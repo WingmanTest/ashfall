@@ -97,10 +97,15 @@ function showScreen(id) {
   if (id) $(id)?.classList.add("show");
 }
 
+let _touchInput = null;
 function setMenuOpen(on) {
   document.body.classList.toggle("menu-open", !!on);
   if (on) document.exitPointerLock?.();
+  // Opening or closing a menu hides/shows #touch; drop any latched stick
+  // before the matching pointerup can be lost.
+  _touchInput?.resetTouch?.();
 }
+function bindTouchInput(input) { _touchInput = input; }
 function setPlaying(on) {
   document.body.classList.toggle("playing", !!on);
 }
@@ -240,6 +245,22 @@ class Game {
       get colliders() { return (self.world && self.world.colliders) || []; },
       unstuck: () => self.unstuck(),
       cycleWeapon: () => self.cycleWeapon(),
+      resetTouch: () => self.input && self.input.resetTouch && self.input.resetTouch(),
+      talk: (id) => {
+        const dlg = self.story.pickDialogue(id, self._storyCtx());
+        if (dlg) { self.openDialogue(dlg); return dlg.id || true; }
+        return null;
+      },
+      get inputState() {
+        const i = self.input || {};
+        const joy = i._joy || {};
+        return {
+          moveX: i.moveX, moveZ: i.moveZ, sprint: !!i.sprint, autoSprint: !!i.autoSprint,
+          fwdTime: i._fwdTime || 0, fire: !!i.fire, aim: !!i.aim,
+          joyActive: !!joy.active, joyX: joy.x || 0, joyY: joy.y || 0, joyId: joy.id ?? null,
+          joyClass: (document.getElementById('joy')||{}).className || '',
+        };
+      },
       wepFade: () => self.hud && self.hud.wepFade,
       wepName: () => (self.player && self.player.equipped),
 
@@ -642,6 +663,7 @@ class Game {
   }
 
   async setChapter(id, { endPrevious = true, fireLoad = true, teleport = true } = {}) {
+    this.input?.resetTouch?.();
     showLoad(20, "Loading");
     try {
       if (this.story?.ensureChapterStory) await this.story.ensureChapterStory(id);
@@ -1189,12 +1211,7 @@ class Game {
     const res = this.world.unstuckFrom(p.x, p.z, 0.42, spawn);
     p.x = res.x;
     p.z = res.z;
-    if (this.input) {
-      this.input.moveX = 0;
-      this.input.moveZ = 0;
-      this.input.sprint = false;
-      this.input.autoSprint = false;
-    }
+    if (this.input) this.input.resetTouch?.();
     p.syncCamera?.();
     this.hud.say("Moved to clear ground");
     if (this.mode === "pause") this.resume();
@@ -1882,6 +1899,7 @@ async function boot() {
     const audio = await attachAudio({ THREE, scene, camera });
     world.bindAudio(audio);
     const input = new Input(frame, () => audio.unlock());
+    bindTouchInput(input);
 
     let pipeline = null;
     let renderInfo = { source: "builtin", url: null, tried: [] };

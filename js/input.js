@@ -165,6 +165,47 @@ export class Input {
     look.addEventListener("pointermove", lookMove, { passive: false });
     look.addEventListener("pointerup", lookEnd);
     look.addEventListener("pointercancel", lookEnd);
+
+    const cancelAll = () => this.resetTouch();
+    window.addEventListener("pointercancel", cancelAll);
+    window.addEventListener("touchcancel", cancelAll, { passive: true });
+    window.addEventListener("blur", cancelAll);
+    document.addEventListener("visibilitychange", () => { if (document.hidden) cancelAll(); });
+  }
+
+  /** Drop all touch-stick / hold state. Call whenever a menu covers #touch
+   *  or a pointer is cancelled, so a hidden pointerup cannot latch movement. */
+  resetTouch() {
+    this.clearInputs();
+  }
+
+  clearInputs() {
+    this._joy.active = false;
+    this._joy.id = null;
+    this._joy.x = 0;
+    this._joy.y = 0;
+    this._look.active = false;
+    this._look.id = null;
+    this.moveX = 0;
+    this.moveZ = 0;
+    this.lookX = 0;
+    this.lookY = 0;
+    this.autoSprint = false;
+    this._fwdTime = 0;
+    this.sprint = !!(this.keys["ShiftLeft"] || this.keys["ShiftRight"]);
+    this.fire = false;
+    this.fireDown = false;
+    this.aim = false;
+    this.reload = false;
+    this.interact = false;
+    this.fireMode = false;
+    this.inv = false;
+    this.craft = false;
+    this.swap = false;
+    this.pause = false;
+    const knob = document.getElementById("joy-knob");
+    if (knob) knob.style.transform = "translate(0, 0)";
+    document.getElementById("joy")?.classList.remove("sprint");
   }
 
   _joyMove(x, y, knob, r) {
