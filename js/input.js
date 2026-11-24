@@ -1,4 +1,17 @@
-import { CFG } from "./config.js?v=r12";
+import { CFG } from "./config.js?v=r13";
+
+const JOY_DEAD = 0.14;
+
+/** Radial deadzone + smoothstep response. Output length is 0..1, direction preserved. */
+export function shapeJoy(x, y, dead = JOY_DEAD) {
+  const len = Math.hypot(x || 0, y || 0);
+  if (len < dead) return { x: 0, y: 0 };
+  const t = Math.min(1, (len - dead) / (1 - dead));
+  const shaped = t * t * (3 - 2 * t);
+  const s = shaped / len;
+  return { x: (x || 0) * s, y: (y || 0) * s };
+}
+
 
 export class Input {
   constructor(frame, onUnlock) {
@@ -231,8 +244,9 @@ export class Input {
     if (k["KeyW"] || k["ArrowUp"]) mz -= 1;
     if (k["KeyS"] || k["ArrowDown"]) mz += 1;
     if (this.touch) {
-      mx += this._joy.x;
-      mz += this._joy.y;
+      const shaped = shapeJoy(this._joy.x, this._joy.y);
+      mx += shaped.x;
+      mz += shaped.y;
     }
     const mlen = Math.hypot(mx, mz);
     if (mlen > 1) { mx /= mlen; mz /= mlen; }

@@ -72,10 +72,12 @@ export function visitedNodes(mem, npcId, dlgId) {
   return (rec && rec.nodes && rec.nodes[dlgId]) || [];
 }
 
-/** Filter already-picked choices unless they are marked repeatable. */
+/** Filter already-picked choices unless they are marked repeatable or are commands/actions. */
 export function filterChoices(choices, mem, npcId, dlgId, nodeId) {
   return (choices || []).filter((c, i) => {
-    if (c && (c.repeatable || c.repeat || c.info)) return true;
+    if (c && (c.repeatable || c.repeat || c.info || c.command || c.action || c.verb)) return true;
+    const kind = String(c && c.kind || "").toLowerCase();
+    if (kind === "command" || kind === "action") return true;
     return !hasChoice(mem, npcId, dlgId, nodeId, c, i);
   });
 }
@@ -115,10 +117,17 @@ export function revisitLine(game, npcId, objText) {
   return `${name} has nothing new to say.`;
 }
 
-/** Synthetic one-line dialogue so a finished tree is never replayed from the top. */
-export function makeRevisitDialogue(game, npcId, objText) {
-  const text = revisitLine(game, npcId, objText);
+/** Synthetic one-line dialogue so a finished tree is never replayed from the top.
+ *  extraChoices (companion commands / pending quest actions) are shown instead of
+ *  repeating the objective when they exist. */
+export function makeRevisitDialogue(game, npcId, objText, extraChoices) {
+  const extras = (extraChoices || []).filter(Boolean);
+  const text = revisitLine(game, npcId, extras.length ? "" : objText);
   const name = game.story?.npcName?.(npcId) || npcId;
+  const choices = [
+    ...extras.map((c) => ({ ...c, repeatable: true, action: c.action ?? true })),
+    { text: "[Leave]", end: true, repeatable: true },
+  ];
   return {
     id: `revisit_${npcId}`,
     npc: npcId,
@@ -129,7 +138,7 @@ export function makeRevisitDialogue(game, npcId, objText) {
         speaker: npcId === "wraith" ? "narrator" : npcId,
         text,
         end: true,
-        choices: [{ text: "[Leave]", end: true, repeatable: true }],
+        choices,
       },
     },
     _name: name,

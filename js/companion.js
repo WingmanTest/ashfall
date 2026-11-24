@@ -13,9 +13,45 @@ function audioEngine(game) {
 export function companionFollows(game) {
   const f = game.flags || {};
   if (f.wraith_alive === false || f.wraith_gone || f.wraith_lost) return false;
+  const mode = game.companionMode || (f.wraith_stay ? "stay" : "follow");
+  if (mode === "stay" || mode === "guard" || mode === "hold") return false;
+  if (mode === "track") return false; // lead is handled in tickCompanion
   const ch = String(f.chapter || "ch01");
   if (ch !== "ch01") return true;
   return !!(f.ch01_wraith_fed || f.wraith_fed || f.wraith_following);
+}
+
+function _moveToward(game, rec, tx, tz, dt, spd) {
+  const dx = tx - rec.x, dz = tz - rec.z;
+  const d = Math.hypot(dx, dz);
+  if (d < 0.28) return false;
+  const step = Math.min(spd, d / Math.max(dt, 1e-3));
+  let nx = rec.x + (dx / d) * step * dt;
+  let nz = rec.z + (dz / d) * step * dt;
+  if (game.world?.collide) { const c = game.world.collide(nx, nz, 0.3, rec.x, rec.z); nx = c.x; nz = c.z; }
+  rec.x = nx; rec.z = nz;
+  const want = Math.atan2(dx, dz);
+  let dy = want - rec.mesh.rotation.y;
+  while (dy > Math.PI) dy -= Math.PI * 2;
+  while (dy < -Math.PI) dy += Math.PI * 2;
+  rec.mesh.rotation.y += dy * Math.min(1, dt * 8);
+  return true;
+}
+
+function _leadAlongPath(game, rec, dt) {
+  const path = rec._path;
+  if (!path || !path.length) return false;
+  if (rec._pathI == null) rec._pathI = 0;
+  while (rec._pathI < path.length - 1) {
+    const p = path[rec._pathI];
+    if (Math.hypot(rec.x - p.x, rec.z - p.z) < 1.1) rec._pathI++;
+    else break;
+  }
+  const i = Math.min(rec._pathI, path.length - 1);
+  const p = path[i];
+  const far = Math.hypot((game.player?.x || 0) - rec.x, (game.player?.z || 0) - rec.z);
+  const spd = far > 10 ? 6.4 : 4.4;
+  return _moveToward(game, rec, p.x, p.z, dt, spd);
 }
 
 export function tickCompanion(game, dt) {
@@ -26,32 +62,35 @@ export function tickCompanion(game, dt) {
   const st = rec._c || (rec._c = { t: 0, told: new WeakSet(), barkCd: 0, moving: false });
   st.t += dt;
   st.barkCd = Math.max(0, st.barkCd - dt);
-  if (companionFollows(game)) {
+  const mode = game.companionMode || ((game.flags || {}).wraith_stay ? "stay" : "follow");
+  st.moving = false;
+  if (mode === "track") {
+    const far = Math.hypot(p.x - rec.x, p.z - rec.z);
+    if (far > 28 && rec._path && rec._path.length) {
+      const wp = rec._path[Math.min(rec._pathI || 0, rec._path.length - 1)];
+      rec.x = wp.x; rec.z = wp.z;
+    }
+    st.moving = _leadAlongPath(game, rec, dt);
+  } else if (mode === "stay" || mode === "guard" || mode === "hold") {
+    const hx = rec._holdX ?? rec.x, hz = rec._holdZ ?? rec.z;
+    if (mode === "hold" && rec._holdTarget && rec._holdTarget.alive) {
+      rec._holdX = rec._holdTarget.x; rec._holdZ = rec._holdTarget.z;
+    }
+    st.moving = _moveToward(game, rec, rec._holdX ?? hx, rec._holdZ ?? hz, dt, 3.4);
+  } else if (companionFollows(game)) {
     // Target: behind and slightly right of Braith's facing.
     const yaw = p.yaw || 0;
     const tx = p.x + Math.sin(yaw) * 1.6 + Math.cos(yaw) * 0.9;
     const tz = p.z + Math.cos(yaw) * 1.6 - Math.sin(yaw) * 0.9;
-    const dx = tx - rec.x, dz = tz - rec.z;
-    const d = Math.hypot(dx, dz);
+    const d = Math.hypot(tx - rec.x, tz - rec.z);
     const far = Math.hypot(p.x - rec.x, p.z - rec.z);
     if (far > 24) {
-      // Lost her (teleport / chapter spawn): she catches up off-screen.
       rec.x = tx; rec.z = tz;
     } else if (d > 0.35 && far > FOLLOW_GAP * 0.6) {
-      const spd = Math.min(far > 6 ? 6.2 : 3.6, d / Math.max(dt, 1e-3));
-      let nx = rec.x + (dx / d) * spd * dt;
-      let nz = rec.z + (dz / d) * spd * dt;
-      if (game.world.collide) { const c = game.world.collide(nx, nz, 0.3); nx = c.x; nz = c.z; }
-      rec.x = nx; rec.z = nz;
-      const want = Math.atan2(dx, dz);
-      let dy = want - rec.mesh.rotation.y;
-      while (dy > Math.PI) dy -= Math.PI * 2;
-      while (dy < -Math.PI) dy += Math.PI * 2;
-      rec.mesh.rotation.y += dy * Math.min(1, dt * 8);
-      st.moving = true;
-    } else st.moving = false;
-    rec.mesh.position.set(rec.x, st.moving ? Math.abs(Math.sin(st.t * 11)) * 0.035 : 0, rec.z);
+      st.moving = _moveToward(game, rec, tx, tz, dt, far > 6 ? 6.2 : 3.8);
+    }
   }
+  rec.mesh.position.set(rec.x, st.moving ? Math.abs(Math.sin(st.t * 11)) * 0.035 : 0, rec.z);
   // 3D emitter for her cues.
   const A = audioEngine(game);
   if (A && typeof A.emitter === "function" && !rec.sfx) {

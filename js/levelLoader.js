@@ -1,12 +1,14 @@
 // Cartographer chapter loader. Builds geometry from levels/*.json (do not edit those files).
 import * as THREE from "three";
-import { CFG } from "./config.js?v=r12";
-import { fitHeight, makePerson, makeDog } from "./world.js?v=r12";
-import { evalCondition, applyEffects, setFlag } from "./story.js?v=r12";
-import { rollContainer, aliasItem } from "./systems.js?v=r12";
-import { addItem, takeItem, hasItems } from "./inventory.js?v=r12";
-import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js?v=r12";
-import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r12";
+import { CFG } from "./config.js?v=r13";
+import { fitHeight, makePerson, makeDog } from "./world.js?v=r13";
+import { evalCondition, applyEffects, setFlag } from "./story.js?v=r13";
+import { rollContainer, aliasItem } from "./systems.js?v=r13";
+import { addItem, takeItem, hasItems } from "./inventory.js?v=r13";
+import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js?v=r13";
+import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r13";
+import { coverBuildingRoofs, extractShingleMaterial, fallbackShingleMat } from "./roofs.js?v=r13";
+import { startTracking } from "./companionCmd.js?v=r13";
 
 const SNOW_HEX = 0xeef2f6;
 function stripSnow(obj) {
@@ -437,15 +439,9 @@ export class LevelRuntime {
       mesh.instanceMatrix.needsUpdate = true;
       scene.add(mesh);
       world.farProps.push(mesh);
-      if (t.roof) {
-        const roof = new THREE.InstancedMesh(geo, stdMat(await getPbr(t.wallTex || t.floorTex) || tex, 0x3c3f44), cells.length);
-        cells.forEach((cell, i) => {
-          m.makeTranslation(cell.x, t.height || 4, cell.z);
-          roof.setMatrixAt(i, m);
-        });
-        roof.instanceMatrix.needsUpdate = true;
-        scene.add(roof);
-      }
+      // r13: per-cell upward-facing roof planes were culled from inside (sky showed
+      // through) and sat flush with wall tops, so buildings looked open-topped.
+      // Merged pitched / parapet roofs are stamped in coverBuildingRoofs().
     }
 
     // Colliders: merge horizontal runs. Visuals are dressed separately (Kenney / UV-mapped PBR).
@@ -503,9 +499,16 @@ export class LevelRuntime {
       }
     }
     this._tractHouses = 0;
+    this._tractBoxes = [];
+    this._lotRoofs = [];
+    this._roofMeshes = [];
     for (const rec of lots) {
       const box = rectWorld(rec, o, cs);
-      if (houseLots.has(rec) && await this._placeTractHouses(scene, box, rec._houses, L)) continue;
+      if (houseLots.has(rec) && await this._placeTractHouses(scene, box, rec._houses, L)) {
+        this._tractBoxes.push({ ...box });
+        this._lotRoofs.push({ box, skip: true, source: "tract" });
+        continue;
+      }
       const reserved = buildingProps.some((p) => p.x >= box.minX - 0.4 && p.x <= box.maxX + 0.4 && p.z >= box.minZ - 0.4 && p.z <= box.maxZ + 0.4);
       const ok = await stampBuildings(rec, world, scene, o, cs, snowMat, {
         skip: () => reserved,
@@ -517,17 +520,14 @@ export class LevelRuntime {
         shell.position.set(box.cx, h / 2, box.cz);
         shell.userData.kind = "building_shell";
         scene.add(shell);
-        if (snowMat) {
-          const cap = snowCap(box.w, box.d, h, snowMat);
-          cap.position.x = box.cx; cap.position.z = box.cz;
-          scene.add(cap);
-        }
         addFacadeDetails(scene, { ...box, h, y0: 0 }, facadeMats);
+        this._lotRoofs.push({ box, y: h, source: "shell", house: houseLots.has(rec) });
       } else if (ok !== "reserved") {
         // r8: Kenney GLB lot. The kit model carries its own windows/doors, so never
         // stamp procedural facades on the lot edge (they floated in midair in r7).
         // A solid inset core fills any gap/setback in the GLB so there is always a wall.
         this._addLotCore(scene, box, 5.6, concMat);
+        this._lotRoofs.push({ box, y: 7.2, source: "kenney", house: houseLots.has(rec) });
       }
       // ok === "reserved": a level-authored building prop fills this lot in _placeProps.
     }
@@ -592,6 +592,22 @@ export class LevelRuntime {
     // Nevada sagebrush on scrub tiles (instanced: ~5 draw calls for the whole field).
     await this._placeSagebrush(L, floors, scene);
 
+    if (!this._shingleMat) {
+      try {
+        const src = await getModel("sparks_tract_house", { receiveShadow: true });
+        if (src) this._shingleMat = extractShingleMaterial(src);
+      } catch {}
+    }
+    try {
+      coverBuildingRoofs(this, L, scene, {
+        shingle: this._shingleMat || fallbackShingleMat(),
+        snow: snowMat,
+        gable: brickMat,
+        flat: concMat,
+        rects: { greedyRects, rectWorld },
+      });
+    } catch (err) { console.warn("[roofs]", err); }
+
     // Bind G tiles to the nearest door-like interactive
     for (const g of this.gates) {
       const ix = (g.minX + g.maxX) / 2, iz = (g.minZ + g.maxZ) / 2;
@@ -603,6 +619,7 @@ export class LevelRuntime {
   async _placeTractHouses(scene, box, n, L) {
     const src = await getModel("sparks_tract_house", { receiveShadow: true });
     if (!src) return false;
+    if (!this._shingleMat) this._shingleMat = extractShingleMaterial(src);
     const alongX = box.w >= box.d;
     const seg = (alongX ? box.w : box.d) / n;
     const mapMidZ = (this.world.bounds.minZ + this.world.bounds.maxZ) / 2;
@@ -1279,6 +1296,12 @@ export class LevelRuntime {
     if (it.type === "feed" || it.setsFlag === "ch01_wraith_fed") {
       setFlag(game.flags, "ch01_wraith_fed", true);
       if (game.quests) game.quests.q_companion_tutorial = "done";
+    }
+    if (it.type === "companion_track") {
+      try { startTracking(game, it); } catch (err) { console.warn("[track]", err); }
+      game.refreshObjective?.();
+      game.reconcileInventoryObjectives?.("interactive");
+      return true;
     }
     if (it.type === "craft") {
       const pool = [...(game.systems.storyRecipes || []), ...(game.systems.recipes || [])];

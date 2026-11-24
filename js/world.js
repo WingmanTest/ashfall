@@ -2,9 +2,9 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { KTX2Loader } from "three/addons/loaders/KTX2Loader.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
-import { LOCATIONS } from "./config.js?v=r12";
-import { isMobileClient } from "./device.js?v=r12";
-import { tickActor, tickStaticNpc } from "./actors.js?v=r12";
+import { LOCATIONS } from "./config.js?v=r13";
+import { isMobileClient } from "./device.js?v=r13";
+import { tickActor, tickStaticNpc } from "./actors.js?v=r13";
 
 export function makeLoader(renderer) {
   const loader = new GLTFLoader();
@@ -42,7 +42,7 @@ export function fitHeight(obj, height, alignBottom = true) {
   return obj;
 }
 
-export { makePerson, tickActor, tickStaticNpc } from "./actors.js?v=r12";
+export { makePerson, tickActor, tickStaticNpc } from "./actors.js?v=r13";
 
 export function makeDog(color = 0x3b322c) {
   const g = new THREE.Group();
@@ -759,8 +759,10 @@ export class World {
    * capping each push so a corner / overlapping pair can never launch the
    * player across the map. Always re-clamps to playable bounds at the end.
    */
-  collide(x, z, rad = 0.35) {
+  collide(x, z, rad = 0.35, fromX = null, fromZ = null) {
     const CAP = 0.7;
+    const ox = fromX == null ? x : fromX;
+    const oz = fromZ == null ? z : fromZ;
     let { x: nx, z: nz } = this._clampToBounds(x, z, rad);
     const cols = this.colliders || [];
     for (let iter = 0; iter < 5; iter++) {
@@ -788,6 +790,19 @@ export class World {
       }
       ({ x: nx, z: nz } = this._clampToBounds(nx, nz, rad));
       if (!hit) break;
+    }
+    // Unplayable floor (water, solid tiles, voids) is treated as a collider
+    // and resolved as an axis slide from the previous position so corners don't stutter.
+    if (this.blocked(nx, nz, rad)) {
+      const okX = !this.blocked(nx, oz, rad);
+      const okZ = !this.blocked(ox, nz, rad);
+      if (okX && !okZ) return this._clampToBounds(nx, oz, rad);
+      if (okZ && !okX) return this._clampToBounds(ox, nz, rad);
+      if (okX && okZ) {
+        const dx = Math.abs(nx - ox), dz = Math.abs(nz - oz);
+        return this._clampToBounds(dx >= dz ? nx : ox, dx >= dz ? oz : nz, rad);
+      }
+      return this._clampToBounds(ox, oz, rad);
     }
     return this._clampToBounds(nx, nz, rad);
   }

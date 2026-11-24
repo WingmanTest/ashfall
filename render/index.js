@@ -3,8 +3,8 @@ export {
   createRenderPipeline, TIERS, TIER_ORDER, detectTier, isMobileDevice,
   CRT_PRESETS, LOOKS, getTierConfig, applyMobileQuality, PALETTES,
   ENVIRONMENTS, ENVIRONMENT_ORDER, resolveEnvironment, environmentForChapter, getEnvironmentConfig,
-} from './pipeline.js?v=r12';
-export { AdaptiveQuality, isIOS } from './quality.js?v=r12';
-export { createCampfire, createFlashlight, fitSunShadow } from './lighting.js?v=r12';
-export { createParticles } from './particles.js?v=r12';
-export { GRADE_ASHFALL, WINTER_PALETTE_HEX, buildPaletteLUT, buildPaletteLUTGPU, lutStats } from './palette.js?v=r12';
+} from './pipeline.js?v=r13';
+export { AdaptiveQuality, isIOS } from './quality.js?v=r13';
+export { createCampfire, createFlashlight, fitSunShadow } from './lighting.js?v=r13';
+export { createParticles } from './particles.js?v=r13';
+export { GRADE_ASHFALL, WINTER_PALETTE_HEX, buildPaletteLUT, buildPaletteLUTGPU, lutStats } from './palette.js?v=r13';

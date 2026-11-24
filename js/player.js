@@ -1,8 +1,8 @@
 import * as THREE from "three";
-import { CFG, ITEMS, WEAPONS_ORDER } from "./config.js?v=r12";
-import { combinedInsulation } from "./equipment.js?v=r12";
-import { fitHeight } from "./world.js?v=r12";
-import { createWeaponModel, setWeaponLibrary, mountViewmodel, applyHold, installViewmodelLights, weaponKind } from "./weapons/viewmodels.js?v=r12";
+import { CFG, ITEMS, WEAPONS_ORDER } from "./config.js?v=r13";
+import { combinedInsulation } from "./equipment.js?v=r13";
+import { fitHeight } from "./world.js?v=r13";
+import { createWeaponModel, setWeaponLibrary, mountViewmodel, applyHold, installViewmodelLights, weaponKind } from "./weapons/viewmodels.js?v=r13";
 
 export function defaultStats() {
   return {
@@ -117,19 +117,33 @@ export class Player {
   }
 
   move(dt, input, world, sprintOk) {
+    dt = Math.max(0, Math.min(Number(dt) || 0, 0.05));
     const overSoft = this.carryState?.overSoft;
     const sprint = sprintOk && !overSoft && input.sprint && this.stats.stamina > 2 && (input.moveX || input.moveZ);
-    const spd = (sprint ? CFG.sprint : CFG.walk) * (overSoft ? (this.carryState.moveMul || 0.8) : 1) * dt;
+    const maxSpd = (sprint ? CFG.sprint : CFG.walk) * (overSoft ? (this.carryState.moveMul || 0.8) : 1);
     const s = Math.sin(this.yaw), c = Math.cos(this.yaw);
     // moveX strafe, moveZ forward in input (neg is forward from WASD W)
     const fx = s * input.moveZ + c * input.moveX;
     const fz = c * input.moveZ - s * input.moveX;
-    let nx = this.x + fx * spd;
-    let nz = this.z + fz * spd;
-    const hit = world.collide(nx, nz, 0.38);
-    this.x = hit.x;
-    this.z = hit.z;
+    const wishX = fx * maxSpd;
+    const wishZ = fz * maxSpd;
     const moving = Math.hypot(input.moveX, input.moveZ) > 0.08;
+    const rate = moving ? 12 : 16;
+    const a = dt > 0 ? (1 - Math.exp(-rate * dt)) : 1;
+    this.vx = (this.vx || 0) + (wishX - (this.vx || 0)) * a;
+    this.vz = (this.vz || 0) + (wishZ - (this.vz || 0)) * a;
+    const dist = Math.hypot(this.vx, this.vz) * dt;
+    const steps = Math.max(1, Math.min(8, Math.ceil(dist / 0.16)));
+    const sdt = dt / steps;
+    for (let i = 0; i < steps; i++) {
+      const hx = this.x + this.vx * sdt;
+      const hz = this.z + this.vz * sdt;
+      const hit = world.collide(hx, hz, 0.38, this.x, this.z);
+      if (Math.abs(hit.x - hx) > 1e-4) this.vx = 0;
+      if (Math.abs(hit.z - hz) > 1e-4) this.vz = 0;
+      this.x = hit.x;
+      this.z = hit.z;
+    }
     if (sprint && moving) this.stats.stamina = Math.max(0, this.stats.stamina - CFG.staminaSprint * dt);
     else this.stats.stamina = Math.min(100, this.stats.stamina + CFG.staminaRegen * dt * (this.stats.hunger > 0 ? 1 : 0.35));
     this.bob += dt * (moving ? (sprint ? 11 : 7) : 2);

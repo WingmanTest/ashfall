@@ -1,8 +1,8 @@
 // Data-driven story loader. Reads /story/ when present. NEVER writes there.
 // Full Loremaster contract (SCHEMA.md): condition ops, not, count_true,
 // if/then/else, value_from, on_end, flags.ending, chapter start/end scripts.
-import { tryFetch, loadJsonDir, listDir } from "./load.js?v=r12";
-import { aliasItem } from "./systems.js?v=r12";
+import { tryFetch, loadJsonDir, listDir } from "./load.js?v=r13";
+import { aliasItem } from "./systems.js?v=r13";
 
 const STORY_ROOT = "./story/";
 
@@ -379,7 +379,7 @@ export class StorySystem {
       else this.chapters.push(f.data);
     }
 
-    const { PLACEHOLDER } = await import("./data/placeholderStory.js?v=r12");
+    const { PLACEHOLDER } = await import("./data/placeholderStory.js?v=r13");
     if (!this.npcs.length) this.npcs = PLACEHOLDER.npcs;
     if (!Object.keys(this.endings).length) this.endings = PLACEHOLDER.endings;
     this.notesCatalog = PLACEHOLDER.notes;

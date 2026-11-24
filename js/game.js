@@ -1,40 +1,41 @@
 import * as THREE from "three";
-import { CFG, WEAPONS_ORDER } from "./config.js?v=r12";
-import { weaponKind } from "./weapons/viewmodels.js?v=r12";
-import { Input } from "./input.js?v=r12";
-import { HUD } from "./hud.js?v=r12";
-import { World } from "./world.js?v=r12";
-import { Player } from "./player.js?v=r12";
-import { EnemySystem } from "./enemies.js?v=r12";
-import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r12";
-import { openCharacterSheet } from "./inventoryUI.js?v=r12";
+import { CFG, WEAPONS_ORDER } from "./config.js?v=r13";
+import { weaponKind } from "./weapons/viewmodels.js?v=r13";
+import { Input } from "./input.js?v=r13";
+import { HUD } from "./hud.js?v=r13";
+import { World } from "./world.js?v=r13";
+import { Player } from "./player.js?v=r13";
+import { EnemySystem } from "./enemies.js?v=r13";
+import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r13";
+import { openCharacterSheet } from "./inventoryUI.js?v=r13";
 import {
   emptyDialogueMem, markNode, markChoice, markComplete, filterChoices, resumeNodeId,
   makeRevisitDialogue, authoredRevisit, hydrateDialogueMem, looksLikeFeedChoice,
   looksLikeFeedNode, choiceFlagName, memHasFeed,
-} from "./dialogueMem.js?v=r12";
-import { currentMainObjective, currentSideObjective, isSideObjective, noteSideQuestUpdate, renderQuestLogHtml } from "./questTrack.js?v=r12";
-import { createMinimap, loadObjectiveBinds, packExploredFog, restoreExploredFog } from "./minimap.js?v=r12";
-import { stopDoll3D } from "./doll3d.js?v=r12";
-import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r12";
-import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r12";
-import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r12";
-import { tickCompanion, disposeCompanion } from "./companion.js?v=r12";
-import { BreathSystem } from "./breath.js?v=r12";
-import { openTradeModal } from "./trade.js?v=r12";
-import { preloadModels } from "./models3d.js?v=r12";
-import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r12";
-import { isMobileClient, canvasDpr } from "./device.js?v=r12";
-import { LevelRuntime } from "./levelLoader.js?v=r12";
-import { attachAudio } from "./audioHook.js?v=r12";
-import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r12";
-import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r12";
-import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r12";
-import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js?v=r12";
+} from "./dialogueMem.js?v=r13";
+import { currentMainObjective, currentSideObjective, isSideObjective, noteSideQuestUpdate, renderQuestLogHtml } from "./questTrack.js?v=r13";
+import { createMinimap, loadObjectiveBinds, packExploredFog, restoreExploredFog } from "./minimap.js?v=r13";
+import { stopDoll3D } from "./doll3d.js?v=r13";
+import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r13";
+import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r13";
+import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r13";
+import { tickCompanion, disposeCompanion } from "./companion.js?v=r13";
+import { collectCompanionCommands, collectPendingActions, mergeActionChoices, startTracking, restoreTracking, findTrackTarget } from "./companionCmd.js?v=r13";
+import { BreathSystem } from "./breath.js?v=r13";
+import { openTradeModal } from "./trade.js?v=r13";
+import { preloadModels } from "./models3d.js?v=r13";
+import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r13";
+import { isMobileClient, canvasDpr } from "./device.js?v=r13";
+import { LevelRuntime } from "./levelLoader.js?v=r13";
+import { attachAudio } from "./audioHook.js?v=r13";
+import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r13";
+import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r13";
+import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r13";
+import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js?v=r13";
 
 window.__ASHFALL_MODULE = true;
-window.__ASHFALL_BUILD = "r12";
-if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r12") {
+window.__ASHFALL_BUILD = "r13";
+if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r13") {
   if (typeof window.__ashfallBustStaleBuild === "function") window.__ashfallBustStaleBuild(window.__ASHFALL_BUILD);
 }
 
@@ -291,14 +292,10 @@ class Game {
         id: r.id, out: r.out?.id, name: r.name, isObjective: !!r.isObjective, in: r.in, set_flags: r.set_flags || [],
       })),
       doll3d: () => (window.__ASHFALL_DOLL3D ? window.__ASHFALL_DOLL3D.debug() : null),
-      talk: (id) => {
-        const dlg = self.story.pickDialogue(id, self._storyCtx());
-        if (dlg) { self.openDialogue(dlg); return dlg.id || true; }
-        const authored = authoredRevisit((self.story.dialogues || []).find((d) => d.npc === id && self.seen[d.id]));
-        if (authored) { self.openDialogue(authored); return authored.id || true; }
-        self.openDialogue(makeRevisitDialogue(self, id, self.objectiveText()));
-        return "revisit_" + id;
-      },
+      talk: (id) => self._openNpcTalk(id),
+      startTracking: (target) => startTracking(self, target),
+      findTrackTarget: () => findTrackTarget(self),
+      measureMove: (seconds = 1.4, fps = 60, sprint = false) => self._measureMove(seconds, fps, sprint),
       get inputState() {
         const i = self.input || {};
         const joy = i._joy || {};
@@ -824,6 +821,7 @@ class Game {
         }
         this.reconcileFeedAndDialogue();
         this.refreshObjective();
+        try { restoreTracking(this); } catch (err) { console.warn("[track] restore", err); }
       } catch (err) {
         console.warn("[level] load failed", id, err);
         this._syncEnemiesForChapter(id);
@@ -1105,6 +1103,56 @@ class Game {
   }
 
 
+  _pendingTalkChoices(npcId) {
+    return mergeActionChoices(
+      collectCompanionCommands(this, npcId),
+      collectPendingActions(this, npcId)
+    );
+  }
+
+  _openNpcTalk(id, picked) {
+    const dlg = picked !== undefined ? picked : this.story.pickDialogue(id, this._storyCtx());
+    if (dlg) { this.openDialogue(dlg); return dlg.id || true; }
+    const authored = authoredRevisit((this.story.dialogues || []).find((d) => d.npc === id && this.seen[d.id]));
+    if (authored) { this.openDialogue(authored); return authored.id || true; }
+    const extras = this._pendingTalkChoices(id);
+    const rev = makeRevisitDialogue(this, id, this.objectiveText(), extras);
+    this.openDialogue(rev);
+    return "revisit_" + id;
+  }
+
+  _measureMove(seconds = 1.4, fps = 60, sprint = false) {
+    const p = this.player, world = this.world;
+    if (!p || !world) return { ok: false };
+    const dt = 1 / Math.max(1, fps);
+    const steps = Math.max(1, Math.round(seconds * fps));
+    const x0 = p.x, z0 = p.z, vx0 = p.vx || 0, vz0 = p.vz || 0, stam = p.stats.stamina;
+    p.vx = 0; p.vz = 0;
+    const input = { moveX: 0, moveZ: -1, sprint: !!sprint };
+    const settle = Math.min(0.45, seconds * 0.3);
+    let sx = p.x, sz = p.z, started = false;
+    for (let i = 0; i < steps; i++) {
+      p.move(dt, input, world, true);
+      const t = (i + 1) * dt;
+      if (!started && t >= settle) { sx = p.x; sz = p.z; started = true; }
+    }
+    const time = Math.max(1e-4, seconds - settle);
+    const dist = Math.hypot(p.x - sx, p.z - sz);
+    const out = {
+      ok: true,
+      mps: dist / time,
+      dist,
+      time,
+      fps,
+      sprint: !!sprint,
+      walk: 3.62,
+      sprintSpd: 5.58,
+      settled: started,
+    };
+    p.x = x0; p.z = z0; p.vx = vx0; p.vz = vz0; p.stats.stamina = stam;
+    return out;
+  }
+
   openDialogue(dlg) {
     if (!dlg) return;
     if (this._talkLockUntil && performance.now() < this._talkLockUntil) return;
@@ -1157,7 +1205,13 @@ class Game {
       ? this.story.npcName(node.speaker) || node.speaker
       : (node.speaker === "narrator" ? "" : this.story.npcName(this.dlg.npc));
     const rawChoices = (node.choices || []).filter((c) => !c.conditions || evalCondition(c.conditions, this._storyCtx()));
-    const choices = filterChoices(rawChoices, this.dialogueMem, this.dlg.npc, this.dlg.id, id);
+    let choices = filterChoices(rawChoices, this.dialogueMem, this.dlg.npc, this.dlg.id, id);
+    if (this.dlg?.npc) {
+      const cmds = collectCompanionCommands(this, this.dlg.npc);
+      const pending = (this.dlg.revisit || /^revisit_/.test(this.dlg.id || ""))
+        ? collectPendingActions(this, this.dlg.npc) : [];
+      choices = mergeActionChoices(choices, cmds.concat(pending));
+    }
     if (entering && (node.choices || []).length && !choices.length && !node.end && (node.next || node.branches)) {
       return this._advanceNode(node);
     }
@@ -1215,6 +1269,10 @@ class Game {
     if (this.dlg?.id) setFlag(this.flags, choiceFlagName(this.dlg.id, nodeId, key), true);
     if (c.flag) setFlag(this.flags, c.flag, true);
     if (looksLikeFeedChoice(c)) this._markWraithFed();
+    if (typeof c._run === "function") {
+      try { c._run(this, c); } catch (err) { console.warn("[cmd]", err); }
+    }
+    if (c.command === "track" && !c._run) startTracking(this);
     if (c.effects) applyEffects(c.effects, this._ctxFx());
     // Placeholder-format fields
     if (c.set_flags) for (const f of (Array.isArray(c.set_flags) ? c.set_flags : [c.set_flags])) {
@@ -1839,10 +1897,7 @@ class Game {
         const porch = this.story.dialogues.find((d) => d.id === "ch01_lolo_porch");
         if (porch) { this.openDialogue(porch); if (porch.nodes?.l4) this.dlgId = "l4"; this._showNode(true); return; }
       }
-      if (dlg) return this.openDialogue(dlg);
-      const authored = authoredRevisit(this.story.dialogues.find((d) => d.npc === hit.obj.id && this.seen[d.id]));
-      if (authored) return this.openDialogue(authored);
-      return this.openDialogue(makeRevisitDialogue(this, hit.obj.id, this.objectiveText()));
+      return this._openNpcTalk(hit.obj.id, dlg);
     }
     if (hit.type === "console" || hit.obj?.id === "dam_console") {
       this.flags.at_dam = true;
@@ -2357,7 +2412,7 @@ class Game {
 
   loop = (now) => {
     const t = now || performance.now();
-    let dt = Math.min(0.08, (t - this.last) / 1000);
+    let dt = Math.max(0, Math.min(0.05, (t - this.last) / 1000));
     this.last = t;
     this._frames++;
     this._fpsT += dt;
@@ -2466,7 +2521,7 @@ async function boot() {
     await story.load();
     const systems = await loadSystems();
     const levels = await loadLevels();
-    const { rollTable } = await import("./systems.js?v=r12");
+    const { rollTable } = await import("./systems.js?v=r13");
 
     const renderer = new THREE.WebGLRenderer({
       canvas: view, antialias: false, alpha: false, powerPreference: "high-performance",
@@ -2590,7 +2645,7 @@ async function boot() {
     game.loop();
     window.__READY = true;
     window.__ASHFALL_BOOTED = true;
-    window.__ASHFALL_BUILD = "r12";
+    window.__ASHFALL_BUILD = "r13";
     const banner = $("boot-banner");
     if (banner) banner.classList.remove("show");
     window.__INTEGRATION = {
