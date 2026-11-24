@@ -3,7 +3,7 @@
 // World.clearLevel() never disposes geometry/materials owned by a cached template.
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { MODEL_CATALOG, loadModel, fitToGround, modelUrl, attachMask as regAttachMask, resolveNpcModelId } from "../models/registry.js?v=r14.2";
+import { MODEL_CATALOG, loadModel, fitToGround, modelUrl, attachMask as regAttachMask, resolveNpcModelId } from "../models/registry.js?v=r15";
 
 let _loader = null;
 const _ready = new Map();   // id -> template-loaded boolean
@@ -37,7 +37,10 @@ export async function getModel(id, { castShadow = false, receiveShadow = true } 
   if (!MODEL_CATALOG[id] || _failed.has(id)) return null;
   modelStats.requested[id] = (modelStats.requested[id] || 0) + 1;
   try {
-    const inst = await loadModel(id, gltfLoader(), { castShadow, receiveShadow });
+    const inst = await Promise.race([
+      loadModel(id, gltfLoader(), { castShadow, receiveShadow }),
+      new Promise((_, rej) => setTimeout(() => rej(new Error("getModel timeout: " + id)), 12000)),
+    ]);
     _ready.set(id, true);
     modelStats.loaded[id] = true;
     modelStats.instances[id] = (modelStats.instances[id] || 0) + 1;

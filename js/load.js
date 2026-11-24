@@ -43,6 +43,14 @@ export async function listDir(url) {
     const r = await fetch(href, { cache: "no-store" });
     if (r.ok) {
       const j = await r.json();
+      // A bare array is a file list. A catalog object (levels/index.json) has
+      // storyVersion/chapters plus a files[] list that does NOT include index.json
+      // itself — always prepend it so loaders still read the catalog.
+      if (j && !Array.isArray(j) && (j.storyVersion != null || j.chapters || j.formatVersion)) {
+        const arr = j.files || j.items || j.entries || [];
+        const names = arr.map((x) => (typeof x === "string" ? x : x.file || x.path || x.name || x.id)).filter(Boolean);
+        return ["index.json", ...names];
+      }
       const arr = Array.isArray(j) ? j : (j.files || j.items || j.entries || []);
       return arr.map((x) => (typeof x === "string" ? x : x.file || x.path || x.name || x.id)).filter(Boolean);
     }

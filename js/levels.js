@@ -1,7 +1,7 @@
 // Per-chapter level JSON from Cartographer (/levels/). Fallback built-in layouts.
 // Never writes into /levels/.
-import { LOCATIONS } from "./config.js?v=r14.2";
-import { tryFetch, listDir } from "./load.js?v=r14.2";
+import { LOCATIONS } from "./config.js?v=r15";
+import { tryFetch, listDir } from "./load.js?v=r15";
 
 const FALLBACK_CHAPTERS = [
   { id: "ch01", title: "Day Three", act: "I" },
@@ -93,10 +93,17 @@ const FALLBACK_LEVEL = {
 
 export async function loadLevels() {
   const found = [];
+  const files = {};
+  // Always load the catalog first (listDir may only return files[] from it).
+  const catalog = await tryFetch("./levels/index.json");
+  if (catalog != null) { files["index.json"] = catalog; found.push("levels/index.json"); }
+  else {
+    const alt = await tryFetch("./levels/levels.json");
+    if (alt != null) { files["levels.json"] = alt; found.push("levels/levels.json"); }
+  }
   const listed = await listDir("./levels/");
   // Boot only the catalog + Ch1. Later chapters are fetched in ensureChapterLevel().
   const tryNames = ["index.json", "levels.json", "world.json", "schema.json", "id_registry.json", "ch01_day_three.json", "ch01.json"];
-  const files = {};
   const names = listed.length ? listed.filter((n) => {
     const s = String(n);
     if (!s.endsWith(".json")) return false;
@@ -105,6 +112,7 @@ export async function loadLevels() {
   }) : tryNames;
   for (const n of [...new Set(names)]) {
     if (!String(n).endsWith(".json")) continue;
+    if (files[n]) continue;
     const data = await tryFetch("./levels/" + n);
     if (data != null) { files[n] = data; found.push("levels/" + n); }
   }
@@ -119,7 +127,7 @@ export async function loadLevels() {
     if (fname) perChapter[id] = files[fname];
   }
   const locations = buildLocationCatalog(LOCATIONS, world, perChapter, files);
-  return { world, chapters, perChapter, locations, indexFiles, storyVersion: index.storyVersion || 1, loadedFiles: found, source: found.length ? "levels+fallback" : "fallback" };
+  return { world, chapters, perChapter, locations, indexFiles, storyVersion: index.storyVersion || 2, loadedFiles: found, source: found.length ? "levels+fallback" : "fallback" };
 }
 
 /** Map a story location id to Cartographer data: locations[], then grid terrain of the same name (e.g. river_ice). */
@@ -216,9 +224,10 @@ function buildLocationCatalog(base, world, perChapter, files) {
 }
 
 export function advanceChapter(current, flags, chapters, storyVersion = 1) {
-  // Rev 2 levels end chapters through their own chapter_end triggers; the v1 flag
-  // gates below reference retired ids and must not fire.
-  if (storyVersion >= 2) return current || "ch01";
+  // Rev 2 (the shipped story) ends chapters through authored chapter_end triggers.
+  // The v1 flag gates below reference retired ids and must not auto-advance a
+  // Rev 2 playthrough — even if storyVersion was lost and defaulted.
+  if (storyVersion !== 1) return current || "ch01";
   const order = (chapters || FALLBACK_CHAPTERS).map((c) => c.id || c);
   const i = Math.max(0, order.indexOf(current));
   const f = flags || {};

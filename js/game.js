@@ -1,42 +1,43 @@
 import * as THREE from "three";
-import { CFG, WEAPONS_ORDER } from "./config.js?v=r14.2";
-import { weaponKind } from "./weapons/viewmodels.js?v=r14.2";
-import { Input } from "./input.js?v=r14.2";
-import { HUD } from "./hud.js?v=r14.2";
-import { World } from "./world.js?v=r14.2";
-import { Player } from "./player.js?v=r14.2";
-import { EnemySystem } from "./enemies.js?v=r14.2";
-import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r14.2";
-import { openCharacterSheet } from "./inventoryUI.js?v=r14.2";
+import { CFG, WEAPONS_ORDER } from "./config.js?v=r15";
+import { weaponKind } from "./weapons/viewmodels.js?v=r15";
+import { Input } from "./input.js?v=r15";
+import { HUD } from "./hud.js?v=r15";
+import { World } from "./world.js?v=r15";
+import { Player } from "./player.js?v=r15";
+import { EnemySystem } from "./enemies.js?v=r15";
+import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r15";
+import { openCharacterSheet } from "./inventoryUI.js?v=r15";
 import {
   emptyDialogueMem, markNode, markChoice, markComplete, filterChoices, resumeNodeId,
   makeRevisitDialogue, authoredRevisit, hydrateDialogueMem, looksLikeFeedChoice,
   looksLikeFeedNode, choiceFlagName, memHasFeed,
-} from "./dialogueMem.js?v=r14.2";
-import { currentMainObjective, currentSideObjective, isSideObjective, noteSideQuestUpdate, renderQuestLogHtml } from "./questTrack.js?v=r14.2";
-import { createMinimap, loadObjectiveBinds, packExploredFog, restoreExploredFog } from "./minimap.js?v=r14.2";
-import { stopDoll3D } from "./doll3d.js?v=r14.2";
-import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r14.2";
-import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r14.2";
-import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r14.2";
-import { tickCompanion, disposeCompanion } from "./companion.js?v=r14.2";
-import { collectCompanionCommands, collectPendingActions, mergeActionChoices, startTracking, restoreTracking, findTrackTarget, setCompanionMode } from "./companionCmd.js?v=r14.2";
-import { pinNpc, unpinNpc, haltForTalk, findNpc } from "./npcWander.js?v=r14.2";
-import { BreathSystem } from "./breath.js?v=r14.2";
-import { openTradeModal } from "./trade.js?v=r14.2";
-import { preloadModels } from "./models3d.js?v=r14.2";
-import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r14.2";
-import { isMobileClient, canvasDpr } from "./device.js?v=r14.2";
-import { LevelRuntime } from "./levelLoader.js?v=r14.2";
-import { attachAudio } from "./audioHook.js?v=r14.2";
-import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r14.2";
-import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r14.2";
-import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r14.2";
-import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js?v=r14.2";
+} from "./dialogueMem.js?v=r15";
+import { currentMainObjective, currentSideObjective, isSideObjective, noteSideQuestUpdate, renderQuestLogHtml } from "./questTrack.js?v=r15";
+import { createMinimap, loadObjectiveBinds, packExploredFog, restoreExploredFog } from "./minimap.js?v=r15";
+import { stopDoll3D } from "./doll3d.js?v=r15";
+import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r15";
+import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r15";
+import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r15";
+import { tickCompanion, disposeCompanion } from "./companion.js?v=r15";
+import { collectCompanionCommands, collectPendingActions, mergeActionChoices, startTracking, restoreTracking, findTrackTarget, setCompanionMode } from "./companionCmd.js?v=r15";
+import { pinNpc, unpinNpc, haltForTalk, findNpc } from "./npcWander.js?v=r15";
+import { BreathSystem } from "./breath.js?v=r15";
+import { openTradeModal } from "./trade.js?v=r15";
+import { preloadModels } from "./models3d.js?v=r15";
+import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r15";
+import { isMobileClient, canvasDpr } from "./device.js?v=r15";
+import { LevelRuntime } from "./levelLoader.js?v=r15";
+import { attachAudio } from "./audioHook.js?v=r15";
+import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r15";
+import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r15";
+import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r15";
+import { loadSave, hasSave, writeSave, clearSave, migrateSave, applyCh1CompleteFlags, normalizeChapter, CH02_SPAWN } from "./save.js?v=r15";
+import { createSky, hudHour } from "../sky/sky.js?v=r15";
 
 window.__ASHFALL_MODULE = true;
-window.__ASHFALL_BUILD = "r14.2";
-if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r14.2") {
+window.__ASHFALL_BUILD = "r15";
+if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r15") {
   if (typeof window.__ashfallBustStaleBuild === "function") window.__ashfallBustStaleBuild(window.__ASHFALL_BUILD);
 }
 
@@ -59,6 +60,14 @@ function showLoad(pct, label) {
 function hideLoad() {
   $("loader")?.classList.remove("show");
 }
+function withTimeout(promise, ms, label) {
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error((label || "load") + " timed out after " + ms + " ms")), ms);
+  });
+  return Promise.race([Promise.resolve(promise), timeout]).finally(() => clearTimeout(timer));
+}
+const CHAPTER_LOAD_MS = 30000;
 function showError(err) {
   const msg = String(err && (err.stack || err.message) || err);
   const el = $("boot-error");
@@ -277,7 +286,9 @@ class Game {
       },
       completeObjective: (id) => { self.quests[id] = "done"; },
       triggerEnding: (id) => self.showEnding(id || self.story.resolveEnding(self.flags, self._storyCtx())),
-      setChapter: (id) => self.setChapter(id),
+      setChapter: (id, opts) => self.setChapter(id, opts),
+      requestChapter: (id, opts) => self.requestChapter(id, opts),
+      loadStage: () => self._loadStage || null,
       closeUi: () => self.closePanel(),
       get world() { return self.world; },
       get bounds() { return self.world && self.world.bounds; },
@@ -451,7 +462,7 @@ class Game {
     $("btn-continue").style.display = hasSave() ? "" : "none";
   }
 
-  newGame() {
+  newGame(opts = {}) {
     showLoad(8, "Loading");
     this.flags = this.story.startingFlags();
     this.trust = this.story.startingTrust();
@@ -514,7 +525,17 @@ class Game {
       if (!this.inv[id]) addItem(this.inv, id, 1);
       wearItem(this.player, this.inv, id, this.systems.items, this.flags);
     }
-    return this.setChapter("ch01", { endPrevious: false, fireLoad: true, teleport: true }).then(() => {
+    const jump = normalizeChapter((opts && opts.chapter) || "ch01");
+    if (jump && jump !== "ch01") {
+      applyCh1CompleteFlags(this.flags);
+      this.flags.chapter = jump;
+      this.flags.r15_ch02_rescue = true;
+      if (jump === "ch02") {
+        this.quests.q_essential_card = this.quests.q_essential_card || "start";
+        this.timeOfDay = 0.45;
+      }
+    }
+    return this.setChapter(jump, { endPrevious: false, fireLoad: true, teleport: true }).then(() => {
       hideLoad();
       // fireLoadTriggers may have opened the opening dialogue — do not dismiss it.
       if (this.mode === "dialogue" || panel.classList.contains("show")) {
@@ -597,6 +618,9 @@ class Game {
       this.firedTriggers = new Set(s.firedTriggers || []);
       return this.setChapter(ch, { endPrevious: false, fireLoad: false, teleport: false }).then(() => {
         this.player.restore(s.player);
+        if (mig.rescuedToCh02) {
+          try { this.save(); } catch {}
+        }
         hideLoad();
         this.enterPlay();
         this.reconcileInventoryObjectives("restore");
@@ -672,6 +696,7 @@ class Game {
   }
 
   _night() {
+    if (this.sky) return this.sky.isNight();
     const t = this.timeOfDay;
     const day = Math.max(0, Math.cos((t - 0.5) * Math.PI * 2) * 0.5 + 0.5);
     return day < 0.35;
@@ -785,9 +810,40 @@ class Game {
     }
   }
 
+  requestChapter(id, opts) {
+    if (!id) return null;
+    const dest = String(id).replace(/_.*$/, "") || String(id);
+    this._pendingChapter = dest;
+    this._pendingChapterOpts = opts || { endPrevious: true, fireLoad: true, teleport: true };
+    // Finish the current conversation first (voicemail / chapter-end dialogue).
+    if (this.mode === "dialogue" && this.dlg) return null;
+    if (this._chapterBusy || this._loadingLevel) return null;
+    return this._flushPendingChapter();
+  }
+
+  _flushPendingChapter() {
+    const id = this._pendingChapter;
+    if (!id || this._chapterBusy || this._loadingLevel) return null;
+    if (this.mode === "dialogue" && this.dlg) return null;
+    this._pendingChapter = null;
+    const opts = this._pendingChapterOpts || { endPrevious: true, fireLoad: true, teleport: true };
+    this._pendingChapterOpts = null;
+    const cur = String(this.flags.chapter || "").replace(/_.*$/, "") || this.flags.chapter;
+    if (cur === id) return null;
+    return this.setChapter(id, opts);
+  }
+
   async setChapter(id, { endPrevious = true, fireLoad = true, teleport = true } = {}) {
+    if (this._chapterBusy) {
+      this.requestChapter(id, { endPrevious, fireLoad, teleport });
+      return;
+    }
+    this._chapterBusy = true;
+    this._loadStage = "start";
     this.input?.resetTouch?.();
+    try {
     showLoad(20, "Loading");
+    this._loadStage = "story";
     this.enemies.flags = this.flags;
     disposeCompanion(this.world.companion);
     try {
@@ -796,7 +852,8 @@ class Game {
     } catch (err) {
       console.warn("[chapter] lazy load", id, err);
     }
-    showLoad(40, "Loading");
+    showLoad(40, "Loading world");
+    this._loadStage = "world";
     const prev = this.flags.chapter;
     if (endPrevious && prev && prev !== id) {
       this.story.applyChapterEnd(prev, this._ctxFx());
@@ -816,7 +873,14 @@ class Game {
       try {
         this.enemies.clearAll?.();
         this.levelRuntime.bind(this);
-        const ok = await this.levelRuntime.load(id, { fired: this.firedTriggers });
+        const ok = await withTimeout(
+          this.levelRuntime.load(id, {
+            fired: this.firedTriggers,
+            onProgress: (pct, label) => { this._loadStage = label || this._loadStage; showLoad(pct, label || "Loading"); },
+          }),
+          CHAPTER_LOAD_MS,
+          "chapter " + id,
+        );
         if (ok && teleport && this.levelRuntime.spawn) {
           const sp = this.levelRuntime.spawn;
           this.player.x = sp.x;
@@ -835,11 +899,12 @@ class Game {
           this.player.pitch = 0;
           this.player.syncCamera?.();
         }
-        showLoad(75, "Loading");
+        showLoad(80, "Lighting");
+        this._loadStage = "lighting";
         this._applyChapterEnvironment(id);
         this._attachLumenFires();
         if (this.pipeline?.warmup) {
-          try { await this.pipeline.warmup(); } catch (err) { console.warn("[pipeline] warmup", err); }
+          try { await withTimeout(this.pipeline.warmup(), 8000, "pipeline warmup"); } catch (err) { console.warn("[pipeline] warmup", err); }
         }
         this.world.bindAudio?.(this.audio);
         if (fireLoad) this.levelRuntime.fireLoadTriggers(this);
@@ -852,6 +917,7 @@ class Game {
         try { restoreTracking(this); } catch (err) { console.warn("[track] restore", err); }
       } catch (err) {
         console.warn("[level] load failed", id, err);
+        showError(err);
         this._syncEnemiesForChapter(id);
       }
       this._loadingLevel = false;
@@ -870,8 +936,17 @@ class Game {
     if (!this._isWinter()) { this.blizzard = false; this.blizzardT = 0; }
     showLoad(100, "Loading");
     this.reconcileInventoryObjectives("chapter");
-    // The in-game loader must never linger over gameplay (r8 bug).
-    hideLoad();
+    } catch (err) {
+      console.warn("[chapter] setChapter failed", id, err);
+      showError(err);
+    } finally {
+      this._loadingLevel = false;
+      this._chapterBusy = false;
+      this._loadStage = "done";
+      // The in-game loader must never linger over gameplay (r8 bug).
+      hideLoad();
+      try { this._flushPendingChapter(); } catch (err) { console.warn("[chapter] flush", err); }
+    }
   }
 
   _audioEngine() {
@@ -1395,6 +1470,7 @@ class Game {
       if (epi) return this.openDialogue(epi);
     }
     if (this.flags.ending && !this._ended) this.showEnding(this.flags.ending);
+    try { this._flushPendingChapter(); } catch (err) { console.warn("[chapter] flush after dialogue", err); }
   }
 
 
@@ -2233,7 +2309,7 @@ class Game {
       // desktop: fire stays while button held (input.fire)
     }
 
-    const night = this._night();
+    let night = this._night();
     const blizzard = this.blizzard;
     const inFire = this.world.inFire(this.player.x, this.player.z);
     const loc = this.world.locationAt(this.player.x, this.player.z);
@@ -2280,6 +2356,24 @@ class Game {
     }
 
     const sky = this.world.setSky(this.timeOfDay, this.blizzard);
+    if (this.sky) {
+      const st = this.sky.update(dt, {
+        timeOfDay: hudHour(this.timeOfDay),
+        weather: this.blizzard ? "blizzard" : (this._weather || "clear"),
+        environment: this._envCfg?.id,
+        pipeline: this.pipeline,
+      });
+      this.sky.applyTo({
+        sun: this.world.lights.sun,
+        hemi: this.world.lights.hemi,
+        amb: this.world.lights.amb,
+        fog: this.world.scene.fog,
+        scene: this.world.scene,
+      });
+      sky.day = st.day;
+      sky.night = st.night;
+    }
+    night = this._night();
     this._syncPipeline(sky, night);
     this.world.cull?.(this.player.camera, this.blizzard ? 28 : 42);
     this.world.updateParticles(dt, this.player.camera, this.blizzard);
@@ -2315,7 +2409,7 @@ class Game {
 
     if (loc?.id === "loc_thomson_dam") this.flags.at_dam = true;
     this.levelRuntime?.tick(dt, this);
-    const nextCh = advanceChapter(this.flags.chapter || "ch01", this.flags, this.levels.chapters, this.levels.storyVersion || 1);
+    const nextCh = advanceChapter(this.flags.chapter || "ch01", this.flags, this.levels.chapters, this.levels.storyVersion ?? 2);
     if (nextCh && nextCh !== this.flags.chapter && !this._loadingLevel) this.setChapter(nextCh);
     if (this._enc) this._tickEncounter();
 
@@ -2346,12 +2440,14 @@ class Game {
     const fogCol = this.world.scene.background;
     if (typeof p.setFog === "function" && E?.fog) {
       const n = sky?.night ?? (night ? 1 : 0);
-      p.setFog({
+      const fogArgs = {
         color: fogCol,
         density: bz ? Math.max(0.085, E.fog.density * 6) : E.fog.density * (1 + n * 2.2),
         maxDist: bz ? 16 : E.fog.maxDist * (1 - n * 0.45),
         falloff: bz ? 0.04 : E.fog.falloff,
-      });
+      };
+      p.setFog(fogArgs);
+      this.sky?.setFogParams(fogArgs);
     }
     if (typeof p.setSun === "function") {
       const sun = this.world.lights.sun;
@@ -2562,7 +2658,7 @@ async function boot() {
     await story.load();
     const systems = await loadSystems();
     const levels = await loadLevels();
-    const { rollTable } = await import("./systems.js?v=r14.2");
+    const { rollTable } = await import("./systems.js?v=r15");
 
     const renderer = new THREE.WebGLRenderer({
       canvas: view, antialias: false, alpha: false, powerPreference: "high-performance",
@@ -2680,13 +2776,24 @@ async function boot() {
     });
     game.levelRuntime.levels = levels;
     game.levelRuntime.bind(game);
+    game.sky = createSky({
+      scene, camera: player.camera, renderer,
+      pipeline,
+      environment: game._envCfg?.id || "summer",
+      weather: game._weather || "heat_haze",
+    });
     // Ch1 geometry is built when the player taps NEW GAME, behind a loading bar.
     // Preloading it here doubled the work on iPhone and exhausted Safari's RAM.
     window.addEventListener("resize", () => { sizeView(renderer, pipeline); gameHudResize(hud, pipeline); });
+    const rawJump = (params.get("chapter") || "").trim();
+    if (/^ch\s*0*\d/i.test(rawJump)) {
+      // Dev / rescue jump: start that chapter with Ch1-complete flags (does not use the stuck save).
+      game.newGame({ chapter: normalizeChapter(rawJump) });
+    }
     game.loop();
     window.__READY = true;
     window.__ASHFALL_BOOTED = true;
-    window.__ASHFALL_BUILD = "r14.2";
+    window.__ASHFALL_BUILD = "r15";
     const banner = $("boot-banner");
     if (banner) banner.classList.remove("show");
     window.__INTEGRATION = {

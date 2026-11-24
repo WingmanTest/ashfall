@@ -227,3 +227,159 @@ The sculpt stoop was cut back: walt 0.075→0.020, civ_elder 0.06→0.035, augie
 Gait lean is now 2° for walk and walk_short, 3° for walk_elder, 4.5° for walk_elder_stoop (civ_elder only) and 5° for run. The neck and head cancel the whole lean, so the eyes stay level, and arm swing is measured from vertical.
 
 Characters are about 2 cm taller (walt about 4 cm). Clip names, clip lengths, speeds, tri counts and the atlas are unchanged. To compare, render `python3 tools/render_anim.py posture` (output: `previews/posture_before_after.png`). The pre-fix files are in `/workspace/ashfall_rig_backup/pre_posture/`.
+
+
+## Environment set
+
+Ground detail + vegetation for every chapter, category `env` in `manifest.json` (`man.env`). Source: `tools/env.py`
+(run by `tools/build_all.py`); previews `previews/env_sheet.png` and `previews/env_scene_winter.png`
+(`python3 tools/render_env.py all`: headless WebKit, 0 console/page/WebGL errors).
+
+**Rules (every env GLB):** 1 mesh / 1 primitive / 1 material / **1 draw call**. You can use it directly as an `InstancedMesh`. Ground pivot is min y = 0
+(the decal quad is at y = +0.02). Units are meters, +Z is forward, +Y is up. Faces are flat-shaded and non-indexed. Textures are NEAREST, no mipmaps, SRGB, flipY = false.
+Roughness is 0.9 and metalness 0.02. Vegetation and tufts share **one** 256 px atlas, `env/textures/env_atlas.png`, as an external uri, so it is uploaded once.
+Ground pieces use their tiling texture, and decals use `env/textures/env_decal_atlas.png`. Alpha uses alphaTest 0.5 and is never blended.
+
+**Ids:** Cartographer's provisional ids from `levels/ground_previews/asset_map.json` are the final ids: `remap[id].final == id`
+for every entry. The list is also in `man.env.provisionalIds`. Extras are `env_tuft_cards`, `env_sidewalk_curb_corner`,
+`env_road_tile_4m`, `env_road_2lane_8x4` and the `*_ash` / overlay textures.
+
+### Models (`env/*.glb`, plus the re-exported `nature/sagebrush_clump.glb`)
+
+| id | kind | tris | size W × H × D (m) | bounding r | collider (manifest `collider`) | variants → atlas band |
+|---|---|---|---|---|---|---|
+| `env_tree_cottonwood_dead` | tree | 399 | 9.89 × 6.61 × 7.67 | 5.98 | r 0.35 / h 6.61 / solid | summer_sparse_leaf→0, autumn_leaf_drop→1, late_fall_bare_wet→2, fallout_frosted→3 |
+| `env_tree_pinyon_burnt` | tree | 306 | 4.32 × 3.64 × 4.88 | 2.83 | r 0.3 / h 3.64 / solid | summer_charred→0, autumn_charred→1, late_fall_charred→2, fallout_frosted→3 |
+| `env_tree_bare_frosted` | tree | 394 | 2.80 × 5.72 × 2.58 | 3.15 | r 0.3 / h 5.72 / solid | fallout_frosted→3 |
+| `env_tree_snag_stump` | tree | 166 | 2.09 × 2.92 × 1.86 | 1.89 | r 0.3 / h 2.92 / solid | plain→1, summer→0, late_fall_wet→2, fallout_frosted→3 |
+| `env_bush_rabbitbrush` | bush | 242 | 0.88 × 0.91 × 0.74 | 0.47 | r 0.0 / h 0.91 / walk-through | summer_yellow_bloom→0, autumn_seedhead→1, late_fall_grey→2, fallout_frosted→3 |
+| `env_bush_tumbleweed` | bush | 232 | 0.62 × 0.58 × 0.71 | 0.38 | r 0.0 / h 0.58 / walk-through | summer_tan→0, autumn_tan→1, late_fall_grey→2, fallout_frosted→3 |
+| `env_bush_frosted` | bush | 239 | 1.85 × 0.91 × 1.57 | 1.00 | r 0.45 / h 0.91 / solid | fallout_frosted→3 |
+| `env_tuft_cheatgrass` | tuft | 16 | 0.41 × 0.32 × 0.38 | 0.31 | r 0.0 / h 0.32 / walk-through | summer_straw→0, autumn_tan→1, late_fall_grey→2, fallout_frosted→3 |
+| `env_tuft_weeds` | tuft | 16 | 0.44 × 0.34 × 0.40 | 0.32 | r 0.0 / h 0.34 / walk-through | summer_dry_green→0, autumn_kochia_red→1, late_fall_brown→2, fallout_frosted→3 |
+| `env_tuft_frostgrass` | tuft | 16 | 0.34 × 0.24 × 0.34 | 0.22 | r 0.0 / h 0.24 / walk-through | summer_dry→0, autumn_dry→1, late_fall_rime→2, fallout_buried_ash→3 |
+| `env_tuft_thistle` | tuft | 16 | 0.36 × 0.46 × 0.34 | 0.30 | r 0.0 / h 0.46 / walk-through | summer_dry→0, autumn_dry→1, late_fall_dry→2, fallout_frosted→3 |
+| `env_tuft_cards` | tuft | 16 | 0.36 × 0.32 × 0.36 | 0.26 | r 0.0 / h 0.32 / walk-through | summer→0, autumn→1, late_fall→2, fallout_winter→3 |
+| `env_sidewalk_curb_strip` | ground | 12 | 1.98 × 0.15 × 1.50 | 1.24 | r 0.0 / h 0.15 / walk-through | - |
+| `env_sidewalk_curb_corner` | ground | 36 | 3.30 × 0.15 × 3.30 | 2.33 | r 0.0 / h 0.15 / walk-through | - |
+| `env_road_tile_4m` | ground | 2 | 4.00 × 0.00 × 4.00 | 2.83 | r 0.0 / h 0.0 / walk-through | - |
+| `env_road_2lane_8x4` | ground | 4 | 8.00 × 0.00 × 4.00 | 4.47 | r 0.0 / h 0.0 / walk-through | - |
+| `env_decal_atlas` | decal | 2 | 1.00 × 0.00 × 1.00 | 0.71 | r 0.0 / h 0.02 / walk-through | - |
+| `sagebrush_clump` | bush | 324 | 1.02 × 1.04 × 1.00 | 0.62 | r 0.45 / h 1.04 / solid | summer→0, autumn_dusty→1, late_fall_dusty→2, fallout_frosted→3 |
+
+**Season variants** are atlas-band swaps on the **same mesh**: band = `variants[name].band`, `map.offset.y = band * 0.25`.
+`setEnvSeason('summer'|'autumn'|'late_fall'|'fallout_winter')` switches every shared env material at once. Pass
+`{ season }` to `getEnvMaterial` / `makeEnvInstanced` to pin one mesh to a band, for example a frosted tree in a late_fall level.
+In band 3 (`fallout_winter`) every up-facing facet (normal.y > 0.45) turns to snow. `env_tree_bare_frosted` and
+`env_bush_frosted` are frosted in every band.
+
+**sagebrush_clump** is the one allowed change to an existing model. It was re-exported from 5 materials / 5 draw calls to 1 env-atlas material / 1 draw call.
+The geometry is identical (the triangle sets were compared exactly), and band 0 holds its original 5 colours. In the before/after on the sheet, the mean
+absolute pixel difference is 0.05 / 255. The original is backed up at `/workspace/ashfall_rig_backup/pre_env/sagebrush_clump.glb`. It loads through
+`loadModel('sagebrush_clump')` as before (its GLB points at `../env/textures/env_atlas.png`). It is also in `ENV_CATALOG`
+for instancing, with season bands.
+
+### Tufts: one draw call for mixed types
+
+`env_tuft_cards` is one crossed-card mesh. The per-instance float `tuftFrame` shifts u by 48/256 per frame:
+0 cheatgrass, 1 weeds, 2 thistle, 3 frostgrass (`ENV_TUFT_FRAMES`). `setTuftAt` multiplies the scale by `ENV_TUFT_FRAME_SCALE`
+(thistle 1.4, frostgrass 0.75, ...). The individual `env_tuft_*` ids remain for single-type patches.
+
+```js
+const tufts = await makeEnvTuftCards(600);               // 1 InstancedMesh, 1 draw call
+for (let i = 0; i < 600; i++) tufts.setTuftAt(i, pickKind(i), x[i], z[i], rand);   // frame + jittered matrix
+tufts.instanceMatrix.needsUpdate = true; tufts.computeBoundingSphere(); scene.add(tufts);
+```
+
+### Ground textures (`env/textures/`; ENV_TEXTURES; `loadGroundTexture(id, { size: [w, d] })` sets repeat = size / metersPerTile)
+
+| id | px | m per tile | wrap | alpha |
+|---|---|---|---|---|
+| `env_tex_asphalt_cracked` | 128×128 | 4.0 × 4.0 m | repeat | opaque |
+| `env_tex_asphalt_lanes` | 128×128 | 4.0 × 4.0 m | repeat-v | opaque |
+| `env_tex_sidewalk` | 64×64 | 1.5 × 1.5 m | repeat | opaque |
+| `env_tex_curb` | 64×64 | 1.0 × 0.64 m | repeat | opaque |
+| `env_tex_sidewalk_curb` | 64×128 | 1.5 × 1.5 m | repeat | opaque |
+| `env_tex_dirt_ashy` | 128×128 | 4.0 × 4.0 m | repeat | opaque |
+| `env_tex_snow` | 128×128 | 4.0 × 4.0 m | repeat | opaque |
+| `env_tex_gravel` | 64×64 | 2.0 × 2.0 m | repeat | opaque |
+| `env_tex_dirt_frozen` | 64×64 | 2.0 × 2.0 m | repeat | opaque |
+| `env_tex_asphalt_cracked_ash` | 128×128 | 4.0 × 4.0 m | repeat | opaque |
+| `env_tex_sidewalk_ash` | 64×64 | 1.5 × 1.5 m | repeat | opaque |
+| `env_tex_curb_ash` | 64×64 | 1.0 × 0.64 m | repeat | opaque |
+| `env_tex_sidewalk_curb_ash` | 64×128 | 1.5 × 1.5 m | repeat | opaque |
+| `env_tex_ash_overlay` | 128×128 | 2.0 × 2.0 m | repeat | alphaTest |
+| `env_tex_snow_dust` | 128×128 | 2.0 × 2.0 m | repeat | alphaTest |
+| `env_decal_atlas` | 256×256 | - | clamp | alphaTest |
+
+- `env_tex_sidewalk_curb` is the uv layout of `env_sidewalk_curb_strip` / `_corner`. v 0–0.5 is the sidewalk top (1.5 m), v 0.5–0.6 the curb top,
+  0.6–0.64 the arris, 0.64–0.78 the curb face and 0.78–1 the gutter. u = 1.5 m along the curb.
+- Ash/snow blend: use the `*_ash` variants (same uv layout, swap with `{ texture: 'env_tex_..._ash' }`), or lay the tiling alpha
+  overlays `env_tex_ash_overlay` / `env_tex_snow_dust` with `makeEnvDecal(id, { width, depth })`, plus the snow/ash decal frames.
+- All tiling textures pass the wrap seam check in `render_env.py`. The joint textures are measured across the designed joint, and curb v
+  is a cross-section, not a tiling direction.
+
+### Decal atlas (`env_decal_atlas.png`, 256 px; `env_decal_atlas.glb` = 1 × 1 m unit quad at y = +0.02, long axis = local X)
+
+One InstancedMesh draws every road marking, crack, pothole and patch through the per-instance `vec4 uvRect`
+(`makeEnvDecals`). `setDecalAt(i, frame, x, z, yaw, scale)` scales the quad to the frame's metric size. Use yaw = π/2 to run a
+line along Z. For a single decal use `makeEnvDecal('pothole')`, which bakes the uvs.
+
+| frame | px [x, y, w, h] | size m | uvRect [u0, v0, u1, v1] |
+|---|---|---|---|
+| `lane_dash_yellow` | [0, 0, 128, 8] | [3.0, 0.12] | [0.001953, 0.001953, 0.498047, 0.029297] |
+| `lane_edge_white` | [128, 0, 128, 8] | [6.0, 0.12] | [0.501953, 0.001953, 0.998047, 0.029297] |
+| `stop_line` | [0, 8, 128, 16] | [3.6, 0.45] | [0.001953, 0.033203, 0.498047, 0.091797] |
+| `lot_line_white` | [128, 8, 128, 8] | [5.5, 0.1] | [0.501953, 0.033203, 0.998047, 0.060547] |
+| `lane_double_yellow` | [128, 16, 128, 16] | [6.0, 0.35] | [0.501953, 0.064453, 0.998047, 0.123047] |
+| `crosswalk_bar` | [0, 24, 128, 28] | [2.2, 0.45] | [0.001953, 0.095703, 0.498047, 0.201172] |
+| `crack_a` | [0, 64, 64, 64] | [1.6, 1.6] | [0.001953, 0.251953, 0.248047, 0.498047] |
+| `crack_b` | [64, 64, 64, 64] | [1.4, 1.4] | [0.251953, 0.251953, 0.498047, 0.498047] |
+| `crack_web` | [128, 64, 64, 64] | [1.9, 1.9] | [0.501953, 0.251953, 0.748047, 0.498047] |
+| `patch` | [192, 64, 64, 64] | [1.6, 1.6] | [0.751953, 0.251953, 0.998047, 0.498047] |
+| `pothole` | [0, 128, 64, 64] | [1.0, 1.0] | [0.001953, 0.501953, 0.248047, 0.748047] |
+| `pothole_water` | [64, 128, 64, 64] | [1.0, 1.0] | [0.251953, 0.501953, 0.498047, 0.748047] |
+| `pothole_ash` | [128, 128, 64, 64] | [1.0, 1.0] | [0.501953, 0.501953, 0.748047, 0.748047] |
+| `manhole` | [192, 128, 64, 64] | [0.8, 0.8] | [0.751953, 0.501953, 0.998047, 0.748047] |
+| `snow_patch` | [0, 192, 64, 64] | [1.6, 1.4] | [0.001953, 0.751953, 0.248047, 0.998047] |
+| `ash_overlay` | [64, 192, 64, 64] | [1.6, 1.4] | [0.251953, 0.751953, 0.498047, 0.998047] |
+| `curb_drift` | [128, 192, 64, 64] | [1.6, 0.8] | [0.501953, 0.751953, 0.748047, 0.998047] |
+| `leaf_litter` | [192, 192, 64, 64] | [1.2, 1.2] | [0.751953, 0.751953, 0.998047, 0.998047] |
+
+```js
+const marks = await makeEnvDecals(300);
+let i = 0;
+for (let z = 0; z > -200; z -= 12) marks.setDecalAt(i++, 'lane_dash_yellow', cx, z, Math.PI / 2);   // 3 m dash, 9 m gap
+for (let z = -3; z > -200; z -= 6) marks.setDecalAt(i++, 'lane_edge_white', curbX - 0.45, z, Math.PI / 2);
+marks.setDecalAt(i++, 'stop_line', cx + 1.8, -29, 0);
+for (let k = 0; k < 6; k++) marks.setDecalAt(i++, 'crosswalk_bar', curbX - 0.9 - k * 1.25, -31.6, Math.PI / 2);
+marks.count = i; marks.instanceMatrix.needsUpdate = true; marks.computeBoundingSphere(); scene.add(marks);
+```
+
+### Registry helpers (`registry.js`; existing exports unchanged)
+
+Exports: `ENV_CATALOG`, `ENV_TEXTURES`, `ENV_ATLAS`, `ENV_DECAL_FRAMES`, `ENV_TUFT_FRAMES`, `ENV_TUFT_FRAME_SCALE` and `ENV_SEASONS`.
+Helpers:
+- `loadEnvModel(id, loader?, { season, texture })`
+- `makeEnvInstanced(id, count, opts)`
+- `envJitterMatrix(id, x, z, rand, out, y)`, which applies the catalogue's scale, yaw and tilt jitter
+- `makeEnvTuftCards(count)`
+- `makeEnvDecals(count)`
+- `makeEnvDecal(frameOrOverlay, { width, depth })`
+- `loadGroundTexture(id, { size | repeat })`
+- `setEnvSeason(season)`
+- `getEnvMaterial`, `loadEnvGeometry`, `envTexturesReady`
+
+Geometry and materials are shared per id or key, so N instances cost one draw call per id.
+
+### Draw calls and placement notes (for Cartographer)
+
+- The mock street in `env_sheet.png` has 532 env instances in 11 InstancedMeshes. In the main pass (no shadow pass) it is **15 draw calls**: 13 env, plus 2 for the NPC and the sagebrush (the house is out of frame). The winter street is
+  16 calls, with the extra call from the snow-dust overlay. The budget per street is roughly one call per id you place, plus one for all tufts and one for all decals.
+- Colliders: trees use a cylinder of r 0.35 (cottonwood) or 0.30 (others), at full height. Use `sagebrush_clump` / `env_bush_frosted` at r 0.45. Rabbitbrush,
+  tumbleweed, tufts, decals and ground pieces are walk-through (r 0). The sidewalk strip is a 0.15 m step, not a wall.
+- The `env_sidewalk_curb_strip` curb face is on x = 0, with the road on −X and the sidewalk out to +1.68. Chain the strips every 1.5 m along Z and rotate 180° for the far side.
+  The `_corner` piece is a curb arc of r 3 m about its origin, from −X to −Z, and joins straight strips with their faces on x = −3 and z = −3.
+- Density guide: tufts 0.5–3 per m², in clumps of 4–12, culled at 10–22 m. Rabbitbrush in clusters of 3–7, 1.5–4 m apart. Tumbleweeds against
+  the downwind (east) side of fences, curbs and walls, with any rotation. Cottonwoods as singles or rows 8–15 m apart (they are wide, rXZ about 5.8 m).
+  Pinyon in groves 6–12 m apart, and snags about 1 per 400–900 m². Every entry has `jitter`, `placement` and `chapters` in the manifest.

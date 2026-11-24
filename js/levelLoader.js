@@ -1,15 +1,19 @@
 // Cartographer chapter loader. Builds geometry from levels/*.json (do not edit those files).
 import * as THREE from "three";
-import { CFG } from "./config.js?v=r14.2";
-import { fitHeight, makePerson, makeDog } from "./world.js?v=r14.2";
-import { evalCondition, applyEffects, setFlag } from "./story.js?v=r14.2";
-import { rollContainer, aliasItem } from "./systems.js?v=r14.2";
-import { addItem, takeItem, hasItems } from "./inventory.js?v=r14.2";
-import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js?v=r14.2";
-import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r14.2";
-import { coverBuildingRoofs, extractShingleMaterial, fallbackShingleMat } from "./roofs.js?v=r14.2";
-import { startTracking } from "./companionCmd.js?v=r14.2";
-import { bindNpc, disposeMixer } from "./npcWander.js?v=r14.2";
+import { CFG } from "./config.js?v=r15";
+import { fitHeight, makePerson, makeDog } from "./world.js?v=r15";
+import { evalCondition, applyEffects, setFlag } from "./story.js?v=r15";
+import { rollContainer, aliasItem } from "./systems.js?v=r15";
+import { addItem, takeItem, hasItems } from "./inventory.js?v=r15";
+import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings, instanceSmallBoxes } from "./buildings.js?v=r15";
+import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r15";
+import { coverBuildingRoofs, extractShingleMaterial, fallbackShingleMat } from "./roofs.js?v=r15";
+import { startTracking } from "./companionCmd.js?v=r15";
+import { bindNpc, disposeMixer } from "./npcWander.js?v=r15";
+import {
+  loadGroundOverlay, floorSkipSet, decorateFloorMaterial,
+  applyGroundDressing, tickGroundDressing, replacesSagebrush,
+} from "./groundDressing.js?v=r15";
 
 const SNOW_HEX = 0xeef2f6;
 function stripSnow(obj) {
@@ -305,7 +309,8 @@ export class LevelRuntime {
     };
   }
 
-  async load(chapterId, { fired } = {}) {
+  async load(chapterId, { fired, onProgress } = {}) {
+    const prog = (pct, label) => { try { onProgress?.(pct, label); } catch {} };
     const levels = this.game?.levels || this.levels;
     const L = (levels?.perChapter && (levels.perChapter[chapterId] || levels.perChapter[chapterId?.replace(/_.*$/, "")]))
       || Object.values(levels?.perChapter || {}).find((x) => x.chapter === chapterId || x.id === chapterId || x.id?.startsWith(chapterId));
@@ -335,14 +340,19 @@ export class LevelRuntime {
     this.world.clearLevel?.();
     this.world._levelLoaded = true;
     this.group = this.world.levelGroup;
+    prog(42, "Terrain");
     await this._buildGrid(L);
+    prog(55, "Props");
     await this._placeProps(L);
     this._placeFires(L);
+    prog(62, "Loot");
     await this._placeLoot(L);
+    prog(68, "People");
     await this._placeNpcs(L);
     this._placeInteractives(L);
     this._applyLocations(L);
     this._applyEnvironment(L);
+    prog(78, "Ready");
 
     const check = (w) => evalWhen(w, this.ctx());
     this.spawn = (L.spawns?.player || []).find((s) => check(s.when)) || (L.spawns?.player || [])[0] || { x: 0, z: 6, rotY: 0 };
@@ -398,6 +408,9 @@ export class LevelRuntime {
     };
     world.pbrCache = pbrCache;
 
+    this._ground = await loadGroundOverlay(L.id);
+    const skipFloor = floorSkipSet(this._ground);
+
     // Floors grouped by legend char
     const floors = new Map();
     const specials = [];
@@ -408,7 +421,7 @@ export class LevelRuntime {
         const t = legend[ch] || {};
         const x = o.x + (c + 0.5) * cs;
         const z = o.z + (r + 0.5) * cs;
-        if (t.walkable && !t.solid) {
+        if (t.walkable && !t.solid && !skipFloor.has(c + "," + r)) {
           if (!floors.has(ch)) floors.set(ch, []);
           floors.get(ch).push({ x, z, t, ch, c, r });
         }
@@ -428,6 +441,7 @@ export class LevelRuntime {
       const tex = await getPbr(t.floorTex);
       const color = t.ice ? 0xb9d3e3 : (t.preview ? parseInt(String(t.preview).replace("#", ""), 16) : 0xd9e1e8);
       const mat = stdMat(tex, color);
+      decorateFloorMaterial(ch, mat, this._ground, cs);
       const geo = new THREE.PlaneGeometry(cs, cs);
       geo.rotateX(-Math.PI / 2);
       const mesh = new THREE.InstancedMesh(geo, mat, cells.length);
@@ -591,7 +605,15 @@ export class LevelRuntime {
     }
 
     // Nevada sagebrush on scrub tiles (instanced: ~5 draw calls for the whole field).
-    await this._placeSagebrush(L, floors, scene);
+    // Ground overlay v2 already places sagebrush_clump where it belongs.
+    if (!replacesSagebrush(this._ground)) {
+      await this._placeSagebrush(L, floors, scene);
+    }
+    try {
+      await applyGroundDressing(this, this._ground, scene, world);
+    } catch (err) {
+      console.warn("[ground] apply failed", err);
+    }
 
     if (!this._shingleMat) {
       try {
@@ -608,6 +630,11 @@ export class LevelRuntime {
         rects: { greedyRects, rectWorld },
       });
     } catch (err) { console.warn("[roofs]", err); }
+
+    try {
+      const n = instanceSmallBoxes(scene);
+      if (n) console.info("[buildings] instanced", n, "facade boxes");
+    } catch (err) { console.warn("[buildings] instanceSmallBoxes", err); }
 
     // Bind G tiles to the nearest door-like interactive
     for (const g of this.gates) {
@@ -1108,6 +1135,7 @@ export class LevelRuntime {
     this._updateGates();
     this.tickEncounters(game.player.x, game.player.z);
     this.tickTriggers(game);
+    tickGroundDressing(this, game.player, dt);
   }
 
   _updateGates() {
@@ -1188,6 +1216,7 @@ export class LevelRuntime {
   }
 
   tickTriggers(game) {
+    if (game?._loadingLevel || game?._chapterBusy) return;
     const L = this.L;
     const p = game.player;
     const check = (w) => evalWhen(w, this.ctx());
@@ -1268,7 +1297,12 @@ export class LevelRuntime {
     if (type === "chapter_end") {
       const next = a.next || this.L?.next;
       const id = (next || "").replace(/_.*$/, "") || next;
-      if (id) game.setChapter(id);
+      // Queue the change so a chapter-end dialogue (e.g. the Ch1 voicemail)
+      // can finish, and so we never start a second setChapter while one is loading.
+      if (id) {
+        if (typeof game.requestChapter === "function") game.requestChapter(id);
+        else game.setChapter(id);
+      }
     }
     if (type === "story_check") this._storyCheck(a.id, game);
     if (type === "start_sequence") {

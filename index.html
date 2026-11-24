@@ -171,6 +171,24 @@
     .tbtn svg { display:block; width:18px; height:18px; margin: 0 auto; fill: currentColor; }
     #btn-pause svg { width:16px; height:16px; }
     #btn-swap svg { width:22px; height:22px; }
+    /* r15: pixel-outline interact / attack / swap (hud_buttons_mockup_v2). Same hit areas. */
+    #btn-interact, #btn-melee, #btn-swap {
+      border: 0;
+      box-shadow: none;
+      background: transparent;
+      overflow: visible;
+      padding: 0;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+    #btn-interact svg, #btn-melee svg, #btn-swap svg { display: none !important; }
+    #btn-interact img.px-hud, #btn-melee img.px-hud, #btn-swap img.px-hud {
+      position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      border-radius: 0;
+    }
     #look-pad {
       pointer-events:auto;
       position:absolute;
@@ -432,7 +450,7 @@
 </head>
 <body class="wield-melee">
   <div id="frame">
-    <div id="build-tag">r14.2</div>
+    <div id="build-tag">r15</div>
     <canvas id="view" width="180" height="320"></canvas>
     <canvas id="minimap" width="180" height="180"></canvas>
     <canvas id="hud" width="360" height="640"></canvas>
@@ -489,19 +507,19 @@
       <div id="look-pad"></div>
       <div class="joy-base" id="joy"><div class="joy-knob" id="joy-knob"></div></div>
       <button class="tbtn" id="btn-fire">FIRE</button>
-      <button class="tbtn" id="btn-melee" aria-label="Attack"><svg class="ico-knife" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.2 18.8l1.2 1.2 5.1-3.3-.9-1.1c-.3-.3-.3-.8 0-1.1l.4-.4 1.6 1.6 7.8-7.8c1.5-1.5 2.2-3.3 1.9-4.2-.4-.4-2.2.3-3.7 1.8L9.8 12.3l1.6 1.6-.4.4c-.3.3-.8.3-1.1 0l-1.1-.9-3.3 5.1-2.3 2.3z"/></svg><svg class="ico-melee" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.2 3.2l1.4 1.4-1.1 1.1 6.3 6.3-1.4 1.4-1.2-1.2-8.2 8.2c-.4.4-1 .4-1.4 0L4.2 17c-.4-.4-.4-1 0-1.4l8.2-8.2-1.2-1.2 1.4-1.4 1.1 1.1 1.1-1.1zM8.1 16.3L7 17.4 8.2 18.6l1.1-1.1-1.2-1.2z"/></svg></button>
+      <button class="tbtn" id="btn-melee" aria-label="Attack"><img class="px-hud" alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAYAAABV7bNHAAABY0lEQVR42u3cuw3CMBCA4YAYhZoSIdExBYMwBoMwBR0SoqRmGCo3lsDge9i+/DdAIMeXeygJ00QQklhYf8D9+bpYHn+3WR8tj7/EyPdYWYs57LcnT6HaohBkXYO8xZTienucNUUhyEpQb3KsJCFIW1CS05uYX0X9KwlBWoJGlSOVhCCpoChyaiUhqHYXs97Ce4l0np8kIUi6zUerPfl55RM3gqRdLGrXqu1qCGJQJEE+NUhae0rdwKsradciBEnnoFa/pFSw1vdAkLegXmpQEiWVhKC5CKIGRRPkPRdZdU8EeQvS6h7sYiSIBJEgggS12+ZLc9AoXQ5BzEEIIkEkaA41KOqdWAQVgnvzWffl3jyXGAlqW4PmVotKT7siSDoHRdut8vOiBlkJStdk9OeledLeqotF7Wq87dNK0OiSeOOwF0G5pBS89YygGJL454XRBLUWpS0GQa0FlUR571IIIoiu4w0qVr10w+GhfQAAAABJRU5ErkJggg==" /><svg class="ico-knife" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.2 18.8l1.2 1.2 5.1-3.3-.9-1.1c-.3-.3-.3-.8 0-1.1l.4-.4 1.6 1.6 7.8-7.8c1.5-1.5 2.2-3.3 1.9-4.2-.4-.4-2.2.3-3.7 1.8L9.8 12.3l1.6 1.6-.4.4c-.3.3-.8.3-1.1 0l-1.1-.9-3.3 5.1-2.3 2.3z"/></svg><svg class="ico-melee" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.2 3.2l1.4 1.4-1.1 1.1 6.3 6.3-1.4 1.4-1.2-1.2-8.2 8.2c-.4.4-1 .4-1.4 0L4.2 17c-.4-.4-.4-1 0-1.4l8.2-8.2-1.2-1.2 1.4-1.4 1.1 1.1 1.1-1.1zM8.1 16.3L7 17.4 8.2 18.6l1.1-1.1-1.2-1.2z"/></svg></button>
       <button class="tbtn" id="btn-reload">RELOAD</button>
-      <button class="tbtn" id="btn-interact" aria-label="Interact" title="Interact"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V12"/><path d="M11 11.5v-7a1.5 1.5 0 0 1 3 0V12"/><path d="M14 11.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M17 9.5a1.5 1.5 0 0 1 3 0V15a7 7 0 0 1-7 7h-1.2a7 7 0 0 1-5.6-2.8L3.3 15.4a1.6 1.6 0 0 1 2.4-2.1L8 15.5"/></svg></button>
+      <button class="tbtn" id="btn-interact" aria-label="Interact" title="Interact"><img class="px-hud" alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAABK0lEQVR42u2bMQ7CMAxFS8VRmBkREhun4CAcg4NwCjYkxMjMYZiyWKoayf5OaN/fSRs9vr/rpsOAlq1N9IKvz/ceud5xv7tErjeujfA2muj5dLgq/zFe4iMebkx0To/n++YhDuFeyUaRhvAU2dZEa4nPkSaHVR1Tlsp9T5GGsFXv3rX3aas3VTq7KlsC6utYL+PhrM7Iei6rVqzXwyrvznlW7WnrZTyszsna/FSRh3DvHZSX9OoIs2E87MxdCC+FsLeK2t+pemuKFhtmw2yYXlqR6zwttSYc/VSjmnUxl46abXl76qjrM5dWTyrI4d48HO3lVrnN++FaD2e/+1GnAoSLigf+7awHp3hqq/RU1e4lZzmJF024F9KcplUTzibuJQrh6AX5qgWhVP0AxFq2h2JdJqAAAAAASUVORK5CYII=" /><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V12"/><path d="M11 11.5v-7a1.5 1.5 0 0 1 3 0V12"/><path d="M14 11.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M17 9.5a1.5 1.5 0 0 1 3 0V15a7 7 0 0 1-7 7h-1.2a7 7 0 0 1-5.6-2.8L3.3 15.4a1.6 1.6 0 0 1 2.4-2.1L8 15.5"/></svg></button>
       <button class="tbtn" id="btn-aim">AIM</button>
       <button class="tbtn" id="btn-mode">SEMI</button>
       <button class="tbtn" id="btn-inv">BAG</button>
       <button class="tbtn" id="btn-pause" aria-label="Pause"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4" width="4.5" height="16" rx="1.2"/><rect x="13.5" y="4" width="4.5" height="16" rx="1.2"/></svg></button>
-      <button class="tbtn" id="btn-swap" aria-label="Swap weapon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.7 7.7A6.8 6.8 0 0 0 7.2 6.4L6 5.2v4.3h4.3L8.8 8.1A4.5 4.5 0 0 1 16.4 9l1.3-1.3zM6.3 16.3A6.8 6.8 0 0 0 16.8 17.6L18 18.8v-4.3h-4.3l1.5 1.4A4.5 4.5 0 0 1 7.6 15l-1.3 1.3z"/></svg></button>
+      <button class="tbtn" id="btn-swap" aria-label="Swap weapon"><img class="px-hud" alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAw0lEQVR42u2aMQqEMBBFJ+JRrLeUhe32FB7EY3iQPYWdsFhu7WG2ccqIjtEQ5k0lSDAvD2e+YJC1vr/lIwXV89F0IiKVFF61nvz71fYlbVz3XbwBAAAAAAAAAAAgaxY6umCc5mErO+l9ax3NZP4M6AnFTFhTrdWcPwN7TdCFrjaQ2oR1HQbOniBR4u4HjtM8nJ3WZKEU3SbV/KAL5Z4ffg1YO0ksvVpN+P0euOqdYBIDAAAAAAAAAAAAOAIIesHfKpnqD/CbTQ4OR+xhAAAAAElFTkSuQmCC" /><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.7 7.7A6.8 6.8 0 0 0 7.2 6.4L6 5.2v4.3h4.3L8.8 8.1A4.5 4.5 0 0 1 16.4 9l1.3-1.3zM6.3 16.3A6.8 6.8 0 0 0 16.8 17.6L18 18.8v-4.3h-4.3l1.5 1.4A4.5 4.5 0 0 1 7.6 15l-1.3 1.3z"/></svg></button>
     </div>
   </div>
   <script>
-    window.__ASHFALL_EXPECTED_BUILD = "r14.2";
-    window.__ASHFALL_BUILD = "r14.2";
+    window.__ASHFALL_EXPECTED_BUILD = "r15";
+    window.__ASHFALL_BUILD = "r15";
     window.__ASHFALL_BOOTED = false;
     window.__ASHFALL_MODULE = false;
     window.__ASHFALL_PENDING = null;
@@ -587,12 +605,12 @@
       setTimeout(function () {
         if (window.__ASHFALL_BOOTED) return;
         if (window.__ASHFALL_MODULE) {
-          showBanner("The game file loaded, but startup is stuck (often a Safari WebGL or cache issue). Wait a moment, or clear this site's data and reload. Build r14.2.");
+          showBanner("The game file loaded, but startup is stuck (often a Safari WebGL or cache issue). Wait a moment, or clear this site's data and reload. Build r15.");
         } else {
-          showBanner("The game never started — the script did not load. If you opened this from an older Home Screen icon, delete it and reopen the page, or clear Safari cache for this site. Build r14.2.");
+          showBanner("The game never started — the script did not load. If you opened this from an older Home Screen icon, delete it and reopen the page, or clear Safari cache for this site. Build r15.");
         }
       }, 4000);
-      var EXPECTED = window.__ASHFALL_EXPECTED_BUILD || "r14.2";
+      var EXPECTED = window.__ASHFALL_EXPECTED_BUILD || "r15";
       window.__ashfallBustStaleBuild = function (found) {
         var key = "ashfall-bust-" + EXPECTED;
         var reloadOnce = function () {
@@ -631,12 +649,12 @@
         if (window.__ASHFALL_BOOTED || buildChecks > 80) clearInterval(buildTimer);
       }, 50);
       if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("./sw.js?v=r14.2", { scope: "./" }).then(function (reg) {
+        navigator.serviceWorker.register("./sw.js?v=r15", { scope: "./" }).then(function (reg) {
           try { reg.update(); } catch (err) {}
         }).catch(function () {});
       }
     })();
   </script>
-  <script type="module" src="./js/game.js?v=r14.2" onerror="window.__ASHFALL_MODULE_ERR=true; if (window.__ashfallBootFail) window.__ashfallBootFail('The game script failed to load. Try a hard refresh or clear this site\\'s data. Build r14.2.');"></script>
+  <script type="module" src="./js/game.js?v=r15" onerror="window.__ASHFALL_MODULE_ERR=true; if (window.__ashfallBootFail) window.__ashfallBootFail('The game script failed to load. Try a hard refresh or clear this site\\'s data. Build r15.');"></script>
 </body>
 </html>

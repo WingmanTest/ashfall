@@ -1,6 +1,6 @@
 // Visual dressing for Cartographer solid tiles. Colliders stay merged AABBs.
 import * as THREE from "three";
-import { fitHeight } from "./world.js?v=r14.2";
+import { fitHeight } from "./world.js?v=r15";
 
 export const KENNEY_BUILDINGS = [
   "assets/kenney/industrial/building-a.glb",
@@ -293,4 +293,53 @@ export function dressMeshPBR(root, pbr, tile = 2) {
     }
     uv.needsUpdate = true;
   });
+}
+
+/**
+ * Collapse many small same-size BoxGeometry meshes (windows, doors, lintels)
+ * into one InstancedMesh per (material, size). Cuts hundreds of draw calls
+ * on dressed streets without changing how the facades look.
+ */
+export function instanceSmallBoxes(group, maxDim = 2.2) {
+  if (!group) return 0;
+  const buckets = new Map();
+  for (const o of group.children) {
+    if (!o || !o.isMesh || o.isInstancedMesh) continue;
+    if (o.userData && (o.userData.kind || o.userData.groundDressing || o.userData.sharedAsset || o.userData.modelId)) continue;
+    const geo = o.geometry;
+    if (!geo || geo.type !== "BoxGeometry" || !geo.parameters) continue;
+    const { width, height, depth } = geo.parameters;
+    if (Math.max(width, height, depth) > maxDim) continue;
+    const mat = o.material;
+    if (!mat || Array.isArray(mat)) continue;
+    const key = mat.uuid + "|" + width + "|" + height + "|" + depth;
+    let b = buckets.get(key);
+    if (!b) {
+      b = { mat, geo, items: [] };
+      buckets.set(key, b);
+    }
+    b.items.push(o);
+  }
+  let merged = 0;
+  for (const b of buckets.values()) {
+    if (b.items.length < 2) continue;
+    const im = new THREE.InstancedMesh(b.geo, b.mat, b.items.length);
+    im.instanceMatrix.setUsage(THREE.StaticDrawUsage);
+    im.castShadow = b.items.some((o) => o.castShadow);
+    im.receiveShadow = b.items.some((o) => o.receiveShadow);
+    im.frustumCulled = false;
+    im.userData.kind = "facade_instanced";
+    im.userData.sharedAsset = true;
+    let i = 0;
+    for (const o of b.items) {
+      o.updateWorldMatrix(true, false);
+      im.setMatrixAt(i++, o.matrixWorld);
+      if (o.parent) o.parent.remove(o);
+    }
+    im.instanceMatrix.needsUpdate = true;
+    im.computeBoundingSphere?.();
+    group.add(im);
+    merged += b.items.length;
+  }
+  return merged;
 }

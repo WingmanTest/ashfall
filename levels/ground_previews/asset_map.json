@@ -1,0 +1,1218 @@
+{
+ "formatVersion": 2,
+ "note": "THE one remap table for ground dressing, regenerated from models/manifest.json (env) by tools/sync_asset_map.py. Sculptor finalised every id (final == provisional). Engine: resolve model = remap[id].final || id; load via registry.js makeEnvInstanced / makeEnvTuftCards / makeEnvDecals / loadGroundTexture; setEnvSeason(level season) once per level.",
+ "source": "models/manifest.json env section (Sculptor env set, 2026-11-24)",
+ "registryHelpers": [
+  "ENV_CATALOG",
+  "ENV_TEXTURES",
+  "ENV_DECAL_FRAMES",
+  "ENV_TUFT_FRAMES",
+  "loadEnvModel",
+  "makeEnvInstanced",
+  "envJitterMatrix",
+  "makeEnvTuftCards",
+  "makeEnvDecals",
+  "makeEnvDecal",
+  "loadGroundTexture",
+  "setEnvSeason"
+ ],
+ "seasonBands": {
+  "summer": 0,
+  "autumn": 1,
+  "late_fall": 2,
+  "fallout_winter": 3
+ },
+ "remap": {
+  "env_bush_frosted": {
+   "final": "env_bush_frosted",
+   "role": "bush",
+   "exists": true,
+   "path": "models/env/env_bush_frosted.glb",
+   "tris": 239,
+   "estTris": 239,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": true,
+   "colliderR": 0.45,
+   "colliderH": 0.91,
+   "radiusXZ": 0.983,
+   "heightM": 0.905,
+   "jitter": {
+    "scale": [
+     0.8,
+     1.25
+    ],
+    "rotY": "full",
+    "tiltDeg": 4
+   },
+   "variants": {
+    "fallout_frosted": 3
+   },
+   "placement": "Act III; dense enough to hide an ambusher. Same placement as sagebrush.",
+   "chapters": [
+    8,
+    9,
+    10
+   ],
+   "material": "env_atlas (opaque, FrontSide, flat-shaded)"
+  },
+  "env_bush_rabbitbrush": {
+   "final": "env_bush_rabbitbrush",
+   "role": "bush",
+   "exists": true,
+   "path": "models/env/env_bush_rabbitbrush.glb",
+   "tris": 242,
+   "estTris": 242,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": false,
+   "colliderR": 0.0,
+   "colliderH": 0.91,
+   "radiusXZ": 0.455,
+   "heightM": 0.909,
+   "jitter": {
+    "scale": [
+     0.7,
+     1.3
+    ],
+    "rotY": "full",
+    "tiltDeg": 5
+   },
+   "variants": {
+    "summer_yellow_bloom": 0,
+    "autumn_seedhead": 1,
+    "late_fall_grey": 2,
+    "fallout_frosted": 3
+   },
+   "placement": "Road shoulders, vacant lots, washes. Clusters of 3-7, 1.5-4 m apart. Knee-high, walk-through.",
+   "chapters": [
+    1,
+    2,
+    3,
+    4,
+    7
+   ],
+   "material": "env_atlas (opaque, FrontSide, flat-shaded)"
+  },
+  "env_bush_tumbleweed": {
+   "final": "env_bush_tumbleweed",
+   "role": "bush",
+   "exists": true,
+   "path": "models/env/env_bush_tumbleweed.glb",
+   "tris": 232,
+   "estTris": 232,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": false,
+   "colliderR": 0.0,
+   "colliderH": 0.58,
+   "radiusXZ": 0.387,
+   "heightM": 0.581,
+   "jitter": {
+    "scale": [
+     0.7,
+     1.35
+    ],
+    "rotY": "full",
+    "tiltDeg": 25,
+    "note": "any rotation works (it is a ball)"
+   },
+   "variants": {
+    "summer_tan": 0,
+    "autumn_tan": 1,
+    "late_fall_grey": 2,
+    "fallout_frosted": 3
+   },
+   "placement": "Piled against fences, curbs, wrecks and walls on the downwind (east) side; loose singles on flats.",
+   "chapters": [
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "material": "env_atlas (opaque, FrontSide, flat-shaded)"
+  },
+  "env_decal_atlas": {
+   "final": "env_decal_atlas",
+   "role": "decal_atlas",
+   "exists": true,
+   "path": "models/env/env_decal_atlas.glb",
+   "tris": 2,
+   "estTris": 2,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": false,
+   "colliderR": 0.0,
+   "colliderH": 0.02,
+   "radiusXZ": 0.707,
+   "heightM": 0.0,
+   "jitter": {
+    "scale": [
+     0.8,
+     1.25
+    ],
+    "rotY": "full"
+   },
+   "variants": {},
+   "placement": null,
+   "chapters": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "material": "decal atlas (alphaTest 0.5, polygonOffset; per-instance uvRect)",
+   "decalFrames": {
+    "lane_dash_yellow": {
+     "size": [
+      3.0,
+      0.12
+     ],
+     "uvRect": [
+      0.001953,
+      0.001953,
+      0.498047,
+      0.029297
+     ]
+    },
+    "lane_edge_white": {
+     "size": [
+      6.0,
+      0.12
+     ],
+     "uvRect": [
+      0.501953,
+      0.001953,
+      0.998047,
+      0.029297
+     ]
+    },
+    "stop_line": {
+     "size": [
+      3.6,
+      0.45
+     ],
+     "uvRect": [
+      0.001953,
+      0.033203,
+      0.498047,
+      0.091797
+     ]
+    },
+    "lot_line_white": {
+     "size": [
+      5.5,
+      0.1
+     ],
+     "uvRect": [
+      0.501953,
+      0.033203,
+      0.998047,
+      0.060547
+     ]
+    },
+    "lane_double_yellow": {
+     "size": [
+      6.0,
+      0.35
+     ],
+     "uvRect": [
+      0.501953,
+      0.064453,
+      0.998047,
+      0.123047
+     ]
+    },
+    "crosswalk_bar": {
+     "size": [
+      2.2,
+      0.45
+     ],
+     "uvRect": [
+      0.001953,
+      0.095703,
+      0.498047,
+      0.201172
+     ]
+    },
+    "crack_a": {
+     "size": [
+      1.6,
+      1.6
+     ],
+     "uvRect": [
+      0.001953,
+      0.251953,
+      0.248047,
+      0.498047
+     ]
+    },
+    "crack_b": {
+     "size": [
+      1.4,
+      1.4
+     ],
+     "uvRect": [
+      0.251953,
+      0.251953,
+      0.498047,
+      0.498047
+     ]
+    },
+    "crack_web": {
+     "size": [
+      1.9,
+      1.9
+     ],
+     "uvRect": [
+      0.501953,
+      0.251953,
+      0.748047,
+      0.498047
+     ]
+    },
+    "patch": {
+     "size": [
+      1.6,
+      1.6
+     ],
+     "uvRect": [
+      0.751953,
+      0.251953,
+      0.998047,
+      0.498047
+     ]
+    },
+    "pothole": {
+     "size": [
+      1.0,
+      1.0
+     ],
+     "uvRect": [
+      0.001953,
+      0.501953,
+      0.248047,
+      0.748047
+     ]
+    },
+    "pothole_water": {
+     "size": [
+      1.0,
+      1.0
+     ],
+     "uvRect": [
+      0.251953,
+      0.501953,
+      0.498047,
+      0.748047
+     ]
+    },
+    "pothole_ash": {
+     "size": [
+      1.0,
+      1.0
+     ],
+     "uvRect": [
+      0.501953,
+      0.501953,
+      0.748047,
+      0.748047
+     ]
+    },
+    "manhole": {
+     "size": [
+      0.8,
+      0.8
+     ],
+     "uvRect": [
+      0.751953,
+      0.501953,
+      0.998047,
+      0.748047
+     ]
+    },
+    "snow_patch": {
+     "size": [
+      1.6,
+      1.4
+     ],
+     "uvRect": [
+      0.001953,
+      0.751953,
+      0.248047,
+      0.998047
+     ]
+    },
+    "ash_overlay": {
+     "size": [
+      1.6,
+      1.4
+     ],
+     "uvRect": [
+      0.251953,
+      0.751953,
+      0.498047,
+      0.998047
+     ]
+    },
+    "curb_drift": {
+     "size": [
+      1.6,
+      0.8
+     ],
+     "uvRect": [
+      0.501953,
+      0.751953,
+      0.748047,
+      0.998047
+     ]
+    },
+    "leaf_litter": {
+     "size": [
+      1.2,
+      1.2
+     ],
+     "uvRect": [
+      0.751953,
+      0.751953,
+      0.998047,
+      0.998047
+     ]
+    }
+   }
+  },
+  "env_road_2lane_8x4": {
+   "final": "env_road_2lane_8x4",
+   "role": "road_static",
+   "exists": true,
+   "path": "models/env/env_road_2lane_8x4.glb",
+   "tris": 4,
+   "estTris": 4,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": false,
+   "colliderR": 0.0,
+   "colliderH": 0.0,
+   "radiusXZ": 4.472,
+   "heightM": 0.0,
+   "jitter": {
+    "scale": [
+     1,
+     1
+    ],
+    "rotY": "snap 90 deg"
+   },
+   "variants": {},
+   "placement": null,
+   "chapters": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "material": "ground (opaque, RepeatWrapping)"
+  },
+  "env_road_tile_4m": {
+   "final": "env_road_tile_4m",
+   "role": "road_static",
+   "exists": true,
+   "path": "models/env/env_road_tile_4m.glb",
+   "tris": 2,
+   "estTris": 2,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": false,
+   "colliderR": 0.0,
+   "colliderH": 0.0,
+   "radiusXZ": 2.828,
+   "heightM": 0.0,
+   "jitter": {
+    "scale": [
+     1,
+     1
+    ],
+    "rotY": "snap 90 deg"
+   },
+   "variants": {},
+   "placement": null,
+   "chapters": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "material": "ground (opaque, RepeatWrapping)"
+  },
+  "env_sidewalk_curb_corner": {
+   "final": "env_sidewalk_curb_corner",
+   "role": "road_static",
+   "exists": true,
+   "path": "models/env/env_sidewalk_curb_corner.glb",
+   "tris": 36,
+   "estTris": 36,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": false,
+   "colliderR": 0.0,
+   "colliderH": 0.15,
+   "radiusXZ": 3.3,
+   "heightM": 0.15,
+   "jitter": {
+    "scale": [
+     1,
+     1
+    ],
+    "rotY": "snap 90 deg"
+   },
+   "variants": {},
+   "placement": null,
+   "chapters": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "material": "ground (opaque, RepeatWrapping)"
+  },
+  "env_sidewalk_curb_strip": {
+   "final": "env_sidewalk_curb_strip",
+   "role": "road_static",
+   "exists": true,
+   "path": "models/env/env_sidewalk_curb_strip.glb",
+   "tris": 12,
+   "estTris": 12,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": false,
+   "colliderR": 0.0,
+   "colliderH": 0.15,
+   "radiusXZ": 1.84,
+   "heightM": 0.15,
+   "jitter": {
+    "scale": [
+     1,
+     1
+    ],
+    "rotY": "snap 90 deg"
+   },
+   "variants": {},
+   "placement": null,
+   "chapters": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "material": "ground (opaque, RepeatWrapping)"
+  },
+  "env_tree_bare_frosted": {
+   "final": "env_tree_bare_frosted",
+   "role": "tree",
+   "exists": true,
+   "path": "models/env/env_tree_bare_frosted.glb",
+   "tris": 394,
+   "estTris": 394,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": true,
+   "colliderR": 0.3,
+   "colliderH": 5.72,
+   "radiusXZ": 1.958,
+   "heightM": 5.723,
+   "jitter": {
+    "scale": [
+     0.85,
+     1.15
+    ],
+    "rotY": "full",
+    "tiltDeg": 2
+   },
+   "variants": {
+    "fallout_frosted": 3
+   },
+   "placement": "Act III street trees / park strips. Along sidewalks every 8-12 m.",
+   "chapters": [
+    8,
+    9,
+    10
+   ],
+   "material": "env_atlas (opaque, FrontSide, flat-shaded)"
+  },
+  "env_tree_cottonwood_dead": {
+   "final": "env_tree_cottonwood_dead",
+   "role": "tree",
+   "exists": true,
+   "path": "models/env/env_tree_cottonwood_dead.glb",
+   "tris": 399,
+   "estTris": 399,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": true,
+   "colliderR": 0.35,
+   "colliderH": 6.61,
+   "radiusXZ": 5.841,
+   "heightM": 6.611,
+   "jitter": {
+    "scale": [
+     0.85,
+     1.25
+    ],
+    "rotY": "full",
+    "tiltDeg": 3
+   },
+   "variants": {
+    "summer_sparse_leaf": 0,
+    "autumn_leaf_drop": 1,
+    "late_fall_bare_wet": 2,
+    "fallout_frosted": 3
+   },
+   "placement": "Truckee River / Sparks yards, Carson valley floor, Dixie Valley ranch rows. Singles, or rows 8-15 m apart.",
+   "chapters": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "material": "env_atlas (opaque, FrontSide, flat-shaded)"
+  },
+  "env_tree_pinyon_burnt": {
+   "final": "env_tree_pinyon_burnt",
+   "role": "tree",
+   "exists": true,
+   "path": "models/env/env_tree_pinyon_burnt.glb",
+   "tris": 306,
+   "estTris": 306,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": true,
+   "colliderR": 0.3,
+   "colliderH": 3.64,
+   "radiusXZ": 3.951,
+   "heightM": 3.643,
+   "jitter": {
+    "scale": [
+     0.8,
+     1.2
+    ],
+    "rotY": "full",
+    "tiltDeg": 4
+   },
+   "variants": {
+    "summer_charred": 0,
+    "autumn_charred": 1,
+    "late_fall_charred": 2,
+    "fallout_frosted": 3
+   },
+   "placement": "Pinyon-juniper hills (Galena, US-50 passes, Virginia Range). Loose groves 6-12 m apart; mix with tumbleweeds.",
+   "chapters": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "material": "env_atlas (opaque, FrontSide, flat-shaded)"
+  },
+  "env_tree_snag_stump": {
+   "final": "env_tree_snag_stump",
+   "role": "tree",
+   "exists": true,
+   "path": "models/env/env_tree_snag_stump.glb",
+   "tris": 166,
+   "estTris": 166,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": true,
+   "colliderR": 0.3,
+   "colliderH": 2.92,
+   "radiusXZ": 1.567,
+   "heightM": 2.924,
+   "jitter": {
+    "scale": [
+     0.75,
+     1.25
+    ],
+    "rotY": "full",
+    "tiltDeg": 0
+   },
+   "variants": {
+    "plain": 1,
+    "summer": 0,
+    "late_fall_wet": 2,
+    "fallout_frosted": 3
+   },
+   "placement": "Burn scars, wash edges, yards where trees were cut for firewood. Accent: about 1 per 400-900 m2.",
+   "chapters": [
+    3,
+    4,
+    8,
+    9,
+    10
+   ],
+   "material": "env_atlas (opaque, FrontSide, flat-shaded)"
+  },
+  "env_tuft_cards": {
+   "final": "env_tuft_cards",
+   "role": "tuft",
+   "exists": true,
+   "path": "models/env/env_tuft_cards.glb",
+   "tris": 16,
+   "estTris": 16,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": false,
+   "colliderR": 0.0,
+   "colliderH": 0.32,
+   "radiusXZ": 0.231,
+   "heightM": 0.32,
+   "jitter": {
+    "scale": [
+     0.7,
+     1.4
+    ],
+    "rotY": "full",
+    "tiltDeg": 6,
+    "note": "multiply by tuftFrames[f].scale"
+   },
+   "variants": {
+    "summer": 0,
+    "autumn": 1,
+    "late_fall": 2,
+    "fallout_winter": 3
+   },
+   "placement": "Mixed tufts in ONE draw call: any mix of cheatgrass / weeds / thistle / frostgrass per instance.",
+   "chapters": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "material": "env_cutout + per-instance float attribute tuftFrame (registry makeEnvTuftCards)",
+   "tuftFrames": {
+    "cheatgrass": {
+     "frame": 0,
+     "scale": 1.0,
+     "id": "env_tuft_cheatgrass"
+    },
+    "weeds": {
+     "frame": 1,
+     "scale": 1.05,
+     "id": "env_tuft_weeds"
+    },
+    "thistle": {
+     "frame": 2,
+     "scale": 1.4,
+     "id": "env_tuft_thistle"
+    },
+    "frostgrass": {
+     "frame": 3,
+     "scale": 0.75,
+     "id": "env_tuft_frostgrass"
+    }
+   }
+  },
+  "env_tuft_cheatgrass": {
+   "final": "env_tuft_cheatgrass",
+   "role": "tuft",
+   "exists": true,
+   "path": "models/env/env_tuft_cheatgrass.glb",
+   "tris": 16,
+   "estTris": 16,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": false,
+   "colliderR": 0.0,
+   "colliderH": 0.32,
+   "radiusXZ": 0.298,
+   "heightM": 0.32,
+   "jitter": {
+    "scale": [
+     0.7,
+     1.4
+    ],
+    "rotY": "full",
+    "tiltDeg": 6
+   },
+   "variants": {
+    "summer_straw": 0,
+    "autumn_tan": 1,
+    "late_fall_grey": 2,
+    "fallout_frosted": 3
+   },
+   "placement": "Dirt shoulders, sidewalk cracks, gutters, lot edges, fence lines. Clumped patches of 0.5-3 per m2; distance-cull at 10-22 m.",
+   "chapters": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "material": "env_cutout (same atlas, alphaTest 0.5, not blended, up-facing normals; double-sided via explicit back faces, FrontSide material)"
+  },
+  "env_tuft_frostgrass": {
+   "final": "env_tuft_frostgrass",
+   "role": "tuft",
+   "exists": true,
+   "path": "models/env/env_tuft_frostgrass.glb",
+   "tris": 16,
+   "estTris": 16,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": false,
+   "colliderR": 0.0,
+   "colliderH": 0.24,
+   "radiusXZ": 0.21,
+   "heightM": 0.24,
+   "jitter": {
+    "scale": [
+     0.7,
+     1.4
+    ],
+    "rotY": "full",
+    "tiltDeg": 6
+   },
+   "variants": {
+    "summer_dry": 0,
+    "autumn_dry": 1,
+    "late_fall_rime": 2,
+    "fallout_buried_ash": 3
+   },
+   "placement": "Dirt shoulders, sidewalk cracks, gutters, lot edges, fence lines. Clumped patches of 0.5-3 per m2; distance-cull at 10-22 m.",
+   "chapters": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "material": "env_cutout (same atlas, alphaTest 0.5, not blended, up-facing normals; double-sided via explicit back faces, FrontSide material)"
+  },
+  "env_tuft_thistle": {
+   "final": "env_tuft_thistle",
+   "role": "tuft",
+   "exists": true,
+   "path": "models/env/env_tuft_thistle.glb",
+   "tris": 16,
+   "estTris": 16,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": false,
+   "colliderR": 0.0,
+   "colliderH": 0.46,
+   "radiusXZ": 0.203,
+   "heightM": 0.46,
+   "jitter": {
+    "scale": [
+     0.7,
+     1.4
+    ],
+    "rotY": "full",
+    "tiltDeg": 6
+   },
+   "variants": {
+    "summer_dry": 0,
+    "autumn_dry": 1,
+    "late_fall_dry": 2,
+    "fallout_frosted": 3
+   },
+   "placement": "Dirt shoulders, sidewalk cracks, gutters, lot edges, fence lines. Clumped patches of 0.5-3 per m2; distance-cull at 10-22 m.",
+   "chapters": [
+    3,
+    4,
+    8,
+    9,
+    10
+   ],
+   "material": "env_cutout (same atlas, alphaTest 0.5, not blended, up-facing normals; double-sided via explicit back faces, FrontSide material)"
+  },
+  "env_tuft_weeds": {
+   "final": "env_tuft_weeds",
+   "role": "tuft",
+   "exists": true,
+   "path": "models/env/env_tuft_weeds.glb",
+   "tris": 16,
+   "estTris": 16,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": false,
+   "colliderR": 0.0,
+   "colliderH": 0.34,
+   "radiusXZ": 0.27,
+   "heightM": 0.34,
+   "jitter": {
+    "scale": [
+     0.7,
+     1.4
+    ],
+    "rotY": "full",
+    "tiltDeg": 6
+   },
+   "variants": {
+    "summer_dry_green": 0,
+    "autumn_kochia_red": 1,
+    "late_fall_brown": 2,
+    "fallout_frosted": 3
+   },
+   "placement": "Dirt shoulders, sidewalk cracks, gutters, lot edges, fence lines. Clumped patches of 0.5-3 per m2; distance-cull at 10-22 m.",
+   "chapters": [
+    1,
+    2,
+    5,
+    6,
+    7
+   ],
+   "material": "env_cutout (same atlas, alphaTest 0.5, not blended, up-facing normals; double-sided via explicit back faces, FrontSide material)"
+  },
+  "sagebrush_clump": {
+   "final": "sagebrush_clump",
+   "role": "bush",
+   "exists": true,
+   "path": "models/nature/sagebrush_clump.glb",
+   "tris": 324,
+   "estTris": 324,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": true,
+   "colliderR": 0.45,
+   "colliderH": 1.04,
+   "radiusXZ": 0.562,
+   "heightM": 1.041,
+   "jitter": {
+    "scale": [
+     0.75,
+     1.3
+    ],
+    "rotY": "full",
+    "tiltDeg": 4
+   },
+   "variants": {
+    "summer": 0,
+    "autumn_dusty": 1,
+    "late_fall_dusty": 2,
+    "fallout_frosted": 3
+   },
+   "placement": "Everywhere outside town: open flats 3-8 m apart, denser on slopes.",
+   "chapters": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    7
+   ],
+   "material": "env_atlas (opaque, FrontSide, flat-shaded) - re-exported from 5 materials, same geometry"
+  }
+ },
+ "textures": {
+  "env_atlas": {
+   "final": "env_atlas",
+   "path": "models/env/textures/env_atlas.png",
+   "sizePx": [
+    256,
+    256
+   ],
+   "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping (needed for the season offset)",
+   "seasonBands": {
+    "summer": 0,
+    "autumn": 1,
+    "late_fall": 2,
+    "fallout_winter": 3
+   },
+   "bandOffsetV": 0.25
+  },
+  "env_decal_atlas": {
+   "final": "env_decal_atlas",
+   "path": "models/env/textures/env_decal_atlas.png",
+   "sizePx": [
+    256,
+    256
+   ],
+   "metersPerTile": null,
+   "wrap": "clamp",
+   "alpha": "alphaTest 0.5 (alpha is 0/255, never blended)",
+   "kind": "decal_atlas",
+   "notes": "4x4 grid of 64 px cells; row 0 holds 6 stretched line frames."
+  },
+  "env_tex_ash_overlay": {
+   "final": "env_tex_ash_overlay",
+   "path": "models/env/textures/env_tex_ash_overlay.png",
+   "sizePx": [
+    128,
+    128
+   ],
+   "metersPerTile": [
+    2.0,
+    2.0
+   ],
+   "wrap": "repeat",
+   "alpha": "alphaTest 0.5 (alpha is 0/255, never blended)",
+   "kind": "overlay",
+   "notes": "Tileable dithered ash coverage (alphaTest): drape over ANY ground plane for the ash blend."
+  },
+  "env_tex_asphalt_cracked": {
+   "final": "env_tex_asphalt_cracked",
+   "path": "models/env/textures/env_tex_asphalt_cracked.png",
+   "sizePx": [
+    128,
+    128
+   ],
+   "metersPerTile": [
+    4.0,
+    4.0
+   ],
+   "wrap": "repeat",
+   "alpha": null,
+   "kind": "ground",
+   "notes": "Neutral-grey cracked asphalt (tint per season with roadStyle.surfaceTint), aggregate speckle, tar-sealed crack. Seamless."
+  },
+  "env_tex_asphalt_cracked_ash": {
+   "final": "env_tex_asphalt_cracked_ash",
+   "path": "models/env/textures/env_tex_asphalt_cracked_ash.png",
+   "sizePx": [
+    128,
+    128
+   ],
+   "metersPerTile": [
+    4.0,
+    4.0
+   ],
+   "wrap": "repeat",
+   "alpha": null,
+   "kind": "ground",
+   "notes": "Extra: ash-dusted env_tex_asphalt_cracked (same layout) for Ch 7b-10."
+  },
+  "env_tex_asphalt_lanes": {
+   "final": "env_tex_asphalt_lanes",
+   "path": "models/env/textures/env_tex_asphalt_lanes.png",
+   "sizePx": [
+    128,
+    128
+   ],
+   "metersPerTile": [
+    4.0,
+    4.0
+   ],
+   "wrap": "repeat-v",
+   "alpha": null,
+   "kind": "ground",
+   "notes": "Optional. One 4 m lane cross-section: u 0 = dashed yellow centre (2 px half-line; mirror for the other lane), u 0.9 = white edge line, u 0.93-1 = shoulder. Seamless along v only. Variable-width streets: use the decal atlas."
+  },
+  "env_tex_curb": {
+   "final": "env_tex_curb",
+   "path": "models/env/textures/env_tex_curb.png",
+   "sizePx": [
+    64,
+    64
+   ],
+   "metersPerTile": [
+    1.0,
+    0.64
+   ],
+   "wrap": "repeat",
+   "alpha": null,
+   "kind": "ground",
+   "notes": "Curb + gutter: u = 1 m along the curb; v bands gutter 0-0.47, face 0.47-0.67, arris 0.67-0.73, top 0.73-0.92."
+  },
+  "env_tex_curb_ash": {
+   "final": "env_tex_curb_ash",
+   "path": "models/env/textures/env_tex_curb_ash.png",
+   "sizePx": [
+    64,
+    64
+   ],
+   "metersPerTile": [
+    1.0,
+    0.64
+   ],
+   "wrap": "repeat",
+   "alpha": null,
+   "kind": "ground",
+   "notes": "Extra: ash-dusted curb (same v bands)."
+  },
+  "env_tex_dirt_ashy": {
+   "final": "env_tex_dirt_ashy",
+   "path": "models/env/textures/env_tex_dirt_ashy.png",
+   "sizePx": [
+    128,
+    128
+   ],
+   "metersPerTile": [
+    4.0,
+    4.0
+   ],
+   "wrap": "repeat",
+   "alpha": null,
+   "kind": "ground",
+   "notes": "Ashy high-desert dirt: pebbles, ash drifts, dried-mud crazing (Ch 8-10 ground; fine for Ch 1-7 lots too)."
+  },
+  "env_tex_dirt_frozen": {
+   "final": "env_tex_dirt_frozen",
+   "path": "models/env/textures/env_tex_dirt_frozen.png",
+   "sizePx": [
+    64,
+    64
+   ],
+   "metersPerTile": [
+    2.0,
+    2.0
+   ],
+   "wrap": "repeat",
+   "alpha": null,
+   "kind": "ground",
+   "notes": "Optional: frozen dirt, hoarfrost, frost cracks."
+  },
+  "env_tex_gravel": {
+   "final": "env_tex_gravel",
+   "path": "models/env/textures/env_tex_gravel.png",
+   "sizePx": [
+    64,
+    64
+   ],
+   "metersPerTile": [
+    2.0,
+    2.0
+   ],
+   "wrap": "repeat",
+   "alpha": null,
+   "kind": "ground",
+   "notes": "Optional: road-shoulder gravel."
+  },
+  "env_tex_sidewalk": {
+   "final": "env_tex_sidewalk",
+   "path": "models/env/textures/env_tex_sidewalk.png",
+   "sizePx": [
+    64,
+    64
+   ],
+   "metersPerTile": [
+    1.5,
+    1.5
+   ],
+   "wrap": "repeat",
+   "alpha": null,
+   "kind": "ground",
+   "notes": "One 1.5 m (5 ft) concrete slab per tile, tooled joint on the edges, low-contrast stains."
+  },
+  "env_tex_sidewalk_ash": {
+   "final": "env_tex_sidewalk_ash",
+   "path": "models/env/textures/env_tex_sidewalk_ash.png",
+   "sizePx": [
+    64,
+    64
+   ],
+   "metersPerTile": [
+    1.5,
+    1.5
+   ],
+   "wrap": "repeat",
+   "alpha": null,
+   "kind": "ground",
+   "notes": "Extra: ash-dusted sidewalk."
+  },
+  "env_tex_sidewalk_curb": {
+   "final": "env_tex_sidewalk_curb",
+   "path": "models/env/textures/env_tex_sidewalk_curb.png",
+   "sizePx": [
+    64,
+    128
+   ],
+   "metersPerTile": [
+    1.5,
+    1.5
+   ],
+   "wrap": "repeat",
+   "alpha": null,
+   "kind": "ground",
+   "notes": "64x128 for env_sidewalk_curb_strip/_corner: u = 1.5 m along the strip; v 0-0.5 sidewalk top (1.5 m wide), 0.5-0.6 curb top, 0.6-0.64 arris, 0.64-0.78 face, 0.78-1.0 gutter."
+  },
+  "env_tex_sidewalk_curb_ash": {
+   "final": "env_tex_sidewalk_curb_ash",
+   "path": "models/env/textures/env_tex_sidewalk_curb_ash.png",
+   "sizePx": [
+    64,
+    128
+   ],
+   "metersPerTile": [
+    1.5,
+    1.5
+   ],
+   "wrap": "repeat",
+   "alpha": null,
+   "kind": "ground",
+   "notes": "Extra: ash-dusted env_tex_sidewalk_curb (same uv layout; for env_sidewalk_curb_* via texture swap)."
+  },
+  "env_tex_snow": {
+   "final": "env_tex_snow",
+   "path": "models/env/textures/env_tex_snow.png",
+   "sizePx": [
+    128,
+    128
+   ],
+   "metersPerTile": [
+    4.0,
+    4.0
+   ],
+   "wrap": "repeat",
+   "alpha": null,
+   "kind": "ground",
+   "notes": "Wind-rippled fallout snow with ash specks (snowCover blend layer)."
+  },
+  "env_tex_snow_dust": {
+   "final": "env_tex_snow_dust",
+   "path": "models/env/textures/env_tex_snow_dust.png",
+   "sizePx": [
+    128,
+    128
+   ],
+   "metersPerTile": [
+    2.0,
+    2.0
+   ],
+   "wrap": "repeat",
+   "alpha": "alphaTest 0.5 (alpha is 0/255, never blended)",
+   "kind": "overlay",
+   "notes": "Tileable dithered snow dusting overlay (late_fall -> winter transition, partial snowCover)."
+  }
+ }
+}

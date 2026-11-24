@@ -1,5 +1,5 @@
-import { CFG } from "./config.js?v=r14.2";
-import { stripRetiredInv } from "./systems.js?v=r14.2";
+import { CFG } from "./config.js?v=r15";
+import { stripRetiredInv } from "./systems.js?v=r15";
 
 /** Nevada Revision 2 story/save schema. Older saves (v1: Theo, insulin, Marguerite…) can't be mapped. */
 export const SAVE_STORY_VERSION = 2;
@@ -39,7 +39,7 @@ export function normalizeChapter(ch) {
     return "ch" + String(n).padStart(2, "0");
   }
   const s = String(ch).trim();
-  const m = s.match(/^(?:ch)?\s*0*(\d+)(b?)$/i);
+  const m = s.match(/^(?:ch)?\s*0*(\d+)(b)?/i);
   if (m) {
     const n = Math.max(1, Math.min(10, parseInt(m[1], 10) || 1));
     return "ch" + String(n).padStart(2, "0") + (m[2] && n === 7 ? "b" : "");
@@ -56,6 +56,54 @@ function asArray(v) {
   return [v];
 }
 
+/** Ch2 start (ch02_the_registry.json spawn_default). */
+export const CH02_SPAWN = { x: -1, z: 1, yaw: Math.PI };
+
+const CH02_VISIT_FLAGS = [
+  "ch02_glimpse_seen", "ch02_registered", "ch02_avila_met", "ch02_haas_met",
+  "ch02_ames_met", "ch02_dusk", "ch02_crush_started",
+];
+
+export function ch01Complete(flags) {
+  const f = flags || {};
+  return !!(f.ch01_voicemail_heard || f.ch01_phone_used);
+}
+
+export function ch02Visited(flags) {
+  const f = flags || {};
+  return CH02_VISIT_FLAGS.some((k) => !!f[k]);
+}
+
+/** Flags for a Ch1-complete start at the beginning of Ch2 (dev jump / rescue). */
+export function applyCh1CompleteFlags(flags) {
+  const f = flags || {};
+  f.ch01_phone_used = true;
+  f.ch01_voicemail_heard = true;
+  if (f.ch01_pharmacy_choice == null) f.ch01_pharmacy_choice = "shared";
+  f.ch01_wraith_fed = true;
+  f.wraith_fed = true;
+  f.wraith_following = true;
+  f.wraith_alive = true;
+  if (f.ch01_night == null) f.ch01_night = true;
+  return f;
+}
+
+/**
+ * r15: the r14.2 voicemail bug could stamp a save as ch03 (or leave it at
+ * ch01/ch02) without any Ch2 play. One-time rescue: start of Ch2, keep Ch1
+ * flags and inventory. `r15_ch02_rescue` prevents resetting position again.
+ */
+export function shouldRescueToCh02(flags) {
+  const f = flags || {};
+  if (f.r15_ch02_rescue) return false;
+  if (ch02Visited(f)) return false;
+  const ch = normalizeChapter(f.chapter);
+  const n = parseInt(String(ch).replace(/\D/g, ""), 10) || 1;
+  if (ch01Complete(f) && n <= 3) return true;
+  if (n === 3) return true; // in Ch3 but never visited Ch2
+  return false;
+}
+
 export function migrateSave(raw) {
   if (!raw || typeof raw !== "object") {
     return { ok: false, notice: "Old save incompatible — starting a fresh shift" };
@@ -67,6 +115,12 @@ export function migrateSave(raw) {
   try {
     const flags = { ...(raw.flags && typeof raw.flags === "object" && !Array.isArray(raw.flags) ? raw.flags : {}) };
     flags.chapter = normalizeChapter(flags.chapter ?? raw.chapter ?? 1);
+    let rescuedToCh02 = false;
+    if (shouldRescueToCh02(flags)) {
+      flags.chapter = "ch02";
+      flags.r15_ch02_rescue = true;
+      rescuedToCh02 = true;
+    }
 
     const player = raw.player && typeof raw.player === "object" && !Array.isArray(raw.player)
       ? { ...raw.player }
@@ -83,6 +137,12 @@ export function migrateSave(raw) {
     if (!Number.isFinite(player.x)) player.x = 1;
     if (!Number.isFinite(player.z)) player.z = -8.5;
     if (!Number.isFinite(player.yaw)) player.yaw = 0;
+    if (rescuedToCh02) {
+      player.x = CH02_SPAWN.x;
+      player.z = CH02_SPAWN.z;
+      player.yaw = CH02_SPAWN.yaw;
+      player.pitch = 0;
+    }
     if (!player.stats || typeof player.stats !== "object") {
       player.stats = { health: 100, warmth: 82, hunger: 70, stamina: 100, rad: 0 };
     }
@@ -94,17 +154,31 @@ export function migrateSave(raw) {
     else if (raw.inventory && typeof raw.inventory === "object" && !Array.isArray(raw.inventory)) inv = { ...raw.inventory };
 
     inv = stripRetiredInv(inv);
+    let firedTriggers = asArray(raw.firedTriggers);
+    const quests = raw.quests && typeof raw.quests === "object" ? { ...raw.quests } : {};
+    let timeOfDay = raw.timeOfDay;
+    if (rescuedToCh02) {
+      firedTriggers = firedTriggers.filter((id) => {
+        const s = String(id);
+        if (/^t_ch0([3-9]|10|7b)/.test(s)) return false;
+        if (s === "t_ch02_end") return false;
+        return true;
+      });
+      delete quests.q_find_walt;
+      if (!quests.q_essential_card) quests.q_essential_card = "start";
+      if (timeOfDay == null || timeOfDay < 0.3 || timeOfDay > 0.8) timeOfDay = 0.45;
+    }
     const save = {
       ...raw,
       flags,
       inv,
       player,
       notes: Array.isArray(raw.notes) ? raw.notes : [],
-      firedTriggers: asArray(raw.firedTriggers),
+      firedTriggers,
       hudUnlocks: asArray(raw.hudUnlocks),
       trust: raw.trust && typeof raw.trust === "object" ? raw.trust : {},
       alive: raw.alive && typeof raw.alive === "object" ? raw.alive : {},
-      quests: raw.quests && typeof raw.quests === "object" ? raw.quests : {},
+      quests,
       seen: raw.seen && typeof raw.seen === "object" ? raw.seen : {},
       dialogueMem: raw.dialogueMem && typeof raw.dialogueMem === "object" ? raw.dialogueMem : { npcs: {} },
       exploredFog: raw.exploredFog && typeof raw.exploredFog === "object" ? raw.exploredFog : {},
@@ -112,7 +186,8 @@ export function migrateSave(raw) {
       lootTaken: asArray(raw.lootTaken),
       lootLeft: raw.lootLeft && typeof raw.lootLeft === "object" ? raw.lootLeft : {},
     };
-    return { ok: true, save, migrated: true };
+    if (rescuedToCh02 && timeOfDay != null) save.timeOfDay = timeOfDay;
+    return { ok: true, save, migrated: true, rescuedToCh02 };
   } catch {
     return { ok: false, notice: "Old save incompatible — starting a fresh shift" };
   }
