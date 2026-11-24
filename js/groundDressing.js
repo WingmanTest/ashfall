@@ -1,11 +1,14 @@
-// Ground dressing v2: roads, curbs, decals, instanced vegetation from
-// levels/ground_previews/<id>.ground.json. Optional — a missing overlay is a no-op.
+// Ground dressing v3 overlays (schema formatVersion 2): roads, curbs, decals,
+// instanced vegetation from levels/ground_previews/<id>.ground.json.
+// New ids (tight corners, ash 8x4 roads, street trees, new decal frames, light
+// snow dust) go through the same instance/piece/decal/overlay loops.
+// Optional — a missing overlay is a no-op.
 import * as THREE from "three";
 import {
   setEnvSeason, makeEnvInstanced, makeEnvTuftCards, makeEnvDecals, makeEnvDecal,
   loadGroundTexture,
-} from "../models/registry.js?v=r15.2";
-import { gltfLoader } from "./models3d.js?v=r15.2";
+} from "../models/registry.js?v=r15.3";
+import { gltfLoader } from "./models3d.js?v=r15.3";
 
 const KNOWN_OVERLAYS = new Set(['ch01_day_three', 'ch02_the_registry', 'ch03_the_long_cold', 'ch04_black_start', 'ch05_route_9', 'ch06_the_trench', 'ch07_dead_air', 'ch07b_dixie_valley', 'ch08_ashfall', 'ch09_the_long_night', 'ch10_the_warm_room']);
 

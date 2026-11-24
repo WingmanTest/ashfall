@@ -5,8 +5,8 @@
  * canvas is mounted in the BAG tab; gear meshes rebuild (and dispose) on change.
  */
 import * as THREE from "three";
-import { paintFace } from "./actors.js?v=r15.2";
-import { getModel, attachBraithMask, setCapVisible, fitToGround } from "./models3d.js?v=r15.2";
+import { paintFace } from "./actors.js?v=r15.3";
+import { getModel, attachBraithMask, setCapVisible, fitToGround } from "./models3d.js?v=r15.3";
 
 const W = 144, H = 200;
 const PLAYER = {

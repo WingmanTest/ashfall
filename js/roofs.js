@@ -272,6 +272,63 @@ function labelFor(box, buildings) {
   return best ? { id: best.id, label: best.label, kind: best.kind } : {};
 }
 
+
+/** Walls / doors immediately outside a footprint, per side. */
+export function enclosureOf(L, box) {
+  const g = L?.grid;
+  const empty = { sides: 0, frac: 0, heights: [] };
+  if (!g?.tiles) return empty;
+  const cs = g.cellSize || 2, o = g.origin || { x: 0, z: 0 };
+  const legend = g.legend || {}, tiles = g.tiles || [];
+  const defAt = (x, z) => {
+    const c = Math.floor((x - o.x) / cs);
+    const r = Math.floor((z - o.z) / cs);
+    if (r < 0 || c < 0 || r >= tiles.length || c >= (tiles[r] || []).length) return {};
+    return legend[tiles[r][c]] || {};
+  };
+  const isLine = (def) => !!(def.door || def.name === "door" || (def.solid && (def.height || 0) >= 2));
+  const sides = [
+    { x: box.minX - cs * 0.5, z0: box.minZ + cs * 0.25, z1: box.maxZ - cs * 0.25, axis: "z" },
+    { x: box.maxX + cs * 0.5, z0: box.minZ + cs * 0.25, z1: box.maxZ - cs * 0.25, axis: "z" },
+    { z: box.minZ - cs * 0.5, x0: box.minX + cs * 0.25, x1: box.maxX - cs * 0.25, axis: "x" },
+    { z: box.maxZ + cs * 0.5, x0: box.minX + cs * 0.25, x1: box.maxX - cs * 0.25, axis: "x" },
+  ];
+  let sidesWalled = 0, wallCells = 0, allCells = 0;
+  const heights = [];
+  for (const s of sides) {
+    let hit = 0, n = 0;
+    if (s.axis === "z") {
+      for (let z = s.z0; z <= s.z1 + 1e-6; z += cs) {
+        n++;
+        const def = defAt(s.x, z);
+        if (isLine(def)) {
+          hit++;
+          if (def.solid && (def.height || 0) >= 2) heights.push(def.height);
+        }
+      }
+    } else {
+      for (let x = s.x0; x <= s.x1 + 1e-6; x += cs) {
+        n++;
+        const def = defAt(x, s.z);
+        if (isLine(def)) {
+          hit++;
+          if (def.solid && (def.height || 0) >= 2) heights.push(def.height);
+        }
+      }
+    }
+    allCells += n;
+    wallCells += hit;
+    if (n && hit / n >= 0.45) sidesWalled++;
+  }
+  return { sides: sidesWalled, frac: allCells ? wallCells / allCells : 0, heights };
+}
+
+/** A roof belongs on a building: walls (or doorways) on at least 3 sides, or 2 sides that cover most of the ring. */
+export function roofHasSupports(enc) {
+  if (!enc) return false;
+  return enc.sides >= 3 || (enc.sides >= 2 && enc.frac >= 0.55);
+}
+
 function wallHeightAround(L, box, fallback = 4) {
   const g = L?.grid;
   if (!g) return fallback;
@@ -363,6 +420,7 @@ export function coverBuildingRoofs(runtime, L, scene, mats = {}) {
     foot.wallH = wallH;
     foot.eaveY = eaveY;
     foot.roofKind = kind;
+    if (!foot.enc && (foot.source === "interior" || foot.source === "building")) foot.enc = enclosureOf(L, foot);
     covered.push(foot);
   };
 
@@ -373,7 +431,17 @@ export function coverBuildingRoofs(runtime, L, scene, mats = {}) {
       const recs = greedyRects(g.tiles, g.legend, (ch, t) => !!(t.roof || t.blocksAirLOS || t.name === "covered_floor" || t.name === "interior_floor"));
       for (const rec of recs) {
         const box = rectWorld(rec, g.origin || { x: 0, z: 0 }, g.cellSize || 2);
-        take({ ...box, source: "interior", ceiling: true });
+        const foot = { ...box, source: "interior", ceiling: true };
+        const enc = enclosureOf(L, foot);
+        foot.enc = enc;
+        if (!roofHasSupports(enc)) {
+          if (runtime) {
+            runtime._roofSkipped = runtime._roofSkipped || [];
+            runtime._roofSkipped.push({ ...foot, reason: "no-building" });
+          }
+          continue;
+        }
+        take(foot);
       }
     }
   }

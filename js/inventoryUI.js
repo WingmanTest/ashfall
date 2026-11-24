@@ -1,12 +1,12 @@
-import { CFG } from "./config.js?v=r15.2";
+import { CFG } from "./config.js?v=r15.3";
 import {
   GEAR_SLOTS, WEAPON_SLOTS, ALL_SLOTS, SLOT_LABELS, SLOT_COLORS,
   itemSlot, combinedInsulation, combinedWetResist, carryState,
   resolveDollLayers, wearItem, removeGear, emptyGear, canAddWeight,
-} from "./equipment.js?v=r15.2";
-import { mountDoll3D, stopDoll3D, doll3DWasDrag } from "./doll3d.js?v=r15.2";
-import { renderQuestLogHtml } from "./questTrack.js?v=r15.2";
-import { chapterHeading } from "./save.js?v=r15.2";
+} from "./equipment.js?v=r15.3";
+import { mountDoll3D, stopDoll3D, doll3DWasDrag } from "./doll3d.js?v=r15.3";
+import { renderQuestLogHtml } from "./questTrack.js?v=r15.3";
+import { chapterHeading } from "./save.js?v=r15.3";
 
 const cache = new Map();
 function loadImg(src) {

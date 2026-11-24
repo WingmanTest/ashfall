@@ -10,8 +10,10 @@
     "main_cast": 14,
     "archetypes": 6,
     "previews": 1,
-    "env_models": 18,
-    "env_textures": 16
+    "env_models": 21,
+    "env_textures": 17,
+    "arch_models": 58,
+    "arch_textures": 33
   },
   "conventions": {
     "up": "+Y",
@@ -2504,7 +2506,7 @@
         256,
         256
       ],
-      "bytes": 32800,
+      "bytes": 34572,
       "grid": "4 x 4 cells of 64 px",
       "rows": {
         "0": "road markings (stretched along u; long axis = quad local X)",
@@ -2626,6 +2628,44 @@
             0.45
           ],
           "notes": "One crosswalk (zebra) bar, worn by tyres; lay several 0.6 m apart."
+        },
+        "lane_dash_white": {
+          "uvRect": [
+            0.501953,
+            0.126953,
+            0.998047,
+            0.154297
+          ],
+          "px": [
+            128,
+            32,
+            128,
+            8
+          ],
+          "size": [
+            3.0,
+            0.12
+          ],
+          "notes": "Dashed white lane divider: ONE 3 m dash (ragged worn ends). Gap 9 m or as the level needs."
+        },
+        "lane_solid_yellow": {
+          "uvRect": [
+            0.501953,
+            0.158203,
+            0.998047,
+            0.185547
+          ],
+          "px": [
+            128,
+            40,
+            128,
+            8
+          ],
+          "size": [
+            6.0,
+            0.12
+          ],
+          "notes": "Single solid yellow (taxi / left-edge / no-passing single); seamless along X, chain every 6 m."
         },
         "crack_a": {
           "uvRect": [
@@ -2919,8 +2959,14 @@
         "env_tex_curb_ash",
         "env_tex_ash_overlay",
         "env_tex_snow_dust",
+        "env_tex_snow_dust_light",
         "env_tex_sidewalk_curb_ash",
-        "env_decal_atlas.png"
+        "env_decal_atlas.png",
+        "env_sidewalk_curb_corner_tight",
+        "env_road_2lane_8x4_ash",
+        "env_tree_street_frosted",
+        "lane_dash_white",
+        "lane_solid_yellow"
       ],
       "note": "final == provisional for every id; env_atlas = vegetation/tuft colours, decal frames live in env_decal_atlas."
     },
@@ -3195,6 +3241,105 @@
           10
         ],
         "notes": "Bare Siberian elm with rime/snow on every up-facing facet (in every band), small drift at the base."
+      },
+      {
+        "id": "env_tree_street_frosted",
+        "category": "env",
+        "kind": "tree",
+        "path": "env/env_tree_street_frosted.glb",
+        "tris": 228,
+        "bytes": 23204,
+        "bounds": [
+          1.782,
+          5.443,
+          1.14
+        ],
+        "min": [
+          -0.874,
+          0.0,
+          -0.492
+        ],
+        "max": [
+          0.908,
+          5.443,
+          0.648
+        ],
+        "radiusXZ": 0.909,
+        "boundingSphere": {
+          "center": [
+            0.017,
+            2.722,
+            0.078
+          ],
+          "radius": 2.828
+        },
+        "budget": [
+          150,
+          350
+        ],
+        "drawCalls": 1,
+        "materials": 1,
+        "pivot": "ground-center (min y = 0)",
+        "facing": "+Z",
+        "units": "meters",
+        "material": "env_atlas (opaque, FrontSide, flat-shaded)",
+        "texture": "env/textures/env_atlas.png",
+        "swatches": [
+          "bark",
+          "bark_top",
+          "leaf",
+          "leaf_dk"
+        ],
+        "frosted": false,
+        "variants": {
+          "summer_sparse_leaf": {
+            "season": "summer",
+            "band": 0,
+            "offsetV": 0.0
+          },
+          "autumn_leaf_drop": {
+            "season": "autumn",
+            "band": 1,
+            "offsetV": 0.25
+          },
+          "late_fall_bare_wet": {
+            "season": "late_fall",
+            "band": 2,
+            "offsetV": 0.5
+          },
+          "fallout_frosted": {
+            "season": "fallout_winter",
+            "band": 3,
+            "offsetV": 0.75
+          }
+        },
+        "collider": {
+          "radius": 0.25,
+          "height": 5.44,
+          "solid": true
+        },
+        "jitter": {
+          "scale": [
+            0.9,
+            1.15
+          ],
+          "rotY": "full",
+          "tiltDeg": 2
+        },
+        "placement": "Parkway / sidewalk corridor (fits a 3 m walk: radiusXZ <= 1.4 m). Along sidewalks every 8-12 m, all chapters; the winter band is the frosted street tree for Act III.",
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "notes": "Narrow high-pruned Siberian elm / ash street tree: tight upright vase, 6 sparse leaf clumps (season: dusty green / yellow-orange / dead brown / snow)."
       },
       {
         "id": "env_tree_snag_stump",
@@ -4169,6 +4314,75 @@
         "notes": "90-deg corner, curb-face radius 3 m about the local origin (sidewalk toward the origin), from -X to -Z; joins straight strips with faces on x = -3 and z = -3."
       },
       {
+        "id": "env_sidewalk_curb_corner_tight",
+        "category": "env",
+        "kind": "ground",
+        "path": "env/env_sidewalk_curb_corner_tight.glb",
+        "tris": 30,
+        "bytes": 4228,
+        "bounds": [
+          1.8,
+          0.138,
+          1.8
+        ],
+        "min": [
+          -1.8,
+          0.012,
+          -1.8
+        ],
+        "max": [
+          0.0,
+          0.15,
+          0.0
+        ],
+        "radiusXZ": 2.546,
+        "boundingSphere": {
+          "center": [
+            -0.9,
+            0.081,
+            -0.9
+          ],
+          "radius": 1.275
+        },
+        "budget": [
+          2,
+          40
+        ],
+        "drawCalls": 1,
+        "materials": 1,
+        "pivot": "see notes (ground at y = 0)",
+        "facing": "+Z = strip / road direction",
+        "units": "meters",
+        "material": "ground (opaque, RepeatWrapping)",
+        "texture": "env/textures/env_tex_sidewalk_curb.png",
+        "textureId": "env_tex_sidewalk_curb",
+        "collider": {
+          "radius": 0.0,
+          "height": 0.15,
+          "solid": false
+        },
+        "jitter": {
+          "scale": [
+            1,
+            1
+          ],
+          "rotY": "snap 90 deg"
+        },
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "notes": "Tight 90-deg corner, curb-face radius 1.5 m (same orientation as the 3 m corner). Joins straight strips with faces on x = -1.5 and z = -1.5. Sidewalk is a fan to the origin (the 1.68 m walk is wider than R); a gutter-height fill paves the pie out to the grid corner (-1.8, -1.8) so no ground shows in the intersection pocket."
+      },
+      {
         "id": "env_road_tile_4m",
         "category": "env",
         "kind": "ground",
@@ -4305,6 +4519,75 @@
           10
         ],
         "notes": "Optional 8 x 4 m two-lane road along Z with baked lanes (centre line at x = 0). Chain every 4 m."
+      },
+      {
+        "id": "env_road_2lane_8x4_ash",
+        "category": "env",
+        "kind": "ground",
+        "path": "env/env_road_2lane_8x4_ash.glb",
+        "tris": 2,
+        "bytes": 1440,
+        "bounds": [
+          8.0,
+          0.0,
+          4.0
+        ],
+        "min": [
+          -4.0,
+          0.0,
+          -2.0
+        ],
+        "max": [
+          4.0,
+          0.0,
+          2.0
+        ],
+        "radiusXZ": 4.472,
+        "boundingSphere": {
+          "center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "radius": 4.472
+        },
+        "budget": [
+          2,
+          12
+        ],
+        "drawCalls": 1,
+        "materials": 1,
+        "pivot": "see notes (ground at y = 0)",
+        "facing": "+Z = strip / road direction",
+        "units": "meters",
+        "material": "ground (opaque, RepeatWrapping)",
+        "texture": "env/textures/env_tex_asphalt_cracked_ash.png",
+        "textureId": "env_tex_asphalt_cracked_ash",
+        "collider": {
+          "radius": 0.0,
+          "height": 0.0,
+          "solid": false
+        },
+        "jitter": {
+          "scale": [
+            1,
+            1
+          ],
+          "rotY": "snap 90 deg"
+        },
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "notes": "Ash-dusted 8 x 4 m two-lane road along Z (same footprint as env_road_2lane_8x4). Tiling UVs for env_tex_asphalt_cracked_ash (4 m/tile); lane markings from the decal atlas. Chain every 4 m."
       },
       {
         "id": "env_decal_atlas",
@@ -4488,6 +4771,44 @@
               0.45
             ],
             "notes": "One crosswalk (zebra) bar, worn by tyres; lay several 0.6 m apart."
+          },
+          "lane_dash_white": {
+            "uvRect": [
+              0.501953,
+              0.126953,
+              0.998047,
+              0.154297
+            ],
+            "px": [
+              128,
+              32,
+              128,
+              8
+            ],
+            "size": [
+              3.0,
+              0.12
+            ],
+            "notes": "Dashed white lane divider: ONE 3 m dash (ragged worn ends). Gap 9 m or as the level needs."
+          },
+          "lane_solid_yellow": {
+            "uvRect": [
+              0.501953,
+              0.158203,
+              0.998047,
+              0.185547
+            ],
+            "px": [
+              128,
+              40,
+              128,
+              8
+            ],
+            "size": [
+              6.0,
+              0.12
+            ],
+            "notes": "Single solid yellow (taxi / left-edge / no-passing single); seamless along X, chain every 6 m."
           },
           "crack_a": {
             "uvRect": [
@@ -5100,7 +5421,26 @@
         "wrap": "repeat",
         "alpha": "alphaTest 0.5 (alpha is 0/255, never blended)",
         "filter": "NEAREST, no mipmaps, SRGB",
-        "notes": "Tileable dithered snow dusting overlay (late_fall -> winter transition, partial snowCover)."
+        "notes": "Full snow-dust overlay (~38% coverage). Recommended for fallout_winter (Ch 8-10) over road and lots."
+      },
+      {
+        "id": "env_tex_snow_dust_light",
+        "category": "env",
+        "kind": "overlay",
+        "path": "env/textures/env_tex_snow_dust_light.png",
+        "size": [
+          128,
+          128
+        ],
+        "bytes": 5154,
+        "metersPerTile": [
+          2.0,
+          2.0
+        ],
+        "wrap": "repeat",
+        "alpha": "alphaTest 0.5 (alpha is 0/255, never blended)",
+        "filter": "NEAREST, no mipmaps, SRGB",
+        "notes": "Light snow-dust overlay (~12% coverage). Recommended for late_fall Ch 7b (first dusting); use env_tex_snow_dust for winter."
       },
       {
         "id": "env_decal_atlas",
@@ -5111,12 +5451,7940 @@
           256,
           256
         ],
-        "bytes": 32800,
+        "bytes": 34572,
         "metersPerTile": null,
         "wrap": "clamp",
         "alpha": "alphaTest 0.5 (alpha is 0/255, never blended)",
         "filter": "NEAREST, no mipmaps, SRGB",
         "notes": "4x4 grid of 64 px cells; row 0 holds 6 stretched line frames."
+      }
+    ]
+  },
+  "arch": {
+    "category": "arch",
+    "notes": "Architecture detail + interior kit. Every GLB = root node + 1 mesh per part (doors: frame + leaf; everything else: main), 1 material (arch_atlas, or arch_cutout = same atlas + alphaTest for window_broken / window_boarded_diagonal), 1 draw call per part, InstancedMesh-ready. See README \"Architecture set\".",
+    "conventions": {
+      "forward": "+Z = exterior face (doors / windows) or front (furniture)",
+      "pivotOpenings": "y = 0 bottom of the opening",
+      "wallFace": "z = 0 exterior wall face; frames authored for a 0.20 m wall (scale.z = wall / 0.20)",
+      "units": "meters",
+      "shading": "flat, non-indexed"
+    },
+    "atlas": {
+      "path": "arch/textures/arch_atlas.png",
+      "mr": "arch/textures/arch_atlas_mr.png",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 153885,
+      "mrSize": [
+        128,
+        128
+      ],
+      "mrBytes": 617,
+      "bands": {
+        "weathered": {
+          "band": 0,
+          "offsetV": 0.0,
+          "seasons": [
+            "summer",
+            "autumn",
+            "late_fall"
+          ]
+        },
+        "ashfall": {
+          "band": 1,
+          "offsetV": 0.5,
+          "seasons": [
+            "fallout_winter"
+          ]
+        }
+      },
+      "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping (needed for the band offset); MR map linear, offset 0 (same in both bands)",
+      "layout": {
+        "bandHeightPx": 256,
+        "swatches": "96 solid 8 px cells (x 0-63 y 0-63, then x 448-511 y 192-255); *_top twins are used on up-facing facets (ash in band 1)",
+        "regions": {
+          "swatches": [
+            0,
+            0,
+            64,
+            64
+          ],
+          "door_wood": [
+            64,
+            0,
+            48,
+            112
+          ],
+          "glass_door": [
+            112,
+            0,
+            48,
+            112
+          ],
+          "rollup": [
+            160,
+            0,
+            96,
+            80
+          ],
+          "planks": [
+            160,
+            80,
+            96,
+            32
+          ],
+          "glass_res": [
+            0,
+            64,
+            64,
+            64
+          ],
+          "glass_out": [
+            0,
+            128,
+            64,
+            48
+          ],
+          "glass_cracked": [
+            64,
+            112,
+            64,
+            64
+          ],
+          "glass_broken": [
+            128,
+            112,
+            64,
+            64
+          ],
+          "glass_out_cracked": [
+            192,
+            112,
+            64,
+            64
+          ],
+          "glass_store": [
+            0,
+            176,
+            128,
+            80
+          ],
+          "door_old": [
+            128,
+            176,
+            48,
+            80
+          ],
+          "cardboard": [
+            176,
+            176,
+            48,
+            48
+          ],
+          "papers": [
+            224,
+            176,
+            32,
+            48
+          ],
+          "laminate": [
+            176,
+            224,
+            48,
+            32
+          ],
+          "free": [
+            224,
+            224,
+            32,
+            32
+          ],
+          "corrugated": [
+            256,
+            0,
+            64,
+            128
+          ],
+          "wood_wall": [
+            320,
+            0,
+            64,
+            128
+          ],
+          "crate": [
+            384,
+            0,
+            64,
+            64
+          ],
+          "fridge": [
+            448,
+            0,
+            32,
+            64
+          ],
+          "med_cab": [
+            480,
+            0,
+            32,
+            64
+          ],
+          "mattress": [
+            384,
+            64,
+            64,
+            32
+          ],
+          "couch": [
+            384,
+            96,
+            64,
+            32
+          ],
+          "tire": [
+            448,
+            64,
+            32,
+            32
+          ],
+          "register": [
+            480,
+            64,
+            32,
+            32
+          ],
+          "pegboard": [
+            448,
+            96,
+            64,
+            32
+          ],
+          "goods": [
+            256,
+            128,
+            128,
+            64
+          ],
+          "goods_looted": [
+            256,
+            192,
+            128,
+            64
+          ],
+          "blanket": [
+            384,
+            128,
+            64,
+            32
+          ],
+          "cot": [
+            384,
+            160,
+            64,
+            32
+          ],
+          "free2": [
+            448,
+            128,
+            64,
+            64
+          ],
+          "free3": [
+            384,
+            192,
+            64,
+            64
+          ],
+          "swatches2": [
+            448,
+            192,
+            64,
+            64
+          ]
+        }
+      },
+      "swatches": {
+        "trim_white": {
+          "index": 0,
+          "colors": {
+            "weathered": "#a39d8f",
+            "ashfall": "#9a968f"
+          }
+        },
+        "trim_dk": {
+          "index": 1,
+          "colors": {
+            "weathered": "#4b4139",
+            "ashfall": "#4a4540"
+          }
+        },
+        "jamb": {
+          "index": 2,
+          "colors": {
+            "weathered": "#8c8373",
+            "ashfall": "#86827b"
+          }
+        },
+        "wood_edge": {
+          "index": 3,
+          "colors": {
+            "weathered": "#5a412d",
+            "ashfall": "#54473c"
+          }
+        },
+        "brass": {
+          "index": 4,
+          "colors": {
+            "weathered": "#9c8650",
+            "ashfall": "#8f8676"
+          }
+        },
+        "alu": {
+          "index": 5,
+          "colors": {
+            "weathered": "#8d8f8c",
+            "ashfall": "#898b88"
+          }
+        },
+        "alu_dk": {
+          "index": 6,
+          "colors": {
+            "weathered": "#514d47",
+            "ashfall": "#55524d"
+          }
+        },
+        "steel": {
+          "index": 7,
+          "colors": {
+            "weathered": "#6b6d69",
+            "ashfall": "#6c6d6a"
+          }
+        },
+        "steel_dk": {
+          "index": 8,
+          "colors": {
+            "weathered": "#42433f",
+            "ashfall": "#454642"
+          }
+        },
+        "rust": {
+          "index": 9,
+          "colors": {
+            "weathered": "#74533a",
+            "ashfall": "#6e5848"
+          }
+        },
+        "rubber": {
+          "index": 10,
+          "colors": {
+            "weathered": "#262626",
+            "ashfall": "#2c2c2c"
+          }
+        },
+        "hood": {
+          "index": 11,
+          "colors": {
+            "weathered": "#77786f",
+            "ashfall": "#76776f"
+          }
+        },
+        "threshold": {
+          "index": 12,
+          "colors": {
+            "weathered": "#7d776c",
+            "ashfall": "#7b7770"
+          }
+        },
+        "plank": {
+          "index": 13,
+          "colors": {
+            "weathered": "#7d6448",
+            "ashfall": "#73655a"
+          }
+        },
+        "plank_end": {
+          "index": 14,
+          "colors": {
+            "weathered": "#9a8262",
+            "ashfall": "#8f8475"
+          }
+        },
+        "void": {
+          "index": 15,
+          "colors": {
+            "weathered": "#121314",
+            "ashfall": "#161718"
+          }
+        },
+        "shard": {
+          "index": 16,
+          "colors": {
+            "weathered": "#6f8288",
+            "ashfall": "#8d989d"
+          }
+        },
+        "baseboard": {
+          "index": 17,
+          "colors": {
+            "weathered": "#b3ac9e",
+            "ashfall": "#a7a39c"
+          }
+        },
+        "sill": {
+          "index": 18,
+          "colors": {
+            "weathered": "#9a9282",
+            "ashfall": "#949089"
+          }
+        },
+        "glass_edge": {
+          "index": 19,
+          "colors": {
+            "weathered": "#2a3236",
+            "ashfall": "#3a4246"
+          }
+        },
+        "cardboard": {
+          "index": 20,
+          "colors": {
+            "weathered": "#9a7b52",
+            "ashfall": "#8e7c66"
+          }
+        },
+        "cardboard_dk": {
+          "index": 21,
+          "colors": {
+            "weathered": "#6f5739",
+            "ashfall": "#6b5d4e"
+          }
+        },
+        "paper": {
+          "index": 22,
+          "colors": {
+            "weathered": "#c9c2b0",
+            "ashfall": "#bdb8ae"
+          }
+        },
+        "wood_furn": {
+          "index": 23,
+          "colors": {
+            "weathered": "#6a4b33",
+            "ashfall": "#5f4e40"
+          }
+        },
+        "wood_furn_lt": {
+          "index": 24,
+          "colors": {
+            "weathered": "#8a6a4a",
+            "ashfall": "#7e6b58"
+          }
+        },
+        "laminate": {
+          "index": 25,
+          "colors": {
+            "weathered": "#a59a83",
+            "ashfall": "#9e978b"
+          }
+        },
+        "cabinet": {
+          "index": 26,
+          "colors": {
+            "weathered": "#5f5a4e",
+            "ashfall": "#5c5952"
+          }
+        },
+        "shelf_metal": {
+          "index": 27,
+          "colors": {
+            "weathered": "#7b7e7a",
+            "ashfall": "#7a7c79"
+          }
+        },
+        "chrome": {
+          "index": 28,
+          "colors": {
+            "weathered": "#a3a6a5",
+            "ashfall": "#9c9e9d"
+          }
+        },
+        "debris": {
+          "index": 29,
+          "colors": {
+            "weathered": "#615b53",
+            "ashfall": "#7a766f"
+          }
+        },
+        "appliance": {
+          "index": 30,
+          "colors": {
+            "weathered": "#b4ae9f",
+            "ashfall": "#aaa69d"
+          }
+        },
+        "cushion": {
+          "index": 31,
+          "colors": {
+            "weathered": "#5b4f43",
+            "ashfall": "#59524a"
+          }
+        },
+        "blanket": {
+          "index": 32,
+          "colors": {
+            "weathered": "#56594d",
+            "ashfall": "#5a5c55"
+          }
+        },
+        "canvas": {
+          "index": 33,
+          "colors": {
+            "weathered": "#5a5c44",
+            "ashfall": "#5c5d4f"
+          }
+        },
+        "tire_rubber": {
+          "index": 34,
+          "colors": {
+            "weathered": "#2a2927",
+            "ashfall": "#302f2d"
+          }
+        },
+        "pipe": {
+          "index": 35,
+          "colors": {
+            "weathered": "#5d6163",
+            "ashfall": "#5f6264"
+          }
+        },
+        "pipe_rust": {
+          "index": 36,
+          "colors": {
+            "weathered": "#6a4a34",
+            "ashfall": "#665244"
+          }
+        },
+        "can": {
+          "index": 37,
+          "colors": {
+            "weathered": "#8c8f8c",
+            "ashfall": "#8a8c8a"
+          }
+        },
+        "can_label": {
+          "index": 38,
+          "colors": {
+            "weathered": "#7a3a2e",
+            "ashfall": "#6f4c44"
+          }
+        },
+        "rock": {
+          "index": 39,
+          "colors": {
+            "weathered": "#6b665e",
+            "ashfall": "#76726b"
+          }
+        },
+        "rock_dk": {
+          "index": 40,
+          "colors": {
+            "weathered": "#4f4b45",
+            "ashfall": "#57544f"
+          }
+        },
+        "crate": {
+          "index": 41,
+          "colors": {
+            "weathered": "#7a6142",
+            "ashfall": "#6e6150"
+          }
+        },
+        "crate_dk": {
+          "index": 42,
+          "colors": {
+            "weathered": "#4d3c2a",
+            "ashfall": "#4a4036"
+          }
+        },
+        "mattress": {
+          "index": 43,
+          "colors": {
+            "weathered": "#a99e88",
+            "ashfall": "#a29b8e"
+          }
+        },
+        "med_white": {
+          "index": 44,
+          "colors": {
+            "weathered": "#bdbcb4",
+            "ashfall": "#b4b3ad"
+          }
+        },
+        "register": {
+          "index": 45,
+          "colors": {
+            "weathered": "#3c3d3b",
+            "ashfall": "#40413f"
+          }
+        },
+        "tool_red": {
+          "index": 46,
+          "colors": {
+            "weathered": "#7a3a2e",
+            "ashfall": "#6e4840"
+          }
+        },
+        "corrugated": {
+          "index": 47,
+          "colors": {
+            "weathered": "#5b6470",
+            "ashfall": "#626a74"
+          }
+        },
+        "trim_white_top": {
+          "index": 48,
+          "colors": {
+            "weathered": "#a39d8f",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "trim_dk_top": {
+          "index": 49,
+          "colors": {
+            "weathered": "#4b4139",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "jamb_top": {
+          "index": 50,
+          "colors": {
+            "weathered": "#8c8373",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "wood_edge_top": {
+          "index": 51,
+          "colors": {
+            "weathered": "#5a412d",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "brass_top": {
+          "index": 52,
+          "colors": {
+            "weathered": "#9c8650",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "alu_top": {
+          "index": 53,
+          "colors": {
+            "weathered": "#8d8f8c",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "alu_dk_top": {
+          "index": 54,
+          "colors": {
+            "weathered": "#514d47",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "steel_top": {
+          "index": 55,
+          "colors": {
+            "weathered": "#6b6d69",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "steel_dk_top": {
+          "index": 56,
+          "colors": {
+            "weathered": "#42433f",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "rust_top": {
+          "index": 57,
+          "colors": {
+            "weathered": "#74533a",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "rubber_top": {
+          "index": 58,
+          "colors": {
+            "weathered": "#262626",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "hood_top": {
+          "index": 59,
+          "colors": {
+            "weathered": "#77786f",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "threshold_top": {
+          "index": 60,
+          "colors": {
+            "weathered": "#7d776c",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "plank_top": {
+          "index": 61,
+          "colors": {
+            "weathered": "#7d6448",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "plank_end_top": {
+          "index": 62,
+          "colors": {
+            "weathered": "#9a8262",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "void_top": {
+          "index": 63,
+          "colors": {
+            "weathered": "#121314",
+            "ashfall": "#161718"
+          }
+        },
+        "shard_top": {
+          "index": 64,
+          "colors": {
+            "weathered": "#6f8288",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "baseboard_top": {
+          "index": 65,
+          "colors": {
+            "weathered": "#b3ac9e",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "sill_top": {
+          "index": 66,
+          "colors": {
+            "weathered": "#9a9282",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "glass_edge_top": {
+          "index": 67,
+          "colors": {
+            "weathered": "#2a3236",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "cardboard_top": {
+          "index": 68,
+          "colors": {
+            "weathered": "#9a7b52",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "cardboard_dk_top": {
+          "index": 69,
+          "colors": {
+            "weathered": "#6f5739",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "paper_top": {
+          "index": 70,
+          "colors": {
+            "weathered": "#c9c2b0",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "wood_furn_top": {
+          "index": 71,
+          "colors": {
+            "weathered": "#6a4b33",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "wood_furn_lt_top": {
+          "index": 72,
+          "colors": {
+            "weathered": "#8a6a4a",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "laminate_top": {
+          "index": 73,
+          "colors": {
+            "weathered": "#a59a83",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "cabinet_top": {
+          "index": 74,
+          "colors": {
+            "weathered": "#5f5a4e",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "shelf_metal_top": {
+          "index": 75,
+          "colors": {
+            "weathered": "#7b7e7a",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "chrome_top": {
+          "index": 76,
+          "colors": {
+            "weathered": "#a3a6a5",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "debris_top": {
+          "index": 77,
+          "colors": {
+            "weathered": "#615b53",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "appliance_top": {
+          "index": 78,
+          "colors": {
+            "weathered": "#b4ae9f",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "cushion_top": {
+          "index": 79,
+          "colors": {
+            "weathered": "#5b4f43",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "blanket_top": {
+          "index": 80,
+          "colors": {
+            "weathered": "#56594d",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "canvas_top": {
+          "index": 81,
+          "colors": {
+            "weathered": "#5a5c44",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "tire_rubber_top": {
+          "index": 82,
+          "colors": {
+            "weathered": "#2a2927",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "pipe_top": {
+          "index": 83,
+          "colors": {
+            "weathered": "#5d6163",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "pipe_rust_top": {
+          "index": 84,
+          "colors": {
+            "weathered": "#6a4a34",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "can_top": {
+          "index": 85,
+          "colors": {
+            "weathered": "#8c8f8c",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "can_label_top": {
+          "index": 86,
+          "colors": {
+            "weathered": "#7a3a2e",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "rock_top": {
+          "index": 87,
+          "colors": {
+            "weathered": "#6b665e",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "rock_dk_top": {
+          "index": 88,
+          "colors": {
+            "weathered": "#4f4b45",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "crate_top": {
+          "index": 89,
+          "colors": {
+            "weathered": "#7a6142",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "crate_dk_top": {
+          "index": 90,
+          "colors": {
+            "weathered": "#4d3c2a",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "mattress_top": {
+          "index": 91,
+          "colors": {
+            "weathered": "#a99e88",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "med_white_top": {
+          "index": 92,
+          "colors": {
+            "weathered": "#bdbcb4",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "register_top": {
+          "index": 93,
+          "colors": {
+            "weathered": "#3c3d3b",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "tool_red_top": {
+          "index": 94,
+          "colors": {
+            "weathered": "#7a3a2e",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "corrugated_top": {
+          "index": 95,
+          "colors": {
+            "weathered": "#5b6470",
+            "ashfall": "#b8b4ad"
+          }
+        }
+      },
+      "mrValues": {
+        "glass": "roughness 0.40-0.50, metalness 0 (the one glossy exception, like the mask lens)",
+        "metals": "roughness 0.55-0.75, metalness 0.15-0.30",
+        "default": "roughness 0.90, metalness 0.02"
+      }
+    },
+    "decalAtlas": {
+      "path": "arch/textures/arch_floor_decals.png",
+      "size": [
+        256,
+        256
+      ],
+      "frames": {
+        "rug_rect": {
+          "uvRect": [
+            0.001953,
+            0.001953,
+            0.498047,
+            0.248047
+          ],
+          "px": [
+            0,
+            0,
+            128,
+            64
+          ],
+          "size": [
+            2.0,
+            1.25
+          ],
+          "notes": "Worn rectangular area rug (living / bedroom).",
+          "tags": [
+            "living",
+            "bedroom"
+          ]
+        },
+        "rug_round": {
+          "uvRect": [
+            0.501953,
+            0.001953,
+            0.748047,
+            0.248047
+          ],
+          "px": [
+            128,
+            0,
+            64,
+            64
+          ],
+          "size": [
+            1.3,
+            1.3
+          ],
+          "notes": "Braided round rug.",
+          "tags": [
+            "living",
+            "bedroom",
+            "kitchen"
+          ]
+        },
+        "doormat": {
+          "uvRect": [
+            0.751953,
+            0.001953,
+            0.998047,
+            0.123047
+          ],
+          "px": [
+            192,
+            0,
+            64,
+            32
+          ],
+          "size": [
+            0.9,
+            0.5
+          ],
+          "notes": "Coir doormat.",
+          "tags": [
+            "any",
+            "entry"
+          ]
+        },
+        "footprints": {
+          "uvRect": [
+            0.751953,
+            0.126953,
+            0.998047,
+            0.248047
+          ],
+          "px": [
+            192,
+            32,
+            64,
+            32
+          ],
+          "size": [
+            0.9,
+            0.45
+          ],
+          "notes": "Muddy / ashy boot prints (horror beat: someone was here).",
+          "tags": [
+            "any",
+            "horror"
+          ]
+        },
+        "stain_water": {
+          "uvRect": [
+            0.001953,
+            0.251953,
+            0.248047,
+            0.498047
+          ],
+          "px": [
+            0,
+            64,
+            64,
+            64
+          ],
+          "size": [
+            1.2,
+            1.2
+          ],
+          "notes": "Water stain ring.",
+          "tags": [
+            "any"
+          ]
+        },
+        "stain_oil": {
+          "uvRect": [
+            0.251953,
+            0.251953,
+            0.498047,
+            0.498047
+          ],
+          "px": [
+            64,
+            64,
+            64,
+            64
+          ],
+          "size": [
+            1.4,
+            1.4
+          ],
+          "notes": "Oil stain.",
+          "tags": [
+            "garage",
+            "warehouse"
+          ]
+        },
+        "stain_dark": {
+          "uvRect": [
+            0.501953,
+            0.251953,
+            0.748047,
+            0.498047
+          ],
+          "px": [
+            128,
+            64,
+            64,
+            64
+          ],
+          "size": [
+            1.0,
+            1.0
+          ],
+          "notes": "Dark dried stain (reads as old blood in later acts).",
+          "tags": [
+            "any",
+            "horror"
+          ]
+        },
+        "puddle": {
+          "uvRect": [
+            0.751953,
+            0.251953,
+            0.998047,
+            0.498047
+          ],
+          "px": [
+            192,
+            64,
+            64,
+            64
+          ],
+          "size": [
+            1.2,
+            1.0
+          ],
+          "notes": "Standing water puddle (glossier).",
+          "tags": [
+            "any",
+            "leak"
+          ]
+        },
+        "debris": {
+          "uvRect": [
+            0.001953,
+            0.501953,
+            0.248047,
+            0.748047
+          ],
+          "px": [
+            0,
+            128,
+            64,
+            64
+          ],
+          "size": [
+            1.0,
+            1.0
+          ],
+          "notes": "Plaster crumbs + grit.",
+          "tags": [
+            "any",
+            "debris"
+          ]
+        },
+        "papers": {
+          "uvRect": [
+            0.251953,
+            0.501953,
+            0.498047,
+            0.748047
+          ],
+          "px": [
+            64,
+            128,
+            64,
+            64
+          ],
+          "size": [
+            1.0,
+            1.0
+          ],
+          "notes": "Scattered papers.",
+          "tags": [
+            "any",
+            "papers",
+            "office",
+            "clinic"
+          ]
+        },
+        "glass_shards": {
+          "uvRect": [
+            0.501953,
+            0.501953,
+            0.748047,
+            0.748047
+          ],
+          "px": [
+            128,
+            128,
+            64,
+            64
+          ],
+          "size": [
+            1.0,
+            1.0
+          ],
+          "notes": "Broken glass on the floor, glints.",
+          "tags": [
+            "any",
+            "glass"
+          ]
+        },
+        "ash_drift": {
+          "uvRect": [
+            0.751953,
+            0.501953,
+            0.998047,
+            0.748047
+          ],
+          "px": [
+            192,
+            128,
+            64,
+            64
+          ],
+          "size": [
+            1.2,
+            1.0
+          ],
+          "notes": "Ash blown in under a door / window.",
+          "tags": [
+            "any",
+            "ash"
+          ]
+        },
+        "plaster": {
+          "uvRect": [
+            0.001953,
+            0.751953,
+            0.248047,
+            0.998047
+          ],
+          "px": [
+            0,
+            192,
+            64,
+            64
+          ],
+          "size": [
+            1.0,
+            1.0
+          ],
+          "notes": "Fallen ceiling plaster chunks.",
+          "tags": [
+            "any",
+            "debris"
+          ]
+        },
+        "leaves": {
+          "uvRect": [
+            0.251953,
+            0.751953,
+            0.498047,
+            0.998047
+          ],
+          "px": [
+            64,
+            192,
+            64,
+            64
+          ],
+          "size": [
+            1.0,
+            1.0
+          ],
+          "notes": "Dead leaves blown indoors.",
+          "tags": [
+            "any",
+            "abandoned"
+          ]
+        },
+        "scorch": {
+          "uvRect": [
+            0.501953,
+            0.751953,
+            0.748047,
+            0.998047
+          ],
+          "px": [
+            128,
+            192,
+            64,
+            64
+          ],
+          "size": [
+            1.2,
+            1.2
+          ],
+          "notes": "Burn / scorch mark.",
+          "tags": [
+            "any",
+            "fire"
+          ]
+        },
+        "sawdust": {
+          "uvRect": [
+            0.751953,
+            0.751953,
+            0.998047,
+            0.998047
+          ],
+          "px": [
+            192,
+            192,
+            64,
+            64
+          ],
+          "size": [
+            1.0,
+            1.0
+          ],
+          "notes": "Sawdust / wood splinters (broken boards).",
+          "tags": [
+            "warehouse",
+            "garage",
+            "broken_boards"
+          ]
+        }
+      },
+      "uvRect": "[u0, v0, u1, v1] glTF uv (v from the top), half-texel inset"
+    },
+    "counts": {
+      "door": 4,
+      "overlay": 1,
+      "window": 6,
+      "trim": 1,
+      "wall_panel": 4,
+      "dressing": 22,
+      "furniture": 20
+    },
+    "roomKits": {
+      "any": {
+        "models": [
+          "door_residential_wood",
+          "door_boarded",
+          "door_boards_overlay",
+          "window_intact",
+          "window_cracked",
+          "window_broken",
+          "window_boarded",
+          "window_boarded_diagonal",
+          "arch_baseboard_2m",
+          "arch_wall_plank_1m",
+          "arch_wall_plank_2m",
+          "arch_glass_shards_a",
+          "arch_glass_shards_b",
+          "arch_glass_pane_fallen",
+          "arch_glass_hanging",
+          "arch_paper_pile",
+          "arch_debris_pile",
+          "arch_rubble_small",
+          "arch_rubble_medium",
+          "arch_rubble_large",
+          "arch_can",
+          "arch_can_cluster",
+          "arch_pipe_straight",
+          "arch_pipe_elbow",
+          "arch_plank_loose",
+          "arch_plank_broken_a",
+          "arch_plank_broken_b",
+          "arch_chair",
+          "arch_table",
+          "arch_shelf_metal",
+          "arch_box_small",
+          "arch_box_large",
+          "arch_box_collapsed",
+          "arch_crate_large",
+          "arch_crate_small",
+          "arch_crate_broken",
+          "arch_cot"
+        ],
+        "textures": [
+          "floor_hardwood",
+          "floor_wood_plank",
+          "wall_drywall",
+          "wall_drywall_stained",
+          "wall_wood_panel",
+          "wall_brick"
+        ]
+      },
+      "bedroom": {
+        "models": [
+          "door_residential_wood",
+          "arch_bed",
+          "arch_bed_messy"
+        ],
+        "textures": [
+          "floor_hardwood",
+          "floor_carpet",
+          "wall_drywall",
+          "wall_drywall_stained",
+          "wall_wood_panel"
+        ]
+      },
+      "clinic": {
+        "models": [
+          "door_storefront",
+          "window_storefront",
+          "arch_paper_pile",
+          "arch_chair",
+          "arch_counter_sink",
+          "arch_cot",
+          "arch_med_cabinet"
+        ],
+        "textures": [
+          "floor_linoleum",
+          "floor_carpet",
+          "wall_drywall",
+          "wall_drywall_stained"
+        ]
+      },
+      "garage": {
+        "models": [
+          "door_garage_rollup",
+          "arch_wall_corrugated_1m",
+          "arch_wall_corrugated_2m",
+          "arch_wall_plank_1m",
+          "arch_wall_plank_2m",
+          "arch_pipe_straight",
+          "arch_pipe_elbow",
+          "arch_plank_stack",
+          "arch_shelf_metal",
+          "arch_shelf_metal_boxes",
+          "arch_crate_large",
+          "arch_crate_small",
+          "arch_crate_broken",
+          "arch_workbench",
+          "arch_tire",
+          "arch_tire_stack"
+        ],
+        "textures": [
+          "floor_concrete_stained",
+          "floor_wood_plank",
+          "wall_corrugated",
+          "wall_brick"
+        ]
+      },
+      "kitchen": {
+        "models": [
+          "door_residential_wood",
+          "arch_can_cluster",
+          "arch_chair",
+          "arch_table",
+          "arch_counter",
+          "arch_counter_sink",
+          "arch_fridge",
+          "arch_fridge_ajar"
+        ],
+        "textures": [
+          "floor_linoleum",
+          "floor_ceramic_tile",
+          "wall_drywall",
+          "wall_drywall_stained"
+        ]
+      },
+      "living": {
+        "models": [
+          "door_residential_wood",
+          "arch_chair",
+          "arch_table",
+          "arch_couch"
+        ],
+        "textures": [
+          "floor_hardwood",
+          "floor_carpet",
+          "wall_drywall",
+          "wall_drywall_stained",
+          "wall_wood_panel"
+        ]
+      },
+      "store": {
+        "models": [
+          "door_storefront",
+          "door_garage_rollup",
+          "window_storefront",
+          "arch_paper_pile",
+          "arch_can_cluster",
+          "arch_counter",
+          "arch_shelf_metal",
+          "arch_shelf_metal_boxes",
+          "arch_box_large",
+          "arch_crate_small",
+          "arch_gondola_stocked",
+          "arch_gondola_looted",
+          "arch_cash_register"
+        ],
+        "textures": [
+          "floor_linoleum",
+          "floor_ceramic_tile",
+          "floor_concrete_stained",
+          "wall_drywall",
+          "wall_brick"
+        ]
+      },
+      "warehouse": {
+        "models": [
+          "door_garage_rollup",
+          "window_boarded_diagonal",
+          "arch_wall_corrugated_1m",
+          "arch_wall_corrugated_2m",
+          "arch_wall_plank_1m",
+          "arch_wall_plank_2m",
+          "arch_rubble_small",
+          "arch_rubble_medium",
+          "arch_rubble_large",
+          "arch_pipe_straight",
+          "arch_pipe_elbow",
+          "arch_plank_loose",
+          "arch_plank_broken_a",
+          "arch_plank_broken_b",
+          "arch_plank_stack",
+          "arch_shelf_metal",
+          "arch_shelf_metal_boxes",
+          "arch_box_large",
+          "arch_crate_large",
+          "arch_crate_small",
+          "arch_crate_broken",
+          "arch_workbench",
+          "arch_tire",
+          "arch_tire_stack",
+          "arch_cot"
+        ],
+        "textures": [
+          "floor_concrete_stained",
+          "floor_wood_plank",
+          "wall_corrugated",
+          "wall_brick"
+        ]
+      }
+    },
+    "models": [
+      {
+        "id": "door_residential_wood",
+        "category": "arch",
+        "kind": "door",
+        "subtype": "swing",
+        "path": "arch/door_residential_wood.glb",
+        "tris": 158,
+        "partTris": {
+          "frame": 86,
+          "leaf": 72
+        },
+        "parts": [
+          "frame",
+          "leaf"
+        ],
+        "bytes": 17316,
+        "bounds": [
+          1.09,
+          2.145,
+          0.252
+        ],
+        "min": [
+          -0.545,
+          0.0,
+          -0.222
+        ],
+        "max": [
+          0.545,
+          2.145,
+          0.03
+        ],
+        "budget": [
+          60,
+          250
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 2,
+        "tags": [
+          "door",
+          "wood",
+          "house"
+        ],
+        "rooms": [
+          "any",
+          "bedroom",
+          "living",
+          "kitchen"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "opening: x centred, y = 0 bottom of the opening / threshold, z = 0 exterior wall face",
+        "opening": {
+          "width": 0.98,
+          "height": 2.09,
+          "depth": 0.2
+        },
+        "clearOpening": {
+          "width": 0.92,
+          "height": 2.06
+        },
+        "motion": "swing",
+        "states": [
+          "closed",
+          "open",
+          "ajar"
+        ],
+        "hinge": {
+          "side": "-X",
+          "axis": "+Y",
+          "pivot": [
+            -0.455,
+            0.0,
+            -0.1
+          ],
+          "hands": [
+            "L (default, hinge on -X seen from outside)",
+            "R (mirrored: opts.hand = \"R\")"
+          ]
+        },
+        "leafPivot": [
+          -0.455,
+          0.0,
+          -0.1
+        ],
+        "collider": {
+          "frameBoxes": [
+            [
+              [
+                -0.545,
+                0,
+                -0.22
+              ],
+              [
+                -0.46,
+                2.145,
+                0.022
+              ]
+            ],
+            [
+              [
+                0.46,
+                0,
+                -0.22
+              ],
+              [
+                0.545,
+                2.145,
+                0.022
+              ]
+            ],
+            [
+              [
+                -0.545,
+                2.06,
+                -0.22
+              ],
+              [
+                0.545,
+                2.145,
+                0.022
+              ]
+            ]
+          ],
+          "leafClosed": {
+            "min": [
+              -0.455,
+              0.025,
+              -0.162
+            ],
+            "max": [
+              0.455,
+              2.055,
+              0.007
+            ]
+          },
+          "swingRadius": 0.91,
+          "passable": {
+            "closed": false,
+            "open": true
+          }
+        },
+        "notes": "Stained 6-panel slab 0.91 x 2.03 m, brass knob + deadbolt both faces, jambs + stops + threshold + casing on both faces. In-swing: rotation.y 0 -> +90 deg swings the leaf into the room (-Z).",
+        "swing": "in",
+        "openAngleDeg": 90
+      },
+      {
+        "id": "door_storefront",
+        "category": "arch",
+        "kind": "door",
+        "subtype": "swing",
+        "path": "arch/door_storefront.glb",
+        "tris": 142,
+        "partTris": {
+          "frame": 52,
+          "leaf": 90
+        },
+        "parts": [
+          "frame",
+          "leaf"
+        ],
+        "bytes": 15756,
+        "bounds": [
+          1.1,
+          2.17,
+          0.195
+        ],
+        "min": [
+          -0.55,
+          0.0,
+          -0.17
+        ],
+        "max": [
+          0.55,
+          2.17,
+          0.025
+        ],
+        "budget": [
+          60,
+          250
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 2,
+        "tags": [
+          "door",
+          "glass",
+          "store"
+        ],
+        "rooms": [
+          "store",
+          "clinic"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "opening: x centred, y = 0 bottom of the opening / threshold, z = 0 exterior wall face",
+        "opening": {
+          "width": 1.1,
+          "height": 2.17,
+          "depth": 0.115
+        },
+        "clearOpening": {
+          "width": 1.0,
+          "height": 2.12
+        },
+        "motion": "swing",
+        "states": [
+          "closed",
+          "open"
+        ],
+        "hinge": {
+          "side": "-X",
+          "axis": "+Y",
+          "pivot": [
+            -0.49,
+            0.0,
+            -0.035
+          ],
+          "hands": [
+            "L (default, hinge on -X seen from outside)",
+            "R (mirrored: opts.hand = \"R\")"
+          ]
+        },
+        "leafPivot": [
+          -0.49,
+          0.0,
+          -0.035
+        ],
+        "collider": {
+          "frameBoxes": [
+            [
+              [
+                -0.55,
+                0,
+                -0.17
+              ],
+              [
+                -0.5,
+                2.17,
+                0.025
+              ]
+            ],
+            [
+              [
+                0.5,
+                0,
+                -0.17
+              ],
+              [
+                0.55,
+                2.17,
+                0.025
+              ]
+            ],
+            [
+              [
+                -0.55,
+                2.12,
+                -0.17
+              ],
+              [
+                0.55,
+                2.17,
+                0
+              ]
+            ]
+          ],
+          "leafClosed": {
+            "min": [
+              -0.49,
+              0.017,
+              -0.14
+            ],
+            "max": [
+              0.49,
+              2.11,
+              0.023
+            ]
+          },
+          "swingRadius": 0.98,
+          "passable": {
+            "closed": false,
+            "open": true
+          }
+        },
+        "notes": "Bronze-anodised aluminium frame + closer, glass leaf 0.98 x 2.09 m with interior push bar and exterior pull. Out-swing (egress): rotation.y 0 -> -90 deg swings the leaf out to the street (+Z).",
+        "swing": "out",
+        "openAngleDeg": -90
+      },
+      {
+        "id": "door_garage_rollup",
+        "category": "arch",
+        "kind": "door",
+        "subtype": "roll",
+        "path": "arch/door_garage_rollup.glb",
+        "tris": 108,
+        "partTris": {
+          "frame": 62,
+          "leaf": 46
+        },
+        "parts": [
+          "frame",
+          "leaf"
+        ],
+        "bytes": 12500,
+        "bounds": [
+          3.22,
+          2.94,
+          0.632
+        ],
+        "min": [
+          -1.61,
+          0.0,
+          -0.62
+        ],
+        "max": [
+          1.61,
+          2.94,
+          0.012
+        ],
+        "budget": [
+          60,
+          250
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 2,
+        "tags": [
+          "door",
+          "garage",
+          "metal",
+          "warehouse"
+        ],
+        "rooms": [
+          "garage",
+          "warehouse",
+          "store"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "opening: x centred, y = 0 bottom of the opening / threshold, z = 0 exterior wall face",
+        "opening": {
+          "width": 3.06,
+          "height": 2.48,
+          "depth": 0.2
+        },
+        "clearOpening": {
+          "width": 2.9,
+          "height": 2.4
+        },
+        "motion": "roll",
+        "states": [
+          "closed",
+          "open",
+          "half"
+        ],
+        "hinge": null,
+        "leafPivot": [
+          0.0,
+          2.4,
+          -0.11
+        ],
+        "collider": {
+          "frameBoxes": [
+            [
+              [
+                -1.61,
+                0,
+                -0.2
+              ],
+              [
+                -1.45,
+                2.56,
+                0.012
+              ]
+            ],
+            [
+              [
+                1.45,
+                0,
+                -0.2
+              ],
+              [
+                1.61,
+                2.56,
+                0.012
+              ]
+            ],
+            [
+              [
+                -1.57,
+                2.42,
+                -0.62
+              ],
+              [
+                1.57,
+                2.94,
+                -0.2
+              ]
+            ]
+          ],
+          "leafClosed": {
+            "min": [
+              -1.475,
+              0.0,
+              -0.14
+            ],
+            "max": [
+              1.475,
+              2.4,
+              -0.062
+            ]
+          },
+          "swingRadius": null,
+          "passable": {
+            "closed": false,
+            "open": true
+          }
+        },
+        "notes": "Rolling steel door: steel jambs, guide channels, exterior trim, coil hood on the interior face (top y 2.94: needs >= 3.0 m of wall inside). Leaf pivot = top centre of the curtain; open = leaf.scale.y 1 -> 0.07 (rolls into the hood, leaves the bottom bar under the header: 2.23 m clear).",
+        "rollMinScale": 0.07
+      },
+      {
+        "id": "door_boarded",
+        "category": "arch",
+        "kind": "door",
+        "subtype": "boarded",
+        "path": "arch/door_boarded.glb",
+        "tris": 120,
+        "partTris": {
+          "frame": 70,
+          "leaf": 50
+        },
+        "parts": [
+          "frame",
+          "leaf"
+        ],
+        "bytes": 13616,
+        "bounds": [
+          1.165,
+          2.145,
+          0.314
+        ],
+        "min": [
+          -0.572,
+          0.0,
+          -0.222
+        ],
+        "max": [
+          0.593,
+          2.145,
+          0.092
+        ],
+        "budget": [
+          60,
+          250
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 2,
+        "tags": [
+          "door",
+          "boarded",
+          "abandoned"
+        ],
+        "rooms": [
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "opening: x centred, y = 0 bottom of the opening / threshold, z = 0 exterior wall face",
+        "opening": {
+          "width": 0.98,
+          "height": 2.09,
+          "depth": 0.2
+        },
+        "clearOpening": {
+          "width": 0.92,
+          "height": 2.06
+        },
+        "motion": "remove",
+        "states": [
+          "boarded",
+          "cleared"
+        ],
+        "hinge": null,
+        "leafPivot": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "collider": {
+          "frameBoxes": [
+            [
+              [
+                -0.545,
+                0,
+                -0.22
+              ],
+              [
+                0.545,
+                2.145,
+                0.08
+              ]
+            ]
+          ],
+          "leafClosed": {
+            "min": [
+              -0.572,
+              0.343,
+              0.026
+            ],
+            "max": [
+              0.593,
+              2.045,
+              0.092
+            ]
+          },
+          "swingRadius": null,
+          "passable": {
+            "boarded": false,
+            "cleared": false
+          }
+        },
+        "notes": "Dark-trim residential frame + an old peeling painted slab 4 mm proud of the wall face (so it also works on an UNCUT wall), leaf = 4 planks + diagonal brace. setDoorOpen(obj, 1) hides the boards (\"cleared\"); the slab stays (swap to door_residential_wood if the player should enter)."
+      },
+      {
+        "id": "door_boards_overlay",
+        "category": "arch",
+        "kind": "overlay",
+        "subtype": "boards",
+        "path": "arch/door_boards_overlay.glb",
+        "tris": 50,
+        "partTris": {
+          "main": 50
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 6256,
+        "bounds": [
+          1.265,
+          1.755,
+          0.066
+        ],
+        "min": [
+          -0.64,
+          0.304,
+          0.03
+        ],
+        "max": [
+          0.625,
+          2.059,
+          0.096
+        ],
+        "budget": [
+          20,
+          120
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "boarded",
+          "planks",
+          "abandoned"
+        ],
+        "rooms": [
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "opening: x centred, y = 0 bottom of the opening / threshold, z = 0 exterior wall face",
+        "collider": null,
+        "notes": "4 planks + brace sized for a 1.0 x 2.1 m opening, at z 0.030-0.08 (in front of any door casing). Scale x 0.8-2.9 (garage), y 0.9-1.15."
+      },
+      {
+        "id": "window_intact",
+        "category": "arch",
+        "kind": "window",
+        "subtype": "residential",
+        "path": "arch/window_intact.glb",
+        "tris": 142,
+        "partTris": {
+          "main": 142
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 15056,
+        "bounds": [
+          1.12,
+          1.38,
+          0.315
+        ],
+        "min": [
+          -0.56,
+          -0.09,
+          -0.25
+        ],
+        "max": [
+          0.56,
+          1.29,
+          0.065
+        ],
+        "budget": [
+          20,
+          150
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "window",
+          "glass"
+        ],
+        "rooms": [
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "opening: x centred, y = 0 bottom of the opening / threshold, z = 0 exterior wall face",
+        "opening": {
+          "width": 0.9,
+          "height": 1.2,
+          "depth": 0.2
+        },
+        "sillHeight": {
+          "recommended": 0.9,
+          "note": "place y = sill height above the floor"
+        },
+        "states": [
+          "static"
+        ],
+        "motion": null,
+        "hinge": null,
+        "safeScale": {
+          "x": [
+            0.75,
+            1.6
+          ],
+          "y": [
+            0.75,
+            1.4
+          ],
+          "z": [
+            0.15,
+            10.0
+          ]
+        },
+        "collider": {
+          "frameBoxes": [
+            {
+              "min": [
+                -0.56,
+                -0.09,
+                -0.25
+              ],
+              "max": [
+                0.56,
+                1.29,
+                0.065
+              ]
+            }
+          ],
+          "passable": false
+        },
+        "glass": "opaque baked interior (front, +Z) / hazy exterior (back, -Z); glossy via the MR map. No transparency sorting."
+      },
+      {
+        "id": "window_cracked",
+        "category": "arch",
+        "kind": "window",
+        "subtype": "residential",
+        "path": "arch/window_cracked.glb",
+        "tris": 142,
+        "partTris": {
+          "main": 142
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 15060,
+        "bounds": [
+          1.12,
+          1.38,
+          0.315
+        ],
+        "min": [
+          -0.56,
+          -0.09,
+          -0.25
+        ],
+        "max": [
+          0.56,
+          1.29,
+          0.065
+        ],
+        "budget": [
+          20,
+          150
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "window",
+          "glass",
+          "cracked"
+        ],
+        "rooms": [
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "opening: x centred, y = 0 bottom of the opening / threshold, z = 0 exterior wall face",
+        "opening": {
+          "width": 0.9,
+          "height": 1.2,
+          "depth": 0.2
+        },
+        "sillHeight": {
+          "recommended": 0.9,
+          "note": "place y = sill height above the floor"
+        },
+        "states": [
+          "static"
+        ],
+        "motion": null,
+        "hinge": null,
+        "safeScale": {
+          "x": [
+            0.75,
+            1.6
+          ],
+          "y": [
+            0.75,
+            1.4
+          ],
+          "z": [
+            0.15,
+            10.0
+          ]
+        },
+        "collider": {
+          "frameBoxes": [
+            {
+              "min": [
+                -0.56,
+                -0.09,
+                -0.25
+              ],
+              "max": [
+                0.56,
+                1.29,
+                0.065
+              ]
+            }
+          ],
+          "passable": false
+        },
+        "glass": "opaque baked interior (front, +Z) / hazy exterior (back, -Z); glossy via the MR map. No transparency sorting."
+      },
+      {
+        "id": "window_broken",
+        "category": "arch",
+        "kind": "window",
+        "subtype": "residential",
+        "path": "arch/window_broken.glb",
+        "tris": 147,
+        "partTris": {
+          "main": 147
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 15576,
+        "bounds": [
+          1.12,
+          1.38,
+          0.328
+        ],
+        "min": [
+          -0.56,
+          -0.09,
+          -0.25
+        ],
+        "max": [
+          0.56,
+          1.29,
+          0.078
+        ],
+        "budget": [
+          20,
+          150
+        ],
+        "materials": 1,
+        "material": "arch_cutout (same atlas, alphaTest 0.5)",
+        "drawCalls": 1,
+        "tags": [
+          "window",
+          "glass",
+          "broken",
+          "shattered"
+        ],
+        "rooms": [
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "opening: x centred, y = 0 bottom of the opening / threshold, z = 0 exterior wall face",
+        "opening": {
+          "width": 0.9,
+          "height": 1.2,
+          "depth": 0.2
+        },
+        "sillHeight": {
+          "recommended": 0.9,
+          "note": "place y = sill height above the floor"
+        },
+        "states": [
+          "static"
+        ],
+        "motion": null,
+        "hinge": null,
+        "safeScale": {
+          "x": [
+            0.75,
+            1.6
+          ],
+          "y": [
+            0.75,
+            1.4
+          ],
+          "z": [
+            0.15,
+            10.0
+          ]
+        },
+        "collider": {
+          "frameBoxes": [
+            {
+              "min": [
+                -0.56,
+                -0.09,
+                -0.25
+              ],
+              "max": [
+                0.56,
+                1.29,
+                0.078
+              ]
+            }
+          ],
+          "passable": "vault-only"
+        },
+        "glass": "opaque baked interior (front, +Z) / hazy exterior (back, -Z); glossy via the MR map. alpha-tested hole: see-through."
+      },
+      {
+        "id": "window_boarded",
+        "category": "arch",
+        "kind": "window",
+        "subtype": "residential",
+        "path": "arch/window_boarded.glb",
+        "tris": 140,
+        "partTris": {
+          "main": 140
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 14868,
+        "bounds": [
+          1.182,
+          1.38,
+          0.315
+        ],
+        "min": [
+          -0.607,
+          -0.09,
+          -0.25
+        ],
+        "max": [
+          0.576,
+          1.29,
+          0.065
+        ],
+        "budget": [
+          20,
+          150
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "window",
+          "boarded",
+          "planks"
+        ],
+        "rooms": [
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "opening: x centred, y = 0 bottom of the opening / threshold, z = 0 exterior wall face",
+        "opening": {
+          "width": 0.9,
+          "height": 1.2,
+          "depth": 0.2
+        },
+        "sillHeight": {
+          "recommended": 0.9,
+          "note": "place y = sill height above the floor"
+        },
+        "states": [
+          "static"
+        ],
+        "motion": null,
+        "hinge": null,
+        "safeScale": {
+          "x": [
+            0.75,
+            1.6
+          ],
+          "y": [
+            0.75,
+            1.4
+          ],
+          "z": [
+            0.15,
+            10.0
+          ]
+        },
+        "collider": {
+          "frameBoxes": [
+            {
+              "min": [
+                -0.607,
+                -0.09,
+                -0.25
+              ],
+              "max": [
+                0.576,
+                1.29,
+                0.065
+              ]
+            }
+          ],
+          "passable": false
+        },
+        "glass": "opaque baked interior (front, +Z) / hazy exterior (back, -Z); glossy via the MR map. No transparency sorting."
+      },
+      {
+        "id": "window_boarded_diagonal",
+        "category": "arch",
+        "kind": "window",
+        "subtype": "residential",
+        "path": "arch/window_boarded_diagonal.glb",
+        "tris": 140,
+        "partTris": {
+          "main": 140
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 14932,
+        "bounds": [
+          1.141,
+          1.38,
+          0.356
+        ],
+        "min": [
+          -0.571,
+          -0.09,
+          -0.25
+        ],
+        "max": [
+          0.571,
+          1.29,
+          0.106
+        ],
+        "budget": [
+          20,
+          160
+        ],
+        "materials": 1,
+        "material": "arch_cutout (same atlas, alphaTest 0.5)",
+        "drawCalls": 1,
+        "tags": [
+          "window",
+          "boarded",
+          "planks",
+          "broken",
+          "concept"
+        ],
+        "rooms": [
+          "any",
+          "warehouse"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "opening: x centred, y = 0 bottom of the opening / threshold, z = 0 exterior wall face",
+        "opening": {
+          "width": 0.9,
+          "height": 1.2,
+          "depth": 0.2
+        },
+        "sillHeight": {
+          "recommended": 0.9,
+          "note": "place y = sill height above the floor"
+        },
+        "states": [
+          "static"
+        ],
+        "motion": null,
+        "hinge": null,
+        "safeScale": {
+          "x": [
+            0.75,
+            1.6
+          ],
+          "y": [
+            0.75,
+            1.4
+          ],
+          "z": [
+            0.15,
+            10.0
+          ]
+        },
+        "collider": {
+          "frameBoxes": [
+            {
+              "min": [
+                -0.571,
+                -0.09,
+                -0.25
+              ],
+              "max": [
+                0.571,
+                1.29,
+                0.106
+              ]
+            }
+          ],
+          "passable": false
+        },
+        "glass": "opaque baked interior (front, +Z) / hazy exterior (back, -Z); glossy via the MR map. alpha-tested hole: see-through.",
+        "notes": "Concept-match window: broken lite + two diagonal planks + one slanted board."
+      },
+      {
+        "id": "window_storefront",
+        "category": "arch",
+        "kind": "window",
+        "subtype": "storefront",
+        "path": "arch/window_storefront.glb",
+        "tris": 50,
+        "partTris": {
+          "main": 50
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 6252,
+        "bounds": [
+          2.44,
+          1.82,
+          0.16
+        ],
+        "min": [
+          -1.22,
+          -0.02,
+          -0.115
+        ],
+        "max": [
+          1.22,
+          1.8,
+          0.045
+        ],
+        "budget": [
+          20,
+          150
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "window",
+          "glass",
+          "store"
+        ],
+        "rooms": [
+          "store",
+          "clinic"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "opening: x centred, y = 0 bottom of the opening / threshold, z = 0 exterior wall face",
+        "opening": {
+          "width": 2.4,
+          "height": 1.8,
+          "depth": 0.115
+        },
+        "sillHeight": {
+          "recommended": 0.45,
+          "note": "place y = sill height above the floor"
+        },
+        "states": [
+          "static"
+        ],
+        "motion": null,
+        "hinge": null,
+        "safeScale": {
+          "x": [
+            0.6,
+            1.5
+          ],
+          "y": [
+            0.7,
+            1.3
+          ],
+          "z": [
+            0.15,
+            10.0
+          ]
+        },
+        "collider": {
+          "frameBoxes": [
+            {
+              "min": [
+                -1.22,
+                -0.02,
+                -0.115
+              ],
+              "max": [
+                1.22,
+                1.8,
+                0.045
+              ]
+            }
+          ],
+          "passable": false
+        },
+        "glass": "opaque baked interior (front, +Z) / hazy exterior (back, -Z); glossy via the MR map. No transparency sorting."
+      },
+      {
+        "id": "arch_baseboard_2m",
+        "category": "arch",
+        "kind": "trim",
+        "subtype": "baseboard",
+        "path": "arch/arch_baseboard_2m.glb",
+        "tris": 4,
+        "partTris": {
+          "main": 4
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 1760,
+        "bounds": [
+          2.0,
+          0.09,
+          0.014
+        ],
+        "min": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "max": [
+          1.0,
+          0.09,
+          0.014
+        ],
+        "budget": [
+          2,
+          12
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "trim"
+        ],
+        "rooms": [
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "opening: x centred, y = 0 bottom of the opening / threshold, z = 0 exterior wall face",
+        "collider": null
+      },
+      {
+        "id": "arch_wall_corrugated_1m",
+        "category": "arch",
+        "kind": "wall_panel",
+        "subtype": "panel",
+        "path": "arch/arch_wall_corrugated_1m.glb",
+        "tris": 46,
+        "partTris": {
+          "main": 46
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 5824,
+        "bounds": [
+          1.0,
+          2.4,
+          0.045
+        ],
+        "min": [
+          -0.5,
+          0.0,
+          0.0
+        ],
+        "max": [
+          0.5,
+          2.4,
+          0.045
+        ],
+        "budget": [
+          20,
+          120
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "wall",
+          "metal",
+          "corrugated"
+        ],
+        "rooms": [
+          "warehouse",
+          "garage"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "opening: x centred, y = 0 bottom of the opening / threshold, z = 0 exterior wall face",
+        "collider": {
+          "box": {
+            "min": [
+              -0.5,
+              0.0,
+              0.0
+            ],
+            "max": [
+              0.5,
+              2.4,
+              0.045
+            ]
+          }
+        },
+        "panelSize": [
+          1.0,
+          2.4
+        ],
+        "notes": "Modular wall panel, back face on z = 0 (mount on the wall face; snap every panelSize[0] m along X). Corrugated: real 25 mm trapezoid ridges at 200 mm pitch (flat-shaded relief)."
+      },
+      {
+        "id": "arch_wall_corrugated_2m",
+        "category": "arch",
+        "kind": "wall_panel",
+        "subtype": "panel",
+        "path": "arch/arch_wall_corrugated_2m.glb",
+        "tris": 86,
+        "partTris": {
+          "main": 86
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 9664,
+        "bounds": [
+          2.0,
+          2.4,
+          0.045
+        ],
+        "min": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "max": [
+          1.0,
+          2.4,
+          0.045
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "wall",
+          "metal",
+          "corrugated"
+        ],
+        "rooms": [
+          "warehouse",
+          "garage"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "opening: x centred, y = 0 bottom of the opening / threshold, z = 0 exterior wall face",
+        "collider": {
+          "box": {
+            "min": [
+              -1.0,
+              0.0,
+              0.0
+            ],
+            "max": [
+              1.0,
+              2.4,
+              0.045
+            ]
+          }
+        },
+        "panelSize": [
+          2.0,
+          2.4
+        ],
+        "notes": "Modular wall panel, back face on z = 0 (mount on the wall face; snap every panelSize[0] m along X). Corrugated: real 25 mm trapezoid ridges at 200 mm pitch (flat-shaded relief)."
+      },
+      {
+        "id": "arch_wall_plank_1m",
+        "category": "arch",
+        "kind": "wall_panel",
+        "subtype": "panel",
+        "path": "arch/arch_wall_plank_1m.glb",
+        "tris": 14,
+        "partTris": {
+          "main": 14
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 2732,
+        "bounds": [
+          1.0,
+          2.4,
+          0.022
+        ],
+        "min": [
+          -0.5,
+          0.0,
+          0.0
+        ],
+        "max": [
+          0.5,
+          2.4,
+          0.022
+        ],
+        "budget": [
+          2,
+          40
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "wall",
+          "wood",
+          "planks"
+        ],
+        "rooms": [
+          "warehouse",
+          "garage",
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "opening: x centred, y = 0 bottom of the opening / threshold, z = 0 exterior wall face",
+        "collider": {
+          "box": {
+            "min": [
+              -0.5,
+              0.0,
+              0.0
+            ],
+            "max": [
+              0.5,
+              2.4,
+              0.022
+            ]
+          }
+        },
+        "panelSize": [
+          1.0,
+          2.4
+        ],
+        "notes": "Modular wall panel, back face on z = 0 (mount on the wall face; snap every panelSize[0] m along X). Corrugated: real 25 mm trapezoid ridges at 200 mm pitch (flat-shaded relief)."
+      },
+      {
+        "id": "arch_wall_plank_2m",
+        "category": "arch",
+        "kind": "wall_panel",
+        "subtype": "panel",
+        "path": "arch/arch_wall_plank_2m.glb",
+        "tris": 16,
+        "partTris": {
+          "main": 16
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 2924,
+        "bounds": [
+          2.0,
+          2.4,
+          0.022
+        ],
+        "min": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "max": [
+          1.0,
+          2.4,
+          0.022
+        ],
+        "budget": [
+          2,
+          40
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "wall",
+          "wood",
+          "planks"
+        ],
+        "rooms": [
+          "warehouse",
+          "garage",
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "opening: x centred, y = 0 bottom of the opening / threshold, z = 0 exterior wall face",
+        "collider": {
+          "box": {
+            "min": [
+              -1.0,
+              0.0,
+              0.0
+            ],
+            "max": [
+              1.0,
+              2.4,
+              0.022
+            ]
+          }
+        },
+        "panelSize": [
+          2.0,
+          2.4
+        ],
+        "notes": "Modular wall panel, back face on z = 0 (mount on the wall face; snap every panelSize[0] m along X). Corrugated: real 25 mm trapezoid ridges at 200 mm pitch (flat-shaded relief)."
+      },
+      {
+        "id": "arch_glass_shards_a",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "small",
+        "path": "arch/arch_glass_shards_a.glb",
+        "tris": 6,
+        "partTris": {
+          "main": 6
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 2012,
+        "bounds": [
+          0.334,
+          0.01,
+          0.317
+        ],
+        "min": [
+          -0.113,
+          0.0,
+          -0.164
+        ],
+        "max": [
+          0.221,
+          0.01,
+          0.153
+        ],
+        "budget": [
+          6,
+          30
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "glass",
+          "shards",
+          "broken"
+        ],
+        "rooms": [
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null
+      },
+      {
+        "id": "arch_glass_shards_b",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "small",
+        "path": "arch/arch_glass_shards_b.glb",
+        "tris": 14,
+        "partTris": {
+          "main": 14
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 2780,
+        "bounds": [
+          0.645,
+          0.011,
+          0.529
+        ],
+        "min": [
+          -0.335,
+          0.0,
+          -0.291
+        ],
+        "max": [
+          0.31,
+          0.011,
+          0.238
+        ],
+        "budget": [
+          6,
+          30
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "glass",
+          "shards",
+          "broken"
+        ],
+        "rooms": [
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null
+      },
+      {
+        "id": "arch_glass_pane_fallen",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "small",
+        "path": "arch/arch_glass_pane_fallen.glb",
+        "tris": 35,
+        "partTris": {
+          "main": 35
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 4812,
+        "bounds": [
+          0.899,
+          0.126,
+          0.641
+        ],
+        "min": [
+          -0.42,
+          0.0,
+          -0.354
+        ],
+        "max": [
+          0.479,
+          0.126,
+          0.286
+        ],
+        "budget": [
+          20,
+          120
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "glass",
+          "shattered",
+          "window",
+          "broken"
+        ],
+        "rooms": [
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null
+      },
+      {
+        "id": "arch_glass_hanging",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "small",
+        "path": "arch/arch_glass_hanging.glb",
+        "tris": 10,
+        "partTris": {
+          "main": 10
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 2408,
+        "bounds": [
+          0.78,
+          1.05,
+          0.004
+        ],
+        "min": [
+          -0.39,
+          0.08,
+          -0.079
+        ],
+        "max": [
+          0.39,
+          1.13,
+          -0.075
+        ],
+        "budget": [
+          6,
+          30
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "glass",
+          "shattered",
+          "window",
+          "broken"
+        ],
+        "rooms": [
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "notes": "Shards hanging in a window lite: place at the window origin of window_boarded / an empty window frame."
+      },
+      {
+        "id": "arch_paper_pile",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "small",
+        "path": "arch/arch_paper_pile.glb",
+        "tris": 50,
+        "partTris": {
+          "main": 50
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 6232,
+        "bounds": [
+          0.681,
+          0.066,
+          0.63
+        ],
+        "min": [
+          -0.302,
+          0.0,
+          -0.291
+        ],
+        "max": [
+          0.379,
+          0.066,
+          0.339
+        ],
+        "budget": [
+          6,
+          120
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "papers",
+          "debris",
+          "office"
+        ],
+        "rooms": [
+          "any",
+          "clinic",
+          "store"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null
+      },
+      {
+        "id": "arch_debris_pile",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "small",
+        "path": "arch/arch_debris_pile.glb",
+        "tris": 86,
+        "partTris": {
+          "main": 86
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 9692,
+        "bounds": [
+          0.838,
+          0.078,
+          0.512
+        ],
+        "min": [
+          -0.425,
+          0.0,
+          -0.186
+        ],
+        "max": [
+          0.414,
+          0.078,
+          0.326
+        ],
+        "budget": [
+          6,
+          120
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "debris",
+          "rubble",
+          "papers"
+        ],
+        "rooms": [
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null
+      },
+      {
+        "id": "arch_rubble_small",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "small",
+        "path": "arch/arch_rubble_small.glb",
+        "tris": 12,
+        "partTris": {
+          "main": 12
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 2584,
+        "bounds": [
+          0.149,
+          0.048,
+          0.117
+        ],
+        "min": [
+          -0.079,
+          0.0,
+          -0.06
+        ],
+        "max": [
+          0.07,
+          0.048,
+          0.056
+        ],
+        "budget": [
+          8,
+          40
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "rubble",
+          "rocks",
+          "debris"
+        ],
+        "rooms": [
+          "any",
+          "warehouse"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null
+      },
+      {
+        "id": "arch_rubble_medium",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "small",
+        "path": "arch/arch_rubble_medium.glb",
+        "tris": 27,
+        "partTris": {
+          "main": 27
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 4024,
+        "bounds": [
+          0.446,
+          0.097,
+          0.284
+        ],
+        "min": [
+          -0.19,
+          0.0,
+          -0.154
+        ],
+        "max": [
+          0.257,
+          0.097,
+          0.13
+        ],
+        "budget": [
+          8,
+          40
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "rubble",
+          "rocks",
+          "debris"
+        ],
+        "rooms": [
+          "any",
+          "warehouse"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null
+      },
+      {
+        "id": "arch_rubble_large",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "small",
+        "path": "arch/arch_rubble_large.glb",
+        "tris": 42,
+        "partTris": {
+          "main": 42
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 5468,
+        "bounds": [
+          0.818,
+          0.199,
+          0.593
+        ],
+        "min": [
+          -0.363,
+          0.0,
+          -0.266
+        ],
+        "max": [
+          0.455,
+          0.199,
+          0.327
+        ],
+        "budget": [
+          8,
+          60
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "rubble",
+          "rocks",
+          "debris"
+        ],
+        "rooms": [
+          "any",
+          "warehouse"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.363,
+            0.0,
+            -0.266
+          ],
+          "max": [
+            0.455,
+            0.199,
+            0.327
+          ]
+        }
+      },
+      {
+        "id": "arch_can",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "small",
+        "path": "arch/arch_can.glb",
+        "tris": 19,
+        "partTris": {
+          "main": 19
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 3228,
+        "bounds": [
+          0.066,
+          0.122,
+          0.065
+        ],
+        "min": [
+          -0.033,
+          0.0,
+          -0.034
+        ],
+        "max": [
+          0.033,
+          0.122,
+          0.031
+        ],
+        "budget": [
+          6,
+          40
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "can",
+          "trash",
+          "food"
+        ],
+        "rooms": [
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null
+      },
+      {
+        "id": "arch_can_cluster",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "small",
+        "path": "arch/arch_can_cluster.glb",
+        "tris": 81,
+        "partTris": {
+          "main": 81
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 9212,
+        "bounds": [
+          0.226,
+          0.122,
+          0.254
+        ],
+        "min": [
+          -0.063,
+          0.0,
+          -0.143
+        ],
+        "max": [
+          0.163,
+          0.122,
+          0.111
+        ],
+        "budget": [
+          6,
+          120
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "can",
+          "trash",
+          "food"
+        ],
+        "rooms": [
+          "any",
+          "kitchen",
+          "store"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null
+      },
+      {
+        "id": "arch_pipe_straight",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "small",
+        "path": "arch/arch_pipe_straight.glb",
+        "tris": 40,
+        "partTris": {
+          "main": 40
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 5252,
+        "bounds": [
+          1.5,
+          0.112,
+          0.097
+        ],
+        "min": [
+          -0.75,
+          0.0,
+          -0.049
+        ],
+        "max": [
+          0.75,
+          0.112,
+          0.049
+        ],
+        "budget": [
+          6,
+          60
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "pipe",
+          "metal",
+          "debris"
+        ],
+        "rooms": [
+          "warehouse",
+          "garage",
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null
+      },
+      {
+        "id": "arch_pipe_elbow",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "small",
+        "path": "arch/arch_pipe_elbow.glb",
+        "tris": 44,
+        "partTris": {
+          "main": 44
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 5640,
+        "bounds": [
+          0.603,
+          0.09,
+          0.553
+        ],
+        "min": [
+          -0.5,
+          0.0,
+          -0.514
+        ],
+        "max": [
+          0.103,
+          0.09,
+          0.039
+        ],
+        "budget": [
+          6,
+          60
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "pipe",
+          "metal",
+          "debris"
+        ],
+        "rooms": [
+          "warehouse",
+          "garage",
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null
+      },
+      {
+        "id": "arch_plank_loose",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "small",
+        "path": "arch/arch_plank_loose.glb",
+        "tris": 10,
+        "partTris": {
+          "main": 10
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 2356,
+        "bounds": [
+          2.0,
+          0.025,
+          0.14
+        ],
+        "min": [
+          -1.0,
+          0.0,
+          -0.07
+        ],
+        "max": [
+          1.0,
+          0.025,
+          0.07
+        ],
+        "budget": [
+          6,
+          40
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "planks",
+          "wood",
+          "broken_boards"
+        ],
+        "rooms": [
+          "any",
+          "warehouse"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null
+      },
+      {
+        "id": "arch_plank_broken_a",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "small",
+        "path": "arch/arch_plank_broken_a.glb",
+        "tris": 12,
+        "partTris": {
+          "main": 12
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 2584,
+        "bounds": [
+          1.12,
+          0.025,
+          0.14
+        ],
+        "min": [
+          -0.55,
+          0.0,
+          -0.07
+        ],
+        "max": [
+          0.57,
+          0.025,
+          0.07
+        ],
+        "budget": [
+          6,
+          40
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "planks",
+          "broken_boards",
+          "wood"
+        ],
+        "rooms": [
+          "any",
+          "warehouse"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null
+      },
+      {
+        "id": "arch_plank_broken_b",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "small",
+        "path": "arch/arch_plank_broken_b.glb",
+        "tris": 24,
+        "partTris": {
+          "main": 24
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 3740,
+        "bounds": [
+          0.69,
+          0.05,
+          0.375
+        ],
+        "min": [
+          -0.35,
+          0.0,
+          -0.07
+        ],
+        "max": [
+          0.34,
+          0.05,
+          0.305
+        ],
+        "budget": [
+          6,
+          60
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "planks",
+          "broken_boards",
+          "wood"
+        ],
+        "rooms": [
+          "any",
+          "warehouse"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null
+      },
+      {
+        "id": "arch_plank_stack",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "small",
+        "path": "arch/arch_plank_stack.glb",
+        "tris": 60,
+        "partTris": {
+          "main": 60
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 7192,
+        "bounds": [
+          1.905,
+          0.15,
+          0.701
+        ],
+        "min": [
+          -0.953,
+          0.0,
+          -0.409
+        ],
+        "max": [
+          0.953,
+          0.15,
+          0.292
+        ],
+        "budget": [
+          6,
+          120
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "planks",
+          "wood",
+          "lumber"
+        ],
+        "rooms": [
+          "warehouse",
+          "garage"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.953,
+            0.0,
+            -0.409
+          ],
+          "max": [
+            0.953,
+            0.15,
+            0.292
+          ]
+        }
+      },
+      {
+        "id": "arch_chair",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_chair.glb",
+        "tris": 88,
+        "partTris": {
+          "main": 88
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 9864,
+        "bounds": [
+          0.44,
+          0.92,
+          0.42
+        ],
+        "min": [
+          -0.22,
+          0.0,
+          -0.21
+        ],
+        "max": [
+          0.22,
+          0.92,
+          0.21
+        ],
+        "budget": [
+          60,
+          300
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "chair",
+          "wood",
+          "overturned"
+        ],
+        "rooms": [
+          "kitchen",
+          "living",
+          "clinic",
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.22,
+            0.0,
+            -0.21
+          ],
+          "max": [
+            0.22,
+            0.92,
+            0.21
+          ]
+        },
+        "poses": {
+          "overturned": {
+            "rotationDeg": [
+              -90,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.21,
+              0.0
+            ],
+            "note": "tipped onto its back",
+            "collider": {
+              "min": [
+                -0.22,
+                0.0,
+                -0.92
+              ],
+              "max": [
+                0.22,
+                0.42,
+                0.0
+              ]
+            }
+          },
+          "on_side": {
+            "rotationDeg": [
+              0,
+              0,
+              90
+            ],
+            "position": [
+              0.0,
+              0.22,
+              0.0
+            ],
+            "note": "lying on its side",
+            "collider": {
+              "min": [
+                -0.92,
+                0.0,
+                -0.21
+              ],
+              "max": [
+                0.0,
+                0.44,
+                0.21
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": "arch_table",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_table.glb",
+        "tris": 56,
+        "partTris": {
+          "main": 56
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 6788,
+        "bounds": [
+          1.2,
+          0.76,
+          0.76
+        ],
+        "min": [
+          -0.6,
+          0.0,
+          -0.38
+        ],
+        "max": [
+          0.6,
+          0.76,
+          0.38
+        ],
+        "budget": [
+          40,
+          300
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "table",
+          "wood"
+        ],
+        "rooms": [
+          "kitchen",
+          "living",
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.6,
+            0.0,
+            -0.38
+          ],
+          "max": [
+            0.6,
+            0.76,
+            0.38
+          ]
+        },
+        "poses": {
+          "overturned": {
+            "rotationDeg": [
+              -90,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.38,
+              0.0
+            ],
+            "note": "tipped onto its back",
+            "collider": {
+              "min": [
+                -0.6,
+                0.0,
+                -0.76
+              ],
+              "max": [
+                0.6,
+                0.76,
+                0.0
+              ]
+            }
+          },
+          "on_side": {
+            "rotationDeg": [
+              0,
+              0,
+              90
+            ],
+            "position": [
+              0.0,
+              0.6,
+              0.0
+            ],
+            "note": "lying on its side",
+            "collider": {
+              "min": [
+                -0.76,
+                0.0,
+                -0.38
+              ],
+              "max": [
+                0.0,
+                1.2,
+                0.38
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": "arch_counter",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_counter.glb",
+        "tris": 112,
+        "partTris": {
+          "main": 112
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 12172,
+        "bounds": [
+          1.84,
+          0.9,
+          0.64
+        ],
+        "min": [
+          -0.92,
+          0.0,
+          -0.31
+        ],
+        "max": [
+          0.92,
+          0.9,
+          0.33
+        ],
+        "budget": [
+          60,
+          300
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "counter",
+          "kitchen",
+          "store"
+        ],
+        "rooms": [
+          "kitchen",
+          "store"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.92,
+            0.0,
+            -0.31
+          ],
+          "max": [
+            0.92,
+            0.9,
+            0.33
+          ]
+        }
+      },
+      {
+        "id": "arch_counter_sink",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_counter_sink.glb",
+        "tris": 162,
+        "partTris": {
+          "main": 162
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 16988,
+        "bounds": [
+          1.84,
+          1.15,
+          0.64
+        ],
+        "min": [
+          -0.92,
+          0.0,
+          -0.31
+        ],
+        "max": [
+          0.92,
+          1.15,
+          0.33
+        ],
+        "budget": [
+          60,
+          300
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "counter",
+          "sink",
+          "kitchen"
+        ],
+        "rooms": [
+          "kitchen",
+          "clinic"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.92,
+            0.0,
+            -0.31
+          ],
+          "max": [
+            0.92,
+            1.15,
+            0.33
+          ]
+        }
+      },
+      {
+        "id": "arch_shelf_metal",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_shelf_metal.glb",
+        "tris": 80,
+        "partTris": {
+          "main": 80
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 9112,
+        "bounds": [
+          1.229,
+          2.1,
+          0.46
+        ],
+        "min": [
+          -0.614,
+          0.0,
+          -0.23
+        ],
+        "max": [
+          0.614,
+          2.1,
+          0.23
+        ],
+        "budget": [
+          60,
+          300
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "shelves",
+          "metal",
+          "storage"
+        ],
+        "rooms": [
+          "warehouse",
+          "garage",
+          "store",
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.614,
+            0.0,
+            -0.23
+          ],
+          "max": [
+            0.614,
+            2.1,
+            0.23
+          ]
+        },
+        "poses": {
+          "toppled": {
+            "rotationDeg": [
+              90,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.23,
+              0.0
+            ],
+            "note": "fallen forward onto its front (+Z), lift = depth/2",
+            "collider": {
+              "min": [
+                -0.614,
+                0.0,
+                -0.0
+              ],
+              "max": [
+                0.614,
+                0.46,
+                2.1
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": "arch_shelf_metal_boxes",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_shelf_metal_boxes.glb",
+        "tris": 190,
+        "partTris": {
+          "main": 190
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 19692,
+        "bounds": [
+          1.229,
+          2.1,
+          0.465
+        ],
+        "min": [
+          -0.614,
+          0.0,
+          -0.23
+        ],
+        "max": [
+          0.614,
+          2.1,
+          0.235
+        ],
+        "budget": [
+          60,
+          350
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "shelves",
+          "boxes",
+          "storage",
+          "concept"
+        ],
+        "rooms": [
+          "warehouse",
+          "garage",
+          "store"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.614,
+            0.0,
+            -0.23
+          ],
+          "max": [
+            0.614,
+            2.1,
+            0.235
+          ]
+        },
+        "poses": {
+          "toppled": {
+            "rotationDeg": [
+              90,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.2348,
+              0.0
+            ],
+            "note": "fallen forward onto its front (+Z), lift = depth/2",
+            "collider": {
+              "min": [
+                -0.614,
+                0.0,
+                -0.0
+              ],
+              "max": [
+                0.614,
+                0.465,
+                2.1
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": "arch_box_small",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "small",
+        "path": "arch/arch_box_small.glb",
+        "tris": 10,
+        "partTris": {
+          "main": 10
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 2380,
+        "bounds": [
+          0.42,
+          0.3,
+          0.32
+        ],
+        "min": [
+          -0.21,
+          0.0,
+          -0.16
+        ],
+        "max": [
+          0.21,
+          0.3,
+          0.16
+        ],
+        "budget": [
+          6,
+          120
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "boxes",
+          "cardboard"
+        ],
+        "rooms": [
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null
+      },
+      {
+        "id": "arch_box_large",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "box",
+        "path": "arch/arch_box_large.glb",
+        "tris": 10,
+        "partTris": {
+          "main": 10
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 2376,
+        "bounds": [
+          0.7,
+          0.52,
+          0.52
+        ],
+        "min": [
+          -0.35,
+          0.0,
+          -0.26
+        ],
+        "max": [
+          0.35,
+          0.52,
+          0.26
+        ],
+        "budget": [
+          6,
+          120
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "boxes",
+          "cardboard"
+        ],
+        "rooms": [
+          "any",
+          "warehouse",
+          "store"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.35,
+            0.0,
+            -0.26
+          ],
+          "max": [
+            0.35,
+            0.52,
+            0.26
+          ]
+        }
+      },
+      {
+        "id": "arch_box_collapsed",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "small",
+        "path": "arch/arch_box_collapsed.glb",
+        "tris": 14,
+        "partTris": {
+          "main": 14
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 2776,
+        "bounds": [
+          0.692,
+          0.158,
+          0.7
+        ],
+        "min": [
+          -0.3,
+          0.0,
+          -0.225
+        ],
+        "max": [
+          0.392,
+          0.158,
+          0.475
+        ],
+        "budget": [
+          6,
+          120
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "boxes",
+          "cardboard",
+          "debris"
+        ],
+        "rooms": [
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null
+      },
+      {
+        "id": "arch_crate_large",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "crate",
+        "path": "arch/arch_crate_large.glb",
+        "tris": 70,
+        "partTris": {
+          "main": 70
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 8152,
+        "bounds": [
+          1.14,
+          0.855,
+          0.89
+        ],
+        "min": [
+          -0.57,
+          0.0,
+          -0.445
+        ],
+        "max": [
+          0.57,
+          0.855,
+          0.445
+        ],
+        "budget": [
+          40,
+          300
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "crate",
+          "wood",
+          "concept"
+        ],
+        "rooms": [
+          "warehouse",
+          "garage",
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.57,
+            0.0,
+            -0.445
+          ],
+          "max": [
+            0.57,
+            0.855,
+            0.445
+          ]
+        }
+      },
+      {
+        "id": "arch_crate_small",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "crate",
+        "path": "arch/arch_crate_small.glb",
+        "tris": 74,
+        "partTris": {
+          "main": 74
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 8540,
+        "bounds": [
+          0.64,
+          0.485,
+          0.54
+        ],
+        "min": [
+          -0.32,
+          0.0,
+          -0.27
+        ],
+        "max": [
+          0.32,
+          0.485,
+          0.27
+        ],
+        "budget": [
+          40,
+          300
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "crate",
+          "wood"
+        ],
+        "rooms": [
+          "warehouse",
+          "garage",
+          "store",
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.32,
+            0.0,
+            -0.27
+          ],
+          "max": [
+            0.32,
+            0.485,
+            0.27
+          ]
+        }
+      },
+      {
+        "id": "arch_crate_broken",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "crate",
+        "path": "arch/arch_crate_broken.glb",
+        "tris": 92,
+        "partTris": {
+          "main": 92
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 10268,
+        "bounds": [
+          1.032,
+          0.755,
+          1.393
+        ],
+        "min": [
+          -0.495,
+          0.0,
+          -0.395
+        ],
+        "max": [
+          0.537,
+          0.755,
+          0.998
+        ],
+        "budget": [
+          40,
+          300
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "crate",
+          "broken",
+          "broken_boards",
+          "looted"
+        ],
+        "rooms": [
+          "warehouse",
+          "garage",
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.495,
+            0.0,
+            -0.395
+          ],
+          "max": [
+            0.537,
+            0.755,
+            0.998
+          ]
+        }
+      },
+      {
+        "id": "arch_fridge",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "kitchen",
+        "path": "arch/arch_fridge.glb",
+        "tris": 36,
+        "partTris": {
+          "main": 36
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 4872,
+        "bounds": [
+          0.76,
+          1.7,
+          0.7
+        ],
+        "min": [
+          -0.38,
+          0.0,
+          -0.35
+        ],
+        "max": [
+          0.38,
+          1.7,
+          0.35
+        ],
+        "budget": [
+          30,
+          350
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "fridge",
+          "appliance"
+        ],
+        "rooms": [
+          "kitchen"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.38,
+            0.0,
+            -0.35
+          ],
+          "max": [
+            0.38,
+            1.7,
+            0.35
+          ]
+        }
+      },
+      {
+        "id": "arch_fridge_ajar",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "kitchen",
+        "path": "arch/arch_fridge_ajar.glb",
+        "tris": 46,
+        "partTris": {
+          "main": 46
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 5848,
+        "bounds": [
+          0.791,
+          1.7,
+          1.157
+        ],
+        "min": [
+          -0.411,
+          0.0,
+          -0.35
+        ],
+        "max": [
+          0.38,
+          1.7,
+          0.807
+        ],
+        "budget": [
+          40,
+          350
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "fridge",
+          "appliance",
+          "looted",
+          "ajar"
+        ],
+        "rooms": [
+          "kitchen"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.411,
+            0.0,
+            -0.35
+          ],
+          "max": [
+            0.38,
+            1.7,
+            0.807
+          ]
+        }
+      },
+      {
+        "id": "arch_bed",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "bedroom",
+        "path": "arch/arch_bed.glb",
+        "tris": 72,
+        "partTris": {
+          "main": 72
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 8304,
+        "bounds": [
+          1.44,
+          1.05,
+          2.05
+        ],
+        "min": [
+          -0.72,
+          0.0,
+          -1.05
+        ],
+        "max": [
+          0.72,
+          1.05,
+          1.0
+        ],
+        "budget": [
+          60,
+          350
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "bed",
+          "mattress"
+        ],
+        "rooms": [
+          "bedroom"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.72,
+            0.0,
+            -1.05
+          ],
+          "max": [
+            0.72,
+            1.05,
+            1.0
+          ]
+        }
+      },
+      {
+        "id": "arch_bed_messy",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "bedroom",
+        "path": "arch/arch_bed_messy.glb",
+        "tris": 92,
+        "partTris": {
+          "main": 92
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 10244,
+        "bounds": [
+          1.47,
+          1.05,
+          2.11
+        ],
+        "min": [
+          -0.72,
+          0.0,
+          -1.05
+        ],
+        "max": [
+          0.75,
+          1.05,
+          1.06
+        ],
+        "budget": [
+          60,
+          350
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "bed",
+          "mattress",
+          "messy",
+          "abandoned"
+        ],
+        "rooms": [
+          "bedroom"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.72,
+            0.0,
+            -1.05
+          ],
+          "max": [
+            0.75,
+            1.05,
+            1.06
+          ]
+        }
+      },
+      {
+        "id": "arch_couch",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "living",
+        "path": "arch/arch_couch.glb",
+        "tris": 82,
+        "partTris": {
+          "main": 82
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 9284,
+        "bounds": [
+          1.9,
+          0.92,
+          0.89
+        ],
+        "min": [
+          -0.95,
+          0.0,
+          -0.44
+        ],
+        "max": [
+          0.95,
+          0.92,
+          0.45
+        ],
+        "budget": [
+          60,
+          350
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "couch",
+          "sofa"
+        ],
+        "rooms": [
+          "living"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.95,
+            0.0,
+            -0.44
+          ],
+          "max": [
+            0.95,
+            0.92,
+            0.45
+          ]
+        }
+      },
+      {
+        "id": "arch_gondola_stocked",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "store",
+        "path": "arch/arch_gondola_stocked.glb",
+        "tris": 74,
+        "partTris": {
+          "main": 74
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 8520,
+        "bounds": [
+          1.28,
+          1.6,
+          0.5
+        ],
+        "min": [
+          -0.64,
+          0.0,
+          -0.25
+        ],
+        "max": [
+          0.64,
+          1.6,
+          0.25
+        ],
+        "budget": [
+          60,
+          350
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "shelves",
+          "store",
+          "stocked"
+        ],
+        "rooms": [
+          "store"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.64,
+            0.0,
+            -0.25
+          ],
+          "max": [
+            0.64,
+            1.6,
+            0.25
+          ]
+        },
+        "poses": {
+          "toppled": {
+            "rotationDeg": [
+              90,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.25,
+              0.0
+            ],
+            "note": "fallen forward onto its front (+Z), lift = depth/2",
+            "collider": {
+              "min": [
+                -0.64,
+                0.0,
+                -0.0
+              ],
+              "max": [
+                0.64,
+                0.5,
+                1.6
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": "arch_gondola_looted",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "store",
+        "path": "arch/arch_gondola_looted.glb",
+        "tris": 114,
+        "partTris": {
+          "main": 114
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 12372,
+        "bounds": [
+          1.28,
+          1.6,
+          0.743
+        ],
+        "min": [
+          -0.64,
+          0.0,
+          -0.25
+        ],
+        "max": [
+          0.64,
+          1.6,
+          0.493
+        ],
+        "budget": [
+          60,
+          350
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "shelves",
+          "store",
+          "looted",
+          "empty"
+        ],
+        "rooms": [
+          "store"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.64,
+            0.0,
+            -0.25
+          ],
+          "max": [
+            0.64,
+            1.6,
+            0.493
+          ]
+        },
+        "poses": {
+          "toppled": {
+            "rotationDeg": [
+              90,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.4934,
+              0.0
+            ],
+            "note": "fallen forward onto its front (+Z), lift = depth/2",
+            "collider": {
+              "min": [
+                -0.64,
+                0.0,
+                -0.0
+              ],
+              "max": [
+                0.64,
+                0.743,
+                1.6
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": "arch_cash_register",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "store",
+        "path": "arch/arch_cash_register.glb",
+        "tris": 36,
+        "partTris": {
+          "main": 36
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 4896,
+        "bounds": [
+          0.4,
+          0.3,
+          0.44
+        ],
+        "min": [
+          -0.2,
+          0.0,
+          -0.2
+        ],
+        "max": [
+          0.2,
+          0.3,
+          0.24
+        ],
+        "budget": [
+          20,
+          120
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "register",
+          "store",
+          "counter"
+        ],
+        "rooms": [
+          "store"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placement": "On arch_counter: y = 0.90 (counter top), keep >= 0.05 m from the front edge."
+      },
+      {
+        "id": "arch_workbench",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "garage",
+        "path": "arch/arch_workbench.glb",
+        "tris": 138,
+        "partTris": {
+          "main": 138
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 14660,
+        "bounds": [
+          1.8,
+          1.75,
+          0.72
+        ],
+        "min": [
+          -0.9,
+          0.0,
+          -0.37
+        ],
+        "max": [
+          0.9,
+          1.75,
+          0.35
+        ],
+        "budget": [
+          60,
+          350
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "workbench",
+          "tools",
+          "garage"
+        ],
+        "rooms": [
+          "garage",
+          "warehouse"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.9,
+            0.0,
+            -0.37
+          ],
+          "max": [
+            0.9,
+            1.75,
+            0.35
+          ]
+        }
+      },
+      {
+        "id": "arch_tire",
+        "category": "arch",
+        "kind": "dressing",
+        "subtype": "garage",
+        "path": "arch/arch_tire.glb",
+        "tris": 80,
+        "partTris": {
+          "main": 80
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 9092,
+        "bounds": [
+          0.66,
+          0.628,
+          0.2
+        ],
+        "min": [
+          -0.33,
+          0.0,
+          -0.1
+        ],
+        "max": [
+          0.33,
+          0.628,
+          0.1
+        ],
+        "budget": [
+          40,
+          120
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "tire",
+          "garage"
+        ],
+        "rooms": [
+          "garage",
+          "warehouse"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null
+      },
+      {
+        "id": "arch_tire_stack",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "garage",
+        "path": "arch/arch_tire_stack.glb",
+        "tris": 240,
+        "partTris": {
+          "main": 240
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 24472,
+        "bounds": [
+          0.73,
+          0.61,
+          0.678
+        ],
+        "min": [
+          -0.36,
+          0.0,
+          -0.344
+        ],
+        "max": [
+          0.37,
+          0.61,
+          0.334
+        ],
+        "budget": [
+          60,
+          350
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "tire",
+          "garage"
+        ],
+        "rooms": [
+          "garage",
+          "warehouse"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.36,
+            0.0,
+            -0.344
+          ],
+          "max": [
+            0.37,
+            0.61,
+            0.334
+          ]
+        }
+      },
+      {
+        "id": "arch_cot",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "clinic",
+        "path": "arch/arch_cot.glb",
+        "tris": 119,
+        "partTris": {
+          "main": 119
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 12832,
+        "bounds": [
+          0.736,
+          0.544,
+          1.9
+        ],
+        "min": [
+          -0.37,
+          0.0,
+          -0.95
+        ],
+        "max": [
+          0.366,
+          0.544,
+          0.95
+        ],
+        "budget": [
+          60,
+          350
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "cot",
+          "bed",
+          "clinic",
+          "shelter"
+        ],
+        "rooms": [
+          "clinic",
+          "warehouse",
+          "any"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.37,
+            0.0,
+            -0.95
+          ],
+          "max": [
+            0.366,
+            0.544,
+            0.95
+          ]
+        }
+      },
+      {
+        "id": "arch_med_cabinet",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "clinic",
+        "path": "arch/arch_med_cabinet.glb",
+        "tris": 70,
+        "partTris": {
+          "main": 70
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 8152,
+        "bounds": [
+          0.82,
+          1.83,
+          0.43
+        ],
+        "min": [
+          -0.41,
+          0.0,
+          -0.21
+        ],
+        "max": [
+          0.41,
+          1.83,
+          0.22
+        ],
+        "budget": [
+          30,
+          350
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "cabinet",
+          "medical",
+          "clinic"
+        ],
+        "rooms": [
+          "clinic"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.41,
+            0.0,
+            -0.21
+          ],
+          "max": [
+            0.41,
+            1.83,
+            0.22
+          ]
+        },
+        "poses": {
+          "toppled": {
+            "rotationDeg": [
+              90,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.22,
+              0.0
+            ],
+            "note": "fallen forward onto its front (+Z), lift = depth/2",
+            "collider": {
+              "min": [
+                -0.41,
+                0.0,
+                -0.0
+              ],
+              "max": [
+                0.41,
+                0.43,
+                1.83
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "textures": [
+      {
+        "id": "floor_hardwood",
+        "category": "arch",
+        "kind": "floor",
+        "path": "arch/textures/floor_hardwood.png",
+        "size": [
+          128,
+          128
+        ],
+        "bytes": 5695,
+        "metersPerTile": [
+          2.0,
+          2.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": null,
+        "rooms": [
+          "bedroom",
+          "living",
+          "any"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Oak strip flooring, 12.5 cm boards along u, staggered butt joints."
+      },
+      {
+        "id": "floor_hardwood_dirty",
+        "category": "arch",
+        "kind": "floor",
+        "path": "arch/textures/floor_hardwood_dirty.png",
+        "size": [
+          128,
+          128
+        ],
+        "bytes": 21468,
+        "metersPerTile": [
+          2.0,
+          2.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "floor_hardwood",
+        "rooms": [
+          "bedroom",
+          "living",
+          "any"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Dirty variant: grime blotches, scuffs, stains. Same layout."
+      },
+      {
+        "id": "floor_hardwood_ash",
+        "category": "arch",
+        "kind": "floor",
+        "path": "arch/textures/floor_hardwood_ash.png",
+        "size": [
+          128,
+          128
+        ],
+        "bytes": 30183,
+        "metersPerTile": [
+          2.0,
+          2.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "floor_hardwood",
+        "rooms": [
+          "bedroom",
+          "living",
+          "any"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Ash variant (Act III / fallout_winter): the dirty texture with dithered ash in the low pixels."
+      },
+      {
+        "id": "floor_linoleum",
+        "category": "arch",
+        "kind": "floor",
+        "path": "arch/textures/floor_linoleum.png",
+        "size": [
+          128,
+          128
+        ],
+        "bytes": 8125,
+        "metersPerTile": [
+          1.2,
+          1.2
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": null,
+        "rooms": [
+          "kitchen",
+          "store",
+          "clinic"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "12\" (0.3 m) vinyl-composition checker tile, cream + sage, chip speckle."
+      },
+      {
+        "id": "floor_linoleum_dirty",
+        "category": "arch",
+        "kind": "floor",
+        "path": "arch/textures/floor_linoleum_dirty.png",
+        "size": [
+          128,
+          128
+        ],
+        "bytes": 24290,
+        "metersPerTile": [
+          1.2,
+          1.2
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "floor_linoleum",
+        "rooms": [
+          "kitchen",
+          "store",
+          "clinic"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Dirty variant: grime blotches, scuffs, stains. Same layout."
+      },
+      {
+        "id": "floor_linoleum_ash",
+        "category": "arch",
+        "kind": "floor",
+        "path": "arch/textures/floor_linoleum_ash.png",
+        "size": [
+          128,
+          128
+        ],
+        "bytes": 27125,
+        "metersPerTile": [
+          1.2,
+          1.2
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "floor_linoleum",
+        "rooms": [
+          "kitchen",
+          "store",
+          "clinic"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Ash variant (Act III / fallout_winter): the dirty texture with dithered ash in the low pixels."
+      },
+      {
+        "id": "floor_ceramic_tile",
+        "category": "arch",
+        "kind": "floor",
+        "path": "arch/textures/floor_ceramic_tile.png",
+        "size": [
+          128,
+          128
+        ],
+        "bytes": 3545,
+        "metersPerTile": [
+          1.6,
+          1.6
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": null,
+        "rooms": [
+          "kitchen",
+          "bathroom",
+          "store"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "0.4 m glazed terracotta tiles, 2 px grout, one cracked tile."
+      },
+      {
+        "id": "floor_ceramic_tile_dirty",
+        "category": "arch",
+        "kind": "floor",
+        "path": "arch/textures/floor_ceramic_tile_dirty.png",
+        "size": [
+          128,
+          128
+        ],
+        "bytes": 21222,
+        "metersPerTile": [
+          1.6,
+          1.6
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "floor_ceramic_tile",
+        "rooms": [
+          "kitchen",
+          "bathroom",
+          "store"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Dirty variant: grime blotches, scuffs, stains. Same layout."
+      },
+      {
+        "id": "floor_ceramic_tile_ash",
+        "category": "arch",
+        "kind": "floor",
+        "path": "arch/textures/floor_ceramic_tile_ash.png",
+        "size": [
+          128,
+          128
+        ],
+        "bytes": 26891,
+        "metersPerTile": [
+          1.6,
+          1.6
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "floor_ceramic_tile",
+        "rooms": [
+          "kitchen",
+          "bathroom",
+          "store"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Ash variant (Act III / fallout_winter): the dirty texture with dithered ash in the low pixels."
+      },
+      {
+        "id": "floor_carpet",
+        "category": "arch",
+        "kind": "floor",
+        "path": "arch/textures/floor_carpet.png",
+        "size": [
+          64,
+          64
+        ],
+        "bytes": 2686,
+        "metersPerTile": [
+          1.0,
+          1.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": null,
+        "rooms": [
+          "bedroom",
+          "living",
+          "clinic"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Low-pile 70s rust-brown loop carpet."
+      },
+      {
+        "id": "floor_carpet_dirty",
+        "category": "arch",
+        "kind": "floor",
+        "path": "arch/textures/floor_carpet_dirty.png",
+        "size": [
+          64,
+          64
+        ],
+        "bytes": 7144,
+        "metersPerTile": [
+          1.0,
+          1.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "floor_carpet",
+        "rooms": [
+          "bedroom",
+          "living",
+          "clinic"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Dirty variant: grime blotches, scuffs, stains. Same layout."
+      },
+      {
+        "id": "floor_carpet_ash",
+        "category": "arch",
+        "kind": "floor",
+        "path": "arch/textures/floor_carpet_ash.png",
+        "size": [
+          64,
+          64
+        ],
+        "bytes": 8876,
+        "metersPerTile": [
+          1.0,
+          1.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "floor_carpet",
+        "rooms": [
+          "bedroom",
+          "living",
+          "clinic"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Ash variant (Act III / fallout_winter): the dirty texture with dithered ash in the low pixels."
+      },
+      {
+        "id": "floor_concrete_stained",
+        "category": "arch",
+        "kind": "floor",
+        "path": "arch/textures/floor_concrete_stained.png",
+        "size": [
+          128,
+          128
+        ],
+        "bytes": 10269,
+        "metersPerTile": [
+          4.0,
+          4.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": null,
+        "rooms": [
+          "garage",
+          "store",
+          "warehouse"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Sealed slab, oil / acid stains, saw-cut control joint every 4 m (tile edge)."
+      },
+      {
+        "id": "floor_concrete_stained_dirty",
+        "category": "arch",
+        "kind": "floor",
+        "path": "arch/textures/floor_concrete_stained_dirty.png",
+        "size": [
+          128,
+          128
+        ],
+        "bytes": 24951,
+        "metersPerTile": [
+          4.0,
+          4.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "floor_concrete_stained",
+        "rooms": [
+          "garage",
+          "store",
+          "warehouse"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Dirty variant: grime blotches, scuffs, stains. Same layout."
+      },
+      {
+        "id": "floor_concrete_stained_ash",
+        "category": "arch",
+        "kind": "floor",
+        "path": "arch/textures/floor_concrete_stained_ash.png",
+        "size": [
+          128,
+          128
+        ],
+        "bytes": 29570,
+        "metersPerTile": [
+          4.0,
+          4.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "floor_concrete_stained",
+        "rooms": [
+          "garage",
+          "store",
+          "warehouse"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Ash variant (Act III / fallout_winter): the dirty texture with dithered ash in the low pixels."
+      },
+      {
+        "id": "floor_wood_plank",
+        "category": "arch",
+        "kind": "floor",
+        "path": "arch/textures/floor_wood_plank.png",
+        "size": [
+          128,
+          128
+        ],
+        "bytes": 16854,
+        "metersPerTile": [
+          2.0,
+          2.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": null,
+        "rooms": [
+          "warehouse",
+          "garage",
+          "any"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Rough dark warehouse planks (concept-match floor): deep gaps, nail heads, mottled."
+      },
+      {
+        "id": "floor_wood_plank_dirty",
+        "category": "arch",
+        "kind": "floor",
+        "path": "arch/textures/floor_wood_plank_dirty.png",
+        "size": [
+          128,
+          128
+        ],
+        "bytes": 19926,
+        "metersPerTile": [
+          2.0,
+          2.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "floor_wood_plank",
+        "rooms": [
+          "warehouse",
+          "garage",
+          "any"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Dirty variant: grime blotches, scuffs, stains. Same layout."
+      },
+      {
+        "id": "floor_wood_plank_ash",
+        "category": "arch",
+        "kind": "floor",
+        "path": "arch/textures/floor_wood_plank_ash.png",
+        "size": [
+          128,
+          128
+        ],
+        "bytes": 28239,
+        "metersPerTile": [
+          2.0,
+          2.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "floor_wood_plank",
+        "rooms": [
+          "warehouse",
+          "garage",
+          "any"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Ash variant (Act III / fallout_winter): the dirty texture with dithered ash in the low pixels."
+      },
+      {
+        "id": "wall_corrugated",
+        "category": "arch",
+        "kind": "wall",
+        "path": "arch/textures/wall_corrugated.png",
+        "size": [
+          64,
+          64
+        ],
+        "bytes": 1516,
+        "metersPerTile": [
+          1.0,
+          1.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": null,
+        "rooms": [
+          "warehouse",
+          "garage"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Cold blue-grey corrugated sheet, 200 mm ridges shaded in, rust runs."
+      },
+      {
+        "id": "wall_corrugated_dirty",
+        "category": "arch",
+        "kind": "wall",
+        "path": "arch/textures/wall_corrugated_dirty.png",
+        "size": [
+          64,
+          64
+        ],
+        "bytes": 4328,
+        "metersPerTile": [
+          1.0,
+          1.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "wall_corrugated",
+        "rooms": [
+          "warehouse",
+          "garage"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Dirty variant: grime blotches, scuffs, stains. Same layout."
+      },
+      {
+        "id": "wall_corrugated_ash",
+        "category": "arch",
+        "kind": "wall",
+        "path": "arch/textures/wall_corrugated_ash.png",
+        "size": [
+          64,
+          64
+        ],
+        "bytes": 5704,
+        "metersPerTile": [
+          1.0,
+          1.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "wall_corrugated",
+        "rooms": [
+          "warehouse",
+          "garage"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Ash variant (Act III / fallout_winter): the dirty texture with dithered ash in the low pixels."
+      },
+      {
+        "id": "wall_drywall",
+        "category": "arch",
+        "kind": "wall",
+        "path": "arch/textures/wall_drywall.png",
+        "size": [
+          64,
+          64
+        ],
+        "bytes": 701,
+        "metersPerTile": [
+          1.0,
+          1.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": null,
+        "rooms": [
+          "bedroom",
+          "living",
+          "kitchen",
+          "clinic",
+          "store",
+          "any"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Painted drywall, faint roller texture."
+      },
+      {
+        "id": "wall_drywall_dirty",
+        "category": "arch",
+        "kind": "wall",
+        "path": "arch/textures/wall_drywall_dirty.png",
+        "size": [
+          64,
+          64
+        ],
+        "bytes": 3472,
+        "metersPerTile": [
+          1.0,
+          1.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "wall_drywall",
+        "rooms": [
+          "bedroom",
+          "living",
+          "kitchen",
+          "clinic",
+          "store",
+          "any"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Dirty variant: grime blotches, scuffs, stains. Same layout."
+      },
+      {
+        "id": "wall_drywall_ash",
+        "category": "arch",
+        "kind": "wall",
+        "path": "arch/textures/wall_drywall_ash.png",
+        "size": [
+          64,
+          64
+        ],
+        "bytes": 3682,
+        "metersPerTile": [
+          1.0,
+          1.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "wall_drywall",
+        "rooms": [
+          "bedroom",
+          "living",
+          "kitchen",
+          "clinic",
+          "store",
+          "any"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Ash variant (Act III / fallout_winter): the dirty texture with dithered ash in the low pixels."
+      },
+      {
+        "id": "wall_drywall_stained",
+        "category": "arch",
+        "kind": "wall",
+        "path": "arch/textures/wall_drywall_stained.png",
+        "size": [
+          64,
+          64
+        ],
+        "bytes": 1366,
+        "metersPerTile": [
+          1.0,
+          1.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": null,
+        "rooms": [
+          "bedroom",
+          "living",
+          "kitchen",
+          "clinic",
+          "any"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Drywall with tide-mark water stains."
+      },
+      {
+        "id": "wall_wood_panel",
+        "category": "arch",
+        "kind": "wall",
+        "path": "arch/textures/wall_wood_panel.png",
+        "size": [
+          64,
+          64
+        ],
+        "bytes": 1638,
+        "metersPerTile": [
+          1.0,
+          1.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": null,
+        "rooms": [
+          "living",
+          "bedroom",
+          "any"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "70s grooved wood panelling, 25 cm boards."
+      },
+      {
+        "id": "wall_wood_panel_dirty",
+        "category": "arch",
+        "kind": "wall",
+        "path": "arch/textures/wall_wood_panel_dirty.png",
+        "size": [
+          64,
+          64
+        ],
+        "bytes": 4071,
+        "metersPerTile": [
+          1.0,
+          1.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "wall_wood_panel",
+        "rooms": [
+          "living",
+          "bedroom",
+          "any"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Dirty variant: grime blotches, scuffs, stains. Same layout."
+      },
+      {
+        "id": "wall_wood_panel_ash",
+        "category": "arch",
+        "kind": "wall",
+        "path": "arch/textures/wall_wood_panel_ash.png",
+        "size": [
+          64,
+          64
+        ],
+        "bytes": 5617,
+        "metersPerTile": [
+          1.0,
+          1.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "wall_wood_panel",
+        "rooms": [
+          "living",
+          "bedroom",
+          "any"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Ash variant (Act III / fallout_winter): the dirty texture with dithered ash in the low pixels."
+      },
+      {
+        "id": "wall_brick",
+        "category": "arch",
+        "kind": "wall",
+        "path": "arch/textures/wall_brick.png",
+        "size": [
+          64,
+          64
+        ],
+        "bytes": 3332,
+        "metersPerTile": [
+          1.0,
+          1.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": null,
+        "rooms": [
+          "store",
+          "garage",
+          "warehouse",
+          "any"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Interior red brick, 8 x 16 px courses (0.125 x 0.25 m)."
+      },
+      {
+        "id": "wall_brick_dirty",
+        "category": "arch",
+        "kind": "wall",
+        "path": "arch/textures/wall_brick_dirty.png",
+        "size": [
+          64,
+          64
+        ],
+        "bytes": 3765,
+        "metersPerTile": [
+          1.0,
+          1.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "wall_brick",
+        "rooms": [
+          "store",
+          "garage",
+          "warehouse",
+          "any"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Dirty variant: grime blotches, scuffs, stains. Same layout."
+      },
+      {
+        "id": "wall_brick_ash",
+        "category": "arch",
+        "kind": "wall",
+        "path": "arch/textures/wall_brick_ash.png",
+        "size": [
+          64,
+          64
+        ],
+        "bytes": 4670,
+        "metersPerTile": [
+          1.0,
+          1.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "wall_brick",
+        "rooms": [
+          "store",
+          "garage",
+          "warehouse",
+          "any"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Ash variant (Act III / fallout_winter): the dirty texture with dithered ash in the low pixels."
+      },
+      {
+        "id": "arch_floor_decals",
+        "category": "arch",
+        "kind": "decal_atlas",
+        "path": "arch/textures/arch_floor_decals.png",
+        "size": [
+          256,
+          256
+        ],
+        "bytes": 45977,
+        "metersPerTile": null,
+        "wrap": "clamp",
+        "alpha": "alphaTest 0.5",
+        "filter": "NEAREST, no mipmaps, SRGB",
+        "notes": "4 x 4 cells of 64 px; per-instance uvRect (makeArchFloorDecals)."
+      },
+      {
+        "id": "arch_dust_mote",
+        "category": "arch",
+        "kind": "sprite",
+        "path": "arch/textures/arch_dust_mote.png",
+        "size": [
+          16,
+          16
+        ],
+        "bytes": 165,
+        "metersPerTile": null,
+        "wrap": "clamp",
+        "alpha": "alphaTest 0.5",
+        "filter": "NEAREST",
+        "notes": "Dust-mote sprite for THREE.Points (makeArchDust): 1 draw call for every mote in a room."
       }
     ]
   }

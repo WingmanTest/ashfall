@@ -1,7 +1,7 @@
 // Clean audio hook for Echoes' manager in /audio/. Never writes there.
 // If a usable module is present it is used; otherwise the built-in WebAudio synth (js/audio.js).
-import { AudioBus } from "./audio.js?v=r15.2";
-import { tryImport, listDir } from "./load.js?v=r15.2";
+import { AudioBus } from "./audio.js?v=r15.3";
+import { tryImport, listDir } from "./load.js?v=r15.3";
 
 const CANDIDATES = [
   "./audio/audio.js",

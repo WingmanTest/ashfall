@@ -242,6 +242,30 @@
       0.201172
      ]
     },
+    "lane_dash_white": {
+     "size": [
+      3.0,
+      0.12
+     ],
+     "uvRect": [
+      0.501953,
+      0.126953,
+      0.998047,
+      0.154297
+     ]
+    },
+    "lane_solid_yellow": {
+     "size": [
+      6.0,
+      0.12
+     ],
+     "uvRect": [
+      0.501953,
+      0.158203,
+      0.998047,
+      0.185547
+     ]
+    },
     "crack_a": {
      "size": [
       1.6,
@@ -425,6 +449,43 @@
    ],
    "material": "ground (opaque, RepeatWrapping)"
   },
+  "env_road_2lane_8x4_ash": {
+   "final": "env_road_2lane_8x4_ash",
+   "role": "road_static",
+   "exists": true,
+   "path": "models/env/env_road_2lane_8x4_ash.glb",
+   "tris": 2,
+   "estTris": 2,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": false,
+   "colliderR": 0.0,
+   "colliderH": 0.0,
+   "radiusXZ": 4.472,
+   "heightM": 0.0,
+   "jitter": {
+    "scale": [
+     1,
+     1
+    ],
+    "rotY": "snap 90 deg"
+   },
+   "variants": {},
+   "placement": null,
+   "chapters": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "material": "ground (opaque, RepeatWrapping)"
+  },
   "env_road_tile_4m": {
    "final": "env_road_tile_4m",
    "role": "road_static",
@@ -476,6 +537,43 @@
    "colliderH": 0.15,
    "radiusXZ": 3.3,
    "heightM": 0.15,
+   "jitter": {
+    "scale": [
+     1,
+     1
+    ],
+    "rotY": "snap 90 deg"
+   },
+   "variants": {},
+   "placement": null,
+   "chapters": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "material": "ground (opaque, RepeatWrapping)"
+  },
+  "env_sidewalk_curb_corner_tight": {
+   "final": "env_sidewalk_curb_corner_tight",
+   "role": "road_static",
+   "exists": true,
+   "path": "models/env/env_sidewalk_curb_corner_tight.glb",
+   "tris": 30,
+   "estTris": 30,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": false,
+   "colliderR": 0.0,
+   "colliderH": 0.15,
+   "radiusXZ": 2.546,
+   "heightM": 0.138,
    "jitter": {
     "scale": [
      1,
@@ -680,6 +778,49 @@
    "chapters": [
     3,
     4,
+    8,
+    9,
+    10
+   ],
+   "material": "env_atlas (opaque, FrontSide, flat-shaded)"
+  },
+  "env_tree_street_frosted": {
+   "final": "env_tree_street_frosted",
+   "role": "tree",
+   "exists": true,
+   "path": "models/env/env_tree_street_frosted.glb",
+   "tris": 228,
+   "estTris": 228,
+   "materials": 1,
+   "drawCalls": 1,
+   "solid": true,
+   "colliderR": 0.25,
+   "colliderH": 5.44,
+   "radiusXZ": 0.909,
+   "heightM": 5.443,
+   "jitter": {
+    "scale": [
+     0.9,
+     1.15
+    ],
+    "rotY": "full",
+    "tiltDeg": 2
+   },
+   "variants": {
+    "summer_sparse_leaf": 0,
+    "autumn_leaf_drop": 1,
+    "late_fall_bare_wet": 2,
+    "fallout_frosted": 3
+   },
+   "placement": "Parkway / sidewalk corridor (fits a 3 m walk: radiusXZ <= 1.4 m). Along sidewalks every 8-12 m, all chapters; the winter band is the frosted street tree for Act III.",
+   "chapters": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
     8,
     9,
     10
@@ -1212,7 +1353,23 @@
    "wrap": "repeat",
    "alpha": "alphaTest 0.5 (alpha is 0/255, never blended)",
    "kind": "overlay",
-   "notes": "Tileable dithered snow dusting overlay (late_fall -> winter transition, partial snowCover)."
+   "notes": "Full snow-dust overlay (~38% coverage). Recommended for fallout_winter (Ch 8-10) over road and lots."
+  },
+  "env_tex_snow_dust_light": {
+   "final": "env_tex_snow_dust_light",
+   "path": "models/env/textures/env_tex_snow_dust_light.png",
+   "sizePx": [
+    128,
+    128
+   ],
+   "metersPerTile": [
+    2.0,
+    2.0
+   ],
+   "wrap": "repeat",
+   "alpha": "alphaTest 0.5 (alpha is 0/255, never blended)",
+   "kind": "overlay",
+   "notes": "Light snow-dust overlay (~12% coverage). Recommended for late_fall Ch 7b (first dusting); use env_tex_snow_dust for winter."
   }
  }
 }

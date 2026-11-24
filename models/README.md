@@ -383,3 +383,34 @@ Geometry and materials are shared per id or key, so N instances cost one draw ca
 - Density guide: tufts 0.5–3 per m², in clumps of 4–12, culled at 10–22 m. Rabbitbrush in clusters of 3–7, 1.5–4 m apart. Tumbleweeds against
   the downwind (east) side of fences, curbs and walls, with any rotation. Cottonwoods as singles or rows 8–15 m apart (they are wide, rXZ about 5.8 m).
   Pinyon in groves 6–12 m apart, and snags about 1 per 400–900 m². Every entry has `jitter`, `placement` and `chapters` in the manifest.
+
+
+### Optional extras (Cartographer, 2026-11-24)
+
+Added without moving any existing decal frame (existing `uvRect`s are unchanged and still valid).
+
+| id | kind | tris | notes |
+|---|---|---|---|
+| `env_tree_street_frosted` | tree | 228 | Narrow high-pruned street tree for a **3 m sidewalk corridor** (`radiusXZ` 0.91 m, height 5.44 m, collider r 0.25 / h 5.44, solid). Same mesh, 4 season bands: `summer_sparse_leaf`, `autumn_leaf_drop`, `late_fall_bare_wet`, `fallout_frosted`. Parkway placement every 8–12 m. |
+| `env_sidewalk_curb_corner_tight` | ground | 30 | Tight 90° corner, curb-face radius **1.5 m** (the original `env_sidewalk_curb_corner` at r 3 m is unchanged). Same orientation: from −X to −Z, sidewalk toward the origin. Joins straight strips with faces on x = −1.5 and z = −1.5. Because the 1.68 m walk is wider than R, the sidewalk is a fan to the origin; a gutter-height fill paves the pie out to the grid corner (−1.8, −1.8) so no ground shows in the intersection pocket. Sidewalk top stays at 0.15 m. |
+| `env_road_2lane_8x4_ash` | ground | 2 | Same 8 × 4 m footprint as `env_road_2lane_8x4`, along Z. Tiling UVs for `env_tex_asphalt_cracked_ash` (4 m/tile); put lane markings on with the decal atlas. |
+
+**New decal frames** (painted into leftover pixels of row 0 at x 128–255, y 32–48; neighbours keep their rects):
+
+| frame | px [x, y, w, h] | size m | uvRect |
+|---|---|---|---|
+| `lane_dash_white` | [128, 32, 128, 8] | 3.0 × 0.12 | [0.501953, 0.126953, 0.998047, 0.154297] |
+| `lane_solid_yellow` | [128, 40, 128, 8] | 6.0 × 0.12 (seamless along X) | [0.501953, 0.158203, 0.998047, 0.185547] |
+
+`lane_dash_white` is a white dashed lane divider (one 3 m dash, same placement as `lane_dash_yellow`). `lane_solid_yellow` is a single solid yellow (taxi / left-edge / single no-passing line); chain every 6 m.
+
+**Snow dust densities**
+
+| id | coverage | recommended use |
+|---|---|---|
+| `env_tex_snow_dust_light` | ~12% (10–15%) | late_fall **Ch 7b** — first dusting / late flurries over road and lots |
+| `env_tex_snow_dust` | ~38% | fallout_winter **Ch 8–10** — full ash-snow dusting |
+
+Both are 128 px, 2 m/tile, RepeatWrapping, alphaTest 0.5. `makeEnvDecal('env_tex_snow_dust_light', { width, depth })` lays the light overlay.
+
+Previews: `previews/env_extras_sheet.png` (street-tree season strip, 3 m vs tight corner, ash road, new decal frames, dust comparison, and an intersection street with tight corners + street trees: late_fall + light dust, and winter + full dust).

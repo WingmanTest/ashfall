@@ -1,19 +1,19 @@
 // Cartographer chapter loader. Builds geometry from levels/*.json (do not edit those files).
 import * as THREE from "three";
-import { CFG } from "./config.js?v=r15.2";
-import { fitHeight, makePerson, makeDog } from "./world.js?v=r15.2";
-import { evalCondition, applyEffects, setFlag } from "./story.js?v=r15.2";
-import { rollContainer, aliasItem } from "./systems.js?v=r15.2";
-import { addItem, takeItem, hasItems } from "./inventory.js?v=r15.2";
-import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings, instanceSmallBoxes } from "./buildings.js?v=r15.2";
-import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r15.2";
-import { coverBuildingRoofs, extractShingleMaterial, fallbackShingleMat } from "./roofs.js?v=r15.2";
-import { startTracking } from "./companionCmd.js?v=r15.2";
-import { bindNpc, disposeMixer } from "./npcWander.js?v=r15.2";
+import { CFG } from "./config.js?v=r15.3";
+import { fitHeight, makePerson, makeDog } from "./world.js?v=r15.3";
+import { evalCondition, applyEffects, setFlag } from "./story.js?v=r15.3";
+import { rollContainer, aliasItem } from "./systems.js?v=r15.3";
+import { addItem, takeItem, hasItems } from "./inventory.js?v=r15.3";
+import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings, instanceSmallBoxes } from "./buildings.js?v=r15.3";
+import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r15.3";
+import { coverBuildingRoofs, extractShingleMaterial, fallbackShingleMat } from "./roofs.js?v=r15.3";
+import { startTracking } from "./companionCmd.js?v=r15.3";
+import { bindNpc, disposeMixer } from "./npcWander.js?v=r15.3";
 import {
   loadGroundOverlay, floorSkipSet, decorateFloorMaterial,
   applyGroundDressing, tickGroundDressing, replacesSagebrush,
-} from "./groundDressing.js?v=r15.2";
+} from "./groundDressing.js?v=r15.3";
 
 const SNOW_HEX = 0xeef2f6;
 function stripSnow(obj) {
@@ -499,6 +499,7 @@ export class LevelRuntime {
     const buildingProps = (L.props || []).filter((p) => isBuildingAsset(p.asset));
     this._buildingProps = buildingProps;
     this._coreMatEarly = concMat;
+    this._brickMat = brickMat;
     const chNum = parseInt(String(L.chapter || L.id || "").replace(/\D/g, ""), 10) || 0;
     const houseLots = new Set();
     if ([1, 2, 3, 6, 8].includes(chNum)) {
@@ -536,13 +537,18 @@ export class LevelRuntime {
         shell.userData.kind = "building_shell";
         scene.add(shell);
         addFacadeDetails(scene, { ...box, h, y0: 0 }, facadeMats);
-        this._lotRoofs.push({ box, y: h, source: "shell", house: houseLots.has(rec) });
+        const top = this._lotMeshTop(scene, box) || h;
+        this._lotRoofs.push({ box, y: top, source: "shell", house: houseLots.has(rec) });
       } else if (ok !== "reserved") {
         // r8: Kenney GLB lot. The kit model carries its own windows/doors, so never
         // stamp procedural facades on the lot edge (they floated in midair in r7).
         // A solid inset core fills any gap/setback in the GLB so there is always a wall.
-        this._addLotCore(scene, box, 5.6, concMat);
-        this._lotRoofs.push({ box, y: 7.2, source: "kenney", house: houseLots.has(rec) });
+        // r15.3: core and cap use the actual Kenney top (the old 5.6 / 7.2 pair left
+        // a floating slab and a dark untextured core sticking out of shorter brick).
+        const top = this._lotMeshTop(scene, box);
+        const coreH = top >= 2.2 ? Math.max(2.2, top - 0.12) : 5.6;
+        this._addLotCore(scene, box, coreH, brickMat);
+        this._lotRoofs.push({ box, y: top >= 2.2 ? top : 7.2, source: "kenney", house: houseLots.has(rec) });
       }
       // ok === "reserved": a level-authored building prop fills this lot in _placeProps.
     }
@@ -627,6 +633,7 @@ export class LevelRuntime {
         snow: snowMat,
         gable: brickMat,
         flat: concMat,
+        ceiling: concMat,
         rects: { greedyRects, rectWorld },
       });
     } catch (err) { console.warn("[roofs]", err); }
@@ -682,7 +689,7 @@ export class LevelRuntime {
       this._tractHouses++;
     }
     // Solid inset core: the B tiles are the collider; the core guarantees no see-through gap.
-    this._addLotCore(scene, box, 2.2, this._coreMatEarly || null);
+    this._addLotCore(scene, box, 2.2, this._brickMat || this._coreMatEarly || null);
     return true;
   }
 
@@ -818,13 +825,34 @@ export class LevelRuntime {
     }
   }
 
+
+  /** Highest visual mesh in a lot, used so procedural roofs sit flush (not at a hardcoded 7.2). */
+  _lotMeshTop(root, box, minY = 1.2) {
+    if (!root || !box) return 0;
+    const tmp = new THREE.Box3();
+    let top = 0;
+    root.traverse((obj) => {
+      if (!obj.isMesh) return;
+      const k = `${obj.userData?.kind || ""} ${obj.parent?.userData?.kind || ""} ${obj.name || ""}`;
+      if (/ground|road|curb|sage|tuft|tree|car|dumpster|roof|fire|water|decal/i.test(k)) return;
+      tmp.setFromObject(obj);
+      if (tmp.max.y < minY) return;
+      const ix0 = Math.max(tmp.min.x, box.minX), ix1 = Math.min(tmp.max.x, box.maxX);
+      const iz0 = Math.max(tmp.min.z, box.minZ), iz1 = Math.min(tmp.max.z, box.maxZ);
+      if (ix1 - ix0 < 0.3 || iz1 - iz0 < 0.3) return;
+      if (tmp.max.y > top) top = tmp.max.y;
+    });
+    return top;
+  }
+
   /** Solid inset hull inside a GLB building lot (hidden when the GLB covers it). */
   _addLotCore(parent, box, h, mat) {
     const w = (box.maxX - box.minX) * 0.82, d = (box.maxZ - box.minZ) * 0.82;
     if (w < 0.5 || d < 0.5) return null;
-    const core = boxMesh(w, h, d, mat || new THREE.MeshStandardMaterial({ color: 0x6a625a, roughness: 0.92 }), 2.5);
+    const core = boxMesh(w, h, d, mat || this._coreMat || this._coreMatEarly || new THREE.MeshStandardMaterial({ color: 0x6a625a, roughness: 0.92 }), 2.5);
     core.position.set((box.minX + box.maxX) / 2, h / 2, (box.minZ + box.maxZ) / 2);
     core.userData.kind = "building_core";
+    if (core.material && !core.material.map && (mat && mat.map)) core.material = mat;
     parent.add(core);
     (this._cores || (this._cores = [])).push(core);
     return core;
