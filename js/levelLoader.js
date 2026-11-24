@@ -1,12 +1,12 @@
 // Cartographer chapter loader. Builds geometry from levels/*.json (do not edit those files).
 import * as THREE from "three";
-import { CFG } from "./config.js?v=r11";
-import { fitHeight, makePerson, makeDog } from "./world.js?v=r11";
-import { evalCondition, applyEffects } from "./story.js?v=r11";
-import { rollContainer, aliasItem } from "./systems.js?v=r11";
-import { addItem, takeItem, hasItems } from "./inventory.js?v=r11";
-import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js?v=r11";
-import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r11";
+import { CFG } from "./config.js?v=r12";
+import { fitHeight, makePerson, makeDog } from "./world.js?v=r12";
+import { evalCondition, applyEffects, setFlag } from "./story.js?v=r12";
+import { rollContainer, aliasItem } from "./systems.js?v=r12";
+import { addItem, takeItem, hasItems } from "./inventory.js?v=r12";
+import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js?v=r12";
+import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r12";
 
 const SNOW_HEX = 0xeef2f6;
 function stripSnow(obj) {
@@ -1265,7 +1265,21 @@ export class LevelRuntime {
         : it.requiresItems;
       if (!hasItems(game.inv, need)) { game.hud.say("You don't have that."); return false; }
     }
-    if (it.setsFlag) game.flags[it.setsFlag] = true;
+    if (it.setsFlag) setFlag(game.flags, it.setsFlag, true);
+    if (it.givesItems) {
+      const bag = Array.isArray(it.givesItems)
+        ? Object.fromEntries(it.givesItems.map((id) => [id, 1]))
+        : it.givesItems;
+      for (const [id, n] of Object.entries(bag || {})) {
+        const qty = typeof n === "number" ? n : 1;
+        if (game.giveItem) game.giveItem(id, qty);
+        else addItem(game.inv, aliasItem(id), qty);
+      }
+    }
+    if (it.type === "feed" || it.setsFlag === "ch01_wraith_fed") {
+      setFlag(game.flags, "ch01_wraith_fed", true);
+      if (game.quests) game.quests.q_companion_tutorial = "done";
+    }
     if (it.type === "craft") {
       const pool = [...(game.systems.storyRecipes || []), ...(game.systems.recipes || [])];
       const rec = pool.find((r) => (it.setsFlag && (r.set_flags || []).includes(it.setsFlag)))
@@ -1288,6 +1302,8 @@ export class LevelRuntime {
     }
     if (it.type === "read" && it.label) game.hud.say(it.label);
     game.hud.say(it.label || "Done.");
+    game.refreshObjective?.();
+    game.reconcileInventoryObjectives?.("interactive");
     return true;
   }
 }

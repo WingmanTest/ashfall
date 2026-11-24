@@ -1,4 +1,4 @@
-import { CFG, ITEMS } from "./config.js?v=r11";
+import { CFG, ITEMS } from "./config.js?v=r12";
 
 export class HUD {
   constructor(canvas) {
@@ -10,6 +10,7 @@ export class HUD {
     this.toast = "";
     this.toastT = 0;
     this.objText = "";
+    this.sideText = "";
     this.loc = "";
     this.clock = "";
     this.weather = "";
@@ -118,7 +119,16 @@ export class HUD {
     if (objBody || objRaw) ctx.fillText("OBJECTIVE", 8, y + px(22));
     ctx.fillStyle = "#e8eef4";
     ctx.font = `${px(11)}px monospace`;
-    wrap(ctx, objBody, 8, y + px(34), objMax, px(13));
+    const objLines = wrapLines(ctx, objBody, objMax);
+    const objY = y + px(34);
+    objLines.forEach((s, i) => ctx.fillText(s, 8, objY + i * px(13)));
+    const side = String(this.sideText || "").trim();
+    if (side) {
+      ctx.fillStyle = "#8a9aaa";
+      ctx.font = `${px(8)}px monospace`;
+      const sideLine = side.length > 36 ? side.slice(0, 35) + "…" : side;
+      ctx.fillText("SIDE  " + sideLine, 8, objY + objLines.length * px(13) + px(2));
+    }
 
     // Weapon name (and ammo) fade out after ~2s; only return on a swap.
     if (player.equipped !== this._lastWep) {

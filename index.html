@@ -177,6 +177,20 @@
       right:0; top: 20%;
       width: 58%; height: 48%;
     }
+    /* B_round minimap: 180px on a 720-wide frame, top-right under the HUD (y=114). */
+    #minimap {
+      pointer-events: none;
+      position: absolute;
+      z-index: 6;
+      right: calc(16 / 720 * 100%);
+      top: calc(114 / 1280 * 100%);
+      width: 25%;
+      aspect-ratio: 1 / 1;
+      height: auto;
+      display: none;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
 
     /* Dialogue / inventory panels */
     #panel {
@@ -275,6 +289,30 @@
     .sheet-tabs button { flex: 1; text-align:center; letter-spacing:0.12em; font-size:11px !important; padding:8px 6px !important; }
     .sheet-tabs button.on { background: var(--ice); color: var(--ink); }
     .sheet-tabs .tab-close { flex: 0 0 auto; width: auto; padding: 8px 10px !important; }
+    .quest-log { display:flex; flex-direction:column; gap:12px; flex:1; overflow:auto; min-height:0; padding-bottom: 10px; }
+    .q-sec { display:flex; flex-direction:column; gap:8px; }
+    .q-h { font-size:10px; letter-spacing:0.16em; color: var(--muted); }
+    .q-empty { font-size:12px; color: var(--muted); margin:0; }
+    .q-card {
+      width:100%; min-height:44px;
+      display:block !important;
+      text-align:left;
+      padding:10px 8px !important;
+      border:1px solid #2a3340 !important;
+      background:#121820 !important;
+      color: var(--ice) !important;
+    }
+    .q-card.is-live { border-color:#8a9aaa !important; }
+    .q-card.is-done { opacity:0.85; }
+    .q-title { display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:13px; letter-spacing:0.04em; }
+    .q-state { font-size:9px; letter-spacing:0.12em; color:#d4a15a; }
+    .q-desc { margin:6px 0 0; color:#8a9aaa; font-size:11px; line-height:1.35; }
+    .q-steps { list-style:none; margin:6px 0 0; padding:0; font-size:12px; }
+    .q-steps li { display:flex; align-items:flex-start; gap:8px; padding:6px 0; min-height:28px; }
+    .q-steps li.done { color: var(--muted); }
+    .q-box { flex:0 0 auto; width:1.2em; }
+    .q-card.is-collapsed .q-desc,
+    .q-card.is-collapsed .q-steps { display:none; }
     .craft-list { flex:1; overflow:auto; display:flex; flex-direction:column; gap:8px; min-height:0; }
     .craft-card { border:1px solid #2a3340; background:#121820; padding:8px; display:flex; flex-direction:column; gap:6px; }
     .craft-card.cant { opacity:0.72; }
@@ -394,8 +432,9 @@
 </head>
 <body class="wield-melee">
   <div id="frame">
-    <div id="build-tag">r11</div>
+    <div id="build-tag">r12</div>
     <canvas id="view" width="180" height="320"></canvas>
+    <canvas id="minimap" width="180" height="180"></canvas>
     <canvas id="hud" width="360" height="640"></canvas>
     <div id="ui">
       <div id="title" class="screen show top-safe">
@@ -432,6 +471,7 @@
           <button class="menu" id="btn-crt">CRT: LOW</button>
           <button class="menu" id="btn-save">SAVE</button>
           <button class="menu" id="btn-notes">FIELD NOTES</button>
+          <button class="menu" id="btn-quests">QUESTS</button>
           <button class="menu" id="btn-quit">TITLE</button>
         </div>
       </div>
@@ -460,8 +500,8 @@
     </div>
   </div>
   <script>
-    window.__ASHFALL_EXPECTED_BUILD = "r11";
-    window.__ASHFALL_BUILD = "r11";
+    window.__ASHFALL_EXPECTED_BUILD = "r12";
+    window.__ASHFALL_BUILD = "r12";
     window.__ASHFALL_BOOTED = false;
     window.__ASHFALL_MODULE = false;
     window.__ASHFALL_PENDING = null;
@@ -547,12 +587,12 @@
       setTimeout(function () {
         if (window.__ASHFALL_BOOTED) return;
         if (window.__ASHFALL_MODULE) {
-          showBanner("The game file loaded, but startup is stuck (often a Safari WebGL or cache issue). Wait a moment, or clear this site's data and reload. Build r11.");
+          showBanner("The game file loaded, but startup is stuck (often a Safari WebGL or cache issue). Wait a moment, or clear this site's data and reload. Build r12.");
         } else {
-          showBanner("The game never started — the script did not load. If you opened this from an older Home Screen icon, delete it and reopen the page, or clear Safari cache for this site. Build r11.");
+          showBanner("The game never started — the script did not load. If you opened this from an older Home Screen icon, delete it and reopen the page, or clear Safari cache for this site. Build r12.");
         }
       }, 4000);
-      var EXPECTED = window.__ASHFALL_EXPECTED_BUILD || "r11";
+      var EXPECTED = window.__ASHFALL_EXPECTED_BUILD || "r12";
       window.__ashfallBustStaleBuild = function (found) {
         var key = "ashfall-bust-" + EXPECTED;
         var reloadOnce = function () {
@@ -591,12 +631,12 @@
         if (window.__ASHFALL_BOOTED || buildChecks > 80) clearInterval(buildTimer);
       }, 50);
       if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("./sw.js?v=r11", { scope: "./" }).then(function (reg) {
+        navigator.serviceWorker.register("./sw.js?v=r12", { scope: "./" }).then(function (reg) {
           try { reg.update(); } catch (err) {}
         }).catch(function () {});
       }
     })();
   </script>
-  <script type="module" src="./js/game.js?v=r11" onerror="window.__ASHFALL_MODULE_ERR=true; if (window.__ashfallBootFail) window.__ashfallBootFail('The game script failed to load. Try a hard refresh or clear this site\\'s data. Build r11.');"></script>
+  <script type="module" src="./js/game.js?v=r12" onerror="window.__ASHFALL_MODULE_ERR=true; if (window.__ashfallBootFail) window.__ashfallBootFail('The game script failed to load. Try a hard refresh or clear this site\\'s data. Build r12.');"></script>
 </body>
 </html>

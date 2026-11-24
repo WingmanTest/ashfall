@@ -1,6 +1,17 @@
 {
   "version": 2,
   "quests": {
+    "q_companion_tutorial": {
+      "title": "Companion Tutorial",
+      "chapter": "ch01",
+      "desc": "Feed Wraith and learn her commands. A side lesson \u2014 it does not block the main job.",
+      "stages": [
+        "start",
+        "fed",
+        "complete"
+      ],
+      "side": true
+    },
     "q_water": {
       "title": "Rolling Boil",
       "chapter": "ch01",

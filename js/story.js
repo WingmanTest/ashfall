@@ -1,8 +1,8 @@
 // Data-driven story loader. Reads /story/ when present. NEVER writes there.
 // Full Loremaster contract (SCHEMA.md): condition ops, not, count_true,
 // if/then/else, value_from, on_end, flags.ending, chapter start/end scripts.
-import { tryFetch, loadJsonDir, listDir } from "./load.js?v=r11";
-import { aliasItem } from "./systems.js?v=r11";
+import { tryFetch, loadJsonDir, listDir } from "./load.js?v=r12";
+import { aliasItem } from "./systems.js?v=r12";
 
 const STORY_ROOT = "./story/";
 
@@ -130,6 +130,8 @@ export const FLAG_ALIASES = {
   ch01_carly_talked: "carly_talked",
   lolo_talked: "ch01_lolo_talked",
   ch01_lolo_talked: "lolo_talked",
+  wraith_fed: "ch01_wraith_fed",
+  ch01_wraith_fed: "wraith_fed",
 };
 
 /** Objective-complete flags written when the matching conversation is finished. */
@@ -377,7 +379,7 @@ export class StorySystem {
       else this.chapters.push(f.data);
     }
 
-    const { PLACEHOLDER } = await import("./data/placeholderStory.js?v=r11");
+    const { PLACEHOLDER } = await import("./data/placeholderStory.js?v=r12");
     if (!this.npcs.length) this.npcs = PLACEHOLDER.npcs;
     if (!Object.keys(this.endings).length) this.endings = PLACEHOLDER.endings;
     this.notesCatalog = PLACEHOLDER.notes;
@@ -531,11 +533,41 @@ export class StorySystem {
 
   _npcMatch(d, npcId) {
     if (!npcId) return !d.npc;
-    if (d.npc === npcId) return true;
-    if (npcId === "cpl_haas" && d.npc === "haas") return true;
-    if (npcId === "haas" && d.npc === "cpl_haas") return true;
-    if (d.speakers && d.speakers.includes(npcId)) return true;
-    if (d.speakers && npcId === "cpl_haas" && d.speakers.includes("haas")) return true;
+    const aliases = [npcId];
+    if (npcId === "cpl_haas") aliases.push("haas");
+    if (npcId === "haas") aliases.push("cpl_haas");
+    const id = String(d.id || "");
+    // Prefer trees named for this NPC so scene beats that merely mention them
+    // (voicemail, pharmacy, marina) are not offered as a walk-up conversation.
+    if (aliases.some((a) => new RegExp("(?:^|_)" + a + "(?:_|$)", "i").test(id))) return true;
+    if (aliases.includes(d.npc)) {
+      const slug = id.replace(/^ch\d+b?_/, "").split("_")[0];
+      if (aliases.includes(slug)) return true;
+    }
+    return false;
+  }
+
+  _timeOfDayOk(d, npcId, ctx, chapter) {
+    const id = d.id || "";
+    if (d.tutorial || /tutorial|companion/i.test(id)) return true;
+    const morn = /morning/i.test(id);
+    const night = /night/i.test(id) && !morn;
+    if (!morn && !night) return true;
+    const siblings = this.dialogues.filter((x) => this._npcMatch(x, npcId) && (!x.chapter || x.chapter === chapter));
+    if (morn && ctx.night) {
+      if (siblings.some((x) => /night/i.test(x.id || "") && !/morning/i.test(x.id || ""))) return false;
+    }
+    if (night && !ctx.night) {
+      if (siblings.some((x) => /morning/i.test(x.id || "") && !/night/i.test(x.id || ""))) return false;
+    }
+    return true;
+  }
+
+  _dialogueMemDone(d, ctx) {
+    if (!d) return false;
+    const mem = ctx.dialogueMem;
+    const rec = mem && mem.npcs && mem.npcs[d.npc];
+    if (rec && rec.completed && rec.completed[d.id]) return true;
     return false;
   }
 
@@ -548,11 +580,7 @@ export class StorySystem {
       .filter((d) => this.sceneAllowed(d.id, { ...ctx, npc: npcId }))
       .filter((d) => evalWhen(d.when, { ...ctx, npc: npcId }))
       .filter((d) => !d.trigger_conditions || evalCondition(d.trigger_conditions, ctx))
-      .filter((d) => {
-        if (/night/i.test(d.id) && !ctx.night) return false;
-        if (/morning/i.test(d.id) && ctx.night) return false;
-        return true;
-      })
+      .filter((d) => this._timeOfDayOk(d, npcId, ctx, chapter))
       .sort((a, b) => {
         const as = seen[a.id] ? 0 : 1;
         const bs = seen[b.id] ? 0 : 1;
@@ -566,9 +594,8 @@ export class StorySystem {
     // Real story files always beat placeholder filler (e.g. theo_start vs ch01_theo_morning).
     const storyCands = cands.filter((d) => !d.placeholder);
     if (storyCands.length) cands = storyCands;
-    const incomplete = cands.find((d) => !dialogueIsComplete(d, ctx));
-    const fresh = cands.find((d) => !seen[d.id]);
-    return incomplete || fresh || cands[0] || null;
+    // Never fall back to replaying a finished intro tree — revisit is synthesized by the game.
+    return cands.find((d) => !this._dialogueMemDone(d, ctx)) || null;
   }
 
   pickLocationDialogue(locId, ctx) {

@@ -1,5 +1,5 @@
-import { CFG } from "./config.js?v=r11";
-import { stripRetiredInv } from "./systems.js?v=r11";
+import { CFG } from "./config.js?v=r12";
+import { stripRetiredInv } from "./systems.js?v=r12";
 
 /** Nevada Revision 2 story/save schema. Older saves (v1: Theo, insulin, Marguerite…) can't be mapped. */
 export const SAVE_STORY_VERSION = 2;
@@ -106,6 +106,8 @@ export function migrateSave(raw) {
       alive: raw.alive && typeof raw.alive === "object" ? raw.alive : {},
       quests: raw.quests && typeof raw.quests === "object" ? raw.quests : {},
       seen: raw.seen && typeof raw.seen === "object" ? raw.seen : {},
+      dialogueMem: raw.dialogueMem && typeof raw.dialogueMem === "object" ? raw.dialogueMem : { npcs: {} },
+      exploredFog: raw.exploredFog && typeof raw.exploredFog === "object" ? raw.exploredFog : {},
       shelterSeals: raw.shelterSeals && typeof raw.shelterSeals === "object" ? raw.shelterSeals : {},
       lootTaken: asArray(raw.lootTaken),
       lootLeft: raw.lootLeft && typeof raw.lootLeft === "object" ? raw.lootLeft : {},

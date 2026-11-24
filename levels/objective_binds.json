@@ -1,0 +1,57 @@
+{
+  "comment": "Hook file: bind level objectives[] (which have no x,z) to world positions for the minimap. Each id may list npc, interactive, landmark, location, safeZone, or x/z. The first resolvable entry wins. Engine also falls back to name/flag matching.",
+  "ch01": {
+    "o1": { "npc": "carly" },
+    "o2": { "interactive": "ch01_wraith_bowl", "npc": "wraith" },
+    "o3": { "interactive": "ch01_lake_edge", "interactiveAlt": "ch01_water_station" },
+    "o4": { "npc": "lolo" },
+    "o5": { "npc": "pruitt", "interactive": "ch01_scent_trail" },
+    "o6": { "npc": "gil" },
+    "o7": { "npc": "kit" },
+    "o8": { "interactive": "ch01_phone", "safeZone": "safe_01" }
+  },
+  "ch02": {
+    "o1": { "npc": "avila" },
+    "o2": { "npc": "kit" },
+    "o3": { "npc": "ames" },
+    "o4": { "npc": "carly" }
+  },
+  "ch03": {
+    "o1": { "npc": "carly" },
+    "o2": { "npc": "wes" },
+    "o3": { "npc": "lolo" },
+    "o4": { "npc": "walt" }
+  },
+  "ch04": {
+    "o1": { "npc": "walt" },
+    "o2": { "npc": "avila" },
+    "o3": { "npc": "amb_salt" }
+  },
+  "ch05": {
+    "o1": { "npc": "ruiz" },
+    "o2": { "npc": "wes" },
+    "o3": { "npc": "ross" },
+    "o4": { "npc": "ander" }
+  },
+  "ch06": {
+    "o1": { "location": "loc_fourth_street" },
+    "o2": { "interactive": "ch06_informant_list" },
+    "o3": { "npc": "carly", "safeZone": "safe_02", "location": "loc_silver_spur" },
+    "o4": { "npc": "avila" },
+    "o5": { "npc": "ruiz", "interactive": "ch06_mrap_door", "location": "loc_rail_trench" },
+    "o6": { "interactive": "ch06_freight_brake" }
+  },
+  "ch07": {
+    "o1": { "npc": "reyne" }
+  },
+  "ch08": {
+    "o1": { "npc": "carly", "safeZone": "safe_01" }
+  },
+  "ch09": {
+    "o1": { "npc": "ross" },
+    "o2": { "npc": "wraith" }
+  },
+  "ch10": {
+    "o1": { "npc": "reyne" }
+  }
+}

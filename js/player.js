@@ -1,8 +1,8 @@
 import * as THREE from "three";
-import { CFG, ITEMS, WEAPONS_ORDER } from "./config.js?v=r11";
-import { combinedInsulation } from "./equipment.js?v=r11";
-import { fitHeight } from "./world.js?v=r11";
-import { createWeaponModel, setWeaponLibrary, mountViewmodel, applyHold, installViewmodelLights, weaponKind } from "./weapons/viewmodels.js?v=r11";
+import { CFG, ITEMS, WEAPONS_ORDER } from "./config.js?v=r12";
+import { combinedInsulation } from "./equipment.js?v=r12";
+import { fitHeight } from "./world.js?v=r12";
+import { createWeaponModel, setWeaponLibrary, mountViewmodel, applyHold, installViewmodelLights, weaponKind } from "./weapons/viewmodels.js?v=r12";
 
 export function defaultStats() {
   return {

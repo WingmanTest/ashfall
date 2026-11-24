@@ -2130,7 +2130,9 @@
    "id": "o2",
    "order": 2,
    "text": "Feed Wraith (companion tutorial)",
-   "optional": false,
+   "optional": true,
+   "side": true,
+   "quest": "q_companion_tutorial",
    "completeWhen": [
     {
      "flag": "ch01_wraith_fed",

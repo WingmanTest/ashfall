@@ -1,10 +1,11 @@
-import { CFG } from "./config.js?v=r11";
+import { CFG } from "./config.js?v=r12";
 import {
   GEAR_SLOTS, WEAPON_SLOTS, ALL_SLOTS, SLOT_LABELS, SLOT_COLORS,
   itemSlot, combinedInsulation, combinedWetResist, carryState,
   resolveDollLayers, wearItem, removeGear, emptyGear, canAddWeight,
-} from "./equipment.js?v=r11";
-import { mountDoll3D, stopDoll3D, doll3DWasDrag } from "./doll3d.js?v=r11";
+} from "./equipment.js?v=r12";
+import { mountDoll3D, stopDoll3D, doll3DWasDrag } from "./doll3d.js?v=r12";
+import { renderQuestLogHtml } from "./questTrack.js?v=r12";
 
 const cache = new Map();
 function loadImg(src) {
@@ -69,6 +70,7 @@ function applyTint(ctx, tint, w, h) {
 function sheetTabs(active) {
   return `<div class="sheet-tabs">
     <button type="button" data-tab="bag" class="${active === "bag" ? "on" : ""}">BAG</button>
+    <button type="button" data-tab="quests" class="${active === "quests" ? "on" : ""}">QUESTS</button>
     <button type="button" data-tab="craft" class="${active === "craft" ? "on" : ""}">CRAFT</button>
     <button type="button" data-a="close" class="tab-close">CLOSE</button>
   </div>`;
@@ -87,6 +89,7 @@ function bindSheetTabs(game, panel, active) {
       if (panel._dollTimer) clearInterval(panel._dollTimer);
       stopDoll3D();
       if (tab === "craft") return game.openCraft();
+      if (tab === "quests") return game.openInventory("quests");
       return game.openInventory("bag");
     };
   });
@@ -152,8 +155,25 @@ function renderCraftTab(game, panel) {
   });
 }
 
+function renderQuestTab(game, panel) {
+  stopDoll3D();
+  if (panel._dollTimer) clearInterval(panel._dollTimer);
+  document.body.classList.add("char-sheet-open");
+  panel.classList.add("char-sheet", "show");
+  panel.innerHTML = `${sheetTabs("quests")}${renderQuestLogHtml(game)}`;
+  bindSheetTabs(game, panel, "quests");
+  panel.querySelectorAll(".q-card").forEach((btn) => {
+    btn.addEventListener("pointerup", (e) => {
+      e.preventDefault();
+      if (!btn.classList.contains("is-done")) return;
+      btn.classList.toggle("is-collapsed");
+    });
+  });
+}
+
 export function openCharacterSheet(game, panel, tab = "bag") {
   if (tab === "craft") return renderCraftTab(game, panel);
+  if (tab === "quests") return renderQuestTab(game, panel);
   const items = game.systems.items;
   const paperdoll = game.systems.paperdoll;
   const flags = game.flags;

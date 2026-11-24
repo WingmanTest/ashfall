@@ -1,33 +1,40 @@
 import * as THREE from "three";
-import { CFG, WEAPONS_ORDER } from "./config.js?v=r11";
-import { weaponKind } from "./weapons/viewmodels.js?v=r11";
-import { Input } from "./input.js?v=r11";
-import { HUD } from "./hud.js?v=r11";
-import { World } from "./world.js?v=r11";
-import { Player } from "./player.js?v=r11";
-import { EnemySystem } from "./enemies.js?v=r11";
-import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r11";
-import { openCharacterSheet } from "./inventoryUI.js?v=r11";
-import { stopDoll3D } from "./doll3d.js?v=r11";
-import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r11";
-import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r11";
-import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r11";
-import { tickCompanion, disposeCompanion } from "./companion.js?v=r11";
-import { BreathSystem } from "./breath.js?v=r11";
-import { openTradeModal } from "./trade.js?v=r11";
-import { preloadModels } from "./models3d.js?v=r11";
-import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r11";
-import { isMobileClient, canvasDpr } from "./device.js?v=r11";
-import { LevelRuntime } from "./levelLoader.js?v=r11";
-import { attachAudio } from "./audioHook.js?v=r11";
-import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r11";
-import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r11";
-import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r11";
-import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js?v=r11";
+import { CFG, WEAPONS_ORDER } from "./config.js?v=r12";
+import { weaponKind } from "./weapons/viewmodels.js?v=r12";
+import { Input } from "./input.js?v=r12";
+import { HUD } from "./hud.js?v=r12";
+import { World } from "./world.js?v=r12";
+import { Player } from "./player.js?v=r12";
+import { EnemySystem } from "./enemies.js?v=r12";
+import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r12";
+import { openCharacterSheet } from "./inventoryUI.js?v=r12";
+import {
+  emptyDialogueMem, markNode, markChoice, markComplete, filterChoices, resumeNodeId,
+  makeRevisitDialogue, authoredRevisit, hydrateDialogueMem, looksLikeFeedChoice,
+  looksLikeFeedNode, choiceFlagName, memHasFeed,
+} from "./dialogueMem.js?v=r12";
+import { currentMainObjective, currentSideObjective, isSideObjective, noteSideQuestUpdate, renderQuestLogHtml } from "./questTrack.js?v=r12";
+import { createMinimap, loadObjectiveBinds, packExploredFog, restoreExploredFog } from "./minimap.js?v=r12";
+import { stopDoll3D } from "./doll3d.js?v=r12";
+import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r12";
+import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r12";
+import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r12";
+import { tickCompanion, disposeCompanion } from "./companion.js?v=r12";
+import { BreathSystem } from "./breath.js?v=r12";
+import { openTradeModal } from "./trade.js?v=r12";
+import { preloadModels } from "./models3d.js?v=r12";
+import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r12";
+import { isMobileClient, canvasDpr } from "./device.js?v=r12";
+import { LevelRuntime } from "./levelLoader.js?v=r12";
+import { attachAudio } from "./audioHook.js?v=r12";
+import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r12";
+import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r12";
+import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r12";
+import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js?v=r12";
 
 window.__ASHFALL_MODULE = true;
-window.__ASHFALL_BUILD = "r11";
-if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r11") {
+window.__ASHFALL_BUILD = "r12";
+if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r12") {
   if (typeof window.__ashfallBustStaleBuild === "function") window.__ashfallBustStaleBuild(window.__ASHFALL_BUILD);
 }
 
@@ -135,6 +142,8 @@ class Game {
     this.quests = {};
     this.hudUnlocks = new Set((this.story.hooks?.hud_unlocks?.ch01) || ["hp", "hydration", "hunger"]);
     this.seen = {};
+    this.dialogueMem = emptyDialogueMem();
+    this.exploredFog = {};
     this.notes = [];
     this.firedTriggers = new Set();
     this.levelRuntime = null;
@@ -157,6 +166,22 @@ class Game {
     this._breakInCd = 0;
     this._bootHook();
     this._bindUi();
+    this._initMinimap();
+  }
+
+  _initMinimap() {
+    try {
+      let el = $("minimap");
+      if (!el) {
+        el = document.createElement("canvas");
+        el.id = "minimap";
+        (document.getElementById("frame") || document.body).appendChild(el);
+      }
+      this.minimap = createMinimap(el);
+      loadObjectiveBinds();
+    } catch (err) {
+      console.warn("[minimap] init", err);
+    }
   }
 
   _bootHook() {
@@ -269,7 +294,10 @@ class Game {
       talk: (id) => {
         const dlg = self.story.pickDialogue(id, self._storyCtx());
         if (dlg) { self.openDialogue(dlg); return dlg.id || true; }
-        return null;
+        const authored = authoredRevisit((self.story.dialogues || []).find((d) => d.npc === id && self.seen[d.id]));
+        if (authored) { self.openDialogue(authored); return authored.id || true; }
+        self.openDialogue(makeRevisitDialogue(self, id, self.objectiveText()));
+        return "revisit_" + id;
       },
       get inputState() {
         const i = self.input || {};
@@ -309,6 +337,25 @@ class Game {
       }),
       openCraft: () => self.openCraft(),
       openInv: () => self.openInventory("bag"),
+      openQuests: () => self.openInventory("quests"),
+      get dialogueMem() { return self.dialogueMem; },
+      get sideObjective() { return self.sideObjectiveText(); },
+      get questLogHtml() { return renderQuestLogHtml(self); },
+      setFlag: (name, value = true) => setFlag(self.flags, name, value),
+      reconcileFeed: () => self.reconcileFeedAndDialogue(),
+      minimap: () => {
+        const el = document.getElementById("minimap");
+        if (!el) return { ok: false };
+        const cs = getComputedStyle(el);
+        return {
+          ok: true,
+          display: cs.display,
+          width: el.clientWidth,
+          height: el.clientHeight,
+          buf: el.width,
+          visible: cs.display !== "none" && el.clientWidth > 0,
+        };
+      },
     };
   }
 
@@ -332,6 +379,7 @@ class Game {
     }
     bindTap("btn-save", () => { this.save(); this.hud.say("Saved."); });
     bindTap("btn-notes", () => this.openNotes(false));
+    if ($("btn-quests")) bindTap("btn-quests", () => this.openInventory("quests"));
     bindTap("btn-quit", () => this.toTitle());
     bindTap("btn-restart", () => this.newGame());
     bindTap("btn-menu", () => this.toTitle());
@@ -389,6 +437,9 @@ class Game {
     this.traderStock = {};
     this.hudUnlocks = new Set((this.story.hooks?.hud_unlocks?.ch01) || ["hp", "hydration", "hunger"]);
     this.seen = {};
+    this.dialogueMem = emptyDialogueMem();
+    this.exploredFog = {};
+    this._lastSideText = "";
     this.notes = [this.story.notesCatalog?.[0]].filter(Boolean);
     this.timeOfDay = 0.38;
     this.blizzard = false;
@@ -479,6 +530,8 @@ class Game {
       this.traderStock = s.traderStock || {};
       this._acquired = s.acquired || {};
       this.seen = s.seen || {};
+      this.dialogueMem = hydrateDialogueMem(s.dialogueMem || emptyDialogueMem(), { flags: this.flags, seen: this.seen }, this.story);
+      restoreExploredFog(this, s.exploredFog || {});
       this.notes = Array.isArray(s.notes) ? s.notes : [];
       this.timeOfDay = s.timeOfDay ?? 0.4;
       this.blizzard = !!s.blizzard;
@@ -540,6 +593,8 @@ class Game {
       inv: this.inv,
       quests: this.quests,
       seen: this.seen,
+      dialogueMem: this.dialogueMem || emptyDialogueMem(),
+      exploredFog: packExploredFog(this.exploredFog),
       notes: this.notes,
       timeOfDay: this.timeOfDay,
       blizzard: this.blizzard,
@@ -585,6 +640,7 @@ class Game {
       kindness: this.flags.kindness || 0,
       chapter: this.flags.chapter || "ch01",
       seen: this.seen,
+      dialogueMem: this.dialogueMem,
       night: this._night(),
       alive: this.alive,
     };
@@ -762,6 +818,12 @@ class Game {
         }
         this.world.bindAudio?.(this.audio);
         if (fireLoad) this.levelRuntime.fireLoadTriggers(this);
+        this.dialogueMem = hydrateDialogueMem(this.dialogueMem || emptyDialogueMem(), this._storyCtx(), this.story);
+        if ((this.flags.chapter || "ch01") === "ch01" && !this.flags.ch01_wraith_fed && this.quests && !this.quests.q_companion_tutorial) {
+          this.quests.q_companion_tutorial = "active";
+        }
+        this.reconcileFeedAndDialogue();
+        this.refreshObjective();
       } catch (err) {
         console.warn("[level] load failed", id, err);
         this._syncEnemiesForChapter(id);
@@ -867,9 +929,35 @@ class Game {
    * Multi-route ("OR") objectives whose single completion flag is only set on one route in data.
    * Each resolver returns true when it changed flags. Generic shape so new chapters can add routes.
    */
+  reconcileFeedAndDialogue() {
+    this.dialogueMem = hydrateDialogueMem(this.dialogueMem || emptyDialogueMem(), this._storyCtx(), this.story);
+    let changed = false;
+    const startTrust = this.story?.startingTrust?.()?.wraith ?? 0;
+    const fed = !!(this.flags.ch01_wraith_fed || this.flags.wraith_fed
+      || memHasFeed(this.dialogueMem, this.flags)
+      || (this.seen?.ch01_wraith_morning && (this.trust?.wraith || 0) > startTrust));
+    if (fed && !this.flags.ch01_wraith_fed) {
+      setFlag(this.flags, "ch01_wraith_fed", true);
+      changed = true;
+    }
+    if (this.flags.ch01_wraith_fed) {
+      if (this.quests && this.quests.q_companion_tutorial !== "done") this.quests.q_companion_tutorial = "done";
+      markComplete(this.dialogueMem, "wraith", "ch01_wraith_morning");
+    }
+    return changed;
+  }
+
+  _markWraithFed() {
+    if (this.flags.ch01_wraith_fed) return false;
+    setFlag(this.flags, "ch01_wraith_fed", true);
+    if (this.quests) this.quests.q_companion_tutorial = "done";
+    markComplete(this.dialogueMem || (this.dialogueMem = emptyDialogueMem()), "wraith", this.dlg?.id || "ch01_wraith_morning");
+    return true;
+  }
+
   _resolveObjectiveRoutes() {
     const f = this.flags;
-    let changed = false;
+    let changed = this.reconcileFeedAndDialogue() || false;
     // Ch1 "Fuel: Gil's garage OR the gas can": Lolo's porch sets ch01_gas_choice; Gil's diesel route
     // ("Ask Gil. I'll go with you." -> diesel_jug) never did. Bringing Gil's diesel resolves it.
     if (f.chapter === "ch01" && !f.ch01_gas_choice && f.ch01_lolo_talked) {
@@ -1020,12 +1108,14 @@ class Game {
   openDialogue(dlg) {
     if (!dlg) return;
     if (this._talkLockUntil && performance.now() < this._talkLockUntil) return;
+    this.dialogueMem = this.dialogueMem || emptyDialogueMem();
     this.dlg = dlg;
-    this.dlgId = dlg.start || "start";
+    const resume = !dlg.revisit ? resumeNodeId(dlg, this.dialogueMem, dlg.npc) : null;
+    this.dlgId = resume || dlg.start || "start";
     this._dlgWalk = new Set();
     this.mode = "dialogue";
     setMenuOpen(true);
-    this.seen[dlg.id] = true;
+    if (!dlg.revisit) this.seen[dlg.id] = true;
     this._showNode(true);
   }
 
@@ -1055,6 +1145,10 @@ class Game {
       if (!nxt) return this._finishDialogue(node);
     }
     if (entering && node.effects) applyEffects(node.effects, this._ctxFx());
+    if (entering) {
+      markNode(this.dialogueMem || (this.dialogueMem = emptyDialogueMem()), this.dlg.npc, this.dlg.id, id, node.text);
+      if (looksLikeFeedNode(id, node)) this._markWraithFed();
+    }
     if (entering && this._pendingEvent && (this._pendingEvent.name === "encounter" || this._pendingEvent.name === "minigame") && !node.text && !node.choices?.length) {
       this._encResumeNext = node.next;
       return this._finishDialogue(node);
@@ -1062,7 +1156,11 @@ class Game {
     const who = node.speaker && node.speaker !== "narrator"
       ? this.story.npcName(node.speaker) || node.speaker
       : (node.speaker === "narrator" ? "" : this.story.npcName(this.dlg.npc));
-    const choices = (node.choices || []).filter((c) => !c.conditions || evalCondition(c.conditions, this._storyCtx()));
+    const rawChoices = (node.choices || []).filter((c) => !c.conditions || evalCondition(c.conditions, this._storyCtx()));
+    const choices = filterChoices(rawChoices, this.dialogueMem, this.dlg.npc, this.dlg.id, id);
+    if (entering && (node.choices || []).length && !choices.length && !node.end && (node.next || node.branches)) {
+      return this._advanceNode(node);
+    }
     const canContinue = !choices.length && (node.next || node.branches || node.end || true);
     let html = `<div class="dlg-bar"><button type="button" data-a="leave">LEAVE</button></div>`;
     if (who) html += `<div class="who">${escapeHtml(String(who).toUpperCase())}</div>`;
@@ -1112,6 +1210,11 @@ class Game {
       this.hud.say("You don't have that.");
       return;
     }
+    const nodeId = this.dlgId;
+    const key = markChoice(this.dialogueMem || (this.dialogueMem = emptyDialogueMem()), this.dlg?.npc, this.dlg?.id, nodeId, c);
+    if (this.dlg?.id) setFlag(this.flags, choiceFlagName(this.dlg.id, nodeId, key), true);
+    if (c.flag) setFlag(this.flags, c.flag, true);
+    if (looksLikeFeedChoice(c)) this._markWraithFed();
     if (c.effects) applyEffects(c.effects, this._ctxFx());
     // Placeholder-format fields
     if (c.set_flags) for (const f of (Array.isArray(c.set_flags) ? c.set_flags : [c.set_flags])) {
@@ -1160,7 +1263,20 @@ class Game {
   }
 
   refreshObjective() {
-    if (this.hud) this.hud.objText = this.objectiveText();
+    const beforeSide = this._lastSideText || "";
+    const main = this.objectiveText();
+    const side = this.sideObjectiveText();
+    if (this.hud) {
+      this.hud.objText = main;
+      this.hud.sideText = side;
+    }
+    const ch = this.flags?.chapter || "";
+    if (this._sideReady && beforeSide !== side && this._sideChapter === ch) {
+      noteSideQuestUpdate(this, beforeSide, side);
+    }
+    this._sideReady = true;
+    this._sideChapter = ch;
+    this._lastSideText = side;
     if (!this._reconciling) this.reconcileInventoryObjectives("objective");
     try { this._checkObjectiveCraftUnlock(); } catch (_) { /* never block the HUD */ }
   }
@@ -1169,6 +1285,12 @@ class Game {
     this._lockTalk(700);
     if (this.dlg?.on_end) applyEffects(this.dlg.on_end, this._ctxFx());
     const left = !!(node && node.left);
+    const dlg = this.dlg;
+    const leftover = dlg && !dlg.revisit ? resumeNodeId(dlg, this.dialogueMem, dlg.npc) : null;
+    if (dlg && !dlg.revisit && !leftover) {
+      markComplete(this.dialogueMem || (this.dialogueMem = emptyDialogueMem()), dlg.npc, dlg.id);
+      if (dlg.npc) setFlag(this.flags, "talked_" + dlg.npc, true);
+    }
     if (!left || this._dialogueReachedBeat(this.dlg)) this._completeDialogueObjectives(this.dlg);
     else this.refreshObjective();
     const pending = this._pendingEvent;
@@ -1442,8 +1564,9 @@ class Game {
 
   openInventory(tab = "bag") {
     this.mode = tab === "craft" ? "craft" : "inventory";
-    this._sheetTab = tab === "craft" ? "craft" : "bag";
+    this._sheetTab = tab === "craft" ? "craft" : (tab === "quests" ? "quests" : "bag");
     setMenuOpen(true);
+    showScreen(null);
     this.player.gear = this.player.gear || emptyGear();
     openCharacterSheet(this, panel, this._sheetTab);
   }
@@ -1452,17 +1575,24 @@ class Game {
     this.openInventory("craft");
   }
 
-  /** Objectives that are currently live (startWhen ok, not complete). The first one is the HUD objective. */
-  activeObjectives() {
+  /** Live MAIN objectives (side quests stay off the HUD). The first one is the HUD objective. */
+  activeObjectives(opts = {}) {
+    const includeSide = !!opts.includeSide;
     const objs = (this.levelRuntime?.L?.objectives || []).slice().sort((a, b) => (a.order || 0) - (b.order || 0));
     const ctx = this._storyCtx();
     const out = [];
     for (const o of objs) {
       if (o.startWhen && !evalCondition(o.startWhen, ctx)) continue;
       if (o.completeWhen && evalCondition(o.completeWhen, ctx)) continue;
+      if (!includeSide && isSideObjective(o)) continue;
       if (o.text) out.push(o);
     }
     return out;
+  }
+
+  sideObjectiveText() {
+    const o = currentSideObjective(this);
+    return o?.text || "";
   }
 
   /**
@@ -1710,9 +1840,9 @@ class Game {
         if (porch) { this.openDialogue(porch); if (porch.nodes?.l4) this.dlgId = "l4"; this._showNode(true); return; }
       }
       if (dlg) return this.openDialogue(dlg);
-      if (hit.obj.companion) { this.hud.say("Wraith leans into your leg."); try { this._audioEngine()?.playWraith?.("whine", { emitter: hit.obj.sfx || undefined }); } catch {} return; }
-      this.hud.say((hit.obj.name || "They") + " has nothing to say.");
-      return;
+      const authored = authoredRevisit(this.story.dialogues.find((d) => d.npc === hit.obj.id && this.seen[d.id]));
+      if (authored) return this.openDialogue(authored);
+      return this.openDialogue(makeRevisitDialogue(this, hit.obj.id, this.objectiveText()));
     }
     if (hit.type === "console" || hit.obj?.id === "dam_console") {
       this.flags.at_dam = true;
@@ -1933,13 +2063,8 @@ class Game {
   _syncFireModeBtn() { this._syncWeaponChrome(); }
 
   objectiveText() {
-    const objs = (this.levelRuntime?.L?.objectives || []).slice().sort((a, b) => (a.order || 0) - (b.order || 0));
-    const ctx = this._storyCtx();
-    for (const o of objs) {
-      if (o.startWhen && !evalCondition(o.startWhen, ctx)) continue;
-      if (o.completeWhen && evalCondition(o.completeWhen, ctx)) continue;
-      if (o.text) return "OBJECTIVE  " + o.text;
-    }
+    const o = currentMainObjective(this);
+    if (o?.text) return "OBJECTIVE  " + o.text;
     const ch = this.flags.chapter || "ch01";
     const def = this.story.chapterDef?.(ch);
     if (def?.objective) return "OBJECTIVE  " + def.objective;
@@ -2190,6 +2315,7 @@ class Game {
     const wxName = this.blizzard ? "blizzard" : (this._weather || (this._night() ? "night" : "overcast"));
     this.hud.weather = String(wxName).replace(/_/g, " ").toUpperCase();
     this.hud.objText = this.objectiveText();
+    this.hud.sideText = this.sideObjectiveText();
     const playing = this.mode === "play" || this.mode === "inventory" || this.mode === "craft"
       || this.mode === "dialogue" || this.mode === "loot" || this.mode === "searching";
     if (playing) this.hud.draw(p, this.inv, "play", {
@@ -2200,6 +2326,10 @@ class Game {
       sprinting: !!this.input.sprint && this.mode === "play",
     });
     else this.hud.ctx.clearRect(0, 0, this.hud.w, this.hud.h);
+
+    try { this.minimap?.tick(this, performance.now()); } catch (err) {
+      if (!this._minimapWarn) { this._minimapWarn = true; console.warn("[minimap]", err); }
+    }
 
     // The pipeline owns shadow scheduling (T.shadow.updateEvery). Do not
     // fight it with autoUpdate/needsUpdate here — that desyncs the shadow matrix.
@@ -2336,7 +2466,7 @@ async function boot() {
     await story.load();
     const systems = await loadSystems();
     const levels = await loadLevels();
-    const { rollTable } = await import("./systems.js?v=r11");
+    const { rollTable } = await import("./systems.js?v=r12");
 
     const renderer = new THREE.WebGLRenderer({
       canvas: view, antialias: false, alpha: false, powerPreference: "high-performance",
@@ -2460,7 +2590,7 @@ async function boot() {
     game.loop();
     window.__READY = true;
     window.__ASHFALL_BOOTED = true;
-    window.__ASHFALL_BUILD = "r11";
+    window.__ASHFALL_BUILD = "r12";
     const banner = $("boot-banner");
     if (banner) banner.classList.remove("show");
     window.__INTEGRATION = {
