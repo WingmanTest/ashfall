@@ -1,0 +1,153 @@
+{
+  "id": "ch02_ames_hospital",
+  "chapter": "ch02",
+  "location": "loc_lakehead_memorial",
+  "trigger": "Find Dr. Ames in the east wing.",
+  "speakers": [
+    "ames",
+    "dell",
+    "narrator"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Gurneys in the hall. Generators in the parking ramp, some dead. A man in scrubs, coat over them.",
+      "next": "a1"
+    },
+    {
+      "id": "a1",
+      "speaker": "ames",
+      "text": "Ames. Talk fast. What are you, what do you need.",
+      "branches": [
+        {
+          "next": "a_card",
+          "conditions": [
+            {
+              "item": "priority_card",
+              "gte": 1
+            }
+          ]
+        },
+        {
+          "next": "a_nocard"
+        }
+      ]
+    },
+    {
+      "id": "a_card",
+      "speaker": "dell",
+      "text": "Insulin. Priority card. My son, fifteen.",
+      "next": "a_card2"
+    },
+    {
+      "id": "a_card2",
+      "speaker": "ames",
+      "text": "Tier two. Two vials, Lantus. Stay cool, not frozen. Not frozen. People freeze it.",
+      "effects": [
+        {
+          "give": "insulin_vial",
+          "qty": 2
+        },
+        {
+          "take": "priority_card",
+          "qty": 1
+        },
+        {
+          "quest": "q_insulin",
+          "state": "complete"
+        }
+      ],
+      "next": "a_card3"
+    },
+    {
+      "id": "a_card3",
+      "speaker": "ames",
+      "text": "Next. No, wait. You're the lineworker. The registry flagged you.",
+      "next": "job"
+    },
+    {
+      "id": "a_nocard",
+      "speaker": "dell",
+      "text": "Insulin. For my son. No card.",
+      "next": "a_nocard2"
+    },
+    {
+      "id": "a_nocard2",
+      "speaker": "ames",
+      "text": "Then no. Card, or I give it to a kid with a card. Unless.",
+      "next": "job"
+    },
+    {
+      "id": "job",
+      "speaker": "ames",
+      "text": "My B generator is dry. There's a tanker truck in the ramp, level three. Drained, mostly.",
+      "next": "job2"
+    },
+    {
+      "id": "job2",
+      "speaker": "ames",
+      "text": "Someone's living up there. Get me what's left in it and I'll find a vial with no paperwork.",
+      "choices": [
+        {
+          "text": "I'll get it.",
+          "next": "accept",
+          "effects": [
+            {
+              "quest": "q_hospital_diesel",
+              "state": "start"
+            }
+          ]
+        },
+        {
+          "text": "Who's living up there?",
+          "next": "who"
+        },
+        {
+          "text": "Not my job.",
+          "next": "refuse"
+        }
+      ]
+    },
+    {
+      "id": "who",
+      "speaker": "ames",
+      "text": "Squatters. Kids, probably. They shot at a porter. I don't judge. I need diesel.",
+      "next": "job2b"
+    },
+    {
+      "id": "job2b",
+      "speaker": "ames",
+      "text": "Yes or no. People are dying in alphabetical order down here.",
+      "choices": [
+        {
+          "text": "I'll get it.",
+          "next": "accept",
+          "effects": [
+            {
+              "quest": "q_hospital_diesel",
+              "state": "start"
+            }
+          ]
+        },
+        {
+          "text": "Not my job.",
+          "next": "refuse"
+        }
+      ]
+    },
+    {
+      "id": "accept",
+      "speaker": "ames",
+      "text": "Good. Don't die. I'd have to do paperwork.",
+      "end": true
+    },
+    {
+      "id": "refuse",
+      "speaker": "ames",
+      "text": "Fair. Next.",
+      "end": true
+    }
+  ]
+}

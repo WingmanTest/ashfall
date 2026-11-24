@@ -1,0 +1,312 @@
+{
+  "id": "ch10_epilogue",
+  "chapter": "ch10",
+  "location": "loc_thomson_dam",
+  "trigger": "Triggered by event play_epilogue. Branches on `ending`, then on Theo.",
+  "speakers": [
+    "narrator",
+    "theo",
+    "wren"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "...",
+      "branches": [
+        {
+          "next": "wr1",
+          "conditions": [
+            {
+              "flag": "ending",
+              "eq": "end_warm_room"
+            }
+          ]
+        },
+        {
+          "next": "le1",
+          "conditions": [
+            {
+              "flag": "ending",
+              "eq": "end_ledger"
+            }
+          ]
+        },
+        {
+          "next": "ir1",
+          "conditions": [
+            {
+              "flag": "ending",
+              "eq": "end_iron_range"
+            }
+          ]
+        },
+        {
+          "next": "dw1",
+          "conditions": [
+            {
+              "flag": "ending",
+              "eq": "end_dark_water"
+            }
+          ]
+        },
+        {
+          "next": "tc1"
+        }
+      ]
+    },
+    {
+      "id": "wr1",
+      "speaker": "narrator",
+      "text": "The census board covers a whole wall of the powerhouse. Names in chalk. More every week.",
+      "next": "wr2"
+    },
+    {
+      "id": "wr2",
+      "speaker": "narrator",
+      "text": "The hospital ward runs on Feeder 3. Elevator 6 is a greenhouse: potatoes, kale, lamps humming.",
+      "next": "wr3"
+    },
+    {
+      "id": "wr3",
+      "speaker": "narrator",
+      "text": "The council argues every night. Bea calls it democracy. Jory calls it a migraine. Both show up.",
+      "next": "wr4"
+    },
+    {
+      "id": "wr4",
+      "speaker": "narrator",
+      "text": "No one is coming. There's a plan for this winter, and a draft for the next one.",
+      "branches": [
+        {
+          "next": "wr_lou",
+          "conditions": [
+            {
+              "flag": "lou_broadcast",
+              "eq": "truth"
+            }
+          ]
+        },
+        {
+          "next": "wr_kess",
+          "conditions": [
+            {
+              "flag": "remnant_stood_down",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "wr5"
+        }
+      ]
+    },
+    {
+      "id": "wr_lou",
+      "speaker": "narrator",
+      "text": "Above the board, someone has chalked Lou's words: SOMETHING TERRIBLE HAPPENED. WE DON'T KNOW WHAT. BE KIND.",
+      "branches": [
+        {
+          "next": "wr_kess",
+          "conditions": [
+            {
+              "flag": "remnant_stood_down",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "wr5"
+        }
+      ]
+    },
+    {
+      "id": "wr_kess",
+      "speaker": "narrator",
+      "text": "Kessler runs the motor pool. He has one vote. He says it's the hardest posting he's ever had.",
+      "next": "wr5"
+    },
+    {
+      "id": "wr5",
+      "speaker": "narrator",
+      "text": "In March, for eleven minutes, the sun comes through the ash. Nobody says anything. Everybody goes outside.",
+      "next": "theo"
+    },
+    {
+      "id": "le1",
+      "speaker": "narrator",
+      "text": "The list has 412 names. In December the city had nine thousand.",
+      "next": "le2"
+    },
+    {
+      "id": "le2",
+      "speaker": "narrator",
+      "text": "It's honest now. Strand reads it aloud every Sunday, including the names she crossed off.",
+      "next": "le3"
+    },
+    {
+      "id": "le3",
+      "speaker": "narrator",
+      "text": "You have a desk. A warm bed. A pencil with an eraser. You use the eraser.",
+      "next": "theo"
+    },
+    {
+      "id": "ir1",
+      "speaker": "narrator",
+      "text": "The turbines go north on logging sleds. Behind you, the dam goes dark, then the hospital.",
+      "next": "ir2"
+    },
+    {
+      "id": "ir2",
+      "speaker": "narrator",
+      "text": "Seven hundred meters down, it's always seven degrees. Mushrooms. Potatoes. Lamps.",
+      "next": "ir3"
+    },
+    {
+      "id": "ir3",
+      "speaker": "narrator",
+      "text": "From the Highway 53 overlook you watch Duluth go black, one window at a time.",
+      "next": "theo"
+    },
+    {
+      "id": "dw1",
+      "speaker": "narrator",
+      "text": "The spillways roar open. Unit 2 dies with a sound Hank would have hated.",
+      "branches": [
+        {
+          "next": "dw_ruiz",
+          "conditions": [
+            {
+              "flag": "ruiz_defected",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "dw_hand"
+        }
+      ]
+    },
+    {
+      "id": "dw_ruiz",
+      "speaker": "narrator",
+      "text": "Ruiz's charges are clean. Nobody is hurt. Nobody will ever kill for this room again.",
+      "next": "dw2"
+    },
+    {
+      "id": "dw_hand",
+      "speaker": "narrator",
+      "text": "You do it by hand, with a sledge and a breaker bar. It costs you. It's done.",
+      "effects": [
+        {
+          "stat": "health",
+          "delta": -30
+        }
+      ],
+      "next": "dw2"
+    },
+    {
+      "id": "dw2",
+      "speaker": "narrator",
+      "text": "Then the long walk south over the ice, toward camps nobody has seen. Everyone who trusts you comes.",
+      "next": "theo"
+    },
+    {
+      "id": "tc1",
+      "speaker": "narrator",
+      "text": "You slip out before dawn with two packs and two coats. Nobody stops you. Nobody notices.",
+      "branches": [
+        {
+          "next": "tc_wren",
+          "conditions": [
+            {
+              "flag": "wren_alive",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "theo"
+        }
+      ]
+    },
+    {
+      "id": "tc_wren",
+      "speaker": "wren",
+      "text": "[Radio static] ...Sparky? If you hear this, I'm heading for Bayfield. Owe you three. Bye.",
+      "next": "theo"
+    },
+    {
+      "id": "theo",
+      "speaker": "narrator",
+      "text": "And Theo—",
+      "branches": [
+        {
+          "next": "theo_dead",
+          "conditions": [
+            {
+              "flag": "theo_alive",
+              "eq": false
+            }
+          ]
+        },
+        {
+          "next": "theo_apart",
+          "conditions": [
+            {
+              "flag": "theo_side",
+              "ne": "none"
+            }
+          ]
+        },
+        {
+          "next": "theo_here"
+        }
+      ]
+    },
+    {
+      "id": "theo_here",
+      "speaker": "theo",
+      "text": "ma. exciter, sync, breaker. i still remember. forty-one times.",
+      "branches": [
+        {
+          "next": "theo_foot",
+          "conditions": [
+            {
+              "flag": "ch08_foot_saved",
+              "eq": false
+            }
+          ]
+        },
+        {
+          "next": "theo_end"
+        }
+      ]
+    },
+    {
+      "id": "theo_foot",
+      "speaker": "narrator",
+      "text": "He walks with a crutch Ray made. He races it anyway.",
+      "next": "theo_end"
+    },
+    {
+      "id": "theo_end",
+      "speaker": "narrator",
+      "text": "ASHFALL",
+      "end": true
+    },
+    {
+      "id": "theo_apart",
+      "speaker": "narrator",
+      "text": "He's with his people now. A letter comes in spring: 'i'm taking my insulin. i promise. — T'",
+      "end": true
+    },
+    {
+      "id": "theo_dead",
+      "speaker": "narrator",
+      "text": "It happened in the cold, in March. You keep his meter in your coat. It still turns on.",
+      "end": true
+    }
+  ]
+}

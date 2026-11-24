@@ -1,0 +1,200 @@
+import { CFG } from "./config.js";
+
+export class Input {
+  constructor(frame, onUnlock) {
+    this.frame = frame;
+    this.keys = Object.create(null);
+    this.moveX = 0;
+    this.moveZ = 0;
+    this.lookX = 0;
+    this.lookY = 0;
+    this.fire = false;
+    this.fireDown = false;
+    this.interact = false;
+    this.reload = false;
+    this.sprint = false;
+    this.aim = false;
+    this.fireMode = false;
+    this.inv = false;
+    this.craft = false;
+    this.pause = false;
+    this.locked = false;
+    this.touch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+    this._joy = { active: false, id: null, x: 0, y: 0, cx: 0, cy: 0 };
+    this._look = { active: false, id: null, lx: 0, ly: 0 };
+    this.onUnlock = onUnlock;
+    if (this.touch) document.body.classList.add("touch");
+    this._bind();
+  }
+
+  _bind() {
+    const f = this.frame;
+    window.addEventListener("keydown", (e) => {
+      this.onUnlock?.();
+      this.keys[e.code] = true;
+      if (["Space", "Tab", "KeyI", "KeyC", "KeyE", "KeyR"].includes(e.code)) e.preventDefault();
+      if (e.code === "KeyI" || e.code === "Tab") this.inv = true;
+      if (e.code === "KeyC") this.craft = true;
+      if (e.code === "KeyE") this.interact = true;
+      if (e.code === "KeyR") this.reload = true;
+      if (e.code === "KeyV") this.fireMode = true;
+      if (e.code === "KeyF") this.aim = true;
+      if (e.code === "Escape") this.pause = true;
+      if (e.code === "Digit1") this.slot = 1;
+      if (e.code === "Digit2") this.slot = 2;
+      if (e.code === "Digit3") this.slot = 3;
+      if (e.code === "Digit4") this.slot = 4;
+    });
+    window.addEventListener("keyup", (e) => { this.keys[e.code] = false; });
+
+    f.addEventListener("mousedown", (e) => {
+      this.onUnlock?.();
+      if (!this.touch && !this.locked && e.button === 0) {
+        f.requestPointerLock?.();
+      }
+      if (e.button === 0) { this.fire = true; this.fireDown = true; }
+      if (e.button === 2) this.aim = true;
+    });
+    window.addEventListener("mouseup", (e) => { if (e.button === 0) this.fire = false; if (e.button === 2) this.aim = false; });
+    window.addEventListener("contextmenu", (e) => e.preventDefault());
+    window.addEventListener("keyup", (e) => { if (e.code === "KeyF") this.aim = false; });
+    document.addEventListener("pointerlockchange", () => {
+      this.locked = document.pointerLockElement === f || document.pointerLockElement === document.getElementById("view");
+    });
+    window.addEventListener("mousemove", (e) => {
+      if (!this.locked) return;
+      this.lookX += e.movementX;
+      this.lookY += e.movementY;
+    });
+    f.addEventListener("contextmenu", (e) => e.preventDefault());
+
+    // Touch joystick
+    const joy = document.getElementById("joy");
+    const knob = document.getElementById("joy-knob");
+    const look = document.getElementById("look-pad");
+    const setBtn = (id, prop) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const down = (e) => { e.preventDefault(); e.stopPropagation(); this.onUnlock?.(); this[prop] = true; if (prop === "fire") this.fireDown = true; };
+      const up = (e) => { e.preventDefault(); this[prop] = false; };
+      el.addEventListener("pointerdown", down);
+      el.addEventListener("pointerup", up);
+      el.addEventListener("pointercancel", up);
+      el.addEventListener("pointerleave", up);
+    };
+    setBtn("btn-fire", "fire");
+    setBtn("btn-reload", "reload");
+    setBtn("btn-interact", "interact");
+    setBtn("btn-sprint", "sprint");
+    setBtn("btn-aim", "aim");
+    setBtn("btn-mode", "fireMode");
+    document.getElementById("btn-inv")?.addEventListener("pointerdown", (e) => { e.preventDefault(); this.onUnlock?.(); this.inv = true; });
+    document.getElementById("btn-craft")?.addEventListener("pointerdown", (e) => { e.preventDefault(); this.onUnlock?.(); this.craft = true; });
+
+    const joyStart = (e) => {
+      const t = e.changedTouches ? e.changedTouches[0] : e;
+      const r = joy.getBoundingClientRect();
+      this._joy.active = true;
+      this._joy.id = t.identifier ?? t.pointerId;
+      this._joy.cx = r.left + r.width / 2;
+      this._joy.cy = r.top + r.height / 2;
+      this._joyMove(t.clientX, t.clientY, knob, r);
+      this.onUnlock?.();
+      e.preventDefault();
+    };
+    const joyMove = (e) => {
+      if (!this._joy.active) return;
+      const list = e.changedTouches || [e];
+      for (const t of list) {
+        if ((t.identifier ?? t.pointerId) !== this._joy.id && e.changedTouches) continue;
+        const r = joy.getBoundingClientRect();
+        this._joyMove(t.clientX, t.clientY, knob, r);
+      }
+      e.preventDefault();
+    };
+    const joyEnd = (e) => {
+      this._joy.active = false;
+      this._joy.x = 0; this._joy.y = 0;
+      knob.style.transform = "translate(0,0)";
+    };
+    joy.addEventListener("touchstart", joyStart, { passive: false });
+    joy.addEventListener("touchmove", joyMove, { passive: false });
+    joy.addEventListener("touchend", joyEnd);
+    joy.addEventListener("touchcancel", joyEnd);
+    joy.addEventListener("pointerdown", (e) => { if (!e.pointerType || e.pointerType === "mouse") return; joyStart(e); joy.setPointerCapture?.(e.pointerId); });
+
+    const lookStart = (e) => {
+      const t = e.changedTouches ? e.changedTouches[0] : e;
+      this._look.active = true;
+      this._look.id = t.identifier ?? t.pointerId;
+      this._look.lx = t.clientX;
+      this._look.ly = t.clientY;
+      this.onUnlock?.();
+      e.preventDefault();
+    };
+    const lookMove = (e) => {
+      if (!this._look.active) return;
+      const list = e.changedTouches || [e];
+      for (const t of list) {
+        if (e.changedTouches && (t.identifier ?? t.pointerId) !== this._look.id) continue;
+        this.lookX += (t.clientX - this._look.lx);
+        this.lookY += (t.clientY - this._look.ly);
+        this._look.lx = t.clientX;
+        this._look.ly = t.clientY;
+      }
+      e.preventDefault();
+    };
+    const lookEnd = () => { this._look.active = false; };
+    look.addEventListener("touchstart", lookStart, { passive: false });
+    look.addEventListener("touchmove", lookMove, { passive: false });
+    look.addEventListener("touchend", lookEnd);
+    look.addEventListener("touchcancel", lookEnd);
+    look.addEventListener("pointerdown", (e) => { if (e.pointerType === "touch") { lookStart(e); look.setPointerCapture?.(e.pointerId); }});
+    look.addEventListener("pointermove", (e) => { if (e.pointerType === "touch") lookMove(e); });
+    look.addEventListener("pointerup", lookEnd);
+  }
+
+  _joyMove(x, y, knob, r) {
+    let dx = x - this._joy.cx;
+    let dy = y - this._joy.cy;
+    const max = r.width * 0.38;
+    const len = Math.hypot(dx, dy) || 1;
+    if (len > max) { dx = dx / len * max; dy = dy / len * max; }
+    this._joy.x = dx / max;
+    this._joy.y = dy / max;
+    knob.style.transform = `translate(${dx}px, ${dy}px)`;
+  }
+
+  sample() {
+    const k = this.keys;
+    let mx = 0, mz = 0;
+    if (k["KeyA"] || k["ArrowLeft"]) mx -= 1;
+    if (k["KeyD"] || k["ArrowRight"]) mx += 1;
+    if (k["KeyW"] || k["ArrowUp"]) mz -= 1;
+    if (k["KeyS"] || k["ArrowDown"]) mz += 1;
+    if (this.touch) {
+      mx += this._joy.x;
+      mz += this._joy.y;
+    }
+    const mlen = Math.hypot(mx, mz);
+    if (mlen > 1) { mx /= mlen; mz /= mlen; }
+    this.moveX = mx;
+    this.moveZ = mz;
+    this.sprint = this.sprint || !!(k["ShiftLeft"] || k["ShiftRight"]);
+  }
+
+  consumeLook(touch) {
+    const s = touch ? CFG.lookSensTouch : CFG.lookSensDesk;
+    const x = this.lookX * s;
+    const y = this.lookY * s;
+    this.lookX = 0;
+    this.lookY = 0;
+    return { x, y };
+  }
+
+  consume(flag) {
+    const v = this[flag];
+    this[flag] = false;
+    return v;
+  }
+}

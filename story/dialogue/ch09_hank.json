@@ -1,0 +1,101 @@
+{
+  "id": "ch09_hank",
+  "chapter": "ch09",
+  "location": "loc_jay_cooke",
+  "trigger": "Warming hut. Only if hank_alive.",
+  "speakers": [
+    "hank",
+    "theo",
+    "dell",
+    "narrator"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "hank",
+      "text": "Theo. C'mere. Draw the panel. No, the real one. Exciter, sync, breaker. Again.",
+      "next": "h1"
+    },
+    {
+      "id": "h1",
+      "speaker": "theo",
+      "text": "exciter. sync. breaker. you said that like forty times.",
+      "next": "h2"
+    },
+    {
+      "id": "h2",
+      "speaker": "hank",
+      "text": "Say it forty-one. That's one more than me.",
+      "next": "h3"
+    },
+    {
+      "id": "h3",
+      "speaker": "narrator",
+      "text": "Later, Hank asks you to step outside with him. It's −45. He doesn't need long.",
+      "branches": [
+        {
+          "next": "h3k",
+          "conditions": [
+            {
+              "flag": "hank_secret_known",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "h4"
+        }
+      ]
+    },
+    {
+      "id": "h3k",
+      "speaker": "hank",
+      "text": "You knew since Proctor. Thanks for not making it a whole thing. Making it a small thing now.",
+      "next": "h4"
+    },
+    {
+      "id": "h4",
+      "speaker": "hank",
+      "text": "Kid. Don't let 'em make it a fort. Make it a kitchen. Kitchens have doors.",
+      "choices": [
+        {
+          "text": "I'll try.",
+          "next": "try"
+        },
+        {
+          "text": "I don't know how.",
+          "next": "dontknow"
+        }
+      ]
+    },
+    {
+      "id": "try",
+      "speaker": "hank",
+      "text": "Trying's the job. Okay. I'm gonna sit a while. Go on in.",
+      "next": "end"
+    },
+    {
+      "id": "dontknow",
+      "speaker": "hank",
+      "text": "Nobody does. Ask the room. Rooms are smarter than people. Go on in.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "In the morning, Theo goes out to bring him coffee, and comes back without it.",
+      "effects": [
+        {
+          "set": "hank_alive",
+          "value": false
+        },
+        {
+          "event": "npc_death",
+          "npc": "hank"
+        }
+      ],
+      "end": true
+    }
+  ]
+}

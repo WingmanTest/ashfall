@@ -1,0 +1,150 @@
+{
+  "id": "ch09_ice",
+  "chapter": "ch09",
+  "location": "loc_jay_cooke",
+  "trigger": "River crossing. The ice breaks under the column.",
+  "speakers": [
+    "cody",
+    "dell",
+    "narrator",
+    "ray"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "A crack like a rifle shot. The ice tilts. The supply sled slides toward black water.",
+      "branches": [
+        {
+          "next": "both",
+          "conditions": [
+            {
+              "flag": "cody_alive",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "sled_only"
+        }
+      ]
+    },
+    {
+      "id": "both",
+      "speaker": "narrator",
+      "text": "So does Cody, who was pulling it. You can reach one. Only one.",
+      "choices": [
+        {
+          "text": "[Grab Cody]",
+          "next": "cody"
+        },
+        {
+          "text": "[Grab the sled]",
+          "next": "sled"
+        }
+      ]
+    },
+    {
+      "id": "cody",
+      "speaker": "narrator",
+      "text": "Your hand on his collar. The sled goes under, a winter of food with it. Cody is choking, alive.",
+      "effects": [
+        {
+          "set": "ch09_saved",
+          "value": "cody"
+        },
+        {
+          "take": "canned_food",
+          "qty": 8
+        },
+        {
+          "take": "firewood",
+          "qty": 6
+        },
+        {
+          "trust": "cody",
+          "delta": 5
+        },
+        {
+          "trust": "ray",
+          "delta": 5
+        },
+        {
+          "add": "rep_compact",
+          "value": 2
+        }
+      ],
+      "next": "cody2"
+    },
+    {
+      "id": "cody2",
+      "speaker": "narrator",
+      "text": "He coughs up river water and laughs, the scared laugh.",
+      "branches": [
+        {
+          "next": "cody_ray",
+          "conditions": [
+            {
+              "flag": "ray_alive",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "end"
+        }
+      ]
+    },
+    {
+      "id": "cody_ray",
+      "speaker": "ray",
+      "text": "...Son. Hey. Hey. We're square. We're square, okay?",
+      "next": "end"
+    },
+    {
+      "id": "sled",
+      "speaker": "narrator",
+      "text": "You haul the sled back by the rope. When you look up, the hole is just black water.",
+      "effects": [
+        {
+          "set": "ch09_saved",
+          "value": "sled"
+        },
+        {
+          "set": "cody_alive",
+          "value": false
+        },
+        {
+          "trust": "ray",
+          "delta": -8
+        }
+      ],
+      "next": "sled2"
+    },
+    {
+      "id": "sled2",
+      "speaker": "narrator",
+      "text": "Nobody says anything. Then someone has to keep walking, so everyone does.",
+      "next": "end"
+    },
+    {
+      "id": "sled_only",
+      "speaker": "narrator",
+      "text": "You throw yourself on the rope. The sled stops at the edge. Everyone breathes.",
+      "effects": [
+        {
+          "set": "ch09_saved",
+          "value": "sled"
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "Across the swinging bridge: lights. The dam. Someone is standing at the gate.",
+      "end": true
+    }
+  ]
+}

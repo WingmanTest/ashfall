@@ -1,0 +1,170 @@
+{
+  "id": "ch09_picket",
+  "chapter": "ch09",
+  "location": "loc_jay_cooke",
+  "trigger": "Remnant picket on the Hwy 210 bridge. Searchlight in the snow.",
+  "speakers": [
+    "ruiz",
+    "kessler",
+    "dell",
+    "narrator"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Sandbags on the bridge. A searchlight sweeping the snow. Kessler's last loyalists, and the last diesel.",
+      "branches": [
+        {
+          "next": "ruiz",
+          "conditions": [
+            {
+              "flag": "ruiz_defected",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "noruiz"
+        }
+      ]
+    },
+    {
+      "id": "ruiz",
+      "speaker": "ruiz",
+      "text": "Shift change is at the hour. Eight-minute gap on the east end. I built that schedule.",
+      "next": "ruiz2"
+    },
+    {
+      "id": "ruiz2",
+      "speaker": "ruiz",
+      "text": "We go quiet, in a line, no lights. If anyone coughs, we go anyway.",
+      "choices": [
+        {
+          "text": "[Take Ruiz's gap]",
+          "next": "gap"
+        },
+        {
+          "text": "[Hit the picket. Take their fuel.]",
+          "next": "fight"
+        }
+      ]
+    },
+    {
+      "id": "noruiz",
+      "speaker": "narrator",
+      "text": "No way around but the thin ice downstream, or straight through.",
+      "choices": [
+        {
+          "text": "[Detour across the thin ice]",
+          "next": "ice"
+        },
+        {
+          "text": "[Hit the picket. Take their fuel.]",
+          "next": "fight"
+        },
+        {
+          "text": "[Talk to them]",
+          "next": "talk"
+        }
+      ]
+    },
+    {
+      "id": "talk",
+      "speaker": "kessler",
+      "text": "[Loudspeaker] Civilian column, you are approaching a federal position. State your number and purpose.",
+      "choices": [
+        {
+          "text": "Twenty people. Freezing. Let us pass.",
+          "next": "talk2"
+        },
+        {
+          "text": "[Back off]",
+          "next": "noruiz"
+        }
+      ]
+    },
+    {
+      "id": "talk2",
+      "speaker": "kessler",
+      "text": "[Loudspeaker] Negative. Leave your fuel and medical supplies at the marker, then pass.",
+      "choices": [
+        {
+          "text": "[Leave the supplies]",
+          "next": "pay",
+          "effects": [
+            {
+              "take": "firewood",
+              "qty": 4
+            },
+            {
+              "take": "med_kit",
+              "qty": 1
+            },
+            {
+              "take": "antibiotics",
+              "qty": 1
+            }
+          ]
+        },
+        {
+          "text": "[Hit the picket]",
+          "next": "fight"
+        }
+      ]
+    },
+    {
+      "id": "pay",
+      "speaker": "narrator",
+      "text": "You leave it at the marker. They let you pass. A soldier on the sandbags lifts a hand, ashamed.",
+      "next": "end"
+    },
+    {
+      "id": "gap",
+      "speaker": "narrator",
+      "text": "Eight minutes. Twenty people. Nobody coughs. On the far side, Ruiz is shaking.",
+      "effects": [
+        {
+          "set": "ch09_ruiz_gap",
+          "value": true
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "ice",
+      "speaker": "narrator",
+      "text": "The ice groans under the column. Everyone gets across. The sled nearly doesn't.",
+      "effects": [
+        {
+          "stat": "warmth",
+          "delta": -20
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "fight",
+      "speaker": "narrator",
+      "text": "Muzzle flashes in the snow. Kessler's voice on the speaker, perfectly calm, counting casualties.",
+      "effects": [
+        {
+          "add": "ironwood_hostility",
+          "value": 2
+        },
+        {
+          "event": "encounter",
+          "id": "enc_ch09_picket_assault"
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "Jay Cooke. The trees are black. Somewhere ahead, wolves.",
+      "end": true
+    }
+  ]
+}

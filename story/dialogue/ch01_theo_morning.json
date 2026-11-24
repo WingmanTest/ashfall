@@ -1,0 +1,225 @@
+{
+  "id": "ch01_theo_morning",
+  "chapter": "ch01",
+  "location": "loc_east_end",
+  "trigger": "Game start. Kitchen, morning.",
+  "speakers": [
+    "narrator",
+    "theo",
+    "dell"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Day three. The fridge stopped humming on Monday. Now it just smells.",
+      "next": "t1"
+    },
+    {
+      "id": "t1",
+      "speaker": "theo",
+      "text": "ma. the fridge is officially a cave. a smelly cave.",
+      "choices": [
+        {
+          "text": "How's your sugar?",
+          "next": "sugar"
+        },
+        {
+          "text": "[Check the insulin first]",
+          "next": "check"
+        },
+        {
+          "text": "Get dressed. We've got work.",
+          "next": "work"
+        }
+      ]
+    },
+    {
+      "id": "sugar",
+      "speaker": "theo",
+      "text": "one-forty. fine. don't do the face.",
+      "choices": [
+        {
+          "text": "I'm not doing a face.",
+          "next": "face"
+        },
+        {
+          "text": "Show me the meter.",
+          "next": "meter"
+        }
+      ]
+    },
+    {
+      "id": "face",
+      "speaker": "theo",
+      "text": "you're doing it right now. it's like a sad owl.",
+      "effects": [
+        {
+          "trust": "theo",
+          "delta": 1
+        }
+      ],
+      "next": "check"
+    },
+    {
+      "id": "meter",
+      "speaker": "narrator",
+      "text": "The meter reads 212. He looks at the floor.",
+      "next": "meter2"
+    },
+    {
+      "id": "meter2",
+      "speaker": "theo",
+      "text": "there were pop tarts. they were gonna go bad. it's basically recycling.",
+      "choices": [
+        {
+          "text": "Fair. Recycle less.",
+          "next": "check",
+          "effects": [
+            {
+              "trust": "theo",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "text": "Theo. You can't do that now.",
+          "next": "meter3"
+        }
+      ]
+    },
+    {
+      "id": "meter3",
+      "speaker": "theo",
+      "text": "yeah. i know. i KNOW.",
+      "effects": [
+        {
+          "trust": "theo",
+          "delta": -1
+        }
+      ],
+      "next": "check"
+    },
+    {
+      "id": "work",
+      "speaker": "theo",
+      "text": "work? the school's closed. society is closed.",
+      "next": "check"
+    },
+    {
+      "id": "check",
+      "speaker": "narrator",
+      "text": "One open vial. Two spares, still sealed. The kitchen is 17 °C and climbing in the sun.",
+      "next": "plan"
+    },
+    {
+      "id": "plan",
+      "speaker": "dell",
+      "text": "Sealed ones last a month warm. Maybe. I want them cold.",
+      "next": "rumor"
+    },
+    {
+      "id": "rumor",
+      "speaker": "theo",
+      "text": "kayla's dad says it's china. hacking the grid. he has a ham radio.",
+      "choices": [
+        {
+          "text": "Kayla's dad says a lot.",
+          "next": "rumor_a"
+        },
+        {
+          "text": "Nobody knows yet. Don't repeat it.",
+          "next": "rumor_b"
+        },
+        {
+          "text": "It was the sun. I saw the aurora.",
+          "next": "rumor_c"
+        }
+      ]
+    },
+    {
+      "id": "rumor_a",
+      "speaker": "theo",
+      "text": "he also says bigfoot is a government guy. so.",
+      "next": "lake"
+    },
+    {
+      "id": "rumor_b",
+      "speaker": "theo",
+      "text": "okay okay. i'm just saying what people say.",
+      "next": "lake"
+    },
+    {
+      "id": "rumor_c",
+      "speaker": "theo",
+      "text": "the green sky thing? that was cool. that broke everything?",
+      "next": "rumor_c2"
+    },
+    {
+      "id": "rumor_c2",
+      "speaker": "dell",
+      "text": "Transformers cook in a storm like that. Big ones. Years to replace.",
+      "next": "lake"
+    },
+    {
+      "id": "lake",
+      "speaker": "theo",
+      "text": "lake's cold. lake's always cold. we could do a cooler thing.",
+      "choices": [
+        {
+          "text": "Grab buckets. You're helping.",
+          "next": "help",
+          "effects": [
+            {
+              "trust": "theo",
+              "delta": 1
+            },
+            {
+              "set": "theo_helped_cooler",
+              "value": true
+            },
+            {
+              "quest": "q_cooler",
+              "state": "start"
+            }
+          ]
+        },
+        {
+          "text": "Stay in. Keep the door locked.",
+          "next": "alone",
+          "effects": [
+            {
+              "quest": "q_cooler",
+              "state": "start"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "help",
+      "speaker": "theo",
+      "text": "yes. finally. a quest.",
+      "next": "end_hint"
+    },
+    {
+      "id": "alone",
+      "speaker": "theo",
+      "text": "cool. cool cool cool. i'll guard the smelly cave.",
+      "effects": [
+        {
+          "trust": "theo",
+          "delta": -1
+        }
+      ],
+      "next": "end_hint"
+    },
+    {
+      "id": "end_hint",
+      "speaker": "narrator",
+      "text": "Cooler in the basement. Lake water from the shore. Then check on Marguerite.",
+      "end": true
+    }
+  ]
+}

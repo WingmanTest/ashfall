@@ -1,0 +1,136 @@
+{
+  "id": "ch08_ames_foot",
+  "chapter": "ch08",
+  "location": "loc_lakehead_memorial",
+  "trigger": "Theo's foot is infected. Bring him to the hospital (or Marguerite's kitchen if no ames_deal).",
+  "speakers": [
+    "ames",
+    "marguerite",
+    "theo",
+    "dell",
+    "narrator"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Theo's toes are dark at the tips. He hid it in two pairs of socks.",
+      "branches": [
+        {
+          "next": "ames",
+          "conditions": [
+            {
+              "flag": "ames_deal",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "marg"
+        }
+      ]
+    },
+    {
+      "id": "ames",
+      "speaker": "ames",
+      "text": "Diabetic foot, early gangrene, two toes. He's been skipping. You didn't know. Next— no. Sit.",
+      "next": "ames2"
+    },
+    {
+      "id": "ames2",
+      "speaker": "ames",
+      "text": "I can take the toes and keep the foot. Your dam is why I have lights to do it.",
+      "next": "ames3"
+    },
+    {
+      "id": "ames3",
+      "speaker": "ames",
+      "text": "You kept your end. I keep mine. Lantus, two vials, monthly. While the lights stay on.",
+      "effects": [
+        {
+          "set": "ch08_foot_saved",
+          "value": true
+        },
+        {
+          "give": "insulin_vial",
+          "qty": 2
+        },
+        {
+          "give": "antibiotics",
+          "qty": 1
+        },
+        {
+          "trust": "ames",
+          "delta": 1
+        }
+      ],
+      "next": "end_saved"
+    },
+    {
+      "id": "marg",
+      "speaker": "marguerite",
+      "text": "Kitchen table, my dear. Boil everything. Hold his hand. Don't look at me, look at him.",
+      "branches": [
+        {
+          "next": "marg_ok",
+          "conditions": [
+            {
+              "trust": "marguerite",
+              "gte": 4
+            }
+          ]
+        },
+        {
+          "next": "marg_bad"
+        }
+      ]
+    },
+    {
+      "id": "marg_ok",
+      "speaker": "narrator",
+      "text": "It takes an hour. Theo bites a belt. Marguerite hums the whole time. The foot stays.",
+      "effects": [
+        {
+          "set": "ch08_foot_saved",
+          "value": true
+        },
+        {
+          "trust": "theo",
+          "delta": 1
+        }
+      ],
+      "next": "end_saved"
+    },
+    {
+      "id": "marg_bad",
+      "speaker": "narrator",
+      "text": "She does what she can with what you brought. It isn't enough. The foot goes below the ankle.",
+      "effects": [
+        {
+          "set": "ch08_foot_saved",
+          "value": false
+        }
+      ],
+      "next": "end_lost"
+    },
+    {
+      "id": "end_saved",
+      "speaker": "theo",
+      "text": "so. eight toes. still more than a dog. ...thanks.",
+      "end": true
+    },
+    {
+      "id": "end_lost",
+      "speaker": "theo",
+      "text": "hey. hey ma. it's okay. you can carry me now. finally a quest.",
+      "effects": [
+        {
+          "trust": "theo",
+          "delta": 1
+        }
+      ],
+      "end": true
+    }
+  ]
+}

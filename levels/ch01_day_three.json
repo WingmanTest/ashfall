@@ -1,0 +1,1213 @@
+{
+ "$schema": "./schema.json",
+ "formatVersion": 1,
+ "id": "ch01_day_three",
+ "chapter": 1,
+ "title": "Day Three",
+ "act": "I",
+ "storyFile": "story/chapters/ch01_day_three.md",
+ "next": "ch02_the_registry",
+ "summary": "Tutorial block in Superior's East End: home -> neighbors -> Belknap Pharmacy at dusk -> home.",
+ "difficulty": 1,
+ "units": "meters",
+ "grid": {
+  "cellSize": 2.0,
+  "cols": 22,
+  "rows": 46,
+  "origin": {
+   "x": -22.0,
+   "z": -84.0
+  },
+  "legend": {
+   "#": {
+    "name": "wall",
+    "walkable": false,
+    "solid": true,
+    "height": 4,
+    "wallTex": "red_brick",
+    "preview": "#5a3a32"
+   },
+   ",": {
+    "name": "interior_floor",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirty_concrete",
+    "roof": true,
+    "preview": "#b8ad98"
+   },
+   ".": {
+    "name": "snow_ground",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "snow_02",
+    "preview": "#d9e1e8"
+   },
+   "=": {
+    "name": "road",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "asphalt_snow",
+    "preview": "#8d969e"
+   },
+   "B": {
+    "name": "building_mass",
+    "walkable": false,
+    "solid": true,
+    "height": 0,
+    "wallTex": "red_brick",
+    "massOnly": true,
+    "preview": "#4a4f57"
+   },
+   "D": {
+    "name": "door",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirty_concrete",
+    "door": true,
+    "preview": "#e0a040"
+   },
+   "H": {
+    "name": "high_wall",
+    "walkable": false,
+    "solid": true,
+    "height": 8,
+    "wallTex": "dirty_concrete",
+    "preview": "#3c3f44"
+   },
+   "c": {
+    "name": "cover_low",
+    "walkable": false,
+    "solid": true,
+    "height": 1.0,
+    "wallTex": "dirt",
+    "cover": true,
+    "preview": "#a08850"
+   },
+   "r": {
+    "name": "road_damaged",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "road_damaged",
+    "preview": "#7b7f80"
+   },
+   "~": {
+    "name": "open_water",
+    "walkable": false,
+    "solid": false,
+    "height": -0.6,
+    "floorTex": "dirty_concrete",
+    "water": true,
+    "preview": "#2f4a63"
+   }
+  },
+  "tiles": [
+   "H#########HHHHHHHHHHHH",
+   "H#,,,,,,,#...BBBBBBBBH",
+   "H#,,,,,,,#...BBBBBBBBH",
+   "H#####D###...BBBBBBBBH",
+   "H#,,,,,,,#...BBBBBBBBH",
+   "H#,,,,,,,#...BBBBBBBBH",
+   "H#,,,,,,,#...BBBBBBBBH",
+   "H##D#D####...........H",
+   "H====================H",
+   "H====================H",
+   "H...r.....==....ccc..H",
+   "H...r.BBB.==.BBBBB...H",
+   "H...r.BBB.==.BBBBB...H",
+   "H...r.BBB.==.BBBBB...H",
+   "H...r.BBB.==.BBBBB...H",
+   "H...r.BBB.==.BBBBB...H",
+   "H...r.BBB.==.BBBBB...H",
+   "H...r.....==.BBBBB...H",
+   "H...r.BBB.==.BBBBB...H",
+   "H...r.BBB.==.BBBBB...H",
+   "H...r.BBB.==.BBBBB...H",
+   "H...r.BBB.==.BBBBB...H",
+   "H...r.BBB.==.........H",
+   "H...r.BBB.==.........H",
+   "H...r.....==.#####...H",
+   "H...r.....==.#,,,#...H",
+   "H...r.BBB.==.#,,,#...H",
+   "H...r.BBB.==.D,,,#...H",
+   "H...r.BBB.==.#,,,#...H",
+   "H...r.BBB.==.#,,,#...H",
+   "H###r.BBB.==.#####...H",
+   "H#,#r.BBB.==.........H",
+   "H#,#r.BBB.==.........H",
+   "H#,Dr.BBB.==.#####...H",
+   "H#,#r.....==.#,,,#...H",
+   "H#,#r.####==.#,,,#...H",
+   "H###r.#,,#==.#,,,#...H",
+   "H...r.#,,#==.D,,,#...H",
+   "H###r.#,,D==.#,,,#...H",
+   "H#,#r.#,,#==.#,,,#...H",
+   "H#,Dr.##D#==.#,,,#...H",
+   "H#,#r.#,,#==.#####~~~H",
+   "H#,#r.D,,#==......~~~H",
+   "H###r.#,,#==......~~~H",
+   "H...r.####==......~~~H",
+   "HHHHHHHHHHHHHHHHHHHHHH"
+  ]
+ },
+ "environment": {
+  "timeStart": 0.32,
+  "timeEnd": 0.76,
+  "timeLocked": false,
+  "weather": "overcast",
+  "tempC": 6,
+  "blizzard": false,
+  "snowCover": 0.15,
+  "particles": "none",
+  "fogNear": 8,
+  "fogFar": 60,
+  "palette": "assets/palettes/endesga-32.json",
+  "ambientTint": "#c9d6e6",
+  "hud": {
+   "temp": false,
+   "hunger": true,
+   "rad": false,
+   "filter": false,
+   "seal": false
+  },
+  "warmthDrainMul": 0.0,
+  "maxAliveEnemies": 5
+ },
+ "locations": [
+  {
+   "id": "loc_east_end",
+   "x": 0.0,
+   "z": -29.0,
+   "rect": {
+    "type": "rect",
+    "x0": -20.0,
+    "z0": -64.0,
+    "x1": 20.0,
+    "z1": 6.0
+   },
+   "safe": true
+  },
+  {
+   "id": "loc_belknap_pharmacy",
+   "x": -11.0,
+   "z": -74.0,
+   "rect": {
+    "type": "rect",
+    "x0": -20.0,
+    "z0": -84.0,
+    "x1": -2.0,
+    "z1": -64.0
+   },
+   "safe": false
+  }
+ ],
+ "landmarks": [
+  {
+   "label": "Water tower",
+   "x": 17.0,
+   "z": -76.0
+  },
+  {
+   "label": "Belknap Pharmacy",
+   "x": -11.0,
+   "z": -73.0
+  },
+  {
+   "label": "Home",
+   "x": -6.0,
+   "z": -9.0
+  },
+  {
+   "label": "Ray's garage",
+   "x": -17.0,
+   "z": -17.0
+  },
+  {
+   "label": "Marguerite's porch",
+   "x": 3.0,
+   "z": -9.0
+  }
+ ],
+ "paths": {
+  "critical": [
+   [
+    -6.0,
+    -8.0
+   ],
+   [
+    -3.0,
+    -7.0
+   ],
+   [
+    1.0,
+    -9.0
+   ],
+   [
+    3.0,
+    -9.0
+   ],
+   [
+    1.0,
+    -11.0
+   ],
+   [
+    1.0,
+    -43.0
+   ],
+   [
+    1.0,
+    -63.0
+   ],
+   [
+    -11.0,
+    -65.0
+   ],
+   [
+    -11.0,
+    -69.0
+   ],
+   [
+    -11.0,
+    -75.0
+   ],
+   [
+    -9.0,
+    -77.0
+   ],
+   [
+    -9.0,
+    -80.0
+   ],
+   [
+    -9.0,
+    -77.0
+   ],
+   [
+    -11.0,
+    -69.0
+   ],
+   [
+    -11.0,
+    -65.0
+   ],
+   [
+    1.0,
+    -63.0
+   ],
+   [
+    1.0,
+    -7.0
+   ],
+   [
+    -3.0,
+    -7.0
+   ],
+   [
+    -6.0,
+    -8.0
+   ]
+  ],
+  "optional": [
+   {
+    "id": "b_cooler",
+    "label": "Basement cooler + lake water",
+    "points": [
+     [
+      -6.0,
+      -8.0
+     ],
+     [
+      -5.0,
+      -3.0
+     ],
+     [
+      -6.0,
+      2.0
+     ],
+     [
+      -9.0,
+      1.0
+     ],
+     [
+      -11.0,
+      1.0
+     ],
+     [
+      -11.0,
+      5.0
+     ],
+     [
+      13.0,
+      5.0
+     ],
+     [
+      13.0,
+      2.0
+     ]
+    ]
+   },
+   {
+    "id": "b_ray",
+    "label": "Ray's garage trade (via alley)",
+    "points": [
+     [
+      -9.0,
+      1.0
+     ],
+     [
+      -13.0,
+      1.0
+     ],
+     [
+      -13.0,
+      -17.0
+     ],
+     [
+      -15.0,
+      -17.0
+     ],
+     [
+      -17.0,
+      -17.0
+     ]
+    ]
+   }
+  ]
+ },
+ "spawns": {
+  "player": [
+   {
+    "id": "spawn_default",
+    "x": -6.0,
+    "z": -8.0,
+    "rotY": -1.571
+   }
+  ],
+  "npcs": [
+   {
+    "id": "npc_theo",
+    "npc": "theo",
+    "x": -5.0,
+    "z": -10.0,
+    "rotY": 1.571,
+    "behavior": "idle",
+    "dialogue": "ch01_theo_morning"
+   },
+   {
+    "id": "npc_marguerite",
+    "npc": "marguerite",
+    "x": 3.0,
+    "z": -10.0,
+    "rotY": 1.571,
+    "behavior": "idle",
+    "dialogue": "ch01_marguerite_porch"
+   },
+   {
+    "id": "npc_ray",
+    "npc": "ray",
+    "x": -17.0,
+    "z": -17.0,
+    "rotY": -1.571,
+    "behavior": "idle",
+    "dialogue": "ch01_ray_garage"
+   },
+   {
+    "id": "npc_wren",
+    "npc": "wren",
+    "x": -11.0,
+    "z": -80.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch01_wren_pharmacy",
+    "when": [
+     {
+      "flag": "ch01_dusk",
+      "eq": true
+     }
+    ],
+    "label": "Wren (looting)",
+    "combatProfile": "looter"
+   },
+   {
+    "id": "npc_theo_night",
+    "npc": "theo",
+    "x": -6.0,
+    "z": -8.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch01_theo_night",
+    "when": [
+     {
+      "flag": "ch01_pharmacy_done",
+      "eq": true
+     }
+    ]
+   }
+  ],
+  "enemies": [
+   {
+    "id": "en_01",
+    "type": "watch_militia",
+    "x": 15.0,
+    "z": -65.0,
+    "group": "g_watch",
+    "tier": 1,
+    "behavior": "patrol",
+    "hostile": "conditional",
+    "activate": "trigger",
+    "patrol": [
+     [
+      17.0,
+      -65.0
+     ],
+     [
+      -9.0,
+      -65.0
+     ],
+     [
+      1.0,
+      -55.0
+     ],
+     [
+      17.0,
+      -65.0
+     ]
+    ],
+    "hostileWhen": [
+     {
+      "flag": "ch01_ran_with_drugs",
+      "eq": true
+     }
+    ],
+    "note": "Block watch with deer rifle. Hostile only if Dell runs with drugs or draws a weapon."
+   }
+  ],
+  "loot": [
+   {
+    "id": "loot_01",
+    "x": -7.0,
+    "z": -10.0,
+    "r": 1.6,
+    "label": "Kitchen cupboard",
+    "container": "kitchen_cabinet",
+    "guaranteed": [
+     {
+      "item": "candles",
+      "n": 3
+     }
+    ],
+    "location": "loc_east_end"
+   },
+   {
+    "id": "loot_02",
+    "x": -7.4,
+    "z": -5.0,
+    "r": 1.6,
+    "label": "Hall toolbox",
+    "container": "toolbox",
+    "guaranteed": [
+     {
+      "item": "lineman_tools",
+      "n": 1
+     }
+    ],
+    "location": "loc_east_end"
+   },
+   {
+    "id": "loot_03",
+    "x": -6.0,
+    "z": 3.0,
+    "r": 1.6,
+    "label": "Basement shelf",
+    "container": "toolbox",
+    "location": "loc_east_end"
+   },
+   {
+    "id": "loot_04",
+    "x": 1.0,
+    "z": -9.8,
+    "r": 1.8,
+    "label": "Dell's car (trunk)",
+    "container": "car_trunk",
+    "guaranteed": [
+     {
+      "item": "gas_can",
+      "n": 1
+     }
+    ],
+    "setsFlag": "ch01_car_checked",
+    "location": "loc_east_end"
+   },
+   {
+    "id": "loot_05",
+    "x": -15.0,
+    "z": -59.0,
+    "r": 1.6,
+    "label": "Dumpster",
+    "container": "dumpster",
+    "location": "loc_east_end"
+   },
+   {
+    "id": "loot_06",
+    "x": -11.0,
+    "z": -33.0,
+    "r": 1.6,
+    "label": "Dumpster",
+    "container": "dumpster",
+    "location": "loc_east_end"
+   },
+   {
+    "id": "loot_07",
+    "x": 10.0,
+    "z": -23.0,
+    "r": 1.6,
+    "label": "Pruitt porch box",
+    "container": "wardrobe",
+    "location": "loc_east_end"
+   },
+   {
+    "id": "loot_08",
+    "x": -15.0,
+    "z": -73.0,
+    "r": 1.6,
+    "label": "Pharmacy shelves (looted)",
+    "container": "medicine_cabinet",
+    "guaranteed": [
+     {
+      "item": "bandage",
+      "n": 1
+     }
+    ],
+    "location": "loc_belknap_pharmacy"
+   },
+   {
+    "id": "loot_09",
+    "x": -5.0,
+    "z": -80.0,
+    "r": 1.6,
+    "label": "Back-room locker",
+    "container": "locker",
+    "guaranteed": [
+     {
+      "item": "pharmacy_bag",
+      "n": 1
+     }
+    ],
+    "when": [
+     {
+      "flag": "ch01_dusk",
+      "eq": true
+     }
+    ],
+    "location": "loc_belknap_pharmacy"
+   },
+   {
+    "id": "loot_10",
+    "x": -17.0,
+    "z": -66.0,
+    "r": 1.6,
+    "label": "Pharmacy dumpster",
+    "container": "dumpster",
+    "location": "loc_belknap_pharmacy"
+   },
+   {
+    "id": "loot_11",
+    "x": -6.0,
+    "z": -80.0,
+    "r": 1.6,
+    "label": "Pharmacy fridge",
+    "container": "medicine_cabinet",
+    "guaranteed": [
+     {
+      "item": "insulin_vial",
+      "n": 2
+     },
+     {
+      "item": "cool_pack",
+      "n": 1
+     }
+    ],
+    "when": [
+     {
+      "flag": "ch01_dusk",
+      "eq": true
+     }
+    ],
+    "location": "loc_belknap_pharmacy"
+   },
+   {
+    "id": "loot_12",
+    "x": -17.0,
+    "z": 1.0,
+    "r": 1.6,
+    "label": "Kitchen cabinet (filler)",
+    "container": "kitchen_cabinet",
+    "location": "loc_east_end",
+    "filler": true
+   },
+   {
+    "id": "loot_13",
+    "x": 7.0,
+    "z": -33.0,
+    "r": 1.6,
+    "label": "Medicine cabinet (filler)",
+    "container": "medicine_cabinet",
+    "location": "loc_east_end",
+    "filler": true
+   },
+   {
+    "id": "loot_14",
+    "x": 19.0,
+    "z": -61.0,
+    "r": 1.6,
+    "label": "Dumpster (filler)",
+    "container": "dumpster",
+    "location": "loc_east_end",
+    "filler": true
+   },
+   {
+    "id": "loot_15",
+    "x": 11.0,
+    "z": -13.0,
+    "r": 1.6,
+    "label": "Closet / wardrobe (filler)",
+    "container": "wardrobe",
+    "location": "loc_east_end",
+    "filler": true
+   },
+   {
+    "id": "loot_16",
+    "x": 7.0,
+    "z": -3.0,
+    "r": 1.6,
+    "label": "Closet / wardrobe (filler)",
+    "container": "wardrobe",
+    "location": "loc_east_end",
+    "filler": true
+   },
+   {
+    "id": "loot_17",
+    "x": 3.0,
+    "z": -51.0,
+    "r": 1.6,
+    "label": "Car trunk (filler)",
+    "container": "car_trunk",
+    "location": "loc_east_end",
+    "filler": true
+   },
+   {
+    "id": "loot_18",
+    "x": 19.0,
+    "z": -45.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture (filler)",
+    "container": "woodpile",
+    "location": "loc_east_end",
+    "filler": true
+   },
+   {
+    "id": "loot_19",
+    "x": -19.0,
+    "z": -45.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture (filler)",
+    "container": "woodpile",
+    "location": "loc_east_end",
+    "filler": true
+   }
+  ]
+ },
+ "props": [
+  {
+   "id": "prop_01",
+   "asset": "assets/kenney/industrial/building-k.glb",
+   "x": -7.0,
+   "z": -56.0,
+   "rotY": 1.571,
+   "h": 7,
+   "collide": true
+  },
+  {
+   "id": "prop_02",
+   "asset": "assets/kenney/industrial/building-d.glb",
+   "x": -7.0,
+   "z": -42.0,
+   "rotY": 1.571,
+   "h": 6,
+   "collide": true
+  },
+  {
+   "id": "prop_03",
+   "asset": "assets/kenney/industrial/building-a.glb",
+   "x": -7.0,
+   "z": -24.0,
+   "rotY": 1.571,
+   "h": 7,
+   "collide": true
+  },
+  {
+   "id": "prop_04",
+   "asset": "assets/kenney/industrial/building-f.glb",
+   "x": 9.0,
+   "z": -51.0,
+   "rotY": -1.571,
+   "h": 9,
+   "collide": true
+  },
+  {
+   "id": "prop_05",
+   "asset": "assets/kenney/industrial/building-s.glb",
+   "x": 12.0,
+   "z": -76.0,
+   "rotY": 0.0,
+   "h": 7,
+   "collide": true
+  },
+  {
+   "id": "prop_06",
+   "asset": "assets/kenney/industrial/water-tower.glb",
+   "x": 17.0,
+   "z": -76.0,
+   "rotY": 0,
+   "h": 16,
+   "collide": true,
+   "tag": "landmark"
+  },
+  {
+   "id": "prop_07",
+   "asset": "assets/kenney/industrial/chimney-large.glb",
+   "x": 9.0,
+   "z": -59.0,
+   "rotY": 0,
+   "h": 14,
+   "collide": false,
+   "tag": "backdrop"
+  },
+  {
+   "id": "prop_dell_car",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": 1.0,
+   "z": -12.0,
+   "rotY": 0.15,
+   "h": 1.45,
+   "collide": true
+  },
+  {
+   "id": "prop_08",
+   "asset": "assets/kenney/roads/electricity-pole.glb",
+   "x": 3.0,
+   "z": -55.0,
+   "rotY": 0,
+   "h": 8,
+   "collide": true
+  },
+  {
+   "id": "prop_09",
+   "asset": "assets/kenney/roads/electricity-pole.glb",
+   "x": 3.0,
+   "z": -39.0,
+   "rotY": 0,
+   "h": 8,
+   "collide": true
+  },
+  {
+   "id": "prop_10",
+   "asset": "assets/kenney/roads/electricity-pole.glb",
+   "x": 3.0,
+   "z": -23.0,
+   "rotY": 0,
+   "h": 8,
+   "collide": true
+  },
+  {
+   "id": "prop_11",
+   "asset": "assets/kenney/roads/electricity-pole.glb",
+   "x": 3.0,
+   "z": 1.0,
+   "rotY": 0,
+   "h": 8,
+   "collide": true
+  },
+  {
+   "id": "prop_12",
+   "asset": "assets/kenney/roads/traffic-light.glb",
+   "x": 3.0,
+   "z": -63.0,
+   "rotY": 3.142,
+   "h": 4.5,
+   "collide": true
+  },
+  {
+   "id": "prop_13",
+   "asset": "assets/kenney/roads/road-sign-stop.glb",
+   "x": -3.0,
+   "z": -63.0,
+   "rotY": 0.0,
+   "h": 2.4,
+   "collide": true
+  },
+  {
+   "id": "prop_14",
+   "asset": "assets/kenney/roads/light-square.glb",
+   "x": 3.0,
+   "z": -47.0,
+   "rotY": 0.0,
+   "h": 5.5,
+   "collide": true
+  },
+  {
+   "id": "prop_15",
+   "asset": "assets/kenney/roads/dumpster.glb",
+   "x": -15.0,
+   "z": -61.0,
+   "rotY": 1.571,
+   "h": 1.4,
+   "collide": true
+  },
+  {
+   "id": "prop_16",
+   "asset": "assets/kenney/roads/dumpster.glb",
+   "x": -11.0,
+   "z": -35.0,
+   "rotY": 1.571,
+   "h": 1.4,
+   "collide": true
+  },
+  {
+   "id": "prop_17",
+   "asset": "assets/kenney/roads/construction-barrier.glb",
+   "x": 13.0,
+   "z": -61.0,
+   "rotY": 0.1,
+   "h": 1.1,
+   "collide": true
+  }
+ ],
+ "interactives": [
+  {
+   "id": "ch01_cooler_station",
+   "type": "craft",
+   "x": -5.0,
+   "z": 2.0,
+   "r": 1.8,
+   "label": "Picnic cooler (craft lake_cooler)",
+   "requiresItems": [
+    "bucket",
+    "wire"
+   ],
+   "setsFlag": "ch01_cooler_built"
+  },
+  {
+   "id": "ch01_lake_edge",
+   "type": "fill",
+   "x": 15.0,
+   "z": 2.0,
+   "r": 1.8,
+   "label": "Lake edge: haul cold water",
+   "requiresItems": [
+    "bucket"
+   ],
+   "setsFlag": "ch01_bucket_filled"
+  }
+ ],
+ "safeZones": [
+  {
+   "id": "safe_01",
+   "kind": "indoor",
+   "x": -6.0,
+   "z": -8.0,
+   "r": 3.5,
+   "label": "Home kitchen (stove, candles)",
+   "warmth": true,
+   "save": true,
+   "sealed": false
+  },
+  {
+   "id": "safe_02",
+   "kind": "indoor",
+   "x": -17.0,
+   "z": -17.0,
+   "r": 2.5,
+   "label": "Ray's garage (generator hum)",
+   "warmth": true,
+   "save": false,
+   "sealed": false
+  }
+ ],
+ "setPieces": [],
+ "encounters": [
+  {
+   "id": "enc_belknap",
+   "area": {
+    "type": "rect",
+    "x0": -20.0,
+    "z0": -68.0,
+    "x1": 20.0,
+    "z1": -50.0
+   },
+   "groups": [
+    {
+     "group": "g_watch",
+     "wave": 1
+    }
+   ]
+  }
+ ],
+ "triggers": [
+  {
+   "id": "t_ch01_start",
+   "on": "load",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": -6.0,
+    "z": -8.0,
+    "r": 3
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch01_theo_morning"
+    },
+    {
+     "type": "checkpoint"
+    }
+   ]
+  },
+  {
+   "id": "t_ch01_basement",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -8.0,
+    "z0": -2.0,
+    "x1": -4.0,
+    "z1": 4.0
+   },
+   "actions": [
+    {
+     "type": "bark",
+     "speaker": "theo",
+     "text": "It's cold down here. Good, right?"
+    }
+   ]
+  },
+  {
+   "id": "t_ch01_dusk_gate_block",
+   "on": "enter",
+   "once": false,
+   "shape": {
+    "type": "rect",
+    "x0": -20.0,
+    "z0": -64.0,
+    "x1": 20.0,
+    "z1": -58.0
+   },
+   "actions": [
+    {
+     "type": "bark",
+     "speaker": "dell",
+     "text": "Marguerite first. And I need fuel."
+    },
+    {
+     "type": "push_back"
+    }
+   ],
+   "when": [
+    {
+     "any": [
+      {
+       "flag": "ch01_marguerite_talked",
+       "ne": true
+      },
+      {
+       "flag": "ch01_fuel_resolved",
+       "ne": true
+      }
+     ]
+    }
+   ],
+   "note": "Soft gate: the north end of the street pushes back until the porch + fuel beats are done."
+  },
+  {
+   "id": "t_ch01_dusk",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -20.0,
+    "z0": -64.0,
+    "x1": 20.0,
+    "z1": -58.0
+   },
+   "actions": [
+    {
+     "type": "set_time",
+     "value": 0.74
+    },
+    {
+     "type": "cutscene",
+     "id": "cs_ch01_dusk",
+     "text": "The light goes orange. A rifle bolt clacks down Belknap."
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch01_dusk",
+     "value": true
+    },
+    {
+     "type": "activate_group",
+     "group": "g_watch"
+    },
+    {
+     "type": "checkpoint"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch01_marguerite_talked",
+     "eq": true
+    },
+    {
+     "flag": "ch01_fuel_resolved",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch01_pharmacy",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -18.0,
+    "z0": -76.0,
+    "x1": -4.0,
+    "z1": -70.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch01_wren_pharmacy"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch01_dusk",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch01_home",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -8.0,
+    "z0": -12.0,
+    "x1": -4.0,
+    "z1": -4.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch01_theo_night"
+    },
+    {
+     "type": "story_check",
+     "id": "ch01_end_pruitt"
+    },
+    {
+     "type": "chapter_end",
+     "next": "ch02_the_registry"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch01_pharmacy_done",
+     "eq": true
+    }
+   ]
+  }
+ ],
+ "objectives": [
+  {
+   "id": "o1",
+   "order": 1,
+   "text": "Talk to Theo",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch01_theo_talked",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o2",
+   "order": 2,
+   "text": "Build a lake-water cooler for the insulin",
+   "optional": true,
+   "completeWhen": [
+    {
+     "flag": "ch01_cooler_built",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o3",
+   "order": 3,
+   "text": "Check on Marguerite",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch01_marguerite_talked",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o4",
+   "order": 4,
+   "text": "Get fuel: Ray's garage or the gas can in your car",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch01_fuel_resolved",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o5",
+   "order": 5,
+   "text": "Belknap Pharmacy at dusk: insulin",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch01_pharmacy_done",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o6",
+   "order": 6,
+   "text": "Get home before dark",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch01_home",
+     "eq": true
+    }
+   ]
+  }
+ ]
+}

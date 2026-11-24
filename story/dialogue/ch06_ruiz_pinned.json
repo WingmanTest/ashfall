@@ -1,0 +1,119 @@
+{
+  "id": "ch06_ruiz_pinned",
+  "chapter": "ch06",
+  "location": "loc_lift_bridge",
+  "trigger": "Canal Park battle. IED flips an MRAP; Ruiz is pinned under the door.",
+  "speakers": [
+    "ruiz",
+    "dell",
+    "narrator"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "The MRAP is on its side, burning. Ruiz is under the blast door, leg trapped, rifle out of reach.",
+      "next": "r1"
+    },
+    {
+      "id": "r1",
+      "speaker": "ruiz",
+      "text": "Kowalczyk. Hah. Of course. Say again your intentions. Over.",
+      "choices": [
+        {
+          "text": "[Lever the door off her]",
+          "next": "spare"
+        },
+        {
+          "text": "[Take her rifle and leave]",
+          "next": "leave"
+        },
+        {
+          "text": "[Finish it]",
+          "next": "kill"
+        }
+      ]
+    },
+    {
+      "id": "spare",
+      "speaker": "narrator",
+      "text": "You jam a pry bar under the hinge. It moves an inch. Two. She drags herself free.",
+      "effects": [
+        {
+          "set": "ruiz_spared",
+          "value": true
+        },
+        {
+          "add": "kindness",
+          "value": 1
+        },
+        {
+          "trust": "ruiz",
+          "delta": 4
+        },
+        {
+          "give": "ironwood_id",
+          "qty": 1
+        }
+      ],
+      "next": "spare2"
+    },
+    {
+      "id": "spare2",
+      "speaker": "ruiz",
+      "text": "Here. My ID. Gets you through Blatnik once, maybe. Don't thank me. Go.",
+      "next": "spare3"
+    },
+    {
+      "id": "spare3",
+      "speaker": "ruiz",
+      "text": "And Kowalczyk. Bradley's covering the pier. Go under the crane, not around it.",
+      "effects": [
+        {
+          "set": "ch06_bradley_tip",
+          "value": true
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "leave",
+      "speaker": "narrator",
+      "text": "You take the rifle. Behind you, someone else will find her. Someone.",
+      "effects": [
+        {
+          "set": "ruiz_spared",
+          "value": false
+        },
+        {
+          "give": "rifle_ammo",
+          "qty": 20
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "kill",
+      "speaker": "narrator",
+      "text": "It's quick. It doesn't feel quick.",
+      "effects": [
+        {
+          "set": "ruiz_spared",
+          "value": false
+        },
+        {
+          "trust": "theo",
+          "delta": -1
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "The lift bridge control house is fifty meters ahead. Searchlights sweep the canal.",
+      "end": true
+    }
+  ]
+}

@@ -1,0 +1,220 @@
+{
+  "id": "ch06_lift_bridge",
+  "chapter": "ch06",
+  "location": "loc_lift_bridge",
+  "trigger": "Inside the lift bridge control house. Harbor boats wait in the dark.",
+  "speakers": [
+    "bea",
+    "dell",
+    "narrator",
+    "kessler"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Old switchgear, dead. A feeder line from the dam, if it reaches. Boats idle beyond the piers.",
+      "branches": [
+        {
+          "next": "power_ok",
+          "conditions": [
+            {
+              "any": [
+                {
+                  "flag": "power_priority",
+                  "eq": "harbor"
+                },
+                {
+                  "item": "relay_kit",
+                  "gte": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "next": "power_jury"
+        }
+      ]
+    },
+    {
+      "id": "power_ok",
+      "speaker": "narrator",
+      "text": "The panel hums. The bridge can rise.",
+      "next": "bea"
+    },
+    {
+      "id": "power_jury",
+      "speaker": "narrator",
+      "text": "No feed. You jumper it off the MRAP's batteries. Slow. Possible.",
+      "effects": [
+        {
+          "event": "minigame",
+          "id": "mg_jumper_bridge"
+        }
+      ],
+      "next": "bea"
+    },
+    {
+      "id": "bea",
+      "speaker": "bea",
+      "text": "[Radio] Dell. Here's the deal. Six boats, forty tons. Bayfield's got people waiting. Raise it.",
+      "next": "kess"
+    },
+    {
+      "id": "kess",
+      "speaker": "kessler",
+      "text": "[Loudspeaker] Whoever's in the control house: that grain is federal. Lower your hands.",
+      "next": "choice"
+    },
+    {
+      "id": "choice",
+      "speaker": "narrator",
+      "text": "The lever is cold. The Bradley's turret turns toward the house.",
+      "choices": [
+        {
+          "text": "[Raise the bridge]",
+          "next": "raise"
+        },
+        {
+          "text": "[Leave it down]",
+          "next": "hold"
+        },
+        {
+          "text": "Bea. Is that grain buying guns?",
+          "next": "guns",
+          "conditions": [
+            {
+              "any": [
+                {
+                  "flag": "ames_trade_hinted",
+                  "eq": true
+                },
+                {
+                  "flag": "wren_scouted_known",
+                  "eq": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "guns",
+      "speaker": "bea",
+      "text": "[Radio] ...Some of it. The rest feeds Bayfield. You want clean, move to Canada. Raise it.",
+      "effects": [
+        {
+          "set": "bea_guns_known",
+          "value": true
+        }
+      ],
+      "next": "guns2"
+    },
+    {
+      "id": "guns2",
+      "speaker": "narrator",
+      "text": "The Bradley's engine revs.",
+      "choices": [
+        {
+          "text": "[Raise the bridge]",
+          "next": "raise"
+        },
+        {
+          "text": "[Leave it down]",
+          "next": "hold"
+        }
+      ]
+    },
+    {
+      "id": "raise",
+      "speaker": "narrator",
+      "text": "The span lifts, groaning. Six boats slide under it into the dark lake. The Bradley opens up on the house.",
+      "effects": [
+        {
+          "set": "bridge_choice",
+          "value": "raised"
+        },
+        {
+          "add": "rep_harbor",
+          "value": 3
+        },
+        {
+          "add": "rep_authority",
+          "value": -3
+        },
+        {
+          "add": "ironwood_hostility",
+          "value": 3
+        },
+        {
+          "trust": "bea",
+          "delta": 4
+        },
+        {
+          "trust": "strand",
+          "delta": -5
+        },
+        {
+          "event": "encounter",
+          "id": "enc_ch06_escape_house"
+        }
+      ],
+      "next": "raise2"
+    },
+    {
+      "id": "raise2",
+      "speaker": "narrator",
+      "text": "You go out the back window into the canal. The cold stops your heart for a second.",
+      "effects": [
+        {
+          "stat": "warmth",
+          "delta": -40
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "hold",
+      "speaker": "narrator",
+      "text": "You take your hand off the lever. The boats wait. Then they turn back. Ironwood takes the elevators by dawn.",
+      "effects": [
+        {
+          "set": "bridge_choice",
+          "value": "held"
+        },
+        {
+          "add": "rep_authority",
+          "value": 2
+        },
+        {
+          "add": "rep_harbor",
+          "value": -3
+        },
+        {
+          "trust": "bea",
+          "delta": -5
+        },
+        {
+          "event": "encounter",
+          "id": "enc_ch06_harbor_retaliation"
+        }
+      ],
+      "next": "hold2"
+    },
+    {
+      "id": "hold2",
+      "speaker": "narrator",
+      "text": "Nobody fires at the control house. That's how you know which side thinks you're theirs.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "By morning the port is quiet. Not peaceful. Quiet.",
+      "end": true
+    }
+  ]
+}

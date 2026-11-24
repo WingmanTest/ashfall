@@ -1,0 +1,1144 @@
+{
+ "$schema": "./schema.json",
+ "formatVersion": 1,
+ "id": "ch10_the_warm_room",
+ "chapter": 10,
+ "title": "The Warm Room",
+ "act": "III",
+ "storyFile": "story/chapters/ch10_the_warm_room.md",
+ "next": null,
+ "summary": "Thomson Dam: gate parley or last battle in the snow -> powerhouse floor -> the control room vote -> ending.",
+ "difficulty": 5,
+ "units": "meters",
+ "grid": {
+  "cellSize": 2.0,
+  "cols": 24,
+  "rows": 52,
+  "origin": {
+   "x": -24.0,
+   "z": -96.0
+  },
+  "legend": {
+   "#": {
+    "name": "wall",
+    "walkable": false,
+    "solid": true,
+    "height": 4,
+    "wallTex": "red_brick",
+    "preview": "#5a3a32"
+   },
+   ",": {
+    "name": "interior_floor",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirty_concrete",
+    "roof": true,
+    "preview": "#b8ad98"
+   },
+   ".": {
+    "name": "snow_ground",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "snow_02",
+    "preview": "#d9e1e8"
+   },
+   "=": {
+    "name": "road",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "asphalt_snow",
+    "preview": "#8d969e"
+   },
+   "B": {
+    "name": "building_mass",
+    "walkable": false,
+    "solid": true,
+    "height": 0,
+    "wallTex": "red_brick",
+    "massOnly": true,
+    "preview": "#4a4f57"
+   },
+   "D": {
+    "name": "door",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirty_concrete",
+    "door": true,
+    "preview": "#e0a040"
+   },
+   "H": {
+    "name": "high_wall",
+    "walkable": false,
+    "solid": true,
+    "height": 8,
+    "wallTex": "dirty_concrete",
+    "preview": "#3c3f44"
+   },
+   "c": {
+    "name": "cover_low",
+    "walkable": false,
+    "solid": true,
+    "height": 1.0,
+    "wallTex": "dirt",
+    "cover": true,
+    "preview": "#a08850"
+   },
+   "g": {
+    "name": "dirt_gravel",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirt",
+    "preview": "#9c8f7a"
+   },
+   "x": {
+    "name": "debris",
+    "walkable": false,
+    "solid": true,
+    "height": 0.9,
+    "wallTex": "rust_coarse_01",
+    "preview": "#6e5545"
+   },
+   "~": {
+    "name": "open_water",
+    "walkable": false,
+    "solid": false,
+    "height": -0.6,
+    "floorTex": "dirty_concrete",
+    "water": true,
+    "preview": "#2f4a63"
+   }
+  },
+  "tiles": [
+   "HHHHHHHHHHHHHHHHHHHHHHHH",
+   "HBBBBBB............~~~~H",
+   "HBBBBBB.#########..~~~~H",
+   "HBBBBBB.#,,,,,,,#..~~~~H",
+   "HBBBBBB.#,,,,,,,#..~~~~H",
+   "HBBBBBB.#,,xxx,,#..~~~~H",
+   "HBBBBBB.#,,xxx,,#..~~~~H",
+   "HBBBBBB.#,,,,,,,#..~~~~H",
+   "HBBBBBB.#,,,,,,,#..~~~~H",
+   "HBBBBBB.#,,,,,,,#..~~~~H",
+   "HBBBBBB.####D####..~~~~H",
+   "H..........#,#.........H",
+   "H........###D#########.H",
+   "H........#,,,,,,,,,,,#.H",
+   "H........#,,,,,,,,,,,#.H",
+   "H........#,,,,,,,,,,,#.H",
+   "H........#,,,,,,,,,,,#.H",
+   "H........#,,,,,,,,,,,#.H",
+   "H........#,,,,,,,,,,,#.H",
+   "H........#,x,,,x,,,x,#.H",
+   "H........#,x,,,x,,,x,#.H",
+   "H.######.#,,,,,,,,,,,#.H",
+   "H.#gggg#.#,,,,,,,,,,,#.H",
+   "H.#gggg#.#,,,,,,,,,,,#.H",
+   "H.#gggg#.#,,,,,,,,,,,#.H",
+   "H.#ggggD.#,,,,,,,,,,,#.H",
+   "H.#gggg#.#,,,,,,,,,,,#.H",
+   "H.#gggg#.#,,,,,,,,,,,#.H",
+   "H.#gggg#.#,,,,,,,,,,,#.H",
+   "H.######.#,,,,,,,,,,,#.H",
+   "H........######D######.H",
+   "H......................H",
+   "H......................H",
+   "HHHHHHHHHHHDDHHHHHHHHHHH",
+   "H.........====.........H",
+   "H.........====.........H",
+   "H.........====.........H",
+   "H.....cc..====..cc.....H",
+   "H.........====.........H",
+   "H.........====.........H",
+   "H.......cc====.........H",
+   "H.........====.cc......H",
+   "H.........====.........H",
+   "H.........====.........H",
+   "H...cc....====.........H",
+   "H.........====....cc...H",
+   "H.........=cc=.........H",
+   "H.........====.........H",
+   "H.........====.........H",
+   "H.........====.........H",
+   "H.........====.........H",
+   "HHHHHHHHHHHHHHHHHHHHHHHH"
+  ]
+ },
+ "environment": {
+  "timeStart": 0.5,
+  "timeEnd": 0.5,
+  "timeLocked": true,
+  "weather": "clear_cold",
+  "tempC": -38,
+  "blizzard": true,
+  "snowCover": 1.0,
+  "particles": "snow_heavy",
+  "fogNear": 3,
+  "fogFar": 18,
+  "palette": "assets/palettes/slso8.json",
+  "ambientTint": "#c9d6e6",
+  "hud": {
+   "temp": true,
+   "hunger": true,
+   "rad": true,
+   "filter": true,
+   "seal": false
+  },
+  "warmthDrainMul": 2.5,
+  "maxAliveEnemies": 5,
+  "startWeather": "blizzard",
+  "transitions": [
+   {
+    "at": "t_ch10_room",
+    "weather": "clear_cold",
+    "tempC": -38,
+    "particles": "snow_light",
+    "fogFar": 45
+   },
+   {
+    "at": "epilogue_end_warm_room",
+    "weather": "clear_cold",
+    "sunShaft": true
+   }
+  ]
+ },
+ "locations": [
+  {
+   "id": "loc_thomson_dam",
+   "x": 0.0,
+   "z": -44.0,
+   "rect": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -94.0,
+    "x1": 22.0,
+    "z1": 6.0
+   },
+   "safe": true
+  }
+ ],
+ "landmarks": [
+  {
+   "label": "Dam gate",
+   "x": 0.0,
+   "z": -29.0
+  },
+  {
+   "label": "Greenhouse",
+   "x": -14.0,
+   "z": -45.0
+  },
+  {
+   "label": "Powerhouse floor",
+   "x": 7.0,
+   "z": -45.0
+  },
+  {
+   "label": "Control room",
+   "x": 1.0,
+   "z": -83.0
+  }
+ ],
+ "paths": {
+  "critical": [
+   [
+    0.0,
+    -32.0
+   ],
+   [
+    0.0,
+    -27.0
+   ],
+   [
+    0.0,
+    -11.0
+   ],
+   [
+    0.0,
+    -27.0
+   ],
+   [
+    0.0,
+    -29.0
+   ],
+   [
+    7.0,
+    -35.0
+   ],
+   [
+    7.0,
+    -51.0
+   ],
+   [
+    1.0,
+    -69.0
+   ],
+   [
+    1.0,
+    -75.0
+   ],
+   [
+    1.0,
+    -81.0
+   ]
+  ],
+  "optional": [
+   {
+    "id": "b_greenhouse",
+    "label": "Lunds' greenhouse",
+    "points": [
+     [
+      0.0,
+      -31.0
+     ],
+     [
+      -9.0,
+      -45.0
+     ],
+     [
+      -14.0,
+      -45.0
+     ]
+    ]
+   }
+  ]
+ },
+ "spawns": {
+  "player": [
+   {
+    "id": "spawn_default",
+    "x": 0.0,
+    "z": -32.0,
+    "rotY": 0.0
+   }
+  ],
+  "npcs": [
+   {
+    "id": "npc_kessler",
+    "npc": "kessler",
+    "x": 0.0,
+    "z": -9.0,
+    "rotY": 3.142,
+    "behavior": "idle",
+    "dialogue": "ch10_gate",
+    "label": "Maj. Kessler (in person)"
+   },
+   {
+    "id": "npc_ruiz",
+    "npc": "ruiz",
+    "x": -3.0,
+    "z": -32.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "ruiz_defected",
+      "eq": true
+     }
+    ]
+   },
+   {
+    "id": "npc_strand",
+    "npc": "strand",
+    "x": 3.0,
+    "z": -32.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "strand_alive",
+      "ne": false
+     }
+    ]
+   },
+   {
+    "id": "npc_theo",
+    "npc": "theo",
+    "x": 1.0,
+    "z": -79.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "theo_alive",
+      "ne": false
+     }
+    ]
+   },
+   {
+    "id": "npc_bea_room",
+    "npc": "bea",
+    "x": -3.0,
+    "z": -87.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch10_final",
+    "when": [
+     {
+      "flag": "bea_alive",
+      "ne": false
+     }
+    ]
+   },
+   {
+    "id": "npc_jory_room",
+    "npc": "jory",
+    "x": 5.0,
+    "z": -87.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch10_final",
+    "when": [
+     {
+      "flag": "jory_alive",
+      "ne": false
+     }
+    ]
+   },
+   {
+    "id": "npc_strand_room",
+    "npc": "strand",
+    "x": 1.0,
+    "z": -88.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch10_final",
+    "when": [
+     {
+      "flag": "strand_alive",
+      "ne": false
+     }
+    ]
+   },
+   {
+    "id": "npc_ames_room",
+    "npc": "ames",
+    "x": -4.0,
+    "z": -81.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "ames_alive",
+      "ne": false
+     }
+    ]
+   },
+   {
+    "id": "npc_marguerite_room",
+    "npc": "marguerite",
+    "x": 6.0,
+    "z": -81.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "marguerite_alive",
+      "ne": false
+     }
+    ]
+   },
+   {
+    "id": "npc_ray_room",
+    "npc": "ray",
+    "x": -3.0,
+    "z": -78.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "ray_alive",
+      "ne": false
+     }
+    ]
+   },
+   {
+    "id": "npc_cody_room",
+    "npc": "cody",
+    "x": 4.0,
+    "z": -78.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "cody_alive",
+      "ne": false
+     }
+    ]
+   },
+   {
+    "id": "npc_wren_room",
+    "npc": "wren",
+    "x": 7.0,
+    "z": -84.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "wren_alive",
+      "ne": false
+     }
+    ]
+   },
+   {
+    "id": "npc_annie_lund",
+    "npc": "annie_lund",
+    "x": -14.0,
+    "z": -47.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "lunds_stayed",
+      "eq": true
+     }
+    ],
+    "label": "Lunds (greenhouse)"
+   }
+  ],
+  "enemies": [
+   {
+    "id": "en_01",
+    "type": "remnant_patrol",
+    "x": -13.0,
+    "z": -5.0,
+    "group": "g_gate_a",
+    "tier": 5,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "ch10_no_standdown",
+      "eq": true
+     }
+    ]
+   },
+   {
+    "id": "en_02",
+    "type": "remnant_patrol",
+    "x": -7.0,
+    "z": -13.0,
+    "group": "g_gate_a",
+    "tier": 5,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "ch10_no_standdown",
+      "eq": true
+     }
+    ]
+   },
+   {
+    "id": "en_03",
+    "type": "remnant_patrol",
+    "x": 7.0,
+    "z": -11.0,
+    "group": "g_gate_a",
+    "tier": 5,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "ch10_no_standdown",
+      "eq": true
+     }
+    ]
+   },
+   {
+    "id": "en_04",
+    "type": "remnant_patrol",
+    "x": 13.0,
+    "z": -3.0,
+    "group": "g_gate_a",
+    "tier": 5,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "ch10_no_standdown",
+      "eq": true
+     }
+    ]
+   },
+   {
+    "id": "en_05",
+    "type": "remnant_patrol",
+    "x": -11.0,
+    "z": -19.0,
+    "group": "g_gate_b",
+    "tier": 5,
+    "behavior": "flank",
+    "hostile": "always",
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "ch10_no_standdown",
+      "eq": true
+     }
+    ]
+   },
+   {
+    "id": "en_06",
+    "type": "remnant_patrol",
+    "x": 9.0,
+    "z": -19.0,
+    "group": "g_gate_b",
+    "tier": 5,
+    "behavior": "flank",
+    "hostile": "always",
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "ch10_no_standdown",
+      "eq": true
+     }
+    ]
+   },
+   {
+    "id": "en_07",
+    "type": "remnant_patrol",
+    "x": -17.0,
+    "z": -1.0,
+    "group": "g_gate_b",
+    "tier": 5,
+    "behavior": "flank",
+    "hostile": "always",
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "ch10_no_standdown",
+      "eq": true
+     }
+    ]
+   },
+   {
+    "id": "en_08",
+    "type": "remnant_patrol",
+    "x": 17.0,
+    "z": 1.0,
+    "group": "g_gate_b",
+    "tier": 5,
+    "behavior": "flank",
+    "hostile": "always",
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "ch10_no_standdown",
+      "eq": true
+     }
+    ]
+   }
+  ],
+  "loot": [
+   {
+    "id": "loot_01",
+    "x": 17.0,
+    "z": -67.0,
+    "r": 1.6,
+    "label": "Plant stores",
+    "container": "locker",
+    "location": "loc_thomson_dam"
+   },
+   {
+    "id": "loot_02",
+    "x": -17.0,
+    "z": -39.0,
+    "r": 1.6,
+    "label": "Greenhouse shelf",
+    "container": "kitchen_cabinet",
+    "location": "loc_thomson_dam"
+   },
+   {
+    "id": "loot_03",
+    "x": -4.0,
+    "z": -32.0,
+    "r": 1.6,
+    "label": "Gate ammo crate",
+    "container": "military_crate",
+    "when": [
+     {
+      "flag": "ch10_no_standdown",
+      "eq": true
+     }
+    ],
+    "location": "loc_thomson_dam"
+   },
+   {
+    "id": "loot_04",
+    "x": 17.0,
+    "z": -47.0,
+    "r": 1.6,
+    "label": "Locker (filler)",
+    "container": "locker",
+    "location": "loc_thomson_dam",
+    "filler": true,
+    "guaranteed": [
+     {
+      "item": "water_clean",
+      "n": 1
+     }
+    ]
+   },
+   {
+    "id": "loot_05",
+    "x": 1.0,
+    "z": -57.0,
+    "r": 1.6,
+    "label": "Medicine cabinet (filler)",
+    "container": "medicine_cabinet",
+    "location": "loc_thomson_dam",
+    "filler": true,
+    "guaranteed": [
+     {
+      "item": "bandage",
+      "n": 1
+     }
+    ]
+   },
+   {
+    "id": "loot_06",
+    "x": -21.0,
+    "z": 5.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture (filler)",
+    "container": "woodpile",
+    "location": "loc_thomson_dam",
+    "filler": true,
+    "guaranteed": [
+     {
+      "item": "ration",
+      "n": 1
+     }
+    ]
+   }
+  ]
+ },
+ "props": [
+  {
+   "id": "prop_01",
+   "asset": "assets/kenney/industrial/detail-tank-large.glb",
+   "x": -1.0,
+   "z": -56.0,
+   "rotY": 0,
+   "h": 3.2,
+   "collide": true,
+   "tag": "Unit 1"
+  },
+  {
+   "id": "prop_02",
+   "asset": "assets/kenney/industrial/detail-tank-large.glb",
+   "x": 7.0,
+   "z": -56.0,
+   "rotY": 0,
+   "h": 3.2,
+   "collide": true,
+   "tag": "Unit 2 (running)"
+  },
+  {
+   "id": "prop_03",
+   "asset": "assets/kenney/industrial/detail-tank-large.glb",
+   "x": 15.0,
+   "z": -56.0,
+   "rotY": 0,
+   "h": 3.2,
+   "collide": true,
+   "tag": "Unit 3"
+  },
+  {
+   "id": "prop_04",
+   "asset": "assets/kenney/industrial/building-m.glb",
+   "x": 7.0,
+   "z": -69.0,
+   "rotY": 0.0,
+   "h": 13,
+   "collide": false,
+   "tag": "powerhouse silhouette"
+  },
+  {
+   "id": "prop_05",
+   "asset": "assets/kenney/industrial/chimney-medium.glb",
+   "x": 19.0,
+   "z": -73.0,
+   "rotY": 0,
+   "h": 11,
+   "collide": true,
+   "tag": "surge tower"
+  },
+  {
+   "id": "prop_06",
+   "asset": "assets/kenney/industrial/detail-tank.glb",
+   "x": -16.0,
+   "z": -85.0,
+   "rotY": 0,
+   "h": 4,
+   "collide": true
+  },
+  {
+   "id": "prop_07",
+   "asset": "assets/kenney/roads/light-square-double.glb",
+   "x": -3.0,
+   "z": -31.0,
+   "rotY": 0,
+   "h": 6,
+   "collide": true
+  },
+  {
+   "id": "prop_08",
+   "asset": "assets/kenney/roads/light-square-double.glb",
+   "x": 5.0,
+   "z": -31.0,
+   "rotY": 0,
+   "h": 6,
+   "collide": true
+  },
+  {
+   "id": "prop_09",
+   "asset": "assets/kenney/roads/construction-barrier.glb",
+   "x": -1.0,
+   "z": -23.0,
+   "rotY": 0,
+   "h": 1.1,
+   "collide": true
+  },
+  {
+   "id": "prop_10",
+   "asset": "assets/kenney/industrial/shipping-container-a.glb",
+   "x": -17.0,
+   "z": -15.0,
+   "rotY": 0.2,
+   "h": 2.6,
+   "collide": true,
+   "tag": "Remnant fuel trailer stand-in"
+  },
+  {
+   "id": "prop_11",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": 15.0,
+   "z": -17.0,
+   "rotY": -0.5,
+   "h": 1.45,
+   "collide": true
+  }
+ ],
+ "interactives": [
+  {
+   "id": "ch10_table",
+   "type": "choice_panel",
+   "x": 1.0,
+   "z": -81.0,
+   "r": 2.4,
+   "label": "The table (final choice)"
+  }
+ ],
+ "safeZones": [
+  {
+   "id": "safe_01",
+   "kind": "warm_room",
+   "x": 1.0,
+   "z": -83.0,
+   "r": 4.5,
+   "label": "Control room, 18 C",
+   "warmth": true,
+   "save": true,
+   "sealed": false
+  },
+  {
+   "id": "safe_02",
+   "kind": "warm_room",
+   "x": 7.0,
+   "z": -45.0,
+   "r": 5,
+   "label": "Powerhouse floor",
+   "warmth": true,
+   "save": true,
+   "sealed": false
+  },
+  {
+   "id": "safe_03",
+   "kind": "indoor",
+   "x": -14.0,
+   "z": -45.0,
+   "r": 3,
+   "label": "Greenhouse",
+   "warmth": true,
+   "save": true,
+   "sealed": false
+  }
+ ],
+ "setPieces": [
+  {
+   "id": "sp_ch10_mrap",
+   "type": "ironwood_mrap",
+   "path": [
+    [
+     0.0,
+     3.0
+    ],
+    [
+     0.0,
+     -15.0
+    ],
+    [
+     0.0,
+     -21.0
+    ]
+   ],
+   "when": [
+    {
+     "flag": "ch10_no_standdown",
+     "eq": true
+    }
+   ],
+   "note": "Never dueled; disable or survive."
+  }
+ ],
+ "encounters": [
+  {
+   "id": "enc_gate",
+   "area": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -28.0,
+    "x1": 22.0,
+    "z1": 6.0
+   },
+   "groups": [
+    {
+     "group": "g_gate_a",
+     "wave": 1
+    },
+    {
+     "group": "g_gate_b",
+     "wave": 2
+    }
+   ],
+   "note": "0 enemies if the Remnant stands down."
+  }
+ ],
+ "triggers": [
+  {
+   "id": "t_ch10_start",
+   "on": "load",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": 0.0,
+    "z": -32.0,
+    "r": 3
+   },
+   "actions": [
+    {
+     "type": "checkpoint"
+    }
+   ]
+  },
+  {
+   "id": "t_ch10_gate",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -6.0,
+    "z0": -28.0,
+    "x1": 6.0,
+    "z1": -22.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch10_gate"
+    }
+   ]
+  },
+  {
+   "id": "t_ch10_battle",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -28.0,
+    "x1": 22.0,
+    "z1": 6.0
+   },
+   "actions": [
+    {
+     "type": "activate_group",
+     "group": "g_gate_a"
+    },
+    {
+     "type": "spawn_setpiece",
+     "id": "sp_ch10_mrap"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch10_no_standdown",
+     "eq": true
+    }
+   ],
+   "note": "Engine sets ch10_no_standdown when NOT ruiz_defected AND strand_stance!=governor AND ironwood_hostility>=5."
+  },
+  {
+   "id": "t_ch10_wave2",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -28.0,
+    "x1": 22.0,
+    "z1": 6.0
+   },
+   "actions": [
+    {
+     "type": "activate_group",
+     "group": "g_gate_b"
+    }
+   ],
+   "when": [
+    {
+     "flag": "cleared.g_gate_a",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch10_room",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -6.0,
+    "z0": -90.0,
+    "x1": 8.0,
+    "z1": -76.0
+   },
+   "actions": [
+    {
+     "type": "set_weather",
+     "weather": "clear_cold",
+     "blendSec": 60,
+     "tempC": -38
+    },
+    {
+     "type": "dialogue",
+     "id": "ch10_final"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch10_gate_resolved",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch10_gate_block",
+   "on": "enter",
+   "once": false,
+   "shape": {
+    "type": "rect",
+    "x0": -4.0,
+    "z0": -36.0,
+    "x1": 4.0,
+    "z1": -32.0
+   },
+   "actions": [
+    {
+     "type": "bark",
+     "speaker": "dell",
+     "text": "The gate first."
+    },
+    {
+     "type": "push_back"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch10_gate_resolved",
+     "ne": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch10_end",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -6.0,
+    "z0": -90.0,
+    "x1": 8.0,
+    "z1": -76.0
+   },
+   "actions": [
+    {
+     "type": "story_check",
+     "id": "endings"
+    },
+    {
+     "type": "dialogue",
+     "id": "ch10_epilogue"
+    },
+    {
+     "type": "chapter_end",
+     "next": null
+    }
+   ],
+   "when": [
+    {
+     "flag": "final_choice",
+     "ne": null
+    }
+   ]
+  }
+ ],
+ "objectives": [
+  {
+   "id": "o1",
+   "order": 1,
+   "text": "Hold the gate long enough to talk (or fight)",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch10_gate_resolved",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o2",
+   "order": 2,
+   "text": "Hear each faction's offer",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch10_offers_heard",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o3",
+   "order": 3,
+   "text": "Decide who controls the dam",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "final_choice",
+     "ne": null
+    }
+   ]
+  }
+ ]
+}

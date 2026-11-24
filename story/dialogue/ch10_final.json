@@ -1,0 +1,378 @@
+{
+  "id": "ch10_final",
+  "chapter": "ch10",
+  "location": "loc_thomson_dam",
+  "trigger": "Control room. Final decision.",
+  "speakers": [
+    "bea",
+    "jory",
+    "strand",
+    "dell",
+    "theo",
+    "narrator"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "They all talk at once, then they all stop and look at you. The turbine hums.",
+      "next": "pitches"
+    },
+    {
+      "id": "pitches",
+      "speaker": "narrator",
+      "text": "Hear each pitch, or decide now.",
+      "choices": [
+        {
+          "text": "Strand, go.",
+          "next": "p_strand",
+          "conditions": [
+            {
+              "flag": "strand_alive",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "text": "Jory, go.",
+          "next": "p_jory",
+          "conditions": [
+            {
+              "flag": "jory_alive",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "text": "Bea, go.",
+          "next": "p_bea",
+          "conditions": [
+            {
+              "flag": "bea_alive",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "text": "[Decide]",
+          "next": "decide"
+        }
+      ]
+    },
+    {
+      "id": "p_strand",
+      "speaker": "strand",
+      "text": "A list. Honest this time. Capacity is 400 heated beds. We pick by survivability. It saves the most.",
+      "branches": [
+        {
+          "next": "p_strand_t",
+          "conditions": [
+            {
+              "flag": "ch02_strand_truth",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "pitches"
+        }
+      ]
+    },
+    {
+      "id": "p_strand_t",
+      "speaker": "strand",
+      "text": "You knew about the 41 days before anyone. You kept it. So you know I can count, and I can lie. I won't.",
+      "next": "pitches"
+    },
+    {
+      "id": "p_jory",
+      "speaker": "jory",
+      "text": "Strip it, haul it north. Mine shafts sit at seven degrees forever. We farm under lamps. It saves the Range.",
+      "branches": [
+        {
+          "next": "p_jory_t",
+          "conditions": [
+            {
+              "flag": "jory_secret_known",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "pitches"
+        }
+      ]
+    },
+    {
+      "id": "p_jory_t",
+      "speaker": "jory",
+      "text": "Thirty-one names in my coat, neighbor. I'm not asking you to trust me. I'm asking you to trust the rock.",
+      "next": "pitches"
+    },
+    {
+      "id": "p_bea",
+      "speaker": "bea",
+      "text": "The Harbor runs it. We've fed people all winter. Show of hands... okay, fine, it's my turn, I know.",
+      "branches": [
+        {
+          "next": "p_bea_t",
+          "conditions": [
+            {
+              "flag": "bea_guns_known",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "pitches"
+        }
+      ]
+    },
+    {
+      "id": "p_bea_t",
+      "speaker": "bea",
+      "text": "And yes, I bought guns with grain. Those guns are why there's a Harbor to have a vote. Here's the deal.",
+      "next": "pitches"
+    },
+    {
+      "id": "decide",
+      "speaker": "theo",
+      "text": "ma. hank said ask the room. so... ask the room?",
+      "choices": [
+        {
+          "text": "A council. Everyone at one table.",
+          "next": "c_council",
+          "conditions": [
+            {
+              "flag": "kindness",
+              "gte": 5
+            },
+            {
+              "flag": "dam_running",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "text": "Strand runs it. The list.",
+          "next": "c_auth",
+          "conditions": [
+            {
+              "flag": "strand_alive",
+              "eq": true
+            },
+            {
+              "flag": "rep_authority",
+              "gte": 3
+            }
+          ]
+        },
+        {
+          "text": "The Compact takes it north.",
+          "next": "c_compact",
+          "conditions": [
+            {
+              "flag": "jory_alive",
+              "eq": true
+            },
+            {
+              "flag": "rep_compact",
+              "gte": 3
+            }
+          ]
+        },
+        {
+          "text": "[Open the spillways. Shut it down.]",
+          "next": "c_shutdown"
+        },
+        {
+          "text": "[Take Theo and go]",
+          "next": "c_leave"
+        }
+      ]
+    },
+    {
+      "id": "c_council",
+      "speaker": "dell",
+      "text": "Not mine. Not yours. Ours. Every name in this room goes on the board, and we argue it out.",
+      "effects": [
+        {
+          "set": "final_choice",
+          "value": "council"
+        }
+      ],
+      "next": "r_council"
+    },
+    {
+      "id": "r_council",
+      "speaker": "narrator",
+      "text": "Bea laughs. Jory groans. Strand, if she's here, picks up the chalk.",
+      "branches": [
+        {
+          "next": "warm",
+          "conditions": [
+            {
+              "flag": "dam_running",
+              "eq": true
+            },
+            {
+              "flag": "kindness",
+              "gte": 5
+            },
+            {
+              "count_true": [
+                "pruitt_alive",
+                "wren_alive",
+                "ray_alive",
+                "cody_alive",
+                "marguerite_alive",
+                "ruiz_defected",
+                "lunds_stayed"
+              ],
+              "gte": 3
+            },
+            {
+              "any": [
+                {
+                  "flag": "rep_harbor",
+                  "gte": 2
+                },
+                {
+                  "flag": "strand_stance",
+                  "eq": "governor"
+                },
+                {
+                  "flag": "ruiz_defected",
+                  "eq": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "next": "council_fail"
+        }
+      ]
+    },
+    {
+      "id": "council_fail",
+      "speaker": "narrator",
+      "text": "But too few people trust each other. Too few are left. By the second vote, the room has split.",
+      "next": "two_coats"
+    },
+    {
+      "id": "warm",
+      "speaker": "narrator",
+      "text": "THE WARM ROOM.",
+      "effects": [
+        {
+          "set": "ending",
+          "value": "end_warm_room"
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "c_auth",
+      "speaker": "dell",
+      "text": "Run the list, Yvonne. Make it honest.",
+      "effects": [
+        {
+          "set": "final_choice",
+          "value": "authority"
+        },
+        {
+          "set": "ending",
+          "value": "end_ledger"
+        }
+      ],
+      "next": "ledger"
+    },
+    {
+      "id": "ledger",
+      "speaker": "narrator",
+      "text": "THE LEDGER.",
+      "next": "end"
+    },
+    {
+      "id": "c_compact",
+      "speaker": "dell",
+      "text": "Take it north, Jory. Keep them alive down there.",
+      "effects": [
+        {
+          "set": "final_choice",
+          "value": "compact"
+        },
+        {
+          "set": "ending",
+          "value": "end_iron_range"
+        }
+      ],
+      "next": "range"
+    },
+    {
+      "id": "range",
+      "speaker": "narrator",
+      "text": "THE IRON RANGE.",
+      "next": "end"
+    },
+    {
+      "id": "c_shutdown",
+      "speaker": "dell",
+      "text": "Nobody dies for this room again. We walk.",
+      "effects": [
+        {
+          "set": "final_choice",
+          "value": "shutdown"
+        },
+        {
+          "set": "ending",
+          "value": "end_dark_water"
+        }
+      ],
+      "next": "dark"
+    },
+    {
+      "id": "dark",
+      "speaker": "narrator",
+      "text": "DARK WATER.",
+      "next": "end"
+    },
+    {
+      "id": "c_leave",
+      "speaker": "dell",
+      "text": "[To Theo] Get your coat. Both coats.",
+      "effects": [
+        {
+          "set": "final_choice",
+          "value": "leave"
+        }
+      ],
+      "next": "two_coats"
+    },
+    {
+      "id": "two_coats",
+      "speaker": "narrator",
+      "text": "TWO COATS.",
+      "effects": [
+        {
+          "set": "ending",
+          "value": "end_two_coats"
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "[Epilogue: see story_bible.md §9 and flags.json endings]",
+      "effects": [
+        {
+          "event": "play_epilogue"
+        }
+      ],
+      "end": true
+    }
+  ]
+}

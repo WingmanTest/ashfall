@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "quests": {
+    "q_cooler": {
+      "title": "Keep It Cold",
+      "chapter": "ch01",
+      "desc": "Build a lake-water cooler for Theo's spare insulin.",
+      "stages": [
+        "start",
+        "complete"
+      ]
+    },
+    "q_insulin": {
+      "title": "Tier Two",
+      "chapter": "ch02",
+      "desc": "Get Theo's insulin through the registry or otherwise.",
+      "stages": [
+        "start",
+        "hospital",
+        "complete"
+      ]
+    },
+    "q_hospital_diesel": {
+      "title": "Level Three",
+      "chapter": "ch02",
+      "desc": "Drain the tanker in the hospital parking ramp for Dr. Ames.",
+      "stages": [
+        "start",
+        "complete"
+      ]
+    },
+    "q_find_hank": {
+      "title": "Bring Your Head",
+      "chapter": "ch03",
+      "desc": "Reach Hank at Lou's shack in Proctor.",
+      "stages": [
+        "start",
+        "complete"
+      ]
+    },
+    "q_black_start": {
+      "title": "Black Start",
+      "chapter": "ch03-ch04",
+      "desc": "Restart Thomson Unit 2.",
+      "stages": [
+        "start",
+        "complete"
+      ]
+    },
+    "q_find_theo": {
+      "title": "don't be mad",
+      "chapter": "ch06",
+      "desc": "Find Theo in the port.",
+      "stages": [
+        "start",
+        "complete"
+      ]
+    }
+  }
+}

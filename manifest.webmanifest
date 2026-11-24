@@ -1,0 +1,12 @@
+{
+  "name": "ASHFALL",
+  "short_name": "ASHFALL",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#07090c",
+  "theme_color": "#07090c",
+  "lang": "en",
+  "scope": "./",
+  "id": "./"
+}

@@ -1,0 +1,267 @@
+{
+  "id": "ch05_jory_blockade",
+  "chapter": "ch05",
+  "location": "loc_hwy53_blockade",
+  "trigger": "Convoy halts at the Hwy 53 overpass. Jory approaches under a white rag.",
+  "speakers": [
+    "jory",
+    "dell",
+    "narrator",
+    "ruiz"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Logging trucks across the road. Deer rifles behind them. A man walks out with a white rag.",
+      "effects": [
+        {
+          "set": "jory_met",
+          "value": true
+        }
+      ],
+      "next": "j1"
+    },
+    {
+      "id": "j1",
+      "speaker": "jory",
+      "text": "Not you, soldiers. Her. Neighbor, can we talk like people for a minute?",
+      "next": "j2"
+    },
+    {
+      "id": "j2",
+      "speaker": "jory",
+      "text": "That grain grew in Minnesota. Your Directive's shipping it to men who never saw a winter.",
+      "next": "j3"
+    },
+    {
+      "id": "j3",
+      "speaker": "jory",
+      "text": "We're not stopping a train. We're stopping a robbery. You get the difference?",
+      "choices": [
+        {
+          "text": "Philadelphia is starving too.",
+          "next": "philly"
+        },
+        {
+          "text": "And the Range? Who's feeding them?",
+          "next": "range"
+        },
+        {
+          "text": "What do you want from me?",
+          "next": "want"
+        }
+      ]
+    },
+    {
+      "id": "philly",
+      "speaker": "jory",
+      "text": "Sure is. So's Hibbing. That dog won't hunt, neighbor. Charity starts in the county.",
+      "next": "want"
+    },
+    {
+      "id": "range",
+      "speaker": "jory",
+      "text": "We are. Barely. Ask anybody.",
+      "choices": [
+        {
+          "text": "I heard about the Hibbing nursing home.",
+          "next": "hibbing",
+          "conditions": [
+            {
+              "any": [
+                {
+                  "flag": "lou_met",
+                  "eq": true
+                },
+                {
+                  "flag": "dam_secret_told",
+                  "eq": "harbor"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "[Let it go]",
+          "next": "want"
+        }
+      ]
+    },
+    {
+      "id": "hibbing",
+      "speaker": "narrator",
+      "text": "His face doesn't change. His hand goes to his coat pocket, where there's paper.",
+      "effects": [
+        {
+          "set": "jory_secret_known",
+          "value": true
+        }
+      ],
+      "next": "hibbing2"
+    },
+    {
+      "id": "hibbing2",
+      "speaker": "jory",
+      "text": "Thirty-one. Blockade held, trucks didn't get through. I made that call.",
+      "branches": [
+        {
+          "next": "hibbing_kind",
+          "conditions": [
+            {
+              "flag": "kindness",
+              "gte": 4
+            }
+          ]
+        },
+        {
+          "next": "hibbing_hard"
+        }
+      ]
+    },
+    {
+      "id": "hibbing_kind",
+      "speaker": "jory",
+      "text": "I carry their names. I'd make it again, and I'll be in hell for it. That honest enough?",
+      "effects": [
+        {
+          "trust": "jory",
+          "delta": 1
+        }
+      ],
+      "next": "want"
+    },
+    {
+      "id": "hibbing_hard",
+      "speaker": "jory",
+      "text": "War's arithmetic. You'd know. You work for the people with the calculator.",
+      "effects": [
+        {
+          "trust": "jory",
+          "delta": -2
+        }
+      ],
+      "next": "want"
+    },
+    {
+      "id": "want",
+      "speaker": "jory",
+      "text": "The signal cabinet. You turn it on, the trains go. You don't, they don't. Simple.",
+      "next": "j4"
+    },
+    {
+      "id": "j4",
+      "speaker": "ruiz",
+      "text": "Kowalczyk. We're exposed. Thirty seconds.",
+      "choices": [
+        {
+          "text": "[Energize the signals]",
+          "next": "escort"
+        },
+        {
+          "text": "[Short the cabinet]",
+          "next": "sabotage"
+        },
+        {
+          "text": "[Switch half the cars to the Harbor siding]",
+          "next": "divert"
+        }
+      ]
+    },
+    {
+      "id": "escort",
+      "speaker": "narrator",
+      "text": "Green lights down the line. The trains roll. Jory's men open fire, and the MRAP answers.",
+      "effects": [
+        {
+          "set": "convoy_choice",
+          "value": "escort"
+        },
+        {
+          "add": "rep_authority",
+          "value": 2
+        },
+        {
+          "add": "rep_compact",
+          "value": -2
+        },
+        {
+          "trust": "jory",
+          "delta": -3
+        },
+        {
+          "event": "encounter",
+          "id": "enc_ch05_compact_attack"
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "sabotage",
+      "speaker": "narrator",
+      "text": "Sparks. The signals die red. Ruiz stares at you. Then the drone turns toward you.",
+      "effects": [
+        {
+          "set": "convoy_choice",
+          "value": "sabotage"
+        },
+        {
+          "add": "rep_compact",
+          "value": 3
+        },
+        {
+          "trust": "jory",
+          "delta": 4
+        },
+        {
+          "add": "ironwood_hostility",
+          "value": 3
+        },
+        {
+          "trust": "ruiz",
+          "delta": -2
+        },
+        {
+          "event": "encounter",
+          "id": "enc_ch05_ironwood_turn"
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "divert",
+      "speaker": "narrator",
+      "text": "Clack. Eleven cars peel off toward the docks. Nobody notices for a minute. Then everyone does.",
+      "effects": [
+        {
+          "set": "convoy_choice",
+          "value": "divert"
+        },
+        {
+          "add": "rep_harbor",
+          "value": 2
+        },
+        {
+          "add": "ironwood_hostility",
+          "value": 1
+        },
+        {
+          "trust": "bea",
+          "delta": 2
+        },
+        {
+          "event": "encounter",
+          "id": "enc_ch05_crossfire"
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "Under the overpass, someone is calling for his dad.",
+      "end": true
+    }
+  ]
+}

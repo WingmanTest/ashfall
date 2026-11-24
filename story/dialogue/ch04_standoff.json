@@ -1,0 +1,110 @@
+{
+  "id": "ch04_standoff",
+  "chapter": "ch04",
+  "location": "loc_thomson_dam",
+  "trigger": "Only if dam_secret_told == authority. Guard squad arrives during the black start.",
+  "speakers": [
+    "strand",
+    "hank",
+    "dell",
+    "narrator"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Headlights on the access road. A Guard squad, eight of them, rifles up. Strand is with them.",
+      "branches": [
+        {
+          "next": "calm",
+          "conditions": [
+            {
+              "trust": "strand",
+              "gte": 2
+            }
+          ]
+        },
+        {
+          "next": "shot"
+        }
+      ]
+    },
+    {
+      "id": "calm",
+      "speaker": "strand",
+      "text": "Easy. Everyone easy. Ms. Kowalczyk, we brought the relay kit. And dinner.",
+      "effects": [
+        {
+          "give": "relay_kit",
+          "qty": 1
+        },
+        {
+          "set": "relay_source",
+          "value": "authority"
+        }
+      ],
+      "next": "calm2"
+    },
+    {
+      "id": "calm2",
+      "speaker": "hank",
+      "text": "Brought guns too, I see.",
+      "next": "calm3"
+    },
+    {
+      "id": "calm3",
+      "speaker": "strand",
+      "text": "I bring guns to everything now. Show me what you need, Mr. Lindqvist.",
+      "end": true
+    },
+    {
+      "id": "shot",
+      "speaker": "narrator",
+      "text": "Someone startles. A private fires once at the powerhouse door. Hank goes down.",
+      "effects": [
+        {
+          "set": "hank_alive",
+          "value": false
+        },
+        {
+          "event": "npc_death",
+          "npc": "hank"
+        }
+      ],
+      "next": "shot2"
+    },
+    {
+      "id": "shot2",
+      "speaker": "strand",
+      "text": "CEASE FIRE. Cease— God. Medic! Ms. Kowalczyk, I'm sorry. I am.",
+      "next": "shot3"
+    },
+    {
+      "id": "shot3",
+      "speaker": "narrator",
+      "text": "Hank grabs your sleeve. 'Exciter first. Then sync. Don't— let them make it a fort.'",
+      "next": "shot4"
+    },
+    {
+      "id": "shot4",
+      "speaker": "narrator",
+      "text": "He's gone before the medic gets the coat open.",
+      "effects": [
+        {
+          "give": "relay_kit",
+          "qty": 1
+        },
+        {
+          "set": "relay_source",
+          "value": "authority"
+        },
+        {
+          "trust": "strand",
+          "delta": -2
+        }
+      ],
+      "end": true
+    }
+  ]
+}

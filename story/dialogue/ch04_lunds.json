@@ -1,0 +1,173 @@
+{
+  "id": "ch04_lunds",
+  "chapter": "ch04",
+  "location": "loc_thomson_dam",
+  "trigger": "Enter the powerhouse. Smoke from a barrel fire.",
+  "speakers": [
+    "pete_lund",
+    "dell",
+    "hank",
+    "narrator"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Inside the powerhouse: a barrel fire. Three kids under a tarp. Binders of manuals, half burned.",
+      "next": "p1"
+    },
+    {
+      "id": "p1",
+      "speaker": "pete_lund",
+      "text": "That's close enough. I got two shells and three kids. Don't make me count.",
+      "choices": [
+        {
+          "text": "We're here to start the plant.",
+          "next": "start_plant"
+        },
+        {
+          "text": "[Raise your rifle]",
+          "next": "threat"
+        },
+        {
+          "text": "[Hold out a can of food]",
+          "next": "food",
+          "conditions": [
+            {
+              "item": "canned_food",
+              "gte": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "food",
+      "speaker": "pete_lund",
+      "text": "...Annie. Annie, they've got chili.",
+      "effects": [
+        {
+          "take": "canned_food",
+          "qty": 1
+        },
+        {
+          "add": "kindness",
+          "value": 1
+        }
+      ],
+      "next": "food2"
+    },
+    {
+      "id": "food2",
+      "speaker": "pete_lund",
+      "text": "Pete Lund. Esko. Farm's gone, the barn caved in. This place had walls.",
+      "next": "start_plant"
+    },
+    {
+      "id": "start_plant",
+      "speaker": "hank",
+      "text": "Mister, you're burning my startup procedure. Page 40's in that barrel.",
+      "next": "p2"
+    },
+    {
+      "id": "p2",
+      "speaker": "pete_lund",
+      "text": "Pages burn. Kids don't. Where were you in December?",
+      "choices": [
+        {
+          "text": "Stay. Help us run it. You'll be warm.",
+          "next": "stay",
+          "effects": [
+            {
+              "set": "lunds_stayed",
+              "value": true
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            },
+            {
+              "trust": "hank",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "text": "You can stay till spring. Then go.",
+          "next": "partial",
+          "effects": [
+            {
+              "set": "lunds_stayed",
+              "value": true
+            }
+          ]
+        },
+        {
+          "text": "You need to leave. This place gets ugly.",
+          "next": "leave"
+        }
+      ]
+    },
+    {
+      "id": "stay",
+      "speaker": "pete_lund",
+      "text": "...Warm. Okay. I can lift. Annie can wire, she did the barn.",
+      "next": "stay2"
+    },
+    {
+      "id": "stay2",
+      "speaker": "hank",
+      "text": "Fine. Nobody touches the binders. Kid, you got a crew.",
+      "next": "end"
+    },
+    {
+      "id": "partial",
+      "speaker": "pete_lund",
+      "text": "Spring. Okay. Spring's a long way.",
+      "next": "end"
+    },
+    {
+      "id": "leave",
+      "speaker": "pete_lund",
+      "text": "Dangerous. Lady, it's minus twenty-five. Dangerous is the walk.",
+      "next": "leave2"
+    },
+    {
+      "id": "leave2",
+      "speaker": "narrator",
+      "text": "He packs. It takes an hour. Nobody speaks. The youngest waves at Theo from the door.",
+      "effects": [
+        {
+          "set": "lunds_stayed",
+          "value": false
+        }
+      ],
+      "next": "leave3"
+    },
+    {
+      "id": "leave3",
+      "speaker": "hank",
+      "text": "Hell of a way to start a power plant.",
+      "next": "end"
+    },
+    {
+      "id": "threat",
+      "speaker": "pete_lund",
+      "text": "Go on, then. Do it in front of them.",
+      "effects": [
+        {
+          "trust": "hank",
+          "delta": -1
+        }
+      ],
+      "next": "p2"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "Headgate deck next. The river under the ice is loud.",
+      "end": true
+    }
+  ]
+}

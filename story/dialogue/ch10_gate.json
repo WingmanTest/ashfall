@@ -1,0 +1,150 @@
+{
+  "id": "ch10_gate",
+  "chapter": "ch10",
+  "location": "loc_thomson_dam",
+  "trigger": "Arrival at the dam gate. Kessler's Remnant is in the snow outside.",
+  "speakers": [
+    "kessler",
+    "ruiz",
+    "strand",
+    "dell",
+    "narrator"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "kessler",
+      "text": "Ms. Kowalczyk. Dale Kessler. I have forty soldiers, nine hundred liters of diesel, and no orders.",
+      "next": "k1"
+    },
+    {
+      "id": "k1",
+      "speaker": "kessler",
+      "text": "Philadelphia is gone. I checked. I'd like operational control of this facility. I'm asking. Once.",
+      "branches": [
+        {
+          "next": "ruiz",
+          "conditions": [
+            {
+              "flag": "ruiz_defected",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "strand",
+          "conditions": [
+            {
+              "flag": "strand_stance",
+              "eq": "governor"
+            },
+            {
+              "flag": "strand_alive",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "fight",
+          "conditions": [
+            {
+              "flag": "ironwood_hostility",
+              "gte": 5
+            }
+          ]
+        },
+        {
+          "next": "talk"
+        }
+      ]
+    },
+    {
+      "id": "ruiz",
+      "speaker": "ruiz",
+      "text": "Sir. It's Ruiz. Lopez, Okafor, Tran, you know me. There's soup inside. There's no war in there.",
+      "next": "standdown"
+    },
+    {
+      "id": "strand",
+      "speaker": "strand",
+      "text": "Major. Northland Guard. Any of mine in your ranks are released. Come in or go home.",
+      "next": "standdown"
+    },
+    {
+      "id": "standdown",
+      "speaker": "narrator",
+      "text": "One soldier lowers his rifle. Then four. Then most. Kessler watches them go in, then follows, last.",
+      "effects": [
+        {
+          "set": "remnant_stood_down",
+          "value": true
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "fight",
+      "speaker": "kessler",
+      "text": "Then we do this the old way. I'm sorry. I truly am.",
+      "effects": [
+        {
+          "event": "encounter",
+          "id": "enc_ch10_gate_battle"
+        }
+      ],
+      "next": "fight2"
+    },
+    {
+      "id": "fight2",
+      "speaker": "narrator",
+      "text": "It lasts eleven minutes. Afterward, the snow is quiet again and there are fewer of everyone.",
+      "effects": [
+        {
+          "set": "remnant_stood_down",
+          "value": false
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "talk",
+      "speaker": "dell",
+      "text": "Bring your diesel inside. You get a vote. One. Same as everyone.",
+      "choices": [
+        {
+          "text": "That's the offer.",
+          "next": "talk2"
+        },
+        {
+          "text": "[Lower your rifle first]",
+          "next": "talk2",
+          "effects": [
+            {
+              "add": "kindness",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "talk2",
+      "speaker": "kessler",
+      "text": "...A vote. Christ. All right. I'll take a warm vote over a cold command.",
+      "effects": [
+        {
+          "set": "remnant_stood_down",
+          "value": true
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "Inside: the control room, 18 °C, and every faction that's left.",
+      "end": true
+    }
+  ]
+}

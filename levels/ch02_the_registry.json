@@ -1,0 +1,1292 @@
+{
+ "$schema": "./schema.json",
+ "formatVersion": 1,
+ "id": "ch02_the_registry",
+ "chapter": 2,
+ "title": "The Registry",
+ "act": "I",
+ "storyFile": "story/chapters/ch02_the_registry.md",
+ "next": "ch03_the_long_cold",
+ "summary": "Blatnik bridge checkpoint -> DECC ration line & registry -> Lakehead Memorial; crush escape set piece.",
+ "difficulty": 1,
+ "units": "meters",
+ "grid": {
+  "cellSize": 2.0,
+  "cols": 24,
+  "rows": 60,
+  "origin": {
+   "x": -24.0,
+   "z": -112.0
+  },
+  "legend": {
+   "#": {
+    "name": "wall",
+    "walkable": false,
+    "solid": true,
+    "height": 4,
+    "wallTex": "red_brick",
+    "preview": "#5a3a32"
+   },
+   ",": {
+    "name": "interior_floor",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirty_concrete",
+    "roof": true,
+    "preview": "#b8ad98"
+   },
+   ".": {
+    "name": "snow_ground",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "snow_02",
+    "preview": "#d9e1e8"
+   },
+   "=": {
+    "name": "road",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "asphalt_snow",
+    "preview": "#8d969e"
+   },
+   "D": {
+    "name": "door",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirty_concrete",
+    "door": true,
+    "preview": "#e0a040"
+   },
+   "H": {
+    "name": "high_wall",
+    "walkable": false,
+    "solid": true,
+    "height": 8,
+    "wallTex": "dirty_concrete",
+    "preview": "#3c3f44"
+   },
+   "U": {
+    "name": "covered_floor",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "road_damaged",
+    "roof": true,
+    "roofHeight": 5,
+    "blocksAirLOS": true,
+    "preview": "#5f6a72"
+   },
+   "b": {
+    "name": "bridge_deck",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "rusty_metal",
+    "preview": "#7a6a5a"
+   },
+   "c": {
+    "name": "cover_low",
+    "walkable": false,
+    "solid": true,
+    "height": 1.0,
+    "wallTex": "dirt",
+    "cover": true,
+    "preview": "#a08850"
+   },
+   "f": {
+    "name": "fence",
+    "walkable": false,
+    "solid": true,
+    "height": 1.3,
+    "wallTex": "rusty_corrugated_iron",
+    "preview": "#8a5a3a"
+   },
+   "~": {
+    "name": "open_water",
+    "walkable": false,
+    "solid": false,
+    "height": -0.6,
+    "floorTex": "dirty_concrete",
+    "water": true,
+    "preview": "#2f4a63"
+   }
+  },
+  "tiles": [
+   "HHHHHHHHHHHHHHHHHHHHHHHH",
+   "HHHHHHH###############.H",
+   "HHUUUUH#,,,,,,,,,,,,,#.H",
+   "HHUUUUH#,,,,,,,,,,,,,#.H",
+   "HHUUUUH###D#######D###.H",
+   "HHUUUUD#,,,,,,,,,,,,,#.H",
+   "HHUUUUH#,,,,,,,,,,,,,#.H",
+   "HHUUUUH###D##D########.H",
+   "HHUUUUH#,,,,,,,,,,,,,#.H",
+   "HHUUUUH#,,,,,,,,,,,,,#.H",
+   "HHHDHHH######D########.H",
+   "H======================H",
+   "H======================H",
+   "H########..............H",
+   "H#,,,,,,#..............H",
+   "H#,,,,,,#..............H",
+   "H#,,,,,,#..............H",
+   "H#,,,,,,D..ffffffffff..H",
+   "H#,,,,,,#..............H",
+   "H#,,,,,,#..............H",
+   "H###D####.ffffffffff...H",
+   "H#,,,,,,#.............DH",
+   "H#,,,,,,#..............H",
+   "H#,,,,,,#..ffffffffff..H",
+   "H#,,,,,,D..............H",
+   "H#,,,,,,#..............H",
+   "H#,,,,,,#.ffffffffff...H",
+   "H########..............H",
+   "H.........====.........H",
+   "H.........====.........H",
+   "H.........====.........H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fcbbcf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H~~~~~~~~fbbbbf~~~~~~~~H",
+   "H.........====.........H",
+   "H.........====.........H",
+   "H.........====.........H",
+   "H.........====.........H",
+   "H.........====.........H",
+   "HHHHHHHHHHHHHHHHHHHHHHHH"
+  ]
+ },
+ "environment": {
+  "timeStart": 0.42,
+  "timeEnd": 0.6,
+  "timeLocked": true,
+  "weather": "snow",
+  "tempC": -4,
+  "blizzard": false,
+  "snowCover": 0.5,
+  "particles": "snow",
+  "fogNear": 8,
+  "fogFar": 48,
+  "palette": "assets/palettes/endesga-32.json",
+  "ambientTint": "#c9d6e6",
+  "hud": {
+   "temp": false,
+   "hunger": true,
+   "rad": false,
+   "filter": false,
+   "seal": false
+  },
+  "warmthDrainMul": 0.5,
+  "maxAliveEnemies": 5
+ },
+ "locations": [
+  {
+   "id": "loc_blatnik_bridge",
+   "x": 0.0,
+   "z": -22.0,
+   "rect": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -50.0,
+    "x1": 22.0,
+    "z1": 6.0
+   },
+   "safe": false
+  },
+  {
+   "id": "loc_decc_ration",
+   "x": 0.0,
+   "z": -68.0,
+   "rect": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -86.0,
+    "x1": 22.0,
+    "z1": -50.0
+   },
+   "safe": false
+  },
+  {
+   "id": "loc_lakehead_memorial",
+   "x": -1.0,
+   "z": -100.0,
+   "rect": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -110.0,
+    "x1": 20.0,
+    "z1": -90.0
+   },
+   "safe": false
+  }
+ ],
+ "landmarks": [
+  {
+   "label": "Blatnik checkpoint",
+   "x": 0.0,
+   "z": -21.0
+  },
+  {
+   "label": "DECC",
+   "x": -14.0,
+   "z": -75.0
+  },
+  {
+   "label": "Ration line",
+   "x": 7.0,
+   "z": -67.0
+  },
+  {
+   "label": "Lakehead Memorial",
+   "x": 5.0,
+   "z": -100.0
+  },
+  {
+   "label": "Parking garage",
+   "x": -16.0,
+   "z": -101.0
+  }
+ ],
+ "paths": {
+  "critical": [
+   [
+    0.0,
+    3.0
+   ],
+   [
+    0.0,
+    -19.0
+   ],
+   [
+    0.0,
+    -49.0
+   ],
+   [
+    0.0,
+    -55.0
+   ],
+   [
+    -3.0,
+    -57.0
+   ],
+   [
+    17.0,
+    -61.0
+   ],
+   [
+    -1.0,
+    -67.0
+   ],
+   [
+    17.0,
+    -73.0
+   ],
+   [
+    -3.0,
+    -79.0
+   ],
+   [
+    -7.0,
+    -77.0
+   ],
+   [
+    -15.0,
+    -73.0
+   ],
+   [
+    -15.0,
+    -69.0
+   ],
+   [
+    -7.0,
+    -63.0
+   ],
+   [
+    1.0,
+    -55.0
+   ],
+   [
+    1.0,
+    -85.0
+   ],
+   [
+    3.0,
+    -91.0
+   ],
+   [
+    3.0,
+    -99.0
+   ],
+   [
+    15.0,
+    -100.0
+   ]
+  ],
+  "optional": [
+   {
+    "id": "b_garage",
+    "label": "Diesel side job: parking garage",
+    "points": [
+     [
+      -3.0,
+      -100.0
+     ],
+     [
+      -11.0,
+      -101.0
+     ],
+     [
+      -18.0,
+      -106.0
+     ]
+    ]
+   },
+   {
+    "id": "b_crush_exit",
+    "label": "Crush escape east gate",
+    "points": [
+     [
+      7.0,
+      -67.0
+     ],
+     [
+      19.0,
+      -69.0
+     ],
+     [
+      21.0,
+      -69.0
+     ]
+    ]
+   }
+  ]
+ },
+ "spawns": {
+  "player": [
+   {
+    "id": "spawn_default",
+    "x": 0.0,
+    "z": 3.0,
+    "rotY": 3.142
+   }
+  ],
+  "npcs": [
+   {
+    "id": "npc_cpl_haas",
+    "npc": "cpl_haas",
+    "x": 1.0,
+    "z": -19.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch02_haas_checkpoint",
+    "label": "Cpl. Haas"
+   },
+   {
+    "id": "npc_wren",
+    "npc": "wren",
+    "x": 5.0,
+    "z": -73.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch02_wren_line"
+   },
+   {
+    "id": "npc_strand",
+    "npc": "strand",
+    "x": -15.0,
+    "z": -77.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch02_strand_registry"
+   },
+   {
+    "id": "npc_ames",
+    "npc": "ames",
+    "x": 15.0,
+    "z": -100.0,
+    "rotY": 1.571,
+    "behavior": "idle",
+    "dialogue": "ch02_ames_hospital"
+   },
+   {
+    "id": "npc_ames_diesel",
+    "npc": "ames",
+    "x": 15.0,
+    "z": -100.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch02_ames_diesel_return",
+    "when": [
+     {
+      "item": "hospital_diesel",
+      "gte": 1
+     }
+    ]
+   },
+   {
+    "id": "npc_theo",
+    "npc": "theo",
+    "x": -1.0,
+    "z": 1.0,
+    "rotY": 0.0,
+    "behavior": "follow",
+    "when": [
+     {
+      "flag": "ch02_theo_along",
+      "eq": true
+     }
+    ]
+   }
+  ],
+  "enemies": [
+   {
+    "id": "en_01",
+    "type": "authority_guard",
+    "x": -2.0,
+    "z": -19.0,
+    "group": "g_checkpoint",
+    "tier": 1,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "load",
+    "hostileWhen": [
+     {
+      "flag": "stole_from_authority",
+      "eq": true
+     }
+    ]
+   },
+   {
+    "id": "en_02",
+    "type": "authority_guard",
+    "x": 3.0,
+    "z": -19.0,
+    "group": "g_checkpoint",
+    "tier": 1,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "load",
+    "hostileWhen": [
+     {
+      "flag": "stole_from_authority",
+      "eq": true
+     }
+    ]
+   },
+   {
+    "id": "en_03",
+    "type": "authority_guard",
+    "x": -5.0,
+    "z": -79.0,
+    "group": "g_decc_guards",
+    "tier": 1,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "load",
+    "hostileWhen": [
+     {
+      "flag": "stole_from_authority",
+      "eq": true
+     }
+    ]
+   },
+   {
+    "id": "en_04",
+    "type": "authority_guard",
+    "x": -5.0,
+    "z": -61.0,
+    "group": "g_decc_guards",
+    "tier": 1,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "load",
+    "hostileWhen": [
+     {
+      "flag": "stole_from_authority",
+      "eq": true
+     }
+    ]
+   },
+   {
+    "id": "en_05",
+    "type": "authority_guard",
+    "x": 2.0,
+    "z": -88.0,
+    "group": "g_hosp_guards",
+    "tier": 1,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "load",
+    "hostileWhen": [
+     {
+      "flag": "stole_from_authority",
+      "eq": true
+     }
+    ]
+   },
+   {
+    "id": "en_06",
+    "type": "authority_guard",
+    "x": 5.0,
+    "z": -93.0,
+    "group": "g_hosp_guards",
+    "tier": 1,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "load",
+    "hostileWhen": [
+     {
+      "flag": "stole_from_authority",
+      "eq": true
+     }
+    ]
+   },
+   {
+    "id": "en_07",
+    "type": "looter",
+    "x": -19.0,
+    "z": -105.0,
+    "group": "g_garage",
+    "tier": 2,
+    "behavior": "ambush",
+    "hostile": "always",
+    "activate": "trigger",
+    "note": "Only if Dell takes Ames's diesel job."
+   },
+   {
+    "id": "en_08",
+    "type": "looter",
+    "x": -15.0,
+    "z": -97.0,
+    "group": "g_garage",
+    "tier": 2,
+    "behavior": "ambush",
+    "hostile": "always",
+    "activate": "trigger",
+    "note": "Only if Dell takes Ames's diesel job."
+   },
+   {
+    "id": "en_09",
+    "type": "looter",
+    "x": -13.0,
+    "z": -107.0,
+    "group": "g_garage",
+    "tier": 2,
+    "behavior": "ambush",
+    "hostile": "always",
+    "activate": "trigger",
+    "note": "Only if Dell takes Ames's diesel job."
+   }
+  ],
+  "loot": [
+   {
+    "id": "loot_01",
+    "x": -18.0,
+    "z": -106.0,
+    "r": 1.6,
+    "label": "Generator diesel drum",
+    "container": "supply_cache",
+    "guaranteed": [
+     {
+      "item": "hospital_diesel",
+      "n": 1
+     }
+    ],
+    "when": [
+     {
+      "flag": "ch02_diesel_job",
+      "eq": true
+     }
+    ],
+    "location": "loc_lakehead_memorial"
+   },
+   {
+    "id": "loot_02",
+    "x": -13.0,
+    "z": -93.0,
+    "r": 1.6,
+    "label": "Abandoned car",
+    "container": "car_trunk",
+    "location": "loc_lakehead_memorial"
+   },
+   {
+    "id": "loot_03",
+    "x": 17.0,
+    "z": -106.0,
+    "r": 1.6,
+    "label": "Supply closet",
+    "container": "locker",
+    "location": "loc_lakehead_memorial"
+   },
+   {
+    "id": "loot_04",
+    "x": -19.0,
+    "z": -1.0,
+    "r": 1.6,
+    "label": "Bus shelter",
+    "container": "dumpster",
+    "location": "loc_blatnik_bridge"
+   },
+   {
+    "id": "loot_05",
+    "x": -17.0,
+    "z": -59.0,
+    "r": 1.6,
+    "label": "Coat check",
+    "container": "wardrobe",
+    "location": "loc_decc_ration"
+   },
+   {
+    "id": "loot_06",
+    "x": -3.0,
+    "z": -41.0,
+    "r": 1.6,
+    "label": "Car trunk (filler)",
+    "container": "car_trunk",
+    "location": "loc_blatnik_bridge",
+    "filler": true
+   },
+   {
+    "id": "loot_07",
+    "x": 21.0,
+    "z": -3.0,
+    "r": 1.6,
+    "label": "Car trunk (filler)",
+    "container": "car_trunk",
+    "location": "loc_blatnik_bridge",
+    "filler": true
+   },
+   {
+    "id": "loot_08",
+    "x": 3.0,
+    "z": -31.0,
+    "r": 1.6,
+    "label": "Car trunk (filler)",
+    "container": "car_trunk",
+    "location": "loc_blatnik_bridge",
+    "filler": true
+   },
+   {
+    "id": "loot_09",
+    "x": 13.0,
+    "z": 5.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture (filler)",
+    "container": "woodpile",
+    "location": "loc_blatnik_bridge",
+    "filler": true
+   },
+   {
+    "id": "loot_10",
+    "x": -3.0,
+    "z": -9.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture (filler)",
+    "container": "woodpile",
+    "location": "loc_blatnik_bridge",
+    "filler": true
+   },
+   {
+    "id": "loot_11",
+    "x": -9.0,
+    "z": -67.0,
+    "r": 1.6,
+    "label": "Kitchen cabinet (filler)",
+    "container": "kitchen_cabinet",
+    "location": "loc_decc_ration",
+    "filler": true,
+    "guaranteed": [
+     {
+      "item": "ration",
+      "n": 1
+     }
+    ]
+   },
+   {
+    "id": "loot_12",
+    "x": -19.0,
+    "z": -69.0,
+    "r": 1.6,
+    "label": "Locker (filler)",
+    "container": "locker",
+    "location": "loc_decc_ration",
+    "filler": true,
+    "guaranteed": [
+     {
+      "item": "ration_card",
+      "n": 1
+     }
+    ]
+   },
+   {
+    "id": "loot_13",
+    "x": -1.0,
+    "z": -107.0,
+    "r": 1.6,
+    "label": "Medicine cabinet (filler)",
+    "container": "medicine_cabinet",
+    "location": "loc_lakehead_memorial",
+    "filler": true,
+    "guaranteed": [
+     {
+      "item": "cigarettes",
+      "n": 2
+     }
+    ]
+   },
+   {
+    "id": "loot_14",
+    "x": 1.0,
+    "z": -93.0,
+    "r": 1.6,
+    "label": "Medicine cabinet (filler)",
+    "container": "medicine_cabinet",
+    "location": "loc_lakehead_memorial",
+    "filler": true
+   },
+   {
+    "id": "loot_15",
+    "x": -19.0,
+    "z": -97.0,
+    "r": 1.6,
+    "label": "Car trunk (filler)",
+    "container": "car_trunk",
+    "location": "loc_lakehead_memorial",
+    "filler": true
+   }
+  ]
+ },
+ "props": [
+  {
+   "id": "prop_01",
+   "asset": "assets/kenney/roads/light-square-double.glb",
+   "x": -5.0,
+   "z": -21.0,
+   "rotY": 0,
+   "h": 6,
+   "collide": true,
+   "tag": "checkpoint floodlight"
+  },
+  {
+   "id": "prop_02",
+   "asset": "assets/kenney/roads/construction-barrier.glb",
+   "x": -2.0,
+   "z": -21.0,
+   "rotY": 0,
+   "h": 1.1,
+   "collide": true
+  },
+  {
+   "id": "prop_03",
+   "asset": "assets/kenney/roads/construction-barrier.glb",
+   "x": 3.0,
+   "z": -21.0,
+   "rotY": 0,
+   "h": 1.1,
+   "collide": true
+  },
+  {
+   "id": "prop_04",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": 2.0,
+   "z": -11.0,
+   "rotY": 0.3,
+   "h": 1.45,
+   "collide": true
+  },
+  {
+   "id": "prop_05",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -2.0,
+   "z": -35.0,
+   "rotY": -0.4,
+   "h": 1.45,
+   "collide": true
+  },
+  {
+   "id": "prop_06",
+   "asset": "assets/kenney/roads/light-square.glb",
+   "x": -5.0,
+   "z": -43.0,
+   "rotY": 0.0,
+   "h": 5.5,
+   "collide": true
+  },
+  {
+   "id": "prop_07",
+   "asset": "assets/kenney/roads/light-square.glb",
+   "x": -5.0,
+   "z": -29.0,
+   "rotY": 0.0,
+   "h": 5.5,
+   "collide": true
+  },
+  {
+   "id": "prop_08",
+   "asset": "assets/kenney/roads/light-square.glb",
+   "x": -5.0,
+   "z": -15.0,
+   "rotY": 0.0,
+   "h": 5.5,
+   "collide": true
+  },
+  {
+   "id": "prop_09",
+   "asset": "assets/kenney/industrial/building-m.glb",
+   "x": -14.0,
+   "z": -80.0,
+   "rotY": -1.571,
+   "h": 11,
+   "collide": false,
+   "tag": "DECC facade (backdrop above wall tiles)"
+  },
+  {
+   "id": "prop_10",
+   "asset": "assets/kenney/roads/construction-fence.glb",
+   "x": 7.0,
+   "z": -54.0,
+   "rotY": 0,
+   "h": 1.6,
+   "collide": true
+  },
+  {
+   "id": "prop_11",
+   "asset": "assets/kenney/roads/construction-cone.glb",
+   "x": -1.0,
+   "z": -54.0,
+   "rotY": 0.0,
+   "h": 0.7,
+   "collide": true
+  },
+  {
+   "id": "prop_12",
+   "asset": "assets/kenney/industrial/building-h.glb",
+   "x": 5.0,
+   "z": -107.0,
+   "rotY": 0.0,
+   "h": 14,
+   "collide": false,
+   "tag": "hospital tower backdrop"
+  },
+  {
+   "id": "prop_13",
+   "asset": "assets/kenney/industrial/detail-tank-large.glb",
+   "x": -17.0,
+   "z": -105.0,
+   "rotY": 0,
+   "h": 3,
+   "collide": true
+  }
+ ],
+ "interactives": [
+  {
+   "id": "ch02_crank_radio",
+   "type": "ambient_audio",
+   "x": 15.0,
+   "z": -57.0,
+   "r": 1.8,
+   "label": "Crank radio (KD0LOU)",
+   "setsFlag": "ch02_lou_heard"
+  },
+  {
+   "id": "ch02_crush_kid",
+   "type": "rescue",
+   "x": 7.0,
+   "z": -67.0,
+   "r": 1.8,
+   "label": "Pull the kid out",
+   "setsFlag": "ch02_crush_helped",
+   "when": [
+    {
+     "flag": "ch02_crush_active",
+     "eq": true
+    }
+   ]
+  }
+ ],
+ "safeZones": [
+  {
+   "id": "safe_01",
+   "kind": "indoor",
+   "x": -15.0,
+   "z": -65.0,
+   "r": 4,
+   "label": "DECC hall (heated)",
+   "warmth": true,
+   "save": true,
+   "sealed": false
+  },
+  {
+   "id": "safe_02",
+   "kind": "indoor",
+   "x": 3.0,
+   "z": -94.0,
+   "r": 3,
+   "label": "Hospital lobby",
+   "warmth": true,
+   "save": true,
+   "sealed": false
+  }
+ ],
+ "setPieces": [],
+ "encounters": [
+  {
+   "id": "enc_checkpoint",
+   "area": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -50.0,
+    "x1": 22.0,
+    "z1": 6.0
+   },
+   "groups": [
+    {
+     "group": "g_checkpoint",
+     "wave": 1
+    }
+   ]
+  },
+  {
+   "id": "enc_decc",
+   "area": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -86.0,
+    "x1": 22.0,
+    "z1": -50.0
+   },
+   "groups": [
+    {
+     "group": "g_decc_guards",
+     "wave": 1
+    }
+   ]
+  },
+  {
+   "id": "enc_hospital",
+   "area": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -110.0,
+    "x1": 22.0,
+    "z1": -86.0
+   },
+   "groups": [
+    {
+     "group": "g_hosp_guards",
+     "wave": 1
+    },
+    {
+     "group": "g_garage",
+     "wave": 1
+    }
+   ]
+  }
+ ],
+ "triggers": [
+  {
+   "id": "t_ch02_start",
+   "on": "load",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": 0.0,
+    "z": 3.0,
+    "r": 3
+   },
+   "actions": [
+    {
+     "type": "checkpoint"
+    }
+   ]
+  },
+  {
+   "id": "t_ch02_checkpoint",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -4.0,
+    "z0": -20.0,
+    "x1": 4.0,
+    "z1": -16.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch02_haas_checkpoint"
+    }
+   ]
+  },
+  {
+   "id": "t_ch02_checkpoint_block",
+   "on": "enter",
+   "once": false,
+   "shape": {
+    "type": "rect",
+    "x0": -4.0,
+    "z0": -24.0,
+    "x1": 4.0,
+    "z1": -22.0
+   },
+   "actions": [
+    {
+     "type": "bark",
+     "speaker": "cpl_haas",
+     "text": "ID first."
+    },
+    {
+     "type": "push_back"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch02_checkpoint_cleared",
+     "ne": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch02_radio",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": 13.0,
+    "z": -59.0,
+    "r": 3
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch02_lou_radio"
+    }
+   ]
+  },
+  {
+   "id": "t_ch02_line",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -4.0,
+    "z0": -76.0,
+    "x1": 18.0,
+    "z1": -66.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch02_wren_line"
+    }
+   ]
+  },
+  {
+   "id": "t_ch02_registry",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -20.0,
+    "z0": -80.0,
+    "x1": -8.0,
+    "z1": -72.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch02_strand_registry"
+    }
+   ]
+  },
+  {
+   "id": "t_ch02_crush",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -4.0,
+    "z0": -84.0,
+    "x1": 20.0,
+    "z1": -56.0
+   },
+   "actions": [
+    {
+     "type": "cutscene",
+     "id": "cs_ch02_rumor",
+     "text": "\"No more flour!\" The line surges."
+    },
+    {
+     "type": "start_sequence",
+     "id": "seq_ch02_crush"
+    },
+    {
+     "type": "checkpoint"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch02_registered",
+     "eq": true
+    }
+   ],
+   "note": "Timed movement escape. Kid at the marked spot; exits: east gate or north to 1st St."
+  },
+  {
+   "id": "t_ch02_hospital",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": 8.0,
+    "z0": -102.0,
+    "x1": 18.0,
+    "z1": -98.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch02_ames_hospital"
+    }
+   ]
+  },
+  {
+   "id": "t_ch02_garage",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -110.0,
+    "x1": -10.0,
+    "z1": -90.0
+   },
+   "actions": [
+    {
+     "type": "activate_group",
+     "group": "g_garage"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch02_diesel_job",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch02_end",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": 0.0,
+    "z0": -90.0,
+    "x1": 6.0,
+    "z1": -86.0
+   },
+   "actions": [
+    {
+     "type": "chapter_end",
+     "next": "ch03_the_long_cold"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch02_insulin_secured",
+     "eq": true
+    }
+   ]
+  }
+ ],
+ "objectives": [
+  {
+   "id": "o1",
+   "order": 1,
+   "text": "Cross the Blatnik checkpoint",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch02_checkpoint_cleared",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o2",
+   "order": 2,
+   "text": "Register at the DECC",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch02_registered",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o3",
+   "order": 3,
+   "text": "Survive the ration-line crush",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch02_crush_done",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o4",
+   "order": 4,
+   "text": "Get Theo's insulin (priority card, Dr. Ames, or Wren)",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch02_insulin_secured",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o5",
+   "order": 5,
+   "text": "Optional: find the hospital diesel for Ames",
+   "optional": true,
+   "completeWhen": [
+    {
+     "item": "hospital_diesel",
+     "gte": 1
+    }
+   ],
+   "startWhen": [
+    {
+     "flag": "ch02_diesel_job",
+     "eq": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1462 @@
+{
+ "$schema": "./schema.json",
+ "formatVersion": 1,
+ "id": "ch04_black_start",
+ "chapter": 4,
+ "title": "Black Start",
+ "act": "II",
+ "storyFile": "story/chapters/ch04_black_start.md",
+ "next": "ch05_route_9",
+ "summary": "Jay Cooke trail and swinging bridge -> Thomson Dam: Lunds, relay, 4-step black start, first-line choice.",
+ "difficulty": 2,
+ "units": "meters",
+ "grid": {
+  "cellSize": 2.0,
+  "cols": 24,
+  "rows": 64,
+  "origin": {
+   "x": -24.0,
+   "z": -120.0
+  },
+  "legend": {
+   "#": {
+    "name": "wall",
+    "walkable": false,
+    "solid": true,
+    "height": 4,
+    "wallTex": "red_brick",
+    "preview": "#5a3a32"
+   },
+   ",": {
+    "name": "interior_floor",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirty_concrete",
+    "roof": true,
+    "preview": "#b8ad98"
+   },
+   ".": {
+    "name": "snow_ground",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "snow_02",
+    "preview": "#d9e1e8"
+   },
+   "=": {
+    "name": "road",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "asphalt_snow",
+    "preview": "#8d969e"
+   },
+   "D": {
+    "name": "door",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirty_concrete",
+    "door": true,
+    "preview": "#e0a040"
+   },
+   "I": {
+    "name": "river_ice",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "snow_02",
+    "ice": true,
+    "preview": "#b9d3e3"
+   },
+   "T": {
+    "name": "tree",
+    "walkable": false,
+    "solid": true,
+    "height": 6,
+    "tree": true,
+    "preview": "#2e4a34"
+   },
+   "_": {
+    "name": "chasm",
+    "walkable": false,
+    "solid": false,
+    "height": -8,
+    "void": true,
+    "preview": "#14181c"
+   },
+   "b": {
+    "name": "bridge_deck",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "rusty_metal",
+    "preview": "#7a6a5a"
+   },
+   "c": {
+    "name": "cover_low",
+    "walkable": false,
+    "solid": true,
+    "height": 1.0,
+    "wallTex": "dirt",
+    "cover": true,
+    "preview": "#a08850"
+   },
+   "g": {
+    "name": "dirt_gravel",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirt",
+    "preview": "#9c8f7a"
+   },
+   "x": {
+    "name": "debris",
+    "walkable": false,
+    "solid": true,
+    "height": 0.9,
+    "wallTex": "rust_coarse_01",
+    "preview": "#6e5545"
+   },
+   "~": {
+    "name": "open_water",
+    "walkable": false,
+    "solid": false,
+    "height": -0.6,
+    "floorTex": "dirty_concrete",
+    "water": true,
+    "preview": "#2f4a63"
+   }
+  },
+  "tiles": [
+   "TTTTTTTTTTTTTTTTTTTTTTTT",
+   "T...............~~~~~..T",
+   "T.bbbbbbbbbbbbbbbbbbbb.T",
+   "T.bbbbbbbbbbbbbbbbbbbb.T",
+   "T......................T",
+   "T......................T",
+   "T..#########D##........T",
+   "T..#,,,,,,,,,,#........T",
+   "T..#,,,,,,,,,,#........T",
+   "T..#,,,,,,,,,,#........T",
+   "T..###D########........T",
+   "T..#,,,,,,,,,,#........T",
+   "T..#,,x,,x,,x,#........T",
+   "T..#,,x,,x,,x,#........T",
+   "T..#,,,,,,,,,,#........T",
+   "T..#,,,,,,,,,,#........T",
+   "T..#,,,,,,,,,,#........T",
+   "T..#,,,,,,,,,,#........T",
+   "T..#####D######........T",
+   "T.....==========IIIII..T",
+   "T...c.=======c==IIIII..T",
+   "T.....==========IIIII..T",
+   "TTT.....TggggT..IIIIIT.T",
+   "T....TTT.ggggT..IIIII..T",
+   "TTT.TT..TggggT..IIIII..T",
+   "TT.T...TTgggg..TIIIII..T",
+   "T...TT..Tgggg...IIIII..T",
+   "T......T.ggggT..IIIII..T",
+   "T.....TTTgggg..TIIIII..T",
+   "T.T..T..Tgggg..TIIIII..T",
+   "T....T...gggg...IIIIIT.T",
+   "T...T....gggg...IIIII.TT",
+   "T.T......gggg...IIIIITTT",
+   "TTT....T.gggg...IIIIIT.T",
+   "T...TT.T.gggg...IIIII..T",
+   "TT..TT...ggggT..IIIII.TT",
+   "T__________b____~~~~~__T",
+   "T__________b____~~~~~__T",
+   "T__________b____~~~~~__T",
+   "T__________b____~~~~~__T",
+   "T__________b____~~~~~__T",
+   "T__________b____~~~~~__T",
+   "T.T.gggggggggTTTIIIII..T",
+   "T..Tggggggggg...IIIII..T",
+   "T...ggg.T.TggT..IIIII.TT",
+   "T...ggg..T......IIIIIT.T",
+   "T...gggTTTT..T..IIIII.TT",
+   "T.T.ggg.....TT.TIIIIIT.T",
+   "TT..gggT...T.T.TIIIII.TT",
+   "T.T.ggg..T...T..IIIII..T",
+   "TT..ggg..TTT....IIIIIT.T",
+   "T.T.gggT...T..T.IIIII..T",
+   "T.TTggg....T.T.TIIIII..T",
+   "TTT.ggg.T..T....IIIIITTT",
+   "T..Tggg..TT...TTIIIII..T",
+   "TT.TgggT...T....IIIII.TT",
+   "TTTTggg..T..T..TIIIII..T",
+   "T...ggg.TT.T...TIIIIITTT",
+   "TT..ggg.TT...T..IIIII.TT",
+   "T.TTgggTT.....T.IIIII.TT",
+   "T...gggTT...TT.TIIIIITTT",
+   "TT.Tggg.T.T.TT.TIIIII.TT",
+   "T...ggg..T......IIIII..T",
+   "TTTTTTTTTTTTTTTTTTTTTTTT"
+  ]
+ },
+ "environment": {
+  "timeStart": 0.4,
+  "timeEnd": 0.9,
+  "timeLocked": false,
+  "weather": "snow",
+  "tempC": -24,
+  "blizzard": false,
+  "snowCover": 1.0,
+  "particles": "snow",
+  "fogNear": 8,
+  "fogFar": 36,
+  "palette": "assets/palettes/slso8.json",
+  "ambientTint": "#c9d6e6",
+  "hud": {
+   "temp": true,
+   "hunger": true,
+   "rad": false,
+   "filter": false,
+   "seal": false
+  },
+  "warmthDrainMul": 1.3,
+  "maxAliveEnemies": 5
+ },
+ "locations": [
+  {
+   "id": "loc_jay_cooke",
+   "x": 0.0,
+   "z": -35.0,
+   "rect": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -76.0,
+    "x1": 22.0,
+    "z1": 6.0
+   },
+   "safe": false
+  },
+  {
+   "id": "loc_thomson_dam",
+   "x": 0.0,
+   "z": -97.0,
+   "rect": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -118.0,
+    "x1": 22.0,
+    "z1": -76.0
+   },
+   "safe": false
+  }
+ ],
+ "landmarks": [
+  {
+   "label": "Swinging bridge",
+   "x": -1.0,
+   "z": -42.0
+  },
+  {
+   "label": "Headgate deck",
+   "x": 1.0,
+   "z": -114.0
+  },
+  {
+   "label": "Powerhouse",
+   "x": -6.0,
+   "z": -91.0
+  },
+  {
+   "label": "Control room",
+   "x": -7.0,
+   "z": -103.0
+  },
+  {
+   "label": "Surge tower",
+   "x": 19.0,
+   "z": -110.0
+  }
+ ],
+ "paths": {
+  "critical": [
+   [
+    -13.0,
+    3.0
+   ],
+   [
+    -13.0,
+    -33.0
+   ],
+   [
+    -1.0,
+    -34.0
+   ],
+   [
+    -1.0,
+    -47.0
+   ],
+   [
+    -1.0,
+    -51.0
+   ],
+   [
+    -3.0,
+    -75.0
+   ],
+   [
+    -7.0,
+    -79.0
+   ],
+   [
+    -7.0,
+    -83.0
+   ],
+   [
+    -3.0,
+    -89.0
+   ],
+   [
+    1.0,
+    -105.0
+   ],
+   [
+    1.0,
+    -111.0
+   ],
+   [
+    11.0,
+    -114.0
+   ],
+   [
+    1.0,
+    -111.0
+   ],
+   [
+    1.0,
+    -107.0
+   ],
+   [
+    -1.0,
+    -97.0
+   ],
+   [
+    -11.0,
+    -99.0
+   ],
+   [
+    -9.0,
+    -103.0
+   ],
+   [
+    -13.0,
+    -103.0
+   ],
+   [
+    -5.0,
+    -103.0
+   ]
+  ],
+  "optional": [
+   {
+    "id": "b_ice",
+    "label": "River ice scavengers + fishing shack",
+    "points": [
+     [
+      -1.0,
+      -33.0
+     ],
+     [
+      9.0,
+      -27.0
+     ],
+     [
+      13.0,
+      -25.0
+     ],
+     [
+      13.0,
+      -13.0
+     ]
+    ]
+   }
+  ]
+ },
+ "spawns": {
+  "player": [
+   {
+    "id": "spawn_default",
+    "x": -13.0,
+    "z": 3.0,
+    "rotY": 3.142
+   }
+  ],
+  "npcs": [
+   {
+    "id": "npc_hank",
+    "npc": "hank",
+    "x": -13.0,
+    "z": 0.0,
+    "rotY": 0.0,
+    "behavior": "follow",
+    "when": [
+     {
+      "flag": "hank_alive",
+      "ne": false
+     }
+    ]
+   },
+   {
+    "id": "npc_theo",
+    "npc": "theo",
+    "x": -11.0,
+    "z": 2.0,
+    "rotY": 0.0,
+    "behavior": "follow"
+   },
+   {
+    "id": "npc_pete_lund",
+    "npc": "pete_lund",
+    "x": -1.0,
+    "z": -89.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch04_lunds",
+    "label": "Pete Lund (shotgun)",
+    "combatProfile": "desperate_family"
+   },
+   {
+    "id": "npc_annie_lund",
+    "npc": "annie_lund",
+    "x": 1.0,
+    "z": -87.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "label": "Annie Lund + kids"
+   },
+   {
+    "id": "npc_bea",
+    "npc": "bea",
+    "x": -5.0,
+    "z": -79.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "dam_secret_told",
+      "eq": "harbor"
+     }
+    ],
+    "label": "Bea + Harbor volunteers"
+   },
+   {
+    "id": "npc_strand",
+    "npc": "strand",
+    "x": -5.0,
+    "z": -79.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "dam_secret_told",
+      "eq": "authority"
+     }
+    ]
+   }
+  ],
+  "enemies": [
+   {
+    "id": "en_01",
+    "type": "authority_guard",
+    "x": -13.0,
+    "z": -77.0,
+    "group": "g_standoff_gate",
+    "tier": 2,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "trigger",
+    "hostileWhen": [
+     {
+      "flag": "ch04_standoff_fired",
+      "eq": true
+     }
+    ],
+    "when": [
+     {
+      "flag": "dam_secret_told",
+      "eq": "authority"
+     }
+    ],
+    "note": "Story standoff; scripted shot if trust.strand < 2."
+   },
+   {
+    "id": "en_02",
+    "type": "authority_guard",
+    "x": -11.0,
+    "z": -77.0,
+    "group": "g_standoff_gate",
+    "tier": 2,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "trigger",
+    "hostileWhen": [
+     {
+      "flag": "ch04_standoff_fired",
+      "eq": true
+     }
+    ],
+    "when": [
+     {
+      "flag": "dam_secret_told",
+      "eq": "authority"
+     }
+    ],
+    "note": "Story standoff; scripted shot if trust.strand < 2."
+   },
+   {
+    "id": "en_03",
+    "type": "authority_guard",
+    "x": -9.0,
+    "z": -77.0,
+    "group": "g_standoff_gate",
+    "tier": 2,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "trigger",
+    "hostileWhen": [
+     {
+      "flag": "ch04_standoff_fired",
+      "eq": true
+     }
+    ],
+    "when": [
+     {
+      "flag": "dam_secret_told",
+      "eq": "authority"
+     }
+    ],
+    "note": "Story standoff; scripted shot if trust.strand < 2."
+   },
+   {
+    "id": "en_04",
+    "type": "authority_guard",
+    "x": -7.0,
+    "z": -77.0,
+    "group": "g_standoff_gate",
+    "tier": 2,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "trigger",
+    "hostileWhen": [
+     {
+      "flag": "ch04_standoff_fired",
+      "eq": true
+     }
+    ],
+    "when": [
+     {
+      "flag": "dam_secret_told",
+      "eq": "authority"
+     }
+    ],
+    "note": "Story standoff; scripted shot if trust.strand < 2."
+   },
+   {
+    "id": "en_05",
+    "type": "authority_guard",
+    "x": -15.0,
+    "z": -111.0,
+    "group": "g_standoff_deck",
+    "tier": 2,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "trigger",
+    "hostileWhen": [
+     {
+      "flag": "ch04_standoff_fired",
+      "eq": true
+     }
+    ],
+    "when": [
+     {
+      "flag": "dam_secret_told",
+      "eq": "authority"
+     }
+    ],
+    "note": "Story standoff; scripted shot if trust.strand < 2."
+   },
+   {
+    "id": "en_06",
+    "type": "authority_guard",
+    "x": -9.0,
+    "z": -111.0,
+    "group": "g_standoff_deck",
+    "tier": 2,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "trigger",
+    "hostileWhen": [
+     {
+      "flag": "ch04_standoff_fired",
+      "eq": true
+     }
+    ],
+    "when": [
+     {
+      "flag": "dam_secret_told",
+      "eq": "authority"
+     }
+    ],
+    "note": "Story standoff; scripted shot if trust.strand < 2."
+   },
+   {
+    "id": "en_07",
+    "type": "authority_guard",
+    "x": 5.0,
+    "z": -111.0,
+    "group": "g_standoff_deck",
+    "tier": 2,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "trigger",
+    "hostileWhen": [
+     {
+      "flag": "ch04_standoff_fired",
+      "eq": true
+     }
+    ],
+    "when": [
+     {
+      "flag": "dam_secret_told",
+      "eq": "authority"
+     }
+    ],
+    "note": "Story standoff; scripted shot if trust.strand < 2."
+   },
+   {
+    "id": "en_08",
+    "type": "authority_guard",
+    "x": 11.0,
+    "z": -110.0,
+    "group": "g_standoff_deck",
+    "tier": 2,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "trigger",
+    "hostileWhen": [
+     {
+      "flag": "ch04_standoff_fired",
+      "eq": true
+     }
+    ],
+    "when": [
+     {
+      "flag": "dam_secret_told",
+      "eq": "authority"
+     }
+    ],
+    "note": "Story standoff; scripted shot if trust.strand < 2."
+   },
+   {
+    "id": "en_09",
+    "type": "bridge_boy",
+    "x": 13.0,
+    "z": -19.0,
+    "group": "g_ice_scav",
+    "tier": 2,
+    "behavior": "wander",
+    "hostile": "on_provoke",
+    "activate": "load"
+   },
+   {
+    "id": "en_10",
+    "type": "bridge_boy",
+    "x": 15.0,
+    "z": -13.0,
+    "group": "g_ice_scav",
+    "tier": 2,
+    "behavior": "wander",
+    "hostile": "on_provoke",
+    "activate": "load"
+   }
+  ],
+  "loot": [
+   {
+    "id": "loot_01",
+    "x": -7.0,
+    "z": -11.0,
+    "r": 1.6,
+    "label": "Park shelter",
+    "container": "woodpile",
+    "guaranteed": [
+     {
+      "item": "firewood",
+      "n": 2
+     }
+    ],
+    "location": "loc_jay_cooke"
+   },
+   {
+    "id": "loot_02",
+    "x": 13.0,
+    "z": -25.0,
+    "r": 1.6,
+    "label": "Ice-fishing shack",
+    "container": "woodpile",
+    "location": "loc_jay_cooke"
+   },
+   {
+    "id": "loot_03",
+    "x": -14.0,
+    "z": -86.0,
+    "r": 1.6,
+    "label": "Plant locker",
+    "container": "locker",
+    "guaranteed": [
+     {
+      "item": "hank_keys",
+      "n": 1
+     }
+    ],
+    "location": "loc_thomson_dam"
+   },
+   {
+    "id": "loot_04",
+    "x": 3.0,
+    "z": -104.0,
+    "r": 1.6,
+    "label": "Relay cabinet",
+    "container": "supply_cache",
+    "guaranteed": [
+     {
+      "item": "relay_kit",
+      "n": 1
+     }
+    ],
+    "when": [
+     {
+      "flag": "dam_secret_told",
+      "ne": "none"
+     }
+    ],
+    "location": "loc_thomson_dam"
+   },
+   {
+    "id": "loot_05",
+    "x": -3.0,
+    "z": -86.0,
+    "r": 1.6,
+    "label": "Lunds' larder",
+    "container": "kitchen_cabinet",
+    "when": [
+     {
+      "flag": "lunds_stayed",
+      "ne": true
+     }
+    ],
+    "location": "loc_thomson_dam"
+   },
+   {
+    "id": "loot_06",
+    "x": 21.0,
+    "z": 5.0,
+    "r": 1.6,
+    "label": "Car trunk (filler)",
+    "container": "car_trunk",
+    "location": "loc_jay_cooke",
+    "filler": true,
+    "guaranteed": [
+     {
+      "item": "firewood",
+      "n": 2
+     }
+    ]
+   },
+   {
+    "id": "loot_07",
+    "x": 21.0,
+    "z": -63.0,
+    "r": 1.6,
+    "label": "Car trunk (filler)",
+    "container": "car_trunk",
+    "location": "loc_jay_cooke",
+    "filler": true
+   },
+   {
+    "id": "loot_08",
+    "x": -21.0,
+    "z": -59.0,
+    "r": 1.6,
+    "label": "Frozen body (filler)",
+    "container": "corpse",
+    "location": "loc_jay_cooke",
+    "filler": true
+   },
+   {
+    "id": "loot_09",
+    "x": -21.0,
+    "z": -31.0,
+    "r": 1.6,
+    "label": "Kitchen cabinet (filler)",
+    "container": "kitchen_cabinet",
+    "location": "loc_jay_cooke",
+    "filler": true
+   },
+   {
+    "id": "loot_10",
+    "x": 3.0,
+    "z": -63.0,
+    "r": 1.6,
+    "label": "Closet / wardrobe (filler)",
+    "container": "wardrobe",
+    "location": "loc_jay_cooke",
+    "filler": true
+   },
+   {
+    "id": "loot_11",
+    "x": 7.0,
+    "z": -3.0,
+    "r": 1.6,
+    "label": "Closet / wardrobe (filler)",
+    "container": "wardrobe",
+    "location": "loc_jay_cooke",
+    "filler": true
+   },
+   {
+    "id": "loot_12",
+    "x": -9.0,
+    "z": -93.0,
+    "r": 1.6,
+    "label": "Locker (filler)",
+    "container": "locker",
+    "location": "loc_thomson_dam",
+    "filler": true,
+    "guaranteed": [
+     {
+      "item": "canned_food",
+      "n": 1
+     }
+    ]
+   },
+   {
+    "id": "loot_13",
+    "x": -15.0,
+    "z": -97.0,
+    "r": 1.6,
+    "label": "Toolbox / workbench drawer (filler)",
+    "container": "toolbox",
+    "location": "loc_thomson_dam",
+    "filler": true,
+    "guaranteed": [
+     {
+      "item": "start_battery",
+      "n": 1
+     }
+    ]
+   },
+   {
+    "id": "loot_14",
+    "x": 3.0,
+    "z": -93.0,
+    "r": 1.6,
+    "label": "Toolbox / workbench drawer (filler)",
+    "container": "toolbox",
+    "location": "loc_thomson_dam",
+    "filler": true,
+    "guaranteed": [
+     {
+      "item": "water_clean",
+      "n": 2
+     }
+    ]
+   },
+   {
+    "id": "loot_15",
+    "x": -15.0,
+    "z": -91.0,
+    "r": 1.6,
+    "label": "Toolbox / workbench drawer (filler)",
+    "container": "toolbox",
+    "location": "loc_thomson_dam",
+    "filler": true
+   },
+   {
+    "id": "loot_16",
+    "x": -9.0,
+    "z": -85.0,
+    "r": 1.6,
+    "label": "Kitchen cabinet (filler)",
+    "container": "kitchen_cabinet",
+    "location": "loc_thomson_dam",
+    "filler": true
+   },
+   {
+    "id": "loot_17",
+    "x": -7.0,
+    "z": -97.0,
+    "r": 1.6,
+    "label": "Medicine cabinet (filler)",
+    "container": "medicine_cabinet",
+    "location": "loc_thomson_dam",
+    "filler": true
+   },
+   {
+    "id": "loot_18",
+    "x": -3.0,
+    "z": -93.0,
+    "r": 1.6,
+    "label": "Closet / wardrobe (filler)",
+    "container": "wardrobe",
+    "location": "loc_thomson_dam",
+    "filler": true
+   }
+  ]
+ },
+ "props": [
+  {
+   "id": "prop_01",
+   "asset": "assets/kenney/industrial/detail-tank-large.glb",
+   "x": -11.0,
+   "z": -94.0,
+   "rotY": 0,
+   "h": 3.2,
+   "collide": true,
+   "tag": "Unit 1"
+  },
+  {
+   "id": "prop_02",
+   "asset": "assets/kenney/industrial/detail-tank-large.glb",
+   "x": -5.0,
+   "z": -94.0,
+   "rotY": 0,
+   "h": 3.2,
+   "collide": true,
+   "tag": "Unit 2 (black-start)"
+  },
+  {
+   "id": "prop_03",
+   "asset": "assets/kenney/industrial/detail-tank-large.glb",
+   "x": 1.0,
+   "z": -94.0,
+   "rotY": 0,
+   "h": 3.2,
+   "collide": true,
+   "tag": "Unit 3"
+  },
+  {
+   "id": "prop_04",
+   "asset": "assets/kenney/industrial/building-m.glb",
+   "x": -6.0,
+   "z": -106.0,
+   "rotY": 0.0,
+   "h": 12,
+   "collide": false,
+   "tag": "powerhouse silhouette"
+  },
+  {
+   "id": "prop_05",
+   "asset": "assets/kenney/industrial/chimney-medium.glb",
+   "x": 19.0,
+   "z": -110.0,
+   "rotY": 0,
+   "h": 11,
+   "collide": true,
+   "tag": "surge tower"
+  },
+  {
+   "id": "prop_06",
+   "asset": "assets/kenney/roads/electricity-pole.glb",
+   "x": -19.0,
+   "z": -79.0,
+   "rotY": 0,
+   "h": 9,
+   "collide": true
+  },
+  {
+   "id": "prop_07",
+   "asset": "assets/kenney/roads/electricity-pole.glb",
+   "x": 7.0,
+   "z": -79.0,
+   "rotY": 0,
+   "h": 9,
+   "collide": true
+  },
+  {
+   "id": "prop_08",
+   "asset": "assets/kenney/roads/electricity-pole.glb",
+   "x": -19.0,
+   "z": -91.0,
+   "rotY": 0,
+   "h": 9,
+   "collide": true
+  },
+  {
+   "id": "prop_09",
+   "asset": "assets/kenney/roads/light-square.glb",
+   "x": -9.0,
+   "z": -80.0,
+   "rotY": 0.0,
+   "h": 5,
+   "collide": true
+  },
+  {
+   "id": "prop_10",
+   "asset": "assets/kenney/roads/road-sign-warning.glb",
+   "x": -3.0,
+   "z": -34.0,
+   "rotY": 3.142,
+   "h": 2.4,
+   "collide": true
+  },
+  {
+   "id": "prop_11",
+   "asset": "assets/kenney/roads/construction-fence.glb",
+   "x": -3.0,
+   "z": -49.0,
+   "rotY": 0,
+   "h": 1.6,
+   "collide": true
+  }
+ ],
+ "interactives": [
+  {
+   "id": "ch04_balance",
+   "type": "balance",
+   "x": -1.0,
+   "z": -42.0,
+   "r": 2.2,
+   "label": "Swinging bridge",
+   "setsFlag": "ch04_bridge_crossed"
+  },
+  {
+   "id": "ch04_headgate",
+   "type": "valve",
+   "x": 11.0,
+   "z": -114.0,
+   "r": 1.8,
+   "label": "Headgate wheel",
+   "requiresFlags": [
+    {
+     "flag": "ch04_lunds_resolved",
+     "eq": true
+    }
+   ],
+   "setsFlag": "bs_headgate",
+   "sequenceStep": 1
+  },
+  {
+   "id": "ch04_exciter",
+   "type": "panel",
+   "x": -1.0,
+   "z": -97.0,
+   "r": 1.8,
+   "label": "Exciter",
+   "requiresFlags": [
+    {
+     "flag": "bs_headgate",
+     "eq": true
+    },
+    {
+     "any": [
+      {
+       "item": "relay_kit",
+       "gte": 1
+      },
+      {
+       "flag": "ch04_bypass_built",
+       "eq": true
+      }
+     ]
+    }
+   ],
+   "setsFlag": "bs_exciter",
+   "sequenceStep": 2
+  },
+  {
+   "id": "ch04_sync",
+   "type": "panel",
+   "x": -9.0,
+   "z": -103.0,
+   "r": 1.8,
+   "label": "Synchroscope",
+   "requiresFlags": [
+    {
+     "flag": "bs_exciter",
+     "eq": true
+    }
+   ],
+   "setsFlag": "bs_sync",
+   "sequenceStep": 3
+  },
+  {
+   "id": "ch04_breaker",
+   "type": "lever",
+   "x": -13.0,
+   "z": -103.0,
+   "r": 1.8,
+   "label": "Main breaker",
+   "requiresFlags": [
+    {
+     "flag": "bs_sync",
+     "eq": true
+    }
+   ],
+   "setsFlag": "dam_running",
+   "sequenceStep": 4
+  },
+  {
+   "id": "ch04_bypass",
+   "type": "minigame",
+   "x": 2.0,
+   "z": -103.0,
+   "r": 1.8,
+   "label": "Hank's improvised relay bypass",
+   "setsFlag": "ch04_bypass_built",
+   "when": [
+    {
+     "flag": "dam_secret_told",
+     "eq": "none"
+    }
+   ]
+  },
+  {
+   "id": "ch04_feeder",
+   "type": "choice_panel",
+   "x": -5.0,
+   "z": -103.0,
+   "r": 1.8,
+   "label": "Feeder selector (first line)",
+   "requiresFlags": [
+    {
+     "flag": "dam_running",
+     "eq": true
+    }
+   ]
+  }
+ ],
+ "safeZones": [
+  {
+   "id": "safe_01",
+   "kind": "campfire",
+   "x": -9.0,
+   "z": -11.0,
+   "r": 3.4,
+   "label": "Park shelter fire",
+   "warmth": true,
+   "save": true,
+   "sealed": false
+  },
+  {
+   "id": "safe_02",
+   "kind": "campfire",
+   "x": 1.0,
+   "z": -27.0,
+   "r": 3.0,
+   "label": "Trailhead fire ring",
+   "warmth": true,
+   "save": true,
+   "sealed": false
+  },
+  {
+   "id": "safe_03",
+   "kind": "campfire",
+   "x": -2.0,
+   "z": -88.0,
+   "r": 3.2,
+   "label": "Lunds' fire (manuals burning)",
+   "warmth": true,
+   "save": false,
+   "sealed": false
+  },
+  {
+   "id": "safe_04",
+   "kind": "warm_room",
+   "x": -7.0,
+   "z": -103.0,
+   "r": 4.0,
+   "label": "Control room (lights on)",
+   "warmth": true,
+   "save": true,
+   "sealed": false,
+   "when": [
+    {
+     "flag": "dam_running",
+     "eq": true
+    }
+   ]
+  }
+ ],
+ "setPieces": [],
+ "encounters": [
+  {
+   "id": "enc_ice",
+   "area": {
+    "type": "rect",
+    "x0": 2.0,
+    "z0": -36.0,
+    "x1": 22.0,
+    "z1": 6.0
+   },
+   "groups": [
+    {
+     "group": "g_ice_scav",
+     "wave": 1
+    }
+   ]
+  },
+  {
+   "id": "enc_gate",
+   "area": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -82.0,
+    "x1": 8.0,
+    "z1": -72.0
+   },
+   "groups": [
+    {
+     "group": "g_standoff_gate",
+     "wave": 1
+    }
+   ],
+   "note": "Guard squad split 4+4 (gate / headgate deck) to respect the cap."
+  },
+  {
+   "id": "enc_deck",
+   "area": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -118.0,
+    "x1": 22.0,
+    "z1": -108.0
+   },
+   "groups": [
+    {
+     "group": "g_standoff_deck",
+     "wave": 1
+    }
+   ]
+  }
+ ],
+ "triggers": [
+  {
+   "id": "t_ch04_start",
+   "on": "load",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": -13.0,
+    "z": 3.0,
+    "r": 3
+   },
+   "actions": [
+    {
+     "type": "checkpoint"
+    }
+   ]
+  },
+  {
+   "id": "t_ch04_bridge",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -4.0,
+    "z0": -38.0,
+    "x1": 2.0,
+    "z1": -34.0
+   },
+   "actions": [
+    {
+     "type": "bark",
+     "speaker": "hank",
+     "text": "Story time. Listen, it's the startup."
+    },
+    {
+     "type": "start_sequence",
+     "id": "seq_ch04_balance"
+    }
+   ]
+  },
+  {
+   "id": "t_ch04_lunds",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -8.0,
+    "z0": -92.0,
+    "x1": 4.0,
+    "z1": -84.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch04_lunds"
+    }
+   ]
+  },
+  {
+   "id": "t_ch04_standoff",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -14.0,
+    "z0": -82.0,
+    "x1": 2.0,
+    "z1": -76.0
+   },
+   "actions": [
+    {
+     "type": "activate_group",
+     "group": "g_standoff_gate"
+    },
+    {
+     "type": "activate_group",
+     "group": "g_standoff_deck"
+    },
+    {
+     "type": "dialogue",
+     "id": "ch04_standoff"
+    }
+   ],
+   "when": [
+    {
+     "flag": "bs_headgate",
+     "eq": true
+    },
+    {
+     "flag": "dam_secret_told",
+     "eq": "authority"
+    }
+   ]
+  },
+  {
+   "id": "t_ch04_spinup",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -16.0,
+    "z0": -106.0,
+    "x1": 4.0,
+    "z1": -100.0
+   },
+   "actions": [
+    {
+     "type": "set_time",
+     "value": 0.88
+    },
+    {
+     "type": "cutscene",
+     "id": "cs_ch04_spinup",
+     "text": "Unit 2 groans awake. The lights crawl across the ceiling."
+    },
+    {
+     "type": "dialogue",
+     "id": "ch04_black_start"
+    },
+    {
+     "type": "checkpoint"
+    }
+   ],
+   "when": [
+    {
+     "flag": "dam_running",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch04_end",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -16.0,
+    "z0": -106.0,
+    "x1": 4.0,
+    "z1": -100.0
+   },
+   "actions": [
+    {
+     "type": "chapter_end",
+     "next": "ch05_route_9"
+    }
+   ],
+   "when": [
+    {
+     "flag": "power_priority",
+     "ne": null
+    }
+   ]
+  }
+ ],
+ "objectives": [
+  {
+   "id": "o1",
+   "order": 1,
+   "text": "Reach the dam (cross the swinging bridge)",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch04_bridge_crossed",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o2",
+   "order": 2,
+   "text": "Deal with the Lunds",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch04_lunds_resolved",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o3",
+   "order": 3,
+   "text": "Get a relay (kit or Hank's bypass)",
+   "optional": false,
+   "completeWhen": [
+    {
+     "any": [
+      {
+       "item": "relay_kit",
+       "gte": 1
+      },
+      {
+       "flag": "ch04_bypass_built",
+       "eq": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "o4",
+   "order": 4,
+   "text": "Black start: headgate -> exciter -> sync -> breaker",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "dam_running",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o5",
+   "order": 5,
+   "text": "Choose the first line",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "power_priority",
+     "ne": null
+    }
+   ]
+  }
+ ]
+}

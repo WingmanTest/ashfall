@@ -1,0 +1,110 @@
+{
+  "id": "ch03_wren_warning",
+  "chapter": "ch03",
+  "location": "loc_east_end",
+  "trigger": "Dusk, Day 60. Knock at the back door. Only if trust.wren >= 3.",
+  "speakers": [
+    "wren",
+    "dell",
+    "narrator"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "wren",
+      "text": "Don't open it all the way. Cold. Also I'm not here.",
+      "next": "w1"
+    },
+    {
+      "id": "w1",
+      "speaker": "wren",
+      "text": "Don't sleep tonight, Sparky. The garage across the alley. You get me?",
+      "choices": [
+        {
+          "text": "The Bridge Boys are hitting Ray?",
+          "next": "w2"
+        },
+        {
+          "text": "How do you know?",
+          "next": "w_how"
+        },
+        {
+          "text": "Come inside. It's minus thirty.",
+          "next": "w_in"
+        }
+      ]
+    },
+    {
+      "id": "w_how",
+      "speaker": "wren",
+      "text": "Because I'm the one who walked by it twice and counted cans. Okay? Happy?",
+      "effects": [
+        {
+          "set": "wren_scouted_known",
+          "value": true
+        }
+      ],
+      "next": "w2"
+    },
+    {
+      "id": "w_in",
+      "speaker": "wren",
+      "text": "Can't. If I'm warm they'll smell it on me. Ha. Kidding. Mostly.",
+      "effects": [
+        {
+          "add": "kindness",
+          "value": 1
+        }
+      ],
+      "next": "w2"
+    },
+    {
+      "id": "w2",
+      "speaker": "wren",
+      "text": "Midnight-ish. Six guys. They're not evil, they're just cold and Ray's got a lot.",
+      "branches": [
+        {
+          "next": "w_reported",
+          "conditions": [
+            {
+              "flag": "ch02_reported_ray",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "w3"
+        }
+      ]
+    },
+    {
+      "id": "w_reported",
+      "speaker": "wren",
+      "text": "Except the Guard took Ray's diesel last week. Somebody told. Boys don't know yet.",
+      "next": "w_reported2"
+    },
+    {
+      "id": "w_reported2",
+      "speaker": "wren",
+      "text": "They're gonna find nothing. They hate finding nothing.",
+      "next": "w3"
+    },
+    {
+      "id": "w3",
+      "speaker": "wren",
+      "text": "I owed you. Now we're even. Don't make it weird.",
+      "effects": [
+        {
+          "set": "ch03_wren_warned",
+          "value": true
+        },
+        {
+          "trust": "wren",
+          "delta": 1
+        }
+      ],
+      "end": true
+    }
+  ]
+}

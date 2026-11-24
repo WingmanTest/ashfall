@@ -1,0 +1,1660 @@
+{
+  "version": 1,
+  "units": {
+    "rolls": "[min,max] entries drawn (uniform int) per container",
+    "weight": "relative weight",
+    "qty": "[min,max] uniform int",
+    "empty_chance": "0..1 chance container is empty before rolls",
+    "guaranteed": "fixed story/level items per area visit (item: count)",
+    "rad_zones": "share of the area's outdoor space at each zone level (see survival.json)"
+  },
+  "roll_algorithm": [
+    "if rand() < clamp(container.empty_chance + act.empty_chance_add + difficulty.loot_empty_add, 0, 0.95): empty",
+    "n = randint(rolls) ",
+    "for each roll: pick entry by weight' = weight * act.category_weight_mult[item.category] * area.category_bias[cat] * item_act_weight_mult[item][act] (entries whose item is act-gated and not yet available get weight 0)",
+    "qty = randint(entry.qty) * difficulty multiplier for the item's category (loot_mult / ammo_mult / med_mult), rounded with random remainder, min 1"
+  ],
+  "acts": {
+    "blackout": [
+      "ch01",
+      "ch02"
+    ],
+    "collapse": [
+      "ch03",
+      "ch04"
+    ],
+    "civil_war": [
+      "ch05",
+      "ch06",
+      "ch07"
+    ],
+    "nuclear_winter": [
+      "ch08",
+      "ch09",
+      "ch10"
+    ]
+  },
+  "act_modifiers": {
+    "blackout": {
+      "empty_chance_add": -0.05,
+      "category_weight_mult": {
+        "food": 1.4,
+        "water": 1.3,
+        "med": 1.0,
+        "material": 1.0,
+        "clothing": 1.0,
+        "rad": 0.0,
+        "tool": 1.0,
+        "throwable": 0.8,
+        "ammo": 0.5,
+        "weapon": 0.5,
+        "trade": 1.2,
+        "quest": 1.0
+      }
+    },
+    "collapse": {
+      "empty_chance_add": 0.0,
+      "category_weight_mult": {
+        "food": 1.0,
+        "water": 0.9,
+        "med": 0.8,
+        "material": 1.15,
+        "clothing": 1.25,
+        "rad": 0.0,
+        "tool": 1.0,
+        "throwable": 1.0,
+        "ammo": 0.7,
+        "weapon": 0.8,
+        "trade": 1.0,
+        "quest": 1.0
+      }
+    },
+    "civil_war": {
+      "empty_chance_add": 0.05,
+      "category_weight_mult": {
+        "food": 0.85,
+        "water": 0.9,
+        "med": 1.0,
+        "material": 1.0,
+        "clothing": 0.9,
+        "rad": 0.3,
+        "tool": 1.0,
+        "throwable": 1.2,
+        "ammo": 1.4,
+        "weapon": 1.5,
+        "trade": 0.9,
+        "quest": 1.0
+      }
+    },
+    "nuclear_winter": {
+      "empty_chance_add": 0.15,
+      "category_weight_mult": {
+        "food": 0.6,
+        "water": 0.6,
+        "med": 0.6,
+        "material": 0.8,
+        "clothing": 1.1,
+        "rad": 1.6,
+        "tool": 0.9,
+        "throwable": 0.9,
+        "ammo": 0.6,
+        "weapon": 0.6,
+        "trade": 0.5,
+        "quest": 1.0
+      }
+    }
+  },
+  "item_act_gate": {
+    "ammo_556": "collapse",
+    "service_rifle": "civil_war",
+    "pump_shotgun": "civil_war",
+    "military_parka": "civil_war",
+    "mre": "civil_war",
+    "mask_filter": "civil_war",
+    "iodide_tablets": "civil_war",
+    "arctic_parka": "collapse",
+    "fire_axe": "collapse",
+    "crowbar": "collapse",
+    "deer_rifle": "collapse",
+    "blaster": "collapse",
+    "ar15": "collapse"
+  },
+  "container_types": {
+    "kitchen_cabinet": {
+      "rolls": [
+        1,
+        2
+      ],
+      "empty_chance": 0.35,
+      "entries": [
+        {
+          "item": "canned_food",
+          "weight": 5,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "crackers",
+          "weight": 4,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "peanut_butter",
+          "weight": 1.5,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "coffee",
+          "weight": 2,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "candles",
+          "weight": 2,
+          "qty": [
+            1,
+            3
+          ]
+        },
+        {
+          "item": "water_clean",
+          "weight": 3,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "empty_bottle",
+          "weight": 2,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "purification_tablets",
+          "weight": 0.6,
+          "qty": [
+            1,
+            3
+          ]
+        },
+        {
+          "item": "cloth",
+          "weight": 2,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "candy_bar",
+          "weight": 2,
+          "qty": [
+            1,
+            2
+          ]
+        }
+      ],
+      "label": "Kitchen cabinet"
+    },
+    "fridge": {
+      "rolls": [
+        1,
+        1
+      ],
+      "empty_chance": 0.5,
+      "entries": [
+        {
+          "item": "water_clean",
+          "weight": 4,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "canned_food",
+          "weight": 2,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "whiskey",
+          "weight": 1,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "peanut_butter",
+          "weight": 1,
+          "qty": [
+            1,
+            1
+          ]
+        }
+      ],
+      "label": "Dead fridge"
+    },
+    "medicine_cabinet": {
+      "rolls": [
+        1,
+        2
+      ],
+      "empty_chance": 0.45,
+      "entries": [
+        {
+          "item": "bandage",
+          "weight": 5,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "painkillers",
+          "weight": 4,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "antibiotics",
+          "weight": 1.2,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "iodide_tablets",
+          "weight": 0.8,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "purification_tablets",
+          "weight": 1.5,
+          "qty": [
+            1,
+            3
+          ]
+        },
+        {
+          "item": "med_kit",
+          "weight": 0.4,
+          "qty": [
+            1,
+            1
+          ]
+        }
+      ],
+      "label": "Medicine cabinet"
+    },
+    "dumpster": {
+      "rolls": [
+        1,
+        2
+      ],
+      "empty_chance": 0.4,
+      "entries": [
+        {
+          "item": "cloth",
+          "weight": 5,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "scrap",
+          "weight": 4,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "firewood",
+          "weight": 3,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "empty_bottle",
+          "weight": 3,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "crackers",
+          "weight": 1,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "wire",
+          "weight": 1.5,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "note",
+          "weight": 1,
+          "qty": [
+            1,
+            1
+          ]
+        }
+      ],
+      "label": "Dumpster"
+    },
+    "car_trunk": {
+      "rolls": [
+        1,
+        3
+      ],
+      "empty_chance": 0.35,
+      "entries": [
+        {
+          "item": "fuel",
+          "weight": 3,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "scrap",
+          "weight": 2,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "wire",
+          "weight": 2,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "water_clean",
+          "weight": 2,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "flare",
+          "weight": 2,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "tent_tarp",
+          "weight": 0.5,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "repair_kit",
+          "weight": 0.6,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "ammo_9mm",
+          "weight": 1,
+          "qty": [
+            3,
+            8
+          ]
+        },
+        {
+          "item": "ammo_shell",
+          "weight": 1,
+          "qty": [
+            2,
+            4
+          ]
+        },
+        {
+          "item": "wool_blanket",
+          "weight": 1,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "batteries",
+          "weight": 1,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "crackers",
+          "weight": 1,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "ar15",
+          "weight": 0.06,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "ammo_556",
+          "weight": 0.4,
+          "qty": [
+            3,
+            6
+          ]
+        }
+      ],
+      "label": "Car trunk"
+    },
+    "wardrobe": {
+      "rolls": [
+        1,
+        2
+      ],
+      "empty_chance": 0.3,
+      "entries": [
+        {
+          "item": "wool_hat",
+          "weight": 3,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "knit_gloves",
+          "weight": 3,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "balaclava",
+          "weight": 1.5,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "thermal_underlayer",
+          "weight": 1.5,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "coat",
+          "weight": 1.2,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "snow_pants",
+          "weight": 1,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "boots_insulated",
+          "weight": 0.8,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "insulated_gloves",
+          "weight": 0.8,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "wool_blanket",
+          "weight": 2,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "rain_poncho",
+          "weight": 1,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "cloth",
+          "weight": 4,
+          "qty": [
+            2,
+            4
+          ]
+        },
+        {
+          "item": "arctic_parka",
+          "weight": 0.15,
+          "qty": [
+            1,
+            1
+          ]
+        }
+      ],
+      "label": "Closet / wardrobe"
+    },
+    "toolbox": {
+      "rolls": [
+        1,
+        2
+      ],
+      "empty_chance": 0.3,
+      "entries": [
+        {
+          "item": "scrap",
+          "weight": 4,
+          "qty": [
+            1,
+            3
+          ]
+        },
+        {
+          "item": "wire",
+          "weight": 4,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "repair_kit",
+          "weight": 1,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "batteries",
+          "weight": 2,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "crowbar",
+          "weight": 0.5,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "flashlight",
+          "weight": 0.6,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "fuel",
+          "weight": 1,
+          "qty": [
+            1,
+            1
+          ]
+        }
+      ],
+      "label": "Toolbox / workbench drawer"
+    },
+    "locker": {
+      "rolls": [
+        1,
+        2
+      ],
+      "empty_chance": 0.3,
+      "entries": [
+        {
+          "item": "ammo_9mm",
+          "weight": 3,
+          "qty": [
+            4,
+            10
+          ]
+        },
+        {
+          "item": "ammo_shell",
+          "weight": 2,
+          "qty": [
+            2,
+            5
+          ]
+        },
+        {
+          "item": "rifle_ammo",
+          "weight": 1.5,
+          "qty": [
+            2,
+            4
+          ]
+        },
+        {
+          "item": "bandage",
+          "weight": 2,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "pistol",
+          "weight": 0.3,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "cigarettes",
+          "weight": 2,
+          "qty": [
+            1,
+            3
+          ]
+        },
+        {
+          "item": "flashlight",
+          "weight": 1,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "batteries",
+          "weight": 2,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "work_jacket",
+          "weight": 1,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "fire_axe",
+          "weight": 0.2,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "baseball_bat",
+          "weight": 0.4,
+          "qty": [
+            1,
+            1
+          ]
+        }
+      ],
+      "label": "Locker"
+    },
+    "military_crate": {
+      "rolls": [
+        2,
+        3
+      ],
+      "empty_chance": 0.1,
+      "entries": [
+        {
+          "item": "ammo_556",
+          "weight": 5,
+          "qty": [
+            6,
+            12
+          ]
+        },
+        {
+          "item": "mre",
+          "weight": 4,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "med_kit",
+          "weight": 1,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "bandage",
+          "weight": 3,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "iodide_tablets",
+          "weight": 1.5,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "mask_filter",
+          "weight": 1.5,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "military_parka",
+          "weight": 0.4,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "flare",
+          "weight": 2,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "ammo_9mm",
+          "weight": 2,
+          "qty": [
+            4,
+            8
+          ]
+        },
+        {
+          "item": "service_rifle",
+          "weight": 0.15,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "purification_tablets",
+          "weight": 1.5,
+          "qty": [
+            2,
+            4
+          ]
+        }
+      ],
+      "label": "Military crate"
+    },
+    "supply_cache": {
+      "rolls": [
+        2,
+        4
+      ],
+      "empty_chance": 0.05,
+      "entries": [
+        {
+          "item": "ration",
+          "weight": 5,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "canned_food",
+          "weight": 3,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "water_clean",
+          "weight": 4,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "fuel",
+          "weight": 1.5,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "firewood",
+          "weight": 3,
+          "qty": [
+            2,
+            4
+          ]
+        },
+        {
+          "item": "bandage",
+          "weight": 2,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "ammo_shell",
+          "weight": 1.5,
+          "qty": [
+            2,
+            4
+          ]
+        },
+        {
+          "item": "rifle_ammo",
+          "weight": 1.5,
+          "qty": [
+            2,
+            4
+          ]
+        },
+        {
+          "item": "candles",
+          "weight": 2,
+          "qty": [
+            2,
+            4
+          ]
+        },
+        {
+          "item": "batteries",
+          "weight": 1,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "ar15",
+          "weight": 0.12,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "ammo_556",
+          "weight": 0.6,
+          "qty": [
+            4,
+            8
+          ]
+        }
+      ],
+      "label": "Hidden stash / supply cache"
+    },
+    "woodpile": {
+      "rolls": [
+        1,
+        1
+      ],
+      "empty_chance": 0.2,
+      "entries": [
+        {
+          "item": "firewood",
+          "weight": 10,
+          "qty": [
+            2,
+            4
+          ]
+        }
+      ],
+      "label": "Woodpile / pallets / broken furniture"
+    },
+    "corpse": {
+      "rolls": [
+        1,
+        2
+      ],
+      "empty_chance": 0.4,
+      "entries": [
+        {
+          "item": "cloth",
+          "weight": 4,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "crackers",
+          "weight": 2,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "cigarettes",
+          "weight": 2,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "note",
+          "weight": 2,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "coat",
+          "weight": 0.3,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "mask_filter",
+          "weight": 0.4,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "wool_hat",
+          "weight": 1,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "batteries",
+          "weight": 1,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "water_dirty",
+          "weight": 1,
+          "qty": [
+            1,
+            1
+          ]
+        }
+      ],
+      "label": "Frozen body"
+    },
+    "gun_safe": {
+      "rolls": [
+        1,
+        2
+      ],
+      "empty_chance": 0.4,
+      "entries": [
+        {
+          "item": "ar15",
+          "weight": 1.0,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "deer_rifle",
+          "weight": 1.2,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "pistol",
+          "weight": 1.0,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "pump_shotgun",
+          "weight": 0.8,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "ammo_556",
+          "weight": 1.5,
+          "qty": [
+            3,
+            8
+          ]
+        },
+        {
+          "item": "rifle_ammo",
+          "weight": 2,
+          "qty": [
+            2,
+            4
+          ]
+        },
+        {
+          "item": "ammo_9mm",
+          "weight": 1.5,
+          "qty": [
+            3,
+            6
+          ]
+        },
+        {
+          "item": "ammo_shell",
+          "weight": 1.5,
+          "qty": [
+            2,
+            3
+          ]
+        },
+        {
+          "item": "repair_kit",
+          "weight": 1,
+          "qty": [
+            1,
+            1
+          ]
+        }
+      ],
+      "label": "Gun safe / prepper locker",
+      "requires": "crowbar or bolt_cutters (pry/chained), else 'locked'",
+      "note": "Rare, hand-placed: prepper basements, hunting cabins, a gun shop back room."
+    }
+  },
+  "areas": {
+    "ch01": [
+      {
+        "location": "loc_east_end",
+        "containers": {
+          "kitchen_cabinet": 2,
+          "medicine_cabinet": 1,
+          "dumpster": 3,
+          "wardrobe": 3,
+          "car_trunk": 2,
+          "toolbox": 2,
+          "woodpile": 2
+        },
+        "guaranteed": {
+          "candles": 3,
+          "lineman_tools": 1,
+          "gas_can": 1
+        },
+        "note": "home, Marguerite's porch, Ray's garage, alley. diesel_jug comes via Ray dialogue."
+      },
+      {
+        "location": "loc_belknap_pharmacy",
+        "containers": {
+          "medicine_cabinet": 2,
+          "dumpster": 1,
+          "locker": 1
+        },
+        "guaranteed": {
+          "pharmacy_bag": 1,
+          "insulin_vial": 2,
+          "cool_pack": 1,
+          "bandage": 1
+        },
+        "category_bias": {
+          "med": 1.3
+        },
+        "note": "world.js spots dump_pharm + pharm_back. insulin_vial gated by flag wren_dealt."
+      }
+    ],
+    "ch02": [
+      {
+        "location": "loc_blatnik_bridge",
+        "containers": {
+          "car_trunk": 3,
+          "dumpster": 1,
+          "woodpile": 2
+        },
+        "guaranteed": {}
+      },
+      {
+        "location": "loc_decc_ration",
+        "containers": {
+          "kitchen_cabinet": 1,
+          "locker": 1
+        },
+        "guaranteed": {
+          "ration": 1,
+          "ration_card": 1
+        },
+        "note": "ration line hand-out"
+      },
+      {
+        "location": "loc_lakehead_memorial",
+        "containers": {
+          "medicine_cabinet": 2,
+          "locker": 1,
+          "car_trunk": 2
+        },
+        "guaranteed": {
+          "hospital_diesel": 1,
+          "cigarettes": 2
+        },
+        "category_bias": {
+          "med": 1.2
+        },
+        "note": "parking garage looters"
+      }
+    ],
+    "ch03": [
+      {
+        "location": "loc_east_end",
+        "containers": {
+          "kitchen_cabinet": 1,
+          "wardrobe": 3,
+          "woodpile": 2,
+          "dumpster": 2,
+          "medicine_cabinet": 1,
+          "gun_safe": 1
+        },
+        "guaranteed": {
+          "wool_blanket": 1,
+          "firewood": 2
+        },
+        "note": "night fire"
+      },
+      {
+        "location": "loc_proctor_yard",
+        "containers": {
+          "car_trunk": 2,
+          "toolbox": 3,
+          "woodpile": 1,
+          "dumpster": 2
+        },
+        "guaranteed": {
+          "boots_insulated": 1,
+          "rifle_ammo": 1
+        },
+        "category_bias": {
+          "material": 1.3
+        },
+        "note": "world.js crate_yard + bus_battery spots"
+      },
+      {
+        "location": "loc_lou_shack",
+        "containers": {
+          "kitchen_cabinet": 1,
+          "toolbox": 1,
+          "supply_cache": 1
+        },
+        "guaranteed": {
+          "hand_radio": 1,
+          "batteries": 2,
+          "radio_crystal": 0,
+          "water_clean": 1,
+          "bandage": 1
+        }
+      },
+      {
+        "location": "loc_ore_docks",
+        "containers": {
+          "wardrobe": 1
+        },
+        "guaranteed": {
+          "dried_fish": 1
+        },
+        "optional": true,
+        "note": "Harbor soup line (optional)"
+      }
+    ],
+    "ch04": [
+      {
+        "location": "loc_jay_cooke",
+        "containers": {
+          "car_trunk": 2,
+          "woodpile": 2,
+          "corpse": 1,
+          "kitchen_cabinet": 1,
+          "wardrobe": 2,
+          "gun_safe": 1
+        },
+        "guaranteed": {
+          "firewood": 4
+        }
+      },
+      {
+        "location": "loc_thomson_dam",
+        "containers": {
+          "locker": 1,
+          "toolbox": 3,
+          "kitchen_cabinet": 2,
+          "medicine_cabinet": 1,
+          "wardrobe": 1
+        },
+        "guaranteed": {
+          "relay_kit": 1,
+          "hank_keys": 1,
+          "canned_food": 1,
+          "start_battery": 1,
+          "water_clean": 2
+        },
+        "note": "powerhouse; dam_filter spot = intake locker"
+      }
+    ],
+    "ch05": [
+      {
+        "location": "loc_ore_docks",
+        "containers": {
+          "kitchen_cabinet": 2,
+          "locker": 1,
+          "woodpile": 1
+        },
+        "guaranteed": {
+          "grain_sack": 1,
+          "water_clean": 2
+        },
+        "note": "world.js dock_crate"
+      },
+      {
+        "location": "loc_hwy53_blockade",
+        "containers": {
+          "car_trunk": 3,
+          "locker": 1,
+          "corpse": 1,
+          "military_crate": 1,
+          "woodpile": 2
+        },
+        "guaranteed": {
+          "flare": 2,
+          "signal_fuse": 1
+        },
+        "note": "world.js blockade_fuel (burned sedan)"
+      },
+      {
+        "location": "loc_proctor_yard",
+        "containers": {
+          "toolbox": 2,
+          "locker": 1,
+          "car_trunk": 2
+        },
+        "guaranteed": {
+          "canned_food": 1
+        }
+      }
+    ],
+    "ch06": [
+      {
+        "location": "loc_east_end",
+        "containers": {
+          "medicine_cabinet": 2,
+          "wardrobe": 2,
+          "woodpile": 1,
+          "gun_safe": 1
+        },
+        "guaranteed": {
+          "bolt_cutters": 1,
+          "water_clean": 1
+        },
+        "note": "quarantine sweep; floor_cache = player stash mechanic, not loot"
+      },
+      {
+        "location": "loc_blatnik_bridge",
+        "containers": {
+          "car_trunk": 3,
+          "military_crate": 1,
+          "locker": 1
+        },
+        "guaranteed": {}
+      },
+      {
+        "location": "loc_lift_bridge",
+        "containers": {
+          "locker": 1,
+          "military_crate": 1,
+          "car_trunk": 3
+        },
+        "guaranteed": {
+          "med_kit": 1,
+          "ironwood_id": 0,
+          "bandage": 2
+        },
+        "note": "ironwood_id via Ruiz if spared"
+      }
+    ],
+    "ch07": [
+      {
+        "location": "loc_lou_shack",
+        "containers": {
+          "kitchen_cabinet": 1,
+          "supply_cache": 1,
+          "toolbox": 1
+        },
+        "guaranteed": {
+          "dosimeter": 1,
+          "hand_radio": 0,
+          "batteries": 2,
+          "flare": 2
+        }
+      },
+      {
+        "location": "loc_proctor_yard",
+        "containers": {
+          "locker": 1,
+          "car_trunk": 3,
+          "toolbox": 2
+        },
+        "guaranteed": {
+          "sled": 1,
+          "mask_filter": 1
+        }
+      },
+      {
+        "location": "loc_east_end",
+        "containers": {
+          "kitchen_cabinet": 3,
+          "wardrobe": 2,
+          "medicine_cabinet": 1,
+          "woodpile": 1
+        },
+        "guaranteed": {}
+      }
+    ],
+    "ch08": [
+      {
+        "location": "loc_east_end",
+        "containers": {
+          "kitchen_cabinet": 2,
+          "wardrobe": 2,
+          "corpse": 2,
+          "medicine_cabinet": 1,
+          "woodpile": 2,
+          "locker": 1,
+          "gun_safe": 1
+        },
+        "guaranteed": {},
+        "rad_zones": {
+          "rad_low": 0.5
+        }
+      },
+      {
+        "location": "loc_lakehead_memorial",
+        "containers": {
+          "medicine_cabinet": 5,
+          "locker": 3,
+          "kitchen_cabinet": 1,
+          "military_crate": 1
+        },
+        "guaranteed": {
+          "iodide_tablets": 3,
+          "mask_filter": 2,
+          "antibiotics": 1
+        },
+        "category_bias": {
+          "med": 1.4
+        },
+        "rad_zones": {
+          "rad_med": 0.3,
+          "rad_low": 0.4
+        }
+      },
+      {
+        "location": "loc_ore_docks",
+        "containers": {
+          "supply_cache": 1,
+          "kitchen_cabinet": 1,
+          "corpse": 3,
+          "locker": 1,
+          "woodpile": 1
+        },
+        "guaranteed": {
+          "dried_fish": 1,
+          "wool_blanket": 1
+        },
+        "rad_zones": {
+          "rad_low": 0.5,
+          "rad_med": 0.2
+        }
+      }
+    ],
+    "ch09": [
+      {
+        "location": "river_ice",
+        "containers": {
+          "corpse": 4,
+          "car_trunk": 2,
+          "woodpile": 3
+        },
+        "guaranteed": {
+          "firewood": 4,
+          "flare": 2,
+          "bandage": 2
+        },
+        "proposed_area_id": true,
+        "note": "story says 'river ice' between east end and Jay Cooke; burn barrels at stops"
+      },
+      {
+        "location": "loc_jay_cooke",
+        "containers": {
+          "woodpile": 4,
+          "corpse": 3,
+          "supply_cache": 1,
+          "military_crate": 1
+        },
+        "guaranteed": {
+          "tent_tarp": 1,
+          "wool_blanket": 1,
+          "mask_filter": 1,
+          "med_kit": 1,
+          "purification_tablets": 1,
+          "bandage": 2
+        },
+        "rad_zones": {
+          "rad_low": 0.3
+        }
+      },
+      {
+        "location": "loc_thomson_dam",
+        "containers": {
+          "military_crate": 2,
+          "locker": 2,
+          "kitchen_cabinet": 2
+        },
+        "guaranteed": {
+          "sled": 0,
+          "water_clean": 1
+        },
+        "rad_zones": {
+          "rad_low": 0.2
+        }
+      }
+    ],
+    "ch10": [
+      {
+        "location": "loc_thomson_dam",
+        "containers": {
+          "military_crate": 1,
+          "locker": 2,
+          "medicine_cabinet": 1,
+          "woodpile": 1,
+          "kitchen_cabinet": 1
+        },
+        "guaranteed": {
+          "water_clean": 1,
+          "bandage": 1,
+          "ration": 1
+        }
+      }
+    ]
+  },
+  "legacy_world_spots": {
+    "note": "js/world.js this.loot fixed spots -> container type + fixed contents (ids normalised via items.legacy_aliases). Keep them as hand-placed guaranteed loot.",
+    "spots": {
+      "dump_pharm": {
+        "container": "dumpster",
+        "fixed_items": {
+          "cloth": 2,
+          "scrap": 1,
+          "note": 1
+        }
+      },
+      "crate_yard": {
+        "container": "locker",
+        "fixed_items": {
+          "radio_crystal": 1,
+          "scrap": 3,
+          "ammo_shell": 3,
+          "cloth": 1
+        }
+      },
+      "dump_home": {
+        "container": "dumpster",
+        "fixed_items": {
+          "firewood": 3,
+          "cloth": 2,
+          "ration": 1,
+          "fuel": 1
+        }
+      },
+      "blockade_fuel": {
+        "container": "car_trunk",
+        "fixed_items": {
+          "fuel": 2,
+          "ammo_9mm": 8,
+          "pistol": 1,
+          "scrap": 2
+        }
+      },
+      "bus_battery": {
+        "container": "toolbox",
+        "fixed_items": {
+          "start_battery": 1,
+          "wire": 2,
+          "ammo_shell": 2
+        }
+      },
+      "pharm_back": {
+        "container": "fridge",
+        "fixed_items": {
+          "insulin_vial": 1,
+          "bandage": 2,
+          "cool_pack": 1,
+          "ration": 1
+        }
+      },
+      "dam_filter": {
+        "container": "locker",
+        "fixed_items": {
+          "mask_filter": 2,
+          "scrap": 2
+        }
+      },
+      "dock_crate": {
+        "container": "supply_cache",
+        "fixed_items": {
+          "ration": 2,
+          "cloth": 2,
+          "firewood": 2
+        }
+      }
+    }
+  },
+  "note_start_inventory": "Story chapter start_inventory (items.json starting_loadout.by_chapter_from_story) is counted in the budget on top of these tables.",
+  "item_act_weight_mult": {
+    "_note": "Per-item act multiplier applied on top of category_weight_mult (missing act = 1.0). Keeps 5.56 / AR-15 a rare prepper find in collapse.",
+    "ammo_556": {
+      "collapse": 0.25
+    },
+    "ar15": {
+      "collapse": 0.6
+    }
+  }
+}

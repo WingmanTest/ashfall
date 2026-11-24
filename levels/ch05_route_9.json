@@ -1,0 +1,1495 @@
+{
+ "$schema": "./schema.json",
+ "formatVersion": 1,
+ "id": "ch05_route_9",
+ "chapter": 5,
+ "title": "Route 9",
+ "act": "II",
+ "storyFile": "story/chapters/ch05_route_9.md",
+ "next": "ch06_the_lift_bridge",
+ "summary": "Ore docks muster -> on-rails convoy up ROUTE 9 -> Hwy 53 overpass blockade, signal cabinet under fire, Cody -> Proctor junction.",
+ "difficulty": 3,
+ "units": "meters",
+ "grid": {
+  "cellSize": 2.0,
+  "cols": 22,
+  "rows": 64,
+  "origin": {
+   "x": -22.0,
+   "z": -120.0
+  },
+  "legend": {
+   ".": {
+    "name": "snow_ground",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "snow_02",
+    "preview": "#d9e1e8"
+   },
+   "=": {
+    "name": "road",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "asphalt_snow",
+    "preview": "#8d969e"
+   },
+   "B": {
+    "name": "building_mass",
+    "walkable": false,
+    "solid": true,
+    "height": 0,
+    "wallTex": "red_brick",
+    "massOnly": true,
+    "preview": "#4a4f57"
+   },
+   "H": {
+    "name": "high_wall",
+    "walkable": false,
+    "solid": true,
+    "height": 8,
+    "wallTex": "dirty_concrete",
+    "preview": "#3c3f44"
+   },
+   "T": {
+    "name": "tree",
+    "walkable": false,
+    "solid": true,
+    "height": 6,
+    "tree": true,
+    "preview": "#2e4a34"
+   },
+   "U": {
+    "name": "covered_floor",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "road_damaged",
+    "roof": true,
+    "roofHeight": 5,
+    "blocksAirLOS": true,
+    "preview": "#5f6a72"
+   },
+   "c": {
+    "name": "cover_low",
+    "walkable": false,
+    "solid": true,
+    "height": 1.0,
+    "wallTex": "dirt",
+    "cover": true,
+    "preview": "#a08850"
+   },
+   "g": {
+    "name": "dirt_gravel",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirt",
+    "preview": "#9c8f7a"
+   },
+   "x": {
+    "name": "debris",
+    "walkable": false,
+    "solid": true,
+    "height": 0.9,
+    "wallTex": "rust_coarse_01",
+    "preview": "#6e5545"
+   },
+   "~": {
+    "name": "open_water",
+    "walkable": false,
+    "solid": false,
+    "height": -0.6,
+    "floorTex": "dirty_concrete",
+    "water": true,
+    "preview": "#2f4a63"
+   }
+  },
+  "tiles": [
+   "HHHHHHHHHHHHHHHHHHHHHH",
+   "Hggg=gggggg==ggggggggH",
+   "Hggg=gggggg==ggggggggH",
+   "Hggg=gggggg==ggBBBBBgH",
+   "Hggg=gggggg==ggBBBBBgH",
+   "Hggg=gggggg==ggBBBBBgH",
+   "Hggg=gggggg==ggBBBBBgH",
+   "Hggg=gggggg==ggBBBBBgH",
+   "Hggg=gggggg==ggBBBBBgH",
+   "Hggg=gggggg==ggBBBBBgH",
+   "Hggg=gggggg==ggBBBBBgH",
+   "Hggg=gggggg==ggggggggH",
+   "Hggg=gggggg==ggggggggH",
+   "Hggg=gggggg==ggggggggH",
+   "HHHHHHHHHHH==HHHHHHHHH",
+   "HHHHHHHHHHH==HHHHHHHHH",
+   "H..UUUUUUUUUUUUUUUU..H",
+   "H..UUUxUUUUUUUUxUUU..H",
+   "H..UUUxUUUUUUUUxUUU..H",
+   "H..UUUUUUUUUUUUUUUU..H",
+   "H........====........H",
+   "H..cc....====...cc...H",
+   "H.......cc===........H",
+   "H........====........H",
+   "H....BBBBBBBB=BBB....H",
+   "H....BBBBBBBB=BBB....H",
+   "H........====........H",
+   "H...T.T..====...T..TTH",
+   "H.T......====..TT.T..H",
+   "H.TTT.T..====.....T..H",
+   "HTTTT.T..====....T...H",
+   "H.T......====.......TH",
+   "H....T...====.T.T.T..H",
+   "HT.......====.T.T....H",
+   "HT.T..T..====...T.T.TH",
+   "HTT...TT.====.......TH",
+   "H.T.T....====....T..TH",
+   "H....TT..====..T....TH",
+   "H........====..T.T..TH",
+   "H....T...====..T..T.TH",
+   "H.T.T.T..====........H",
+   "H.T....T.====.TT.....H",
+   "H.TT...T.====......TTH",
+   "H.T..T.T.====...TT...H",
+   "H........====...T...TH",
+   "H..TT....====....T.TTH",
+   "H....TTT.====........H",
+   "H........====........H",
+   "H.....TT.====....~~~~H",
+   "H........====....~~~~H",
+   "H........====....~~~~H",
+   "H........====....~~~~H",
+   "HBBBBBB..====....~~~~H",
+   "HBBBBBB..====....~~~~H",
+   "HBBBBBB..====....~~~~H",
+   "HBBBBBB..====....~~~~H",
+   "HBBBBBB..====....~~~~H",
+   "HBBBBBB..====....~~~~H",
+   "HBBBBBB..====....~~~~H",
+   "HBBBBBB..====....~~~~H",
+   "HBBBBBB..====....~~~~H",
+   "H........====....~~~~H",
+   "H........====....~~~~H",
+   "HHHHHHHHHHHHHHHHHHHHHH"
+  ]
+ },
+ "environment": {
+  "timeStart": 0.88,
+  "timeEnd": 0.98,
+  "timeLocked": true,
+  "weather": "freezing_rain",
+  "tempC": -8,
+  "blizzard": false,
+  "snowCover": 0.8,
+  "particles": "rain",
+  "fogNear": 6,
+  "fogFar": 34,
+  "palette": "assets/palettes/oil-6.json",
+  "ambientTint": "#c9d6e6",
+  "hud": {
+   "temp": true,
+   "hunger": true,
+   "rad": false,
+   "filter": false,
+   "seal": false
+  },
+  "warmthDrainMul": 1.2,
+  "maxAliveEnemies": 5
+ },
+ "locations": [
+  {
+   "id": "loc_ore_docks",
+   "x": 0.0,
+   "z": -9.0,
+   "rect": {
+    "type": "rect",
+    "x0": -20.0,
+    "z0": -24.0,
+    "x1": 20.0,
+    "z1": 6.0
+   },
+   "safe": false
+  },
+  {
+   "id": "loc_hwy53_blockade",
+   "x": 0.0,
+   "z": -75.0,
+   "rect": {
+    "type": "rect",
+    "x0": -20.0,
+    "z0": -92.0,
+    "x1": 20.0,
+    "z1": -58.0
+   },
+   "safe": false
+  },
+  {
+   "id": "loc_proctor_yard",
+   "x": 0.0,
+   "z": -105.0,
+   "rect": {
+    "type": "rect",
+    "x0": -20.0,
+    "z0": -118.0,
+    "x1": 20.0,
+    "z1": -92.0
+   },
+   "safe": false
+  }
+ ],
+ "landmarks": [
+  {
+   "label": "Grain elevator",
+   "x": -14.0,
+   "z": -7.0
+  },
+  {
+   "label": "Blockade",
+   "x": 0.0,
+   "z": -70.0
+  },
+  {
+   "label": "Signal cabinet",
+   "x": 13.0,
+   "z": -83.0
+  },
+  {
+   "label": "Cody (under overpass)",
+   "x": -13.0,
+   "z": -85.0
+  },
+  {
+   "label": "Junction switch",
+   "x": -7.0,
+   "z": -105.0
+  }
+ ],
+ "paths": {
+  "critical": [
+   [
+    -1.0,
+    -1.0
+   ],
+   [
+    0.0,
+    -13.0
+   ],
+   [
+    0.0,
+    -65.0
+   ],
+   [
+    5.0,
+    -67.0
+   ],
+   [
+    5.0,
+    -71.0
+   ],
+   [
+    5.0,
+    -75.0
+   ],
+   [
+    11.0,
+    -81.0
+   ],
+   [
+    13.0,
+    -83.0
+   ],
+   [
+    3.0,
+    -85.0
+   ],
+   [
+    2.0,
+    -89.0
+   ],
+   [
+    2.0,
+    -113.0
+   ]
+  ],
+  "optional": [
+   {
+    "id": "b_cody",
+    "label": "Cody under the overpass",
+    "points": [
+     [
+      3.0,
+      -85.0
+     ],
+     [
+      -13.0,
+      -85.0
+     ]
+    ]
+   },
+   {
+    "id": "b_divert",
+    "label": "Divert: junction switch",
+    "points": [
+     [
+      1.0,
+      -95.0
+     ],
+     [
+      -7.0,
+      -105.0
+     ]
+    ]
+   }
+  ]
+ },
+ "spawns": {
+  "player": [
+   {
+    "id": "spawn_default",
+    "x": -1.0,
+    "z": -1.0,
+    "rotY": 3.142
+   }
+  ],
+  "npcs": [
+   {
+    "id": "npc_strand",
+    "npc": "strand",
+    "x": -4.0,
+    "z": -3.0,
+    "rotY": -1.571,
+    "behavior": "idle"
+   },
+   {
+    "id": "npc_ruiz",
+    "npc": "ruiz",
+    "x": 1.0,
+    "z": -13.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch05_ruiz_convoy",
+    "label": "Sgt. Ruiz (MRAP)"
+   },
+   {
+    "id": "npc_ray",
+    "npc": "ray",
+    "x": 5.0,
+    "z": 3.0,
+    "rotY": 1.571,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "ray_alive",
+      "ne": false
+     }
+    ]
+   },
+   {
+    "id": "npc_bea",
+    "npc": "bea",
+    "x": 10.0,
+    "z": -19.0,
+    "rotY": 1.571,
+    "behavior": "idle"
+   },
+   {
+    "id": "npc_jory",
+    "npc": "jory",
+    "x": 5.0,
+    "z": -66.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch05_jory_blockade",
+    "when": [
+     {
+      "flag": "ch05_parley",
+      "eq": true
+     }
+    ],
+    "label": "Jory (white rag)"
+   },
+   {
+    "id": "npc_cody",
+    "npc": "cody",
+    "x": -13.0,
+    "z": -85.0,
+    "rotY": -1.571,
+    "behavior": "idle",
+    "dialogue": "ch05_cody",
+    "label": "Cody (gut-shot)"
+   },
+   {
+    "id": "npc_kessler",
+    "npc": "kessler",
+    "x": -5.0,
+    "z": -6.6,
+    "rotY": 0.0,
+    "behavior": "voice",
+    "label": "Kessler (loudspeaker, voice only)"
+   }
+  ],
+  "enemies": [
+   {
+    "id": "en_01",
+    "type": "compact_militia",
+    "x": -9.0,
+    "z": -75.0,
+    "group": "g_blockade_front",
+    "tier": 3,
+    "behavior": "guard",
+    "hostile": "always",
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "convoy_choice",
+      "ne": "sabotage"
+     }
+    ]
+   },
+   {
+    "id": "en_02",
+    "type": "compact_militia",
+    "x": -3.0,
+    "z": -77.0,
+    "group": "g_blockade_front",
+    "tier": 3,
+    "behavior": "guard",
+    "hostile": "always",
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "convoy_choice",
+      "ne": "sabotage"
+     }
+    ]
+   },
+   {
+    "id": "en_03",
+    "type": "compact_militia",
+    "x": 7.0,
+    "z": -76.0,
+    "group": "g_blockade_front",
+    "tier": 3,
+    "behavior": "guard",
+    "hostile": "always",
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "convoy_choice",
+      "ne": "sabotage"
+     }
+    ]
+   },
+   {
+    "id": "en_04",
+    "type": "compact_militia",
+    "x": 13.0,
+    "z": -75.0,
+    "group": "g_blockade_front",
+    "tier": 3,
+    "behavior": "guard",
+    "hostile": "always",
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "convoy_choice",
+      "ne": "sabotage"
+     }
+    ]
+   },
+   {
+    "id": "en_05",
+    "type": "compact_militia",
+    "x": -17.0,
+    "z": -77.0,
+    "group": "g_blockade_flank",
+    "tier": 3,
+    "behavior": "ambush",
+    "hostile": "always",
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "convoy_choice",
+      "ne": "sabotage"
+     }
+    ]
+   },
+   {
+    "id": "en_06",
+    "type": "compact_militia",
+    "x": 17.0,
+    "z": -78.0,
+    "group": "g_blockade_flank",
+    "tier": 3,
+    "behavior": "ambush",
+    "hostile": "always",
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "convoy_choice",
+      "ne": "sabotage"
+     }
+    ]
+   },
+   {
+    "id": "en_07",
+    "type": "compact_militia",
+    "x": -5.0,
+    "z": -63.0,
+    "group": "g_blockade_flank",
+    "tier": 3,
+    "behavior": "ambush",
+    "hostile": "always",
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "convoy_choice",
+      "ne": "sabotage"
+     }
+    ]
+   },
+   {
+    "id": "en_08",
+    "type": "compact_militia",
+    "x": 15.0,
+    "z": -67.0,
+    "group": "g_blockade_flank",
+    "tier": 3,
+    "behavior": "ambush",
+    "hostile": "always",
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "convoy_choice",
+      "ne": "sabotage"
+     }
+    ]
+   },
+   {
+    "id": "en_09",
+    "type": "ironwood_patrol",
+    "x": -1.0,
+    "z": -59.0,
+    "group": "g_ironwood_turn",
+    "tier": 4,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "convoy_choice",
+      "eq": "sabotage"
+     }
+    ],
+    "note": "Sabotage flips the fight: break drone LOS under the overpass."
+   },
+   {
+    "id": "en_10",
+    "type": "ironwood_patrol",
+    "x": 1.0,
+    "z": -57.0,
+    "group": "g_ironwood_turn",
+    "tier": 4,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "convoy_choice",
+      "eq": "sabotage"
+     }
+    ],
+    "note": "Sabotage flips the fight: break drone LOS under the overpass."
+   },
+   {
+    "id": "en_11",
+    "type": "ironwood_patrol",
+    "x": -2.0,
+    "z": -55.0,
+    "group": "g_ironwood_turn",
+    "tier": 4,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "convoy_choice",
+      "eq": "sabotage"
+     }
+    ],
+    "note": "Sabotage flips the fight: break drone LOS under the overpass."
+   },
+   {
+    "id": "en_12",
+    "type": "ironwood_patrol",
+    "x": 3.0,
+    "z": -55.0,
+    "group": "g_ironwood_turn",
+    "tier": 4,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "convoy_choice",
+      "eq": "sabotage"
+     }
+    ],
+    "note": "Sabotage flips the fight: break drone LOS under the overpass."
+   }
+  ],
+  "loot": [
+   {
+    "id": "loot_01",
+    "x": 5.0,
+    "z": -7.0,
+    "r": 1.6,
+    "label": "Dock crate",
+    "container": "locker",
+    "location": "loc_ore_docks"
+   },
+   {
+    "id": "loot_02",
+    "x": 0.0,
+    "z": -15.0,
+    "r": 1.6,
+    "label": "MRAP locker",
+    "container": "locker",
+    "location": "loc_ore_docks"
+   },
+   {
+    "id": "loot_03",
+    "x": 14.0,
+    "z": -82.0,
+    "r": 1.6,
+    "label": "Cabinet spares",
+    "container": "supply_cache",
+    "guaranteed": [
+     {
+      "item": "signal_fuse",
+      "n": 1
+     }
+    ],
+    "location": "loc_hwy53_blockade"
+   },
+   {
+    "id": "loot_04",
+    "x": -15.0,
+    "z": -74.0,
+    "r": 1.6,
+    "label": "Militia nest",
+    "container": "military_crate",
+    "location": "loc_hwy53_blockade"
+   },
+   {
+    "id": "loot_05",
+    "x": 7.0,
+    "z": -86.0,
+    "r": 1.6,
+    "label": "Overpass drift",
+    "container": "corpse",
+    "guaranteed": [
+     {
+      "item": "flare",
+      "n": 1
+     }
+    ],
+    "location": "loc_hwy53_blockade"
+   },
+   {
+    "id": "loot_06",
+    "x": -11.0,
+    "z": -101.0,
+    "r": 1.6,
+    "label": "Spilled hopper",
+    "container": "toolbox",
+    "location": "loc_proctor_yard"
+   },
+   {
+    "id": "loot_07",
+    "x": 5.0,
+    "z": -2.0,
+    "r": 1.6,
+    "label": "Elevator sack pile",
+    "container": "kitchen_cabinet",
+    "guaranteed": [
+     {
+      "item": "grain_sack",
+      "n": 1
+     }
+    ],
+    "location": "loc_ore_docks"
+   },
+   {
+    "id": "loot_08",
+    "x": -19.0,
+    "z": -23.0,
+    "r": 1.6,
+    "label": "Kitchen cabinet (filler)",
+    "container": "kitchen_cabinet",
+    "location": "loc_ore_docks",
+    "filler": true,
+    "guaranteed": [
+     {
+      "item": "water_clean",
+      "n": 2
+     }
+    ]
+   },
+   {
+    "id": "loot_09",
+    "x": -19.0,
+    "z": 5.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture (filler)",
+    "container": "woodpile",
+    "location": "loc_ore_docks",
+    "filler": true
+   },
+   {
+    "id": "loot_10",
+    "x": 19.0,
+    "z": -59.0,
+    "r": 1.6,
+    "label": "Car trunk (filler)",
+    "container": "car_trunk",
+    "location": "loc_hwy53_blockade",
+    "filler": true,
+    "guaranteed": [
+     {
+      "item": "flare",
+      "n": 1
+     }
+    ]
+   },
+   {
+    "id": "loot_11",
+    "x": -11.0,
+    "z": -59.0,
+    "r": 1.6,
+    "label": "Car trunk (filler)",
+    "container": "car_trunk",
+    "location": "loc_hwy53_blockade",
+    "filler": true
+   },
+   {
+    "id": "loot_12",
+    "x": -3.0,
+    "z": -77.0,
+    "r": 1.6,
+    "label": "Car trunk (filler)",
+    "container": "car_trunk",
+    "location": "loc_hwy53_blockade",
+    "filler": true
+   },
+   {
+    "id": "loot_13",
+    "x": 19.0,
+    "z": -71.0,
+    "r": 1.6,
+    "label": "Locker (filler)",
+    "container": "locker",
+    "location": "loc_hwy53_blockade",
+    "filler": true
+   },
+   {
+    "id": "loot_14",
+    "x": -3.0,
+    "z": -87.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture (filler)",
+    "container": "woodpile",
+    "location": "loc_hwy53_blockade",
+    "filler": true
+   },
+   {
+    "id": "loot_15",
+    "x": -5.0,
+    "z": -67.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture (filler)",
+    "container": "woodpile",
+    "location": "loc_hwy53_blockade",
+    "filler": true
+   },
+   {
+    "id": "loot_16",
+    "x": 19.0,
+    "z": -117.0,
+    "r": 1.6,
+    "label": "Toolbox / workbench drawer (filler)",
+    "container": "toolbox",
+    "location": "loc_proctor_yard",
+    "filler": true
+   },
+   {
+    "id": "loot_17",
+    "x": 19.0,
+    "z": -99.0,
+    "r": 1.6,
+    "label": "Locker (filler)",
+    "container": "locker",
+    "location": "loc_proctor_yard",
+    "filler": true
+   },
+   {
+    "id": "loot_18",
+    "x": -19.0,
+    "z": -117.0,
+    "r": 1.6,
+    "label": "Car trunk (filler)",
+    "container": "car_trunk",
+    "location": "loc_proctor_yard",
+    "filler": true
+   },
+   {
+    "id": "loot_19",
+    "x": 3.0,
+    "z": -117.0,
+    "r": 1.6,
+    "label": "Car trunk (filler)",
+    "container": "car_trunk",
+    "location": "loc_proctor_yard",
+    "filler": true
+   }
+  ]
+ },
+ "props": [
+  {
+   "id": "prop_01",
+   "asset": "assets/kenney/industrial/detail-tank-large.glb",
+   "x": -16.0,
+   "z": -11.0,
+   "rotY": 0,
+   "h": 9,
+   "collide": true,
+   "tag": "grain silo"
+  },
+  {
+   "id": "prop_02",
+   "asset": "assets/kenney/industrial/detail-tank-large.glb",
+   "x": -11.0,
+   "z": -11.0,
+   "rotY": 0,
+   "h": 9,
+   "collide": true
+  },
+  {
+   "id": "prop_03",
+   "asset": "assets/kenney/industrial/chimney-large.glb",
+   "x": -14.0,
+   "z": -2.0,
+   "rotY": 0,
+   "h": 18,
+   "collide": true,
+   "tag": "elevator head"
+  },
+  {
+   "id": "prop_04",
+   "asset": "assets/kenney/industrial/shipping-container-a.glb",
+   "x": 7.0,
+   "z": -3.0,
+   "rotY": 0,
+   "h": 2.6,
+   "collide": true
+  },
+  {
+   "id": "prop_05",
+   "asset": "assets/kenney/industrial/shipping-container-b.glb",
+   "x": 7.0,
+   "z": -9.0,
+   "rotY": 0.05,
+   "h": 2.6,
+   "collide": true
+  },
+  {
+   "id": "prop_06",
+   "asset": "assets/kenney/industrial/shipping-container-c.glb",
+   "x": 9.0,
+   "z": -15.0,
+   "rotY": 0,
+   "h": 2.6,
+   "collide": true
+  },
+  {
+   "id": "prop_07",
+   "asset": "assets/kenney/roads/light-square-double.glb",
+   "x": -5.0,
+   "z": -7.0,
+   "rotY": 0,
+   "h": 6,
+   "collide": true,
+   "tag": "Kessler loudspeaker mast"
+  },
+  {
+   "id": "prop_08",
+   "asset": "assets/kenney/roads/electricity-pole.glb",
+   "x": 6.0,
+   "z": -59.0,
+   "rotY": 0,
+   "h": 8,
+   "collide": true
+  },
+  {
+   "id": "prop_09",
+   "asset": "assets/kenney/roads/electricity-pole.glb",
+   "x": 6.0,
+   "z": -43.0,
+   "rotY": 0,
+   "h": 8,
+   "collide": true
+  },
+  {
+   "id": "prop_10",
+   "asset": "assets/kenney/roads/electricity-pole.glb",
+   "x": 6.0,
+   "z": -27.0,
+   "rotY": 0,
+   "h": 8,
+   "collide": true
+  },
+  {
+   "id": "prop_11",
+   "asset": "assets/kenney/industrial/shipping-container-a.glb",
+   "x": -7.0,
+   "z": -70.0,
+   "rotY": 1.571,
+   "h": 2.6,
+   "collide": true,
+   "tag": "logging truck stand-in"
+  },
+  {
+   "id": "prop_12",
+   "asset": "assets/kenney/industrial/shipping-container-b.glb",
+   "x": 0.0,
+   "z": -70.0,
+   "rotY": 1.571,
+   "h": 2.6,
+   "collide": true
+  },
+  {
+   "id": "prop_13",
+   "asset": "assets/kenney/industrial/shipping-container-c.glb",
+   "x": 9.0,
+   "z": -70.0,
+   "rotY": 1.571,
+   "h": 2.6,
+   "collide": true
+  },
+  {
+   "id": "prop_14",
+   "asset": "assets/kenney/roads/construction-barrier.glb",
+   "x": 5.0,
+   "z": -67.0,
+   "rotY": 0,
+   "h": 1.1,
+   "collide": true
+  },
+  {
+   "id": "prop_15",
+   "asset": "assets/kenney/roads/road-sign-warning.glb",
+   "x": -5.0,
+   "z": -65.0,
+   "rotY": 0.0,
+   "h": 2.6,
+   "collide": true
+  },
+  {
+   "id": "prop_16",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": 18.0,
+   "z": -75.0,
+   "rotY": 1.2,
+   "h": 1.45,
+   "collide": true,
+   "tag": "armored plow truck stand-in"
+  },
+  {
+   "id": "prop_17",
+   "asset": "assets/kenney/roads/traffic-light.glb",
+   "x": 12.0,
+   "z": -85.0,
+   "rotY": 1.571,
+   "h": 4.5,
+   "collide": true,
+   "tag": "signal cabinet mast"
+  },
+  {
+   "id": "prop_18",
+   "asset": "assets/kenney/industrial/building-e.glb",
+   "x": 13.0,
+   "z": -106.0,
+   "rotY": 1.571,
+   "h": 10,
+   "collide": false
+  },
+  {
+   "id": "prop_19",
+   "asset": "assets/kenney/industrial/water-tower.glb",
+   "x": -17.0,
+   "z": -113.0,
+   "rotY": 0,
+   "h": 15,
+   "collide": true,
+   "tag": "Proctor water tower"
+  }
+ ],
+ "interactives": [
+  {
+   "id": "ch05_mrap",
+   "type": "vehicle",
+   "x": 0.0,
+   "z": -13.0,
+   "r": 1.8,
+   "label": "Board the MRAP",
+   "setsFlag": "ch05_convoy_started"
+  },
+  {
+   "id": "ch05_cabinet",
+   "type": "repair",
+   "x": 13.0,
+   "z": -83.0,
+   "r": 2.0,
+   "label": "Signal cabinet (repair under fire)",
+   "requiresItems": [
+    "signal_fuse"
+   ],
+   "setsFlag": "ch05_cabinet_open"
+  },
+  {
+   "id": "ch05_switch",
+   "type": "lever",
+   "x": -7.0,
+   "z": -105.0,
+   "r": 1.8,
+   "label": "Junction switch (divert half to Harbor siding)",
+   "setsFlag": "ch05_switch_thrown",
+   "when": [
+    {
+     "flag": "convoy_choice",
+     "eq": "divert"
+    }
+   ]
+  }
+ ],
+ "safeZones": [
+  {
+   "id": "safe_01",
+   "kind": "indoor",
+   "x": -8.0,
+   "z": 3.0,
+   "r": 2.5,
+   "label": "Elevator gatehouse",
+   "warmth": true,
+   "save": true,
+   "sealed": false
+  },
+  {
+   "id": "safe_02",
+   "kind": "burn_barrel",
+   "x": 5.0,
+   "z": -21.0,
+   "r": 2.6,
+   "label": "Dock burn barrel",
+   "warmth": true,
+   "save": true,
+   "sealed": false
+  },
+  {
+   "id": "safe_03",
+   "kind": "indoor",
+   "x": 15.0,
+   "z": -95.0,
+   "r": 2.5,
+   "label": "Yard switch house",
+   "warmth": true,
+   "save": true,
+   "sealed": false
+  }
+ ],
+ "setPieces": [
+  {
+   "id": "sp_ch05_mrap",
+   "type": "ironwood_mrap",
+   "path": [
+    [
+     0.0,
+     -11.0
+    ],
+    [
+     0.0,
+     -59.0
+    ],
+    [
+     0.0,
+     -65.0
+    ]
+   ],
+   "note": "Convoy lead; on-rails ride camera."
+  },
+  {
+   "id": "sp_ch05_drone",
+   "type": "ironwood_drone",
+   "path": [
+    [
+     -1.0,
+     -39.0
+    ],
+    [
+     -1.0,
+     -67.0
+    ],
+    [
+     -11.0,
+     -79.0
+    ],
+    [
+     11.0,
+     -79.0
+    ],
+    [
+     -1.0,
+     -67.0
+    ]
+   ],
+   "note": "Spotter. Covered 'U' tiles break its line of sight."
+  },
+  {
+   "id": "sp_ch05_plow",
+   "type": "armored_plow_truck",
+   "path": [
+    [
+     18.0,
+     -75.0
+    ],
+    [
+     5.0,
+     -75.0
+    ]
+   ],
+   "note": "Compact homemade armored plow; scripted charge."
+  }
+ ],
+ "encounters": [
+  {
+   "id": "enc_blockade",
+   "area": {
+    "type": "rect",
+    "x0": -20.0,
+    "z0": -92.0,
+    "x1": 20.0,
+    "z1": -52.0
+   },
+   "groups": [
+    {
+     "group": "g_blockade_front",
+     "wave": 1
+    },
+    {
+     "group": "g_blockade_flank",
+     "wave": 2
+    },
+    {
+     "group": "g_ironwood_turn",
+     "wave": 1
+    }
+   ],
+   "note": "Compact 4+4 in two waves; ironwood_turn is the exclusive sabotage branch."
+  }
+ ],
+ "triggers": [
+  {
+   "id": "t_ch05_start",
+   "on": "load",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": -1.0,
+    "z": -1.0,
+    "r": 3
+   },
+   "actions": [
+    {
+     "type": "cutscene",
+     "id": "cs_ch05_ask",
+     "text": "Strand, very quietly: \"They didn't ask me either.\""
+    },
+    {
+     "type": "hud_unlock",
+     "stat": "ammo_military"
+    },
+    {
+     "type": "checkpoint"
+    }
+   ]
+  },
+  {
+   "id": "t_ch05_ride",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -4.0,
+    "z0": -16.0,
+    "x1": 4.0,
+    "z1": -10.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch05_ruiz_convoy"
+    },
+    {
+     "type": "start_sequence",
+     "id": "seq_ch05_convoy_ride"
+    },
+    {
+     "type": "spawn_setpiece",
+     "id": "sp_ch05_mrap"
+    },
+    {
+     "type": "spawn_setpiece",
+     "id": "sp_ch05_drone"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch05_convoy_started",
+     "eq": true
+    }
+   ],
+   "note": "On-rails look-and-shoot from the MRAP up to r=27; hold fire allowed."
+  },
+  {
+   "id": "t_ch05_parley",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -6.0,
+    "z0": -68.0,
+    "x1": 12.0,
+    "z1": -62.0
+   },
+   "actions": [
+    {
+     "type": "set_flag",
+     "flag": "ch05_parley",
+     "value": true
+    },
+    {
+     "type": "dialogue",
+     "id": "ch05_jory_blockade"
+    },
+    {
+     "type": "checkpoint"
+    }
+   ]
+  },
+  {
+   "id": "t_ch05_fight",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -6.0,
+    "z0": -68.0,
+    "x1": 12.0,
+    "z1": -62.0
+   },
+   "actions": [
+    {
+     "type": "activate_group",
+     "group": "g_blockade_front"
+    },
+    {
+     "type": "spawn_setpiece",
+     "id": "sp_ch05_plow"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch05_parley_failed",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch05_flank",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -20.0,
+    "z0": -92.0,
+    "x1": 20.0,
+    "z1": -58.0
+   },
+   "actions": [
+    {
+     "type": "activate_group",
+     "group": "g_blockade_flank"
+    }
+   ],
+   "when": [
+    {
+     "flag": "cleared.g_blockade_front",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch05_cabinet_choice",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": 13.0,
+    "z": -83.0,
+    "r": 2
+   },
+   "actions": [
+    {
+     "type": "start_sequence",
+     "id": "seq_ch05_cabinet_choice"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch05_cabinet_open",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch05_sabotage",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -20.0,
+    "z0": -88.0,
+    "x1": 20.0,
+    "z1": -80.0
+   },
+   "actions": [
+    {
+     "type": "activate_group",
+     "group": "g_ironwood_turn"
+    }
+   ],
+   "when": [
+    {
+     "flag": "convoy_choice",
+     "eq": "sabotage"
+    }
+   ]
+  },
+  {
+   "id": "t_ch05_cody",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": -13.0,
+    "z": -85.0,
+    "r": 2.2
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch05_cody"
+    }
+   ]
+  },
+  {
+   "id": "t_ch05_end",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -4.0,
+    "z0": -118.0,
+    "x1": 6.0,
+    "z1": -112.0
+   },
+   "actions": [
+    {
+     "type": "checkpoint"
+    },
+    {
+     "type": "chapter_end",
+     "next": "ch06_the_lift_bridge"
+    }
+   ],
+   "when": [
+    {
+     "flag": "convoy_choice",
+     "ne": null
+    }
+   ]
+  }
+ ],
+ "objectives": [
+  {
+   "id": "o1",
+   "order": 1,
+   "text": "Ride the convoy with Ironwood",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch05_convoy_started",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o2",
+   "order": 2,
+   "text": "Restore the signal cabinet under fire",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch05_cabinet_open",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o3",
+   "order": 3,
+   "text": "Decide the convoy's fate",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "convoy_choice",
+     "ne": null
+    }
+   ]
+  },
+  {
+   "id": "o4",
+   "order": 4,
+   "text": "Find the wounded fighter under the overpass",
+   "optional": false,
+   "completeWhen": [
+    {
+     "any": [
+      {
+       "flag": "cody_spared",
+       "eq": true
+      },
+      {
+       "flag": "cody_prisoner",
+       "eq": true
+      },
+      {
+       "flag": "cody_alive",
+       "eq": false
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

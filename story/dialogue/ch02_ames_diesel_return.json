@@ -1,0 +1,72 @@
+{
+  "id": "ch02_ames_diesel_return",
+  "chapter": "ch02",
+  "location": "loc_lakehead_memorial",
+  "trigger": "Return to Ames with hospital_diesel.",
+  "speakers": [
+    "ames",
+    "dell",
+    "narrator"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "ames",
+      "text": "You smell like diesel. That's the nicest thing anyone's done this week.",
+      "effects": [
+        {
+          "take": "hospital_diesel",
+          "qty": 1
+        },
+        {
+          "quest": "q_hospital_diesel",
+          "state": "complete"
+        },
+        {
+          "quest": "q_insulin",
+          "state": "complete"
+        },
+        {
+          "give": "insulin_vial",
+          "qty": 1
+        },
+        {
+          "trust": "ames",
+          "delta": 3
+        }
+      ],
+      "next": "d1"
+    },
+    {
+      "id": "d1",
+      "speaker": "ames",
+      "text": "One vial. No paperwork. If anyone asks, it expired.",
+      "next": "d2"
+    },
+    {
+      "id": "d2",
+      "speaker": "dell",
+      "text": "Where are you getting the rest of your fuel, Ames?",
+      "next": "d3"
+    },
+    {
+      "id": "d3",
+      "speaker": "ames",
+      "text": "From people who can get it. Don't ask what I pay them in. Next.",
+      "effects": [
+        {
+          "set": "ames_trade_hinted",
+          "value": true
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "On the way out, a teenage boy in a Bridge Boys bandana passes you, carrying a cooler toward Ames's office.",
+      "end": true
+    }
+  ]
+}

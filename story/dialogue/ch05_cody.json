@@ -1,0 +1,209 @@
+{
+  "id": "ch05_cody",
+  "chapter": "ch05",
+  "location": "loc_hwy53_blockade",
+  "trigger": "After the fight. Wounded Compact fighter under the overpass.",
+  "speakers": [
+    "cody",
+    "dell",
+    "narrator"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "cody",
+      "text": "Don't. Don't. I'm done, okay? I'm done. Hah. I'm so done.",
+      "next": "c1"
+    },
+    {
+      "id": "c1",
+      "speaker": "narrator",
+      "text": "Gut wound. Twenty-something. Compact armband. A Superior Spartans hat.",
+      "choices": [
+        {
+          "text": "What's your name?",
+          "next": "name"
+        },
+        {
+          "text": "[Treat the wound]",
+          "next": "treat",
+          "conditions": [
+            {
+              "item": "med_kit",
+              "gte": 1
+            }
+          ]
+        },
+        {
+          "text": "[Leave him]",
+          "next": "leave"
+        },
+        {
+          "text": "[Call Ironwood: prisoner]",
+          "next": "prisoner"
+        }
+      ]
+    },
+    {
+      "id": "name",
+      "speaker": "cody",
+      "text": "Cody. Brekke. My— the guy's in Superior. Ray. Fourth Street. Tell him... whatever.",
+      "branches": [
+        {
+          "next": "name_ray",
+          "conditions": [
+            {
+              "flag": "ray_mentioned_cody",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "name2"
+        }
+      ]
+    },
+    {
+      "id": "name_ray",
+      "speaker": "dell",
+      "text": "Ray's son. He talks about you.",
+      "next": "name_ray2"
+    },
+    {
+      "id": "name_ray2",
+      "speaker": "cody",
+      "text": "No he doesn't. Hah. Ow. ...Does he?",
+      "effects": [
+        {
+          "trust": "cody",
+          "delta": 1
+        }
+      ],
+      "next": "name2"
+    },
+    {
+      "id": "name2",
+      "speaker": "narrator",
+      "text": "He's losing blood. You have a minute to decide.",
+      "choices": [
+        {
+          "text": "[Treat the wound]",
+          "next": "treat",
+          "conditions": [
+            {
+              "item": "med_kit",
+              "gte": 1
+            }
+          ]
+        },
+        {
+          "text": "[Leave him]",
+          "next": "leave"
+        },
+        {
+          "text": "[Call Ironwood: prisoner]",
+          "next": "prisoner"
+        }
+      ]
+    },
+    {
+      "id": "treat",
+      "speaker": "narrator",
+      "text": "You pack it, tape it, drag him into the lee of a truck. He'll live if somebody gets him north.",
+      "effects": [
+        {
+          "take": "med_kit",
+          "qty": 1
+        },
+        {
+          "set": "cody_spared",
+          "value": true
+        },
+        {
+          "set": "cody_alive",
+          "value": true
+        },
+        {
+          "add": "kindness",
+          "value": 1
+        },
+        {
+          "trust": "cody",
+          "delta": 4
+        },
+        {
+          "trust": "ray",
+          "delta": 4
+        },
+        {
+          "add": "rep_compact",
+          "value": 1
+        }
+      ],
+      "next": "treat2"
+    },
+    {
+      "id": "treat2",
+      "speaker": "cody",
+      "text": "Why. I shot at you guys. Probably. It was dark.",
+      "next": "treat3"
+    },
+    {
+      "id": "treat3",
+      "speaker": "dell",
+      "text": "Your dad would want you home. That's why.",
+      "next": "end"
+    },
+    {
+      "id": "leave",
+      "speaker": "narrator",
+      "text": "You walk back to the MRAP. Behind you, he stops calling.",
+      "effects": [
+        {
+          "set": "cody_spared",
+          "value": false
+        },
+        {
+          "set": "cody_alive",
+          "value": false
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "prisoner",
+      "speaker": "narrator",
+      "text": "Ruiz's medic takes him. 'He'll be processed,' Ruiz says. She doesn't say where.",
+      "effects": [
+        {
+          "set": "cody_spared",
+          "value": true
+        },
+        {
+          "set": "cody_prisoner",
+          "value": true
+        },
+        {
+          "set": "cody_alive",
+          "value": true
+        },
+        {
+          "trust": "ruiz",
+          "delta": 1
+        },
+        {
+          "trust": "cody",
+          "delta": -2
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "Dawn. The trains, wherever they went, are gone.",
+      "end": true
+    }
+  ]
+}

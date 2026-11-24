@@ -1,0 +1,158 @@
+{
+  "id": "ch08_door",
+  "chapter": "ch08",
+  "location": "loc_east_end",
+  "trigger": "Night. Strangers knock. Filters and iodide on the table.",
+  "speakers": [
+    "rosa",
+    "dell",
+    "theo",
+    "narrator"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Knocking. Three people in the ash: a woman, a boy, an old man with a cough like gravel.",
+      "branches": [
+        {
+          "next": "rosa",
+          "conditions": [
+            {
+              "flag": "ch02_crush_helped",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "strangers"
+        }
+      ]
+    },
+    {
+      "id": "rosa",
+      "speaker": "rosa",
+      "text": "It's Rosa. From the line, the flour. You pulled my Mateo out. Please. One night.",
+      "next": "choice"
+    },
+    {
+      "id": "strangers",
+      "speaker": "narrator",
+      "text": "'Please,' the woman says. 'We have nothing. We know that's not a reason.'",
+      "next": "choice"
+    },
+    {
+      "id": "choice",
+      "speaker": "theo",
+      "text": "ma. we have six filters. i need two a week. do the math. i'm not saying no. i'm saying math.",
+      "choices": [
+        {
+          "text": "[Let them in. Share filters and iodide.]",
+          "next": "share",
+          "effects": [
+            {
+              "set": "filters_shared",
+              "value": true
+            },
+            {
+              "add": "kindness",
+              "value": 2
+            },
+            {
+              "trust": "marguerite",
+              "delta": 2
+            },
+            {
+              "take": "mask_filter",
+              "qty": 3
+            }
+          ]
+        },
+        {
+          "text": "[Let them in. Keep the filters.]",
+          "next": "shelter",
+          "effects": [
+            {
+              "add": "kindness",
+              "value": 1
+            },
+            {
+              "set": "filters_shared",
+              "value": false
+            }
+          ]
+        },
+        {
+          "text": "[Keep the door shut]",
+          "next": "shut",
+          "effects": [
+            {
+              "set": "filters_shared",
+              "value": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "share",
+      "speaker": "narrator",
+      "text": "They sleep by your stove. In the morning the old man is gone. The others are still breathing.",
+      "branches": [
+        {
+          "next": "rosa_gift",
+          "conditions": [
+            {
+              "flag": "ch02_crush_helped",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "end"
+        }
+      ]
+    },
+    {
+      "id": "rosa_gift",
+      "speaker": "rosa",
+      "text": "Harbor stores. Back room. Tell them Rosa. There's a case of filters. Go.",
+      "effects": [
+        {
+          "give": "mask_filter",
+          "qty": 6
+        },
+        {
+          "set": "rosa_filters",
+          "value": true
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "shelter",
+      "speaker": "narrator",
+      "text": "They sleep by your stove with wet rags over their faces. The boy coughs all night.",
+      "next": "end"
+    },
+    {
+      "id": "shut",
+      "speaker": "narrator",
+      "text": "The knocking stops eventually. In the morning there are footprints going away. Some come back.",
+      "effects": [
+        {
+          "trust": "theo",
+          "delta": -1
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "Grey morning. Grey noon. Grey.",
+      "end": true
+    }
+  ]
+}

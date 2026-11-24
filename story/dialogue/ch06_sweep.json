@@ -1,0 +1,269 @@
+{
+  "id": "ch06_sweep",
+  "chapter": "ch06",
+  "location": "loc_east_end",
+  "trigger": "Sector 4 quarantine sweep. Ruiz's squad reaches your block.",
+  "speakers": [
+    "ruiz",
+    "dell",
+    "narrator",
+    "kessler",
+    "deshawn"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "kessler",
+      "text": "[Loudspeaker] Sector 4 is under quarantine. Remain indoors. Declare weapons and stores over fourteen days.",
+      "next": "s1"
+    },
+    {
+      "id": "s1",
+      "speaker": "narrator",
+      "text": "Typhoid is real here. Six dead this week. So are the trucks loading confiscated food.",
+      "branches": [
+        {
+          "next": "pruitt",
+          "conditions": [
+            {
+              "flag": "pruitt_alive",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "marg"
+        }
+      ]
+    },
+    {
+      "id": "pruitt",
+      "speaker": "deshawn",
+      "text": "Ms. Dell. Grandpa's got three months of soup cans. They'll take it. Can we hide it at yours?",
+      "choices": [
+        {
+          "text": "[Hide it under your floor]",
+          "next": "hide",
+          "effects": [
+            {
+              "set": "ch06_hid_neighbors",
+              "value": true
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "Declare it. It's not worth getting shot.",
+          "next": "declare"
+        }
+      ]
+    },
+    {
+      "id": "marg",
+      "speaker": "narrator",
+      "text": "Marguerite hands you a cigar box over the fence: the clinic's morphine. 'Under your floor. Please.'",
+      "choices": [
+        {
+          "text": "[Hide it under your floor]",
+          "next": "hide",
+          "effects": [
+            {
+              "set": "ch06_hid_neighbors",
+              "value": true
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            },
+            {
+              "trust": "marguerite",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "text": "I can't risk Theo for this.",
+          "next": "declare",
+          "effects": [
+            {
+              "trust": "marguerite",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "declare",
+      "speaker": "narrator",
+      "text": "It goes on a truck. Somewhere, a quartermaster counts it.",
+      "next": "door"
+    },
+    {
+      "id": "hide",
+      "speaker": "narrator",
+      "text": "Floorboards up, cans in, rug down. Your hands are shaking. Boots on the porch.",
+      "next": "door"
+    },
+    {
+      "id": "door",
+      "speaker": "ruiz",
+      "text": "Kowalczyk. Small world. Weapons, stores, sympathizers. Any of the three.",
+      "branches": [
+        {
+          "next": "door_unreg",
+          "conditions": [
+            {
+              "flag": "ch02_registered",
+              "ne": true
+            }
+          ]
+        },
+        {
+          "next": "door_hostile",
+          "conditions": [
+            {
+              "flag": "ironwood_hostility",
+              "gte": 3
+            }
+          ]
+        },
+        {
+          "next": "door2"
+        }
+      ]
+    },
+    {
+      "id": "door_unreg",
+      "speaker": "ruiz",
+      "text": "You're not even in the registry. Unregistered household, Sector 4. That's a full search.",
+      "effects": [
+        {
+          "add": "ironwood_hostility",
+          "value": 1
+        }
+      ],
+      "next": "door2"
+    },
+    {
+      "id": "door_hostile",
+      "speaker": "ruiz",
+      "text": "You shorted my cabinet. Lieutenant wants you processed. I'm the one who decides if you're home.",
+      "next": "door2"
+    },
+    {
+      "id": "door2",
+      "speaker": "narrator",
+      "text": "She looks at the rug. At the scuffed boards. At Theo in the doorway.",
+      "branches": [
+        {
+          "next": "clear",
+          "conditions": [
+            {
+              "flag": "ch06_hid_neighbors",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "clear_plain"
+        }
+      ]
+    },
+    {
+      "id": "clear",
+      "speaker": "ruiz",
+      "text": "...House is clear. ¡Vámonos!",
+      "effects": [
+        {
+          "trust": "ruiz",
+          "delta": 2
+        }
+      ],
+      "next": "clear2"
+    },
+    {
+      "id": "clear2",
+      "speaker": "narrator",
+      "text": "On the way out she taps the list on her clipboard. Kids' houses have a pencil mark. Skipped.",
+      "effects": [
+        {
+          "set": "ruiz_list_seen",
+          "value": true
+        }
+      ],
+      "next": "list"
+    },
+    {
+      "id": "clear_plain",
+      "speaker": "ruiz",
+      "text": "Clear. Stay inside. Boil your water. I mean it.",
+      "next": "list"
+    },
+    {
+      "id": "list",
+      "speaker": "narrator",
+      "text": "At the checkpoint, a list goes up on plywood: INFORMANT-VERIFIED HOUSEHOLDS. With sources.",
+      "branches": [
+        {
+          "next": "ray_reads",
+          "conditions": [
+            {
+              "flag": "ch02_reported_ray",
+              "eq": true
+            },
+            {
+              "flag": "ray_alive",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "end"
+        }
+      ]
+    },
+    {
+      "id": "ray_reads",
+      "speaker": "narrator",
+      "text": "Ray stands in front of it a long time. BREKKE, R. SOURCE: KOWALCZYK, A.",
+      "effects": [
+        {
+          "set": "ray_knows_report",
+          "value": true
+        },
+        {
+          "trust": "ray",
+          "delta": -6
+        },
+        {
+          "trust": "cody",
+          "delta": -4
+        }
+      ],
+      "next": "ray_reads2"
+    },
+    {
+      "id": "ray_reads2",
+      "speaker": "narrator",
+      "text": "He doesn't come to your door. He doesn't have to.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "By evening, Theo is gone. His note: 'don't be mad. i can help. — T'",
+      "effects": [
+        {
+          "quest": "q_find_theo",
+          "state": "start"
+        }
+      ],
+      "end": true
+    }
+  ]
+}

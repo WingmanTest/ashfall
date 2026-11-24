@@ -1,0 +1,49 @@
+{
+ "_note": "systems/*.json is authoritative for enemies, items, containers. Level-owned ids live here.",
+ "levelSetPieces": {
+  "armored_plow_truck": "Ch5 Compact plow truck charge (scripted)",
+  "ied_mrap": "Ch6 IED flips MRAP door onto Ruiz",
+  "ice_break_qte": "Ch9 timed save-one choice",
+  "house_fire": "Ch3 burning garage: heat hazard + light"
+ },
+ "engineFallback": {
+  "enemies": "use systems/enemies.json enemies[].code_kind (raider | dog | husk) with js/enemies.js EnemySystem.spawn(kind,x,z)",
+  "items": "use systems/items.json legacy_aliases (insulin->insulin_vial, wood->firewood, filter->mask_filter)"
+ },
+ "offlineFallback": {
+  "enemyTypes": [
+   "looter",
+   "bridge_boy",
+   "watch_militia",
+   "desperate_family",
+   "authority_guard",
+   "compact_militia",
+   "harbor_militia",
+   "ironwood_patrol",
+   "remnant_patrol",
+   "feral_dog",
+   "wolf",
+   "husk",
+   "ironwood_checkpoint"
+  ],
+  "setPieces": [
+   "ironwood_drone",
+   "ironwood_mrap",
+   "ironwood_bradley"
+  ],
+  "containers": [
+   "kitchen_cabinet",
+   "fridge",
+   "medicine_cabinet",
+   "dumpster",
+   "car_trunk",
+   "wardrobe",
+   "toolbox",
+   "locker",
+   "military_crate",
+   "supply_cache",
+   "woodpile",
+   "corpse"
+  ]
+ }
+}

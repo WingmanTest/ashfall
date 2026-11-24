@@ -1,0 +1,156 @@
+{
+  "id": "ch08_marguerite_list",
+  "chapter": "ch08",
+  "location": "loc_east_end",
+  "trigger": "Searching Marguerite's clinic drawer for antibiotics.",
+  "speakers": [
+    "marguerite",
+    "dell",
+    "narrator"
+  ],
+  "start": "start",
+  "on_end": [
+    {
+      "if": [
+        {
+          "trust": "marguerite",
+          "lte": -1
+        }
+      ],
+      "then": [
+        {
+          "set": "marguerite_alive",
+          "value": false
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "A spiral notebook under the gauze. Names. Dates. Doses. Mrs. Halloran. Mr. Ostrowski. Fourteen.",
+      "effects": [
+        {
+          "set": "marguerite_list_seen",
+          "value": true
+        }
+      ],
+      "next": "m1"
+    },
+    {
+      "id": "m1",
+      "speaker": "narrator",
+      "text": "The last page says IF IT COMES TO IT. The first name on it is Theo Kowalczyk.",
+      "next": "m2"
+    },
+    {
+      "id": "m2",
+      "speaker": "marguerite",
+      "text": "...You found it. Sit down, my dear. Please. Before you say anything.",
+      "choices": [
+        {
+          "text": "Explain. Now.",
+          "next": "explain"
+        },
+        {
+          "text": "You were going to kill my son.",
+          "next": "harsh"
+        },
+        {
+          "text": "[Put it back. Say nothing.]",
+          "next": "silent"
+        }
+      ]
+    },
+    {
+      "id": "explain",
+      "speaker": "marguerite",
+      "text": "Every one of them asked. Every one was dying slow, in a cold house, in pain. You understand?",
+      "next": "e2"
+    },
+    {
+      "id": "e2",
+      "speaker": "marguerite",
+      "text": "Theo's name is there because if his insulin ends, the end is ugly. I wanted him not to suffer.",
+      "next": "e3"
+    },
+    {
+      "id": "e3",
+      "speaker": "marguerite",
+      "text": "I did not want to be the one. I wanted to be ready. Those are different.",
+      "choices": [
+        {
+          "text": "Cross him off. He's not going to need it.",
+          "next": "cross"
+        },
+        {
+          "text": "Thank you for being ready.",
+          "next": "thank"
+        },
+        {
+          "text": "You don't get to decide that.",
+          "next": "harsh"
+        }
+      ]
+    },
+    {
+      "id": "cross",
+      "speaker": "narrator",
+      "text": "She takes the pen and crosses him out. Her hand is very steady.",
+      "effects": [
+        {
+          "trust": "marguerite",
+          "delta": 2
+        },
+        {
+          "set": "theo_crossed_off",
+          "value": true
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "thank",
+      "speaker": "marguerite",
+      "text": "...No one has ever said that to me. I don't know if they should.",
+      "effects": [
+        {
+          "trust": "marguerite",
+          "delta": 3
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "harsh",
+      "speaker": "marguerite",
+      "text": "No. I don't. I've only ever been the one in the room when no one else would come.",
+      "effects": [
+        {
+          "trust": "marguerite",
+          "delta": -3
+        }
+      ],
+      "next": "harsh2"
+    },
+    {
+      "id": "harsh2",
+      "speaker": "narrator",
+      "text": "She closes the notebook. She doesn't ask you to stay.",
+      "next": "end"
+    },
+    {
+      "id": "silent",
+      "speaker": "narrator",
+      "text": "You put it back under the gauze. You'll carry it now too.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "Outside, ash is falling on the clean snow, so there's no clean snow.",
+      "end": true
+    }
+  ]
+}

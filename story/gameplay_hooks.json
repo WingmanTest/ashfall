@@ -1,0 +1,1340 @@
+{
+  "version": 1,
+  "notes": "Per-chapter machine-readable hooks. Effects/conditions use the same schema as dialogue (see SCHEMA.md). chapter_start_effects run before the first scene; chapter_end_effects after the last.",
+  "enemy_types": {
+    "looter": {
+      "kind": "human",
+      "acts": [
+        1,
+        2
+      ],
+      "desc": "Desperate civilians stealing. Flee when hurt or threatened. Melee/pistol."
+    },
+    "watch_militia": {
+      "kind": "human",
+      "acts": [
+        1,
+        2
+      ],
+      "desc": "Block-watch neighbors with deer rifles. Neutral unless provoked or you carry stolen goods."
+    },
+    "bridge_boy": {
+      "kind": "human",
+      "acts": [
+        1,
+        2
+      ],
+      "desc": "Young scavenger-raiders. Pipes, pistols, molotovs. Break and run at 50% losses."
+    },
+    "desperate_family": {
+      "kind": "human",
+      "acts": [
+        2
+      ],
+      "desc": "Armed parent defending kids. Only hostile if threatened. Killing one: kindness -2, theo trust -2."
+    },
+    "authority_guard": {
+      "kind": "human",
+      "acts": [
+        1,
+        2,
+        3
+      ],
+      "desc": "County/Guard. Rifles, vests. Neutral unless you're hostile to the Authority."
+    },
+    "compact_militia": {
+      "kind": "human",
+      "acts": [
+        2,
+        3
+      ],
+      "desc": "Range miners and farmers. Deer rifles, plow trucks. Hostility depends on convoy_choice."
+    },
+    "harbor_militia": {
+      "kind": "human",
+      "acts": [
+        2
+      ],
+      "desc": "Longshoremen with rifles. Hostile only if bridge_choice=held."
+    },
+    "ironwood_patrol": {
+      "kind": "human_military",
+      "acts": [
+        2
+      ],
+      "desc": "Federal Army fireteam (4). Rifles, grenades, NVGs at night. Can be avoided; some surrender if outflanked."
+    },
+    "ironwood_checkpoint": {
+      "kind": "human_military",
+      "acts": [
+        2,
+        3
+      ],
+      "desc": "Static: sandbags, searchlight, MG. Sneak, bribe with ironwood_id, or assault."
+    },
+    "ironwood_drone": {
+      "kind": "setpiece",
+      "acts": [
+        2,
+        3
+      ],
+      "desc": "Small surveillance quadcopter. Spots and calls fire after 3s line of sight. Fog/blizzard ground it."
+    },
+    "ironwood_mrap": {
+      "kind": "setpiece",
+      "acts": [
+        2,
+        3
+      ],
+      "desc": "Armored truck with searchlight/MG. Not killable by small arms; avoid its lanes or use as cover."
+    },
+    "ironwood_bradley": {
+      "kind": "setpiece",
+      "acts": [
+        2
+      ],
+      "desc": "IFV on the Canal Park pier. Never fought directly. Block with the pier crane or avoid."
+    },
+    "remnant_patrol": {
+      "kind": "human_military",
+      "acts": [
+        2,
+        3
+      ],
+      "desc": "Kessler's loyalists after Ch7. Better gear than anyone, low ammo, cold. Can stand down in Ch10."
+    },
+    "feral_dog": {
+      "kind": "animal",
+      "acts": [
+        2,
+        3
+      ],
+      "first_chapter": "ch07",
+      "desc": "Abandoned pets turned pack (3-5). Flee from fire and flares."
+    },
+    "wolf": {
+      "kind": "animal",
+      "acts": [
+        3
+      ],
+      "first_chapter": "ch09",
+      "desc": "Jay Cooke pack (4-6). Circle, test, attack stragglers in the column."
+    },
+    "husk": {
+      "kind": "human_sick",
+      "acts": [
+        3
+      ],
+      "first_chapter": "ch08",
+      "desc": "Radiation-sick, hypothermic, starving people. Erratic; rush heat/food. Talk-down possible: holster, approach slowly, need iodide_tablets + wool_blanket + kindness>=4."
+    }
+  },
+  "locations": {
+    "loc_east_end": "Dell's block, East End, Superior WI. Authority SECTOR 4.",
+    "loc_belknap_pharmacy": "Looted corner pharmacy.",
+    "loc_blatnik_bridge": "High bridge; Authority (later Ironwood) checkpoint.",
+    "loc_decc_ration": "Duluth convention center: registry and ration hub.",
+    "loc_lakehead_memorial": "Hospital (fictional). Dr. Ames.",
+    "loc_proctor_yard": "Rail yard on the hill. Grain trains; later Ironwood Remnant base.",
+    "loc_lou_shack": "Lou's radio shack, Proctor hill.",
+    "loc_ore_docks": "Ore docks and grain elevators. Harbor stronghold.",
+    "loc_lift_bridge": "Aerial Lift Bridge and control house, Canal Park.",
+    "loc_hwy53_blockade": "Hwy 53 overpass on ROUTE 9. Compact blockade.",
+    "river_ice": "Frozen St. Louis River stretch from the Twin Ports up toward Jay Cooke. Ch9 blizzard march.",
+    "loc_jay_cooke": "State park forest, swinging bridge, river gorge.",
+    "loc_thomson_dam": "Thomson hydro station: headgates, powerhouse, control room."
+  },
+  "quests": [
+    {
+      "id": "q_cooler",
+      "title": "Keep It Cold",
+      "loc": "loc_east_end",
+      "chapter": "ch01",
+      "hint": "Basement cooler + lake water."
+    },
+    {
+      "id": "q_insulin",
+      "title": "Tier Two",
+      "loc": "loc_decc_ration",
+      "chapter": "ch02",
+      "hint": "Registry desk, then Lakehead Memorial."
+    },
+    {
+      "id": "q_hospital_diesel",
+      "title": "Level Three",
+      "loc": "loc_lakehead_memorial",
+      "chapter": "ch02",
+      "hint": "Tanker in the parking ramp, level three."
+    },
+    {
+      "id": "q_find_hank",
+      "title": "Bring Your Head",
+      "loc": "loc_lou_shack",
+      "chapter": "ch03",
+      "hint": "Proctor hill, Lou's shack."
+    },
+    {
+      "id": "q_black_start",
+      "title": "Black Start",
+      "loc": "loc_thomson_dam",
+      "chapter": "ch04",
+      "hint": "Headgates, exciter, sync, breaker."
+    },
+    {
+      "id": "q_find_theo",
+      "title": "don't be mad",
+      "loc": "loc_ore_docks",
+      "chapter": "ch06",
+      "hint": "He went to whoever asked him."
+    }
+  ],
+  "weather_types": [
+    "overcast",
+    "snow",
+    "freezing_rain",
+    "drizzle",
+    "clear_cold",
+    "brown_sky",
+    "grey_snow",
+    "fallout_rain",
+    "ashfall",
+    "blizzard"
+  ],
+  "hud_unlocks": {
+    "ch01": [
+      "hp",
+      "warmth",
+      "hunger"
+    ],
+    "ch03": [
+      "temp"
+    ],
+    "ch05": [
+      "ammo_military"
+    ],
+    "ch07": [
+      "rad"
+    ],
+    "ch08": [
+      "filter",
+      "seal"
+    ]
+  },
+  "chapters": [
+    {
+      "id": "ch01",
+      "title": "Day Three",
+      "act": 1,
+      "date": "Oct 17",
+      "weather": "overcast",
+      "temp_c": 6,
+      "time_of_day": [
+        "morning",
+        "dusk"
+      ],
+      "locations": [
+        "loc_east_end",
+        "loc_belknap_pharmacy"
+      ],
+      "objectives": [
+        "Talk to Theo",
+        "Build lake-water cooler (craft lake_cooler; sets ch01_cooler_built)",
+        "Get fuel (Ray or gas can)",
+        "Check on Marguerite",
+        "Pharmacy at dusk",
+        "Home before dark"
+      ],
+      "player_actions": [
+        "explore",
+        "scavenge",
+        "craft",
+        "trade",
+        "dialogue",
+        "stealth_optional"
+      ],
+      "enemies": [
+        {
+          "type": "looter",
+          "count": 1,
+          "note": "Wren; non-hostile unless attacked"
+        },
+        {
+          "type": "watch_militia",
+          "count": 1,
+          "note": "Hostile only if you run with drugs or draw"
+        }
+      ],
+      "setpieces": [
+        "Looted pharmacy at dusk"
+      ],
+      "start_inventory": {
+        "insulin_vial": 3,
+        "gas_can": 1,
+        "lineman_tools": 1,
+        "canned_food": 2,
+        "candles": 2
+      },
+      "items": [
+        "insulin_vial",
+        "gas_can",
+        "lineman_tools",
+        "diesel_jug",
+        "canned_food",
+        "candles",
+        "bucket",
+        "pharmacy_bag",
+        "lake_cooler"
+      ],
+      "crafting": [
+        {
+          "result": "lake_cooler",
+          "inputs": {
+            "bucket": 1,
+            "wire": 1
+          },
+          "effects": [
+            {
+              "set": "ch01_cooler_built",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "scenes": [
+        "ch01_theo_morning",
+        "ch01_marguerite_porch",
+        "ch01_ray_garage",
+        "ch01_wren_pharmacy",
+        "ch01_theo_night"
+      ],
+      "chapter_start_effects": [
+        {
+          "set": "kindness",
+          "value": 0
+        },
+        {
+          "set": "rep_authority",
+          "value": 0
+        },
+        {
+          "set": "rep_harbor",
+          "value": 0
+        },
+        {
+          "set": "rep_compact",
+          "value": 0
+        },
+        {
+          "set": "ironwood_hostility",
+          "value": 0
+        },
+        {
+          "set": "theo_insulin_lapses",
+          "value": 0
+        },
+        {
+          "set": "theo_alive",
+          "value": true
+        },
+        {
+          "set": "theo_side",
+          "value": "none"
+        },
+        {
+          "set": "ray_alive",
+          "value": true
+        },
+        {
+          "set": "wren_alive",
+          "value": true
+        },
+        {
+          "set": "strand_alive",
+          "value": true
+        },
+        {
+          "set": "bea_alive",
+          "value": true
+        },
+        {
+          "set": "jory_alive",
+          "value": true
+        },
+        {
+          "set": "hank_alive",
+          "value": true
+        },
+        {
+          "set": "marguerite_alive",
+          "value": true
+        },
+        {
+          "set": "cody_alive",
+          "value": true
+        },
+        {
+          "set": "dam_running",
+          "value": false
+        },
+        {
+          "set": "husks_talked_down",
+          "value": 0
+        }
+      ],
+      "chapter_end_effects": []
+    },
+    {
+      "id": "ch02",
+      "title": "The Registry",
+      "act": 1,
+      "date": "Day 19 (Nov 2)",
+      "weather": "snow",
+      "temp_c": -4,
+      "time_of_day": [
+        "day"
+      ],
+      "locations": [
+        "loc_blatnik_bridge",
+        "loc_decc_ration",
+        "loc_lakehead_memorial"
+      ],
+      "objectives": [
+        "Cross the checkpoint",
+        "Register at the DECC",
+        "Get insulin (priority card or Ames diesel job)",
+        "Survive the crush"
+      ],
+      "player_actions": [
+        "dialogue",
+        "queue_timeskip",
+        "timed_escape",
+        "explore_hospital"
+      ],
+      "enemies": [
+        {
+          "type": "authority_guard",
+          "count": 6,
+          "note": "Neutral"
+        },
+        {
+          "type": "looter",
+          "count": 3,
+          "note": "Parking ramp squatters (q_hospital_diesel); can be talked off"
+        }
+      ],
+      "setpieces": [
+        "Ration-line crush (enc_ch02_crush)"
+      ],
+      "items": [
+        "ration_card",
+        "priority_card",
+        "insulin_vial",
+        "cigarettes",
+        "hospital_diesel"
+      ],
+      "scenes": [
+        "ch02_haas_checkpoint",
+        "ch02_lou_radio",
+        "ch02_wren_line",
+        "ch02_strand_registry",
+        "ch02_ames_hospital",
+        "ch02_ames_diesel_return"
+      ],
+      "scene_conditions": {
+        "ch02_ames_diesel_return": [
+          {
+            "item": "hospital_diesel",
+            "gte": 1
+          }
+        ]
+      },
+      "chapter_start_effects": [
+        {
+          "quest": "q_insulin",
+          "state": "start"
+        }
+      ],
+      "chapter_end_effects": []
+    },
+    {
+      "id": "ch03",
+      "title": "The Long Cold",
+      "act": 1,
+      "date": "Day 60 (Dec 13)",
+      "weather": "clear_cold",
+      "temp_c": -30,
+      "time_of_day": [
+        "night",
+        "dawn"
+      ],
+      "locations": [
+        "loc_east_end",
+        "loc_proctor_yard",
+        "loc_lou_shack",
+        "loc_ore_docks"
+      ],
+      "objectives": [
+        "Survive the fire night",
+        "Cross to Proctor (warmth stops)",
+        "Find Hank",
+        "Decide who learns about the dam"
+      ],
+      "player_actions": [
+        "night_defense_or_rescue",
+        "cold_traverse",
+        "scavenge_clothing",
+        "dialogue"
+      ],
+      "enemies": [
+        {
+          "type": "bridge_boy",
+          "count": 6,
+          "note": "Flee at 50% losses; warning shots work"
+        },
+        {
+          "type": "watch_militia",
+          "count": 3,
+          "note": "Proctor patrol; talk past with ration_card"
+        }
+      ],
+      "setpieces": [
+        "Ray's house burning in the dark",
+        "Frozen boxcar in the rail yard"
+      ],
+      "items": [
+        "firewood",
+        "wool_blanket",
+        "boots_insulated",
+        "hand_radio",
+        "batteries",
+        "rifle_ammo"
+      ],
+      "scenes": [
+        "ch03_wren_warning",
+        "ch03_ray_fire",
+        "ch03_hank_proctor",
+        "ch03_dam_secret"
+      ],
+      "scene_conditions": {
+        "ch03_wren_warning": [
+          {
+            "trust": "wren",
+            "gte": 3
+          }
+        ]
+      },
+      "chapter_start_effects": [],
+      "chapter_end_effects": [
+        {
+          "if": [
+            {
+              "flag": "ray_house_burned",
+              "eq": true
+            },
+            {
+              "flag": "ch03_helped_ray",
+              "ne": true
+            }
+          ],
+          "then": [
+            {
+              "set": "ray_badly_burned",
+              "value": true
+            }
+          ]
+        },
+        {
+          "if": [
+            {
+              "item": "insulin_vial",
+              "lt": 1
+            },
+            {
+              "flag": "dam_running",
+              "ne": true
+            },
+            {
+              "flag": "ames_deal",
+              "ne": true
+            }
+          ],
+          "then": [
+            {
+              "add": "theo_insulin_lapses",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch04",
+      "title": "Black Start",
+      "act": 2,
+      "date": "Late January",
+      "weather": "snow",
+      "temp_c": -24,
+      "time_of_day": [
+        "day",
+        "night"
+      ],
+      "locations": [
+        "loc_jay_cooke",
+        "loc_thomson_dam"
+      ],
+      "objectives": [
+        "Cross the swinging bridge",
+        "Deal with the Lunds",
+        "Get a relay",
+        "Black start Unit 2",
+        "Choose the first feeder"
+      ],
+      "player_actions": [
+        "balance_traverse",
+        "negotiate",
+        "minigame_black_start",
+        "valves_levers"
+      ],
+      "minigames": [
+        {
+          "id": "mg_black_start",
+          "steps": [
+            "headgate_wheel",
+            "exciter",
+            "sync",
+            "close_breaker"
+          ],
+          "note": "Longer with relay_source=bypass; mistakes trip breaker"
+        }
+      ],
+      "enemies": [
+        {
+          "type": "desperate_family",
+          "count": 1,
+          "note": "Pete Lund"
+        },
+        {
+          "type": "bridge_boy",
+          "count": 2,
+          "note": "Optional, river ice"
+        },
+        {
+          "type": "authority_guard",
+          "count": 8,
+          "note": "Story standoff only if dam_secret_told=authority"
+        }
+      ],
+      "setpieces": [
+        "Swinging bridge in wind",
+        "Turbine spin-up, lights on at night (big warmth restore)"
+      ],
+      "items": [
+        "relay_kit",
+        "hank_keys",
+        "lineman_tools",
+        "canned_food",
+        "firewood"
+      ],
+      "scenes": [
+        "ch04_lunds",
+        "ch04_standoff",
+        "ch04_black_start"
+      ],
+      "scene_conditions": {
+        "ch04_standoff": [
+          {
+            "flag": "dam_secret_told",
+            "eq": "authority"
+          }
+        ]
+      },
+      "chapter_start_effects": [
+        {
+          "if": [
+            {
+              "flag": "dam_secret_told",
+              "eq": "harbor"
+            }
+          ],
+          "then": [
+            {
+              "set": "relay_source",
+              "value": "harbor"
+            },
+            {
+              "give": "relay_kit",
+              "qty": 1
+            }
+          ]
+        },
+        {
+          "if": [
+            {
+              "flag": "dam_secret_told",
+              "eq": "none"
+            }
+          ],
+          "then": [
+            {
+              "set": "relay_source",
+              "value": "bypass"
+            }
+          ]
+        }
+      ],
+      "chapter_end_effects": []
+    },
+    {
+      "id": "ch05",
+      "title": "Route 9",
+      "act": 2,
+      "date": "March",
+      "weather": "freezing_rain",
+      "temp_c": -8,
+      "time_of_day": [
+        "night"
+      ],
+      "locations": [
+        "loc_ore_docks",
+        "loc_hwy53_blockade",
+        "loc_proctor_yard"
+      ],
+      "objectives": [
+        "Ride the Ironwood convoy",
+        "Restore the signal cabinet under fire",
+        "Decide the convoy",
+        "Find the wounded man under the overpass"
+      ],
+      "player_actions": [
+        "convoy_onrails_shoot_or_hold",
+        "repair_under_fire",
+        "dialogue",
+        "medical"
+      ],
+      "enemies": [
+        {
+          "type": "compact_militia",
+          "count": 8,
+          "note": "If escort/divert"
+        },
+        {
+          "type": "ironwood_patrol",
+          "count": 4,
+          "note": "If sabotage"
+        },
+        {
+          "type": "ironwood_drone",
+          "count": 1,
+          "note": "Spotter; break LOS under overpass"
+        },
+        {
+          "type": "ironwood_mrap",
+          "count": 1,
+          "note": "Escort or threat"
+        }
+      ],
+      "setpieces": [
+        "MRAP searchlight on snow",
+        "Logging-truck blockade on the overpass"
+      ],
+      "items": [
+        "med_kit",
+        "rifle_ammo",
+        "signal_fuse",
+        "flare",
+        "grain_sack"
+      ],
+      "start_inventory": {
+        "med_kit": 1
+      },
+      "scenes": [
+        "ch05_ruiz_convoy",
+        "ch05_jory_blockade",
+        "ch05_cody"
+      ],
+      "chapter_start_effects": [
+        {
+          "set": "ironwood_arrived",
+          "value": true
+        }
+      ],
+      "chapter_end_effects": []
+    },
+    {
+      "id": "ch06",
+      "title": "The Lift Bridge",
+      "act": 2,
+      "date": "May",
+      "weather": "drizzle",
+      "temp_c": 4,
+      "time_of_day": [
+        "day",
+        "night"
+      ],
+      "locations": [
+        "loc_east_end",
+        "loc_blatnik_bridge",
+        "loc_ore_docks",
+        "loc_lift_bridge"
+      ],
+      "objectives": [
+        "Survive the sweep",
+        "Find Theo",
+        "Strand's command post",
+        "Cross Canal Park",
+        "Raise or hold the bridge"
+      ],
+      "player_actions": [
+        "stealth_hide_items",
+        "checkpoint",
+        "urban_night_battle",
+        "power_routing_puzzle"
+      ],
+      "enemies": [
+        {
+          "type": "ironwood_patrol",
+          "count": 12,
+          "note": "Fireteams of 4"
+        },
+        {
+          "type": "ironwood_checkpoint",
+          "count": 1
+        },
+        {
+          "type": "ironwood_drone",
+          "count": 2,
+          "note": "Fog reduces detection"
+        },
+        {
+          "type": "ironwood_bradley",
+          "count": 1,
+          "note": "Setpiece; disable crane to block"
+        },
+        {
+          "type": "compact_militia",
+          "count": 4,
+          "note": "Only if bridge_choice=held (last fight)"
+        },
+        {
+          "type": "harbor_militia",
+          "count": 6,
+          "note": "Only if bridge_choice=held (last fight)"
+        }
+      ],
+      "setpieces": [
+        "Quarantine sweep house-to-house",
+        "Bradley on the pier",
+        "Lift bridge rising under fire",
+        "Jump into the canal"
+      ],
+      "items": [
+        "rifle_ammo",
+        "med_kit",
+        "ironwood_id",
+        "bolt_cutters"
+      ],
+      "scenes": [
+        "ch06_sweep",
+        "ch06_theo_side",
+        "ch06_strand_break",
+        "ch06_ruiz_pinned",
+        "ch06_lift_bridge"
+      ],
+      "chapter_start_effects": [],
+      "chapter_end_effects": [
+        {
+          "if": [
+            {
+              "trust": "wren",
+              "lt": 3
+            }
+          ],
+          "then": [
+            {
+              "set": "wren_alive",
+              "value": false
+            }
+          ]
+        },
+        {
+          "if": [
+            {
+              "flag": "convoy_choice",
+              "eq": "sabotage"
+            },
+            {
+              "flag": "bridge_choice",
+              "eq": "raised"
+            }
+          ],
+          "then": [
+            {
+              "set": "strand_alive",
+              "value": false
+            }
+          ]
+        },
+        {
+          "if": [
+            {
+              "flag": "bridge_choice",
+              "eq": "held"
+            },
+            {
+              "flag": "cody_alive",
+              "eq": false
+            }
+          ],
+          "then": [
+            {
+              "set": "ray_alive",
+              "value": false
+            }
+          ]
+        },
+        {
+          "if": [
+            {
+              "flag": "ray_badly_burned",
+              "eq": true
+            }
+          ],
+          "then": [
+            {
+              "set": "ray_alive",
+              "value": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch07",
+      "title": "Dead Air",
+      "act": 2,
+      "date": "July 9 → late July",
+      "weather": "brown_sky",
+      "temp_c": 2,
+      "time_of_day": [
+        "night",
+        "day"
+      ],
+      "locations": [
+        "loc_lou_shack",
+        "loc_proctor_yard",
+        "loc_east_end"
+      ],
+      "objectives": [
+        "Reach Lou",
+        "Decide the broadcast",
+        "Ruiz at the door",
+        "Choose where to winter"
+      ],
+      "player_actions": [
+        "night_walk",
+        "dialogue",
+        "defend_from_dogs",
+        "load_sled"
+      ],
+      "enemies": [
+        {
+          "type": "feral_dog",
+          "count": 4,
+          "note": "FIRST non-human enemy"
+        },
+        {
+          "type": "remnant_patrol",
+          "count": 4,
+          "note": "Hostile if ironwood_hostility>=3"
+        }
+      ],
+      "setpieces": [
+        "Every frequency goes silent",
+        "Grey snow in July (palette shifts to Nuclear Winter)"
+      ],
+      "items": [
+        "hand_radio",
+        "batteries",
+        "sled",
+        "dosimeter",
+        "flare"
+      ],
+      "scenes": [
+        "ch07_lou_dead_air",
+        "ch07_ruiz",
+        "ch07_where"
+      ],
+      "scene_conditions": {
+        "ch07_ruiz": [
+          {
+            "flag": "ruiz_spared",
+            "eq": true
+          }
+        ]
+      },
+      "chapter_start_effects": [],
+      "chapter_end_effects": [
+        {
+          "if": [
+            {
+              "flag": "ch07_location",
+              "eq": "dam"
+            },
+            {
+              "trust": "lou",
+              "lt": 3
+            }
+          ],
+          "then": [
+            {
+              "set": "lou_alive",
+              "value": false
+            }
+          ],
+          "else": [
+            {
+              "set": "lou_alive",
+              "value": true
+            }
+          ]
+        },
+        {
+          "if": [
+            {
+              "item": "insulin_vial",
+              "lt": 1
+            },
+            {
+              "flag": "dam_running",
+              "ne": true
+            },
+            {
+              "flag": "ames_deal",
+              "ne": true
+            }
+          ],
+          "then": [
+            {
+              "add": "theo_insulin_lapses",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch08",
+      "title": "Ashfall",
+      "act": 3,
+      "date": "August–October",
+      "weather": "fallout_rain",
+      "temp_c": -10,
+      "time_of_day": [
+        "grey_day",
+        "night"
+      ],
+      "locations": [
+        "loc_east_end",
+        "loc_lakehead_memorial",
+        "loc_ore_docks"
+      ],
+      "objectives": [
+        "Iodide and filters",
+        "Clean water",
+        "Theo's foot",
+        "The strangers at the door",
+        "Marguerite's list"
+      ],
+      "player_actions": [
+        "exposure_management",
+        "seal_shelter",
+        "scavenge",
+        "talk_down",
+        "moral_choice"
+      ],
+      "enemies": [
+        {
+          "type": "husk",
+          "count": 6
+        },
+        {
+          "type": "feral_dog",
+          "count": 5
+        },
+        {
+          "type": "looter",
+          "count": 3,
+          "note": "Hospital"
+        },
+        {
+          "type": "remnant_patrol",
+          "count": 4,
+          "note": "Elevators, if bridge_choice=held"
+        }
+      ],
+      "setpieces": [
+        "Fallout rain over the docks",
+        "Seal the shelter: tape plastic/tarp over windows (sets shelter_sealed; HUD SEAL unlocks). Husk/raider break-ins and broken windows lower SEAL.",
+        "Husk at the car"
+      ],
+      "items": [
+        "iodide_tablets",
+        "mask_filter",
+        "med_kit",
+        "antibiotics",
+        "water_clean",
+        "wool_blanket"
+      ],
+      "start_inventory": {
+        "mask_filter": 6,
+        "iodide_tablets": 2
+      },
+      "scenes": [
+        "ch08_ames_foot",
+        "ch08_marguerite_list",
+        "ch08_husk",
+        "ch08_door",
+        "ch08_deshawn"
+      ],
+      "scene_conditions": {
+        "ch08_deshawn": [
+          {
+            "flag": "pruitt_alive",
+            "eq": true
+          }
+        ]
+      },
+      "chapter_start_effects": [
+        {
+          "set": "has_gas_mask",
+          "value": true
+        },
+        {
+          "event": "hud_unlock",
+          "hud": "filter"
+        }
+      ],
+      "chapter_end_effects": []
+    },
+    {
+      "id": "ch09",
+      "title": "The Long Night",
+      "act": 3,
+      "date": "Midwinter, Year 2",
+      "weather": "blizzard",
+      "temp_c": -45,
+      "time_of_day": [
+        "polar_noon",
+        "night"
+      ],
+      "locations": [
+        "loc_east_end",
+        "river_ice",
+        "loc_jay_cooke",
+        "loc_thomson_dam"
+      ],
+      "objectives": [
+        "Lead the column",
+        "Pass the Remnant picket",
+        "Survive whiteout and wolves",
+        "The ice break",
+        "Reach the dam"
+      ],
+      "player_actions": [
+        "blizzard_march",
+        "escort_column",
+        "stealth_or_assault",
+        "timed_choice"
+      ],
+      "enemies": [
+        {
+          "type": "remnant_patrol",
+          "count": 8
+        },
+        {
+          "type": "ironwood_checkpoint",
+          "count": 1
+        },
+        {
+          "type": "ironwood_drone",
+          "count": 1,
+          "note": "Grounded by blizzard; visual only"
+        },
+        {
+          "type": "wolf",
+          "count": 5
+        },
+        {
+          "type": "husk",
+          "count": 4
+        }
+      ],
+      "setpieces": [
+        "Whiteout in Jay Cooke",
+        "Searchlight picket on the Hwy 210 bridge",
+        "River ice breaking"
+      ],
+      "items": [
+        "sled",
+        "firewood",
+        "tent_tarp",
+        "flare",
+        "rifle_ammo",
+        "mask_filter",
+        "wool_blanket"
+      ],
+      "scenes": [
+        "ch09_wren_sled",
+        "ch09_picket",
+        "ch09_hank",
+        "ch09_ice"
+      ],
+      "scene_conditions": {
+        "ch09_wren_sled": [
+          {
+            "trust": "wren",
+            "gte": 5
+          },
+          {
+            "flag": "wren_alive",
+            "eq": true
+          }
+        ],
+        "ch09_hank": [
+          {
+            "flag": "hank_alive",
+            "eq": true
+          }
+        ]
+      },
+      "chapter_start_effects": [
+        {
+          "set": "column_size",
+          "value": 4
+        },
+        {
+          "if": [
+            {
+              "flag": "filters_shared",
+              "eq": true
+            }
+          ],
+          "then": [
+            {
+              "add": "column_size",
+              "value": 4
+            }
+          ]
+        },
+        {
+          "if": [
+            {
+              "flag": "lunds_stayed",
+              "eq": true
+            }
+          ],
+          "then": [
+            {
+              "add": "column_size",
+              "value": 3
+            }
+          ]
+        },
+        {
+          "add": "column_size",
+          "value_from": "husks_talked_down"
+        }
+      ],
+      "chapter_end_effects": [
+        {
+          "set": "hank_alive",
+          "value": false
+        },
+        {
+          "if": [
+            {
+              "item": "insulin_vial",
+              "lt": 1
+            },
+            {
+              "flag": "dam_running",
+              "ne": true
+            },
+            {
+              "flag": "ames_deal",
+              "ne": true
+            }
+          ],
+          "then": [
+            {
+              "add": "theo_insulin_lapses",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "if": [
+            {
+              "flag": "theo_insulin_lapses",
+              "gte": 2
+            }
+          ],
+          "then": [
+            {
+              "set": "theo_alive",
+              "value": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch10",
+      "title": "The Warm Room",
+      "act": 3,
+      "date": "Midwinter",
+      "weather": "clear_cold",
+      "temp_c": -38,
+      "time_of_day": [
+        "day"
+      ],
+      "locations": [
+        "loc_thomson_dam"
+      ],
+      "objectives": [
+        "Hold the gate",
+        "Hear the pitches",
+        "Decide"
+      ],
+      "player_actions": [
+        "gate_defense_optional",
+        "dialogue",
+        "ending"
+      ],
+      "enemies": [
+        {
+          "type": "remnant_patrol",
+          "count": 8,
+          "note": "Only if no stand-down (enc_ch10_gate_battle)"
+        },
+        {
+          "type": "ironwood_mrap",
+          "count": 1,
+          "note": "Same"
+        }
+      ],
+      "setpieces": [
+        "Control room at 18 °C",
+        "Warm Room epilogue: sun through the ash"
+      ],
+      "items": [],
+      "scenes": [
+        "ch10_gate",
+        "ch10_final",
+        "ch10_epilogue"
+      ],
+      "chapter_start_effects": [],
+      "chapter_end_effects": []
+    }
+  ]
+}

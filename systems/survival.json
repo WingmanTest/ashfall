@@ -1,0 +1,687 @@
+{
+  "$schema_note": "See README.md#survivaljson. All rates are at difficulty tense_but_fair (1.0) and time_scale 1.0.",
+  "version": 1,
+  "time_model": {
+    "source": "js/config.js CFG.dayLenSec",
+    "day_length_real_seconds": 420,
+    "in_game_minutes_per_real_second": 3.4286,
+    "note": "The game ticks in real seconds (dt). Every rate below is given as per_real_second (authoritative; multiply by dt) and per_game_minute (= per_real_second / 3.4286, for UI/tooltips). If Echo changes dayLenSec, per_real_second values stay the same; only the per_game_minute column changes.",
+    "night_fraction_of_day": 0.4,
+    "time_skips_drain": "Story time-skips (Ch2 queue etc.) apply a flat cost: satiety -15, hydration -15, warmth set to min(warmth, 60). They do not tick rates."
+  },
+  "stats": {
+    "warmth": {
+      "key_stat": true,
+      "code_field": "stats.warmth",
+      "range": [
+        0,
+        100
+      ],
+      "start": 82,
+      "unit": "points (100 = fully warm)",
+      "base_drain": {
+        "per_real_second": 0.3,
+        "per_game_minute": 0.0875,
+        "applies": "outdoors, daytime, calm weather, ambient_cold 1.0, no clothing"
+      },
+      "formula": "drain = base_drain * chapter.ambient_cold * product(active environment multipliers) * (1 - clothing_insulation) * difficulty.warmth_drain_mult; when a source with 'regen' is active it replaces the drain",
+      "clothing_insulation": {
+        "combine": "1 - product(1 - r_i) over equipped clothing slots",
+        "cap": 0.75
+      },
+      "thresholds": [
+        {
+          "id": "comfortable",
+          "min": 60,
+          "max": 100,
+          "effects": {}
+        },
+        {
+          "id": "chilled",
+          "min": 40,
+          "max": 60,
+          "effects": {
+            "stamina_regen_mult": 0.85
+          },
+          "hud": "breath fog"
+        },
+        {
+          "id": "cold",
+          "min": 20,
+          "max": 40,
+          "effects": {
+            "stamina_regen_mult": 0.6,
+            "aim_sway_mult": 1.4,
+            "satiety_drain_mult": 1.25
+          },
+          "hud": "frost vignette, shiver audio"
+        },
+        {
+          "id": "freezing",
+          "min": 1,
+          "max": 20,
+          "effects": {
+            "stamina_max": 50,
+            "move_speed_mult": 0.85,
+            "aim_sway_mult": 1.8,
+            "health_per_real_second": -0.25
+          },
+          "hud": "heavy frost, heartbeat"
+        },
+        {
+          "id": "hypothermic",
+          "min": 0,
+          "max": 1,
+          "effects": {
+            "no_sprint": true,
+            "move_speed_mult": 0.7,
+            "health_per_real_second": -1.2
+          },
+          "hud": "screen desaturates, death reason 'hypothermia'"
+        }
+      ],
+      "warning_at": 30,
+      "hud_note": "HUD 'warmth' from ch01; 'TEMP' (ambient \u00b0C readout) unlocks ch03 per story."
+    },
+    "satiety": {
+      "code_field": "stats.hunger",
+      "note": "Code calls this 'hunger' but stores fullness (100 = full, drains to 0). Kept that convention; items use satiety +N (code used hunger: -N).",
+      "range": [
+        0,
+        100
+      ],
+      "start": 70,
+      "unit": "points (100 = full)",
+      "base_drain": {
+        "per_real_second": 0.055,
+        "per_game_minute": 0.016
+      },
+      "modifiers": {
+        "warmth_below_40": 1.25,
+        "radiation_above_25": 1.3,
+        "sick": 1.5,
+        "sprinting": 1.2
+      },
+      "thresholds": [
+        {
+          "id": "fed",
+          "min": 30,
+          "max": 100,
+          "effects": {}
+        },
+        {
+          "id": "hungry",
+          "min": 10,
+          "max": 30,
+          "effects": {
+            "stamina_regen_mult": 0.7
+          }
+        },
+        {
+          "id": "starving",
+          "min": 1,
+          "max": 10,
+          "effects": {
+            "stamina_max": 60,
+            "health_per_real_second": -0.15
+          }
+        },
+        {
+          "id": "empty",
+          "min": 0,
+          "max": 1,
+          "effects": {
+            "stamina_regen_mult": 0.35,
+            "health_per_real_second": -0.4
+          }
+        }
+      ]
+    },
+    "hydration": {
+      "code_field": "stats.thirst (NEW - add to defaultStats)",
+      "range": [
+        0,
+        100
+      ],
+      "start": 75,
+      "unit": "points (100 = fully hydrated)",
+      "base_drain": {
+        "per_real_second": 0.075,
+        "per_game_minute": 0.0219
+      },
+      "modifiers": {
+        "sprinting": 1.3,
+        "near_fire": 1.2,
+        "sick": 1.5,
+        "eating_ration_or_mre": "-4 one-shot (salty)"
+      },
+      "thresholds": [
+        {
+          "id": "ok",
+          "min": 30,
+          "max": 100,
+          "effects": {}
+        },
+        {
+          "id": "thirsty",
+          "min": 10,
+          "max": 30,
+          "effects": {
+            "stamina_regen_mult": 0.8,
+            "aim_sway_mult": 1.2
+          }
+        },
+        {
+          "id": "parched",
+          "min": 1,
+          "max": 10,
+          "effects": {
+            "health_per_real_second": -0.2,
+            "vision_blur": true
+          }
+        },
+        {
+          "id": "dehydrated",
+          "min": 0,
+          "max": 1,
+          "effects": {
+            "health_per_real_second": -0.6
+          }
+        }
+      ],
+      "free_source": {
+        "id": "eat_snow",
+        "interaction": "hold USE on snow outdoors",
+        "hydration": 8,
+        "warmth": -6,
+        "cooldown_real_seconds": 6,
+        "radiation_per_use_by_act": {
+          "blackout": 0,
+          "collapse": 0,
+          "civil_war": 0,
+          "nuclear_winter": 5
+        },
+        "note": "Anti-hard-lock valve: thirst can always be patched, at a warmth (and in Act IV radiation) cost."
+      }
+    },
+    "stamina": {
+      "code_field": "stats.stamina",
+      "range": [
+        0,
+        100
+      ],
+      "start": 100,
+      "unit": "points",
+      "regen_per_real_second": 18,
+      "regen_delay_real_seconds": 0.8,
+      "costs": {
+        "sprint_per_real_second": 22,
+        "melee_light": 8,
+        "melee_heavy": 18,
+        "vault_or_climb": 15,
+        "shove": 12
+      },
+      "note": "Matches CFG.staminaRegen / CFG.staminaSprint. Regen multipliers from warmth/satiety/hydration thresholds stack multiplicatively, floor 0.25."
+    },
+    "radiation": {
+      "code_field": "stats.rad",
+      "range": [
+        0,
+        100
+      ],
+      "start": 0,
+      "unit": "dose points (accumulated, not rate)",
+      "visible_from": "dosimeter item (Ch7, Lou). Before that, rad still accrues but HUD hides it (there are no rad zones before Act IV).",
+      "zone_gain_per_real_second": {
+        "rad_low": 0.12,
+        "rad_med": 0.4,
+        "rad_high": 1.0,
+        "fallout_rain_outdoors": 0.25
+      },
+      "zone_gain_per_game_minute": {
+        "rad_low": 0.035,
+        "rad_med": 0.1167,
+        "rad_high": 0.2917,
+        "fallout_rain_outdoors": 0.0729
+      },
+      "mitigation": {
+        "mask_filter_active": 0.2,
+        "iodide_tablets_active": 0.5,
+        "indoors": "x (1 - seal/100) * 0.4 -- SEAL is the HUD shelter-seal % (story hud_unlocks ch08); 100 seal = no gain indoors"
+      },
+      "natural_decay_per_real_second": 0.01,
+      "decontamination": {
+        "dam_shower": -40,
+        "hospital_decon": -30,
+        "note": "story locations, once per visit"
+      },
+      "thresholds": [
+        {
+          "id": "clean",
+          "min": 0,
+          "max": 25,
+          "effects": {}
+        },
+        {
+          "id": "nauseous",
+          "min": 25,
+          "max": 50,
+          "effects": {
+            "satiety_drain_mult": 1.3
+          }
+        },
+        {
+          "id": "sick",
+          "min": 50,
+          "max": 75,
+          "effects": {
+            "health_max": 75,
+            "satiety_drain_mult": 1.3
+          }
+        },
+        {
+          "id": "severe",
+          "min": 75,
+          "max": 100,
+          "effects": {
+            "health_max": 50,
+            "health_per_real_second": -0.15
+          }
+        },
+        {
+          "id": "lethal",
+          "min": 100,
+          "max": 100,
+          "effects": {
+            "health_per_real_second": -2.0
+          }
+        }
+      ],
+      "hud_unlock": "ch07 (gameplay_hooks hud_unlocks)"
+    },
+    "health": {
+      "code_field": "stats.health",
+      "range": [
+        0,
+        100
+      ],
+      "start": 100,
+      "unit": "hit points",
+      "soft_regen": {
+        "per_real_second": 0.04,
+        "cap": 70,
+        "requires": {
+          "satiety_min": 50,
+          "hydration_min": 50,
+          "warmth_min": 50,
+          "no_damage_for_real_seconds": 10
+        }
+      },
+      "note": "No full passive regen: healing above 70 needs meds or a safe-house sleep."
+    }
+  },
+  "status_effects": {
+    "wet": {
+      "source": [
+        "fall through ice",
+        "wade",
+        "fallout_rain without poncho"
+      ],
+      "warmth_drain_mult": 1.75,
+      "dry_per_real_second": {
+        "default": 0.02,
+        "near_fire": 0.2,
+        "indoors_heated": 0.1
+      },
+      "value_range": [
+        0,
+        1
+      ],
+      "note": "wetness 0..1; drain mult = 1 + 0.75*wetness"
+    },
+    "bleeding": {
+      "chance_on_hit": {
+        "gun": 0.3,
+        "dog_bite": 0.2,
+        "blade": 0.25
+      },
+      "health_per_real_second": -0.5,
+      "cured_by": [
+        "bandage",
+        "med_kit"
+      ],
+      "self_stop_real_seconds": 45
+    },
+    "sick": {
+      "source": [
+        "water_dirty 30%",
+        "raw snow in Act IV 0%"
+      ],
+      "duration_real_seconds": 600,
+      "effects": {
+        "satiety_drain_mult": 1.5,
+        "hydration_drain_mult": 1.5,
+        "stamina_max": 75
+      },
+      "cured_by": [
+        "antibiotics"
+      ]
+    },
+    "fracture": {
+      "source": [
+        "fall > 3 m",
+        "ice-break QTE fail (Ch9)"
+      ],
+      "effects": {
+        "no_sprint": true,
+        "move_speed_mult": 0.75
+      },
+      "cured_by": [
+        "splint",
+        "med_kit"
+      ]
+    },
+    "pain_suppressed": {
+      "source": [
+        "painkillers"
+      ],
+      "duration_real_seconds": 120,
+      "effects": {
+        "aim_sway_mult": 0.7,
+        "ignores_fracture_speed": true
+      }
+    }
+  },
+  "environment_modifiers": {
+    "note": "Multiply warmth drain. 'regen' entries set warmth gain instead of drain while active. Echo already has blizzard / night / inFire / radZone flags in Player.tickSurvival.",
+    "outdoors": {
+      "warmth_drain_mult": 1.0
+    },
+    "indoors_unheated": {
+      "warmth_drain_mult": 0.35,
+      "blocks": [
+        "blizzard",
+        "fallout_rain_outdoors"
+      ]
+    },
+    "sheltered": {
+      "warmth_drain_mult": 0.6,
+      "examples": [
+        "vehicle",
+        "tent_tarp shelter",
+        "container"
+      ]
+    },
+    "indoors_heated": {
+      "warmth_regen_per_real_second": 2.0,
+      "examples": [
+        "safe houses",
+        "dam control room after Ch4"
+      ]
+    },
+    "near_fire": {
+      "warmth_regen_per_real_second": 5.0,
+      "radius_m": 2.5,
+      "code_note": "CFG uses 28/s; recommend 5/s so a fire is a stop of ~15 s, not instant"
+    },
+    "near_candle_cluster": {
+      "warmth_drain_mult": 0.5,
+      "radius_m": 1.5,
+      "indoors_only": true
+    },
+    "holding_torch": {
+      "warmth_drain_mult": 0.85
+    },
+    "night": {
+      "warmth_drain_mult": 1.4,
+      "code_note": "CFG used 1.45"
+    },
+    "blizzard": {
+      "warmth_drain_mult": 2.2,
+      "visibility_m": 18,
+      "enemy_detect_mult": 0.6,
+      "code_note": "CFG used 2.4; blizzardPeriod 95 s / blizzardLen 42 s"
+    },
+    "wet": {
+      "warmth_drain_mult": 1.75
+    },
+    "sprinting": {
+      "warmth_drain_mult": 0.8
+    }
+  },
+  "chapter_climate": {
+    "note": "ambient_cold multiplies warmth drain; blizzard_chance is the share of blizzard windows that actually fire (CFG cycle). outdoor_share = expected fraction of play time outdoors, used by the budget check.",
+    "ch01": {
+      "act": "blackout",
+      "temp_c": 6,
+      "ambient_cold": 0.5,
+      "blizzard_chance": 0.0,
+      "fallout_rain": false,
+      "outdoor_share": 0.5,
+      "weather": "overcast",
+      "story_act": 1,
+      "date": "Oct 17"
+    },
+    "ch02": {
+      "act": "blackout",
+      "temp_c": -4,
+      "ambient_cold": 0.7,
+      "blizzard_chance": 0.15,
+      "fallout_rain": false,
+      "outdoor_share": 0.5,
+      "weather": "snow",
+      "story_act": 1,
+      "date": "Day 19 (Nov 2)"
+    },
+    "ch03": {
+      "act": "collapse",
+      "temp_c": -30,
+      "ambient_cold": 1.25,
+      "blizzard_chance": 0.6,
+      "fallout_rain": false,
+      "outdoor_share": 0.65,
+      "weather": "clear_cold",
+      "story_act": 1,
+      "date": "Day 60 (Dec 13)"
+    },
+    "ch04": {
+      "act": "collapse",
+      "temp_c": -24,
+      "ambient_cold": 1.15,
+      "blizzard_chance": 0.4,
+      "fallout_rain": false,
+      "outdoor_share": 0.6,
+      "weather": "snow",
+      "story_act": 2,
+      "date": "Late January"
+    },
+    "ch05": {
+      "act": "civil_war",
+      "temp_c": -8,
+      "ambient_cold": 0.85,
+      "blizzard_chance": 0.2,
+      "fallout_rain": false,
+      "outdoor_share": 0.75,
+      "weather": "freezing_rain",
+      "story_act": 2,
+      "date": "March",
+      "note": "freezing_rain: player gets 'wet' outdoors without rain_poncho"
+    },
+    "ch06": {
+      "act": "civil_war",
+      "temp_c": 4,
+      "ambient_cold": 0.4,
+      "blizzard_chance": 0.0,
+      "fallout_rain": false,
+      "outdoor_share": 0.6,
+      "weather": "drizzle",
+      "story_act": 2,
+      "date": "May"
+    },
+    "ch07": {
+      "act": "civil_war",
+      "temp_c": 2,
+      "ambient_cold": 0.5,
+      "blizzard_chance": 0.0,
+      "fallout_rain": false,
+      "outdoor_share": 0.6,
+      "note": "grey snow in July",
+      "weather": "brown_sky",
+      "story_act": 2,
+      "date": "July 9 \u2192 late July"
+    },
+    "ch08": {
+      "act": "nuclear_winter",
+      "temp_c": -10,
+      "ambient_cold": 0.9,
+      "blizzard_chance": 0.3,
+      "fallout_rain": true,
+      "outdoor_share": 0.55,
+      "weather": "fallout_rain",
+      "story_act": 3,
+      "date": "August\u2013October"
+    },
+    "ch09": {
+      "act": "nuclear_winter",
+      "temp_c": -45,
+      "ambient_cold": 1.8,
+      "blizzard_chance": 0.85,
+      "fallout_rain": false,
+      "outdoor_share": 0.85,
+      "weather": "blizzard",
+      "story_act": 3,
+      "date": "Midwinter, Year 2"
+    },
+    "ch10": {
+      "act": "nuclear_winter",
+      "temp_c": -38,
+      "ambient_cold": 1.5,
+      "blizzard_chance": 0.5,
+      "fallout_rain": false,
+      "outdoor_share": 0.35,
+      "weather": "clear_cold",
+      "story_act": 3,
+      "date": "Midwinter"
+    },
+    "_note": "Keys = story/gameplay_hooks.json chapter ids. temp_c / weather / date copied from hooks; ambient_cold is the systems tuning value derived from temp_c."
+  },
+  "recovery_sources": [
+    {
+      "id": "campfire",
+      "stat": "warmth",
+      "per_real_second": 5.0,
+      "duration_real_seconds": 180,
+      "made_by": "recipe campfire"
+    },
+    {
+      "id": "burn_barrel",
+      "stat": "warmth",
+      "per_real_second": 5.0,
+      "duration_real_seconds": 300,
+      "made_by": "found in level (Ch3, Ch9 stops); refuel with 2 firewood"
+    },
+    {
+      "id": "safe_house",
+      "stat": "warmth",
+      "per_real_second": 2.0,
+      "note": "indoors_heated; also allows sleep: health +30 (cap 100), costs satiety -20, hydration -20"
+    },
+    {
+      "id": "food_items",
+      "stat": "satiety",
+      "see": "items.json effects.satiety"
+    },
+    {
+      "id": "water_items",
+      "stat": "hydration",
+      "see": "items.json effects.hydration"
+    },
+    {
+      "id": "eat_snow",
+      "stat": "hydration",
+      "see": "stats.hydration.free_source"
+    },
+    {
+      "id": "meds",
+      "stat": "health",
+      "see": "items.json category med"
+    },
+    {
+      "id": "decon",
+      "stat": "radiation",
+      "see": "stats.radiation.decontamination"
+    }
+  ],
+  "weather_modifiers": {
+    "_note": "Ids = gameplay_hooks.json weather_types. Multiply warmth drain; 'wet_per_real_second' adds wetness outdoors unless rain_poncho; rad zone applies outdoors.",
+    "overcast": {
+      "warmth_drain_mult": 1.0
+    },
+    "snow": {
+      "warmth_drain_mult": 1.1,
+      "visibility_m": 40
+    },
+    "freezing_rain": {
+      "warmth_drain_mult": 1.15,
+      "wet_per_real_second": 0.01,
+      "visibility_m": 35
+    },
+    "drizzle": {
+      "warmth_drain_mult": 1.0,
+      "wet_per_real_second": 0.004
+    },
+    "clear_cold": {
+      "warmth_drain_mult": 1.0,
+      "night_extra_mult": 1.2,
+      "note": "radiative cooling: nights bite harder"
+    },
+    "brown_sky": {
+      "warmth_drain_mult": 1.05,
+      "visibility_m": 45
+    },
+    "grey_snow": {
+      "warmth_drain_mult": 1.1,
+      "radiation_zone_outdoors": "rad_low",
+      "acts": [
+        "civil_war",
+        "nuclear_winter"
+      ]
+    },
+    "fallout_rain": {
+      "warmth_drain_mult": 1.3,
+      "wet_per_real_second": 0.01,
+      "radiation_zone_outdoors": "fallout_rain_outdoors"
+    },
+    "ashfall": {
+      "warmth_drain_mult": 1.15,
+      "radiation_zone_outdoors": "rad_low",
+      "visibility_m": 30
+    },
+    "blizzard": {
+      "warmth_drain_mult": 2.2,
+      "visibility_m": 18,
+      "enemy_detect_mult": 0.6,
+      "note": "same as environment_modifiers.blizzard; Echo's CFG blizzard windows also apply on top of any chapter weather"
+    }
+  },
+  "hud_unlocks_from_story": {
+    "ch01": [
+      "hp",
+      "warmth",
+      "hunger"
+    ],
+    "ch03": [
+      "temp"
+    ],
+    "ch05": [
+      "ammo_military"
+    ],
+    "ch07": [
+      "rad"
+    ],
+    "ch08": [
+      "filter",
+      "seal"
+    ]
+  }
+}

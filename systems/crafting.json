@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "philosophy": "Crafting is tertiary. Scavenging is the core loop. 8 recipes, 1-2 ingredients each, no stations except a lit campfire (a placed object, not a workbench). No trees, no tiers, no unlocks. Clothing, guns, ammo, food, meds and purification tablets come from loot only.",
+  "units": {
+    "time_real_seconds": "real seconds the craft takes (player can be interrupted; inputs are consumed on completion)"
+  },
+  "requires_values": {
+    "none": "craft anywhere from inventory",
+    "near_campfire": "within 2.5 m of a lit campfire or burn_barrel"
+  },
+  "recipes": [
+    {
+      "id": "bandage",
+      "name": "Tear bandage",
+      "inputs": {
+        "cloth": 2
+      },
+      "output": {
+        "id": "bandage",
+        "qty": 1
+      },
+      "requires": "none",
+      "time_real_seconds": 3,
+      "legacy": "config RECIPES bandage"
+    },
+    {
+      "id": "campfire",
+      "name": "Build campfire",
+      "inputs": {
+        "firewood": 3,
+        "cloth": 1
+      },
+      "output": {
+        "place": "campfire",
+        "burn_real_seconds": 180
+      },
+      "requires": "none",
+      "time_real_seconds": 5,
+      "rules": {
+        "outdoors_or_ventilated": true,
+        "blizzard_burn_mult": 0.6,
+        "refuel": {
+          "firewood": 2,
+          "adds_real_seconds": 120
+        }
+      },
+      "legacy": "config RECIPES campfire_kit used wood 3 + scrap 1; cloth is the tinder now so scrap stays a repair material"
+    },
+    {
+      "id": "molotov",
+      "name": "Molotov",
+      "inputs": {
+        "fuel": 1,
+        "cloth": 1
+      },
+      "output": {
+        "id": "molotov",
+        "qty": 1
+      },
+      "requires": "none",
+      "time_real_seconds": 4,
+      "legacy": "config RECIPES molotov (needs an empty bottle in fiction; bottle is assumed)"
+    },
+    {
+      "id": "torch",
+      "name": "Torch",
+      "inputs": {
+        "firewood": 1,
+        "cloth": 1
+      },
+      "output": {
+        "id": "torch",
+        "qty": 1
+      },
+      "requires": "none",
+      "time_real_seconds": 3
+    },
+    {
+      "id": "splint",
+      "name": "Splint",
+      "inputs": {
+        "firewood": 1,
+        "cloth": 1
+      },
+      "output": {
+        "id": "splint",
+        "qty": 1
+      },
+      "requires": "none",
+      "time_real_seconds": 4
+    },
+    {
+      "id": "clothing_patch",
+      "name": "Patch clothing",
+      "inputs": {
+        "cloth": 2
+      },
+      "output": {
+        "repair": "equipped_clothing_lowest",
+        "durability_pct": 50
+      },
+      "requires": "none",
+      "time_real_seconds": 6,
+      "note": "Clothing below 25% durability loses half its insulation; patching is how you keep a good coat."
+    },
+    {
+      "id": "weapon_repair",
+      "name": "Fix melee weapon",
+      "inputs": {
+        "scrap": 2,
+        "wire": 1
+      },
+      "output": {
+        "repair": "equipped_melee",
+        "durability_pct": 40
+      },
+      "requires": "none",
+      "time_real_seconds": 8,
+      "note": "Melee only. Guns need a looted repair_kit."
+    },
+    {
+      "id": "boil_water",
+      "name": "Boil water",
+      "inputs": {
+        "water_dirty": 1
+      },
+      "output": {
+        "id": "water_boiled",
+        "qty": 1
+      },
+      "requires": "near_campfire",
+      "time_real_seconds": 10,
+      "note": "Removes sickness only; in Act IV fallout remains. purification_tablets (loot) clean fully."
+    }
+  ],
+  "story_recipes": [
+    {
+      "id": "lake_cooler",
+      "name": "Lake cooler (Ch1)",
+      "inputs": {
+        "bucket": 1,
+        "wire": 1
+      },
+      "output": {
+        "id": "lake_cooler",
+        "qty": 1
+      },
+      "requires": "none",
+      "time_real_seconds": 6,
+      "chapters": [
+        "ch01"
+      ],
+      "note": "Story-scripted one-off from ch01 'craft lake_cooler'; hidden from the craft menu outside Ch1."
+    }
+  ],
+  "removed_from_config_js": [
+    {
+      "id": "coat",
+      "reason": "Warm clothing is loot-only (design override)."
+    },
+    {
+      "id": "pipe",
+      "reason": "Weapons are loot-only."
+    },
+    {
+      "id": "filter",
+      "reason": "mask_filter is loot-only (scarce Act IV resource)."
+    }
+  ]
+}

@@ -1,0 +1,242 @@
+{
+  "id": "ch03_ray_fire",
+  "chapter": "ch03",
+  "location": "loc_east_end",
+  "trigger": "Midnight. The Bridge Boys hit Ray's garage.",
+  "speakers": [
+    "ray",
+    "dell",
+    "narrator",
+    "theo"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Glass breaks across the alley. Flashlights. Someone yells 'GAS IT.'",
+      "branches": [
+        {
+          "next": "warned",
+          "conditions": [
+            {
+              "flag": "ch03_wren_warned",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "cold"
+        }
+      ]
+    },
+    {
+      "id": "warned",
+      "speaker": "narrator",
+      "text": "You're already dressed. Boots on. Rifle loaded. Theo is awake too.",
+      "next": "choice"
+    },
+    {
+      "id": "cold",
+      "speaker": "narrator",
+      "text": "You wake to orange light on the ceiling. Your boots are by the stove. Cold seconds.",
+      "effects": [
+        {
+          "stat": "warmth",
+          "delta": -15
+        }
+      ],
+      "next": "choice"
+    },
+    {
+      "id": "choice",
+      "speaker": "theo",
+      "text": "ma. ma, ray's garage. they're— are we going?",
+      "choices": [
+        {
+          "text": "[Go help Ray defend]",
+          "next": "defend",
+          "effects": [
+            {
+              "event": "encounter",
+              "id": "enc_ch03_fire_defend"
+            }
+          ]
+        },
+        {
+          "text": "[Go get Ray out, no fighting]",
+          "next": "rescue",
+          "effects": [
+            {
+              "event": "encounter",
+              "id": "enc_ch03_fire_rescue"
+            }
+          ]
+        },
+        {
+          "text": "We stay. Lock the door.",
+          "next": "stay"
+        }
+      ]
+    },
+    {
+      "id": "defend",
+      "speaker": "narrator",
+      "text": "Ray's in the doorway with the shotgun, firing at shadows. Six of them. Kids, mostly.",
+      "next": "defend2"
+    },
+    {
+      "id": "defend2",
+      "speaker": "ray",
+      "text": "DELL! Left side! They got a can!",
+      "branches": [
+        {
+          "next": "defend_empty",
+          "conditions": [
+            {
+              "flag": "ch02_reported_ray",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "defend_full"
+        }
+      ]
+    },
+    {
+      "id": "defend_full",
+      "speaker": "narrator",
+      "text": "You fire over their heads. They scatter. Two cans spill and catch, but the house holds.",
+      "effects": [
+        {
+          "set": "ray_house_burned",
+          "value": false
+        },
+        {
+          "set": "ch03_helped_ray",
+          "value": true
+        },
+        {
+          "trust": "ray",
+          "delta": 3
+        },
+        {
+          "add": "kindness",
+          "value": 1
+        }
+      ],
+      "next": "defend_end"
+    },
+    {
+      "id": "defend_empty",
+      "speaker": "narrator",
+      "text": "They find the garage empty and torch the house out of spite. You drag Ray clear.",
+      "effects": [
+        {
+          "set": "ray_house_burned",
+          "value": true
+        },
+        {
+          "set": "ch03_helped_ray",
+          "value": true
+        },
+        {
+          "trust": "ray",
+          "delta": 3
+        },
+        {
+          "add": "kindness",
+          "value": 1
+        }
+      ],
+      "next": "defend_end_b"
+    },
+    {
+      "id": "defend_end",
+      "speaker": "ray",
+      "text": "...Yah. We're square. More than square.",
+      "next": "end"
+    },
+    {
+      "id": "defend_end_b",
+      "speaker": "ray",
+      "text": "Guard took the diesel. Somebody told 'em. Find out who, Dell. I'll fix them.",
+      "next": "end"
+    },
+    {
+      "id": "rescue",
+      "speaker": "narrator",
+      "text": "Through the smoke, out the back. Ray fights you. You win. The garage goes up.",
+      "effects": [
+        {
+          "set": "ray_house_burned",
+          "value": true
+        },
+        {
+          "set": "ch03_helped_ray",
+          "value": true
+        },
+        {
+          "trust": "ray",
+          "delta": 2
+        },
+        {
+          "add": "kindness",
+          "value": 1
+        }
+      ],
+      "next": "rescue2"
+    },
+    {
+      "id": "rescue2",
+      "speaker": "ray",
+      "text": "Thirty years in that house. Thirty years.",
+      "next": "end"
+    },
+    {
+      "id": "stay",
+      "speaker": "narrator",
+      "text": "You watch through the curtain. The house burns until dawn. Nobody comes.",
+      "effects": [
+        {
+          "set": "ray_house_burned",
+          "value": true
+        },
+        {
+          "trust": "theo",
+          "delta": -2
+        },
+        {
+          "trust": "ray",
+          "delta": -3
+        }
+      ],
+      "next": "stay2"
+    },
+    {
+      "id": "stay2",
+      "speaker": "theo",
+      "text": "we just watched.",
+      "next": "stay3"
+    },
+    {
+      "id": "stay3",
+      "speaker": "narrator",
+      "text": "At dawn Ray is in Marguerite's kitchen, hands wrapped. He doesn't look at your house.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "Morning. −31 °C. Hank's message on the radio: 'Kid. Proctor. Lou's place. Bring your head.'",
+      "effects": [
+        {
+          "quest": "q_find_hank",
+          "state": "start"
+        }
+      ],
+      "end": true
+    }
+  ]
+}

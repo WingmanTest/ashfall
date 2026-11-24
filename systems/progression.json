@@ -1,0 +1,485 @@
+{
+  "version": 1,
+  "model": "Gear-gated progression plus a few small perks. No XP, no levels, no skill trees: what you carry and wear is your power curve. Perks are picked at 4 chapter ends (1 of 3 random offers).",
+  "acts": {
+    "blackout": {
+      "name": "Blackout",
+      "story_act": "I: The Dark",
+      "chapters": [
+        "ch01",
+        "ch02"
+      ],
+      "feel": "Canned food in cupboards, few guns, mild cold. People are the threat."
+    },
+    "collapse": {
+      "name": "Collapse",
+      "story_act": "I-II: The Dark / The Split",
+      "chapters": [
+        "ch03",
+        "ch04"
+      ],
+      "feel": "Deep cold arrives; firewood & clothing matter most. Shotguns appear."
+    },
+    "civil_war": {
+      "name": "Civil War",
+      "story_act": "II: The Split",
+      "chapters": [
+        "ch05",
+        "ch06",
+        "ch07"
+      ],
+      "feel": "Warmer months, guns and ammo flow, soldiers and militias. Ch7 = first dogs, dosimeter."
+    },
+    "nuclear_winter": {
+      "name": "Nuclear Winter",
+      "story_act": "III: Ashfall",
+      "chapters": [
+        "ch08",
+        "ch09",
+        "ch10"
+      ],
+      "feel": "Extreme cold, fallout, husks and ferals, everything scarce."
+    }
+  },
+  "chapters": [
+    {
+      "id": "ch01",
+      "title": "Day Three",
+      "act": "blackout",
+      "story_act": 1,
+      "est_play_minutes": 25,
+      "expected_insulation": 0.3,
+      "gun_share_of_kills": 0.2
+    },
+    {
+      "id": "ch02",
+      "title": "The Registry",
+      "act": "blackout",
+      "story_act": 1,
+      "est_play_minutes": 25,
+      "expected_insulation": 0.33,
+      "gun_share_of_kills": 0.2
+    },
+    {
+      "id": "ch03",
+      "title": "The Long Cold",
+      "act": "collapse",
+      "story_act": 1,
+      "est_play_minutes": 30,
+      "expected_insulation": 0.45,
+      "gun_share_of_kills": 0.35
+    },
+    {
+      "id": "ch04",
+      "title": "Black Start",
+      "act": "collapse",
+      "story_act": 2,
+      "est_play_minutes": 30,
+      "expected_insulation": 0.5,
+      "gun_share_of_kills": 0.35
+    },
+    {
+      "id": "ch05",
+      "title": "Route 9",
+      "act": "civil_war",
+      "story_act": 2,
+      "est_play_minutes": 30,
+      "expected_insulation": 0.5,
+      "gun_share_of_kills": 0.6
+    },
+    {
+      "id": "ch06",
+      "title": "The Lift Bridge",
+      "act": "civil_war",
+      "story_act": 2,
+      "est_play_minutes": 35,
+      "expected_insulation": 0.5,
+      "gun_share_of_kills": 0.6
+    },
+    {
+      "id": "ch07",
+      "title": "Dead Air",
+      "act": "civil_war",
+      "story_act": 2,
+      "est_play_minutes": 25,
+      "expected_insulation": 0.52,
+      "gun_share_of_kills": 0.6
+    },
+    {
+      "id": "ch08",
+      "title": "Ashfall",
+      "act": "nuclear_winter",
+      "story_act": 3,
+      "est_play_minutes": 35,
+      "expected_insulation": 0.55,
+      "gun_share_of_kills": 0.5
+    },
+    {
+      "id": "ch09",
+      "title": "The Long Night",
+      "act": "nuclear_winter",
+      "story_act": 3,
+      "est_play_minutes": 40,
+      "expected_insulation": 0.62,
+      "gun_share_of_kills": 0.5
+    },
+    {
+      "id": "ch10",
+      "title": "The Warm Room",
+      "act": "nuclear_winter",
+      "story_act": 3,
+      "est_play_minutes": 20,
+      "expected_insulation": 0.62,
+      "gun_share_of_kills": 0.5
+    }
+  ],
+  "gear_gates": [
+    {
+      "item": "lineman_tools",
+      "unlocks": "electrical panels, relay cabinets, service doors",
+      "chapter": "ch01"
+    },
+    {
+      "item": "crowbar",
+      "unlocks": "'pry' containers (crates, car trunks open 2x faster)",
+      "chapter": "ch03"
+    },
+    {
+      "item": "bolt_cutters",
+      "unlocks": "chained gates and supply_cache containers marked chained",
+      "chapter": "ch06"
+    },
+    {
+      "item": "dosimeter",
+      "unlocks": "RAD on HUD",
+      "chapter": "ch07"
+    },
+    {
+      "item": "sled",
+      "unlocks": "+15 kg carry",
+      "chapter": "ch07"
+    },
+    {
+      "item": "arctic_parka",
+      "unlocks": "Ch9 blizzard march without a fire every stop (rare; not required)",
+      "chapter": "any"
+    },
+    {
+      "item": "mask_filter",
+      "unlocks": "rad_med / rad_high areas survivable (gas mask assumed from Ch8; story start_inventory gives 6)",
+      "chapter": "ch08"
+    }
+  ],
+  "perks": {
+    "grant_at_end_of": [
+      "ch02",
+      "ch04",
+      "ch06",
+      "ch08"
+    ],
+    "offers_per_grant": 3,
+    "pool": [
+      {
+        "id": "thick_skin",
+        "name": "Thick Skin",
+        "desc": "Warmth drain -12%.",
+        "effects": {
+          "warmth_drain_mult": 0.88
+        }
+      },
+      {
+        "id": "forager",
+        "name": "Forager",
+        "desc": "Food/water containers: +1 roll 25% of the time.",
+        "effects": {
+          "food_extra_roll_chance": 0.25
+        }
+      },
+      {
+        "id": "field_medic",
+        "name": "Field Medic",
+        "desc": "Bandages and med kits heal +40%.",
+        "effects": {
+          "heal_mult": 1.4
+        }
+      },
+      {
+        "id": "steady_hands",
+        "name": "Steady Hands",
+        "desc": "Gun spread -20%, reload -15%.",
+        "effects": {
+          "spread_mult": 0.8,
+          "reload_mult": 0.85
+        }
+      },
+      {
+        "id": "quiet_step",
+        "name": "Quiet Step",
+        "desc": "Footstep and melee noise -40%.",
+        "effects": {
+          "noise_mult": 0.6
+        }
+      },
+      {
+        "id": "pack_mule",
+        "name": "Pack Mule",
+        "desc": "+6 kg carry.",
+        "effects": {
+          "carry_bonus_kg": 6
+        }
+      },
+      {
+        "id": "fire_keeper",
+        "name": "Fire Keeper",
+        "desc": "Campfires cost 2 firewood and burn 30% longer.",
+        "effects": {
+          "campfire_firewood": 2,
+          "campfire_burn_mult": 1.3
+        }
+      },
+      {
+        "id": "iron_gut",
+        "name": "Iron Gut",
+        "desc": "Dirty-water sickness chance halved; satiety drain -8%.",
+        "effects": {
+          "sick_chance_mult": 0.5,
+          "satiety_drain_mult": 0.92
+        }
+      },
+      {
+        "id": "lineworker",
+        "name": "Lineworker",
+        "desc": "Open electrical panels and relay boxes 2x faster; electrical panels give +1 roll.",
+        "effects": {
+          "panel_speed_mult": 2.0
+        }
+      },
+      {
+        "id": "tinker",
+        "name": "Tinker",
+        "desc": "weapon_repair and clothing_patch restore +50% more; repair_kit works twice.",
+        "effects": {
+          "repair_mult": 1.5
+        }
+      }
+    ]
+  },
+  "economy": {
+    "unit": "value; 1 ration tin = 10",
+    "buy_price": "item.value * act_price_mult[act][category] * trader.markup * difficulty.barter_buy_mult * (trust>=3 ? 0.85 : 1)",
+    "sell_price": "item.value * 0.5 * act_price_mult * difficulty.barter_sell_mult",
+    "barter_only": "No money. Trades are item-for-item; the UI balances by value.",
+    "act_price_mult": {
+      "blackout": {
+        "food": 1.0,
+        "water": 1.0,
+        "med": 1.2,
+        "ammo": 1.3,
+        "weapon": 1.3,
+        "clothing": 1.0,
+        "trade": 1.0,
+        "material": 1.0,
+        "rad": 1.0,
+        "tool": 1.0,
+        "throwable": 1.0
+      },
+      "collapse": {
+        "food": 1.3,
+        "water": 1.0,
+        "med": 1.4,
+        "ammo": 1.2,
+        "weapon": 1.2,
+        "clothing": 1.5,
+        "trade": 1.0,
+        "material": 1.3,
+        "rad": 1.0,
+        "tool": 1.0,
+        "throwable": 1.0
+      },
+      "civil_war": {
+        "food": 1.5,
+        "water": 1.1,
+        "med": 1.5,
+        "ammo": 0.8,
+        "weapon": 0.9,
+        "clothing": 1.0,
+        "trade": 0.9,
+        "material": 1.0,
+        "rad": 1.5,
+        "tool": 1.0,
+        "throwable": 1.0
+      },
+      "nuclear_winter": {
+        "food": 2.2,
+        "water": 1.8,
+        "med": 2.0,
+        "ammo": 1.5,
+        "weapon": 1.0,
+        "clothing": 1.6,
+        "trade": 0.6,
+        "material": 1.3,
+        "rad": 2.5,
+        "tool": 1.2,
+        "throwable": 1.2
+      }
+    },
+    "traders": [
+      {
+        "npc": "ray",
+        "location": "loc_east_end",
+        "chapters": [
+          "ch01"
+        ],
+        "markup": 1.1,
+        "stock": {
+          "scrap": 4,
+          "wire": 3,
+          "ammo_shell": 4,
+          "firewood": 4,
+          "candles": 3
+        },
+        "wants": [
+          "fuel",
+          "batteries",
+          "whiskey"
+        ]
+      },
+      {
+        "npc": "wren",
+        "location": "loc_belknap_pharmacy",
+        "chapters": [
+          "ch01",
+          "ch02",
+          "ch03"
+        ],
+        "markup": 1.3,
+        "stock": {
+          "painkillers": 3,
+          "bandage": 3,
+          "ammo_9mm": 12,
+          "cigarettes": 5,
+          "antibiotics": 1
+        },
+        "wants": [
+          "canned_food",
+          "ration",
+          "cigarettes"
+        ]
+      },
+      {
+        "npc": "bea",
+        "location": "loc_ore_docks",
+        "chapters": [
+          "ch03",
+          "ch05",
+          "ch08"
+        ],
+        "markup": 1.0,
+        "stock": {
+          "dried_fish": 6,
+          "water_clean": 4,
+          "cloth": 6,
+          "ammo_shell": 6
+        },
+        "wants": [
+          "ammo_9mm",
+          "rifle_ammo",
+          "fuel",
+          "med_kit"
+        ]
+      },
+      {
+        "npc": "lou",
+        "location": "loc_lou_shack",
+        "chapters": [
+          "ch03",
+          "ch07"
+        ],
+        "markup": 1.0,
+        "stock": {
+          "batteries": 6,
+          "flare": 3,
+          "coffee": 3,
+          "purification_tablets": 4
+        },
+        "wants": [
+          "batteries",
+          "canned_food",
+          "whiskey"
+        ]
+      },
+      {
+        "npc": "ames",
+        "location": "loc_lakehead_memorial",
+        "chapters": [
+          "ch02",
+          "ch08"
+        ],
+        "markup": 1.2,
+        "stock": {
+          "antibiotics": 2,
+          "bandage": 4,
+          "iodide_tablets": 3,
+          "med_kit": 1
+        },
+        "wants": [
+          "fuel",
+          "hospital_diesel"
+        ]
+      }
+    ],
+    "bribes": {
+      "cigarettes": "Haas checkpoint (Ch2): 1 pack",
+      "whiskey": "generic guard/militia talk-past: 1 bottle"
+    }
+  },
+  "resource_budget": {
+    "see": "budget_report.json (generated by tools/validate.py) and DESIGN.md tables",
+    "targets_ratio_found_over_needed": {
+      "food": [
+        0.85,
+        1.2
+      ],
+      "water_clean": [
+        0.45,
+        0.95
+      ],
+      "firewood": [
+        0.9,
+        1.5
+      ],
+      "healing": [
+        0.75,
+        1.2
+      ],
+      "ammo_damage": [
+        0.6,
+        1.0
+      ]
+    },
+    "why": "Food ~1.0 so a careless player runs short. Clean water deliberately <1: the gap is filled by snow/lake water (boil = firewood, or tablets), never a hard lock. Ammo <1: melee, stealth, talking, and avoiding fights are supposed to carry the rest.",
+    "ammo_target_by_act": {
+      "blackout": [
+        0.3,
+        1.0
+      ],
+      "collapse": [
+        0.5,
+        1.0
+      ],
+      "civil_war": [
+        0.8,
+        1.4
+      ],
+      "nuclear_winter": [
+        0.5,
+        0.95
+      ]
+    },
+    "min_need_to_check": {
+      "healing_damage": 60,
+      "ammo_gun_damage": 60,
+      "firewood": 4
+    }
+  }
+}

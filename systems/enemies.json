@@ -1,0 +1,1574 @@
+{
+  "version": 1,
+  "units": {
+    "hp": "hit points",
+    "speed_mps": "m/s (player walk 3.15, sprint 4.85)",
+    "detect_m": "sight radius, x0.6 in blizzard, x0.7 at night unless player has light on",
+    "attack.damage": "hp to player per hit",
+    "attack.interval_s": "seconds between attacks",
+    "accuracy": "0..1 hit chance per shot at 15 m, linear to half at range_m",
+    "resistances": "fraction of damage removed (negative = weakness, e.g. fire -0.5 = +50%)",
+    "threat_cost": "spawn-budget points"
+  },
+  "families": {
+    "raider": "Hostile civilians & militias (looter, bridge_boy, watch_militia, desperate_family, authority_guard, compact_militia, harbor_militia). Human, talkable, flee. Ch1+.",
+    "soldier": "Federal Army: Task Force Ironwood (ironwood_patrol, ironwood_checkpoint) Ch5+, Remnant (remnant_patrol) Ch7+. Human, armored, sparable.",
+    "dog": "Animals: feral_dog Ch7+, wolf Ch9+. Flee fire/flares.",
+    "husk": "Sick/freezing humans, Ch8+. NOT mutants, ghouls or zombies; radiation is an environmental hazard, never a monster source.",
+    "set_piece": "Invulnerable scripted threats (ironwood_drone, ironwood_mrap, ironwood_bradley)."
+  },
+  "code_kind_note": "code_kind maps to existing js/enemies.js KINDS meshes/AI. Legacy KINDS ids: 'raider' -> use bridge_boy/looter data, 'dog' -> feral_dog, 'husk' -> husk.",
+  "enemies": [
+    {
+      "id": "looter",
+      "name": "Looter",
+      "family": "raider",
+      "code_kind": "raider",
+      "hp": 60,
+      "threat_cost": 2,
+      "speed_mps": 2.0,
+      "detect_m": 12,
+      "attack": {
+        "type": "melee",
+        "damage": 10,
+        "interval_s": 1.1,
+        "range_m": 1.5
+      },
+      "resistances": {
+        "bullet": 0,
+        "melee": 0,
+        "fire": 0,
+        "cold": 0
+      },
+      "behavior": {
+        "flee_hp_pct": 40,
+        "flee_chance": 0.5,
+        "talkable": true
+      },
+      "drops": {
+        "rolls": [
+          1,
+          2
+        ],
+        "empty_chance": 0.15,
+        "entries": [
+          {
+            "item": "canned_food",
+            "weight": 3,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "crackers",
+            "weight": 3,
+            "qty": [
+              1,
+              2
+            ]
+          },
+          {
+            "item": "cloth",
+            "weight": 4,
+            "qty": [
+              1,
+              2
+            ]
+          },
+          {
+            "item": "bandage",
+            "weight": 2,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "cigarettes",
+            "weight": 2,
+            "qty": [
+              1,
+              3
+            ]
+          },
+          {
+            "item": "water_clean",
+            "weight": 2,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "scrap",
+            "weight": 2,
+            "qty": [
+              1,
+              2
+            ]
+          }
+        ]
+      },
+      "first_chapter": "ch01",
+      "story_kind": "human",
+      "story_acts": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "bridge_boy",
+      "name": "Bridge Boy",
+      "family": "raider",
+      "code_kind": "raider",
+      "hp": 65,
+      "threat_cost": 3,
+      "speed_mps": 2.2,
+      "detect_m": 14,
+      "attack": {
+        "type": "melee",
+        "damage": 12,
+        "interval_s": 1.0,
+        "range_m": 1.5
+      },
+      "resistances": {
+        "bullet": 0,
+        "melee": 0,
+        "fire": 0,
+        "cold": 0
+      },
+      "behavior": {
+        "armed_chance": 0.4,
+        "armed_attack": {
+          "type": "ranged",
+          "damage": 9,
+          "interval_s": 0.9,
+          "range_m": 18,
+          "accuracy": 0.35,
+          "weapon": "pistol"
+        },
+        "group_flee_at_losses_pct": 50,
+        "scared_by_warning_shots": true,
+        "talkable": true,
+        "weapons": [
+          "pipe",
+          "pistol",
+          "molotov"
+        ]
+      },
+      "drops": {
+        "rolls": [
+          1,
+          2
+        ],
+        "empty_chance": 0.15,
+        "entries": [
+          {
+            "item": "ammo_9mm",
+            "weight": 4,
+            "qty": [
+              1,
+              4
+            ]
+          },
+          {
+            "item": "ammo_shell",
+            "weight": 2,
+            "qty": [
+              1,
+              2
+            ]
+          },
+          {
+            "item": "canned_food",
+            "weight": 2,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "cigarettes",
+            "weight": 3,
+            "qty": [
+              1,
+              3
+            ]
+          },
+          {
+            "item": "cloth",
+            "weight": 3,
+            "qty": [
+              1,
+              2
+            ]
+          },
+          {
+            "item": "whiskey",
+            "weight": 1,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "bandage",
+            "weight": 2,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "ar15",
+            "weight": 0.12,
+            "qty": [
+              1,
+              1
+            ]
+          }
+        ]
+      },
+      "first_chapter": "ch03",
+      "story_kind": "human",
+      "story_acts": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "watch_militia",
+      "name": "Block watch",
+      "family": "raider",
+      "code_kind": "raider",
+      "hp": 75,
+      "threat_cost": 4,
+      "speed_mps": 2.0,
+      "detect_m": 18,
+      "attack": {
+        "type": "ranged",
+        "damage": 22,
+        "interval_s": 2.5,
+        "range_m": 40,
+        "accuracy": 0.4,
+        "weapon": "deer_rifle"
+      },
+      "resistances": {
+        "bullet": 0,
+        "melee": 0,
+        "fire": 0,
+        "cold": 0
+      },
+      "behavior": {
+        "hostile_if": "run with drugs / draw weapon / steal",
+        "talkable": true,
+        "ration_card_passes": true
+      },
+      "drops": {
+        "rolls": [
+          1,
+          2
+        ],
+        "empty_chance": 0.15,
+        "entries": [
+          {
+            "item": "rifle_ammo",
+            "weight": 4,
+            "qty": [
+              2,
+              4
+            ]
+          },
+          {
+            "item": "canned_food",
+            "weight": 2,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "coffee",
+            "weight": 2,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "bandage",
+            "weight": 2,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "deer_rifle",
+            "weight": 0.4,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "ar15",
+            "weight": 0.2,
+            "qty": [
+              1,
+              1
+            ]
+          }
+        ]
+      },
+      "first_chapter": "ch01",
+      "story_kind": "human",
+      "story_acts": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "desperate_family",
+      "name": "Armed parent",
+      "family": "raider",
+      "code_kind": "raider",
+      "hp": 60,
+      "threat_cost": 3,
+      "speed_mps": 1.8,
+      "detect_m": 10,
+      "attack": {
+        "type": "ranged",
+        "damage": 20,
+        "interval_s": 1.6,
+        "range_m": 12,
+        "accuracy": 0.35,
+        "weapon": "blaster"
+      },
+      "resistances": {
+        "bullet": 0,
+        "melee": 0,
+        "fire": 0,
+        "cold": 0
+      },
+      "behavior": {
+        "hostile_if": "threatened",
+        "talkable": true,
+        "never_flee": true,
+        "note": "Lund family Ch4. Killing them is a story event."
+      },
+      "drops": {
+        "rolls": [
+          1,
+          1
+        ],
+        "empty_chance": 0.4,
+        "entries": [
+          {
+            "item": "canned_food",
+            "weight": 3,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "ammo_shell",
+            "weight": 2,
+            "qty": [
+              1,
+              2
+            ]
+          },
+          {
+            "item": "cloth",
+            "weight": 2,
+            "qty": [
+              1,
+              1
+            ]
+          }
+        ]
+      },
+      "first_chapter": "ch04",
+      "story_kind": "human",
+      "story_acts": [
+        2
+      ]
+    },
+    {
+      "id": "authority_guard",
+      "name": "Authority guard",
+      "family": "raider",
+      "code_kind": "raider",
+      "hp": 85,
+      "threat_cost": 5,
+      "speed_mps": 2.2,
+      "detect_m": 20,
+      "attack": {
+        "type": "ranged",
+        "damage": 16,
+        "interval_s": 1.2,
+        "range_m": 35,
+        "accuracy": 0.45,
+        "weapon": "service_rifle"
+      },
+      "resistances": {
+        "bullet": 0.15,
+        "melee": 0,
+        "fire": 0,
+        "cold": 0
+      },
+      "behavior": {
+        "hostile_if": "steal / fight / story choice",
+        "talkable": true
+      },
+      "drops": {
+        "rolls": [
+          1,
+          2
+        ],
+        "empty_chance": 0.15,
+        "entries": [
+          {
+            "item": "ammo_556",
+            "weight": 3,
+            "qty": [
+              3,
+              8
+            ]
+          },
+          {
+            "item": "ration",
+            "weight": 4,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "bandage",
+            "weight": 3,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "ammo_9mm",
+            "weight": 2,
+            "qty": [
+              3,
+              6
+            ]
+          },
+          {
+            "item": "painkillers",
+            "weight": 1,
+            "qty": [
+              1,
+              1
+            ]
+          }
+        ]
+      },
+      "first_chapter": "ch02",
+      "story_kind": "human",
+      "story_acts": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "compact_militia",
+      "name": "Compact militia",
+      "family": "raider",
+      "code_kind": "raider",
+      "hp": 80,
+      "threat_cost": 4,
+      "speed_mps": 2.2,
+      "detect_m": 22,
+      "attack": {
+        "type": "ranged",
+        "damage": 22,
+        "interval_s": 2.5,
+        "range_m": 45,
+        "accuracy": 0.4,
+        "weapon": "deer_rifle"
+      },
+      "resistances": {
+        "bullet": 0,
+        "melee": 0,
+        "fire": 0,
+        "cold": 0.2
+      },
+      "behavior": {
+        "talkable": true,
+        "armed_variants": {
+          "deer_rifle": 0.8,
+          "ar15": 0.2
+        }
+      },
+      "drops": {
+        "rolls": [
+          1,
+          2
+        ],
+        "empty_chance": 0.15,
+        "entries": [
+          {
+            "item": "rifle_ammo",
+            "weight": 5,
+            "qty": [
+              1,
+              3
+            ]
+          },
+          {
+            "item": "canned_food",
+            "weight": 3,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "dried_fish",
+            "weight": 1,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "bandage",
+            "weight": 1,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "wool_hat",
+            "weight": 1,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "ar15",
+            "weight": 0.35,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "ammo_556",
+            "weight": 1.2,
+            "qty": [
+              3,
+              8
+            ]
+          }
+        ]
+      },
+      "first_chapter": "ch05",
+      "story_kind": "human",
+      "story_acts": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": "harbor_militia",
+      "name": "Harbor longshoreman",
+      "family": "raider",
+      "code_kind": "raider",
+      "hp": 80,
+      "threat_cost": 4,
+      "speed_mps": 2.0,
+      "detect_m": 16,
+      "attack": {
+        "type": "melee",
+        "damage": 16,
+        "interval_s": 1.2,
+        "range_m": 1.9,
+        "weapon": "cargo hook"
+      },
+      "resistances": {
+        "bullet": 0,
+        "melee": 0,
+        "fire": 0,
+        "cold": 0.2
+      },
+      "behavior": {
+        "armed_chance": 0.3,
+        "armed_attack": {
+          "type": "ranged",
+          "damage": 30,
+          "interval_s": 1.6,
+          "range_m": 16,
+          "accuracy": 0.35,
+          "weapon": "pump_shotgun"
+        },
+        "talkable": true
+      },
+      "drops": {
+        "rolls": [
+          1,
+          2
+        ],
+        "empty_chance": 0.15,
+        "entries": [
+          {
+            "item": "dried_fish",
+            "weight": 4,
+            "qty": [
+              1,
+              2
+            ]
+          },
+          {
+            "item": "ammo_shell",
+            "weight": 3,
+            "qty": [
+              1,
+              3
+            ]
+          },
+          {
+            "item": "cloth",
+            "weight": 2,
+            "qty": [
+              1,
+              2
+            ]
+          },
+          {
+            "item": "bandage",
+            "weight": 2,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "ar15",
+            "weight": 0.15,
+            "qty": [
+              1,
+              1
+            ]
+          }
+        ]
+      },
+      "first_chapter": "ch06",
+      "story_kind": "human",
+      "story_acts": [
+        2
+      ]
+    },
+    {
+      "id": "ironwood_patrol",
+      "name": "Ironwood soldier",
+      "family": "soldier",
+      "code_kind": "raider",
+      "hp": 100,
+      "threat_cost": 7,
+      "speed_mps": 2.4,
+      "detect_m": 26,
+      "attack": {
+        "type": "ranged",
+        "damage": 14,
+        "interval_s": 0.6,
+        "range_m": 45,
+        "accuracy": 0.4,
+        "weapon": "service_rifle",
+        "burst": 3
+      },
+      "resistances": {
+        "bullet": 0.3,
+        "melee": 0,
+        "fire": 0,
+        "cold": 0.3
+      },
+      "behavior": {
+        "fireteam_size": 4,
+        "uses_cover": true,
+        "surrender_hp_pct": 25,
+        "sparable": true
+      },
+      "drops": {
+        "rolls": [
+          1,
+          3
+        ],
+        "empty_chance": 0.05,
+        "entries": [
+          {
+            "item": "ammo_556",
+            "weight": 6,
+            "qty": [
+              3,
+              8
+            ]
+          },
+          {
+            "item": "mre",
+            "weight": 1.5,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "bandage",
+            "weight": 3,
+            "qty": [
+              1,
+              2
+            ]
+          },
+          {
+            "item": "med_kit",
+            "weight": 0.6,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "painkillers",
+            "weight": 2,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "iodide_tablets",
+            "weight": 0.5,
+            "qty": [
+              1,
+              2
+            ]
+          },
+          {
+            "item": "service_rifle",
+            "weight": 0.25,
+            "qty": [
+              1,
+              1
+            ]
+          }
+        ]
+      },
+      "first_chapter": "ch05",
+      "story_kind": "human_military",
+      "story_acts": [
+        2
+      ]
+    },
+    {
+      "id": "remnant_patrol",
+      "name": "Ironwood Remnant",
+      "family": "soldier",
+      "code_kind": "raider",
+      "hp": 95,
+      "threat_cost": 7,
+      "speed_mps": 2.3,
+      "detect_m": 24,
+      "attack": {
+        "type": "ranged",
+        "damage": 14,
+        "interval_s": 0.65,
+        "range_m": 45,
+        "accuracy": 0.4,
+        "weapon": "service_rifle",
+        "burst": 3
+      },
+      "resistances": {
+        "bullet": 0.25,
+        "melee": 0,
+        "fire": 0,
+        "cold": 0.6
+      },
+      "behavior": {
+        "fireteam_size": 4,
+        "uses_cover": true,
+        "surrender_hp_pct": 20,
+        "sparable": true
+      },
+      "drops": {
+        "rolls": [
+          1,
+          3
+        ],
+        "empty_chance": 0.05,
+        "entries": [
+          {
+            "item": "ammo_556",
+            "weight": 5,
+            "qty": [
+              3,
+              8
+            ]
+          },
+          {
+            "item": "mre",
+            "weight": 2,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "bandage",
+            "weight": 3,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "mask_filter",
+            "weight": 1.5,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "military_parka",
+            "weight": 0.4,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "iodide_tablets",
+            "weight": 1,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "service_rifle",
+            "weight": 0.25,
+            "qty": [
+              1,
+              1
+            ]
+          }
+        ]
+      },
+      "first_chapter": "ch07",
+      "story_kind": "human_military",
+      "story_acts": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": "feral_dog",
+      "name": "Feral dog",
+      "family": "dog",
+      "code_kind": "dog",
+      "hp": 28,
+      "threat_cost": 1.5,
+      "speed_mps": 3.4,
+      "detect_m": 15,
+      "attack": {
+        "type": "melee",
+        "damage": 9,
+        "interval_s": 0.9,
+        "range_m": 1.2,
+        "bleed_chance": 0.2
+      },
+      "resistances": {
+        "bullet": 0,
+        "melee": 0,
+        "fire": -0.5,
+        "cold": 0
+      },
+      "behavior": {
+        "pack": true,
+        "flees_fire_and_flares": true,
+        "pack_flee_at_losses_pct": 50,
+        "circles_before_attack_s": 2
+      },
+      "drops": {
+        "rolls": [
+          0,
+          0
+        ],
+        "empty_chance": 1.0,
+        "entries": []
+      },
+      "first_chapter": "ch07",
+      "note": "Drops nothing. Starving pets; no butchering by design (tone).",
+      "story_kind": "animal",
+      "story_acts": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": "wolf",
+      "name": "Wolf",
+      "family": "dog",
+      "code_kind": "dog",
+      "hp": 45,
+      "threat_cost": 2.5,
+      "speed_mps": 4.2,
+      "detect_m": 20,
+      "attack": {
+        "type": "melee",
+        "damage": 14,
+        "interval_s": 1.0,
+        "range_m": 1.3,
+        "bleed_chance": 0.3
+      },
+      "resistances": {
+        "bullet": 0,
+        "melee": 0,
+        "fire": -0.5,
+        "cold": 1.0
+      },
+      "behavior": {
+        "pack": true,
+        "flanks": true,
+        "flees_fire_and_flares": true,
+        "pack_flee_at_losses_pct": 50
+      },
+      "drops": {
+        "rolls": [
+          0,
+          0
+        ],
+        "empty_chance": 1.0,
+        "entries": []
+      },
+      "first_chapter": "ch09",
+      "story_kind": "animal",
+      "story_acts": [
+        3
+      ]
+    },
+    {
+      "id": "husk",
+      "name": "Husk (sick/freezing person)",
+      "family": "husk",
+      "code_kind": "husk",
+      "hp": 55,
+      "threat_cost": 2,
+      "speed_mps": 1.55,
+      "detect_m": 13,
+      "attack": {
+        "type": "melee",
+        "damage": 11,
+        "interval_s": 1.05,
+        "range_m": 1.5
+      },
+      "resistances": {
+        "bullet": 0,
+        "melee": 0,
+        "fire": -0.5,
+        "cold": 1.0
+      },
+      "behavior": {
+        "erratic_wander": true,
+        "drawn_to_heat_and_food": true,
+        "heat_detect_mult": 2.0,
+        "talk_down": {
+          "requires": [
+            "iodide_tablets",
+            "wool_blanket"
+          ],
+          "kindness_min": 4,
+          "how": "holster, approach slowly, offer item"
+        },
+        "strips_coats": true,
+        "variants_cosmetic_only": [
+          "t-shirt in snow",
+          "blanket-wrapped",
+          "burn-scarred"
+        ]
+      },
+      "drops": {
+        "rolls": [
+          0,
+          1
+        ],
+        "empty_chance": 0.5,
+        "entries": [
+          {
+            "item": "cloth",
+            "weight": 3,
+            "qty": [
+              1,
+              2
+            ]
+          },
+          {
+            "item": "crackers",
+            "weight": 2,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "iodide_tablets",
+            "weight": 0.5,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "note",
+            "weight": 2,
+            "qty": [
+              1,
+              1
+            ]
+          }
+        ]
+      },
+      "first_chapter": "ch08",
+      "desc": "Radiation-sick, hypothermic, starving PEOPLE. Not monsters, not supernatural. Erratic; rush heat/food. Re-dress the zombie/mutant mockup models as under-dressed humans (story README).",
+      "story_kind": "human_sick",
+      "story_acts": [
+        3
+      ]
+    },
+    {
+      "id": "ironwood_checkpoint",
+      "name": "Ironwood checkpoint garrison",
+      "family": "soldier",
+      "code_kind": "raider",
+      "story_kind": "human_military",
+      "story_acts": [
+        2,
+        3
+      ],
+      "hp": 110,
+      "threat_cost": 16,
+      "speed_mps": 0,
+      "detect_m": 35,
+      "static": true,
+      "attack": {
+        "type": "ranged",
+        "damage": 10,
+        "interval_s": 0.15,
+        "burst": 6,
+        "burst_cooldown_s": 1.5,
+        "range_m": 60,
+        "accuracy": 0.3,
+        "weapon": "mounted MG"
+      },
+      "resistances": {
+        "bullet": 0.5,
+        "melee": 0,
+        "fire": 0,
+        "cold": 0.3
+      },
+      "behavior": {
+        "garrison": {
+          "enemy": "ironwood_patrol",
+          "count": [
+            2,
+            3
+          ]
+        },
+        "searchlight": {
+          "cone_deg": 25,
+          "range_m": 45,
+          "sweep_period_s": 8
+        },
+        "sandbags": true,
+        "pass_with": "ironwood_id (one free pass)",
+        "options": [
+          "sneak",
+          "bribe/ironwood_id",
+          "assault"
+        ],
+        "note": "hp/threat is the MG post; garrison soldiers spawn as separate ironwood_patrol (their threat is included in threat_cost)."
+      },
+      "drops": {
+        "rolls": [
+          2,
+          3
+        ],
+        "empty_chance": 0.0,
+        "entries": [
+          {
+            "item": "ammo_556",
+            "weight": 5,
+            "qty": [
+              8,
+              16
+            ]
+          },
+          {
+            "item": "mre",
+            "weight": 3,
+            "qty": [
+              1,
+              2
+            ]
+          },
+          {
+            "item": "med_kit",
+            "weight": 1,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "bandage",
+            "weight": 3,
+            "qty": [
+              1,
+              2
+            ]
+          },
+          {
+            "item": "flare",
+            "weight": 2,
+            "qty": [
+              1,
+              2
+            ]
+          }
+        ]
+      },
+      "first_chapter": "ch05",
+      "desc": "Federal Army checkpoint (Ch5-6, and the Ch9 Remnant picket)."
+    }
+  ],
+  "set_pieces": [
+    {
+      "id": "ironwood_drone",
+      "family": "set_piece",
+      "invulnerable": true,
+      "behavior": {
+        "spots_player_cone_deg": 40,
+        "calls_patrol_after_s": 4,
+        "grounded_in_blizzard": true
+      }
+    },
+    {
+      "id": "ironwood_mrap",
+      "family": "set_piece",
+      "invulnerable": true,
+      "behavior": {
+        "searchlight": true,
+        "mounted_gun_damage": 30,
+        "avoid_lanes": true
+      }
+    },
+    {
+      "id": "ironwood_bradley",
+      "family": "set_piece",
+      "invulnerable": true,
+      "behavior": {
+        "never_fought_directly": true,
+        "blocked_by": "pier crane"
+      }
+    }
+  ],
+  "encounter_groups": {
+    "feral_dogs": {
+      "enemy": "feral_dog",
+      "count": [
+        3,
+        5
+      ],
+      "threat_cost": 6,
+      "first_chapter": "ch07"
+    },
+    "wolves": {
+      "enemy": "wolf",
+      "count": [
+        4,
+        6
+      ],
+      "threat_cost": 12,
+      "first_chapter": "ch09"
+    },
+    "bridge_boy_raid": {
+      "enemy": "bridge_boy",
+      "count": [
+        4,
+        6
+      ],
+      "threat_cost": 15
+    },
+    "ironwood_fireteam": {
+      "enemy": "ironwood_patrol",
+      "count": [
+        4,
+        4
+      ],
+      "threat_cost": 28
+    },
+    "remnant_fireteam": {
+      "enemy": "remnant_patrol",
+      "count": [
+        4,
+        4
+      ],
+      "threat_cost": 28
+    }
+  },
+  "act_family_mix": {
+    "blackout": {
+      "families": {
+        "raider": 1.0
+      },
+      "note": "people only; few armed"
+    },
+    "collapse": {
+      "families": {
+        "raider": 1.0
+      },
+      "note": "people only; deer rifles and pipe shotguns; the cold kills more than people"
+    },
+    "civil_war": {
+      "families": {
+        "raider": 0.4,
+        "soldier": 0.5,
+        "dog": 0.1
+      },
+      "note": "federal Army from Ch5; dogs only in Ch7"
+    },
+    "nuclear_winter": {
+      "families": {
+        "husk": 0.3,
+        "dog": 0.3,
+        "soldier": 0.35,
+        "raider": 0.05
+      },
+      "note": "few healthy people left: husks, ferals, the Remnant"
+    }
+  },
+  "chapter_curve": {
+    "ch01": {
+      "act": "blackout",
+      "threat_budget": 4,
+      "intensity": 0.3,
+      "max_concurrent": 5,
+      "spawns": [
+        {
+          "enemy": "looter",
+          "count": 1,
+          "hostile_chance": 0.3,
+          "note": "Wren; non-hostile unless attacked"
+        },
+        {
+          "enemy": "watch_militia",
+          "count": 1,
+          "hostile_chance": 0.3,
+          "note": "hostile if you run with drugs or draw"
+        }
+      ],
+      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom for ambient/filler spawns of chapter-allowed families"
+    },
+    "ch02": {
+      "act": "blackout",
+      "threat_budget": 12,
+      "intensity": 0.35,
+      "max_concurrent": 5,
+      "note": "authority_guard hostile only if you steal; budget assumes 3 looters in the parking garage (Ames diesel job)",
+      "spawns": [
+        {
+          "enemy": "authority_guard",
+          "count": 6,
+          "hostile_chance": 0.1,
+          "note": "neutral unless you steal/fight"
+        },
+        {
+          "enemy": "looter",
+          "count": 3,
+          "hostile_chance": 1.0,
+          "note": "parking garage (Ames diesel job)"
+        }
+      ],
+      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom for ambient/filler spawns of chapter-allowed families"
+    },
+    "ch03": {
+      "act": "collapse",
+      "threat_budget": 28,
+      "intensity": 0.5,
+      "max_concurrent": 5,
+      "spawns": [
+        {
+          "enemy": "bridge_boy",
+          "count": 6,
+          "hostile_chance": 1.0,
+          "note": "fire raid; break at 50% losses"
+        },
+        {
+          "enemy": "watch_militia",
+          "count": 3,
+          "hostile_chance": 0.4,
+          "note": "Proctor patrol; ration card talks past"
+        }
+      ],
+      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom for ambient/filler spawns of chapter-allowed families"
+    },
+    "ch04": {
+      "act": "collapse",
+      "threat_budget": 17,
+      "intensity": 0.45,
+      "max_concurrent": 5,
+      "spawns": [
+        {
+          "enemy": "desperate_family",
+          "count": 1,
+          "hostile_chance": 0.3,
+          "note": "Lunds; only if threatened"
+        },
+        {
+          "enemy": "bridge_boy",
+          "count": 2,
+          "hostile_chance": 1.0,
+          "note": "river ice, optional"
+        },
+        {
+          "enemy": "authority_guard",
+          "count": 8,
+          "hostile_chance": 0.15,
+          "note": "story standoff"
+        }
+      ],
+      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom for ambient/filler spawns of chapter-allowed families"
+    },
+    "ch05": {
+      "act": "civil_war",
+      "threat_budget": 37,
+      "intensity": 0.65,
+      "max_concurrent": 5,
+      "note": "If convoy_choice=sabotage, swap compact_militia for 4 ironwood_patrol (threat 28).",
+      "spawns": [
+        {
+          "enemy": "compact_militia",
+          "count": 8,
+          "hostile_chance": 0.6,
+          "note": "escort branch"
+        },
+        {
+          "enemy": "ironwood_patrol",
+          "count": 4,
+          "hostile_chance": 0.4,
+          "note": "sabotage branch"
+        },
+        {
+          "enemy": "ironwood_drone",
+          "count": 1,
+          "hostile_chance": 1.0,
+          "note": "set piece"
+        },
+        {
+          "enemy": "ironwood_mrap",
+          "count": 1,
+          "hostile_chance": 1.0,
+          "note": "set piece"
+        }
+      ],
+      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom for ambient/filler spawns of chapter-allowed families"
+    },
+    "ch06": {
+      "act": "civil_war",
+      "threat_budget": 99,
+      "intensity": 0.7,
+      "max_concurrent": 6,
+      "note": "If bridge_choice=held, enemies become compact_militia + harbor_militia (same budget).",
+      "spawns": [
+        {
+          "enemy": "ironwood_patrol",
+          "count": 12,
+          "hostile_chance": 0.75,
+          "note": "sweep + night battle"
+        },
+        {
+          "enemy": "ironwood_checkpoint",
+          "count": 1,
+          "hostile_chance": 0.6,
+          "note": "Blatnik: sneak/bribe/assault"
+        },
+        {
+          "enemy": "ironwood_drone",
+          "count": 2,
+          "hostile_chance": 1.0,
+          "note": "set piece"
+        },
+        {
+          "enemy": "ironwood_bradley",
+          "count": 1,
+          "hostile_chance": 1.0,
+          "note": "set piece"
+        },
+        {
+          "enemy": "compact_militia",
+          "count": 4,
+          "hostile_chance": 0.3,
+          "note": "bridge_choice=held"
+        },
+        {
+          "enemy": "harbor_militia",
+          "count": 6,
+          "hostile_chance": 0.3,
+          "note": "bridge_choice=held"
+        }
+      ],
+      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom for ambient/filler spawns of chapter-allowed families"
+    },
+    "ch07": {
+      "act": "civil_war",
+      "threat_budget": 20,
+      "intensity": 0.55,
+      "max_concurrent": 5,
+      "spawns": [
+        {
+          "enemy": "feral_dog",
+          "count": 4,
+          "hostile_chance": 1.0,
+          "note": "first dogs"
+        },
+        {
+          "enemy": "remnant_patrol",
+          "count": 4,
+          "hostile_chance": 0.35,
+          "note": "hostile if ironwood_hostility>=3"
+        }
+      ],
+      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom for ambient/filler spawns of chapter-allowed families"
+    },
+    "ch08": {
+      "act": "nuclear_winter",
+      "threat_budget": 38,
+      "intensity": 0.6,
+      "max_concurrent": 5,
+      "spawns": [
+        {
+          "enemy": "husk",
+          "count": 6,
+          "hostile_chance": 0.7,
+          "note": "talk-down possible"
+        },
+        {
+          "enemy": "feral_dog",
+          "count": 5,
+          "hostile_chance": 1.0,
+          "note": ""
+        },
+        {
+          "enemy": "looter",
+          "count": 3,
+          "hostile_chance": 0.7,
+          "note": "hospital"
+        },
+        {
+          "enemy": "remnant_patrol",
+          "count": 4,
+          "hostile_chance": 0.4,
+          "note": "elevators if bridge_choice=held"
+        }
+      ],
+      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom for ambient/filler spawns of chapter-allowed families"
+    },
+    "ch09": {
+      "act": "nuclear_winter",
+      "threat_budget": 82,
+      "intensity": 0.75,
+      "max_concurrent": 6,
+      "spawns": [
+        {
+          "enemy": "remnant_patrol",
+          "count": 8,
+          "hostile_chance": 0.7,
+          "note": "Ruiz gap reduces"
+        },
+        {
+          "enemy": "ironwood_checkpoint",
+          "count": 1,
+          "hostile_chance": 0.7,
+          "note": "bridge picket"
+        },
+        {
+          "enemy": "ironwood_drone",
+          "count": 1,
+          "hostile_chance": 1.0,
+          "note": "grounded by blizzard"
+        },
+        {
+          "enemy": "wolf",
+          "count": 5,
+          "hostile_chance": 1.0,
+          "note": "Jay Cooke pack"
+        },
+        {
+          "enemy": "husk",
+          "count": 4,
+          "hostile_chance": 0.8,
+          "note": "drawn to column heat"
+        }
+      ],
+      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom for ambient/filler spawns of chapter-allowed families"
+    },
+    "ch10": {
+      "act": "nuclear_winter",
+      "threat_budget": 34,
+      "intensity": 0.8,
+      "max_concurrent": 6,
+      "note": "Only if no stand-down (ruiz_defected or strand_stance=governor => 0).",
+      "spawns": [
+        {
+          "enemy": "remnant_patrol",
+          "count": 8,
+          "hostile_chance": 0.5,
+          "note": "0 if stand-down"
+        },
+        {
+          "enemy": "ironwood_mrap",
+          "count": 1,
+          "hostile_chance": 1.0,
+          "note": "set piece"
+        }
+      ],
+      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom for ambient/filler spawns of chapter-allowed families"
+    },
+    "_note": "spawns mirror story/gameplay_hooks.json chapters[].enemies (counts are the story's); hostile_chance is the systems estimate used for budgets."
+  },
+  "drop_rules": {
+    "rolls": "[min,max] entries rolled from weighted entries",
+    "empty_chance": "chance the body has nothing",
+    "difficulty": "difficulty.loot_mult scales qty; ammo drops also scale by difficulty.ammo_mult",
+    "weapons_dropped_have_durability_pct": [
+      25,
+      60
+    ],
+    "guns_dropped_loaded_rounds_pct": [
+      0,
+      0.5
+    ],
+    "act_gating": "drops obey loot_tables.item_act_gate and item_act_weight_mult exactly like containers (e.g. authority_guard 5.56 drops are weight 0 in blackout)"
+  },
+  "chapter_gating": {
+    "human_only_until": "ch04",
+    "soldier_from": "ch05",
+    "dog_from": "ch07",
+    "husk_from": "ch08",
+    "rule": "validated by tools/validate.py"
+  }
+}

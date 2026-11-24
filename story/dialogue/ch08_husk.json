@@ -1,0 +1,194 @@
+{
+  "id": "ch08_husk",
+  "chapter": "ch08",
+  "location": "loc_east_end",
+  "trigger": "Husk encounter: a man in a T-shirt in the snow, trying to get into a car where a family shelters.",
+  "speakers": [
+    "husk",
+    "dell",
+    "theo",
+    "narrator"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "A man in a T-shirt. −15 °C. Hair coming out in clumps. He's pulling at a car door. Kids inside screaming.",
+      "next": "h1"
+    },
+    {
+      "id": "h1",
+      "speaker": "husk",
+      "text": "warm in there. it's warm in there. i'm so hot. why am i so hot.",
+      "choices": [
+        {
+          "text": "[Holster weapon. Approach slowly.]",
+          "next": "approach"
+        },
+        {
+          "text": "[Shout at him to back off]",
+          "next": "shout"
+        },
+        {
+          "text": "[Shoot]",
+          "next": "shoot"
+        }
+      ]
+    },
+    {
+      "id": "approach",
+      "speaker": "narrator",
+      "text": "He turns. Gums bleeding. His eyes track your coat, your bag, the heat coming off you.",
+      "branches": [
+        {
+          "next": "can_talk",
+          "conditions": [
+            {
+              "item": "iodide_tablets",
+              "gte": 1
+            },
+            {
+              "item": "wool_blanket",
+              "gte": 1
+            },
+            {
+              "flag": "kindness",
+              "gte": 4
+            }
+          ]
+        },
+        {
+          "next": "cant_talk"
+        }
+      ]
+    },
+    {
+      "id": "can_talk",
+      "speaker": "dell",
+      "text": "Hey. Hey. You're cold, not hot. It lies to you. Here. Put this on. Take these.",
+      "effects": [
+        {
+          "take": "iodide_tablets",
+          "qty": 1
+        },
+        {
+          "take": "wool_blanket",
+          "qty": 1
+        }
+      ],
+      "next": "talk2"
+    },
+    {
+      "id": "talk2",
+      "speaker": "husk",
+      "text": "...cold. i'm cold. oh god. where's my coat. i had a coat.",
+      "effects": [
+        {
+          "add": "husks_talked_down",
+          "value": 1
+        },
+        {
+          "add": "kindness",
+          "value": 1
+        }
+      ],
+      "next": "talk3"
+    },
+    {
+      "id": "talk3",
+      "speaker": "narrator",
+      "text": "He sits down in the snow and cries. The car door opens an inch. A woman: 'Bring him in. Bring him.'",
+      "branches": [
+        {
+          "next": "pete",
+          "conditions": [
+            {
+              "flag": "lunds_stayed",
+              "eq": false
+            }
+          ]
+        },
+        {
+          "next": "end"
+        }
+      ]
+    },
+    {
+      "id": "pete",
+      "speaker": "narrator",
+      "text": "He has a farm cap. Esko Co-op. It's Pete Lund. He doesn't remember you.",
+      "effects": [
+        {
+          "set": "pete_lund_recovered",
+          "value": true
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "cant_talk",
+      "speaker": "narrator",
+      "text": "He lunges for your bag. There's nothing in your hands that he understands.",
+      "effects": [
+        {
+          "event": "encounter",
+          "id": "enc_ch08_husk"
+        }
+      ],
+      "next": "fight"
+    },
+    {
+      "id": "shout",
+      "speaker": "narrator",
+      "text": "He flinches, then comes at you. Fast. Faster than a sick man should.",
+      "effects": [
+        {
+          "event": "encounter",
+          "id": "enc_ch08_husk"
+        }
+      ],
+      "next": "fight"
+    },
+    {
+      "id": "shoot",
+      "speaker": "narrator",
+      "text": "He drops in the snow. The kids in the car keep screaming.",
+      "next": "end"
+    },
+    {
+      "id": "fight",
+      "speaker": "narrator",
+      "text": "When it's over, the family in the car won't open the door for you either.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "The dosimeter ticks. Get inside.",
+      "next": "tape"
+    },
+    {
+      "id": "tape",
+      "speaker": "theo",
+      "text": "windows first. plastic and tape. i'll do the upstairs.",
+      "effects": [
+        {
+          "set": "shelter_sealed",
+          "value": true
+        },
+        {
+          "event": "hud_unlock",
+          "hud": "seal"
+        }
+      ],
+      "next": "taped"
+    },
+    {
+      "id": "taped",
+      "speaker": "narrator",
+      "text": "Ash ticks on the plastic, not the glass. The click from the street gets quieter.",
+      "end": true
+    }
+  ]
+}

@@ -1,0 +1,196 @@
+{
+  "version": 1,
+  "default_mode": "tense_but_fair",
+  "units": {
+    "*_mult": "multiplier applied to the matching base value in survival/enemies/loot/progression json",
+    "loot_empty_add": "added to container empty_chance (clamped 0..0.95)",
+    "soft_regen_cap": "health level passive regen stops at (survival.json health.soft_regen; 0 = no passive regen)"
+  },
+  "how_to_apply": {
+    "warmth_drain_mult": "survival warmth drain",
+    "satiety_drain_mult": "survival satiety drain",
+    "hydration_drain_mult": "survival hydration drain",
+    "radiation_gain_mult": "zone gain",
+    "survival_damage_mult": "health damage from freezing/starving/dehydration/radiation thresholds",
+    "enemy_*": "enemies.json stats",
+    "threat_budget_mult": "enemies.json chapter_curve.threat_budget (round down; story-required spawns are never removed)",
+    "loot_mult": "qty of all non-ammo, non-med, non-food loot",
+    "ammo_mult": "qty of ammo category loot and drops",
+    "med_mult": "qty of med category",
+    "food_mult": "qty of food + water category",
+    "barter_*": "progression.json economy prices",
+    "campfire_burn_mult": "campfire/burn_barrel duration",
+    "quest_items": "never scaled"
+  },
+  "modes": [
+    {
+      "id": "story",
+      "name": "Story",
+      "description": "For the narrative. Cold and hunger still matter, but you'll rarely be short for long.",
+      "default": false,
+      "multipliers": {
+        "warmth_drain_mult": 0.65,
+        "satiety_drain_mult": 0.65,
+        "hydration_drain_mult": 0.65,
+        "radiation_gain_mult": 0.5,
+        "survival_damage_mult": 0.5,
+        "soft_regen_cap": 100,
+        "enemy_hp_mult": 0.75,
+        "enemy_damage_mult": 0.6,
+        "enemy_accuracy_mult": 0.7,
+        "enemy_detect_mult": 0.8,
+        "threat_budget_mult": 0.7,
+        "loot_mult": 1.35,
+        "ammo_mult": 1.5,
+        "med_mult": 1.4,
+        "food_mult": 1.3,
+        "loot_empty_add": -0.1,
+        "weapon_wear_mult": 0.6,
+        "clothing_wear_mult": 0.6,
+        "barter_buy_mult": 0.8,
+        "barter_sell_mult": 1.2,
+        "campfire_burn_mult": 1.5
+      },
+      "save_rules": {
+        "manual_save": true,
+        "autosave": "chapter start, safe houses, every 3 min"
+      },
+      "hud": {
+        "show_stat_numbers": true,
+        "show_rad_before_dosimeter": false
+      }
+    },
+    {
+      "id": "tense_but_fair",
+      "name": "Tense but Fair",
+      "description": "The intended game. Usually short on something, almost never stuck. All values in the other JSON files are authored at this mode (1.0).",
+      "default": true,
+      "multipliers": {
+        "warmth_drain_mult": 1.0,
+        "satiety_drain_mult": 1.0,
+        "hydration_drain_mult": 1.0,
+        "radiation_gain_mult": 1.0,
+        "survival_damage_mult": 1.0,
+        "soft_regen_cap": 70,
+        "enemy_hp_mult": 1.0,
+        "enemy_damage_mult": 1.0,
+        "enemy_accuracy_mult": 1.0,
+        "enemy_detect_mult": 1.0,
+        "threat_budget_mult": 1.0,
+        "loot_mult": 1.0,
+        "ammo_mult": 1.0,
+        "med_mult": 1.0,
+        "food_mult": 1.0,
+        "loot_empty_add": 0.0,
+        "weapon_wear_mult": 1.0,
+        "clothing_wear_mult": 1.0,
+        "barter_buy_mult": 1.0,
+        "barter_sell_mult": 1.0,
+        "campfire_burn_mult": 1.0
+      },
+      "save_rules": {
+        "manual_save": "safe houses only",
+        "autosave": "chapter start, safe houses"
+      },
+      "hud": {
+        "show_stat_numbers": true,
+        "show_rad_before_dosimeter": false
+      }
+    },
+    {
+      "id": "hard_winter",
+      "name": "Hard Winter",
+      "description": "Scarcer loot, colder nights, sharper enemies. For a second playthrough.",
+      "default": false,
+      "multipliers": {
+        "warmth_drain_mult": 1.25,
+        "satiety_drain_mult": 1.1,
+        "hydration_drain_mult": 1.1,
+        "radiation_gain_mult": 1.25,
+        "survival_damage_mult": 1.25,
+        "soft_regen_cap": 50,
+        "enemy_hp_mult": 1.15,
+        "enemy_damage_mult": 1.25,
+        "enemy_accuracy_mult": 1.15,
+        "enemy_detect_mult": 1.15,
+        "threat_budget_mult": 1.2,
+        "loot_mult": 0.8,
+        "ammo_mult": 0.7,
+        "med_mult": 0.75,
+        "food_mult": 0.85,
+        "loot_empty_add": 0.08,
+        "weapon_wear_mult": 1.3,
+        "clothing_wear_mult": 1.3,
+        "barter_buy_mult": 1.2,
+        "barter_sell_mult": 0.85,
+        "campfire_burn_mult": 0.85
+      },
+      "save_rules": {
+        "manual_save": "safe houses only",
+        "autosave": "chapter start"
+      },
+      "hud": {
+        "show_stat_numbers": true,
+        "show_rad_before_dosimeter": false
+      }
+    },
+    {
+      "id": "whiteout",
+      "name": "Whiteout",
+      "description": "Brutal. Every container could be the last. Stat numbers hidden; read the screen.",
+      "default": false,
+      "multipliers": {
+        "warmth_drain_mult": 1.5,
+        "satiety_drain_mult": 1.25,
+        "hydration_drain_mult": 1.25,
+        "radiation_gain_mult": 1.5,
+        "survival_damage_mult": 1.5,
+        "soft_regen_cap": 0,
+        "enemy_hp_mult": 1.25,
+        "enemy_damage_mult": 1.35,
+        "enemy_accuracy_mult": 1.3,
+        "enemy_detect_mult": 1.3,
+        "threat_budget_mult": 1.4,
+        "loot_mult": 0.65,
+        "ammo_mult": 0.5,
+        "med_mult": 0.65,
+        "food_mult": 0.8,
+        "loot_empty_add": 0.15,
+        "weapon_wear_mult": 1.6,
+        "clothing_wear_mult": 1.6,
+        "barter_buy_mult": 1.4,
+        "barter_sell_mult": 0.7,
+        "campfire_burn_mult": 0.7
+      },
+      "save_rules": {
+        "manual_save": false,
+        "autosave": "chapter start"
+      },
+      "hud": {
+        "show_stat_numbers": false,
+        "show_rad_before_dosimeter": false
+      }
+    }
+  ],
+  "options": {
+    "permadeath": {
+      "id": "permadeath",
+      "name": "Permadeath",
+      "default": false,
+      "combinable_with": [
+        "story",
+        "tense_but_fair",
+        "hard_winter",
+        "whiteout"
+      ],
+      "rules": {
+        "save_slots": 1,
+        "on_death": "delete save (CFG.saveKey) and show run summary",
+        "manual_save": false,
+        "autosave": "chapter start only + quit-save (resume deletes the quit-save)",
+        "story_choices_locked": true
+      },
+      "note": "A toggle, not a mode, so players can do 'Tense but Fair + Permadeath'."
+    }
+  }
+}

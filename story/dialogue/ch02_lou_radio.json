@@ -1,0 +1,49 @@
+{
+  "id": "ch02_lou_radio",
+  "chapter": "ch02",
+  "location": "loc_decc_ration",
+  "trigger": "Ambient: a crank radio in the ration line. Plays once.",
+  "speakers": [
+    "lou",
+    "narrator"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "lou",
+      "text": "...this is KD0LOU, Proctor, still here. Day nineteen. Good morning, Twin Ports.",
+      "next": "l1"
+    },
+    {
+      "id": "l1",
+      "speaker": "lou",
+      "text": "A fellow in Thunder Bay says transformer ships are loading in Busan. Hold onto that.",
+      "next": "l2"
+    },
+    {
+      "id": "l2",
+      "speaker": "lou",
+      "text": "FEMA has trucks in Saint Paul. That's what I hear. I hear a lot of things.",
+      "next": "l3"
+    },
+    {
+      "id": "l3",
+      "speaker": "lou",
+      "text": "Be good to each other in that line. Weather: flurries, minus four. Lou out.",
+      "next": "l4"
+    },
+    {
+      "id": "l4",
+      "speaker": "narrator",
+      "text": "A man near you snorts. 'Busan. Sure.' A woman shushes him. She wants the ships.",
+      "effects": [
+        {
+          "set": "lou_heard",
+          "value": true
+        }
+      ],
+      "end": true
+    }
+  ]
+}

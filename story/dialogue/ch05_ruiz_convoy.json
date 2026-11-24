@@ -1,0 +1,88 @@
+{
+  "id": "ch05_ruiz_convoy",
+  "chapter": "ch05",
+  "location": "loc_ore_docks",
+  "trigger": "Boarding the Ironwood MRAP before the convoy.",
+  "speakers": [
+    "ruiz",
+    "dell",
+    "narrator",
+    "kessler"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "kessler",
+      "text": "[Loudspeaker] Eleven thousand tons feeds Philadelphia for nine days. Load up.",
+      "effects": [
+        {
+          "set": "ironwood_arrived",
+          "value": true
+        }
+      ],
+      "next": "r1"
+    },
+    {
+      "id": "r1",
+      "speaker": "ruiz",
+      "text": "You're the lineworker. Ruiz. Engineer. You touch the cabinet, I cover you.",
+      "effects": [
+        {
+          "set": "ruiz_met",
+          "value": true
+        }
+      ],
+      "next": "r2"
+    },
+    {
+      "id": "r2",
+      "speaker": "ruiz",
+      "text": "That's the whole plan. Questions, keep them short.",
+      "choices": [
+        {
+          "text": "You believe the nine days thing?",
+          "next": "believe"
+        },
+        {
+          "text": "Where are you from?",
+          "next": "home"
+        },
+        {
+          "text": "No questions.",
+          "next": "end"
+        }
+      ]
+    },
+    {
+      "id": "believe",
+      "speaker": "ruiz",
+      "text": "I believe Philly's eating rats. I believe this town's next. Both true, ma'am.",
+      "effects": [
+        {
+          "trust": "ruiz",
+          "delta": 1
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "home",
+      "speaker": "ruiz",
+      "text": "El Paso. Mom, sister. Haven't heard since October. Don't— yeah. Mount up.",
+      "effects": [
+        {
+          "trust": "ruiz",
+          "delta": 1
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "The MRAP rolls. ROUTE 9 is a black line through the snow. A drone whines overhead.",
+      "end": true
+    }
+  ]
+}

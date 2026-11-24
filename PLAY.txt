@@ -1,0 +1,23 @@
+ASHFALL: Lakehead — how to play on a phone or computer
+======================================================
+
+This is a static site. It does not need a special dev server, but
+browsers will not load ES modules from a raw file:// URL. After
+unzipping, host the folder with any static file server and open
+index.html in Safari or Chrome.
+
+Examples:
+  python3 -m http.server 8080
+  npx --yes serve -p 8080
+
+Then, on your iPhone, open http://<your-computer-lan-ip>:8080/
+in Safari (same Wi-Fi). You can also upload the unzipped folder
+to any static host (GitHub Pages, Netlify, etc.) and open that URL.
+
+Portrait 9:16 is the intended layout. Add the page to your Home
+Screen for a fuller view.
+
+A single self-contained HTML file is not bundled here: textures
+and models total tens of megabytes (Poly Haven 1k PBR alone is
+about 22 MB), which is too large to inline as base64 for iPhone
+Safari.

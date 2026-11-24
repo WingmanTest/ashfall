@@ -1,0 +1,118 @@
+{
+  "id": "ch02_haas_checkpoint",
+  "chapter": "ch02",
+  "location": "loc_blatnik_bridge",
+  "trigger": "Reach the Authority checkpoint on the Blatnik bridge.",
+  "speakers": [
+    "cpl_haas",
+    "dell",
+    "narrator"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Jersey barriers. A Humvee with no fuel, used as a wall. A corporal with a clipboard.",
+      "next": "h1"
+    },
+    {
+      "id": "h1",
+      "speaker": "cpl_haas",
+      "text": "Morning. ID and sector. Anything to declare, declare it.",
+      "choices": [
+        {
+          "text": "Sector 4. Here's my license.",
+          "next": "h2"
+        },
+        {
+          "text": "[Offer a pack of cigarettes]",
+          "next": "bribe",
+          "conditions": [
+            {
+              "item": "cigarettes",
+              "gte": 1
+            }
+          ]
+        },
+        {
+          "text": "What happens if I don't?",
+          "next": "h_dont"
+        }
+      ]
+    },
+    {
+      "id": "h_dont",
+      "speaker": "cpl_haas",
+      "text": "Then I search you, and we both have a worse morning.",
+      "next": "h2"
+    },
+    {
+      "id": "h2",
+      "speaker": "cpl_haas",
+      "text": "Kowalczyk. Lineworker? Huh. They want your kind registered first.",
+      "effects": [
+        {
+          "event": "search_inventory",
+          "confiscate": [
+            "pharmacy_bag"
+          ]
+        }
+      ],
+      "next": "h3"
+    },
+    {
+      "id": "h3",
+      "speaker": "cpl_haas",
+      "text": "Bag check. Meds over thirty days go to the hospital pool. Sorry.",
+      "branches": [
+        {
+          "next": "h_bag",
+          "conditions": [
+            {
+              "item": "pharmacy_bag",
+              "gte": 1
+            }
+          ]
+        },
+        {
+          "next": "h_pass"
+        }
+      ]
+    },
+    {
+      "id": "h_bag",
+      "speaker": "narrator",
+      "text": "He takes the pharmacy bag. He leaves Theo's insulin. 'Personal use. Keep it cold.'",
+      "effects": [
+        {
+          "take": "pharmacy_bag",
+          "qty": 1
+        }
+      ],
+      "next": "h_pass"
+    },
+    {
+      "id": "bribe",
+      "speaker": "cpl_haas",
+      "text": "...Camels. God. Okay. Go. You never saw me smile.",
+      "effects": [
+        {
+          "take": "cigarettes",
+          "qty": 1
+        },
+        {
+          "set": "ch02_haas_bribed",
+          "value": true
+        }
+      ],
+      "next": "h_pass"
+    },
+    {
+      "id": "h_pass",
+      "speaker": "cpl_haas",
+      "text": "DECC's past Canal Park. Line starts at the parking ramp. Bring patience.",
+      "end": true
+    }
+  ]
+}

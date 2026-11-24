@@ -1,0 +1,1251 @@
+{
+  "version": 1,
+  "units": {
+    "weight_kg": "kilograms",
+    "value": "barter value; 1 ration tin = 10",
+    "effects.satiety/hydration/warmth/health/stamina": "instant points on use",
+    "durations": "real seconds"
+  },
+  "carry": {
+    "base_capacity_kg": 22,
+    "overweight_soft_kg": 22,
+    "overweight_hard_kg": 30,
+    "overweight_move_mult": 0.8,
+    "note": "Above soft cap: no sprint, move x0.8. Above hard cap: cannot pick up."
+  },
+  "categories": [
+    "food",
+    "water",
+    "med",
+    "material",
+    "clothing",
+    "rad",
+    "tool",
+    "throwable",
+    "ammo",
+    "weapon",
+    "trade",
+    "quest"
+  ],
+  "equipment_slots": [
+    "head",
+    "face",
+    "torso",
+    "base",
+    "hands",
+    "legs",
+    "feet",
+    "wrap"
+  ],
+  "starting_loadout": {
+    "by_chapter_from_story": {
+      "ch01": {
+        "insulin_vial": 3,
+        "gas_can": 1,
+        "lineman_tools": 1,
+        "canned_food": 2,
+        "candles": 2
+      },
+      "ch05": {
+        "med_kit": 1
+      },
+      "ch08": {
+        "mask_filter": 6,
+        "iodide_tablets": 2
+      }
+    },
+    "systems_additions_ch01": {
+      "knife": 1,
+      "cloth": 2,
+      "firewood": 2,
+      "water_clean": 1,
+      "bucket": 1,
+      "flashlight": 1,
+      "batteries": 1
+    },
+    "equipped_ch01": [
+      "work_jacket",
+      "jeans",
+      "sneakers",
+      "knit_gloves"
+    ],
+    "note": "Story start_inventory (gameplay_hooks.json) is authoritative and is merged with systems_additions_ch01 (survival basics). config.js emptyInv() = {knife, cloth 2, wood 2, ration 1}."
+  },
+  "legacy_aliases": {
+    "insulin": "insulin_vial",
+    "wood": "firewood",
+    "filter": "mask_filter"
+  },
+  "items": [
+    {
+      "id": "ration",
+      "name": "Ration tin",
+      "category": "food",
+      "kind": "use",
+      "weight_kg": 0.4,
+      "stack": 8,
+      "value": 10,
+      "effects": {
+        "satiety": 35,
+        "warmth": 4,
+        "hydration": -4
+      },
+      "desc": "Authority ration tin. The barter unit: value 10."
+    },
+    {
+      "id": "canned_food",
+      "name": "Canned food",
+      "category": "food",
+      "kind": "use",
+      "weight_kg": 0.45,
+      "stack": 8,
+      "value": 9,
+      "effects": {
+        "satiety": 30
+      }
+    },
+    {
+      "id": "crackers",
+      "name": "Crackers",
+      "category": "food",
+      "kind": "use",
+      "weight_kg": 0.15,
+      "stack": 10,
+      "value": 4,
+      "effects": {
+        "satiety": 12
+      }
+    },
+    {
+      "id": "peanut_butter",
+      "name": "Peanut butter jar",
+      "category": "food",
+      "kind": "use",
+      "weight_kg": 0.5,
+      "stack": 4,
+      "value": 14,
+      "effects": {
+        "satiety": 40
+      }
+    },
+    {
+      "id": "candy_bar",
+      "name": "Candy bar",
+      "category": "food",
+      "kind": "use",
+      "weight_kg": 0.08,
+      "stack": 10,
+      "value": 5,
+      "effects": {
+        "satiety": 8,
+        "stamina": 25
+      }
+    },
+    {
+      "id": "dried_fish",
+      "name": "Dried herring",
+      "category": "food",
+      "kind": "use",
+      "weight_kg": 0.2,
+      "stack": 8,
+      "value": 8,
+      "effects": {
+        "satiety": 25,
+        "hydration": -6
+      },
+      "desc": "Harbor smokehouse stock."
+    },
+    {
+      "id": "mre",
+      "name": "MRE",
+      "category": "food",
+      "kind": "use",
+      "weight_kg": 0.7,
+      "stack": 4,
+      "value": 20,
+      "effects": {
+        "satiety": 50,
+        "warmth": 8,
+        "hydration": -4
+      },
+      "desc": "Ironwood field ration with flameless heater."
+    },
+    {
+      "id": "water_clean",
+      "name": "Bottled water",
+      "category": "water",
+      "kind": "use",
+      "weight_kg": 1.0,
+      "stack": 4,
+      "value": 7,
+      "effects": {
+        "hydration": 35
+      }
+    },
+    {
+      "id": "water_dirty",
+      "name": "Melt / lake water",
+      "category": "water",
+      "kind": "use",
+      "weight_kg": 1.0,
+      "stack": 4,
+      "value": 1,
+      "effects": {
+        "hydration": 30,
+        "chance_status": {
+          "sick": 0.3
+        },
+        "radiation_by_act": {
+          "nuclear_winter": 6
+        }
+      },
+      "desc": "Free from snow/lake via a bucket or bottle. Boil at a fire or treat with a tablet."
+    },
+    {
+      "id": "water_boiled",
+      "name": "Boiled water",
+      "category": "water",
+      "kind": "use",
+      "weight_kg": 1.0,
+      "stack": 4,
+      "value": 4,
+      "effects": {
+        "hydration": 32,
+        "warmth": 6,
+        "radiation_by_act": {
+          "nuclear_winter": 6
+        }
+      },
+      "desc": "Safe from sickness; boiling doesn't remove fallout."
+    },
+    {
+      "id": "purification_tablets",
+      "name": "Purification tablets",
+      "category": "med",
+      "kind": "use",
+      "weight_kg": 0.02,
+      "stack": 20,
+      "value": 6,
+      "effects": {
+        "convert": {
+          "from": "water_dirty",
+          "to": "water_clean"
+        }
+      },
+      "desc": "Use with water_dirty in inventory: turns 1 into water_clean (removes sickness AND fallout). Loot-only."
+    },
+    {
+      "id": "bandage",
+      "name": "Bandage",
+      "category": "med",
+      "kind": "use",
+      "weight_kg": 0.05,
+      "stack": 8,
+      "value": 6,
+      "effects": {
+        "health": 20,
+        "cures": [
+          "bleeding"
+        ]
+      },
+      "legacy_id": "bandage",
+      "code_note": "config heal 28 -> 20 (meds should feel precious)"
+    },
+    {
+      "id": "med_kit",
+      "name": "Med kit",
+      "category": "med",
+      "kind": "use",
+      "weight_kg": 0.6,
+      "stack": 3,
+      "value": 30,
+      "effects": {
+        "health": 60,
+        "cures": [
+          "bleeding",
+          "fracture"
+        ]
+      }
+    },
+    {
+      "id": "painkillers",
+      "name": "Painkillers",
+      "category": "med",
+      "kind": "use",
+      "weight_kg": 0.05,
+      "stack": 10,
+      "value": 8,
+      "effects": {
+        "health": 8,
+        "apply_status": "pain_suppressed"
+      }
+    },
+    {
+      "id": "antibiotics",
+      "name": "Antibiotics",
+      "category": "med",
+      "kind": "use",
+      "weight_kg": 0.05,
+      "stack": 6,
+      "value": 25,
+      "effects": {
+        "cures": [
+          "sick"
+        ]
+      }
+    },
+    {
+      "id": "iodide_tablets",
+      "name": "Potassium iodide",
+      "category": "med",
+      "kind": "use",
+      "weight_kg": 0.02,
+      "stack": 10,
+      "value": 15,
+      "effects": {
+        "apply_status_seconds": {
+          "iodide_active": 600
+        }
+      },
+      "desc": "Halves radiation gain for 600 s. Also used in Ch8 husk talk-down."
+    },
+    {
+      "id": "splint",
+      "name": "Splint",
+      "category": "med",
+      "kind": "use",
+      "weight_kg": 0.3,
+      "stack": 3,
+      "value": 6,
+      "effects": {
+        "cures": [
+          "fracture"
+        ]
+      }
+    },
+    {
+      "id": "cloth",
+      "name": "Cloth",
+      "category": "material",
+      "kind": "mat",
+      "weight_kg": 0.1,
+      "stack": 20,
+      "value": 2,
+      "legacy_id": "cloth"
+    },
+    {
+      "id": "firewood",
+      "name": "Dry wood",
+      "category": "material",
+      "kind": "mat",
+      "weight_kg": 1.0,
+      "stack": 10,
+      "value": 3,
+      "legacy_id": "wood"
+    },
+    {
+      "id": "fuel",
+      "name": "Fuel can",
+      "category": "material",
+      "kind": "mat",
+      "weight_kg": 1.2,
+      "stack": 6,
+      "value": 12,
+      "legacy_id": "fuel",
+      "desc": "1 L of gasoline/diesel. Molotovs; generators in story."
+    },
+    {
+      "id": "scrap",
+      "name": "Scrap metal",
+      "category": "material",
+      "kind": "mat",
+      "weight_kg": 0.5,
+      "stack": 20,
+      "value": 2,
+      "legacy_id": "scrap"
+    },
+    {
+      "id": "wire",
+      "name": "Copper wire",
+      "category": "material",
+      "kind": "mat",
+      "weight_kg": 0.15,
+      "stack": 12,
+      "value": 3,
+      "legacy_id": "wire"
+    },
+    {
+      "id": "work_jacket",
+      "name": "Work jacket",
+      "category": "clothing",
+      "kind": "wear",
+      "weight_kg": 1.2,
+      "stack": 1,
+      "value": 4,
+      "slot": "torso",
+      "insulation": 0.22,
+      "wet_resist": 0.2,
+      "durability": 100,
+      "paperdoll_layer": "torso_canvas_jacket"
+    },
+    {
+      "id": "coat",
+      "name": "Wool coat",
+      "category": "clothing",
+      "kind": "wear",
+      "weight_kg": 2.0,
+      "stack": 1,
+      "value": 25,
+      "slot": "torso",
+      "insulation": 0.38,
+      "wet_resist": 0.2,
+      "durability": 100,
+      "legacy_id": "coat",
+      "code_note": "config warmthResist 0.42 -> insulation 0.38 (stacks with other slots now)",
+      "paperdoll_layer": "torso_wool_coat"
+    },
+    {
+      "id": "military_parka",
+      "name": "Military parka",
+      "category": "clothing",
+      "kind": "wear",
+      "weight_kg": 2.2,
+      "stack": 1,
+      "value": 40,
+      "slot": "torso",
+      "insulation": 0.45,
+      "wet_resist": 0.6,
+      "durability": 100,
+      "paperdoll_layer": "torso_parka",
+      "tint": "#5b6142"
+    },
+    {
+      "id": "arctic_parka",
+      "name": "Arctic parka",
+      "category": "clothing",
+      "kind": "wear",
+      "weight_kg": 2.5,
+      "stack": 1,
+      "value": 60,
+      "slot": "torso",
+      "insulation": 0.55,
+      "wet_resist": 0.7,
+      "durability": 100,
+      "paperdoll_layer": "torso_parka",
+      "tint": "#c4532e"
+    },
+    {
+      "id": "thermal_underlayer",
+      "name": "Thermal underlayer",
+      "category": "clothing",
+      "kind": "wear",
+      "weight_kg": 0.4,
+      "stack": 1,
+      "value": 12,
+      "slot": "base",
+      "insulation": 0.12,
+      "wet_resist": 0.0,
+      "durability": 100,
+      "paperdoll_layer": "base_thermal_longjohns"
+    },
+    {
+      "id": "wool_hat",
+      "name": "Wool hat",
+      "category": "clothing",
+      "kind": "wear",
+      "weight_kg": 0.1,
+      "stack": 1,
+      "value": 5,
+      "slot": "head",
+      "insulation": 0.08,
+      "wet_resist": 0.2,
+      "durability": 100,
+      "paperdoll_layer": "head_knit_cap",
+      "tint": "#8a2f2f"
+    },
+    {
+      "id": "balaclava",
+      "name": "Balaclava",
+      "category": "clothing",
+      "kind": "wear",
+      "weight_kg": 0.15,
+      "stack": 1,
+      "value": 10,
+      "slot": "head",
+      "insulation": 0.12,
+      "wet_resist": 0.2,
+      "durability": 100,
+      "paperdoll_layer": "head_balaclava"
+    },
+    {
+      "id": "knit_gloves",
+      "name": "Knit gloves",
+      "category": "clothing",
+      "kind": "wear",
+      "weight_kg": 0.1,
+      "stack": 1,
+      "value": 4,
+      "slot": "hands",
+      "insulation": 0.05,
+      "wet_resist": 0.1,
+      "durability": 100,
+      "paperdoll_layer": "hands_knit_gloves"
+    },
+    {
+      "id": "insulated_gloves",
+      "name": "Insulated gloves",
+      "category": "clothing",
+      "kind": "wear",
+      "weight_kg": 0.2,
+      "stack": 1,
+      "value": 14,
+      "slot": "hands",
+      "insulation": 0.1,
+      "wet_resist": 0.5,
+      "durability": 100,
+      "paperdoll_layer": "hands_work_gloves"
+    },
+    {
+      "id": "jeans",
+      "name": "Jeans",
+      "category": "clothing",
+      "kind": "wear",
+      "weight_kg": 0.7,
+      "stack": 1,
+      "value": 2,
+      "slot": "legs",
+      "insulation": 0.04,
+      "wet_resist": 0.0,
+      "durability": 100,
+      "paperdoll_layer": "legs_jeans"
+    },
+    {
+      "id": "snow_pants",
+      "name": "Snow pants",
+      "category": "clothing",
+      "kind": "wear",
+      "weight_kg": 0.9,
+      "stack": 1,
+      "value": 18,
+      "slot": "legs",
+      "insulation": 0.14,
+      "wet_resist": 0.6,
+      "durability": 100,
+      "paperdoll_layer": "legs_insulated_bibs"
+    },
+    {
+      "id": "sneakers",
+      "name": "Sneakers",
+      "category": "clothing",
+      "kind": "wear",
+      "weight_kg": 0.6,
+      "stack": 1,
+      "value": 1,
+      "slot": "feet",
+      "insulation": 0.02,
+      "wet_resist": 0.0,
+      "durability": 100,
+      "paperdoll_layer": "feet_sneakers"
+    },
+    {
+      "id": "boots_insulated",
+      "name": "Insulated boots",
+      "category": "clothing",
+      "kind": "wear",
+      "weight_kg": 1.4,
+      "stack": 1,
+      "value": 22,
+      "slot": "feet",
+      "insulation": 0.15,
+      "wet_resist": 0.6,
+      "durability": 100,
+      "paperdoll_layer": "feet_pac_boots"
+    },
+    {
+      "id": "wool_blanket",
+      "name": "Wool blanket",
+      "category": "clothing",
+      "kind": "wear",
+      "weight_kg": 1.5,
+      "stack": 1,
+      "value": 12,
+      "slot": "wrap",
+      "insulation": 0.15,
+      "wet_resist": 0.1,
+      "durability": 100,
+      "desc": "Wrap slot; also a gift in Ch8 husk talk-down.",
+      "paperdoll_layer": "wrap_wool_blanket"
+    },
+    {
+      "id": "rain_poncho",
+      "name": "Rain poncho",
+      "category": "clothing",
+      "kind": "wear",
+      "weight_kg": 0.3,
+      "stack": 1,
+      "value": 8,
+      "slot": "wrap",
+      "insulation": 0.0,
+      "wet_resist": 1.0,
+      "durability": 100,
+      "desc": "Blocks 'wet' from fallout rain and halves fallout_rain radiation gain.",
+      "effects": {
+        "fallout_rain_rad_mult": 0.5
+      },
+      "paperdoll_layer": "wrap_rain_poncho"
+    },
+    {
+      "id": "mask_filter",
+      "name": "Mask filter",
+      "category": "rad",
+      "kind": "gear",
+      "weight_kg": 0.1,
+      "stack": 6,
+      "value": 18,
+      "effects": {
+        "filter_seconds": 240
+      },
+      "legacy_id": "filter",
+      "desc": "Gas-mask filter (Dell's mask is assumed from Ch8). Equip: radiation gain x0.2 for 240 s of exposure, then the next filter loads. HUD 'FILTER' %. Story: Theo needs ~2/week in Act III.",
+      "slot": "face",
+      "paperdoll_note": "No layer: a cartridge inside the gas mask. The mask itself is drawn from paperdoll.flag_layers (has_gas_mask)."
+    },
+    {
+      "id": "flashlight",
+      "name": "Flashlight",
+      "category": "tool",
+      "kind": "tool",
+      "weight_kg": 0.3,
+      "stack": 1,
+      "value": 10,
+      "effects": {
+        "light_m": 14,
+        "battery_drain_per_real_second": 0.004
+      },
+      "paperdoll_layer": "off_hand_flashlight",
+      "real_world_reference": "Maglite-style 2D-cell aluminium flashlight in yellow (or a yellow Rayovac work light), held in the off hand"
+    },
+    {
+      "id": "batteries",
+      "name": "Batteries",
+      "category": "tool",
+      "kind": "mat",
+      "weight_kg": 0.05,
+      "stack": 12,
+      "value": 4,
+      "effects": {
+        "battery_charge": 1.0
+      },
+      "desc": "Flashlight / hand radio charge. Trade staple."
+    },
+    {
+      "id": "candles",
+      "name": "Candles",
+      "category": "tool",
+      "kind": "use",
+      "weight_kg": 0.1,
+      "stack": 12,
+      "value": 3,
+      "effects": {
+        "place": "candle_cluster",
+        "burn_real_seconds": 300
+      },
+      "desc": "Place 1 indoors: warmth drain x0.5 within 1.5 m for 300 s."
+    },
+    {
+      "id": "bucket",
+      "name": "Bucket",
+      "category": "tool",
+      "kind": "tool",
+      "weight_kg": 0.6,
+      "stack": 1,
+      "value": 4,
+      "desc": "Collect water_dirty (4 per fill) from snow/lake. Ch1 lake_cooler."
+    },
+    {
+      "id": "empty_bottle",
+      "name": "Empty bottle",
+      "category": "tool",
+      "kind": "mat",
+      "weight_kg": 0.2,
+      "stack": 6,
+      "value": 1,
+      "desc": "Fill with snow/lake water -> water_dirty (1 per bottle)."
+    },
+    {
+      "id": "lineman_tools",
+      "name": "Lineman's tools",
+      "category": "tool",
+      "kind": "tool",
+      "weight_kg": 2.0,
+      "stack": 1,
+      "value": 25,
+      "desc": "Story tool (Ray). Opens electrical panels, relay cabinets, locked service doors."
+    },
+    {
+      "id": "bolt_cutters",
+      "name": "Bolt cutters",
+      "category": "tool",
+      "kind": "tool",
+      "weight_kg": 2.5,
+      "stack": 1,
+      "value": 15,
+      "desc": "Opens chained containers/gates (cache_chained containers)."
+    },
+    {
+      "id": "hand_radio",
+      "name": "Hand radio",
+      "category": "tool",
+      "kind": "tool",
+      "weight_kg": 0.5,
+      "stack": 1,
+      "value": 20
+    },
+    {
+      "id": "dosimeter",
+      "name": "Dosimeter",
+      "category": "tool",
+      "kind": "tool",
+      "weight_kg": 0.3,
+      "stack": 1,
+      "value": 40,
+      "desc": "Unlocks RAD on the HUD (Ch7, Lou)."
+    },
+    {
+      "id": "sled",
+      "name": "Sled",
+      "category": "tool",
+      "kind": "tool",
+      "weight_kg": 4.0,
+      "stack": 1,
+      "value": 30,
+      "effects": {
+        "carry_bonus_kg": 15
+      },
+      "desc": "Ch7+. +15 kg carry while pulled; slows sprint 10%."
+    },
+    {
+      "id": "tent_tarp",
+      "name": "Tent tarp",
+      "category": "tool",
+      "kind": "use",
+      "weight_kg": 2.0,
+      "stack": 1,
+      "value": 15,
+      "effects": {
+        "place": "shelter",
+        "shelter_real_seconds": 600
+      },
+      "desc": "Place outdoors: 'sheltered' modifier (warmth drain x0.6, blocks blizzard mult) for 600 s."
+    },
+    {
+      "id": "repair_kit",
+      "name": "Repair kit",
+      "category": "tool",
+      "kind": "use",
+      "weight_kg": 0.4,
+      "stack": 4,
+      "value": 12,
+      "effects": {
+        "repair_weapon_pct": 40
+      },
+      "desc": "Loot. Same effect as the weapon_repair recipe but works on guns too."
+    },
+    {
+      "id": "molotov",
+      "name": "Molotov",
+      "category": "throwable",
+      "kind": "throw",
+      "weight_kg": 0.6,
+      "stack": 4,
+      "value": 14,
+      "legacy_id": "molotov",
+      "paperdoll_layer": "main_hand_molotov"
+    },
+    {
+      "id": "flare",
+      "name": "Road flare",
+      "category": "throwable",
+      "kind": "throw",
+      "weight_kg": 0.3,
+      "stack": 6,
+      "value": 8,
+      "effects": {
+        "light_m": 20,
+        "burn_real_seconds": 30,
+        "scare_radius_m": 6
+      },
+      "desc": "Dogs/wolves flee its radius; husks are drawn to it.",
+      "paperdoll_layer": "main_hand_flare"
+    },
+    {
+      "id": "torch",
+      "name": "Torch",
+      "category": "throwable",
+      "kind": "throw",
+      "weight_kg": 0.5,
+      "stack": 3,
+      "value": 4,
+      "effects": {
+        "light_m": 10,
+        "burn_real_seconds": 120,
+        "warmth_drain_mult": 0.85,
+        "scare_radius_m": 3
+      },
+      "desc": "Held in off-hand (replaces flashlight). Crafted.",
+      "paperdoll_layer": "off_hand_torch"
+    },
+    {
+      "id": "ammo_9mm",
+      "name": "9mm round",
+      "category": "ammo",
+      "kind": "ammo",
+      "weight_kg": 0.012,
+      "stack": 40,
+      "value": 2,
+      "legacy_id": "ammo_9mm"
+    },
+    {
+      "id": "ammo_shell",
+      "name": "12ga shell",
+      "category": "ammo",
+      "kind": "ammo",
+      "weight_kg": 0.04,
+      "stack": 24,
+      "value": 3,
+      "legacy_id": "ammo_shell"
+    },
+    {
+      "id": "rifle_ammo",
+      "name": "Deer rifle round (.30-06)",
+      "category": "ammo",
+      "kind": "ammo",
+      "weight_kg": 0.025,
+      "stack": 20,
+      "value": 4
+    },
+    {
+      "id": "ammo_556",
+      "name": "5.56 round",
+      "category": "ammo",
+      "kind": "ammo",
+      "weight_kg": 0.012,
+      "stack": 60,
+      "value": 3,
+      "desc": "Ironwood issue. Civil war onward."
+    },
+    {
+      "id": "knife",
+      "name": "Shop knife",
+      "category": "weapon",
+      "kind": "melee",
+      "weight_kg": 0.3,
+      "stack": 1,
+      "value": 6,
+      "stats_ref": "weapons.json#knife",
+      "legacy_id": "knife",
+      "paperdoll_layer": "main_hand_knife"
+    },
+    {
+      "id": "pipe",
+      "name": "Lead pipe",
+      "category": "weapon",
+      "kind": "melee",
+      "weight_kg": 1.6,
+      "stack": 1,
+      "value": 4,
+      "stats_ref": "weapons.json#pipe",
+      "legacy_id": "pipe",
+      "paperdoll_layer": "main_hand_pipe"
+    },
+    {
+      "id": "baseball_bat",
+      "name": "Baseball bat",
+      "category": "weapon",
+      "kind": "melee",
+      "weight_kg": 1.0,
+      "stack": 1,
+      "value": 6,
+      "stats_ref": "weapons.json#baseball_bat",
+      "paperdoll_layer": "main_hand_bat",
+      "two_handed": true
+    },
+    {
+      "id": "crowbar",
+      "name": "Crowbar",
+      "category": "weapon",
+      "kind": "melee",
+      "weight_kg": 1.8,
+      "stack": 1,
+      "value": 10,
+      "stats_ref": "weapons.json#crowbar",
+      "paperdoll_layer": "main_hand_crowbar"
+    },
+    {
+      "id": "fire_axe",
+      "name": "Fire axe",
+      "category": "weapon",
+      "kind": "melee",
+      "weight_kg": 2.4,
+      "stack": 1,
+      "value": 18,
+      "stats_ref": "weapons.json#fire_axe",
+      "paperdoll_layer": "main_hand_fire_axe",
+      "two_handed": true
+    },
+    {
+      "id": "pistol",
+      "name": "Service 9mm",
+      "category": "weapon",
+      "kind": "gun",
+      "weight_kg": 0.9,
+      "stack": 1,
+      "value": 45,
+      "stats_ref": "weapons.json#pistol",
+      "legacy_id": "pistol",
+      "paperdoll_layer": "main_hand_pistol"
+    },
+    {
+      "id": "blaster",
+      "name": "Makeshift 12ga",
+      "category": "weapon",
+      "kind": "gun",
+      "weight_kg": 2.6,
+      "stack": 1,
+      "value": 35,
+      "stats_ref": "weapons.json#blaster",
+      "legacy_id": "blaster",
+      "paperdoll_layer": "main_hand_pipe_shotgun",
+      "two_handed": true
+    },
+    {
+      "id": "pump_shotgun",
+      "name": "Pump shotgun",
+      "category": "weapon",
+      "kind": "gun",
+      "weight_kg": 3.4,
+      "stack": 1,
+      "value": 70,
+      "stats_ref": "weapons.json#pump_shotgun",
+      "paperdoll_layer": "main_hand_pump_shotgun",
+      "two_handed": true
+    },
+    {
+      "id": "deer_rifle",
+      "name": "Deer rifle",
+      "category": "weapon",
+      "kind": "gun",
+      "weight_kg": 3.6,
+      "stack": 1,
+      "value": 80,
+      "stats_ref": "weapons.json#deer_rifle",
+      "paperdoll_layer": "main_hand_hunting_rifle",
+      "two_handed": true
+    },
+    {
+      "id": "ar15",
+      "name": "AR-15",
+      "category": "weapon",
+      "kind": "gun",
+      "weight_kg": 3.0,
+      "stack": 1,
+      "value": 90,
+      "stats_ref": "weapons.json#ar15",
+      "paperdoll_layer": "main_hand_ar15",
+      "two_handed": true
+    },
+    {
+      "id": "service_rifle",
+      "name": "Service rifle",
+      "category": "weapon",
+      "kind": "gun",
+      "weight_kg": 3.3,
+      "stack": 1,
+      "value": 110,
+      "stats_ref": "weapons.json#service_rifle",
+      "paperdoll_layer": "main_hand_service_rifle",
+      "two_handed": true
+    },
+    {
+      "id": "cigarettes",
+      "name": "Cigarettes",
+      "category": "trade",
+      "kind": "trade",
+      "weight_kg": 0.05,
+      "stack": 20,
+      "value": 6,
+      "desc": "Bribe currency (Haas checkpoint Ch2)."
+    },
+    {
+      "id": "whiskey",
+      "name": "Whiskey",
+      "category": "trade",
+      "kind": "trade",
+      "weight_kg": 0.8,
+      "stack": 4,
+      "value": 15,
+      "effects": {
+        "warmth": 10,
+        "hydration": -8,
+        "aim_sway_seconds": 30
+      },
+      "desc": "Feels warm. Isn't. Mostly trade."
+    },
+    {
+      "id": "coffee",
+      "name": "Instant coffee",
+      "category": "trade",
+      "kind": "use",
+      "weight_kg": 0.1,
+      "stack": 8,
+      "value": 6,
+      "effects": {
+        "stamina": 30,
+        "warmth": 3
+      }
+    },
+    {
+      "id": "insulin_vial",
+      "name": "Insulin vial",
+      "category": "quest",
+      "kind": "quest",
+      "weight_kg": 0.2,
+      "stack": 6,
+      "value": 0,
+      "desc": "Theo's insulin. Story flag insulin_vial counts these.",
+      "quest": true,
+      "no_drop": true,
+      "legacy_id": "insulin"
+    },
+    {
+      "id": "cool_pack",
+      "name": "Cool pack",
+      "category": "quest",
+      "kind": "quest",
+      "weight_kg": 0.2,
+      "stack": 2,
+      "value": 0,
+      "desc": "Keeps insulin cool in transit.",
+      "quest": true,
+      "no_drop": true,
+      "legacy_id": "cool_pack"
+    },
+    {
+      "id": "lake_cooler",
+      "name": "Lake cooler",
+      "category": "quest",
+      "kind": "quest",
+      "weight_kg": 0.2,
+      "stack": 1,
+      "value": 0,
+      "desc": "Ch1 craft (bucket + wire). Keeps insulin cool. Sets ch01_cooler_built.",
+      "quest": true,
+      "no_drop": true
+    },
+    {
+      "id": "pharmacy_bag",
+      "name": "Pharmacy bag",
+      "category": "quest",
+      "kind": "quest",
+      "weight_kg": 0.2,
+      "stack": 1,
+      "value": 0,
+      "desc": "Ch1 Wren / Ch2 Haas.",
+      "quest": true,
+      "no_drop": true
+    },
+    {
+      "id": "gas_can",
+      "name": "Gas can (5 gal)",
+      "category": "quest",
+      "kind": "quest",
+      "weight_kg": 14.0,
+      "stack": 1,
+      "value": 0,
+      "desc": "Ch1 choice: give to Marguerite for Pruitt's oxygen.",
+      "quest": true,
+      "no_drop": true
+    },
+    {
+      "id": "diesel_jug",
+      "name": "Diesel jug",
+      "category": "quest",
+      "kind": "quest",
+      "weight_kg": 14.0,
+      "stack": 1,
+      "value": 0,
+      "desc": "Ch1 Ray trade.",
+      "quest": true,
+      "no_drop": true
+    },
+    {
+      "id": "hospital_diesel",
+      "name": "Hospital diesel",
+      "category": "quest",
+      "kind": "quest",
+      "weight_kg": 8.0,
+      "stack": 1,
+      "value": 0,
+      "desc": "Ch2 Ames side task.",
+      "quest": true,
+      "no_drop": true
+    },
+    {
+      "id": "ration_card",
+      "name": "Ration card",
+      "category": "quest",
+      "kind": "quest",
+      "weight_kg": 0.2,
+      "stack": 1,
+      "value": 0,
+      "desc": "Ch2 Authority registry.",
+      "quest": true,
+      "no_drop": true
+    },
+    {
+      "id": "priority_card",
+      "name": "Priority card",
+      "category": "quest",
+      "kind": "quest",
+      "weight_kg": 0.2,
+      "stack": 1,
+      "value": 0,
+      "desc": "Ch2 insulin priority.",
+      "quest": true,
+      "no_drop": true
+    },
+    {
+      "id": "radio_crystal",
+      "name": "Radio crystal",
+      "category": "quest",
+      "kind": "quest",
+      "weight_kg": 0.2,
+      "stack": 1,
+      "value": 0,
+      "desc": "Lou's radio part.",
+      "quest": true,
+      "no_drop": true,
+      "legacy_id": "radio_crystal"
+    },
+    {
+      "id": "start_battery",
+      "name": "Start battery",
+      "category": "quest",
+      "kind": "quest",
+      "weight_kg": 0.2,
+      "stack": 1,
+      "value": 0,
+      "desc": "Black-start battery.",
+      "quest": true,
+      "no_drop": true,
+      "legacy_id": "start_battery"
+    },
+    {
+      "id": "relay_kit",
+      "name": "Relay kit",
+      "category": "quest",
+      "kind": "quest",
+      "weight_kg": 0.2,
+      "stack": 1,
+      "value": 0,
+      "desc": "Ch4 black start.",
+      "quest": true,
+      "no_drop": true
+    },
+    {
+      "id": "hank_keys",
+      "name": "Hank's keys",
+      "category": "quest",
+      "kind": "quest",
+      "weight_kg": 0.2,
+      "stack": 1,
+      "value": 0,
+      "desc": "Ch4 dam access.",
+      "quest": true,
+      "no_drop": true
+    },
+    {
+      "id": "signal_fuse",
+      "name": "Signal fuse",
+      "category": "quest",
+      "kind": "quest",
+      "weight_kg": 0.2,
+      "stack": 1,
+      "value": 0,
+      "desc": "Ch5 signal cabinet repair.",
+      "quest": true,
+      "no_drop": true
+    },
+    {
+      "id": "grain_sack",
+      "name": "Grain sack",
+      "category": "trade",
+      "kind": "trade",
+      "weight_kg": 20.0,
+      "stack": 4,
+      "value": 30,
+      "desc": "Ch5 convoy grain, 20 kg. Food bulk; tradeable (story/items.json).",
+      "quest": true,
+      "no_drop": false
+    },
+    {
+      "id": "ironwood_id",
+      "name": "Ironwood ID",
+      "category": "quest",
+      "kind": "quest",
+      "weight_kg": 0.2,
+      "stack": 1,
+      "value": 0,
+      "desc": "Ch6 from Ruiz if spared.",
+      "quest": true,
+      "no_drop": true
+    },
+    {
+      "id": "note",
+      "name": "Torn note",
+      "category": "quest",
+      "kind": "note",
+      "weight_kg": 0.2,
+      "stack": 20,
+      "value": 0,
+      "desc": "Readable lore.",
+      "quest": true,
+      "no_drop": true,
+      "legacy_id": "note"
+    }
+  ],
+  "paperdoll": {
+    "canvas_px": [
+      48,
+      96
+    ],
+    "asset_path": "assets/paperdoll/<paperdoll_layer>.png",
+    "base_body": "assets/paperdoll/base_body.png",
+    "draw_order": [
+      "base",
+      "legs",
+      "feet",
+      "torso",
+      "hands",
+      "wrap",
+      "face",
+      "head",
+      "main_hand",
+      "off_hand"
+    ],
+    "flag_layers": [
+      {
+        "flag": "has_gas_mask",
+        "layer": "face_gas_mask",
+        "slot": "face",
+        "note": "Story flag (flags.json, set in Ch8 hooks). Not a lootable item. Drawn whenever the flag is true; it occupies the face slot visually."
+      }
+    ],
+    "rules": {
+      "slot_from_prefix": "slot = paperdoll_layer prefix (base_, legs_, feet_, torso_, hands_, wrap_, face_, head_, main_hand_, off_hand_)",
+      "tint": "optional #rrggbb multiply-tint applied to the shared layer for colour variants",
+      "two_handed": "if the main-hand item has two_handed: true, hide the off-hand layer",
+      "weapons": "main_hand_ = currently equipped weapon (player.equipped); off_hand_ = flashlight when on, or a held torch"
+    }
+  }
+}
