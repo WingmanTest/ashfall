@@ -1,12 +1,12 @@
 // Cartographer chapter loader. Builds geometry from levels/*.json (do not edit those files).
 import * as THREE from "three";
-import { CFG } from "./config.js?v=r10";
-import { fitHeight, makePerson, makeDog } from "./world.js?v=r10";
-import { evalCondition, applyEffects } from "./story.js?v=r10";
-import { rollContainer, aliasItem } from "./systems.js?v=r10";
-import { addItem, takeItem, hasItems } from "./inventory.js?v=r10";
-import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js?v=r10";
-import { getModel, fitToGround } from "./models3d.js?v=r10";
+import { CFG } from "./config.js?v=r11";
+import { fitHeight, makePerson, makeDog } from "./world.js?v=r11";
+import { evalCondition, applyEffects } from "./story.js?v=r11";
+import { rollContainer, aliasItem } from "./systems.js?v=r11";
+import { addItem, takeItem, hasItems } from "./inventory.js?v=r11";
+import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js?v=r11";
+import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r11";
 
 const SNOW_HEX = 0xeef2f6;
 function stripSnow(obj) {
@@ -336,7 +336,7 @@ export class LevelRuntime {
     await this._placeProps(L);
     this._placeFires(L);
     await this._placeLoot(L);
-    this._placeNpcs(L);
+    await this._placeNpcs(L);
     this._placeInteractives(L);
     this._applyLocations(L);
     this._applyEnvironment(L);
@@ -929,7 +929,7 @@ export class LevelRuntime {
     }
   }
 
-  _placeNpcs(L) {
+  async _placeNpcs(L) {
     const world = this.world;
     for (const n of world.npcs) {
       if (n.mesh && n.mesh.parent) n.mesh.parent.remove(n.mesh);
@@ -944,45 +944,62 @@ export class LevelRuntime {
       chosen.set(id, s);
     }
     world.companion = null;
-    let militia = 0;
+    const swaps = [];
     for (const [id, s] of chosen) {
-      const isWraith = id === "wraith" || s.companion;
-      const isMilitia = /militia|deputy|watch|guard/i.test(id + " " + (s.label || "")) && militia < 3;
+      const isWraith = id === "wraith" || !!s.companion;
       const mesh = isWraith ? makeDog(0x8a6a44) : makePerson({ id });
       mesh.position.set(s.x, 0, s.z);
       mesh.rotation.y = s.rotY || 0;
       this.group.add(mesh);
+      const role = s.role || (s.trader ? "trader" : "") || (s.crowd ? "civilian" : "") || s.label || s.behavior || "";
       const rec = {
-        id, name: s.label || (id || '').replace(/_/g, ' '), x: s.x, z: s.z, rotY: s.rotY || 0,
+        id, name: s.label || (id || "").replace(/_/g, " "), x: s.x, z: s.z, rotY: s.rotY || 0,
         mesh, alive: true, dialogue: s.dialogue, behavior: s.behavior,
         companion: !!isWraith, trader: /^trader_/.test(id) ? id : (s.trader || null),
+        role, r: isWraith ? 1.6 : 2.0,
       };
       world.npcs.push(rec);
-      if (isWraith) {
-        world.companion = rec;
-        rec.r = 1.6;
-        this._swapModel(rec, "wraith_malinois");
-      } else if (isMilitia) {
-        militia++;
-        this._swapModel(rec, "watch_militia");
-      }
+      if (isWraith) world.companion = rec;
+      // Placeholder stays if the GLB fails to load.
+      swaps.push(this._swapNpcModel(rec, id, role, isWraith));
     }
+    await Promise.all(swaps);
   }
 
   /** Replace a placeholder actor mesh with a Sculptor GLB once the template is loaded. */
   async _swapModel(rec, modelId) {
+    return this._applySwappedMesh(rec, await getModel(modelId), modelId);
+  }
+
+  async _swapNpcModel(rec, npcId, role, isWraith) {
+    const modelId = isWraith ? "wraith_malinois" : resolveNpcModelId(npcId, role);
+    const m = isWraith ? await getModel(modelId) : await getNpcModel(npcId, role);
+    return this._applySwappedMesh(rec, m, modelId || (m && m.userData && m.userData.model));
+  }
+
+  _applySwappedMesh(rec, m, modelId) {
     const group = this.group;
-    const m = await getModel(modelId);
-    if (!m || !rec.mesh || rec.mesh.parent !== group) return;
-    m.position.copy(rec.mesh.position);
-    m.rotation.y = rec.mesh.rotation.y;
-    m.visible = rec.mesh.visible;
+    if (!m || !rec.mesh || rec.mesh.parent !== group) return false;
+    const x = rec.mesh.position.x, z = rec.mesh.position.z, yaw = rec.mesh.rotation.y;
+    const vis = rec.mesh.visible;
+    // Heights are authored on the GLB. fitToGround(obj) only snaps min y to 0 —
+    // never pass a height or Lolo/Ross (and the rest) flatten to the same size.
+    m.position.set(x, 0, z);
+    m.rotation.y = yaw;
+    fitToGround(m);
+    m.visible = vis;
     m.userData.kind = rec.companion ? "wraith" : "npc";
-    m.userData.model = modelId;
+    m.userData.model = modelId || m.userData.model;
+    m.userData.npcId = rec.id;
+    m.userData.baseY = m.position.y;
+    m.userData.baseYaw = yaw;
+    const cat = MODEL_CATALOG[m.userData.model];
+    if (cat && cat.collider && cat.collider.radius) rec.r = rec.companion ? 1.6 : Math.max(2.0, (cat.collider.radius || 0.2) + 1.8);
     group.remove(rec.mesh);
     rec.mesh = m;
-    rec.model = modelId;
+    rec.model = m.userData.model;
     group.add(m);
+    return true;
   }
 
   _placeInteractives(L) {

@@ -1,33 +1,33 @@
 import * as THREE from "three";
-import { CFG, WEAPONS_ORDER } from "./config.js?v=r10";
-import { weaponKind } from "./weapons/viewmodels.js?v=r10";
-import { Input } from "./input.js?v=r10";
-import { HUD } from "./hud.js?v=r10";
-import { World } from "./world.js?v=r10";
-import { Player } from "./player.js?v=r10";
-import { EnemySystem } from "./enemies.js?v=r10";
-import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r10";
-import { openCharacterSheet } from "./inventoryUI.js?v=r10";
-import { stopDoll3D } from "./doll3d.js?v=r10";
-import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r10";
-import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r10";
-import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r10";
-import { tickCompanion, disposeCompanion } from "./companion.js?v=r10";
-import { BreathSystem } from "./breath.js?v=r10";
-import { openTradeModal } from "./trade.js?v=r10";
-import { preloadModels } from "./models3d.js?v=r10";
-import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r10";
-import { isMobileClient, canvasDpr } from "./device.js?v=r10";
-import { LevelRuntime } from "./levelLoader.js?v=r10";
-import { attachAudio } from "./audioHook.js?v=r10";
-import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r10";
-import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r10";
-import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r10";
-import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js?v=r10";
+import { CFG, WEAPONS_ORDER } from "./config.js?v=r11";
+import { weaponKind } from "./weapons/viewmodels.js?v=r11";
+import { Input } from "./input.js?v=r11";
+import { HUD } from "./hud.js?v=r11";
+import { World } from "./world.js?v=r11";
+import { Player } from "./player.js?v=r11";
+import { EnemySystem } from "./enemies.js?v=r11";
+import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r11";
+import { openCharacterSheet } from "./inventoryUI.js?v=r11";
+import { stopDoll3D } from "./doll3d.js?v=r11";
+import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r11";
+import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r11";
+import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r11";
+import { tickCompanion, disposeCompanion } from "./companion.js?v=r11";
+import { BreathSystem } from "./breath.js?v=r11";
+import { openTradeModal } from "./trade.js?v=r11";
+import { preloadModels } from "./models3d.js?v=r11";
+import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r11";
+import { isMobileClient, canvasDpr } from "./device.js?v=r11";
+import { LevelRuntime } from "./levelLoader.js?v=r11";
+import { attachAudio } from "./audioHook.js?v=r11";
+import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r11";
+import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r11";
+import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r11";
+import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js?v=r11";
 
 window.__ASHFALL_MODULE = true;
-window.__ASHFALL_BUILD = "r10";
-if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r10") {
+window.__ASHFALL_BUILD = "r11";
+if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r11") {
   if (typeof window.__ashfallBustStaleBuild === "function") window.__ashfallBustStaleBuild(window.__ASHFALL_BUILD);
 }
 
@@ -2336,7 +2336,7 @@ async function boot() {
     await story.load();
     const systems = await loadSystems();
     const levels = await loadLevels();
-    const { rollTable } = await import("./systems.js?v=r10");
+    const { rollTable } = await import("./systems.js?v=r11");
 
     const renderer = new THREE.WebGLRenderer({
       canvas: view, antialias: false, alpha: false, powerPreference: "high-performance",
@@ -2460,7 +2460,7 @@ async function boot() {
     game.loop();
     window.__READY = true;
     window.__ASHFALL_BOOTED = true;
-    window.__ASHFALL_BUILD = "r10";
+    window.__ASHFALL_BUILD = "r11";
     const banner = $("boot-banner");
     if (banner) banner.classList.remove("show");
     window.__INTEGRATION = {

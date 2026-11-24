@@ -1,10 +1,10 @@
-import { CFG } from "./config.js?v=r10";
+import { CFG } from "./config.js?v=r11";
 import {
   GEAR_SLOTS, WEAPON_SLOTS, ALL_SLOTS, SLOT_LABELS, SLOT_COLORS,
   itemSlot, combinedInsulation, combinedWetResist, carryState,
   resolveDollLayers, wearItem, removeGear, emptyGear, canAddWeight,
-} from "./equipment.js?v=r10";
-import { mountDoll3D, stopDoll3D, doll3DWasDrag } from "./doll3d.js?v=r10";
+} from "./equipment.js?v=r11";
+import { mountDoll3D, stopDoll3D, doll3DWasDrag } from "./doll3d.js?v=r11";
 
 const cache = new Map();
 function loadImg(src) {

@@ -1,7 +1,16 @@
 {
-  "version": 1,
-  "wave": 1,
+  "version": 2,
+  "waves": [
+    1,
+    2
+  ],
   "style": "faceted flat-shaded low-poly (reference 1)",
+  "counts": {
+    "wave1": 8,
+    "main_cast": 14,
+    "archetypes": 6,
+    "previews": 1
+  },
   "conventions": {
     "up": "+Y",
     "forward": "+Z",
@@ -61,7 +70,8 @@
       "replaces": [
         "generic NPC human (js/world.js humanoid fallback)"
       ],
-      "notes": "Armed Sparks Watch Militia survivor, reference-style: bandana tails, open charcoal vest + burgundy yoke, rolled grey sleeves, diagonal leather bandolier with pouches, carbine muzzle-down in the right hand."
+      "notes": "Armed Sparks Watch Militia survivor, reference-style: bandana tails, open charcoal vest + burgundy yoke, rolled grey sleeves, diagonal leather bandolier with pouches, carbine muzzle-down in the right hand.",
+      "wave": 1
     },
     {
       "id": "braith_summer",
@@ -103,7 +113,8 @@
       "replaces": [
         "player placeholder humanoid"
       ],
-      "notes": "Braith Pearce, Ch01 heat wave: faded tan ball cap worn backwards (snapback strap on the forehead), medium-long faceted dark beard, dark-ink aviation/desert sleeve tattoos on both bare arms (64 px NEAREST), charcoal-olive tee with rolled sleeves, slate jeans with cuffs, grey low-tops with off-white soles, canvas satchel on the right hip, leather belt."
+      "notes": "Braith Pearce, Ch01 heat wave: faded tan ball cap worn backwards (snapback strap on the forehead), medium-long faceted dark beard, dark-ink aviation/desert sleeve tattoos on both bare arms (64 px NEAREST), charcoal-olive tee with rolled sleeves, slate jeans with cuffs, grey low-tops with off-white soles, canvas satchel on the right hip, leather belt.",
+      "wave": 1
     },
     {
       "id": "braith_mcu2p_mask",
@@ -146,7 +157,8 @@
       "replaces": [
         "none (new: has_gas_mask, Ch8)"
       ],
-      "notes": "USAF MCU-2/P: rubber facepiece, one-piece panoramic visor (glossy-lens exception: roughness 0.40), chin voicemitter, two-strap harness, SINGLE left-cheek NBC canister. Head-local: origin = chin plane centre; parent at braith anchor [0, 1.535, 0.008]."
+      "notes": "USAF MCU-2/P: rubber facepiece, one-piece panoramic visor (glossy-lens exception: roughness 0.40), chin voicemitter, two-strap harness, SINGLE left-cheek NBC canister. Head-local: origin = chin plane centre; parent at braith anchor [0, 1.535, 0.008].",
+      "wave": 1
     },
     {
       "id": "braith_with_mask",
@@ -232,7 +244,8 @@
       "replaces": [
         "generic dog / feral_dog mesh for the companion"
       ],
-      "notes": "Wraith, 4-year-old Belgian Malinois (washed-out MWD). Shoulder 0.62 m, ear tips 0.84 m. Fawn/mahogany coat, charcoal mask, ear tips, saddle and tail tip; worn leather collar with brass tag."
+      "notes": "Wraith, 4-year-old Belgian Malinois (washed-out MWD). Shoulder 0.62 m, ear tips 0.84 m. Fawn/mahogany coat, charcoal mask, ear tips, saddle and tail tip; worn leather collar with brass tag.",
+      "wave": 1
     },
     {
       "id": "sparks_tract_house",
@@ -276,7 +289,8 @@
       "replaces": [
         "stretched warehouse box houses in Sparks blocks"
       ],
-      "notes": "1970s/80s Sparks single-story ranch: desert stucco, asphalt-shingle gable roof w/ eaves + ridge cap, recessed porch (post, stoop, wood door), framed recessed windows (2 boarded), brick side chimney, rooftop swamp cooler. 128/64 px NEAREST textures. Footprint ~9.7 x 7.6 m."
+      "notes": "1970s/80s Sparks single-story ranch: desert stucco, asphalt-shingle gable roof w/ eaves + ridge cap, recessed porch (post, stoop, wood door), framed recessed windows (2 boarded), brick side chimney, rooftop swamp cooler. 128/64 px NEAREST textures. Footprint ~9.7 x 7.6 m.",
+      "wave": 1
     },
     {
       "id": "sagebrush_clump",
@@ -322,7 +336,8 @@
       "replaces": [
         "pine-cone shrub placeholder on desert maps"
       ],
-      "notes": "Great Basin big sagebrush (Artemisia tridentata): gnarled 3-sided stems + layered faceted silvery crowns."
+      "notes": "Great Basin big sagebrush (Artemisia tridentata): gnarled 3-sided stems + layered faceted silvery crowns.",
+      "wave": 1
     },
     {
       "id": "charcoal_grill",
@@ -364,7 +379,8 @@
       "replaces": [
         "primitive box stack (searchable)"
       ],
-      "notes": "Backyard kettle grill: faceted bowl w/ ash rim, offset vented lid + damper + wooden handle, tripod legs, two rear wheels, triangular ash shelf. Searchable."
+      "notes": "Backyard kettle grill: faceted bowl w/ ash rim, offset vented lid + damper + wooden handle, tripod legs, two rear wheels, triangular ash shelf. Searchable.",
+      "wave": 1
     },
     {
       "id": "metal_locker",
@@ -409,7 +425,1114 @@
       "replaces": [
         "primitive box stack (searchable)"
       ],
-      "notes": "Weathered olive-grey steel locker: recessed frame, ajar door, louvered vents, handle pocket, hasp + padlock. 64 px chipped-paint NEAREST texture. Searchable."
+      "notes": "Weathered olive-grey steel locker: recessed frame, ajar door, louvered vents, handle pocket, hasp + padlock. 64 px chipped-paint NEAREST texture. Searchable.",
+      "wave": 1
+    },
+    {
+      "id": "carly",
+      "path": "characters/carly.glb",
+      "category": "character",
+      "tris": 842,
+      "vertices": 2526,
+      "bytes": 69808,
+      "bounds": [
+        0.5114,
+        1.6724,
+        0.3923
+      ],
+      "min": [
+        -0.2797,
+        0.0,
+        -0.1566
+      ],
+      "max": [
+        0.2318,
+        1.6724,
+        0.2357
+      ],
+      "pivot": "ground-center (min y = 0)",
+      "facing": "+Z",
+      "up": "+Y",
+      "units": "meters",
+      "budget": [
+        700,
+        1050
+      ],
+      "materials": 14,
+      "textures": 0,
+      "nodes": 1,
+      "chapters": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "replaces": [
+        "npcs.json \"carly\" blocky humanoid"
+      ],
+      "notes": "Carly Redmond: 26, Washoe County 911 dispatcher (registry clerk Ch2-5, Switchboard Ch6+). High dark-brown ponytail, navy dispatch polo, lanyard + ID badge, shoulder handset mic she is keying with her left hand, hip radio with antenna, jeans, practical sneakers.",
+      "wave": 2,
+      "kind": "main_cast",
+      "name": "Carly Redmond",
+      "height": 1.672,
+      "body_height_m": 1.68,
+      "body_preset": "female_slender",
+      "roles": [],
+      "npc_id": "carly"
+    },
+    {
+      "id": "lolo",
+      "path": "characters/lolo.glb",
+      "category": "character",
+      "tris": 790,
+      "vertices": 2370,
+      "bytes": 66032,
+      "bounds": [
+        0.6112,
+        1.5858,
+        0.3552
+      ],
+      "min": [
+        -0.3165,
+        0.0,
+        -0.1288
+      ],
+      "max": [
+        0.2947,
+        1.5858,
+        0.2264
+      ],
+      "pivot": "ground-center (min y = 0)",
+      "facing": "+Z",
+      "up": "+Y",
+      "units": "meters",
+      "budget": [
+        700,
+        1050
+      ],
+      "materials": 14,
+      "textures": 0,
+      "nodes": 1,
+      "chapters": [
+        1,
+        2,
+        3,
+        6,
+        8,
+        10
+      ],
+      "replaces": [
+        "npcs.json \"lolo\" blocky humanoid"
+      ],
+      "notes": "Dolores 'Lolo' Arrieta: 68, retired ICU nurse next door (Basque family from Winnemucca), kitchen-table clinic. Silver low bun, reading glasses, pale seafoam scrub top under an open plum-brown knit cardigan, dark trousers, red-cross med bag in her right hand.",
+      "wave": 2,
+      "kind": "main_cast",
+      "name": "Dolores 'Lolo' Arrieta",
+      "height": 1.586,
+      "body_height_m": 1.6,
+      "body_preset": "female_elder",
+      "roles": [],
+      "npc_id": "lolo"
+    },
+    {
+      "id": "gil",
+      "path": "characters/gil.glb",
+      "category": "character",
+      "tris": 872,
+      "vertices": 2616,
+      "bytes": 72568,
+      "bounds": [
+        0.6319,
+        1.7802,
+        0.4502
+      ],
+      "min": [
+        -0.3159,
+        0.0,
+        -0.1563
+      ],
+      "max": [
+        0.3159,
+        1.7802,
+        0.2939
+      ],
+      "pivot": "ground-center (min y = 0)",
+      "facing": "+Z",
+      "up": "+Y",
+      "units": "meters",
+      "budget": [
+        700,
+        1050
+      ],
+      "materials": 15,
+      "textures": 0,
+      "nodes": 1,
+      "chapters": [
+        1,
+        2,
+        3
+      ],
+      "replaces": [
+        "npcs.json \"gil\" blocky humanoid"
+      ],
+      "notes": "Gil Shumway: 66, retired Union Pacific diesel mechanic across the alley. Grizzled grey short beard, faded rust trucker cap worn forward, navy-charcoal coveralls with rolled sleeves, heavy leather tool belt with pouches, big wrench in his right hand, work boots.",
+      "wave": 2,
+      "kind": "main_cast",
+      "name": "Gil Shumway",
+      "height": 1.78,
+      "body_height_m": 1.76,
+      "body_preset": "male_stocky",
+      "roles": [],
+      "npc_id": "gil"
+    },
+    {
+      "id": "kit",
+      "path": "characters/kit.glb",
+      "category": "character",
+      "tris": 930,
+      "vertices": 2790,
+      "bytes": 76756,
+      "bounds": [
+        0.5314,
+        1.6966,
+        0.4959
+      ],
+      "min": [
+        -0.2544,
+        0.0,
+        -0.2099
+      ],
+      "max": [
+        0.277,
+        1.6966,
+        0.286
+      ],
+      "pivot": "ground-center (min y = 0)",
+      "facing": "+Z",
+      "up": "+Y",
+      "units": "meters",
+      "budget": [
+        700,
+        1050
+      ],
+      "materials": 15,
+      "textures": 0,
+      "nodes": 1,
+      "chapters": [
+        1,
+        2,
+        3,
+        6,
+        8,
+        9,
+        10
+      ],
+      "replaces": [
+        "npcs.json \"kit\" blocky humanoid"
+      ],
+      "notes": "Kit Darrow: 19, Viaduct Crew / Bridge Boys runner (canon: \"a girl\", \"her voice\"). Slouched olive knit beanie over a short choppy bob, slate hoodie, open rust utility vest, runner backpack, slim dark cargos with a knee patch, worn off-white high-tops.",
+      "wave": 2,
+      "kind": "main_cast",
+      "name": "Kit Darrow",
+      "height": 1.697,
+      "body_height_m": 1.67,
+      "body_preset": "female_athletic",
+      "roles": [],
+      "npc_id": "kit"
+    },
+    {
+      "id": "ross",
+      "path": "characters/ross.glb",
+      "category": "character",
+      "tris": 1039,
+      "vertices": 3117,
+      "bytes": 87140,
+      "bounds": [
+        0.6039,
+        1.8874,
+        0.5343
+      ],
+      "min": [
+        -0.302,
+        0.0,
+        -0.2306
+      ],
+      "max": [
+        0.302,
+        1.8874,
+        0.3037
+      ],
+      "pivot": "ground-center (min y = 0)",
+      "facing": "+Z",
+      "up": "+Y",
+      "units": "meters",
+      "budget": [
+        700,
+        1050
+      ],
+      "materials": 19,
+      "textures": 0,
+      "nodes": 1,
+      "chapters": [
+        5,
+        7,
+        9,
+        10
+      ],
+      "replaces": [
+        "npcs.json \"ross\" blocky humanoid"
+      ],
+      "notes": "Ross Pearce: 58, Braith's father: Yerington hay rancher, widower, Lahontan Compact lieutenant. Salt-and-pepper short beard + moustache, felt cattleman hat, tan canvas ranch coat with dark shearling collar over a red-brown flannel, leather gunbelt, lever rifle slung on his back, dusty denim, brown work boots.",
+      "wave": 2,
+      "kind": "main_cast",
+      "name": "Ross Pearce",
+      "height": 1.887,
+      "body_height_m": 1.83,
+      "body_preset": "male_broad",
+      "roles": [],
+      "npc_id": "ross"
+    },
+    {
+      "id": "avila",
+      "path": "characters/avila.glb",
+      "category": "character",
+      "tris": 782,
+      "vertices": 2346,
+      "bytes": 67380,
+      "bounds": [
+        0.4986,
+        1.7315,
+        0.4397
+      ],
+      "min": [
+        -0.2493,
+        0.0,
+        -0.2079
+      ],
+      "max": [
+        0.2493,
+        1.7315,
+        0.2318
+      ],
+      "pivot": "ground-center (min y = 0)",
+      "facing": "+Z",
+      "up": "+Y",
+      "units": "meters",
+      "budget": [
+        700,
+        1050
+      ],
+      "materials": 17,
+      "textures": 0,
+      "nodes": 1,
+      "chapters": [
+        2,
+        3,
+        4,
+        6,
+        10
+      ],
+      "replaces": [
+        "npcs.json \"avila\" blocky humanoid"
+      ],
+      "notes": "Capt. Lorna Avila: 44, Nevada Army National Guard captain running the Truckee Meadows Recovery Authority. Upright, hands clasped behind her back; tight dark bun under an olive patrol cap, closed olive-drab duty uniform with brass rank tabs, chest radio, black web duty belt + holster, bloused trousers, black boots.",
+      "wave": 2,
+      "kind": "main_cast",
+      "name": "Capt. Lorna Avila",
+      "height": 1.732,
+      "body_height_m": 1.73,
+      "body_preset": "female_athletic",
+      "roles": [],
+      "npc_id": "avila"
+    },
+    {
+      "id": "augie",
+      "path": "characters/augie.glb",
+      "category": "character",
+      "tris": 942,
+      "vertices": 2826,
+      "bytes": 76996,
+      "bounds": [
+        0.5208,
+        1.7055,
+        0.4364
+      ],
+      "min": [
+        -0.2554,
+        0.0,
+        -0.1174
+      ],
+      "max": [
+        0.2654,
+        1.7055,
+        0.319
+      ],
+      "pivot": "ground-center (min y = 0)",
+      "facing": "+Z",
+      "up": "+Y",
+      "units": "meters",
+      "budget": [
+        700,
+        1050
+      ],
+      "materials": 14,
+      "textures": 0,
+      "nodes": 1,
+      "chapters": [
+        3,
+        6,
+        7
+      ],
+      "replaces": [
+        "npcs.json \"augie\" blocky humanoid"
+      ],
+      "notes": "Augie Bell: 71, Peavine Peak ham operator KK7AUG. Wispy white hair with side tufts, wire-rim glasses, bulky vintage over-ear headphones on his head, faded blue flannel with rolled sleeves under a khaki quilted fishing vest with pockets, brown corduroys, worn boots, handheld mic in his right hand.",
+      "wave": 2,
+      "kind": "main_cast",
+      "name": "Augie Bell",
+      "height": 1.706,
+      "body_height_m": 1.71,
+      "body_preset": "male_elder_slight",
+      "roles": [],
+      "npc_id": "augie"
+    },
+    {
+      "id": "ames",
+      "path": "characters/ames.glb",
+      "category": "character",
+      "tris": 996,
+      "vertices": 2988,
+      "bytes": 82124,
+      "bounds": [
+        0.5381,
+        1.8195,
+        0.625
+      ],
+      "min": [
+        -0.2818,
+        0.0,
+        -0.1621
+      ],
+      "max": [
+        0.2563,
+        1.8195,
+        0.4629
+      ],
+      "pivot": "ground-center (min y = 0)",
+      "facing": "+Z",
+      "up": "+Y",
+      "units": "meters",
+      "budget": [
+        700,
+        1050
+      ],
+      "materials": 16,
+      "textures": 0,
+      "nodes": 1,
+      "chapters": [
+        2,
+        4,
+        6,
+        10
+      ],
+      "replaces": [
+        "npcs.json \"ames\" blocky humanoid"
+      ],
+      "notes": "Dr. Samuel Ames: 52, last attending physician at Truckee Meadows General. Tall and weary: neatly parted salt-and-pepper hair, glasses, soiled off-white knee-length white coat over teal scrubs, stethoscope around the neck, clipboard in his left hand, dark clinic shoes.",
+      "wave": 2,
+      "kind": "main_cast",
+      "name": "Dr. Samuel Ames",
+      "height": 1.819,
+      "body_height_m": 1.82,
+      "body_preset": "male_tall",
+      "roles": [],
+      "npc_id": "ames"
+    },
+    {
+      "id": "wes",
+      "path": "characters/wes.glb",
+      "category": "character",
+      "tris": 786,
+      "vertices": 2358,
+      "bytes": 63848,
+      "bounds": [
+        0.5368,
+        1.767,
+        0.4042
+      ],
+      "min": [
+        -0.2604,
+        0.0,
+        -0.1181
+      ],
+      "max": [
+        0.2764,
+        1.767,
+        0.2861
+      ],
+      "pivot": "ground-center (min y = 0)",
+      "facing": "+Z",
+      "up": "+Y",
+      "units": "meters",
+      "budget": [
+        700,
+        1050
+      ],
+      "materials": 11,
+      "textures": 0,
+      "nodes": 1,
+      "chapters": [
+        3,
+        5,
+        7,
+        8,
+        9,
+        10
+      ],
+      "replaces": [
+        "npcs.json \"wes\" blocky humanoid"
+      ],
+      "notes": "Wes Pearce: 19, Braith's younger brother, Compact rider. Clean-shaven, tousled brown hair with a fringe (no cap), faded teal ranch flannel with rolled sleeves, rust-brown insulated vest, red Compact armband on the left arm, dusty jeans, brown boots. Same Pearce skin tone as Braith.",
+      "wave": 2,
+      "kind": "main_cast",
+      "name": "Wes Pearce",
+      "height": 1.767,
+      "body_height_m": 1.77,
+      "body_preset": "male_lean_youth",
+      "roles": [],
+      "npc_id": "wes"
+    },
+    {
+      "id": "walt",
+      "path": "characters/walt.glb",
+      "category": "character",
+      "tris": 918,
+      "vertices": 2754,
+      "bytes": 77200,
+      "bounds": [
+        0.5318,
+        1.7122,
+        0.4126
+      ],
+      "min": [
+        -0.2659,
+        0.0,
+        -0.1652
+      ],
+      "max": [
+        0.2659,
+        1.7122,
+        0.2475
+      ],
+      "pivot": "ground-center (min y = 0)",
+      "facing": "+Z",
+      "up": "+Y",
+      "units": "meters",
+      "budget": [
+        700,
+        1050
+      ],
+      "materials": 17,
+      "textures": 0,
+      "nodes": 1,
+      "chapters": [
+        4,
+        7,
+        10
+      ],
+      "replaces": [
+        "npcs.json \"walt\" blocky humanoid"
+      ],
+      "notes": "Walt Okada: 73, Japanese-American engineer who ran the Galena Station control room for 22 years; frail and dying. Hunched; short white hair, faded yellow hard hat, navy-teal Galena windbreaker open over an oatmeal sweater, khaki work slacks, blueprint tube slung on his back, pressure gauge clipped to the belt.",
+      "wave": 2,
+      "kind": "main_cast",
+      "name": "Walt Okada",
+      "height": 1.712,
+      "body_height_m": 1.7,
+      "body_preset": "custom",
+      "roles": [],
+      "npc_id": "walt"
+    },
+    {
+      "id": "roz",
+      "path": "characters/roz.glb",
+      "category": "character",
+      "tris": 816,
+      "vertices": 2448,
+      "bytes": 68544,
+      "bounds": [
+        0.6491,
+        1.6847,
+        0.4161
+      ],
+      "min": [
+        -0.2913,
+        0.0,
+        -0.1468
+      ],
+      "max": [
+        0.3579,
+        1.6847,
+        0.2693
+      ],
+      "pivot": "ground-center (min y = 0)",
+      "facing": "+Z",
+      "up": "+Y",
+      "units": "meters",
+      "budget": [
+        700,
+        1050
+      ],
+      "materials": 15,
+      "textures": 0,
+      "nodes": 1,
+      "chapters": [
+        2,
+        3,
+        6,
+        8,
+        10
+      ],
+      "replaces": [
+        "npcs.json \"roz\" blocky humanoid"
+      ],
+      "notes": "Roz Tafoya: 49, head chef and union steward at the Silver Spur; leads the Floor (feeds 3,000 a day, buys guns). Fist on her hip; dark hair with a grey streak tied back in a bun, black work shirt with rolled sleeves, long heavy canvas kitchen apron, thick utility belt with keys and a holstered pistol, dark jeans, boots.",
+      "wave": 2,
+      "kind": "main_cast",
+      "name": "Roz Tafoya",
+      "height": 1.685,
+      "body_height_m": 1.69,
+      "body_preset": "female_sturdy",
+      "roles": [],
+      "npc_id": "roz"
+    },
+    {
+      "id": "ander",
+      "path": "characters/ander.glb",
+      "category": "character",
+      "tris": 1030,
+      "vertices": 3090,
+      "bytes": 85252,
+      "bounds": [
+        0.6902,
+        1.8421,
+        0.4489
+      ],
+      "min": [
+        -0.3909,
+        0.0,
+        -0.1687
+      ],
+      "max": [
+        0.2992,
+        1.8421,
+        0.2801
+      ],
+      "pivot": "ground-center (min y = 0)",
+      "facing": "+Z",
+      "up": "+Y",
+      "units": "meters",
+      "budget": [
+        700,
+        1050
+      ],
+      "materials": 17,
+      "textures": 0,
+      "nodes": 1,
+      "chapters": [
+        5,
+        7,
+        10
+      ],
+      "replaces": [
+        "npcs.json \"ander\" blocky humanoid"
+      ],
+      "notes": "Ander Etcheverry: 61, Basque sheep rancher from Fallon, leader of the Lahontan Compact. Broad and commanding; silver hair under a black Basque txapela (beret), trimmed silver beard, heavy dark wool ranch coat to mid-thigh with a pale sheepskin collar, rust-red Compact neckerchief, brass-buckled belt with holster, boots.",
+      "wave": 2,
+      "kind": "main_cast",
+      "name": "Ander Etcheverry",
+      "height": 1.842,
+      "body_height_m": 1.8,
+      "body_preset": "male_broad",
+      "roles": [],
+      "npc_id": "ander"
+    },
+    {
+      "id": "ruiz",
+      "path": "characters/ruiz.glb",
+      "category": "character",
+      "tris": 904,
+      "vertices": 2712,
+      "bytes": 77368,
+      "bounds": [
+        0.5423,
+        1.7362,
+        0.4807
+      ],
+      "min": [
+        -0.2625,
+        0.0,
+        -0.2032
+      ],
+      "max": [
+        0.2797,
+        1.7362,
+        0.2775
+      ],
+      "pivot": "ground-center (min y = 0)",
+      "facing": "+Z",
+      "up": "+Y",
+      "units": "meters",
+      "budget": [
+        700,
+        1050
+      ],
+      "materials": 19,
+      "textures": 0,
+      "nodes": 1,
+      "chapters": [
+        5,
+        6,
+        7,
+        9,
+        10
+      ],
+      "replaces": [
+        "npcs.json \"ruiz\" blocky humanoid"
+      ],
+      "notes": "Sgt. Nadia Ruiz: 31, US Army combat engineer, Task Force Ironwood, call sign 'Engineer Two'. Athletic; dark hair tucked under an olive combat helmet with goggles on the brow, charcoal-olive plate carrier with mag pouches over field-green combat-shirt sleeves, radio pack with whip antenna, knee pads, tan combat boots.",
+      "wave": 2,
+      "kind": "main_cast",
+      "name": "Sgt. Nadia Ruiz",
+      "height": 1.736,
+      "body_height_m": 1.7,
+      "body_preset": "female_athletic",
+      "roles": [],
+      "npc_id": "ruiz"
+    },
+    {
+      "id": "reyne",
+      "path": "characters/reyne.glb",
+      "category": "character",
+      "tris": 1028,
+      "vertices": 3084,
+      "bytes": 85104,
+      "bounds": [
+        0.5824,
+        1.7122,
+        0.4957
+      ],
+      "min": [
+        -0.3104,
+        0.0,
+        -0.2587
+      ],
+      "max": [
+        0.2721,
+        1.7122,
+        0.237
+      ],
+      "pivot": "ground-center (min y = 0)",
+      "facing": "+Z",
+      "up": "+Y",
+      "units": "meters",
+      "budget": [
+        700,
+        1050
+      ],
+      "materials": 17,
+      "textures": 0,
+      "nodes": 1,
+      "chapters": [
+        7,
+        8,
+        10
+      ],
+      "replaces": [
+        "npcs.json \"reyne\" blocky humanoid"
+      ],
+      "notes": "Dr. Hollis Reyne: 39, Dixie Valley Annex Level 3 contract biologist (LONG SLEEP, Wing A). Slender and intense: shoulder-length dark hair, glasses, weathered charcoal-olive Annex field parka to mid-thigh over a dark turtleneck, clipped Level-3 ID badge on a lanyard, sample satchel across the body, dark trousers, boots.",
+      "wave": 2,
+      "kind": "main_cast",
+      "name": "Dr. Hollis Reyne",
+      "height": 1.712,
+      "body_height_m": 1.72,
+      "body_preset": "female_slender",
+      "roles": [],
+      "npc_id": "reyne"
+    },
+    {
+      "id": "civ_summer_a",
+      "path": "characters/civ_summer_a.glb",
+      "category": "archetype",
+      "tris": 748,
+      "vertices": 2244,
+      "bytes": 61784,
+      "bounds": [
+        0.5569,
+        1.7878,
+        0.3771
+      ],
+      "min": [
+        -0.2801,
+        0.0,
+        -0.1071
+      ],
+      "max": [
+        0.2768,
+        1.7878,
+        0.27
+      ],
+      "pivot": "ground-center (min y = 0)",
+      "facing": "+Z",
+      "up": "+Y",
+      "units": "meters",
+      "budget": [
+        700,
+        1050
+      ],
+      "materials": 12,
+      "textures": 0,
+      "nodes": 1,
+      "chapters": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "replaces": [
+        "generic secondary / ambient NPC humanoid"
+      ],
+      "notes": "Sparks neighbor (summer, A): Casual Sparks neighbor: navy ball cap, mustard short-sleeve button-up, khakis, white sneakers.",
+      "wave": 2,
+      "kind": "archetype",
+      "name": "Sparks neighbor (summer, A)",
+      "height": 1.788,
+      "body_height_m": 1.77,
+      "body_preset": "male_avg",
+      "roles": [
+        "civilian",
+        "neighbor",
+        "ambient"
+      ]
+    },
+    {
+      "id": "civ_summer_b",
+      "path": "characters/civ_summer_b.glb",
+      "category": "archetype",
+      "tris": 958,
+      "vertices": 2874,
+      "bytes": 76280,
+      "bounds": [
+        0.5538,
+        1.6425,
+        0.3396
+      ],
+      "min": [
+        -0.2769,
+        0.0,
+        -0.1155
+      ],
+      "max": [
+        0.2769,
+        1.6425,
+        0.2241
+      ],
+      "pivot": "ground-center (min y = 0)",
+      "facing": "+Z",
+      "up": "+Y",
+      "units": "meters",
+      "budget": [
+        700,
+        1050
+      ],
+      "materials": 11,
+      "textures": 0,
+      "nodes": 1,
+      "chapters": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "replaces": [
+        "generic secondary / ambient NPC humanoid"
+      ],
+      "notes": "Sparks neighbor (summer, B): Sparks neighbor: sandy chin bob, terracotta tee under an open light linen overshirt, jeans, small crossbody bag.",
+      "wave": 2,
+      "kind": "archetype",
+      "name": "Sparks neighbor (summer, B)",
+      "height": 1.643,
+      "body_height_m": 1.65,
+      "body_preset": "female_slender",
+      "roles": [
+        "civilian",
+        "neighbor",
+        "ambient"
+      ]
+    },
+    {
+      "id": "civ_elder",
+      "path": "characters/civ_elder.glb",
+      "category": "archetype",
+      "tris": 752,
+      "vertices": 2256,
+      "bytes": 62172,
+      "bounds": [
+        0.5185,
+        1.6782,
+        0.3424
+      ],
+      "min": [
+        -0.2526,
+        0.0,
+        -0.1218
+      ],
+      "max": [
+        0.2659,
+        1.6782,
+        0.2206
+      ],
+      "pivot": "ground-center (min y = 0)",
+      "facing": "+Z",
+      "up": "+Y",
+      "units": "meters",
+      "budget": [
+        700,
+        1050
+      ],
+      "materials": 12,
+      "textures": 0,
+      "nodes": 1,
+      "chapters": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "replaces": [
+        "generic secondary / ambient NPC humanoid"
+      ],
+      "notes": "Older Nevada resident: Older local (Pruitt, Ruth, care-home residents): thin grey hair, glasses, brown cardigan with long sleeves over a pale collared shirt, grey trousers, walking cane in the right hand.",
+      "wave": 2,
+      "kind": "archetype",
+      "name": "Older Nevada resident",
+      "height": 1.678,
+      "body_height_m": 1.7,
+      "body_preset": "custom",
+      "roles": [
+        "elder",
+        "civilian",
+        "ambient"
+      ]
+    },
+    {
+      "id": "trader_wanderer",
+      "path": "characters/trader_wanderer.glb",
+      "category": "archetype",
+      "tris": 1020,
+      "vertices": 3060,
+      "bytes": 83912,
+      "bounds": [
+        0.6041,
+        1.8216,
+        0.5919
+      ],
+      "min": [
+        -0.302,
+        0.0,
+        -0.2816
+      ],
+      "max": [
+        0.302,
+        1.8216,
+        0.3104
+      ],
+      "pivot": "ground-center (min y = 0)",
+      "facing": "+Z",
+      "up": "+Y",
+      "units": "meters",
+      "budget": [
+        700,
+        1050
+      ],
+      "materials": 16,
+      "textures": 0,
+      "nodes": 1,
+      "chapters": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "replaces": [
+        "generic secondary / ambient NPC humanoid"
+      ],
+      "notes": "Nevada trader / prospector: Trader / prospector (Dutch, Mo, Rourke, Annie): khaki boonie hat, short brown beard, multi-pocket utility vest, rolled sleeves, big frame pack with a bedroll, cargo pants, boots.",
+      "wave": 2,
+      "kind": "archetype",
+      "name": "Nevada trader / prospector",
+      "height": 1.822,
+      "body_height_m": 1.79,
+      "body_preset": "male_broad",
+      "roles": [
+        "trader",
+        "merchant",
+        "wanderer"
+      ]
+    },
+    {
+      "id": "scavenger_runner",
+      "path": "characters/scavenger_runner.glb",
+      "category": "archetype",
+      "tris": 904,
+      "vertices": 2712,
+      "bytes": 74316,
+      "bounds": [
+        0.5252,
+        1.7523,
+        0.5073
+      ],
+      "min": [
+        -0.2637,
+        0.0,
+        -0.2127
+      ],
+      "max": [
+        0.2615,
+        1.7523,
+        0.2946
+      ],
+      "pivot": "ground-center (min y = 0)",
+      "facing": "+Z",
+      "up": "+Y",
+      "units": "meters",
+      "budget": [
+        700,
+        1050
+      ],
+      "materials": 14,
+      "textures": 0,
+      "nodes": 1,
+      "chapters": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "replaces": [
+        "generic secondary / ambient NPC humanoid"
+      ],
+      "notes": "Scavenger / runner: Scavenger / runner (Deshawn, Viaduct Crew runners): heather-grey hoodie with the hood up, dark neck gaiter pulled to the chin, olive open vest, backpack, slim black pants, worn trainers.",
+      "wave": 2,
+      "kind": "archetype",
+      "name": "Scavenger / runner",
+      "height": 1.752,
+      "body_height_m": 1.74,
+      "body_preset": "male_lean_youth",
+      "roles": [
+        "scavenger",
+        "runner",
+        "youth"
+      ]
+    },
+    {
+      "id": "guard_trooper",
+      "path": "characters/guard_trooper.glb",
+      "category": "archetype",
+      "tris": 923,
+      "vertices": 2769,
+      "bytes": 78820,
+      "bounds": [
+        0.5617,
+        1.8255,
+        0.3967
+      ],
+      "min": [
+        -0.2807,
+        0.0,
+        -0.1179
+      ],
+      "max": [
+        0.281,
+        1.8255,
+        0.2787
+      ],
+      "pivot": "ground-center (min y = 0)",
+      "facing": "+Z",
+      "up": "+Y",
+      "units": "meters",
+      "budget": [
+        700,
+        1050
+      ],
+      "materials": 19,
+      "textures": 0,
+      "nodes": 1,
+      "chapters": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "replaces": [
+        "generic secondary / ambient NPC humanoid"
+      ],
+      "notes": "Patrol / checkpoint guard: Checkpoint guard (deputies, Authority, Ironwood, Compact pickets): black tactical cap, charcoal plate carrier with pouches, field-olive long sleeves and trousers, carbine muzzle-down in the right hand, holstered sidearm. Recolour the cap/carrier per faction if desired.",
+      "wave": 2,
+      "kind": "archetype",
+      "name": "Patrol / checkpoint guard",
+      "height": 1.825,
+      "body_height_m": 1.81,
+      "body_preset": "male_tall",
+      "roles": [
+        "guard",
+        "soldier",
+        "deputy",
+        "checkpoint"
+      ]
     }
   ]
 }

@@ -276,3 +276,33 @@ export function tickActor(root, dt, player) {
 }
 
 export { TRAITS };
+
+/** Idle bob + a little body turn toward the player for static (no-skeleton) GLB NPCs.
+ *  Skips companions — tickCompanion already owns their position and yaw.
+ *  Skips wraith / creature meshes so the dog is never treated as a humanoid.
+ */
+export function tickStaticNpc(root, dt, player, { companion = false } = {}) {
+  if (!root || companion) return;
+  const u = root.userData || (root.userData = {});
+  if (u.kind === "wraith" || u.model === "wraith_malinois") return;
+  if (u.baseY == null) u.baseY = root.position.y;
+  if (u.baseYaw == null) u.baseYaw = root.rotation.y;
+  u.t = (u.t || 0) + dt;
+  root.position.y = u.baseY + Math.sin(u.t * 1.7) * 0.008;
+  if (!player) return;
+  const dx = player.x - root.position.x;
+  const dz = player.z - root.position.z;
+  const dist2 = dx * dx + dz * dz;
+  let target = u.baseYaw;
+  if (dist2 < 64) {
+    const want = Math.atan2(dx, dz);
+    let dyaw = want - u.baseYaw;
+    while (dyaw > Math.PI) dyaw -= Math.PI * 2;
+    while (dyaw < -Math.PI) dyaw += Math.PI * 2;
+    target = u.baseYaw + THREE.MathUtils.clamp(dyaw, -0.55, 0.55);
+  }
+  let cur = target - root.rotation.y;
+  while (cur > Math.PI) cur -= Math.PI * 2;
+  while (cur < -Math.PI) cur += Math.PI * 2;
+  root.rotation.y += cur * Math.min(1, dt * 4);
+}

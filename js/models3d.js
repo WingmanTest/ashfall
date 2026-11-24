@@ -3,7 +3,7 @@
 // World.clearLevel() never disposes geometry/materials owned by a cached template.
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { MODEL_CATALOG, loadModel, fitToGround, modelUrl, attachMask as regAttachMask } from "../models/registry.js?v=r10";
+import { MODEL_CATALOG, loadModel, fitToGround, modelUrl, attachMask as regAttachMask, resolveNpcModelId } from "../models/registry.js?v=r11";
 
 let _loader = null;
 const _ready = new Map();   // id -> template-loaded boolean
@@ -50,6 +50,17 @@ export async function getModel(id, { castShadow = false, receiveShadow = true } 
   }
 }
 
+
+/** Resolve an NPC id (story / ambient / trader / crowd) to a catalog model and clone it. */
+export async function getNpcModel(id, role, opts) {
+  const modelId = resolveNpcModelId(id, role);
+  const inst = await getModel(modelId, opts);
+  if (!inst) return null;
+  inst.userData.npcId = id;
+  inst.userData.model = modelId;
+  return inst;
+}
+
 export function preloadModels(ids) {
   return Promise.all(ids.map((id) => getModel(id).then((m) => !!m)));
 }
@@ -80,6 +91,6 @@ export function modelsDebug() {
   return { ...modelStats, catalog: Object.keys(MODEL_CATALOG) };
 }
 
-export { MODEL_CATALOG, fitToGround, modelUrl };
+export { MODEL_CATALOG, fitToGround, modelUrl, resolveNpcModelId };
 
 if (typeof window !== "undefined") window.__ASHFALL_MODELS = { debug: modelsDebug };

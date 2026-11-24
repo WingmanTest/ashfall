@@ -1,5 +1,5 @@
 // Pixel-art look knobs. Defaults live in CFG.pixel; Lumen's INTEGRATION.md wins when it lands.
-import { CFG } from "./config.js?v=r10";
+import { CFG } from "./config.js?v=r11";
 
 export function pixelConfig() {
   return {

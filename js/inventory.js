@@ -1,5 +1,5 @@
-import { ITEMS, RECIPES } from "./config.js?v=r10";
-import { aliasItem } from "./systems.js?v=r10";
+import { ITEMS, RECIPES } from "./config.js?v=r11";
+import { aliasItem } from "./systems.js?v=r11";
 
 export function emptyInv() {
   return { knife: 1, cloth: 2, wood: 2, ration: 1 };
