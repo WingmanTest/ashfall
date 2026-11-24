@@ -8,7 +8,7 @@ export function makeLoader(renderer) {
   const loader = new GLTFLoader();
   loader.setMeshoptDecoder(MeshoptDecoder);
   const ktx2 = new KTX2Loader()
-    .setTranscoderPath(new URL("../vendor/three/addons/libs/basis/", document.baseURI).href);
+    .setTranscoderPath(new URL("../vendor/three/addons/libs/basis/", import.meta.url).href);
   ktx2.detectSupport(renderer);
   loader.setKTX2Loader(ktx2);
   return loader;
