@@ -1,4 +1,5 @@
-import { evalCondition } from "./story.js?v=r15.1";
+import { evalCondition } from "./story.js?v=r15.2";
+import { chapterNum } from "./save.js?v=r15.2";
 
 /** Companion tutorial and any objective marked side/tutorial stay off the main HUD. */
 export function isSideObjective(o) {
@@ -12,6 +13,7 @@ export function isSideObjective(o) {
 
 export function isObjectiveComplete(o, ctx) {
   if (!o) return true;
+  if (o._forceDone || o._priorChapter) return true;
   if (o.completeWhen) return !!evalCondition(o.completeWhen, ctx);
   return false;
 }
@@ -54,16 +56,54 @@ export function listLevelObjectives(game) {
   return ((game.levelRuntime?.L?.objectives) || []).slice().sort((a, b) => (a.order || 0) - (b.order || 0));
 }
 
+function chapterOfLevel(L) {
+  return chapterNum(L?.chapter || L?.id);
+}
+
+/** Objectives from earlier chapters — shown under Completed after a jump, rescue, or advance. */
+export function listPriorObjectives(game) {
+  const destN = chapterNum(game?.flags?.chapter);
+  const per = game?.levels?.perChapter || {};
+  const current = game?.levelRuntime?.L;
+  const currentId = current && (current.id || current.chapter);
+  const out = [];
+  const seen = new Set();
+  for (const L of Object.values(per)) {
+    const n = chapterOfLevel(L);
+    if (!n || n >= destN) continue;
+    if (current && (L === current || (currentId && (L.id === currentId || L.chapter === currentId)))) continue;
+    for (const o of (L.objectives || []).slice().sort((a, b) => (a.order || 0) - (b.order || 0))) {
+      const key = n + ":" + (o.quest || "") + ":" + (o.text || o.id || "");
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push({ ...o, _priorChapter: n });
+    }
+  }
+  return out;
+}
+
 export function partitionObjectives(game) {
   const ctx = game._storyCtx ? game._storyCtx() : { flags: game.flags || {} };
   const all = listLevelObjectives(game);
   const main = [], side = [], doneMain = [], doneSide = [];
+  const used = new Set();
+  const currentN = chapterNum(game?.flags?.chapter);
   for (const o of all) {
     if (!isObjectiveStarted(o, ctx)) continue;
     const done = isObjectiveComplete(o, ctx);
     const sideish = isSideObjective(o);
     if (done) (sideish ? doneSide : doneMain).push(o);
     else (sideish ? side : main).push(o);
+    used.add(currentN + ":" + (o.quest || "") + ":" + (o.text || o.id || ""));
+  }
+  // Prior-chapter objectives belong under Completed even if a flag was missed on a jump.
+  // Do not key on bare ids like "o1" — every chapter reuses those.
+  for (const o of listPriorObjectives(game)) {
+    const key = (o._priorChapter || 0) + ":" + (o.quest || "") + ":" + (o.text || o.id || "");
+    if (used.has(key)) continue;
+    used.add(key);
+    const sideish = isSideObjective(o);
+    (sideish ? doneSide : doneMain).push({ ...o, _forceDone: true });
   }
   return { main, side, doneMain, doneSide, ctx };
 }

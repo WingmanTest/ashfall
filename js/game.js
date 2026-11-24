@@ -1,43 +1,43 @@
 import * as THREE from "three";
-import { CFG, WEAPONS_ORDER } from "./config.js?v=r15.1";
-import { weaponKind } from "./weapons/viewmodels.js?v=r15.1";
-import { Input } from "./input.js?v=r15.1";
-import { HUD } from "./hud.js?v=r15.1";
-import { World } from "./world.js?v=r15.1";
-import { Player } from "./player.js?v=r15.1";
-import { EnemySystem } from "./enemies.js?v=r15.1";
-import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r15.1";
-import { openCharacterSheet } from "./inventoryUI.js?v=r15.1";
+import { CFG, WEAPONS_ORDER } from "./config.js?v=r15.2";
+import { weaponKind } from "./weapons/viewmodels.js?v=r15.2";
+import { Input } from "./input.js?v=r15.2";
+import { HUD } from "./hud.js?v=r15.2";
+import { World } from "./world.js?v=r15.2";
+import { Player } from "./player.js?v=r15.2";
+import { EnemySystem } from "./enemies.js?v=r15.2";
+import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r15.2";
+import { openCharacterSheet } from "./inventoryUI.js?v=r15.2";
 import {
   emptyDialogueMem, markNode, markChoice, markComplete, filterChoices, resumeNodeId,
   makeRevisitDialogue, authoredRevisit, hydrateDialogueMem, looksLikeFeedChoice,
   looksLikeFeedNode, choiceFlagName, memHasFeed,
-} from "./dialogueMem.js?v=r15.1";
-import { currentMainObjective, currentSideObjective, isSideObjective, noteSideQuestUpdate, renderQuestLogHtml } from "./questTrack.js?v=r15.1";
-import { createMinimap, loadObjectiveBinds, packExploredFog, restoreExploredFog } from "./minimap.js?v=r15.1";
-import { stopDoll3D } from "./doll3d.js?v=r15.1";
-import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r15.1";
-import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r15.1";
-import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r15.1";
-import { tickCompanion, disposeCompanion } from "./companion.js?v=r15.1";
-import { collectCompanionCommands, collectPendingActions, mergeActionChoices, startTracking, restoreTracking, findTrackTarget, setCompanionMode } from "./companionCmd.js?v=r15.1";
-import { pinNpc, unpinNpc, haltForTalk, findNpc } from "./npcWander.js?v=r15.1";
-import { BreathSystem } from "./breath.js?v=r15.1";
-import { openTradeModal } from "./trade.js?v=r15.1";
-import { preloadModels } from "./models3d.js?v=r15.1";
-import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r15.1";
-import { isMobileClient, canvasDpr } from "./device.js?v=r15.1";
-import { LevelRuntime } from "./levelLoader.js?v=r15.1";
-import { attachAudio } from "./audioHook.js?v=r15.1";
-import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r15.1";
-import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r15.1";
-import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r15.1";
-import { loadSave, hasSave, writeSave, clearSave, migrateSave, applyCh1CompleteFlags, normalizeChapter, CH02_SPAWN } from "./save.js?v=r15.1";
-import { createSky, hudHour } from "../sky/sky.js?v=r15.1";
+} from "./dialogueMem.js?v=r15.2";
+import { currentMainObjective, currentSideObjective, isSideObjective, noteSideQuestUpdate, renderQuestLogHtml } from "./questTrack.js?v=r15.2";
+import { createMinimap, loadObjectiveBinds, packExploredFog, restoreExploredFog } from "./minimap.js?v=r15.2";
+import { stopDoll3D } from "./doll3d.js?v=r15.2";
+import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r15.2";
+import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r15.2";
+import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r15.2";
+import { tickCompanion, disposeCompanion } from "./companion.js?v=r15.2";
+import { collectCompanionCommands, collectPendingActions, mergeActionChoices, startTracking, restoreTracking, findTrackTarget, setCompanionMode } from "./companionCmd.js?v=r15.2";
+import { pinNpc, unpinNpc, haltForTalk, findNpc } from "./npcWander.js?v=r15.2";
+import { BreathSystem } from "./breath.js?v=r15.2";
+import { openTradeModal } from "./trade.js?v=r15.2";
+import { preloadModels } from "./models3d.js?v=r15.2";
+import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r15.2";
+import { isMobileClient, canvasDpr } from "./device.js?v=r15.2";
+import { LevelRuntime } from "./levelLoader.js?v=r15.2";
+import { attachAudio } from "./audioHook.js?v=r15.2";
+import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r15.2";
+import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r15.2";
+import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r15.2";
+import { loadSave, hasSave, writeSave, clearSave, migrateSave, applyCh1CompleteFlags, completePriorChapterProgress, chapterHeading, normalizeChapter, CH02_SPAWN } from "./save.js?v=r15.2";
+import { createSky, hudHour } from "../sky/sky.js?v=r15.2";
 
 window.__ASHFALL_MODULE = true;
-window.__ASHFALL_BUILD = "r15.1";
-if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r15.1") {
+window.__ASHFALL_BUILD = "r15.2";
+if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r15.2") {
   if (typeof window.__ashfallBustStaleBuild === "function") window.__ashfallBustStaleBuild(window.__ASHFALL_BUILD);
 }
 
@@ -413,7 +413,7 @@ class Game {
       $("btn-crt").textContent = "CRT: " + String(cur).toUpperCase();
       bindTap("btn-crt", () => this.cycleCRT());
     }
-    bindTap("btn-save", () => { this.save(); this.hud.say("Saved."); });
+    bindTap("btn-save", () => { this.save(); this.hud.say("Saved — " + chapterHeading(this.flags.chapter, this.story).full + "."); });
     bindTap("btn-notes", () => this.openNotes(false));
     if ($("btn-quests")) bindTap("btn-quests", () => this.openInventory("quests"));
     bindTap("btn-quit", () => this.toTitle());
@@ -528,6 +528,7 @@ class Game {
     const jump = normalizeChapter((opts && opts.chapter) || "ch01");
     if (jump && jump !== "ch01") {
       applyCh1CompleteFlags(this.flags);
+      completePriorChapterProgress(this.flags, this.quests, this.levels, jump);
       this.flags.chapter = jump;
       this.flags.r15_ch02_rescue = true;
       if (jump === "ch02") {
@@ -619,6 +620,7 @@ class Game {
       return this.setChapter(ch, { endPrevious: false, fireLoad: false, teleport: false }).then(() => {
         this.player.restore(s.player);
         if (mig.rescuedToCh02) {
+          completePriorChapterProgress(this.flags, this.quests, this.levels, ch);
           try { this.save(); } catch {}
         }
         hideLoad();
@@ -677,6 +679,8 @@ class Game {
     this.mode = "pause";
     setMenuOpen(true);
     this.save();
+    const el = document.getElementById("pause-chapter");
+    if (el) el.textContent = chapterHeading(this.flags.chapter, this.story).full;
     showScreen("pause");
   }
 
@@ -2227,18 +2231,21 @@ class Game {
   _syncFireModeBtn() { this._syncWeaponChrome(); }
 
   objectiveText() {
-    if (this.flags?.ch01_scarf_found) {
-      if (this.world?.companion) this.world.companion._trackHint = null;
-    } else {
-      const hint = this.world?.companion?._trackHint;
-      if (hint) return "OBJECTIVE  " + hint;
+    const ch = this.flags.chapter || "ch01";
+    const n = this._chapterNum(ch);
+    if (n <= 1) {
+      if (this.flags?.ch01_scarf_found) {
+        if (this.world?.companion) this.world.companion._trackHint = null;
+      } else {
+        const hint = this.world?.companion?._trackHint;
+        if (hint) return "OBJECTIVE  " + hint;
+      }
     }
     const o = currentMainObjective(this);
     if (o?.text) return "OBJECTIVE  " + o.text;
-    const ch = this.flags.chapter || "ch01";
     const def = this.story.chapterDef?.(ch);
     if (def?.objective) return "OBJECTIVE  " + def.objective;
-    return this._chapterNum(ch) <= 2 ? "OBJECTIVE  Scavenge Sparks. Stay hydrated." : "OBJECTIVE  Keep moving. Stay alive.";
+    return n <= 1 ? "OBJECTIVE  Scavenge Sparks. Stay hydrated." : "OBJECTIVE  Keep moving. Stay alive.";
   }
 
   update(dt) {
@@ -2501,6 +2508,7 @@ class Game {
     const p = this.player;
     const loc = this.world.locationAt(p.x, p.z);
     this.hud.loc = loc?.name || "Sparks";
+    this.hud.chapter = chapterHeading(this.flags.chapter, this.story).full;
     const hour = (this.timeOfDay * 24 + 6) % 24;
     const hh = Math.floor(hour), mm = Math.floor((hour - hh) * 60);
     this.hud.clock = String(hh).padStart(2, "0") + ":" + String(mm).padStart(2, "0");
@@ -2658,7 +2666,7 @@ async function boot() {
     await story.load();
     const systems = await loadSystems();
     const levels = await loadLevels();
-    const { rollTable } = await import("./systems.js?v=r15.1");
+    const { rollTable } = await import("./systems.js?v=r15.2");
 
     const renderer = new THREE.WebGLRenderer({
       canvas: view, antialias: false, alpha: false, powerPreference: "high-performance",
@@ -2793,7 +2801,7 @@ async function boot() {
     game.loop();
     window.__READY = true;
     window.__ASHFALL_BOOTED = true;
-    window.__ASHFALL_BUILD = "r15.1";
+    window.__ASHFALL_BUILD = "r15.2";
     const banner = $("boot-banner");
     if (banner) banner.classList.remove("show");
     window.__INTEGRATION = {

@@ -1,6 +1,6 @@
 // Visual dressing for Cartographer solid tiles. Colliders stay merged AABBs.
 import * as THREE from "three";
-import { fitHeight } from "./world.js?v=r15.1";
+import { fitHeight } from "./world.js?v=r15.2";
 
 export const KENNEY_BUILDINGS = [
   "assets/kenney/industrial/building-a.glb",

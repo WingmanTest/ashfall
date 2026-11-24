@@ -176,7 +176,7 @@ function insideTract(box, tracts) {
 function addPitched(sh, gable, soffit, snow, box, eaveY, snowy) {
   const { minX, maxX, minZ, maxZ, w, d, cx, cz } = box;
   const alongX = w >= d;
-  const eave = 0.4;
+  const eave = 0.18;
   const short = Math.min(w, d);
   const rise = Math.max(1.15, Math.min(2.45, short * 0.32));
   const ridgeY = eaveY + rise;
@@ -219,7 +219,7 @@ function addPitched(sh, gable, soffit, snow, box, eaveY, snowy) {
 }
 
 function addFlat(flat, snow, box, roofY) {
-  const e = 0.16;
+  const e = 0.10;
   const { minX, maxX, minZ, maxZ } = box;
   const x0 = minX - e, x1 = maxX + e, z0 = minZ - e, z1 = maxZ + e;
   const y = roofY;
@@ -281,16 +281,31 @@ function wallHeightAround(L, box, fallback = 4) {
   const c1 = Math.min((g.cols || 0) - 1, Math.floor((box.maxX - o.x) / cs) + 1);
   const r0 = Math.max(0, Math.floor((box.minZ - o.z) / cs) - 1);
   const r1 = Math.min((g.rows || 0) - 1, Math.floor((box.maxZ - o.z) / cs) + 1);
-  let h = fallback;
+  const heights = [];
   for (let r = r0; r <= r1; r++) {
     const row = tiles[r];
     if (!row) continue;
     for (let c = c0; c <= c1; c++) {
-      const t = legend[row[c]] || {};
-      if (t.solid && (t.height || 0) >= 2) h = Math.max(h, t.height);
+      const x = o.x + (c + 0.5) * cs;
+      const z = o.z + (r + 0.5) * cs;
+      const edge =
+        x < box.minX + cs * 0.65 || x > box.maxX - cs * 0.65
+        || z < box.minZ + cs * 0.65 || z > box.maxZ - cs * 0.65;
+      if (!edge) continue;
+      if (x < box.minX - cs * 1.05 || x > box.maxX + cs * 1.05) continue;
+      if (z < box.minZ - cs * 1.05 || z > box.maxZ + cs * 1.05) continue;
+      const def = legend[row[c]] || {};
+      if (def.solid && (def.height || 0) >= 2) heights.push(def.height);
     }
   }
-  return h;
+  if (!heights.length) return fallback;
+  const counts = new Map();
+  for (const h of heights) counts.set(h, (counts.get(h) || 0) + 1);
+  let best = heights[0], n = 0;
+  for (const [h, c] of counts) {
+    if (c > n || (c === n && h < best)) { best = h; n = c; }
+  }
+  return best;
 }
 
 function meshOf(geo, mat, kind, shadows = true) {
@@ -331,8 +346,9 @@ export function coverBuildingRoofs(runtime, L, scene, mats = {}) {
     if (covered.some((c) => overlaps(foot, c, 0.7))) return;
     const meta = { ...foot, ...labelFor(foot, buildings) };
     const kind = classifyRoof(meta);
-    const wallH = foot.y || wallHeightAround(L, foot, kind === "flat" ? 7 : 4);
-    const eaveY = wallH + 0.08;
+    const measured = wallHeightAround(L, foot, 0);
+    const wallH = measured >= 2 ? measured : (Number(foot.y) >= 2 ? foot.y : (kind === "flat" ? 4 : 4));
+    const eaveY = wallH + 0.02;
     if (kind === "pitched") {
       addPitched(shA, gableA, ceilA, snowA, foot, eaveY, snowy);
       if (foot.interior !== false && (foot.source === "interior" || foot.ceiling)) {
@@ -344,6 +360,9 @@ export function coverBuildingRoofs(runtime, L, scene, mats = {}) {
         addCeiling(ceilA, foot, Math.min(Math.max(3.35, eaveY - 0.22), eaveY - 0.12));
       }
     }
+    foot.wallH = wallH;
+    foot.eaveY = eaveY;
+    foot.roofKind = kind;
     covered.push(foot);
   };
 
@@ -387,5 +406,6 @@ export function coverBuildingRoofs(runtime, L, scene, mats = {}) {
   add(toGeo(gableA), gableMat, "roof", true);
   add(toGeo(ceilA), ceilMat, "roof_ceiling", false);
   if (snowA) add(toGeo(snowA), snowMat, "roof_snow", false);
+  if (runtime) runtime._roofCovered = covered;
   return covered.length;
 }

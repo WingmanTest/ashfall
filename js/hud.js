@@ -1,4 +1,4 @@
-import { CFG, ITEMS } from "./config.js?v=r15.1";
+import { CFG, ITEMS } from "./config.js?v=r15.2";
 
 export class HUD {
   constructor(canvas) {
@@ -14,6 +14,7 @@ export class HUD {
     this.loc = "";
     this.clock = "";
     this.weather = "";
+    this.chapter = "";
     this.faceImg = null;
     this.faceIdle = null;
     this.wepT = 2.0;
@@ -97,18 +98,22 @@ export class HUD {
       y += barGap;
     }
 
-    // Location / time tucked under the bars, leaving the top-right free for BAG / pause.
+    // Chapter, then location / time, leaving the top-right free for BAG / pause.
     const metaMax = Math.min(w * 0.62, w - px(88));
     ctx.fillStyle = "#c5d0da";
     ctx.font = `${px(8)}px monospace`;
+    ctx.textAlign = "left";
+    const ch = (this.chapter || "").trim().toUpperCase();
+    if (ch) ctx.fillText(ch, 8, y + px(10));
     const loc = (this.loc || "").toUpperCase();
     const time = (this.clock || "").trim();
     const wx = (this.weather || "").trim();
     let meta = [loc, time, wx].filter(Boolean).join("  ");
     while (meta.length > 3 && ctx.measureText(meta).width > metaMax) meta = meta.slice(0, -2);
-    if (meta !== [loc, time, wx].filter(Boolean).join("  ") && meta.length > 1) meta = meta.slice(0, -1) + "…";
-    ctx.textAlign = "left";
-    ctx.fillText(meta, 8, y + px(10));
+    const fullMeta = [loc, time, wx].filter(Boolean).join("  ");
+    if (meta !== fullMeta && meta.length > 1) meta = meta.slice(0, -1) + "…";
+    const metaY = y + (ch ? px(20) : px(10));
+    ctx.fillText(meta, 8, metaY);
 
     // Compact OBJECTIVE block: small header + 11px body (≈12px CSS on iPhone 390).
     const objRaw = String(this.objText || "");
@@ -116,11 +121,12 @@ export class HUD {
     const objMax = metaMax;
     ctx.fillStyle = "#9aa8b4";
     ctx.font = `${px(8)}px monospace`;
-    if (objBody || objRaw) ctx.fillText("OBJECTIVE", 8, y + px(22));
+    const objHeaderY = metaY + px(12);
+    if (objBody || objRaw) ctx.fillText("OBJECTIVE", 8, objHeaderY);
     ctx.fillStyle = "#e8eef4";
     ctx.font = `${px(11)}px monospace`;
     const objLines = wrapLines(ctx, objBody, objMax);
-    const objY = y + px(34);
+    const objY = objHeaderY + px(12);
     objLines.forEach((s, i) => ctx.fillText(s, 8, objY + i * px(13)));
     const side = String(this.sideText || "").trim();
     if (side) {

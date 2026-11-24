@@ -1,19 +1,19 @@
 // Cartographer chapter loader. Builds geometry from levels/*.json (do not edit those files).
 import * as THREE from "three";
-import { CFG } from "./config.js?v=r15.1";
-import { fitHeight, makePerson, makeDog } from "./world.js?v=r15.1";
-import { evalCondition, applyEffects, setFlag } from "./story.js?v=r15.1";
-import { rollContainer, aliasItem } from "./systems.js?v=r15.1";
-import { addItem, takeItem, hasItems } from "./inventory.js?v=r15.1";
-import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings, instanceSmallBoxes } from "./buildings.js?v=r15.1";
-import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r15.1";
-import { coverBuildingRoofs, extractShingleMaterial, fallbackShingleMat } from "./roofs.js?v=r15.1";
-import { startTracking } from "./companionCmd.js?v=r15.1";
-import { bindNpc, disposeMixer } from "./npcWander.js?v=r15.1";
+import { CFG } from "./config.js?v=r15.2";
+import { fitHeight, makePerson, makeDog } from "./world.js?v=r15.2";
+import { evalCondition, applyEffects, setFlag } from "./story.js?v=r15.2";
+import { rollContainer, aliasItem } from "./systems.js?v=r15.2";
+import { addItem, takeItem, hasItems } from "./inventory.js?v=r15.2";
+import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings, instanceSmallBoxes } from "./buildings.js?v=r15.2";
+import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r15.2";
+import { coverBuildingRoofs, extractShingleMaterial, fallbackShingleMat } from "./roofs.js?v=r15.2";
+import { startTracking } from "./companionCmd.js?v=r15.2";
+import { bindNpc, disposeMixer } from "./npcWander.js?v=r15.2";
 import {
   loadGroundOverlay, floorSkipSet, decorateFloorMaterial,
   applyGroundDressing, tickGroundDressing, replacesSagebrush,
-} from "./groundDressing.js?v=r15.1";
+} from "./groundDressing.js?v=r15.2";
 
 const SNOW_HEX = 0xeef2f6;
 function stripSnow(obj) {
@@ -592,7 +592,7 @@ export class LevelRuntime {
         tree.rotation.y = (s.x * 5 + s.z) % 3;
         scene.add(tree);
         world.farProps.push(tree);
-        world.colliders.push({ minX: s.x - 0.35, maxX: s.x + 0.35, minZ: s.z - 0.35, maxZ: s.z + 0.35, src: "tree" });
+        // r15.2: no leftover vegetation colliders (trees are decoration).
       } else if (s.kind === "water") {
         const w = new THREE.Mesh(
           new THREE.PlaneGeometry(cs, cs),

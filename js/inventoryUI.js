@@ -1,11 +1,12 @@
-import { CFG } from "./config.js?v=r15.1";
+import { CFG } from "./config.js?v=r15.2";
 import {
   GEAR_SLOTS, WEAPON_SLOTS, ALL_SLOTS, SLOT_LABELS, SLOT_COLORS,
   itemSlot, combinedInsulation, combinedWetResist, carryState,
   resolveDollLayers, wearItem, removeGear, emptyGear, canAddWeight,
-} from "./equipment.js?v=r15.1";
-import { mountDoll3D, stopDoll3D, doll3DWasDrag } from "./doll3d.js?v=r15.1";
-import { renderQuestLogHtml } from "./questTrack.js?v=r15.1";
+} from "./equipment.js?v=r15.2";
+import { mountDoll3D, stopDoll3D, doll3DWasDrag } from "./doll3d.js?v=r15.2";
+import { renderQuestLogHtml } from "./questTrack.js?v=r15.2";
+import { chapterHeading } from "./save.js?v=r15.2";
 
 const cache = new Map();
 function loadImg(src) {
@@ -67,13 +68,19 @@ function applyTint(ctx, tint, w, h) {
 }
 
 
-function sheetTabs(active) {
+function escSheet(s) {
+  return String(s || "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+function sheetTabs(active, game) {
+  const head = chapterHeading(game?.flags?.chapter, game?.story);
   return `<div class="sheet-tabs">
     <button type="button" data-tab="bag" class="${active === "bag" ? "on" : ""}">BAG</button>
     <button type="button" data-tab="quests" class="${active === "quests" ? "on" : ""}">QUESTS</button>
     <button type="button" data-tab="craft" class="${active === "craft" ? "on" : ""}">CRAFT</button>
     <button type="button" data-a="close" class="tab-close">CLOSE</button>
-  </div>`;
+  </div>
+  <div class="sheet-chapter">${escSheet(head.full)}</div>`;
 }
 
 function bindSheetTabs(game, panel, active) {
@@ -131,7 +138,7 @@ function renderCraftTab(game, panel) {
     </article>`;
   }).join("");
   panel.innerHTML = `
-    ${sheetTabs("craft")}
+    ${sheetTabs("craft", game)}
     <div class="craft-list">${cards || '<p class="line">No recipes yet.</p>'}</div>
     <div id="craft-confirm" class="craft-confirm" hidden></div>
   `;
@@ -160,7 +167,7 @@ function renderQuestTab(game, panel) {
   if (panel._dollTimer) clearInterval(panel._dollTimer);
   document.body.classList.add("char-sheet-open");
   panel.classList.add("char-sheet", "show");
-  panel.innerHTML = `${sheetTabs("quests")}${renderQuestLogHtml(game)}`;
+  panel.innerHTML = `${sheetTabs("quests", game)}${renderQuestLogHtml(game)}`;
   bindSheetTabs(game, panel, "quests");
   panel.querySelectorAll(".q-card").forEach((btn) => {
     btn.addEventListener("pointerup", (e) => {
@@ -223,7 +230,7 @@ export function openCharacterSheet(game, panel, tab = "bag") {
   document.body.classList.add("char-sheet-open");
   panel.classList.add("char-sheet", "show");
   panel.innerHTML = `
-    ${sheetTabs("bag")}
+    ${sheetTabs("bag", game)}
     <div class="char-top">
       <div class="char-doll" id="doll-wrap"></div>
       <div class="char-slots">

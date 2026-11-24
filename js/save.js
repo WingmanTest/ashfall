@@ -1,5 +1,5 @@
-import { CFG } from "./config.js?v=r15.1";
-import { stripRetiredInv } from "./systems.js?v=r15.1";
+import { CFG } from "./config.js?v=r15.2";
+import { stripRetiredInv } from "./systems.js?v=r15.2";
 
 /** Nevada Revision 2 story/save schema. Older saves (v1: Theo, insulin, Marguerite…) can't be mapped. */
 export const SAVE_STORY_VERSION = 2;
@@ -47,6 +47,24 @@ export function normalizeChapter(ch) {
   return "ch01";
 }
 
+export function chapterNum(ch) {
+  return parseInt(String(normalizeChapter(ch)).replace(/\D/g, ""), 10) || 1;
+}
+
+/** Short / full chapter label for HUD, pause menu, quest log, and save toast. */
+export function chapterHeading(ch, story) {
+  const id = normalizeChapter(ch);
+  const n = chapterNum(id);
+  const title = String(story?.chapterDef?.(id)?.title || "").trim();
+  return {
+    id,
+    n,
+    title,
+    short: "CH." + n,
+    full: title ? ("CHAPTER " + n + " — " + title.toUpperCase()) : ("CHAPTER " + n),
+  };
+}
+
 function asArray(v) {
   if (Array.isArray(v)) return v.slice();
   if (v && typeof v === "object") {
@@ -85,7 +103,49 @@ export function applyCh1CompleteFlags(flags) {
   f.wraith_following = true;
   f.wraith_alive = true;
   if (f.ch01_night == null) f.ch01_night = true;
+  f.ch01_carly_talked = f.ch01_carly_talked || true;
+  f.ch01_water_boiled = f.ch01_water_boiled || true;
+  f.ch01_lolo_talked = f.ch01_lolo_talked || true;
+  f.ch01_scarf_found = f.ch01_scarf_found || true;
+  if (!f.ch01_gas_choice) f.ch01_gas_choice = "pruitt";
+  f.ch01_pharmacy_done = f.ch01_pharmacy_done || true;
   return f;
+}
+
+/** Stamp completeWhen flags / quests for every chapter before dest (jump / rescue). */
+export function completePriorChapterProgress(flags, quests, levels, destId) {
+  const destN = chapterNum(destId);
+  const f = flags || {};
+  const q = quests || {};
+  if (destN > 1) applyCh1CompleteFlags(f);
+  const per = levels?.perChapter || {};
+  const setWhen = (when) => {
+    if (!when) return;
+    if (Array.isArray(when)) return when.forEach(setWhen);
+    if (typeof when === "string") {
+      if (f[when] == null || f[when] === false) f[when] = true;
+      return;
+    }
+    if (typeof when === "object") {
+      if (when.flag) {
+        if (f[when.flag] == null || f[when.flag] === false) {
+          f[when.flag] = (when.eq != null ? when.eq : true);
+        }
+      }
+      for (const k of ["all", "any", "and", "or", "allOf", "anyOf", "then"]) {
+        if (when[k]) setWhen(when[k]);
+      }
+    }
+  };
+  for (const L of Object.values(per)) {
+    const n = chapterNum(L.chapter || L.id);
+    if (!n || n >= destN) continue;
+    for (const o of L.objectives || []) {
+      setWhen(o.completeWhen);
+      if (o.quest) q[o.quest] = "complete";
+    }
+  }
+  return { flags: f, quests: q };
 }
 
 /**
@@ -119,6 +179,7 @@ export function migrateSave(raw) {
     if (shouldRescueToCh02(flags)) {
       flags.chapter = "ch02";
       flags.r15_ch02_rescue = true;
+      applyCh1CompleteFlags(flags);
       rescuedToCh02 = true;
     }
 

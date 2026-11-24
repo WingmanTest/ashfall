@@ -4,8 +4,8 @@ import * as THREE from "three";
 import {
   setEnvSeason, makeEnvInstanced, makeEnvTuftCards, makeEnvDecals, makeEnvDecal,
   loadGroundTexture,
-} from "../models/registry.js?v=r15.1";
-import { gltfLoader } from "./models3d.js?v=r15.1";
+} from "../models/registry.js?v=r15.2";
+import { gltfLoader } from "./models3d.js?v=r15.2";
 
 const KNOWN_OVERLAYS = new Set(['ch01_day_three', 'ch02_the_registry', 'ch03_the_long_cold', 'ch04_black_start', 'ch05_route_9', 'ch06_the_trench', 'ch07_dead_air', 'ch07b_dixie_valley', 'ch08_ashfall', 'ch09_the_long_night', 'ch10_the_warm_room']);
 
