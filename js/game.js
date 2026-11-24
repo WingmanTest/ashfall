@@ -1,41 +1,42 @@
 import * as THREE from "three";
-import { CFG, WEAPONS_ORDER } from "./config.js?v=r13";
-import { weaponKind } from "./weapons/viewmodels.js?v=r13";
-import { Input } from "./input.js?v=r13";
-import { HUD } from "./hud.js?v=r13";
-import { World } from "./world.js?v=r13";
-import { Player } from "./player.js?v=r13";
-import { EnemySystem } from "./enemies.js?v=r13";
-import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r13";
-import { openCharacterSheet } from "./inventoryUI.js?v=r13";
+import { CFG, WEAPONS_ORDER } from "./config.js?v=r14";
+import { weaponKind } from "./weapons/viewmodels.js?v=r14";
+import { Input } from "./input.js?v=r14";
+import { HUD } from "./hud.js?v=r14";
+import { World } from "./world.js?v=r14";
+import { Player } from "./player.js?v=r14";
+import { EnemySystem } from "./enemies.js?v=r14";
+import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r14";
+import { openCharacterSheet } from "./inventoryUI.js?v=r14";
 import {
   emptyDialogueMem, markNode, markChoice, markComplete, filterChoices, resumeNodeId,
   makeRevisitDialogue, authoredRevisit, hydrateDialogueMem, looksLikeFeedChoice,
   looksLikeFeedNode, choiceFlagName, memHasFeed,
-} from "./dialogueMem.js?v=r13";
-import { currentMainObjective, currentSideObjective, isSideObjective, noteSideQuestUpdate, renderQuestLogHtml } from "./questTrack.js?v=r13";
-import { createMinimap, loadObjectiveBinds, packExploredFog, restoreExploredFog } from "./minimap.js?v=r13";
-import { stopDoll3D } from "./doll3d.js?v=r13";
-import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r13";
-import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r13";
-import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r13";
-import { tickCompanion, disposeCompanion } from "./companion.js?v=r13";
-import { collectCompanionCommands, collectPendingActions, mergeActionChoices, startTracking, restoreTracking, findTrackTarget } from "./companionCmd.js?v=r13";
-import { BreathSystem } from "./breath.js?v=r13";
-import { openTradeModal } from "./trade.js?v=r13";
-import { preloadModels } from "./models3d.js?v=r13";
-import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r13";
-import { isMobileClient, canvasDpr } from "./device.js?v=r13";
-import { LevelRuntime } from "./levelLoader.js?v=r13";
-import { attachAudio } from "./audioHook.js?v=r13";
-import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r13";
-import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r13";
-import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r13";
-import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js?v=r13";
+} from "./dialogueMem.js?v=r14";
+import { currentMainObjective, currentSideObjective, isSideObjective, noteSideQuestUpdate, renderQuestLogHtml } from "./questTrack.js?v=r14";
+import { createMinimap, loadObjectiveBinds, packExploredFog, restoreExploredFog } from "./minimap.js?v=r14";
+import { stopDoll3D } from "./doll3d.js?v=r14";
+import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r14";
+import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r14";
+import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r14";
+import { tickCompanion, disposeCompanion } from "./companion.js?v=r14";
+import { collectCompanionCommands, collectPendingActions, mergeActionChoices, startTracking, restoreTracking, findTrackTarget, setCompanionMode } from "./companionCmd.js?v=r14";
+import { pinNpc, unpinNpc, haltForTalk, findNpc } from "./npcWander.js?v=r14";
+import { BreathSystem } from "./breath.js?v=r14";
+import { openTradeModal } from "./trade.js?v=r14";
+import { preloadModels } from "./models3d.js?v=r14";
+import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r14";
+import { isMobileClient, canvasDpr } from "./device.js?v=r14";
+import { LevelRuntime } from "./levelLoader.js?v=r14";
+import { attachAudio } from "./audioHook.js?v=r14";
+import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r14";
+import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r14";
+import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r14";
+import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js?v=r14";
 
 window.__ASHFALL_MODULE = true;
-window.__ASHFALL_BUILD = "r13";
-if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r13") {
+window.__ASHFALL_BUILD = "r14";
+if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r14") {
   if (typeof window.__ashfallBustStaleBuild === "function") window.__ashfallBustStaleBuild(window.__ASHFALL_BUILD);
 }
 
@@ -295,6 +296,25 @@ class Game {
       talk: (id) => self._openNpcTalk(id),
       startTracking: (target) => startTracking(self, target),
       findTrackTarget: () => findTrackTarget(self),
+      setCompanionMode: (mode, target) => setCompanionMode(self, mode, target),
+      pinNpc: (id, x, z) => {
+        const n = (self.world.npcs || []).find((p) => p.id === id || p.id === "npc_" + id);
+        if (n) pinNpc(n, x, z);
+        return !!n;
+      },
+      unpinNpc: (id) => {
+        const n = (self.world.npcs || []).find((p) => p.id === id || p.id === "npc_" + id);
+        if (n) unpinNpc(n);
+        return !!n;
+      },
+      npcState: () => (self.world.npcs || []).map((n) => ({
+        id: n.id, model: n.model || n.mesh?.userData?.model, x: n.x, z: n.z,
+        homeX: n.homeX, homeZ: n.homeZ, behavior: n.behavior,
+        companion: !!n.companion, scripted: !!n.scripted,
+        clip: n.mesh?.userData?.animClip || null,
+        mixer: !!n.mesh?.userData?.mixer,
+        wait: n._w?.wait || 0, hold: n._w?.hold || 0, i: n._w?.i,
+      })),
       measureMove: (seconds = 1.4, fps = 60, sprint = false) => self._measureMove(seconds, fps, sprint),
       get inputState() {
         const i = self.input || {};
@@ -1111,6 +1131,7 @@ class Game {
   }
 
   _openNpcTalk(id, picked) {
+    this._talkNpc = id;
     const dlg = picked !== undefined ? picked : this.story.pickDialogue(id, this._storyCtx());
     if (dlg) { this.openDialogue(dlg); return dlg.id || true; }
     const authored = authoredRevisit((this.story.dialogues || []).find((d) => d.npc === id && this.seen[d.id]));
@@ -1158,6 +1179,9 @@ class Game {
     if (this._talkLockUntil && performance.now() < this._talkLockUntil) return;
     this.dialogueMem = this.dialogueMem || emptyDialogueMem();
     this.dlg = dlg;
+    this._talkNpc = this._talkNpc || dlg.npc || dlg.npc_id || null;
+    const talking = findNpc(this.world, this._talkNpc);
+    if (talking) haltForTalk(talking, this.player);
     const resume = !dlg.revisit ? resumeNodeId(dlg, this.dialogueMem, dlg.npc) : null;
     this.dlgId = resume || dlg.start || "start";
     this._dlgWalk = new Set();
@@ -1477,6 +1501,7 @@ class Game {
     panel.innerHTML = "";
     this.lootOpen = null;
     this.dlg = null;
+    this._talkNpc = null;
     if (this.mode === "dialogue" || this.mode === "loot" || this.mode === "searching"
       || this.mode === "inventory" || this.mode === "craft" || this.mode === "notes") {
       this.enterPlay();
@@ -2155,6 +2180,8 @@ class Game {
         const btn = panel.querySelector("button");
         btn?.click();
       }
+      // Keep NPC mixers and the talking face/idle alive while the sim is paused.
+      if (this.mode === "dialogue") this.world.tickPeople?.(dt, this.player, this);
       this._render(dt);
       return;
     }
@@ -2246,7 +2273,7 @@ class Game {
 
     this.enemies.update(dt, this.player, this.world, this.audio);
     this.player.syncCamera();
-    this.world.tickPeople?.(dt, this.player);
+    this.world.tickPeople?.(dt, this.player, this);
     this.enemies.tickActors?.(dt, this.player);
     try { tickCompanion(this, dt); } catch (err) { if (!this._compWarned) { this._compWarned = true; console.warn("[wraith]", err); } }
     this._tickBreath(dt, night);
@@ -2521,7 +2548,7 @@ async function boot() {
     await story.load();
     const systems = await loadSystems();
     const levels = await loadLevels();
-    const { rollTable } = await import("./systems.js?v=r13");
+    const { rollTable } = await import("./systems.js?v=r14");
 
     const renderer = new THREE.WebGLRenderer({
       canvas: view, antialias: false, alpha: false, powerPreference: "high-performance",
@@ -2645,7 +2672,7 @@ async function boot() {
     game.loop();
     window.__READY = true;
     window.__ASHFALL_BOOTED = true;
-    window.__ASHFALL_BUILD = "r13";
+    window.__ASHFALL_BUILD = "r14";
     const banner = $("boot-banner");
     if (banner) banner.classList.remove("show");
     window.__INTEGRATION = {

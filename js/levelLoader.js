@@ -1,14 +1,15 @@
 // Cartographer chapter loader. Builds geometry from levels/*.json (do not edit those files).
 import * as THREE from "three";
-import { CFG } from "./config.js?v=r13";
-import { fitHeight, makePerson, makeDog } from "./world.js?v=r13";
-import { evalCondition, applyEffects, setFlag } from "./story.js?v=r13";
-import { rollContainer, aliasItem } from "./systems.js?v=r13";
-import { addItem, takeItem, hasItems } from "./inventory.js?v=r13";
-import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js?v=r13";
-import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r13";
-import { coverBuildingRoofs, extractShingleMaterial, fallbackShingleMat } from "./roofs.js?v=r13";
-import { startTracking } from "./companionCmd.js?v=r13";
+import { CFG } from "./config.js?v=r14";
+import { fitHeight, makePerson, makeDog } from "./world.js?v=r14";
+import { evalCondition, applyEffects, setFlag } from "./story.js?v=r14";
+import { rollContainer, aliasItem } from "./systems.js?v=r14";
+import { addItem, takeItem, hasItems } from "./inventory.js?v=r14";
+import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js?v=r14";
+import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r14";
+import { coverBuildingRoofs, extractShingleMaterial, fallbackShingleMat } from "./roofs.js?v=r14";
+import { startTracking } from "./companionCmd.js?v=r14";
+import { bindNpc, disposeMixer } from "./npcWander.js?v=r14";
 
 const SNOW_HEX = 0xeef2f6;
 function stripSnow(obj) {
@@ -949,6 +950,7 @@ export class LevelRuntime {
   async _placeNpcs(L) {
     const world = this.world;
     for (const n of world.npcs) {
+      disposeMixer(n.mesh);
       if (n.mesh && n.mesh.parent) n.mesh.parent.remove(n.mesh);
     }
     world.npcs = [];
@@ -971,6 +973,7 @@ export class LevelRuntime {
       const role = s.role || (s.trader ? "trader" : "") || (s.crowd ? "civilian" : "") || s.label || s.behavior || "";
       const rec = {
         id, name: s.label || (id || "").replace(/_/g, " "), x: s.x, z: s.z, rotY: s.rotY || 0,
+        homeX: s.x, homeZ: s.z,
         mesh, alive: true, dialogue: s.dialogue, behavior: s.behavior,
         companion: !!isWraith, trader: /^trader_/.test(id) ? id : (s.trader || null),
         role, r: isWraith ? 1.6 : 2.0,
@@ -1015,7 +1018,10 @@ export class LevelRuntime {
     group.remove(rec.mesh);
     rec.mesh = m;
     rec.model = m.userData.model;
+    rec.homeX = rec.homeX ?? x;
+    rec.homeZ = rec.homeZ ?? z;
     group.add(m);
+    bindNpc(rec, this.world);
     return true;
   }
 

@@ -1,5 +1,5 @@
-import { CFG } from "./config.js?v=r13";
-import { stripRetiredInv } from "./systems.js?v=r13";
+import { CFG } from "./config.js?v=r14";
+import { stripRetiredInv } from "./systems.js?v=r14";
 
 /** Nevada Revision 2 story/save schema. Older saves (v1: Theo, insulin, Marguerite…) can't be mapped. */
 export const SAVE_STORY_VERSION = 2;

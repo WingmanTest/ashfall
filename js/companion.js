@@ -2,6 +2,8 @@
 // Pure gameplay glue: positions world.companion's mesh near the player and fires
 // playWraith cues once per threat within range. Never throws.
 
+import { attachMixer, setLocomotion, updateMixer } from "./npcAnim.js?v=r14";
+
 const FOLLOW_GAP = 2.2;     // she trots to ~2.2 m behind/right of Braith
 const TELL_RANGE = 12;
 const _tmp = { x: 0, z: 0 };
@@ -24,18 +26,19 @@ export function companionFollows(game) {
 function _moveToward(game, rec, tx, tz, dt, spd) {
   const dx = tx - rec.x, dz = tz - rec.z;
   const d = Math.hypot(dx, dz);
-  if (d < 0.28) return false;
+  if (d < 0.28) return 0;
   const step = Math.min(spd, d / Math.max(dt, 1e-3));
   let nx = rec.x + (dx / d) * step * dt;
   let nz = rec.z + (dz / d) * step * dt;
   if (game.world?.collide) { const c = game.world.collide(nx, nz, 0.3, rec.x, rec.z); nx = c.x; nz = c.z; }
+  const used = Math.hypot(nx - rec.x, nz - rec.z) / Math.max(dt, 1e-3);
   rec.x = nx; rec.z = nz;
   const want = Math.atan2(dx, dz);
   let dy = want - rec.mesh.rotation.y;
   while (dy > Math.PI) dy -= Math.PI * 2;
   while (dy < -Math.PI) dy += Math.PI * 2;
   rec.mesh.rotation.y += dy * Math.min(1, dt * 8);
-  return true;
+  return used;
 }
 
 function _leadAlongPath(game, rec, dt) {
@@ -50,7 +53,7 @@ function _leadAlongPath(game, rec, dt) {
   const i = Math.min(rec._pathI, path.length - 1);
   const p = path[i];
   const far = Math.hypot((game.player?.x || 0) - rec.x, (game.player?.z || 0) - rec.z);
-  const spd = far > 10 ? 6.4 : 4.4;
+  const spd = far > 10 ? 2.45 : 2.15;
   return _moveToward(game, rec, p.x, p.z, dt, spd);
 }
 
@@ -63,20 +66,20 @@ export function tickCompanion(game, dt) {
   st.t += dt;
   st.barkCd = Math.max(0, st.barkCd - dt);
   const mode = game.companionMode || ((game.flags || {}).wraith_stay ? "stay" : "follow");
-  st.moving = false;
+  let speed = 0;
   if (mode === "track") {
     const far = Math.hypot(p.x - rec.x, p.z - rec.z);
     if (far > 28 && rec._path && rec._path.length) {
       const wp = rec._path[Math.min(rec._pathI || 0, rec._path.length - 1)];
       rec.x = wp.x; rec.z = wp.z;
     }
-    st.moving = _leadAlongPath(game, rec, dt);
+    speed = _leadAlongPath(game, rec, dt) || 0;
   } else if (mode === "stay" || mode === "guard" || mode === "hold") {
     const hx = rec._holdX ?? rec.x, hz = rec._holdZ ?? rec.z;
     if (mode === "hold" && rec._holdTarget && rec._holdTarget.alive) {
       rec._holdX = rec._holdTarget.x; rec._holdZ = rec._holdTarget.z;
     }
-    st.moving = _moveToward(game, rec, rec._holdX ?? hx, rec._holdZ ?? hz, dt, 3.4);
+    speed = _moveToward(game, rec, rec._holdX ?? hx, rec._holdZ ?? hz, dt, 1.8) || 0;
   } else if (companionFollows(game)) {
     // Target: behind and slightly right of Braith's facing.
     const yaw = p.yaw || 0;
@@ -87,10 +90,18 @@ export function tickCompanion(game, dt) {
     if (far > 24) {
       rec.x = tx; rec.z = tz;
     } else if (d > 0.35 && far > FOLLOW_GAP * 0.6) {
-      st.moving = _moveToward(game, rec, tx, tz, dt, far > 6 ? 6.2 : 3.8);
+      speed = _moveToward(game, rec, tx, tz, dt, far > 6 ? 2.35 : 1.85) || 0;
     }
   }
-  rec.mesh.position.set(rec.x, st.moving ? Math.abs(Math.sin(st.t * 11)) * 0.035 : 0, rec.z);
+  st.moving = speed > 0.05;
+  // r14: clips carry the vertical bob — do not bob the object.
+  const baseY = rec.mesh.userData.baseY;
+  rec.mesh.position.set(rec.x, Number.isFinite(baseY) ? baseY : 0, rec.z);
+  if (!rec.mesh.userData.mixer) attachMixer(rec.mesh, rec.model || rec.mesh.userData.model || "wraith_malinois");
+  const sit = (mode === "stay") && !st.moving;
+  setLocomotion(rec.mesh, speed, { sit, modelId: rec.model || rec.mesh.userData.model || "wraith_malinois" });
+  const dist = Math.hypot(p.x - rec.x, p.z - rec.z);
+  updateMixer(rec.mesh, dt, { dist, visible: dist < 28 });
   // 3D emitter for her cues.
   const A = audioEngine(game);
   if (A && typeof A.emitter === "function" && !rec.sfx) {

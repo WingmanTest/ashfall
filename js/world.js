@@ -2,9 +2,10 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { KTX2Loader } from "three/addons/loaders/KTX2Loader.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
-import { LOCATIONS } from "./config.js?v=r13";
-import { isMobileClient } from "./device.js?v=r13";
-import { tickActor, tickStaticNpc } from "./actors.js?v=r13";
+import { LOCATIONS } from "./config.js?v=r14";
+import { isMobileClient } from "./device.js?v=r14";
+import { tickActor, tickStaticNpc } from "./actors.js?v=r14";
+import { tickNpc, bindNpc, disposeMixer } from "./npcWander.js?v=r14";
 
 export function makeLoader(renderer) {
   const loader = new GLTFLoader();
@@ -42,7 +43,7 @@ export function fitHeight(obj, height, alignBottom = true) {
   return obj;
 }
 
-export { makePerson, tickActor, tickStaticNpc } from "./actors.js?v=r13";
+export { makePerson, tickActor, tickStaticNpc } from "./actors.js?v=r14";
 
 export function makeDog(color = 0x3b322c) {
   const g = new THREE.Group();
@@ -81,7 +82,7 @@ function labelSprite(text) {
   const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false });
   const spr = new THREE.Sprite(mat);
   spr.scale.set(1.4, 0.35, 1);
-  spr.position.y = 1.85;
+  spr.position.y = 1.95;
   return spr;
 }
 
@@ -455,6 +456,7 @@ export class World {
       disposeMesh(f.flame, this.pbrCache);
       disposeMesh(f.logs, this.pbrCache);
     }
+    for (const n of this.npcs || []) disposeMixer(n.mesh);
     if (g) {
       g.traverse((o) => disposeMesh(o, this.pbrCache));
       const kids = [...g.children];
@@ -713,10 +715,13 @@ export class World {
     }
   }
 
-  tickPeople(dt, player) {
+  tickPeople(dt, player, game) {
+    const ctx = game || { player, world: this, mode: "play" };
     for (const n of this.npcs) {
       if (!n.mesh || n.alive === false) continue;
+      if (n.companion) continue;
       if (n.mesh.userData?.actor) tickActor(n.mesh, dt, player);
+      else if (n.mesh.userData?.mixer || n.model) tickNpc(n, dt, ctx);
       else tickStaticNpc(n.mesh, dt, player, { companion: !!n.companion });
     }
   }

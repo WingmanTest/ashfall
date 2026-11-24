@@ -1,4 +1,4 @@
-import { evalCondition } from "./story.js?v=r13";
+import { evalCondition } from "./story.js?v=r14";
 
 /** Companion tutorial and any objective marked side/tutorial stay off the main HUD. */
 export function isSideObjective(o) {

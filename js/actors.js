@@ -285,6 +285,7 @@ export function tickStaticNpc(root, dt, player, { companion = false } = {}) {
   if (!root || companion) return;
   const u = root.userData || (root.userData = {});
   if (u.kind === "wraith" || u.model === "wraith_malinois") return;
+  if (u.mixer || u.animClip) return; // r14: rigged models use clips, not the r11 bob/turn hack
   if (u.baseY == null) u.baseY = root.position.y;
   if (u.baseYaw == null) u.baseYaw = root.rotation.y;
   u.t = (u.t || 0) + dt;

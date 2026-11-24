@@ -16,7 +16,9 @@ models/
   registry.js     ES module for the engine
   tools/          glb_builder.py, humanoid.py, characters.py, creatures.py, world.py, textures.py,
                   build_prototypes.py, turntable.html, render_turntables.py, debug_view.py,
-                  npc_cast.py (Wave 2 body presets + modular parts), build_npcs.py, build_all.py, render_npcs.py
+                  npc_cast.py (Wave 2 body presets + modular parts), build_npcs.py, build_all.py, render_npcs.py,
+                  rig.py (skeletons, skin weights, palette atlas), anim.py (procedural clips), build_rigged.py,
+                  anim_viewer.html + render_anim.py (WebKit animation previews, draw-call A/B)
 ```
 
 Rebuild everything and re-verify:
@@ -24,6 +26,7 @@ Rebuild everything and re-verify:
 python3 models/tools/build_all.py             # Wave 1 + Wave 2 .glb + manifest.json (same as build_prototypes.py)
 python3 models/tools/render_turntables.py     # Wave 1 WebKit contact sheets; exits 1 on any console/WebGL error
 python3 models/tools/render_npcs.py           # Wave 2 sheets + lineup + registry self-test; exits 1 on any error
+python3 models/tools/render_anim.py           # rigged models: inspect + anim_*.png/gif + draw-call test; exits 1 on any error
 ```
 
 ## Conventions (every asset)
@@ -163,3 +166,64 @@ Notes:
   (canon gives no pronoun; Silver Spur head chef → chef's apron + holstered pistol), **Ames** works at
   Truckee Meadows General, **Ander** (Basque) wears a black txapela/beret to separate him from Ross's cattleman hat.
 - Progressive wear (dirt / ash / torn variants for Acts II–III) is planned as recoloured material sets on the same meshes.
+
+
+## Animation: skeletons, looping clips, 1 draw call per character
+
+The 21 NPC humans (`watch_militia`, the 14 main cast, the 6 archetypes) and `wraith_malinois` now ship **skinned and animated**. Each one is **1 SkinnedMesh, 1 primitive, 1 `MeshStandardMaterial`, so 1 draw call**. Its old 11–19 solid materials are collapsed into a 64×64 palette atlas (8 px swatches, `NEAREST`, no mipmaps), and a matching metallic-roughness atlas keeps every swatch's roughness and metalness. File names, triangle counts, the bind pose, y = 0 pivot, +Z forward and the colours are unchanged: an A/B render against the pre-rig files differs by about 0.1 / 765 per pixel on average. `braith_summer`, `braith_mcu2p_mask` and every prop or building are untouched and byte-identical.
+
+| | Humans (21) | Wraith |
+|---|---|---|
+| Bones | 18: `root > hips > spine > chest > neck > head`, `chest > upperarm_L/R > forearm_L/R > hand_L/R`, `hips > thigh_L/R > shin_L/R > foot_L/R` | 23: `root > pelvis > spine > chest > neck > head > ear_L/R`, `pelvis > tail_1..3`, `chest > fl_upper/fl_lower/fl_paw_L/R`, `pelvis > hl_thigh/hl_shin/hl_paw_L/R` |
+| Clips | `idle` (4 s), `walk`; plus `run` on watch_militia, guard_trooper, scavenger_runner, kit, ruiz | `idle` (3 s), `walk` (0.56 s), `trot` (0.40 s), `sit` (3 s looping hold) |
+| Speeds (m/s at timeScale 1) | walk about 0.89–0.97 (elders walt / augie / civ_elder 0.48, slower older gait, only civ_elder slightly stooped; lolo 0.56, short steps), run about 2.1–2.25 | walk 0.98, trot 2.07 |
+
+`_L` is the character's **left** (+X). Every bone's rest rotation is identity, so bone axes are model axes. Exact per-model values are in `manifest.json` (`clips`, `bones`, `walkSpeed` / `runSpeed` / `trotSpeed`, `clipDurations`, `drawCalls: 1`, `rigged: true`) and in `registry.js` `ANIMATIONS`.
+
+**Root motion: none.** Clips play in place. Bone `root` never moves, and `hips` / `pelvis` only carry the vertical bob. Move the object along its path yourself and set `timeScale = pathSpeed / walkSpeed` (`clipTimeScale()`), so planted feet don't slide. Every track's first key equals its last key, so `LoopRepeat` has no pop. Every clip keys every bone, so cross-fades blend cleanly.
+
+**Props.** Held gear is rigid-skinned to the hand: rifles, the cane, wrench, clipboard, med bag, hand mic. Slung gear is rigid to the chest: backpacks, Ross's back rifle, Walt's tube case, the radio pack. Belts, holsters and pouches stay on the hips. Coats and aprons follow both thighs partway. The cane arm automatically bends its elbow so the tip never goes into the floor.
+
+```js
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { loadNpcModel, playClip, clipTimeScale, getClips, ANIMATIONS } from './models/registry.js';
+
+const loader = new GLTFLoader();
+const npc = await loadNpcModel('carly', loader);      // skinned-safe clone: its own skeleton per instance
+scene.add(npc);
+const mixer = new THREE.AnimationMixer(npc);           // one mixer per instance
+playClip(mixer, npc, 'idle', { offset: Math.random() * 4 });   // random offset desyncs crowds
+
+// path follower: switch clips with cross-fades and match ground speed
+function setMoving(speed) {                            // m/s along the path
+  if (speed < 0.05) return playClip(mixer, npc, 'idle', { fade: 0.25 });
+  const clip = speed > 1.6 && getClips('carly').includes('run') ? 'run' : 'walk';
+  const a = playClip(mixer, npc, clip, { fade: clip === 'run' ? 0.2 : 0.25 });
+  a.timeScale = clipTimeScale('carly', clip, speed);   // feet stay planted
+}
+// every frame: mixer.update(dt); npc.position.addScaledVector(dir, speed * dt); npc.rotation.y = Math.atan2(dir.x, dir.z);
+```
+
+Gotchas for the engine:
+- **Clone with `cloneModel()` / `loadModel()`.** Don't use `Object3D.clone()` on a rigged model: a plain clone keeps driving the source skeleton. `SkeletonUtils` isn't vendored, so `registry.cloneModel()` carries the same algorithm. `loadModel` and `loadNpcModel` already use it, and `.animations` comes along on every clone.
+- Use one `AnimationMixer` per instance and call `mixer.update(dt)` every frame. You can skip or throttle mixers for off-screen or distant NPCs (they hold their last pose).
+- Recommended cross-fades: idle↔walk 0.25 s, walk↔run 0.2 s, walk↔trot 0.2 s, anything→sit 0.4 s.
+- Facing is +Z, so `rotation.y = atan2(dir.x, dir.z)`.
+- Skinning uses at most 3 influences per vertex (weights stored as normalized `UNSIGNED_BYTE`). The skinned mesh's bounding sphere comes from the pose on first render, and in-place clips stay inside it, so frustum culling is safe.
+- The atlas material keeps `roughnessFactor 0.94` and `metallicFactor 0.18` (the clamp maxima), with per-swatch values in the MR texture, so `applyRetroMaterialTuning` leaves it unchanged.
+- To attach something to a bone, use `npc.getObjectByName('hand_R')` (or `head`, `chest`, ...).
+
+### Posture pass (2026-11-24)
+The 21 humans now have an upright bind pose. `tools/build_rigged.py:upright_bind` solves it for each character:
+- trunk (hips to neck) at -1° (+1.5° for civ_elder, +0.5° for walt and augie)
+- head moved back so the skull sits about 1.2 cm ahead of the shoulder joints
+- head lifted 2 cm along the neck
+- upper-arm joints dropped 1.2 cm and moved 0.6 cm back (not on the arm holding a cane)
+- head and upper arms counter-rotated so the face stays level and the arms hang the same way as before
+
+The sculpt stoop was cut back: walt 0.075→0.020, civ_elder 0.06→0.035, augie and male_elder_slight 0.05→0.015, lolo and female_elder 0.03→0, gil and male_stocky 0.012→0.
+
+Gait lean is now 2° for walk and walk_short, 3° for walk_elder, 4.5° for walk_elder_stoop (civ_elder only) and 5° for run. The neck and head cancel the whole lean, so the eyes stay level, and arm swing is measured from vertical.
+
+Characters are about 2 cm taller (walt about 4 cm). Clip names, clip lengths, speeds, tri counts and the atlas are unchanged. To compare, render `python3 tools/render_anim.py posture` (output: `previews/posture_before_after.png`). The pre-fix files are in `/workspace/ashfall_rig_backup/pre_posture/`.

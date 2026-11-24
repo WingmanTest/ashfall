@@ -432,7 +432,7 @@
 </head>
 <body class="wield-melee">
   <div id="frame">
-    <div id="build-tag">r13</div>
+    <div id="build-tag">r14</div>
     <canvas id="view" width="180" height="320"></canvas>
     <canvas id="minimap" width="180" height="180"></canvas>
     <canvas id="hud" width="360" height="640"></canvas>
@@ -500,8 +500,8 @@
     </div>
   </div>
   <script>
-    window.__ASHFALL_EXPECTED_BUILD = "r13";
-    window.__ASHFALL_BUILD = "r13";
+    window.__ASHFALL_EXPECTED_BUILD = "r14";
+    window.__ASHFALL_BUILD = "r14";
     window.__ASHFALL_BOOTED = false;
     window.__ASHFALL_MODULE = false;
     window.__ASHFALL_PENDING = null;
@@ -587,12 +587,12 @@
       setTimeout(function () {
         if (window.__ASHFALL_BOOTED) return;
         if (window.__ASHFALL_MODULE) {
-          showBanner("The game file loaded, but startup is stuck (often a Safari WebGL or cache issue). Wait a moment, or clear this site's data and reload. Build r13.");
+          showBanner("The game file loaded, but startup is stuck (often a Safari WebGL or cache issue). Wait a moment, or clear this site's data and reload. Build r14.");
         } else {
-          showBanner("The game never started — the script did not load. If you opened this from an older Home Screen icon, delete it and reopen the page, or clear Safari cache for this site. Build r13.");
+          showBanner("The game never started — the script did not load. If you opened this from an older Home Screen icon, delete it and reopen the page, or clear Safari cache for this site. Build r14.");
         }
       }, 4000);
-      var EXPECTED = window.__ASHFALL_EXPECTED_BUILD || "r13";
+      var EXPECTED = window.__ASHFALL_EXPECTED_BUILD || "r14";
       window.__ashfallBustStaleBuild = function (found) {
         var key = "ashfall-bust-" + EXPECTED;
         var reloadOnce = function () {
@@ -631,12 +631,12 @@
         if (window.__ASHFALL_BOOTED || buildChecks > 80) clearInterval(buildTimer);
       }, 50);
       if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("./sw.js?v=r13", { scope: "./" }).then(function (reg) {
+        navigator.serviceWorker.register("./sw.js?v=r14", { scope: "./" }).then(function (reg) {
           try { reg.update(); } catch (err) {}
         }).catch(function () {});
       }
     })();
   </script>
-  <script type="module" src="./js/game.js?v=r13" onerror="window.__ASHFALL_MODULE_ERR=true; if (window.__ashfallBootFail) window.__ashfallBootFail('The game script failed to load. Try a hard refresh or clear this site\\'s data. Build r13.');"></script>
+  <script type="module" src="./js/game.js?v=r14" onerror="window.__ASHFALL_MODULE_ERR=true; if (window.__ashfallBootFail) window.__ashfallBootFail('The game script failed to load. Try a hard refresh or clear this site\\'s data. Build r14.');"></script>
 </body>
 </html>
