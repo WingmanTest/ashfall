@@ -2,10 +2,10 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { KTX2Loader } from "three/addons/loaders/KTX2Loader.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
-import { LOCATIONS } from "./config.js?v=r14";
-import { isMobileClient } from "./device.js?v=r14";
-import { tickActor, tickStaticNpc } from "./actors.js?v=r14";
-import { tickNpc, bindNpc, disposeMixer } from "./npcWander.js?v=r14";
+import { LOCATIONS } from "./config.js?v=r14.1";
+import { isMobileClient } from "./device.js?v=r14.1";
+import { tickActor, tickStaticNpc } from "./actors.js?v=r14.1";
+import { tickNpc, bindNpc, disposeMixer } from "./npcWander.js?v=r14.1";
 
 export function makeLoader(renderer) {
   const loader = new GLTFLoader();
@@ -43,7 +43,7 @@ export function fitHeight(obj, height, alignBottom = true) {
   return obj;
 }
 
-export { makePerson, tickActor, tickStaticNpc } from "./actors.js?v=r14";
+export { makePerson, tickActor, tickStaticNpc } from "./actors.js?v=r14.1";
 
 export function makeDog(color = 0x3b322c) {
   const g = new THREE.Group();

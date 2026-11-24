@@ -2,7 +2,7 @@
 // Pure gameplay glue: positions world.companion's mesh near the player and fires
 // playWraith cues once per threat within range. Never throws.
 
-import { attachMixer, setLocomotion, updateMixer } from "./npcAnim.js?v=r14";
+import { attachMixer, setLocomotion, updateMixer } from "./npcAnim.js?v=r14.1";
 
 const FOLLOW_GAP = 2.2;     // she trots to ~2.2 m behind/right of Braith
 const TELL_RANGE = 12;
@@ -21,6 +21,19 @@ export function companionFollows(game) {
   const ch = String(f.chapter || "ch01");
   if (ch !== "ch01") return true;
   return !!(f.ch01_wraith_fed || f.wraith_fed || f.wraith_following);
+}
+
+function _placeWalkable(game, rec, x, z) {
+  const world = game.world;
+  if (world?.collide) {
+    const c = world.collide(x, z, 0.3, rec.x, rec.z);
+    x = c.x; z = c.z;
+  }
+  if (world?.blocked?.(x, z, 0.2) && world.unstuckFrom) {
+    const u = world.unstuckFrom(x, z, 0.3, { x: game.player?.x ?? x, z: game.player?.z ?? z });
+    x = u.x; z = u.z;
+  }
+  rec.x = x; rec.z = z;
 }
 
 function _moveToward(game, rec, tx, tz, dt, spd) {
@@ -71,7 +84,7 @@ export function tickCompanion(game, dt) {
     const far = Math.hypot(p.x - rec.x, p.z - rec.z);
     if (far > 28 && rec._path && rec._path.length) {
       const wp = rec._path[Math.min(rec._pathI || 0, rec._path.length - 1)];
-      rec.x = wp.x; rec.z = wp.z;
+      _placeWalkable(game, rec, wp.x, wp.z);
     }
     speed = _leadAlongPath(game, rec, dt) || 0;
   } else if (mode === "stay" || mode === "guard" || mode === "hold") {
@@ -88,7 +101,7 @@ export function tickCompanion(game, dt) {
     const d = Math.hypot(tx - rec.x, tz - rec.z);
     const far = Math.hypot(p.x - rec.x, p.z - rec.z);
     if (far > 24) {
-      rec.x = tx; rec.z = tz;
+      _placeWalkable(game, rec, tx, tz);
     } else if (d > 0.35 && far > FOLLOW_GAP * 0.6) {
       speed = _moveToward(game, rec, tx, tz, dt, far > 6 ? 2.35 : 1.85) || 0;
     }

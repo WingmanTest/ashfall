@@ -1,4 +1,4 @@
-import { CFG } from "./config.js?v=r14";
+import { CFG } from "./config.js?v=r14.1";
 
 const JOY_DEAD = 0.14;
 

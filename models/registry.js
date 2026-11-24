@@ -3,7 +3,7 @@
 //   "three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/addons/"
 //
 //   import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-//   import { loadModel, fitToGround } from './models/registry.js?v=r14';
+//   import { loadModel, fitToGround } from './models/registry.js?v=r14.1';
 //   const loader = new GLTFLoader();
 //   const militia = await loadModel('watch_militia', loader);   // cached, cloned per call
 //   scene.add(militia);

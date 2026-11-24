@@ -1,42 +1,42 @@
 import * as THREE from "three";
-import { CFG, WEAPONS_ORDER } from "./config.js?v=r14";
-import { weaponKind } from "./weapons/viewmodels.js?v=r14";
-import { Input } from "./input.js?v=r14";
-import { HUD } from "./hud.js?v=r14";
-import { World } from "./world.js?v=r14";
-import { Player } from "./player.js?v=r14";
-import { EnemySystem } from "./enemies.js?v=r14";
-import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r14";
-import { openCharacterSheet } from "./inventoryUI.js?v=r14";
+import { CFG, WEAPONS_ORDER } from "./config.js?v=r14.1";
+import { weaponKind } from "./weapons/viewmodels.js?v=r14.1";
+import { Input } from "./input.js?v=r14.1";
+import { HUD } from "./hud.js?v=r14.1";
+import { World } from "./world.js?v=r14.1";
+import { Player } from "./player.js?v=r14.1";
+import { EnemySystem } from "./enemies.js?v=r14.1";
+import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r14.1";
+import { openCharacterSheet } from "./inventoryUI.js?v=r14.1";
 import {
   emptyDialogueMem, markNode, markChoice, markComplete, filterChoices, resumeNodeId,
   makeRevisitDialogue, authoredRevisit, hydrateDialogueMem, looksLikeFeedChoice,
   looksLikeFeedNode, choiceFlagName, memHasFeed,
-} from "./dialogueMem.js?v=r14";
-import { currentMainObjective, currentSideObjective, isSideObjective, noteSideQuestUpdate, renderQuestLogHtml } from "./questTrack.js?v=r14";
-import { createMinimap, loadObjectiveBinds, packExploredFog, restoreExploredFog } from "./minimap.js?v=r14";
-import { stopDoll3D } from "./doll3d.js?v=r14";
-import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r14";
-import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r14";
-import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r14";
-import { tickCompanion, disposeCompanion } from "./companion.js?v=r14";
-import { collectCompanionCommands, collectPendingActions, mergeActionChoices, startTracking, restoreTracking, findTrackTarget, setCompanionMode } from "./companionCmd.js?v=r14";
-import { pinNpc, unpinNpc, haltForTalk, findNpc } from "./npcWander.js?v=r14";
-import { BreathSystem } from "./breath.js?v=r14";
-import { openTradeModal } from "./trade.js?v=r14";
-import { preloadModels } from "./models3d.js?v=r14";
-import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r14";
-import { isMobileClient, canvasDpr } from "./device.js?v=r14";
-import { LevelRuntime } from "./levelLoader.js?v=r14";
-import { attachAudio } from "./audioHook.js?v=r14";
-import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r14";
-import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r14";
-import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r14";
-import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js?v=r14";
+} from "./dialogueMem.js?v=r14.1";
+import { currentMainObjective, currentSideObjective, isSideObjective, noteSideQuestUpdate, renderQuestLogHtml } from "./questTrack.js?v=r14.1";
+import { createMinimap, loadObjectiveBinds, packExploredFog, restoreExploredFog } from "./minimap.js?v=r14.1";
+import { stopDoll3D } from "./doll3d.js?v=r14.1";
+import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r14.1";
+import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r14.1";
+import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r14.1";
+import { tickCompanion, disposeCompanion } from "./companion.js?v=r14.1";
+import { collectCompanionCommands, collectPendingActions, mergeActionChoices, startTracking, restoreTracking, findTrackTarget, setCompanionMode } from "./companionCmd.js?v=r14.1";
+import { pinNpc, unpinNpc, haltForTalk, findNpc } from "./npcWander.js?v=r14.1";
+import { BreathSystem } from "./breath.js?v=r14.1";
+import { openTradeModal } from "./trade.js?v=r14.1";
+import { preloadModels } from "./models3d.js?v=r14.1";
+import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r14.1";
+import { isMobileClient, canvasDpr } from "./device.js?v=r14.1";
+import { LevelRuntime } from "./levelLoader.js?v=r14.1";
+import { attachAudio } from "./audioHook.js?v=r14.1";
+import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r14.1";
+import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r14.1";
+import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r14.1";
+import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js?v=r14.1";
 
 window.__ASHFALL_MODULE = true;
-window.__ASHFALL_BUILD = "r14";
-if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r14") {
+window.__ASHFALL_BUILD = "r14.1";
+if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r14.1") {
   if (typeof window.__ashfallBustStaleBuild === "function") window.__ashfallBustStaleBuild(window.__ASHFALL_BUILD);
 }
 
@@ -2548,7 +2548,7 @@ async function boot() {
     await story.load();
     const systems = await loadSystems();
     const levels = await loadLevels();
-    const { rollTable } = await import("./systems.js?v=r14");
+    const { rollTable } = await import("./systems.js?v=r14.1");
 
     const renderer = new THREE.WebGLRenderer({
       canvas: view, antialias: false, alpha: false, powerPreference: "high-performance",
@@ -2672,7 +2672,7 @@ async function boot() {
     game.loop();
     window.__READY = true;
     window.__ASHFALL_BOOTED = true;
-    window.__ASHFALL_BUILD = "r14";
+    window.__ASHFALL_BUILD = "r14.1";
     const banner = $("boot-banner");
     if (banner) banner.classList.remove("show");
     window.__INTEGRATION = {

@@ -1,15 +1,15 @@
 // Cartographer chapter loader. Builds geometry from levels/*.json (do not edit those files).
 import * as THREE from "three";
-import { CFG } from "./config.js?v=r14";
-import { fitHeight, makePerson, makeDog } from "./world.js?v=r14";
-import { evalCondition, applyEffects, setFlag } from "./story.js?v=r14";
-import { rollContainer, aliasItem } from "./systems.js?v=r14";
-import { addItem, takeItem, hasItems } from "./inventory.js?v=r14";
-import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js?v=r14";
-import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r14";
-import { coverBuildingRoofs, extractShingleMaterial, fallbackShingleMat } from "./roofs.js?v=r14";
-import { startTracking } from "./companionCmd.js?v=r14";
-import { bindNpc, disposeMixer } from "./npcWander.js?v=r14";
+import { CFG } from "./config.js?v=r14.1";
+import { fitHeight, makePerson, makeDog } from "./world.js?v=r14.1";
+import { evalCondition, applyEffects, setFlag } from "./story.js?v=r14.1";
+import { rollContainer, aliasItem } from "./systems.js?v=r14.1";
+import { addItem, takeItem, hasItems } from "./inventory.js?v=r14.1";
+import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js?v=r14.1";
+import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r14.1";
+import { coverBuildingRoofs, extractShingleMaterial, fallbackShingleMat } from "./roofs.js?v=r14.1";
+import { startTracking } from "./companionCmd.js?v=r14.1";
+import { bindNpc, disposeMixer } from "./npcWander.js?v=r14.1";
 
 const SNOW_HEX = 0xeef2f6;
 function stripSnow(obj) {

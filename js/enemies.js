@@ -1,7 +1,7 @@
 import * as THREE from "three";
-import { fitHeight, makePerson, makeDog } from "./world.js?v=r14";
-import { tickActor } from "./actors.js?v=r14";
-import { getModel } from "./models3d.js?v=r14";
+import { fitHeight, makePerson, makeDog } from "./world.js?v=r14.1";
+import { tickActor } from "./actors.js?v=r14.1";
+import { getModel } from "./models3d.js?v=r14.1";
 
 const HOLLOW_KINDS = new Set(["assimilated_human", "assimilated_animal"]);
 const CREATURE_KINDS = new Set(["tallman", "assimilated_human", "assimilated_animal"]);

@@ -1,9 +1,9 @@
 // Companion command menu (TRACK / FOLLOW / STAY / GUARD / HOLD) and quest-gated
 // action choices that dialogue memory must never consume or hide.
 import * as THREE from "three";
-import { evalCondition, setFlag } from "./story.js?v=r14";
-import { hasItems } from "./inventory.js?v=r14";
-import { aliasItem } from "./systems.js?v=r14";
+import { evalCondition, setFlag } from "./story.js?v=r14.1";
+import { hasItems } from "./inventory.js?v=r14.1";
+import { aliasItem } from "./systems.js?v=r14.1";
 
 export function isActionChoice(c) {
   if (!c) return false;
