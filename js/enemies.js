@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import { fitHeight, makePerson, makeDog } from "./world.js?v=r7";
-import { tickActor } from "./actors.js?v=r7";
+import { fitHeight, makePerson, makeDog } from "./world.js?v=r8";
+import { tickActor } from "./actors.js?v=r8";
 
 const KINDS = {
   husk: { hp: 48, spd: 1.25, dmg: 9, range: 1.45, detect: 11, color: 0xb89a8c, body: "husk" },

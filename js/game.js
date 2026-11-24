@@ -1,28 +1,29 @@
 import * as THREE from "three";
-import { CFG, WEAPONS_ORDER } from "./config.js?v=r7";
-import { weaponKind } from "./weapons/viewmodels.js?v=r7";
-import { Input } from "./input.js?v=r7";
-import { HUD } from "./hud.js?v=r7";
-import { World } from "./world.js?v=r7";
-import { Player } from "./player.js?v=r7";
-import { EnemySystem } from "./enemies.js?v=r7";
-import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r7";
-import { openCharacterSheet } from "./inventoryUI.js?v=r7";
-import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r7";
-import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete } from "./story.js?v=r7";
-import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon } from "./systems.js?v=r7";
-import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r7";
-import { isMobileClient, canvasDpr } from "./device.js?v=r7";
-import { LevelRuntime } from "./levelLoader.js?v=r7";
-import { attachAudio } from "./audioHook.js?v=r7";
-import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r7";
-import { createRenderPipeline, TIERS } from "../render/index.js?v=r7";
-import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r7";
-import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js?v=r7";
+import { CFG, WEAPONS_ORDER } from "./config.js?v=r8";
+import { weaponKind } from "./weapons/viewmodels.js?v=r8";
+import { Input } from "./input.js?v=r8";
+import { HUD } from "./hud.js?v=r8";
+import { World } from "./world.js?v=r8";
+import { Player } from "./player.js?v=r8";
+import { EnemySystem } from "./enemies.js?v=r8";
+import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r8";
+import { openCharacterSheet } from "./inventoryUI.js?v=r8";
+import { stopDoll3D } from "./doll3d.js?v=r8";
+import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r8";
+import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete } from "./story.js?v=r8";
+import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon } from "./systems.js?v=r8";
+import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r8";
+import { isMobileClient, canvasDpr } from "./device.js?v=r8";
+import { LevelRuntime } from "./levelLoader.js?v=r8";
+import { attachAudio } from "./audioHook.js?v=r8";
+import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r8";
+import { createRenderPipeline, TIERS } from "../render/index.js?v=r8";
+import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r8";
+import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js?v=r8";
 
 window.__ASHFALL_MODULE = true;
-window.__ASHFALL_BUILD = "r7";
-if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r7") {
+window.__ASHFALL_BUILD = "r8";
+if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r8") {
   if (typeof window.__ashfallBustStaleBuild === "function") window.__ashfallBustStaleBuild(window.__ASHFALL_BUILD);
 }
 
@@ -251,6 +252,12 @@ class Game {
       resetTouch: () => self.input && self.input.resetTouch && self.input.resetTouch(),
       say: (msg, dur) => self.hud && self.hud.say(String(msg||''), dur == null ? 8 : dur),
       get objective() { return self.objectiveText(); },
+      get prompt() { return (self.hud && self.hud.prompt) || ""; },
+      get quests() { return self.quests; },
+      craftRecipes: () => (self.activeCraftRecipes ? self.activeCraftRecipes() : []).map((r) => ({
+        id: r.id, out: r.out?.id, name: r.name, isObjective: !!r.isObjective, in: r.in, set_flags: r.set_flags || [],
+      })),
+      doll3d: () => (window.__ASHFALL_DOLL3D ? window.__ASHFALL_DOLL3D.debug() : null),
       talk: (id) => {
         const dlg = self.story.pickDialogue(id, self._storyCtx());
         if (dlg) { self.openDialogue(dlg); return dlg.id || true; }
@@ -402,6 +409,19 @@ class Game {
       e.alive = true;
       e.hp = e.max;
       if (e.mesh) e.mesh.visible = true;
+    }
+    // r8: grant ch01 survival basics (bucket, flashlight, …) from items.json starting_loadout.
+    const adds = this.systems?.startingLoadout?.systems_additions_ch01 || {};
+    for (const [id, n] of Object.entries(adds)) {
+      // items.json firewood has legacy_id "wood" (emptyInv's id) — fold the legacy stack into the
+      // canonical id so recipes/loot (which use firewood) see one "Dry wood" stack.
+      const legacy = this.systems?.items?.[id]?.legacy_id;
+      if (legacy && legacy !== id && this.inv[legacy]) {
+        addItem(this.inv, id, this.inv[legacy]);
+        delete this.inv[legacy];
+      }
+      const have = this.inv[aliasItem(id)] || 0;
+      if (n > have) addItem(this.inv, id, n - have);
     }
     const worn = this.systems?.startingLoadout?.equipped_ch01 || [];
     for (const id of worn) {
@@ -907,6 +927,7 @@ class Game {
 
   refreshObjective() {
     if (this.hud) this.hud.objText = this.objectiveText();
+    try { this._checkObjectiveCraftUnlock(); } catch (_) { /* never block the HUD */ }
   }
 
   _finishDialogue(node) {
@@ -1034,6 +1055,7 @@ class Game {
   }
 
   closePanel() {
+    stopDoll3D();
     panel.classList.remove("show", "char-sheet");
     document.body.classList.remove("char-sheet-open");
     panel.innerHTML = "";
@@ -1192,12 +1214,138 @@ class Game {
     this.openInventory("craft");
   }
 
+  /** Objectives that are currently live (startWhen ok, not complete). The first one is the HUD objective. */
+  activeObjectives() {
+    const objs = (this.levelRuntime?.L?.objectives || []).slice().sort((a, b) => (a.order || 0) - (b.order || 0));
+    const ctx = this._storyCtx();
+    const out = [];
+    for (const o of objs) {
+      if (o.startWhen && !evalCondition(o.startWhen, ctx)) continue;
+      if (o.completeWhen && evalCondition(o.completeWhen, ctx)) continue;
+      if (o.text) out.push(o);
+    }
+    return out;
+  }
+
+  /**
+   * Standard recipes plus chapter story/objective craftables (systems story_recipes,
+   * level type:"craft" interactives, gameplay_hooks crafting). Objective recipes are pinned first.
+   */
+  activeCraftRecipes() {
+    const base = this.systems.recipes || [];
+    const items = this.systems.items || {};
+    const ch = String(this.flags.chapter || "ch01").replace(/_.*$/, "") || "ch01";
+    const chOk = (r) => !r.chapters || !r.chapters.length || r.chapters.includes(ch) || r.chapters.includes(this.flags.chapter);
+    const L = this.levelRuntime?.L || null;
+    const objectives = L?.objectives || [];
+    const flagsOf = (when) => {
+      const out = [];
+      const walk = (w) => {
+        if (!w) return;
+        if (Array.isArray(w)) return w.forEach(walk);
+        if (typeof w === "string") return out.push(w);
+        if (typeof w === "object") {
+          if (w.flag) out.push(w.flag);
+          for (const k of ["all", "any", "and", "or"]) if (w[k]) walk(w[k]);
+        }
+      };
+      walk(when);
+      return out;
+    };
+    const objForFlag = (f) => objectives.find((o) => flagsOf(o.completeWhen).includes(f));
+    const story = [];
+    const findSame = (r) => story.find((x) => x.id === r.id || (x.out?.id && x.out.id === r.out?.id)
+      || (r.set_flags || []).some((f) => (x.set_flags || []).includes(f)));
+    const merge = (r) => {
+      const prev = findSame(r);
+      if (!prev) { story.push({ ...r, in: { ...(r.in || {}) }, set_flags: r.set_flags ? r.set_flags.slice() : [] }); return; }
+      if (!Object.keys(prev.in || {}).length && r.in) prev.in = { ...r.in };
+      prev.set_flags = [...new Set([...(prev.set_flags || []), ...(r.set_flags || [])])];
+      if (!prev.name && r.name) prev.name = r.name;
+      if (!prev.showWhen && r.showWhen) prev.showWhen = r.showWhen;
+      if (!prev.interactive && r.interactive) prev.interactive = r.interactive;
+    };
+    // a. systems story_recipes
+    for (const r of this.systems.storyRecipes || []) if (chOk(r)) merge({ ...r, story: true });
+    // b. level craft interactives
+    for (const it of (L?.interactives || [])) {
+      if (it.type !== "craft") continue;
+      const m = /craft\s+([a-z0-9_]+)/i.exec(it.label || "");
+      const outId = aliasItem(it.output || it.result || it.craft || (m && m[1]) || it.id);
+      const req = Array.isArray(it.requiresItems)
+        ? Object.fromEntries(it.requiresItems.map((id) => [aliasItem(id), 1]))
+        : { ...(it.requiresItems || {}) };
+      const set = it.setsFlag ? [it.setsFlag] : [];
+      const label = String(it.label || "").replace(/\s*\(.*?\)\s*/g, " ").trim();
+      merge({ id: outId, name: items[outId]?.name || objForFlag(it.setsFlag)?.text || label || null,
+        out: { id: outId, n: 1 }, in: req, set_flags: set, story: true, interactive: it.id, showWhen: it.showWhen });
+    }
+    // c. gameplay_hooks chapter crafting
+    const hookCh = (this.story?.hooks?.chapters || []).find((c) => c.id === ch || c.chapter === ch);
+    for (const c of hookCh?.crafting || []) {
+      const outId = aliasItem(c.result || c.id);
+      if (!outId) continue;
+      const set = (c.effects || []).filter((e) => e && e.set && e.value !== false).map((e) => e.set);
+      const inn = Object.fromEntries(Object.entries(c.inputs || {}).map(([k, v]) => [aliasItem(k), v]));
+      merge({ id: outId, name: items[outId]?.name || null, out: { id: outId, n: 1 }, in: inn, set_flags: set, story: true });
+    }
+    const ctx = this._storyCtx();
+    const current = this.activeObjectives()[0] || null;
+    const currentFlags = current ? flagsOf(current.completeWhen) : [];
+    const pinned = [];
+    for (const r of story) {
+      const sf = r.set_flags || [];
+      if (sf.length && sf.every((f) => !!this.flags[f])) continue; // one-off already done
+      const linked = sf.map(objForFlag).filter(Boolean);
+      const isCurrent = sf.some((f) => currentFlags.includes(f));
+      let show = isCurrent;
+      if (!show && r.showWhen) { try { show = !!evalCondition(r.showWhen, ctx); } catch (_) { show = false; } }
+      if (!show && !linked.length && !r.showWhen) show = true; // chapter story recipe with no objective gate
+      if (!show) continue;
+      const outId = r.out?.id || r.id;
+      pinned.push({
+        ...r,
+        name: items[outId]?.name || r.name || outId,
+        note: r.note || (isCurrent && current ? "Objective: " + current.text : null),
+        isObjective: isCurrent || !!r.showWhen,
+      });
+    }
+    pinned.sort((a, b) => (b.isObjective ? 1 : 0) - (a.isObjective ? 1 : 0));
+    const pinnedIds = new Set(pinned.map((r) => r.id));
+    const rest = base.filter((r) => !pinnedIds.has(r.id) && !(r.out?.id && pinned.some((p) => p.out?.id === r.out.id)));
+    // Report newly unlocked objective recipes once (toast hint).
+    this._seenObjRecipes = this._seenObjRecipes || new Set();
+    for (const r of pinned) if (r.isObjective && !this._seenObjRecipes.has(r.id)) { this._seenObjRecipes.add(r.id); r.isNew = true; }
+    return [...pinned, ...rest];
+  }
+
+  /** Called whenever the objective may have changed: hint when a new objective recipe unlocks. */
+  _checkObjectiveCraftUnlock() {
+    if (!this.levelRuntime?.L) return;
+    const before = new Set(this._seenObjRecipes || []);
+    let list;
+    try { list = this.activeCraftRecipes(); } catch (_) { return; }
+    const fresh = list.filter((r) => r.isObjective && !before.has(r.id));
+    if (fresh.length && this.hud) {
+      this.hud.say?.("New recipe in CRAFT: " + fresh.map((r) => r.name).join(", "));
+      this._craftHint = true;
+    }
+  }
+
   doCraft(r) {
     const res = craft(this.inv, r, this.world, this.player);
     if (res.ok) {
       this.audio.craft?.();
+      const outId = r.out?.id || r.id;
       if (r.set_flags) for (const f of r.set_flags) this.flags[f] = true;
-      if (r.id === "cooler" || r.out?.id === "cooler") this.flags.ch01_cooler_built = true;
+      if (typeof r.setsFlag === "string") this.flags[r.setsFlag] = true;
+      if (r.id === "lake_cooler" || r.id === "cooler" || outId === "lake_cooler" || outId === "cooler") {
+        this.flags.ch01_cooler_built = true;
+        if (this.quests && this.quests.q_cooler && this.quests.q_cooler !== "done") this.quests.q_cooler = "done";
+      }
+      const nm = this.systems.items?.[outId]?.name;
+      if (nm && r.special !== "campfire") res.msg = "Made " + nm;
+      this.refreshObjective();
     }
     return res;
   }
@@ -1260,7 +1408,7 @@ class Game {
       if (!Array.isArray(this.notes)) this.notes = [];
       let html = `<h2>FIELD NOTES</h2>`;
       if (fromTitle) {
-        html += `<p class="line" style="color:#8a9aaa;font-size:11px;">On a phone: walk with the stick and keep pushing forward for a moment to sprint. Look on the right. USE to search and talk. On a keyboard, hold Shift to sprint.</p>`;
+        html += `<p class="line" style="color:#8a9aaa;font-size:11px;">On a phone: put your left thumb down anywhere bottom-left and drag to walk; keep pushing forward for a moment to sprint. Look on the right. Tap the hand to search and talk. On a keyboard, hold Shift to sprint.</p>`;
       }
       if (!this.notes.length) html += `<p class="line">Nothing written down yet.</p>`;
       for (const n of this.notes) {
@@ -1683,7 +1831,9 @@ class Game {
       const raw = near.type === "loot" ? (near.obj.label || "Search")
         : near.type === "npc" ? (this.story.npcName?.(near.obj.id) || near.obj.name || "Talk")
         : (near.obj.label || "Use");
-      this.hud.prompt = (this.input.touch ? "USE  " : "E  ") + cleanLabel(raw);
+      // Touch: the hand button is the action, so lead with a verb instead of "USE".
+      const verb = near.type === "loot" ? "SEARCH  " : near.type === "npc" ? "TALK  " : "";
+      this.hud.prompt = (this.input.touch ? verb : "E  ") + cleanLabel(raw);
     } else this.hud.prompt = "";
 
     if (loc?.id === "loc_thomson_dam") this.flags.at_dam = true;
@@ -1891,7 +2041,7 @@ async function boot() {
     await story.load();
     const systems = await loadSystems();
     const levels = await loadLevels();
-    const { rollTable } = await import("./systems.js?v=r7");
+    const { rollTable } = await import("./systems.js?v=r8");
 
     const renderer = new THREE.WebGLRenderer({
       canvas: view, antialias: false, alpha: false, powerPreference: "high-performance",
@@ -2012,7 +2162,7 @@ async function boot() {
     game.loop();
     window.__READY = true;
     window.__ASHFALL_BOOTED = true;
-    window.__ASHFALL_BUILD = "r7";
+    window.__ASHFALL_BUILD = "r8";
     const banner = $("boot-banner");
     if (banner) banner.classList.remove("show");
     window.__INTEGRATION = {

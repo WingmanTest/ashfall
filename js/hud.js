@@ -1,4 +1,4 @@
-import { CFG, ITEMS } from "./config.js?v=r7";
+import { CFG, ITEMS } from "./config.js?v=r8";
 
 export class HUD {
   constructor(canvas) {

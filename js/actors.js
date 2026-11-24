@@ -61,7 +61,7 @@ function shade(hex, amt) {
   return "#" + ((r << 16) | (g << 8) | b).toString(16).padStart(6, "0");
 }
 
-function paintFace(t) {
+export function paintFace(t) {
   const S = 32, P = 4;
   const c = document.createElement("canvas");
   c.width = c.height = S * P;

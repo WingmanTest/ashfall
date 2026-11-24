@@ -1,11 +1,11 @@
 // Cartographer chapter loader. Builds geometry from levels/*.json (do not edit those files).
 import * as THREE from "three";
-import { CFG } from "./config.js?v=r7";
-import { fitHeight, makePerson, makeDog } from "./world.js?v=r7";
-import { evalCondition, applyEffects } from "./story.js?v=r7";
-import { rollContainer, aliasItem } from "./systems.js?v=r7";
-import { addItem, takeItem, hasItems } from "./inventory.js?v=r7";
-import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js?v=r7";
+import { CFG } from "./config.js?v=r8";
+import { fitHeight, makePerson, makeDog } from "./world.js?v=r8";
+import { evalCondition, applyEffects } from "./story.js?v=r8";
+import { rollContainer, aliasItem } from "./systems.js?v=r8";
+import { addItem, takeItem, hasItems } from "./inventory.js?v=r8";
+import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js?v=r8";
 
 function cleanLabel(s) {
   return String(s || "").replace(/\s*\(\s*filler\s*\)/gi, "").replace(/\s{2,}/g, " ").trim();
@@ -73,14 +73,151 @@ function tightFootprint(kind) {
   }
 }
 
-function lootCrate() {
-  const m = new THREE.Mesh(
-    new THREE.BoxGeometry(0.55, 0.4, 0.55),
-    new THREE.MeshStandardMaterial({ color: 0x5a4a38, roughness: 0.95 })
-  );
-  m.castShadow = false;
+// ---------- r8: loot containers ARE the props (no generic crate beside a dumpster) ----------
+const _pm = new Map();
+function pmat(color, extra = {}) {
+  const key = color + JSON.stringify(extra);
+  if (!_pm.has(key)) _pm.set(key, new THREE.MeshStandardMaterial({ color, roughness: 0.85, ...extra }));
+  return _pm.get(key);
+}
+function part(g, geo, mat, x, y, z) {
+  const m = new THREE.Mesh(geo, mat);
+  m.position.set(x, y, z);
   m.receiveShadow = true;
+  g.add(m);
   return m;
+}
+
+/** Which world prop a loot container represents. */
+export function lootPropKind(l) {
+  const lab = String(l.label || "").toLowerCase();
+  const c = String(l.container || "").toLowerCase();
+  if (/trash|garbage|\bbin\b|bus shelter/.test(lab)) return "trashcan";
+  if (c === "dumpster" || /dumpster/.test(lab)) return "dumpster";
+  if (c === "car_trunk" || /\bcar\b|trunk|sedan|truck/.test(lab)) return "car";
+  if (/drum|barrel|diesel/.test(lab)) return "barrel";
+  if (c === "medicine_cabinet") return "medcabinet";
+  if (c === "kitchen_cabinet") return /woodpile/.test(lab) ? "woodpile" : "cabinet";
+  if (c === "locker") return /crate/.test(lab) ? "crate" : "locker";
+  if (c === "wardrobe") return /box|garage/.test(lab) ? "crate" : "wardrobe";
+  if (c === "toolbox") return "toolbox";
+  if (c === "woodpile") return "woodpile";
+  if (c === "corpse" || c === "body") return "corpse";
+  if (c === "military_crate") return "milcrate";
+  if (c === "supply_cache") return /boots|pack|bag/.test(lab) ? "corpse" : "crate";
+  return "crate";
+}
+
+/** Recognisable low-poly prop for a loot spot that has no decorative prop nearby. */
+export function makeLootProp(kind) {
+  const g = new THREE.Group();
+  g.userData.kind = "loot_" + kind;
+  const B = (w, h, d) => new THREE.BoxGeometry(w, h, d);
+  const C = (rt, rb, h, n = 10) => new THREE.CylinderGeometry(rt, rb, h, n);
+  switch (kind) {
+    case "trashcan": {
+      const body = pmat(0x5d6a62, { metalness: 0.35, roughness: 0.6 });
+      part(g, C(0.3, 0.26, 0.82, 12), body, 0, 0.41, 0);
+      for (const y of [0.2, 0.62]) part(g, C(0.305, 0.305, 0.04, 12), pmat(0x48534c, { metalness: 0.4 }), 0, y, 0);
+      part(g, C(0.33, 0.33, 0.06, 12), pmat(0x6b7770, { metalness: 0.35 }), 0, 0.85, 0);
+      part(g, B(0.16, 0.05, 0.04), pmat(0x3a403c), 0, 0.9, 0);
+      part(g, C(0.33, 0.33, 0.012, 12), pmat(0xeef2f6), 0, 0.885, 0); // snow
+      break;
+    }
+    case "dumpster": {
+      const body = pmat(0x2f5a3a, { metalness: 0.3, roughness: 0.7 });
+      part(g, B(1.6, 1.0, 1.05), body, 0, 0.55, 0);
+      const lid = part(g, B(1.66, 0.07, 1.12), pmat(0x1f2a22), 0, 1.09, -0.02);
+      lid.rotation.x = -0.06;
+      for (const x of [-0.65, 0.65]) part(g, C(0.07, 0.07, 0.08, 8), pmat(0x111111), x, 0.05, 0.42);
+      part(g, B(1.68, 0.06, 1.14), pmat(0xeef2f6), 0, 1.15, -0.02);
+      break;
+    }
+    case "car": {
+      const paint = pmat(0x6b2e24, { metalness: 0.3, roughness: 0.65 });
+      part(g, B(1.8, 0.62, 4.2), paint, 0, 0.6, 0);
+      part(g, B(1.6, 0.55, 2.1), paint, 0, 1.18, -0.2);
+      part(g, B(1.62, 0.42, 1.9), pmat(0x1a2228, { roughness: 0.25, metalness: 0.2 }), 0, 1.2, -0.2);
+      const trunk = part(g, B(1.7, 0.08, 1.0), pmat(0x4a2018, { metalness: 0.3 }), 0, 0.95, 1.6);
+      trunk.rotation.x = -0.35;
+      for (const [x, z] of [[-0.85, 1.3], [0.85, 1.3], [-0.85, -1.3], [0.85, -1.3]]) {
+        const w = part(g, C(0.33, 0.33, 0.22, 10), pmat(0x141414), x, 0.33, z);
+        w.rotation.z = Math.PI / 2;
+      }
+      part(g, B(1.84, 0.08, 4.0), pmat(0xeef2f6), 0, 1.47, -0.2).scale.set(0.85, 1, 0.5);
+      break;
+    }
+    case "barrel": {
+      part(g, C(0.3, 0.3, 0.9, 12), pmat(0x2a4a7a, { metalness: 0.4, roughness: 0.55 }), 0, 0.45, 0);
+      for (const y of [0.25, 0.65]) part(g, C(0.31, 0.31, 0.04, 12), pmat(0x223a60), 0, y, 0);
+      break;
+    }
+    case "medcabinet": {
+      part(g, B(0.8, 1.5, 0.42), pmat(0xd8dcd8, { roughness: 0.5 }), 0, 0.75, 0);
+      part(g, B(0.02, 1.4, 0.43), pmat(0x9aa0a0), 0, 0.75, 0.005);
+      part(g, B(0.22, 0.06, 0.01), pmat(0xb02020), 0, 1.2, 0.215);
+      part(g, B(0.06, 0.22, 0.01), pmat(0xb02020), 0, 1.2, 0.215);
+      break;
+    }
+    case "cabinet": {
+      part(g, B(1.1, 0.9, 0.55), pmat(0x6a4a30), 0, 0.45, 0);
+      part(g, B(1.16, 0.05, 0.6), pmat(0x8a8478), 0, 0.92, 0);
+      part(g, B(0.02, 0.8, 0.56), pmat(0x3a2818), 0, 0.45, 0.005);
+      for (const x of [-0.08, 0.08]) part(g, B(0.03, 0.12, 0.03), pmat(0xb0a890, { metalness: 0.6 }), x, 0.62, 0.29);
+      break;
+    }
+    case "locker": {
+      const steel = pmat(0x4a5a6a, { metalness: 0.45, roughness: 0.55 });
+      part(g, B(0.62, 1.9, 0.52), steel, 0, 0.95, 0);
+      for (let i = 0; i < 3; i++) part(g, B(0.36, 0.03, 0.01), pmat(0x2a343e), 0, 1.65 - i * 0.06, 0.262);
+      part(g, B(0.04, 0.16, 0.03), pmat(0xc0c0c0, { metalness: 0.7 }), 0.22, 1.0, 0.27);
+      break;
+    }
+    case "wardrobe": {
+      part(g, B(1.05, 1.95, 0.58), pmat(0x4a3424), 0, 0.975, 0);
+      part(g, B(0.02, 1.8, 0.59), pmat(0x2a1c12), 0, 0.975, 0.005);
+      for (const x of [-0.07, 0.07]) part(g, B(0.03, 0.18, 0.03), pmat(0xb0a070, { metalness: 0.6 }), x, 1.0, 0.31);
+      break;
+    }
+    case "toolbox": {
+      part(g, B(1.3, 0.08, 0.65), pmat(0x6a5038), 0, 0.86, 0);
+      for (const [x, z] of [[-0.58, -0.26], [0.58, -0.26], [-0.58, 0.26], [0.58, 0.26]]) part(g, B(0.07, 0.82, 0.07), pmat(0x4a3828), x, 0.41, z);
+      part(g, B(0.62, 0.28, 0.3), pmat(0xa82a20, { metalness: 0.35, roughness: 0.5 }), 0.1, 1.04, 0);
+      part(g, B(0.3, 0.04, 0.04), pmat(0x222222), 0.1, 1.22, 0);
+      break;
+    }
+    case "woodpile": {
+      const wood = pmat(0x6a4a2c), end = pmat(0xa07a50);
+      let i = 0;
+      for (let row = 0; row < 3; row++) for (let k = 0; k < 4 - row; k++) {
+        const x = (k - (3 - row) / 2) * 0.24, y = 0.12 + row * 0.21;
+        const log = part(g, C(0.11, 0.11, 1.1, 7), i++ % 2 ? wood : end, x, y, 0);
+        log.rotation.x = Math.PI / 2;
+      }
+      part(g, B(1.2, 0.1, 0.9), pmat(0x7a6040), 0.15, 0.05, 0.6).rotation.y = 0.3;
+      break;
+    }
+    case "corpse": {
+      const cloth = pmat(0x2e3238);
+      part(g, B(0.5, 0.2, 1.1), cloth, 0, 0.11, 0);
+      part(g, new THREE.SphereGeometry(0.15, 8, 6), pmat(0xb8a898), 0, 0.15, -0.68);
+      part(g, B(0.38, 0.28, 0.32), pmat(0x4a5a3a), 0.38, 0.14, 0.2);
+      part(g, B(0.52, 0.04, 1.0), pmat(0xeef2f6), 0, 0.23, 0.08).scale.set(0.9, 1, 0.6);
+      break;
+    }
+    case "milcrate": {
+      part(g, B(1.0, 0.55, 0.6), pmat(0x4a5230, { roughness: 0.9 }), 0, 0.28, 0);
+      part(g, B(1.02, 0.08, 0.62), pmat(0x353b22), 0, 0.5, 0);
+      part(g, B(0.5, 0.1, 0.01), pmat(0xd8d0a0), 0, 0.3, 0.305);
+      break;
+    }
+    default: {
+      part(g, B(0.7, 0.55, 0.7), pmat(0x5a4a32), 0, 0.28, 0);
+      part(g, B(0.72, 0.06, 0.72), pmat(0x3a2e20), 0, 0.42, 0);
+    }
+  }
+  g.traverse((o) => { if (o.isMesh) o.castShadow = false; });
+  return g;
 }
 
 function makeTree() {
@@ -173,7 +310,7 @@ export class LevelRuntime {
     await this._buildGrid(L);
     await this._placeProps(L);
     this._placeFires(L);
-    this._placeLoot(L);
+    await this._placeLoot(L);
     this._placeNpcs(L);
     this._placeInteractives(L);
     this._applyLocations(L);
@@ -219,6 +356,7 @@ export class LevelRuntime {
     const world = this.world;
     const scene = this.group;
     world.bounds = { minX: o.x, maxX: o.x + cols * cs, minZ: o.z, maxZ: o.z + rows * cs };
+    this._cores = [];
     world.colliders = world.colliders || [];
     world.colliders.length = 0;
 
@@ -330,16 +468,25 @@ export class LevelRuntime {
       });
       const h = 7;
       if (!ok) {
+        // Procedural shell: solid box + its own windows/doors flush on the walls.
         const shell = boxMesh(box.w, h, box.d, brickMat, 2);
         shell.position.set(box.cx, h / 2, box.cz);
+        shell.userData.kind = "building_shell";
         scene.add(shell);
         const cap = snowCap(box.w, box.d, h, snowMat);
         cap.position.x = box.cx; cap.position.z = box.cz;
         scene.add(cap);
+        addFacadeDetails(scene, { ...box, h, y0: 0 }, facadeMats);
+      } else if (ok !== "reserved") {
+        // r8: Kenney GLB lot. The kit model carries its own windows/doors, so never
+        // stamp procedural facades on the lot edge (they floated in midair in r7).
+        // A solid inset core fills any gap/setback in the GLB so there is always a wall.
+        this._addLotCore(scene, box, 5.6, concMat);
       }
-      addFacadeDetails(scene, { ...box, h, y0: 0 }, facadeMats);
+      // ok === "reserved": a level-authored building prop fills this lot in _placeProps.
     }
 
+    this._coreMat = concMat;
     // Thin walls, fences, cover, debris, gates — UV-mapped PBR + snow caps + window variation.
     const wallRects = greedyRects(tiles, legend, (ch, t) => {
       if (!t.solid) return false;
@@ -406,6 +553,7 @@ export class LevelRuntime {
 
   async _placeProps(L) {
     const world = this.world;
+    this._decor = [];
     const tryGLB = world.tryGLB;
     for (const p of (L.props || [])) {
       let obj = null;
@@ -431,11 +579,31 @@ export class LevelRuntime {
       obj.rotation.y = p.rotY || 0;
       const kind = assetKind(p.asset);
       const fp = tightFootprint(kind);
-      const lot = (this._lots || []).find((box) => p.x >= box.minX && p.x <= box.maxX && p.z >= box.minZ && p.z <= box.maxZ);
+      const tol = kind === "building" ? 0.4 : 0;
+      const lot = (this._lots || []).find((box) => p.x >= box.minX - tol && p.x <= box.maxX + tol && p.z >= box.minZ - tol && p.z <= box.maxZ + tol);
       obj.updateMatrixWorld(true);
       let b = new THREE.Box3().setFromObject(obj);
       let maxW = fp.maxW, maxD = fp.maxD;
-      if (lot) {
+      if (lot && kind === "building") {
+        // r8: a building prop owns its whole lot (colliders are the full lot). Fit the
+        // model to the lot footprint and centre it, then back it with a solid core so
+        // the hull is never smaller than the walls the player bumps into.
+        const lw = lot.maxX - lot.minX, ld = lot.maxZ - lot.minZ;
+        const bw0 = Math.max(0.05, b.max.x - b.min.x), bd0 = Math.max(0.05, b.max.z - b.min.z);
+        const fx = Math.max(0.3, Math.min(2.4, (lw * 0.94) / bw0));
+        const fz = Math.max(0.3, Math.min(2.4, (ld * 0.94) / bd0));
+        const swap = Math.abs(Math.sin(obj.rotation.y)) > 0.7;
+        obj.scale.x *= swap ? fz : fx;
+        obj.scale.z *= swap ? fx : fz;
+        obj.updateMatrixWorld(true);
+        b = new THREE.Box3().setFromObject(obj);
+        obj.position.x += (lot.minX + lot.maxX) / 2 - (b.min.x + b.max.x) / 2;
+        obj.position.z += (lot.minZ + lot.maxZ) / 2 - (b.min.z + b.max.z) / 2;
+        obj.updateMatrixWorld(true);
+        b = new THREE.Box3().setFromObject(obj);
+        maxW = Infinity; maxD = Infinity;
+        this._addLotCore(this.group, lot, Math.max(3, (b.max.y - b.min.y) * 0.82), this._coreMat);
+      } else if (lot) {
         maxW = Math.min(maxW, Math.max(0.6, (lot.maxX - lot.minX) - 0.5));
         maxD = Math.min(maxD, Math.max(0.6, (lot.maxZ - lot.minZ) - 0.5));
       }
@@ -466,6 +634,10 @@ export class LevelRuntime {
       obj.traverse((o) => { if (o.isMesh) { o.castShadow = !!p.collide; o.receiveShadow = true; } });
       this.group.add(obj);
       world.farProps.push(obj);
+      if (kind === "dumpster" || kind === "car" || /trash|bin|barrel/.test(String(p.asset || "").toLowerCase())) {
+        const dk = kind === "dumpster" || kind === "car" ? kind : (/barrel/.test(p.asset) ? "barrel" : "trashcan");
+        this._decor.push({ id: p.id || ("prop_" + this._decor.length), kind: dk, obj, x: (b.min.x + b.max.x) / 2, z: (b.min.z + b.max.z) / 2, box: b.clone(), bound: null });
+      }
       // Buildings / chimneys sitting on solid lots already have tile colliders —
       // never add a huge GLB AABB that spills into alleys or the street.
       const covered = !!(lot && (kind === "building" || kind === "chimney" || kind === "tower"));
@@ -484,6 +656,18 @@ export class LevelRuntime {
     }
   }
 
+  /** Solid inset hull inside a GLB building lot (hidden when the GLB covers it). */
+  _addLotCore(parent, box, h, mat) {
+    const w = (box.maxX - box.minX) * 0.82, d = (box.maxZ - box.minZ) * 0.82;
+    if (w < 0.5 || d < 0.5) return null;
+    const core = boxMesh(w, h, d, mat || new THREE.MeshStandardMaterial({ color: 0x6a625a, roughness: 0.92 }), 2.5);
+    core.position.set((box.minX + box.maxX) / 2, h / 2, (box.minZ + box.maxZ) / 2);
+    core.userData.kind = "building_core";
+    parent.add(core);
+    (this._cores || (this._cores = [])).push(core);
+    return core;
+  }
+
   _placeFires(L) {
     const check = (w) => evalWhen(w, this.ctx());
     for (const s of (L.safeZones || [])) {
@@ -494,19 +678,90 @@ export class LevelRuntime {
     }
   }
 
-  _placeLoot(L) {
+  async _placeLoot(L) {
     const check = (w) => evalWhen(w, this.ctx());
     const ch = L.chapter || L.id;
-    this.world.loot = [];
+    const world = this.world;
+    world.loot = [];
+    const decor = this._decor || [];
+    const kinds = { dumpster: "assets/kenney/roads/dumpster.glb", car: "assets/tevy/wrecked-sedan-lod1.glb" };
+    const prefab = async (kind) => {
+      const path = kinds[kind];
+      if (!path || !world.tryGLB) return null;
+      let src = world.prefabs?.[path];
+      if (!src) { try { src = await world.tryGLB("./" + path); } catch { src = null; } if (src && world.prefabs) world.prefabs[path] = src; }
+      return src ? (src.scene || src).clone(true) : null;
+    };
+    // Point on a prop's footprint edge closest to p (where the player actually stands to search it).
+    const edgePoint = (d, px, pz) => {
+      const b = d.box, inset = 0.15;
+      return {
+        x: Math.max(b.min.x + inset, Math.min(b.max.x - inset, px)),
+        z: Math.max(b.min.z + inset, Math.min(b.max.z - inset, pz)),
+      };
+    };
+    const bind = (rec, d, l) => {
+      d.bound = rec.id;
+      if (d.kind === "car") {
+        // Search at the trunk end of the car (the end nearer the authored loot point).
+        const b = d.box, longZ = (b.max.z - b.min.z) >= (b.max.x - b.min.x);
+        const pt = longZ
+          ? { x: d.x, z: Math.abs(l.z - b.min.z) < Math.abs(l.z - b.max.z) ? b.min.z + 0.2 : b.max.z - 0.2 }
+          : { z: d.z, x: Math.abs(l.x - b.min.x) < Math.abs(l.x - b.max.x) ? b.min.x + 0.2 : b.max.x - 0.2 };
+        rec.x = pt.x; rec.z = pt.z; rec.r = Math.max(l.r || 1.6, 1.8);
+      } else {
+        const pt = edgePoint(d, d.x, d.z);
+        rec.x = pt.x; rec.z = pt.z;
+        const half = Math.max(d.box.max.x - d.box.min.x, d.box.max.z - d.box.min.z) / 2;
+        rec.r = Math.max(l.r || 1.6, Math.min(2.2, half + 1.1));
+      }
+      rec.prop = d.obj; rec.propKind = d.kind; rec.boundProp = d.id; rec.mesh = null;
+    };
     for (const l of (L.spawns?.loot || [])) {
       if (l.when && !check(l.when)) continue;
       const items = rollContainer(l.container, l.location, ch, l.guaranteed, this.systems, l.id);
       const rec = { ...l, taken: false, items, remaining: { ...items }, label: cleanLabel(l.label || l.container || "Container") };
-      const mesh = lootCrate();
-      mesh.position.set(l.x, 0.2, l.z);
-      this.group.add(mesh);
-      rec.mesh = mesh;
-      this.world.loot.push(rec);
+      const kind = lootPropKind(l);
+      let best = null, bestD = 3.5;
+      for (const d of decor) {
+        if (d.bound || d.kind !== kind) continue;
+        const dd = Math.hypot(d.x - l.x, d.z - l.z);
+        if (dd < bestD) { bestD = dd; best = d; }
+      }
+      if (best) {
+        bind(rec, best, l);
+      } else {
+        let obj = await prefab(kind);
+        if (obj) {
+          fitHeight(obj, kind === "car" ? 1.5 : 1.2);
+          obj.traverse((o) => { if (o.isMesh) { o.castShadow = false; o.receiveShadow = true; } });
+        } else {
+          obj = makeLootProp(kind);
+        }
+        obj.position.x = l.x; obj.position.z = l.z;
+        obj.rotation.y = Number.isFinite(l.rotY) ? l.rotY : (((l.x * 7 + l.z * 3) % 4) | 0) * (Math.PI / 2);
+        obj.userData.kind = "loot_" + kind;
+        obj.userData.lootId = l.id;
+        this.group.add(obj);
+        rec.prop = obj; rec.propKind = kind; rec.mesh = null;
+      }
+      world.loot.push(rec);
+    }
+    // Street dumpsters / cars / bins with no authored container are searchable too.
+    const locId = (x, z) => {
+      let best = null, bd = Infinity;
+      for (const l of (L.spawns?.loot || [])) { const d = Math.hypot(l.x - x, l.z - z); if (l.location && d < bd) { bd = d; best = l.location; } }
+      return best || (L.locations && L.locations[0] && L.locations[0].id) || null;
+    };
+    for (const d of decor) {
+      if (d.bound) continue;
+      const container = d.kind === "car" ? "car_trunk" : "dumpster";
+      const id = "search_" + d.id;
+      const label = d.kind === "car" ? "Car trunk" : d.kind === "trashcan" ? "Trash can" : d.kind === "barrel" ? "Barrel" : "Dumpster";
+      const items = rollContainer(container, locId(d.x, d.z), ch, null, this.systems, id) || {};
+      const rec = { id, x: d.x, z: d.z, r: 1.6, label, container, items, remaining: { ...items }, taken: false, auto: true };
+      bind(rec, d, { x: d.x, z: d.box.max.z, r: 1.6 });
+      world.loot.push(rec);
     }
   }
 
@@ -799,12 +1054,15 @@ export class LevelRuntime {
     }
     if (it.setsFlag) game.flags[it.setsFlag] = true;
     if (it.type === "craft") {
-      const rec = (game.systems.recipes || []).find((r) => r.id === "cooler" || r.out?.id === "cooler" || r.id === "lake_cooler");
+      const pool = [...(game.systems.storyRecipes || []), ...(game.systems.recipes || [])];
+      const rec = pool.find((r) => (it.setsFlag && (r.set_flags || []).includes(it.setsFlag)))
+        || pool.find((r) => r.id === "cooler" || r.out?.id === "cooler" || r.id === "lake_cooler" || r.out?.id === "lake_cooler");
       if (rec && hasItems(game.inv, rec.in)) {
         for (const [id, n] of Object.entries(rec.in)) takeItem(game.inv, id, n);
         addItem(game.inv, rec.out.id, rec.out.n || 1);
         if (rec.set_flags) for (const f of rec.set_flags) game.flags[f] = true;
       }
+      game.refreshObjective?.();
     }
     if (it.type === "fill" && it.requiresItems) {
       /* flag already set — player hauled the water */

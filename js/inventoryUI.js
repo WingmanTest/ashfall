@@ -1,9 +1,10 @@
-import { CFG } from "./config.js?v=r7";
+import { CFG } from "./config.js?v=r8";
 import {
   GEAR_SLOTS, WEAPON_SLOTS, ALL_SLOTS, SLOT_LABELS, SLOT_COLORS,
   itemSlot, combinedInsulation, combinedWetResist, carryState,
   resolveDollLayers, wearItem, removeGear, emptyGear, canAddWeight,
-} from "./equipment.js?v=r7";
+} from "./equipment.js?v=r8";
+import { mountDoll3D, stopDoll3D, doll3DWasDrag } from "./doll3d.js?v=r8";
 
 const cache = new Map();
 function loadImg(src) {
@@ -78,11 +79,13 @@ function bindSheetTabs(game, panel, active) {
     btn.onclick = () => {
       if (btn.dataset.a === "close") {
         if (panel._dollTimer) clearInterval(panel._dollTimer);
+        stopDoll3D();
         return game.closePanel();
       }
       const tab = btn.dataset.tab;
       if (!tab || tab === active) return;
       if (panel._dollTimer) clearInterval(panel._dollTimer);
+      stopDoll3D();
       if (tab === "craft") return game.openCraft();
       return game.openInventory("bag");
     };
@@ -90,7 +93,8 @@ function bindSheetTabs(game, panel, active) {
 }
 
 function renderCraftTab(game, panel) {
-  const recipes = game.systems.recipes || [];
+  stopDoll3D();
+  const recipes = game.activeCraftRecipes ? game.activeCraftRecipes() : (game.systems.recipes || []);
   const items = game.systems.items || {};
   const nearFire = !!(game.world && (
     (game.world.inFire && game.world.inFire(game.player.x, game.player.z))
@@ -113,8 +117,10 @@ function renderCraftTab(game, panel) {
       return `<li class="${ok ? "have" : "need"}">${esc(items[id]?.name || id)} <span>${have} / ${n}</span></li>`;
     }).join("");
     const badge = station ? (r.special === "campfire" ? "FIRE" : "CAMPFIRE") : "HAND";
-    return `<article class="craft-card${can ? "" : " cant"}">
-      <div class="craft-head"><span class="badge">${badge}</span><strong>${esc(outName)}</strong></div>
+    const obj = r.isObjective ? `<span class="badge obj">OBJECTIVE</span>` : "";
+    const fresh = r.isObjective && r.isNew ? `<span class="badge new">NEW</span>` : "";
+    return `<article class="craft-card${r.isObjective ? " obj-card" : ""}${can ? "" : " cant"}" data-recipe="${esc(r.id)}">
+      <div class="craft-head">${obj}<span class="badge">${badge}</span><strong>${esc(outName)}</strong>${fresh}</div>
       ${note ? `<p class="craft-note">${esc(note)}</p>` : ""}
       <ul class="craft-ing">${ing || "<li class='have'>No ingredients</li>"}</ul>
       ${station && r.special !== "campfire" ? `<div class="craft-station${nearFire ? " ok" : ""}">${nearFire ? "Campfire in reach" : "Needs a campfire"}</div>` : ""}
@@ -199,7 +205,7 @@ export function openCharacterSheet(game, panel, tab = "bag") {
   panel.innerHTML = `
     ${sheetTabs("bag")}
     <div class="char-top">
-      <div class="char-doll"><canvas id="doll-canvas" width="192" height="384" aria-label="Paper doll"></canvas></div>
+      <div class="char-doll" id="doll-wrap"></div>
       <div class="char-slots">
         ${[...GEAR_SLOTS, ...WEAPON_SLOTS].map(slotBtn).join("")}
       </div>
@@ -223,16 +229,25 @@ export function openCharacterSheet(game, panel, tab = "bag") {
     <div id="inv-picker" class="inv-picker" hidden></div>
   `;
 
-  const canvas = panel.querySelector("#doll-canvas");
-  const paint = () => {
-    const layers = resolveDollLayers(game.player, flags, items, paperdoll);
-    drawPaperDoll(canvas, layers, 4);
-  };
-  paint();
+  const wrap = panel.querySelector("#doll-wrap");
+  let canvas = null;
+  let paint = () => {};
+  try {
+    canvas = mountDoll3D(wrap, game);
+    paint = () => {};
+    panel._dollTimer = null;
+  } catch (err) {
+    // WebGL unavailable — fall back to the 2D paper doll.
+    console.warn("[doll3d] fallback to 2D", err && err.message);
+    canvas = document.createElement("canvas");
+    canvas.id = "doll-canvas"; canvas.width = 192; canvas.height = 384;
+    wrap.appendChild(canvas);
+    paint = () => drawPaperDoll(canvas, resolveDollLayers(game.player, flags, items, paperdoll), 4);
+    paint();
+    const t = setInterval(() => { if (panel.classList.contains("show")) paint(); else clearInterval(t); }, 200);
+    panel._dollTimer = t;
+  }
   bindSheetTabs(game, panel, "bag");
-  // Redraw as images arrive.
-  const t = setInterval(() => { if (panel.classList.contains("show")) paint(); else clearInterval(t); }, 200);
-  panel._dollTimer = t;
 
   let selected = null;
   const selectCell = (id) => {
@@ -326,6 +341,7 @@ export function openCharacterSheet(game, panel, tab = "bag") {
 
   // Tap the doll: map y to a slot and open the picker.
   canvas.onclick = (e) => {
+    if (doll3DWasDrag()) return;
     const r = canvas.getBoundingClientRect();
     const y = (e.clientY - r.top) / r.height;
     const slot = y < 0.18 ? "head" : y < 0.26 ? "face" : y < 0.48 ? "torso" : y < 0.58 ? "hands" : y < 0.82 ? "legs" : "feet";
@@ -335,8 +351,8 @@ export function openCharacterSheet(game, panel, tab = "bag") {
   panel.querySelectorAll(".inv-actions button").forEach((btn) => {
     btn.onclick = () => {
       const a = btn.dataset.a;
-      if (a === "close") { clearInterval(panel._dollTimer); return game.closePanel(); }
-      if (a === "craft") { clearInterval(panel._dollTimer); return game.openCraft(); }
+      if (a === "close") { clearInterval(panel._dollTimer); stopDoll3D(); return game.closePanel(); }
+      if (a === "craft") { clearInterval(panel._dollTimer); stopDoll3D(); return game.openCraft(); }
       if (!selected) { game.hud.say("Pick an item first."); return; }
       const def = items[selected] || {};
       if (a === "equip") {

@@ -1,4 +1,4 @@
-import { CFG } from "./config.js?v=r7";
+import { CFG } from "./config.js?v=r8";
 
 export class Input {
   constructor(frame, onUnlock) {
@@ -79,7 +79,10 @@ export class Input {
       const el = document.getElementById(id);
       if (!el) return;
       const down = (e) => { e.preventDefault(); e.stopPropagation(); this.onUnlock?.(); this[prop] = true; if (prop === "fire") this.fireDown = true; };
-      const up = (e) => { e.preventDefault(); this[prop] = false; };
+      // One-shot buttons (interact) latch until the game loop consumes them, so a
+      // quick tap that starts and ends between two frames is never lost.
+      const latch = prop === "interact";
+      const up = (e) => { e.preventDefault(); if (!latch) this[prop] = false; };
       el.addEventListener("pointerdown", down);
       el.addEventListener("pointerup", up);
       el.addEventListener("pointercancel", up);
@@ -102,8 +105,9 @@ export class Input {
       const r = joy.getBoundingClientRect();
       this._joy.active = true;
       this._joy.id = t.identifier ?? t.pointerId;
-      this._joy.cx = r.left + r.width / 2;
-      this._joy.cy = r.top + r.height / 2;
+      // r8: floating origin — the stick centres wherever the thumb lands.
+      this._joy.cx = t.clientX;
+      this._joy.cy = t.clientY;
       this._joyMove(t.clientX, t.clientY, knob, r);
       this.onUnlock?.();
       e.preventDefault();
@@ -124,7 +128,7 @@ export class Input {
       this._joy.active = false;
       this._joy.id = null;
       this._joy.x = 0; this._joy.y = 0;
-      knob.style.transform = "translate(0,0)";
+      if (knob) knob.style.transform = "translate(0,0)";
     };
     // Pointer Events only — iOS 13+ and Playwright. Avoid pairing with touch*
     // handlers, which double-apply movement on Safari.
@@ -211,12 +215,12 @@ export class Input {
   _joyMove(x, y, knob, r) {
     let dx = x - this._joy.cx;
     let dy = y - this._joy.cy;
-    const max = r.width * 0.38;
+    const max = 44; // px drag radius for full speed
     const len = Math.hypot(dx, dy) || 1;
     if (len > max) { dx = dx / len * max; dy = dy / len * max; }
     this._joy.x = dx / max;
     this._joy.y = dy / max;
-    knob.style.transform = `translate(${dx}px, ${dy}px)`;
+    if (knob) knob.style.transform = `translate(${dx}px, ${dy}px)`;
   }
 
   sample() {

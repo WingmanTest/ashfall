@@ -1,7 +1,7 @@
 // Data-driven items / recipes / weapons / enemies / loot / survival.
 // Loads /systems/*.json when Quartermaster has written them. Never writes there.
-import { ITEMS as BASE_ITEMS, RECIPES as BASE_RECIPES, CFG } from "./config.js?v=r7";
-import { tryFetch, loadJsonDir, listDir } from "./load.js?v=r7";
+import { ITEMS as BASE_ITEMS, RECIPES as BASE_RECIPES, CFG } from "./config.js?v=r8";
+import { tryFetch, loadJsonDir, listDir } from "./load.js?v=r8";
 
 export const ITEM_ALIAS = {
   insulin_vial: "insulin",
@@ -49,28 +49,47 @@ function asItemMap(raw) {
   return raw;
 }
 
-function asRecipeList(raw) {
+function normRecipe(r, story = false) {
+  const inn = r.in || r.inputs || r.need || r.ingredients || {};
+  const inMap = Array.isArray(inn)
+    ? Object.fromEntries(inn.map((x) => [aliasItem(x.id || x.item || x), x.n || x.qty || 1]))
+    : Object.fromEntries(Object.entries(inn).map(([k, v]) => [aliasItem(k), v]));
+  const out = r.out || r.output || (r.result ? { id: r.result, n: 1 } : { id: r.id, n: r.qty || 1 });
+  const outObj = (Array.isArray(out) ? out[0] : (typeof out === "string" ? { id: out } : out)) || {};
+  let flags = r.set_flags || null;
+  if (!flags && Array.isArray(r.effects)) {
+    flags = r.effects.filter((e) => e && e.set && e.value !== false).map((e) => e.set);
+    if (!flags.length) flags = null;
+  }
+  if (typeof r.setsFlag === "string") flags = [...new Set([...(flags || []), r.setsFlag])];
+  const rec = {
+    id: r.id || outObj.id || outObj.item || r.result,
+    name: r.name ? String(r.name).replace(/\s*\((?:ch|chapter)\s*\d+\)\s*$/i, "") : null,
+    note: story ? null : (r.note || null),
+    requires: (r.requires && r.requires !== "none") ? r.requires : null,
+    out: { id: aliasItem(outObj.id || outObj.item || r.id || r.result), n: outObj.n || outObj.qty || 1, place: outObj.place || null },
+    in: inMap,
+    special: r.special || (outObj.place === "campfire" ? "campfire" : null) || r.flag || null,
+    set_flags: flags,
+    chapters: Array.isArray(r.chapters) ? r.chapters.slice() : null,
+  };
+  if (r.showWhen) rec.showWhen = r.showWhen;
+  if (story) rec.story = true;
+  return rec;
+}
+
+function asRecipeList(raw, story = false) {
   if (!raw) return null;
   const list = Array.isArray(raw) ? raw : (raw.recipes || raw.list || null);
   if (!list) return null;
-  return list.map((r) => {
-    const inn = r.in || r.inputs || r.need || r.ingredients || {};
-    const inMap = Array.isArray(inn)
-      ? Object.fromEntries(inn.map((x) => [aliasItem(x.id || x.item), x.n || x.qty || 1]))
-      : Object.fromEntries(Object.entries(inn).map(([k, v]) => [aliasItem(k), v]));
-    const out = r.out || r.output || { id: r.id, n: r.qty || 1 };
-    const outObj = Array.isArray(out) ? out[0] : out;
-    return {
-      id: r.id || outObj.id || outObj.item,
-      name: r.name || null,
-      note: r.note || null,
-      requires: (r.requires && r.requires !== "none") ? r.requires : null,
-      out: { id: aliasItem(outObj.id || outObj.item || r.id), n: outObj.n || outObj.qty || 1, place: outObj.place || null },
-      in: inMap,
-      special: r.special || (outObj.place === "campfire" ? "campfire" : null) || r.flag || null,
-      set_flags: r.set_flags || null,
-    };
-  });
+  return list.map((r) => normRecipe(r, story));
+}
+
+/** Story / objective one-off recipes (crafting.json story_recipes). Never capped. */
+export function normStoryRecipes(raw) {
+  if (!raw) return [];
+  const list = Array.isArray(raw) ? raw : Object.entries(raw).map(([id, r]) => ({ id, ...r }));
+  return list.filter(Boolean).map((r) => normRecipe(r, true));
 }
 
 export async function loadSystems() {
@@ -107,23 +126,37 @@ export async function loadSystems() {
     cigarettes: { name: "Cigarettes", stack: 4, kind: "mat" },
     canned_food: { name: "Canned food", stack: 8, kind: "use", hunger: -35, warmth: 4 },
     cooler: { name: "Lake-water cooler", stack: 1, kind: "quest" },
+    lake_cooler: { name: "Lake-water cooler", stack: 1, kind: "quest" },
+    bucket: { name: "Bucket", stack: 1, kind: "tool" },
+    wire: { name: "Copper wire", stack: 12, kind: "mat" },
     relay_kit: { name: "Relay kit", stack: 1, kind: "quest" },
     note: items.note || { name: "Torn note", stack: 20, kind: "note" },
   };
   for (const [k, v] of Object.entries(extras)) if (!items[k]) items[k] = v;
+  // Readable display names for objective craftables (Quartermaster's ids stay authoritative).
+  const DISPLAY = { lake_cooler: "Lake-water cooler", cooler: "Lake-water cooler", bucket: "Bucket", wire: "Copper wire" };
+  for (const [k, name] of Object.entries(DISPLAY)) if (items[k]) items[k] = { ...items[k], name };
 
+  const craftFile = files["crafting.json"] || files["recipes.json"] || idx;
   let recipes = asRecipeList(files["recipes.json"] || files["crafting.json"] || idx.recipes) || BASE_RECIPES.slice();
-  // Keep crafting a short flat list — never a tree. Cap at 8; prefer Quartermaster order.
+  // Keep the standard craft list short and flat — never a tree. Cap at 8; prefer Quartermaster order.
   if (recipes.length > 8) recipes = recipes.slice(0, 8);
-  // Ensure a cooler recipe exists for the ch01 beat if Quartermaster didn't add one
-  if (!recipes.some((r) => r.id === "cooler" || r.special === "cooler" || r.out?.id === "cooler")) {
-    if (recipes.length < 8) {
-      recipes.push({
-        id: "cooler",
-        out: { id: "cooler", n: 1 },
-        in: { cloth: 1, wood: 1, scrap: 1 },
-        set_flags: ["ch01_cooler_built"],
-      });
+  // Story / objective recipes live in their own list so the 8-cap never drops them.
+  const storyRecipes = normStoryRecipes((craftFile && craftFile.story_recipes) || idx.story_recipes);
+  // Ensure a ch01 cooler recipe exists even if Quartermaster didn't author one.
+  const hasCooler = (r) => r.id === "cooler" || r.id === "lake_cooler" || r.special === "cooler"
+    || r.out?.id === "cooler" || r.out?.id === "lake_cooler";
+  if (!recipes.some(hasCooler) && !storyRecipes.some(hasCooler)) {
+    storyRecipes.push({
+      id: "lake_cooler", name: null, note: null, requires: null, special: null,
+      out: { id: "lake_cooler", n: 1, place: null },
+      in: { bucket: 1, wire: 1 },
+      set_flags: ["ch01_cooler_built"], chapters: ["ch01"], story: true,
+    });
+  }
+  for (const r of storyRecipes) {
+    if (r.out?.id === "lake_cooler" || r.id === "lake_cooler" || r.out?.id === "cooler") {
+      r.set_flags = [...new Set([...(r.set_flags || []), "ch01_cooler_built"])];
     }
   }
 
@@ -168,7 +201,7 @@ export async function loadSystems() {
   const difficultyMode = (Array.isArray(difficulty?.modes) ? difficulty.modes.find((m) => m.id === difficultyId) : null)
     || { id: difficultyId, multipliers: {} };
 
-  return { items, recipes, weapons, weaponsById, enemies, loot, survival, difficulty, difficultyMode, carry, paperdoll, startingLoadout, itemsFile, loadedFiles: found };
+  return { items, recipes, storyRecipes, weapons, weaponsById, enemies, loot, survival, difficulty, difficultyMode, carry, paperdoll, startingLoadout, itemsFile, loadedFiles: found };
 }
 
 function rngFrom(seed) {
