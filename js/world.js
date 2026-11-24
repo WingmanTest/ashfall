@@ -636,22 +636,114 @@ export class World {
     }
   }
 
-  collide(x, z, rad = 0.35) {
+  _clampToBounds(x, z, rad = 0) {
+    const b = this.bounds || { minX: -11, maxX: 11, minZ: -96, maxZ: 16 };
+    const pad = Math.max(rad, 0.05);
+    return {
+      x: Math.max(b.minX + pad, Math.min(b.maxX - pad, x)),
+      z: Math.max(b.minZ + pad, Math.min(b.maxZ - pad, z)),
+    };
+  }
+
+  blocked(x, z, rad = 0.38) {
     const b = this.bounds;
-    let nx = Math.max(b.minX + rad, Math.min(b.maxX - rad, x));
-    let nz = Math.max(b.minZ + rad, Math.min(b.maxZ - rad, z));
+    if (!b) return true;
+    if (x < b.minX + rad || x > b.maxX - rad || z < b.minZ + rad || z > b.maxZ - rad) return true;
+    if (!this._isPlayableFloor(x, z)) return true;
     for (const c of this.colliders) {
-      const minX = c.minX - rad, maxX = c.maxX + rad, minZ = c.minZ - rad, maxZ = c.maxZ + rad;
-      if (nx > minX && nx < maxX && nz > minZ && nz < maxZ) {
-        const dx1 = nx - minX, dx2 = maxX - nx, dz1 = nz - minZ, dz2 = maxZ - nz;
-        const m = Math.min(dx1, dx2, dz1, dz2);
-        if (m === dx1) nx = minX;
-        else if (m === dx2) nx = maxX;
-        else if (m === dz1) nz = minZ;
-        else nz = maxZ;
+      if (c.walkable || c.ghost) continue;
+      if (x > c.minX - rad && x < c.maxX + rad && z > c.minZ - rad && z < c.maxZ + rad) return true;
+    }
+    return false;
+  }
+
+  _isPlayableFloor(x, z) {
+    if (typeof this.tileQuery === "function") {
+      const t = this.tileQuery(x, z);
+      if (!t) return false;
+      const def = t.def || {};
+      if (t.ch === "~" || t.ch === "_" || def.water || def.name === "open_water") return false;
+      if (def.solid) return false;
+      if (def.walkable === false) return false;
+    }
+    return true;
+  }
+
+  /**
+   * Axis-separated sliding collision. Resolves X then Z over a few iterations,
+   * capping each push so a corner / overlapping pair can never launch the
+   * player across the map. Always re-clamps to playable bounds at the end.
+   */
+  collide(x, z, rad = 0.35) {
+    const CAP = 0.7;
+    let { x: nx, z: nz } = this._clampToBounds(x, z, rad);
+    const cols = this.colliders || [];
+    for (let iter = 0; iter < 5; iter++) {
+      let hit = false;
+      for (const c of cols) {
+        if (c.walkable || c.ghost) continue;
+        const minX = c.minX - rad, maxX = c.maxX + rad;
+        const minZ = c.minZ - rad, maxZ = c.maxZ + rad;
+        if (nx <= minX || nx >= maxX || nz <= minZ || nz >= maxZ) continue;
+        const dx1 = nx - minX, dx2 = maxX - nx;
+        const push = Math.min(dx1, dx2, CAP);
+        nx = dx1 <= dx2 ? nx - push : nx + push;
+        hit = true;
+      }
+      ({ x: nx, z: nz } = this._clampToBounds(nx, nz, rad));
+      for (const c of cols) {
+        if (c.walkable || c.ghost) continue;
+        const minX = c.minX - rad, maxX = c.maxX + rad;
+        const minZ = c.minZ - rad, maxZ = c.maxZ + rad;
+        if (nx <= minX || nx >= maxX || nz <= minZ || nz >= maxZ) continue;
+        const dz1 = nz - minZ, dz2 = maxZ - nz;
+        const push = Math.min(dz1, dz2, CAP);
+        nz = dz1 <= dz2 ? nz - push : nz + push;
+        hit = true;
+      }
+      ({ x: nx, z: nz } = this._clampToBounds(nx, nz, rad));
+      if (!hit) break;
+    }
+    return this._clampToBounds(nx, nz, rad);
+  }
+
+  unstuckFrom(x, z, rad = 0.42, fallback = null) {
+    const ok = (px, pz) => !this.blocked(px, pz, rad);
+    if (ok(x, z)) return { x, z, moved: false };
+    const rings = [1, 1.5, 2, 3, 4, 6, 8, 10, 12, 16];
+    for (const r of rings) {
+      const steps = Math.max(12, Math.round(10 * r));
+      for (let i = 0; i < steps; i++) {
+        const a = (i / steps) * Math.PI * 2;
+        const px = x + Math.cos(a) * r;
+        const pz = z + Math.sin(a) * r;
+        if (ok(px, pz)) return { x: px, z: pz, moved: true };
       }
     }
-    return { x: nx, z: nz };
+    const fb = fallback || { x: 0, z: 0 };
+    return { x: fb.x, z: fb.z, moved: true, spawn: true };
+  }
+
+  gatherVisualBoxes() {
+    const out = [];
+    const box = new THREE.Box3();
+    const add = (o) => {
+      if (!o || !o.updateMatrixWorld) return;
+      try {
+        o.updateMatrixWorld(true);
+        box.setFromObject(o);
+        if (!Number.isFinite(box.min.x) || !Number.isFinite(box.max.x)) return;
+        const w = box.max.x - box.min.x, d = box.max.z - box.min.z;
+        if (w > 80 || d > 80) return; // skip giant floor batches
+        out.push({
+          kind: o.userData?.kind || (o.type || "mesh"),
+          minX: box.min.x, maxX: box.max.x, minZ: box.min.z, maxZ: box.max.z,
+        });
+      } catch {}
+    };
+    for (const o of this.farProps || []) add(o);
+    if (this.levelGroup) this.levelGroup.traverse((o) => { if (o.isMesh && o.userData?.kind) add(o); });
+    return out;
   }
 
   inFire(x, z) {

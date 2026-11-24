@@ -62,9 +62,12 @@ function asRecipeList(raw) {
     const outObj = Array.isArray(out) ? out[0] : out;
     return {
       id: r.id || outObj.id || outObj.item,
-      out: { id: aliasItem(outObj.id || outObj.item || r.id), n: outObj.n || outObj.qty || 1 },
+      name: r.name || null,
+      note: r.note || null,
+      requires: (r.requires && r.requires !== "none") ? r.requires : null,
+      out: { id: aliasItem(outObj.id || outObj.item || r.id), n: outObj.n || outObj.qty || 1, place: outObj.place || null },
       in: inMap,
-      special: r.special || r.flag || null,
+      special: r.special || (outObj.place === "campfire" ? "campfire" : null) || r.flag || null,
       set_flags: r.set_flags || null,
     };
   });

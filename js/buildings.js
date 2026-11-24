@@ -181,8 +181,9 @@ export function rectWorld(rect, origin, cs) {
   };
 }
 
-export async function stampBuildings(rect, world, group, origin, cs, snowMat) {
+export async function stampBuildings(rect, world, group, origin, cs, snowMat, opts = {}) {
   const box = rectWorld(rect, origin, cs);
+  if (opts.skip && opts.skip(box, rect)) return "reserved";
   const tryGLB = world.tryGLB;
   if (!tryGLB) return false;
   const longX = box.w >= box.d;
@@ -215,10 +216,20 @@ export async function stampBuildings(rect, world, group, origin, cs, snowMat) {
     const b = new THREE.Box3().setFromObject(obj);
     const bw = Math.max(0.4, b.max.x - b.min.x);
     const bd = Math.max(0.4, b.max.z - b.min.z);
-    const sx = Math.max(0.7, Math.min(1.8, targetW / bw));
-    const sz = Math.max(0.7, Math.min(1.8, targetD / bd));
+    const sx = Math.max(0.15, Math.min(1.6, targetW / bw));
+    const sz = Math.max(0.15, Math.min(1.6, targetD / bd));
     obj.scale.x *= sx;
     obj.scale.z *= sz;
+    obj.updateMatrixWorld(true);
+    const b2 = new THREE.Box3().setFromObject(obj);
+    let dx = 0, dz = 0;
+    const pad = 0.12;
+    if (b2.min.x < box.minX + pad) dx = (box.minX + pad) - b2.min.x;
+    if (b2.max.x > box.maxX - pad) dx = (box.maxX - pad) - b2.max.x;
+    if (b2.min.z < box.minZ + pad) dz = (box.minZ + pad) - b2.min.z;
+    if (b2.max.z > box.maxZ - pad) dz = (box.maxZ - pad) - b2.max.z;
+    obj.position.x += dx; obj.position.z += dz;
+    obj.userData.kind = "building";
     dressMeshPBR(obj, pickPbr(world, seed), 2);
     group.add(obj);
     world.farProps.push(obj);

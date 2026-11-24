@@ -37,6 +37,42 @@ function stdMat(pbr, color = 0x8899aa) {
   return mat;
 }
 
+
+function isBuildingAsset(asset) {
+  const a = String(asset || "").toLowerCase();
+  return /building[-_/]/.test(a) || /\/building/.test(a);
+}
+
+function assetKind(asset) {
+  const a = String(asset || "").toLowerCase();
+  if (isBuildingAsset(a)) return "building";
+  if (/water-tower|watertower/.test(a)) return "tower";
+  if (/chimney/.test(a)) return "chimney";
+  if (/electricity-pole|utility-pole/.test(a)) return "pole";
+  if (/traffic-light|light-square|light-post/.test(a)) return "light";
+  if (/road-sign|sign-/.test(a)) return "sign";
+  if (/dumpster/.test(a)) return "dumpster";
+  if (/barrier/.test(a)) return "barrier";
+  if (/sedan|car|truck|vehicle/.test(a)) return "car";
+  return "prop";
+}
+
+/** Max visual XZ size and tight collider half-extents, by kind. */
+function tightFootprint(kind) {
+  switch (kind) {
+    case "building": return { maxW: 10, maxD: 10, colW: 0, colD: 0 };
+    case "tower": return { maxW: 3.2, maxD: 3.2, colW: 1.15, colD: 1.15 };
+    case "chimney": return { maxW: 2.2, maxD: 2.2, colW: 0, colD: 0 };
+    case "pole": return { maxW: 0.65, maxD: 0.65, colW: 0.28, colD: 0.28 };
+    case "light": return { maxW: 0.8, maxD: 0.8, colW: 0.3, colD: 0.3 };
+    case "sign": return { maxW: 0.65, maxD: 0.65, colW: 0.22, colD: 0.22 };
+    case "dumpster": return { maxW: 1.7, maxD: 1.2, colW: 0.8, colD: 0.55 };
+    case "barrier": return { maxW: 1.9, maxD: 0.55, colW: 0.9, colD: 0.25 };
+    case "car": return { maxW: 2.4, maxD: 5.4, colW: 1.05, colD: 2.3 };
+    default: return { maxW: 1.6, maxD: 1.6, colW: 0.5, colD: 0.5 };
+  }
+}
+
 function lootCrate() {
   const m = new THREE.Mesh(
     new THREE.BoxGeometry(0.55, 0.4, 0.55),
@@ -212,7 +248,7 @@ export class LevelRuntime {
         }
         if (ch === "T") specials.push({ kind: "tree", x, z });
         if (ch === "~" || ch === "_") {
-          world.colliders.push({ minX: x - cs / 2, maxX: x + cs / 2, minZ: z - cs / 2, maxZ: z + cs / 2 });
+          world.colliders.push({ minX: x - cs / 2, maxX: x + cs / 2, minZ: z - cs / 2, maxZ: z + cs / 2, src: ch === "~" ? "water" : "chasm" });
           specials.push({ kind: ch === "~" ? "water" : "chasm", x, z, t });
         }
         if (t.roof || t.blocksAirLOS || t.name === "covered_floor" || t.name === "interior_floor") {
@@ -258,7 +294,8 @@ export class LevelRuntime {
         let c2 = c;
         while (c2 + 1 < cols && tiles[r][c2 + 1] === ch) c2++;
         const minX = o.x + c * cs, maxX = o.x + (c2 + 1) * cs, minZ = o.z + r * cs, maxZ = minZ + cs;
-        const col = { minX, maxX, minZ, maxZ, gate: ch === "G" };
+        const src = ch === "B" ? "building_mass" : ch === "H" ? "boundary" : ch === "c" ? "cover" : ch === "#" ? "wall" : ch === "G" ? "gate" : "solid";
+        const col = { minX, maxX, minZ, maxZ, gate: ch === "G", src, ch };
         world.colliders.push(col);
         if (ch === "G") this.gates.push({ col, mesh: null, flag: null, minX, maxX, minZ, maxZ });
         c = c2 + 1;
@@ -282,9 +319,15 @@ export class LevelRuntime {
 
     // Building lots: Kenney City Kit models, one (or a few) per footprint.
     const lots = greedyRects(tiles, legend, (ch, t) => ch === "B" || t.name === "building_mass" || t.massOnly);
+    this._lots = lots.map((rec) => rectWorld(rec, o, cs));
+    const buildingProps = (L.props || []).filter((p) => isBuildingAsset(p.asset));
+    this._buildingProps = buildingProps;
     for (const rec of lots) {
       const box = rectWorld(rec, o, cs);
-      const ok = await stampBuildings(rec, world, scene, o, cs, snowMat);
+      const reserved = buildingProps.some((p) => p.x >= box.minX - 0.4 && p.x <= box.maxX + 0.4 && p.z >= box.minZ - 0.4 && p.z <= box.maxZ + 0.4);
+      const ok = await stampBuildings(rec, world, scene, o, cs, snowMat, {
+        skip: () => reserved,
+      });
       const h = 7;
       if (!ok) {
         const shell = boxMesh(box.w, h, box.d, brickMat, 2);
@@ -341,7 +384,7 @@ export class LevelRuntime {
         tree.rotation.y = (s.x * 5 + s.z) % 3;
         scene.add(tree);
         world.farProps.push(tree);
-        world.colliders.push({ minX: s.x - 0.35, maxX: s.x + 0.35, minZ: s.z - 0.35, maxZ: s.z + 0.35 });
+        world.colliders.push({ minX: s.x - 0.35, maxX: s.x + 0.35, minZ: s.z - 0.35, maxZ: s.z + 0.35, src: "tree" });
       } else if (s.kind === "water") {
         const w = new THREE.Mesh(
           new THREE.PlaneGeometry(cs, cs),
@@ -386,13 +429,57 @@ export class LevelRuntime {
       obj.position.x = p.x;
       obj.position.z = p.z;
       obj.rotation.y = p.rotY || 0;
+      const kind = assetKind(p.asset);
+      const fp = tightFootprint(kind);
+      const lot = (this._lots || []).find((box) => p.x >= box.minX && p.x <= box.maxX && p.z >= box.minZ && p.z <= box.maxZ);
+      obj.updateMatrixWorld(true);
+      let b = new THREE.Box3().setFromObject(obj);
+      let maxW = fp.maxW, maxD = fp.maxD;
+      if (lot) {
+        maxW = Math.min(maxW, Math.max(0.6, (lot.maxX - lot.minX) - 0.5));
+        maxD = Math.min(maxD, Math.max(0.6, (lot.maxZ - lot.minZ) - 0.5));
+      }
+      const bw = Math.max(0.05, b.max.x - b.min.x);
+      const bd = Math.max(0.05, b.max.z - b.min.z);
+      const shrink = Math.min(1, maxW / bw, maxD / bd);
+      if (shrink < 0.999) {
+        obj.scale.x *= shrink;
+        obj.scale.z *= shrink;
+        obj.updateMatrixWorld(true);
+        b = new THREE.Box3().setFromObject(obj);
+      }
+      if (lot) {
+        const pad = 0.15;
+        let dx = 0, dz = 0;
+        if (b.min.x < lot.minX + pad) dx = (lot.minX + pad) - b.min.x;
+        if (b.max.x > lot.maxX - pad) dx = (lot.maxX - pad) - b.max.x;
+        if (b.min.z < lot.minZ + pad) dz = (lot.minZ + pad) - b.min.z;
+        if (b.max.z > lot.maxZ - pad) dz = (lot.maxZ - pad) - b.max.z;
+        if (dx || dz) {
+          obj.position.x += dx;
+          obj.position.z += dz;
+          obj.updateMatrixWorld(true);
+          b = new THREE.Box3().setFromObject(obj);
+        }
+      }
+      obj.userData.kind = kind;
       obj.traverse((o) => { if (o.isMesh) { o.castShadow = !!p.collide; o.receiveShadow = true; } });
       this.group.add(obj);
       world.farProps.push(obj);
-      if (p.collide) {
-        obj.updateMatrixWorld(true);
-        const b = new THREE.Box3().setFromObject(obj);
-        world.colliders.push({ minX: b.min.x, maxX: b.max.x, minZ: b.min.z, maxZ: b.max.z });
+      // Buildings / chimneys sitting on solid lots already have tile colliders —
+      // never add a huge GLB AABB that spills into alleys or the street.
+      const covered = !!(lot && (kind === "building" || kind === "chimney" || kind === "tower"));
+      if (p.collide && !covered && fp.colW > 0) {
+        if (kind === "car") {
+          world.colliders.push({ minX: b.min.x, maxX: b.max.x, minZ: b.min.z, maxZ: b.max.z, src: p.id || "car", kind });
+        } else {
+          const cx = p.x, cz = p.z;
+          world.colliders.push({
+            minX: cx - fp.colW, maxX: cx + fp.colW,
+            minZ: cz - fp.colD, maxZ: cz + fp.colD,
+            src: p.id || kind, kind,
+          });
+        }
       }
     }
   }

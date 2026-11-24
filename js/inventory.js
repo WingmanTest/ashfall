@@ -26,6 +26,12 @@ export function hasItems(inv, need) {
 }
 
 export function craft(inv, recipe, world, player) {
+  const needStation = recipe.requires === "near_campfire" || recipe.requires === "campfire";
+  if (needStation) {
+    const near = (world.inFire && world.inFire(player.x, player.z))
+      || (world.fires || []).some((f) => f.on && Math.hypot(player.x - f.x, player.z - f.z) < 3.6);
+    if (!near) return { ok: false, msg: "Need a campfire." };
+  }
   if (!hasItems(inv, recipe.in)) return { ok: false, msg: "Missing parts." };
   for (const [id, n] of Object.entries(recipe.in)) takeItem(inv, id, n);
   if (recipe.special === "campfire") {

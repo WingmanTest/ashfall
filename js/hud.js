@@ -15,6 +15,9 @@ export class HUD {
     this.weather = "";
     this.faceImg = null;
     this.faceIdle = null;
+    this.wepT = 2.0;
+    this.wepFade = 1;
+    this._lastWep = null;
     const faces = (CFG.portrait || {});
     const a = new Image(); a.src = faces.hurt || "./assets/oga/faces/face_hurt.png"; this.faceImg = a;
     const b = new Image(); b.src = faces.idle || "./assets/oga/faces/face_idle.png"; this.faceIdle = b;
@@ -22,7 +25,15 @@ export class HUD {
 
   say(msg, t = 2.4) { this.toast = msg; this.toastT = t; }
 
-  tick(dt) { if (this.toastT > 0) this.toastT -= dt; }
+  showWeaponName(t = 2.0) { this.wepT = t; this.wepFade = 1; }
+
+  tick(dt) {
+    if (this.toastT > 0) this.toastT -= dt;
+    if (this.wepT > 0) {
+      this.wepT -= dt;
+      this.wepFade = this.wepT > 0.4 ? 1 : Math.max(0, this.wepT / 0.4);
+    } else this.wepFade = 0;
+  }
 
   draw(player, inv, mode, opts = {}) {
     const ctx = this.ctx, w = this.w, h = this.h;
@@ -48,83 +59,65 @@ export class HUD {
     if (has("hp")) bars.push(["HP", s.health, "#d44", 100]);
     if (has("warmth") || has("temp")) bars.push(["WARM", s.warmth, "#8ec8e8", 100]);
     if (has("hunger")) bars.push(["HUNGER", s.hunger, "#d4a15a", 100]);
-    if (has("stm") || has("stamina")) bars.push(["STM", s.stamina, "#c8d4c0", 100]);
-    if (has("rad") || has("radiation")) bars.push(["RAD", s.rad, "#7cdb6a", 100]);
     if (has("filter")) bars.push(["FILTER", opts.filter ?? 0, "#9ad4a8", 100]);
-    if (has("seal")) bars.push(["SEAL", opts.seal ?? 0, "#c5d0da", 100]);
-    let y = 14;
-    ctx.font = "9px monospace";
+    // Compact top-left vitals: never more than ~40% of the width, never under BAG / pause.
+    const barW = Math.min(Math.round(w * 0.38), 152);
+    const barX = 28;
+    let y = 10;
+    ctx.font = "7px monospace";
     ctx.textAlign = "left";
     for (const [lab, v, col, max] of bars) {
       ctx.fillStyle = "rgba(10,13,18,0.55)";
-      ctx.fillRect(28, y, 120, 8);
-      ctx.strokeStyle = "rgba(232,238,244,0.45)";
-      ctx.strokeRect(28, y, 120, 8);
+      ctx.fillRect(barX, y, barW, 5);
+      ctx.strokeStyle = "rgba(232,238,244,0.4)";
+      ctx.strokeRect(barX, y, barW, 5);
       ctx.fillStyle = col;
-      ctx.fillRect(28, y, Math.max(0, 120 * (v / max)), 8);
+      ctx.fillRect(barX, y, Math.max(0, barW * (v / max)), 5);
       ctx.fillStyle = "#e8eef4";
-      ctx.fillText(lab, 12, y + 7);
-      y += 11;
+      ctx.fillText(lab, 8, y + 5);
+      y += 8;
     }
 
-    // face
-    const face = s.health < 40 || player.hurtT > 0 ? this.faceImg : this.faceIdle;
-    if (face && face.complete) {
-      ctx.fillStyle = "rgba(10,13,18,0.5)";
-      ctx.fillRect(w - 58, 10, 44, 44);
-      ctx.drawImage(face, w - 56, 12, 40, 40);
-    }
-
-    // location (left) and clock/weather (right of bars, left of the face) — never overlap.
+    // Location / time / objective tucked under the bars, leaving the top-right free.
+    const metaMax = Math.min(w * 0.58, w - 96);
     ctx.fillStyle = "#c5d0da";
-    ctx.font = "9px monospace";
-    const loc = (this.loc || "SECTOR 4").toUpperCase();
+    ctx.font = "8px monospace";
+    const loc = (this.loc || "").toUpperCase();
     const time = (this.clock || "").trim();
     const wx = (this.weather || "").trim();
-    const right = (time + (wx ? "  " + wx : "")).trim();
-    const faceX = w - 58;
-    ctx.textAlign = "right";
-    ctx.fillText(right, faceX - 4, y + 10);
-    const timeW = ctx.measureText(right).width;
-    const locMax = faceX - 8 - timeW - 12;
+    let meta = [loc, time, wx].filter(Boolean).join("  ");
+    while (meta.length > 3 && ctx.measureText(meta).width > metaMax) meta = meta.slice(0, -2);
+    if (meta !== [loc, time, wx].filter(Boolean).join("  ") && meta.length > 1) meta = meta.slice(0, -1) + "…";
     ctx.textAlign = "left";
-    let locDraw = loc;
-    while (locDraw.length > 3 && ctx.measureText(locDraw).width > locMax) locDraw = locDraw.slice(0, -2);
-    if (locDraw !== loc && locDraw.length > 1) locDraw = locDraw.slice(0, -1) + "…";
-    ctx.fillText(locDraw, 12, y + 10);
+    ctx.fillText(meta, 8, y + 10);
 
-    // objective
-    ctx.textAlign = "left";
     ctx.fillStyle = "#e8eef4";
-    ctx.font = "11px monospace";
-    wrap(ctx, this.objText || "", 12, y + 26, w - 24, 13);
+    ctx.font = "10px monospace";
+    wrap(ctx, this.objText || "", 8, y + 22, metaMax, 12);
 
-    // coat / filter pips sit just above the weapon readout
-    ctx.font = "9px monospace";
-    ctx.fillStyle = "#8a9aaa";
-    ctx.textAlign = "left";
-    let pip = 10;
-    const wepBase = h - 68;
-    if (player.coatOn) { ctx.fillText("COAT", pip, wepBase - 22); pip += 36; }
-    if (player.filterOn && !has("filter")) { ctx.fillText("FILTER", pip, wepBase - 22); }
-
-    // weapon / ammo: bottom-left, clearly above the joystick / fire cluster
-    const def = ITEMS[player.equipped];
-    ctx.textAlign = "left";
-    ctx.fillStyle = "#e8eef4";
-    ctx.font = "11px monospace";
-    const wepName = (def?.name || player.equipped || "").toUpperCase();
-    ctx.fillText(wepName, 10, wepBase);
-    const ammo = def && def.ammo ? `${player.mags[player.equipped] || 0} / ${inv[def.ammo] || 0}` : "";
-    if (ammo) {
-      ctx.fillStyle = "#c5d0da";
-      ctx.font = "10px monospace";
-      ctx.fillText(ammo, 10, wepBase + 12);
+    // Weapon name (and ammo) fade out after ~2s; only return on a swap.
+    if (player.equipped !== this._lastWep) {
+      this._lastWep = player.equipped;
+      this.showWeaponName(2.0);
     }
-    if (opts.sprinting) {
-      ctx.fillStyle = "#c5d0da";
-      ctx.font = "9px monospace";
-      ctx.fillText("SPRINT", 10 + ctx.measureText(wepName).width + 8, wepBase);
+    const wepBase = h - 68;
+    const a = this.wepFade;
+    if (a > 0.02) {
+      const def = ITEMS[player.equipped];
+      ctx.save();
+      ctx.globalAlpha = a;
+      ctx.textAlign = "left";
+      ctx.fillStyle = "#e8eef4";
+      ctx.font = "11px monospace";
+      const wepName = (def?.name || player.equipped || "").toUpperCase();
+      ctx.fillText(wepName, 10, wepBase);
+      const ammo = def && def.ammo ? `${player.mags[player.equipped] || 0} / ${inv[def.ammo] || 0}` : "";
+      if (ammo) {
+        ctx.fillStyle = "#c5d0da";
+        ctx.font = "10px monospace";
+        ctx.fillText(ammo, 10, wepBase + 12);
+      }
+      ctx.restore();
     }
 
     // crosshair

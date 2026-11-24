@@ -126,9 +126,52 @@
     #btn-aim { right: max(96px, calc(env(safe-area-inset-right) + 84px)); bottom: max(80px, calc(env(safe-area-inset-bottom) + 64px)); width:56px; height:40px; }
     #btn-interact { right: max(12px, env(safe-area-inset-right)); bottom: max(100px, calc(env(safe-area-inset-bottom) + 84px)); width:72px; height:44px; }
     #btn-mode { right: max(12px, env(safe-area-inset-right)); bottom: max(178px, calc(env(safe-area-inset-bottom) + 156px)); width:56px; height:32px; font-size:10px; display:none; }
-    /* Below the HUD portrait (face sits in the top-right ~24–132px). */
-    #btn-craft { right: max(68px, calc(env(safe-area-inset-right) + 56px)); top: max(140px, calc(env(safe-area-inset-top) + 128px)); width:52px; height:36px; }
-    #btn-inv { right: max(12px, env(safe-area-inset-right)); top: max(140px, calc(env(safe-area-inset-top) + 128px)); width:52px; height:36px; }
+    /* Top-right: BAG + pause icon only. Leave the top-left vitals a wide berth. */
+    #btn-inv {
+      right: max(52px, calc(env(safe-area-inset-right) + 44px));
+      top: max(8px, env(safe-area-inset-top));
+      width: 48px; height: 32px; font-size: 10px;
+    }
+    #btn-pause {
+      right: max(8px, env(safe-area-inset-right));
+      top: max(8px, env(safe-area-inset-top));
+      left: auto; transform: none;
+      width: 36px; height: 32px; padding: 0;
+    }
+    #btn-melee {
+      right: max(12px, env(safe-area-inset-right));
+      bottom: max(16px, env(safe-area-inset-bottom));
+      width: 72px; height: 72px; padding: 0;
+      border-radius: 50%;
+    }
+    #btn-melee svg { width: 34px; height: 34px; margin: 0 auto; }
+    #btn-melee .ico-melee { display: none; }
+    #btn-melee.is-melee .ico-knife { display: none; }
+    #btn-melee.is-melee .ico-melee { display: block; }
+    body.wield-melee #btn-fire,
+    body.wield-melee #btn-aim,
+    body.wield-melee #btn-reload,
+    body.wield-unarmed #btn-fire,
+    body.wield-unarmed #btn-aim,
+    body.wield-unarmed #btn-reload,
+    body.wield-thrown #btn-aim,
+    body.wield-thrown #btn-reload,
+    body.wield-gun #btn-melee,
+    body.wield-thrown #btn-melee { display: none !important; }
+    body.wield-melee #btn-swap,
+    body.wield-unarmed #btn-swap {
+      right: max(96px, calc(env(safe-area-inset-right) + 84px));
+      bottom: max(16px, env(safe-area-inset-bottom));
+    }
+    #btn-swap {
+      right: max(160px, calc(env(safe-area-inset-right) + 148px));
+      bottom: max(16px, env(safe-area-inset-bottom));
+      width: 48px; height: 48px; padding: 0;
+    }
+    #btn-craft { display: none !important; }
+    .tbtn svg { display:block; width:18px; height:18px; margin: 0 auto; fill: currentColor; }
+    #btn-pause svg { width:16px; height:16px; }
+    #btn-swap svg { width:22px; height:22px; }
     #look-pad {
       pointer-events:auto;
       position:absolute;
@@ -224,6 +267,26 @@
     .inv-picker[hidden], .inv-ghost[hidden] { display:none; }
     .inv-picker button { width:100%; }
 
+    .sheet-tabs { display:flex; gap:6px; align-items:center; margin: 0 0 8px; flex: 0 0 auto; }
+    .sheet-tabs button { flex: 1; text-align:center; letter-spacing:0.12em; font-size:11px !important; padding:8px 6px !important; }
+    .sheet-tabs button.on { background: var(--ice); color: var(--ink); }
+    .sheet-tabs .tab-close { flex: 0 0 auto; width: auto; padding: 8px 10px !important; }
+    .craft-list { flex:1; overflow:auto; display:flex; flex-direction:column; gap:8px; min-height:0; }
+    .craft-card { border:1px solid #2a3340; background:#121820; padding:8px; display:flex; flex-direction:column; gap:6px; }
+    .craft-card.cant { opacity:0.72; }
+    .craft-head { display:flex; align-items:center; gap:8px; font-size:13px; }
+    .craft-head .badge { font-size:8px; letter-spacing:0.12em; border:1px solid #8a9aaa; color:#8a9aaa; padding:2px 5px; }
+    .craft-note { margin:0; color:#8a9aaa; font-size:11px; line-height:1.35; }
+    .craft-ing { list-style:none; margin:0; padding:0; font-size:11px; }
+    .craft-ing li { display:flex; justify-content:space-between; gap:8px; padding:2px 0; }
+    .craft-ing .have { color:#9ad4a8; }
+    .craft-ing .need { color:#d48a8a; }
+    .craft-station { font-size:10px; letter-spacing:0.08em; color:#d4a15a; }
+    .craft-station.ok { color:#9ad4a8; }
+    .craft-card button { text-align:center; letter-spacing:0.12em; }
+    .craft-card button[disabled] { opacity:0.35; pointer-events:none; }
+    .craft-confirm { margin-top:8px; padding:6px 8px; border:1px solid #9ad4a8; color:#9ad4a8; font-size:11px; letter-spacing:0.08em; }
+
     #loader {
       display: none; position: absolute; inset: 0; z-index: 40;
       background: rgba(7,9,12,0.92); color: var(--ice);
@@ -261,15 +324,9 @@
     .dlg-bar { display:flex; justify-content:flex-end; margin: 0 0 8px; }
     .dlg-bar button { letter-spacing: 0.12em; font-size: 11px !important; padding: 6px 10px !important; }
 
-    #btn-pause {
-      left: 50%; top: max(10px, env(safe-area-inset-top));
-      transform: translateX(-50%);
-      width: 58px; height: 32px; font-size: 10px;
-    }
-
     #build-tag {
       position: absolute;
-      top: max(6px, env(safe-area-inset-top));
+      top: max(44px, calc(env(safe-area-inset-top) + 36px));
       right: 8px;
       z-index: 30;
       font-size: 10px;
@@ -329,7 +386,7 @@
 </head>
 <body>
   <div id="frame">
-    <div id="build-tag">r5</div>
+    <div id="build-tag">r6</div>
     <canvas id="view" width="180" height="320"></canvas>
     <canvas id="hud" width="360" height="640"></canvas>
     <div id="ui">
@@ -362,6 +419,7 @@
         <h1>PAUSED<span>WIND STILL MOVING</span></h1>
         <div class="btn-row">
           <button class="menu" id="btn-resume">RESUME</button>
+          <button class="menu" id="btn-unstuck">UNSTUCK</button>
           <button class="menu" id="btn-look">LOOK: REFINED</button>
           <button class="menu" id="btn-crt">CRT: LOW</button>
           <button class="menu" id="btn-save">SAVE</button>
@@ -383,17 +441,18 @@
       <div id="look-pad"></div>
       <div class="joy-base" id="joy"><div class="joy-knob" id="joy-knob"></div></div>
       <button class="tbtn" id="btn-fire">FIRE</button>
+      <button class="tbtn" id="btn-melee" aria-label="Attack"><svg class="ico-knife" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.2 18.8l1.2 1.2 5.1-3.3-.9-1.1c-.3-.3-.3-.8 0-1.1l.4-.4 1.6 1.6 7.8-7.8c1.5-1.5 2.2-3.3 1.9-4.2-.4-.4-2.2.3-3.7 1.8L9.8 12.3l1.6 1.6-.4.4c-.3.3-.8.3-1.1 0l-1.1-.9-3.3 5.1-2.3 2.3z"/></svg><svg class="ico-melee" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.2 3.2l1.4 1.4-1.1 1.1 6.3 6.3-1.4 1.4-1.2-1.2-8.2 8.2c-.4.4-1 .4-1.4 0L4.2 17c-.4-.4-.4-1 0-1.4l8.2-8.2-1.2-1.2 1.4-1.4 1.1 1.1 1.1-1.1zM8.1 16.3L7 17.4 8.2 18.6l1.1-1.1-1.2-1.2z"/></svg></button>
       <button class="tbtn" id="btn-reload">RELOAD</button>
       <button class="tbtn" id="btn-interact">USE</button>
       <button class="tbtn" id="btn-aim">AIM</button>
       <button class="tbtn" id="btn-mode">SEMI</button>
       <button class="tbtn" id="btn-inv">BAG</button>
-      <button class="tbtn" id="btn-craft">CRAFT</button>
-      <button class="tbtn" id="btn-pause">PAUSE</button>
+      <button class="tbtn" id="btn-pause" aria-label="Pause"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4" width="4.5" height="16" rx="1.2"/><rect x="13.5" y="4" width="4.5" height="16" rx="1.2"/></svg></button>
+      <button class="tbtn" id="btn-swap" aria-label="Swap weapon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.7 7.7A6.8 6.8 0 0 0 7.2 6.4L6 5.2v4.3h4.3L8.8 8.1A4.5 4.5 0 0 1 16.4 9l1.3-1.3zM6.3 16.3A6.8 6.8 0 0 0 16.8 17.6L18 18.8v-4.3h-4.3l1.5 1.4A4.5 4.5 0 0 1 7.6 15l-1.3 1.3z"/></svg></button>
     </div>
   </div>
   <script>
-    window.__ASHFALL_BUILD = "r5";
+    window.__ASHFALL_BUILD = "r6";
     window.__ASHFALL_BOOTED = false;
     window.__ASHFALL_MODULE = false;
     window.__ASHFALL_PENDING = null;
@@ -479,18 +538,18 @@
       setTimeout(function () {
         if (window.__ASHFALL_BOOTED) return;
         if (window.__ASHFALL_MODULE) {
-          showBanner("The game file loaded, but startup is stuck (often a Safari WebGL or cache issue). Wait a moment, or clear this site's data and reload. Build r5.");
+          showBanner("The game file loaded, but startup is stuck (often a Safari WebGL or cache issue). Wait a moment, or clear this site's data and reload. Build r6.");
         } else {
-          showBanner("The game never started — the script did not load. If you opened this from an older Home Screen icon, delete it and reopen the page, or clear Safari cache for this site. Build r5.");
+          showBanner("The game never started — the script did not load. If you opened this from an older Home Screen icon, delete it and reopen the page, or clear Safari cache for this site. Build r6.");
         }
       }, 4000);
       if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("./sw.js?v=r5", { scope: "./" }).then(function (reg) {
+        navigator.serviceWorker.register("./sw.js?v=r6", { scope: "./" }).then(function (reg) {
           try { reg.update(); } catch (err) {}
         }).catch(function () {});
       }
     })();
   </script>
-  <script type="module" src="./js/game.js" onerror="window.__ASHFALL_MODULE_ERR=true; if (window.__ashfallBootFail) window.__ashfallBootFail('The game script failed to load. Try a hard refresh or clear this site\\'s data. Build r5.');"></script>
+  <script type="module" src="./js/game.js" onerror="window.__ASHFALL_MODULE_ERR=true; if (window.__ashfallBootFail) window.__ashfallBootFail('The game script failed to load. Try a hard refresh or clear this site\\'s data. Build r6.');"></script>
 </body>
 </html>

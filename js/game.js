@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { CFG, WEAPONS_ORDER } from "./config.js";
+import { weaponKind } from "./weapons/viewmodels.js";
 import { Input } from "./input.js";
 import { HUD } from "./hud.js";
 import { World } from "./world.js";
@@ -20,7 +21,7 @@ import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel
 import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js";
 
 window.__ASHFALL_MODULE = true;
-window.__ASHFALL_BUILD = "r5";
+window.__ASHFALL_BUILD = "r6";
 
 const $ = (id) => document.getElementById(id);
 const frame = $("frame");
@@ -219,11 +220,54 @@ class Game {
       fire: () => self.tryFire(),
       toggleFireMode: () => self.toggleFireMode(),
       setHealth: (n) => { self.player.stats.health = n; },
-      teleport: (x, z, yaw) => { self.player.x = x; self.player.z = z; if (yaw != null) self.player.yaw = yaw; },
+      teleport: (x, z, yaw) => {
+        const hit = self.world?.collide ? self.world.collide(x, z, 0.38) : { x, z };
+        const b = self.world?.bounds;
+        let px = hit.x, pz = hit.z;
+        if (b) {
+          px = Math.max(b.minX + 0.4, Math.min(b.maxX - 0.4, px));
+          pz = Math.max(b.minZ + 0.4, Math.min(b.maxZ - 0.4, pz));
+        }
+        self.player.x = px; self.player.z = pz;
+        if (yaw != null) self.player.yaw = yaw;
+      },
       completeObjective: (id) => { self.quests[id] = "done"; },
       triggerEnding: (id) => self.showEnding(id || self.story.resolveEnding(self.flags, self._storyCtx())),
       setChapter: (id) => self.setChapter(id),
       closeUi: () => self.closePanel(),
+      get world() { return self.world; },
+      get bounds() { return self.world && self.world.bounds; },
+      get colliders() { return (self.world && self.world.colliders) || []; },
+      unstuck: () => self.unstuck(),
+      cycleWeapon: () => self.cycleWeapon(),
+      wepFade: () => self.hud && self.hud.wepFade,
+      wepName: () => (self.player && self.player.equipped),
+
+      weaponChrome: () => {
+        const vis = (id) => {
+          const el = document.getElementById(id);
+          if (!el) return false;
+          const s = getComputedStyle(el);
+          return s.display !== "none" && s.visibility !== "hidden";
+        };
+        return {
+          kind: self._syncWeaponChrome?.() || null,
+          equipped: self.player && self.player.equipped,
+          classes: document.body.className,
+          fire: vis("btn-fire"), aim: vis("btn-aim"), reload: vis("btn-reload"),
+          melee: vis("btn-melee"), swap: vis("btn-swap"), use: vis("btn-interact"),
+        };
+      },
+      dumpColliders: () => ({
+        bounds: self.world.bounds,
+        spawn: self.levelRuntime && self.levelRuntime.spawn,
+        colliders: (self.world.colliders || []).map((c) => ({...c})),
+        visuals: self.world.gatherVisualBoxes ? self.world.gatherVisualBoxes() : [],
+        loot: (self.world.loot || []).map((L) => ({ id: L.id, x: L.x, z: L.z, label: L.label })),
+        player: { x: self.player.x, z: self.player.z },
+      }),
+      openCraft: () => self.openCraft(),
+      openInv: () => self.openInventory("bag"),
     };
   }
 
@@ -234,6 +278,7 @@ class Game {
     $("btn-continue").style.display = hasSave() ? "" : "none";
     bindTap("btn-notes-title", () => this.openNotes(true));
     bindTap("btn-resume", () => this.resume());
+    bindTap("btn-unstuck", () => this.unstuck());
     if ($("btn-look")) {
       const cur = (this.pipeline && this.pipeline.getLook && this.pipeline.getLook()) || this.look || localStorage.getItem("ashfall.look") || "refined";
       $("btn-look").textContent = "LOOK: " + String(cur).toUpperCase();
@@ -1080,45 +1125,80 @@ class Game {
     return addItem(this.inv, id, n);
   }
 
-  openInventory() {
-    this.mode = "inventory";
+  openInventory(tab = "bag") {
+    this.mode = tab === "craft" ? "craft" : "inventory";
+    this._sheetTab = tab === "craft" ? "craft" : "bag";
     setMenuOpen(true);
     this.player.gear = this.player.gear || emptyGear();
-    openCharacterSheet(this, panel);
+    openCharacterSheet(this, panel, this._sheetTab);
   }
 
   openCraft() {
-    // Small flat recipe list — tertiary to scavenging, no bench / no tree.
-    this.mode = "craft";
-    setMenuOpen(true);
-    const recipes = this.systems.recipes || [];
-    const items = this.systems.items;
-    let html = `<h2>QUICK CRAFT</h2><p class="line" style="color:#8a9aaa;font-size:11px;">A few things you can make from what you already pulled.</p>`;
-    for (const r of recipes) {
-      const ok = hasItems(this.inv, r.in);
-      const need = Object.entries(r.in).map(([id, n]) => `${items[id]?.name || id} ×${n}`).join(" · ");
-      const outName = r.special === "campfire" ? "Campfire" : (items[r.out?.id]?.name || r.id);
-      html += `<div class="recipe${ok ? "" : " cant"}"><div><div>${escapeHtml(outName)}</div><div class="meta">${escapeHtml(need)}</div></div><button data-r="${r.id}" ${ok ? "" : "disabled"}>MAKE</button></div>`;
+    this.openInventory("craft");
+  }
+
+  doCraft(r) {
+    const res = craft(this.inv, r, this.world, this.player);
+    if (res.ok) {
+      this.audio.craft?.();
+      if (r.set_flags) for (const f of r.set_flags) this.flags[f] = true;
+      if (r.id === "cooler" || r.out?.id === "cooler") this.flags.ch01_cooler_built = true;
     }
-    html += `<div class="inv-actions"><button data-a="close">CLOSE</button></div>`;
-    panel.innerHTML = html;
-    panel.classList.add("show");
-    panel.querySelectorAll("button").forEach((btn) => {
-      btn.onclick = () => {
-        if (btn.dataset.a === "close") return this.closePanel();
-        const r = recipes.find((x) => x.id === btn.dataset.r);
-        if (!r) return;
-        const res = craft(this.inv, r, this.world, this.player);
-        if (res.ok) {
-          this.audio.craft();
-          this.hud.say(res.msg);
-          if (r.set_flags) for (const f of r.set_flags) this.flags[f] = true;
-          if (r.id === "cooler" || r.out?.id === "cooler") this.flags.ch01_cooler_built = true;
-          // World.addCampfire already bound a Lumen campfire if the pipeline is present.
-        } else this.hud.say(res.msg || "Can't.");
-        this.openCraft();
-      };
-    });
+    return res;
+  }
+
+  equipWeapon(id) {
+    if (!id) return false;
+    const ok = this.player.tryEquip(id, this.inv);
+    if (ok) {
+      const def = (this.systems.items && this.systems.items[id]) || {};
+      this.player.gear = this.player.gear || emptyGear();
+      this.player.gear.main_hand = { id, durability: this.player.wDur[id] ?? def.durability ?? 100 };
+      this.hud.showWeaponName?.(2.0);
+      this._syncWeaponChrome?.();
+    }
+    return ok;
+  }
+
+  cycleWeapon() {
+    const items = this.systems.items || {};
+    const held = this.player.equipped;
+    const ids = new Set();
+    for (const id of WEAPONS_ORDER) {
+      if ((this.inv[id] || 0) > 0 || id === held) ids.add(id);
+    }
+    for (const [id, n] of Object.entries(this.inv)) {
+      if (!n) continue;
+      const d = items[id] || {};
+      if (d.kind === "gun" || d.kind === "melee" || d.kind === "throw" || d.type === "ranged" || d.type === "melee") ids.add(id);
+    }
+    const list = [...ids];
+    if (!list.length) return false;
+    const i = Math.max(0, list.indexOf(held));
+    const next = list[(i + 1) % list.length];
+    this.equipWeapon(next);
+    this.hud.showWeaponName(2.0);
+    this._syncWeaponChrome?.();
+    this.audio.ui?.();
+    return true;
+  }
+
+  unstuck() {
+    const p = this.player;
+    const spawn = this.levelRuntime?.spawn || { x: p.x, z: p.z };
+    const res = this.world.unstuckFrom(p.x, p.z, 0.42, spawn);
+    p.x = res.x;
+    p.z = res.z;
+    if (this.input) {
+      this.input.moveX = 0;
+      this.input.moveZ = 0;
+      this.input.sprint = false;
+      this.input.autoSprint = false;
+    }
+    p.syncCamera?.();
+    this.hud.say("Moved to clear ground");
+    if (this.mode === "pause") this.resume();
+    return res;
   }
 
   openNotes(fromTitle) {
@@ -1368,15 +1448,36 @@ class Game {
     this.audio.ui();
   }
 
-  _syncFireModeBtn() {
+  _syncWeaponChrome() {
+    const id = this.player?.equipped;
+    let kind = "unarmed";
+    if (id) {
+      const k = weaponKind(id);
+      kind = k === "melee" ? "melee" : k === "thrown" || k === "held_offhand" ? "thrown" : "gun";
+    }
+    const body = document.body;
+    body.classList.toggle("wield-melee", kind === "melee");
+    body.classList.toggle("wield-gun", kind === "gun");
+    body.classList.toggle("wield-thrown", kind === "thrown");
+    body.classList.toggle("wield-unarmed", kind === "unarmed");
+    const melee = document.getElementById("btn-melee");
+    if (melee) {
+      const isKnife = !id || /knife|blade|machete/.test(String(id));
+      melee.classList.toggle("is-melee", kind === "melee" && !isKnife);
+      melee.setAttribute("aria-label", isKnife || kind === "unarmed" ? "Knife" : "Attack");
+    }
     const btn = document.getElementById("btn-mode");
-    if (!btn) return;
-    const w = this._wep();
-    const modes = w.fire_modes || [];
-    btn.style.display = modes.length > 1 ? "" : "none";
-    const cur = this.player.fireMode[this.player.equipped] || modes[0] || "semi";
-    btn.textContent = cur.toUpperCase();
+    if (btn) {
+      const w = this._wep();
+      const modes = (w && w.fire_modes) || [];
+      btn.style.display = (kind === "gun" && modes.length > 1) ? "" : "none";
+      const cur = this.player.fireMode[id] || modes[0] || "semi";
+      btn.textContent = String(cur).toUpperCase();
+    }
+    return kind;
   }
+
+  _syncFireModeBtn() { this._syncWeaponChrome(); }
 
   objectiveText() {
     const objs = (this.levelRuntime?.L?.objectives || []).slice().sort((a, b) => (a.order || 0) - (b.order || 0));
@@ -1417,7 +1518,9 @@ class Game {
     if (this.mode !== "play") {
       // still let menus close on I/C/E/Esc appropriately
       if (this.mode === "inventory" && this.input.consume("inv")) this.closePanel();
+      else if (this.mode === "inventory" && this.input.consume("craft")) this.openCraft();
       if (this.mode === "craft" && this.input.consume("craft")) this.closePanel();
+      else if (this.mode === "craft" && this.input.consume("inv")) this.openInventory("bag");
       if (this.mode === "dialogue" && this.input.consume("interact")) {
         const btn = panel.querySelector("button");
         btn?.click();
@@ -1426,8 +1529,9 @@ class Game {
       return;
     }
 
-    if (this.input.consume("inv")) return this.openInventory();
+    if (this.input.consume("inv")) return this.openInventory("bag");
     if (this.input.consume("craft")) return this.openCraft();
+    if (this.input.consume("swap") || this.input.swap) { this.input.swap = false; this.cycleWeapon(); }
     if (this.input.consume("interact")) this.interact();
     if (this.input.consume("reload") || this.input.reload) { this.input.reload = false; this.tryReload(); }
     if (this.input.consume("fireMode") || this.input.fireMode) { this.input.fireMode = false; this.toggleFireMode(); }
@@ -1857,7 +1961,7 @@ async function boot() {
     game.loop();
     window.__READY = true;
     window.__ASHFALL_BOOTED = true;
-    window.__ASHFALL_BUILD = "r5";
+    window.__ASHFALL_BUILD = "r6";
     const banner = $("boot-banner");
     if (banner) banner.classList.remove("show");
     window.__INTEGRATION = {

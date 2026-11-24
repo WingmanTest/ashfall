@@ -19,6 +19,7 @@ export class Input {
     this.fireMode = false;
     this.inv = false;
     this.craft = false;
+    this.swap = false;
     this.pause = false;
     this.locked = false;
     this.touch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
@@ -85,11 +86,13 @@ export class Input {
       el.addEventListener("pointerleave", up);
     };
     setBtn("btn-fire", "fire");
+    setBtn("btn-melee", "fire");
     setBtn("btn-reload", "reload");
     setBtn("btn-interact", "interact");
     setBtn("btn-aim", "aim");
     setBtn("btn-mode", "fireMode");
     document.getElementById("btn-inv")?.addEventListener("pointerdown", (e) => { e.preventDefault(); e.stopPropagation(); this.onUnlock?.(); this.inv = true; });
+    document.getElementById("btn-swap")?.addEventListener("pointerdown", (e) => { e.preventDefault(); e.stopPropagation(); this.onUnlock?.(); this.swap = true; });
     document.getElementById("btn-craft")?.addEventListener("pointerdown", (e) => { e.preventDefault(); e.stopPropagation(); this.onUnlock?.(); this.craft = true; });
     document.getElementById("btn-pause")?.addEventListener("pointerdown", (e) => { e.preventDefault(); e.stopPropagation(); this.onUnlock?.(); this.pause = true; });
 

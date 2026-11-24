@@ -64,7 +64,90 @@ function applyTint(ctx, tint, w, h) {
   ctx.putImageData(img, 0, 0);
 }
 
-export function openCharacterSheet(game, panel) {
+
+function sheetTabs(active) {
+  return `<div class="sheet-tabs">
+    <button type="button" data-tab="bag" class="${active === "bag" ? "on" : ""}">BAG</button>
+    <button type="button" data-tab="craft" class="${active === "craft" ? "on" : ""}">CRAFT</button>
+    <button type="button" data-a="close" class="tab-close">CLOSE</button>
+  </div>`;
+}
+
+function bindSheetTabs(game, panel, active) {
+  panel.querySelectorAll(".sheet-tabs button").forEach((btn) => {
+    btn.onclick = () => {
+      if (btn.dataset.a === "close") {
+        if (panel._dollTimer) clearInterval(panel._dollTimer);
+        return game.closePanel();
+      }
+      const tab = btn.dataset.tab;
+      if (!tab || tab === active) return;
+      if (panel._dollTimer) clearInterval(panel._dollTimer);
+      if (tab === "craft") return game.openCraft();
+      return game.openInventory("bag");
+    };
+  });
+}
+
+function renderCraftTab(game, panel) {
+  const recipes = game.systems.recipes || [];
+  const items = game.systems.items || {};
+  const nearFire = !!(game.world && (
+    (game.world.inFire && game.world.inFire(game.player.x, game.player.z))
+    || (game.world.fires || []).some((f) => f.on && Math.hypot(game.player.x - f.x, game.player.z - f.z) < 3.6)
+  ));
+  document.body.classList.add("char-sheet-open");
+  panel.classList.add("char-sheet", "show");
+  const cards = recipes.map((r) => {
+    const outId = r.out?.id || r.id;
+    const outName = r.special === "campfire" ? "Campfire" : (r.name || items[outId]?.name || r.id);
+    const note = r.note || items[outId]?.desc || (r.special === "campfire" ? "A fire you can warm up next to." : "");
+    const station = r.requires === "near_campfire" || r.requires === "campfire" || r.special === "campfire";
+    const need = Object.entries(r.in || {});
+    const haveAll = need.every(([id, n]) => (game.inv[id] || 0) >= n);
+    const stationOk = !station || r.special === "campfire" || nearFire;
+    const can = haveAll && stationOk;
+    const ing = need.map(([id, n]) => {
+      const have = game.inv[id] || 0;
+      const ok = have >= n;
+      return `<li class="${ok ? "have" : "need"}">${esc(items[id]?.name || id)} <span>${have} / ${n}</span></li>`;
+    }).join("");
+    const badge = station ? (r.special === "campfire" ? "FIRE" : "CAMPFIRE") : "HAND";
+    return `<article class="craft-card${can ? "" : " cant"}">
+      <div class="craft-head"><span class="badge">${badge}</span><strong>${esc(outName)}</strong></div>
+      ${note ? `<p class="craft-note">${esc(note)}</p>` : ""}
+      <ul class="craft-ing">${ing || "<li class='have'>No ingredients</li>"}</ul>
+      ${station && r.special !== "campfire" ? `<div class="craft-station${nearFire ? " ok" : ""}">${nearFire ? "Campfire in reach" : "Needs a campfire"}</div>` : ""}
+      <button data-r="${r.id}" ${can ? "" : "disabled"}>CRAFT</button>
+    </article>`;
+  }).join("");
+  panel.innerHTML = `
+    ${sheetTabs("craft")}
+    <div class="craft-list">${cards || '<p class="line">No recipes yet.</p>'}</div>
+    <div id="craft-confirm" class="craft-confirm" hidden></div>
+  `;
+  bindSheetTabs(game, panel, "craft");
+  panel.querySelectorAll(".craft-list button[data-r]").forEach((btn) => {
+    btn.onclick = () => {
+      const r = recipes.find((x) => x.id === btn.dataset.r);
+      if (!r) return;
+      const res = game.doCraft ? game.doCraft(r) : null;
+      const box = panel.querySelector("#craft-confirm");
+      if (res && res.ok) {
+        if (box) { box.hidden = false; box.textContent = res.msg || "Crafted."; }
+        game.hud.say(res.msg);
+        renderCraftTab(game, panel);
+        const again = panel.querySelector("#craft-confirm");
+        if (again) { again.hidden = false; again.textContent = res.msg || "Crafted."; }
+      } else {
+        game.hud.say((res && res.msg) || "Can't.");
+      }
+    };
+  });
+}
+
+export function openCharacterSheet(game, panel, tab = "bag") {
+  if (tab === "craft") return renderCraftTab(game, panel);
   const items = game.systems.items;
   const paperdoll = game.systems.paperdoll;
   const flags = game.flags;
@@ -114,6 +197,7 @@ export function openCharacterSheet(game, panel) {
   document.body.classList.add("char-sheet-open");
   panel.classList.add("char-sheet", "show");
   panel.innerHTML = `
+    ${sheetTabs("bag")}
     <div class="char-top">
       <div class="char-doll"><canvas id="doll-canvas" width="192" height="384" aria-label="Paper doll"></canvas></div>
       <div class="char-slots">
@@ -132,7 +216,6 @@ export function openCharacterSheet(game, panel) {
       <div class="inv-actions">
         <button data-a="use">USE</button>
         <button data-a="equip">EQUIP</button>
-        <button data-a="craft">CRAFT</button>
         <button data-a="close">CLOSE</button>
       </div>
     </div>
@@ -146,6 +229,7 @@ export function openCharacterSheet(game, panel) {
     drawPaperDoll(canvas, layers, 4);
   };
   paint();
+  bindSheetTabs(game, panel, "bag");
   // Redraw as images arrive.
   const t = setInterval(() => { if (panel.classList.contains("show")) paint(); else clearInterval(t); }, 200);
   panel._dollTimer = t;
