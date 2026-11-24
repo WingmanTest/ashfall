@@ -1,27 +1,30 @@
 import * as THREE from "three";
-import { CFG, WEAPONS_ORDER } from "./config.js";
-import { weaponKind } from "./weapons/viewmodels.js";
-import { Input } from "./input.js";
-import { HUD } from "./hud.js";
-import { World } from "./world.js";
-import { Player } from "./player.js";
-import { EnemySystem } from "./enemies.js";
-import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js";
-import { openCharacterSheet } from "./inventoryUI.js";
-import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js";
-import { StorySystem, applyEffects, evalCondition, resolveBranches } from "./story.js";
-import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon } from "./systems.js";
-import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js";
-import { isMobileClient, canvasDpr } from "./device.js";
-import { LevelRuntime } from "./levelLoader.js";
-import { attachAudio } from "./audioHook.js";
-import { discoverRenderModule, attachRenderModule } from "./renderHook.js";
-import { createRenderPipeline, TIERS } from "../render/index.js";
-import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js";
-import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js";
+import { CFG, WEAPONS_ORDER } from "./config.js?v=r7";
+import { weaponKind } from "./weapons/viewmodels.js?v=r7";
+import { Input } from "./input.js?v=r7";
+import { HUD } from "./hud.js?v=r7";
+import { World } from "./world.js?v=r7";
+import { Player } from "./player.js?v=r7";
+import { EnemySystem } from "./enemies.js?v=r7";
+import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r7";
+import { openCharacterSheet } from "./inventoryUI.js?v=r7";
+import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r7";
+import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete } from "./story.js?v=r7";
+import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon } from "./systems.js?v=r7";
+import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r7";
+import { isMobileClient, canvasDpr } from "./device.js?v=r7";
+import { LevelRuntime } from "./levelLoader.js?v=r7";
+import { attachAudio } from "./audioHook.js?v=r7";
+import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r7";
+import { createRenderPipeline, TIERS } from "../render/index.js?v=r7";
+import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r7";
+import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js?v=r7";
 
 window.__ASHFALL_MODULE = true;
-window.__ASHFALL_BUILD = "r6";
+window.__ASHFALL_BUILD = "r7";
+if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r7") {
+  if (typeof window.__ashfallBustStaleBuild === "function") window.__ashfallBustStaleBuild(window.__ASHFALL_BUILD);
+}
 
 const $ = (id) => document.getElementById(id);
 const frame = $("frame");
@@ -246,6 +249,8 @@ class Game {
       unstuck: () => self.unstuck(),
       cycleWeapon: () => self.cycleWeapon(),
       resetTouch: () => self.input && self.input.resetTouch && self.input.resetTouch(),
+      say: (msg, dur) => self.hud && self.hud.say(String(msg||''), dur == null ? 8 : dur),
+      get objective() { return self.objectiveText(); },
       talk: (id) => {
         const dlg = self.story.pickDialogue(id, self._storyCtx());
         if (dlg) { self.openDialogue(dlg); return dlg.id || true; }
@@ -777,7 +782,7 @@ class Game {
 
   leaveDialogue() {
     this._lockTalk(700);
-    return this._finishDialogue({ end: true });
+    return this._finishDialogue({ left: true });
   }
 
   _showNode(entering) {
@@ -856,9 +861,9 @@ class Game {
     if (c.effects) applyEffects(c.effects, this._ctxFx());
     // Placeholder-format fields
     if (c.set_flags) for (const f of (Array.isArray(c.set_flags) ? c.set_flags : [c.set_flags])) {
-      if (typeof f === "string") this.flags[f] = true;
+      if (typeof f === "string") setFlag(this.flags, f, true);
     }
-    if (c.unset_flags) for (const f of c.unset_flags) this.flags[f] = false;
+    if (c.unset_flags) for (const f of c.unset_flags) setFlag(this.flags, f, false);
     if (c.add_item) addItem(this.inv, aliasItem(c.add_item), 1);
     if (c.remove_item) takeItem(this.inv, aliasItem(c.remove_item), 1);
     if (c.kindness) this.flags.kindness = (this.flags.kindness || 0) + c.kindness;
@@ -880,9 +885,36 @@ class Game {
     else { this.dlgId = c.next; this._showNode(true); }
   }
 
+  _dialogueReachedBeat(dlg) {
+    if (!dlg) return false;
+    const walk = this._dlgWalk || new Set();
+    const beatIds = new Set(["lake", "end_hint", "help", "alone", "brave", "stay", "give"]);
+    for (const id of walk) {
+      if (beatIds.has(id)) return true;
+      const n = dlg.nodes?.[id];
+      if (n && n.end) return true;
+    }
+    if (this.flags.ch01_theo_talked || this.flags.theo_talked || this.flags.theo_helped_cooler) return true;
+    if (this.quests && this.quests.q_cooler) return true;
+    return false;
+  }
+
+  _completeDialogueObjectives(dlg) {
+    if (!dlg) return;
+    for (const f of dialogueCompleteFlags(dlg)) setFlag(this.flags, f, true);
+    this.refreshObjective();
+  }
+
+  refreshObjective() {
+    if (this.hud) this.hud.objText = this.objectiveText();
+  }
+
   _finishDialogue(node) {
     this._lockTalk(700);
     if (this.dlg?.on_end) applyEffects(this.dlg.on_end, this._ctxFx());
+    const left = !!(node && node.left);
+    if (!left || this._dialogueReachedBeat(this.dlg)) this._completeDialogueObjectives(this.dlg);
+    else this.refreshObjective();
     const pending = this._pendingEvent;
     this._pendingEvent = null;
     const resumeDlg = this.dlg;
@@ -1011,6 +1043,7 @@ class Game {
       || this.mode === "inventory" || this.mode === "craft" || this.mode === "notes") {
       this.enterPlay();
     }
+    this.refreshObjective();
   }
 
   _dropEnemyLoot(e) {
@@ -1858,7 +1891,7 @@ async function boot() {
     await story.load();
     const systems = await loadSystems();
     const levels = await loadLevels();
-    const { rollTable } = await import("./systems.js");
+    const { rollTable } = await import("./systems.js?v=r7");
 
     const renderer = new THREE.WebGLRenderer({
       canvas: view, antialias: false, alpha: false, powerPreference: "high-performance",
@@ -1979,7 +2012,7 @@ async function boot() {
     game.loop();
     window.__READY = true;
     window.__ASHFALL_BOOTED = true;
-    window.__ASHFALL_BUILD = "r6";
+    window.__ASHFALL_BUILD = "r7";
     const banner = $("boot-banner");
     if (banner) banner.classList.remove("show");
     window.__INTEGRATION = {

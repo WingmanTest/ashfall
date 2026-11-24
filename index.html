@@ -148,16 +148,23 @@
     #btn-melee .ico-melee { display: none; }
     #btn-melee.is-melee .ico-knife { display: none; }
     #btn-melee.is-melee .ico-melee { display: block; }
-    body.wield-melee #btn-fire,
-    body.wield-melee #btn-aim,
-    body.wield-melee #btn-reload,
-    body.wield-unarmed #btn-fire,
-    body.wield-unarmed #btn-aim,
-    body.wield-unarmed #btn-reload,
-    body.wield-thrown #btn-aim,
-    body.wield-thrown #btn-reload,
-    body.wield-gun #btn-melee,
-    body.wield-thrown #btn-melee { display: none !important; }
+    /* Hide both clusters by default so a stale JS module can never
+       stack #btn-melee on top of AIM/RELOAD/FIRE for even one frame. */
+    #btn-fire, #btn-aim, #btn-reload, #btn-melee { display: none !important; }
+    body.wield-melee #btn-melee,
+    body.wield-unarmed #btn-melee {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+    }
+    body.wield-gun #btn-fire,
+    body.wield-thrown #btn-fire,
+    body.wield-gun #btn-aim,
+    body.wield-gun #btn-reload {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+    }
     body.wield-melee #btn-swap,
     body.wield-unarmed #btn-swap {
       right: max(96px, calc(env(safe-area-inset-right) + 84px));
@@ -384,9 +391,9 @@
   }
   </script>
 </head>
-<body>
+<body class="wield-melee">
   <div id="frame">
-    <div id="build-tag">r6</div>
+    <div id="build-tag">r7</div>
     <canvas id="view" width="180" height="320"></canvas>
     <canvas id="hud" width="360" height="640"></canvas>
     <div id="ui">
@@ -452,7 +459,8 @@
     </div>
   </div>
   <script>
-    window.__ASHFALL_BUILD = "r6";
+    window.__ASHFALL_EXPECTED_BUILD = "r7";
+    window.__ASHFALL_BUILD = "r7";
     window.__ASHFALL_BOOTED = false;
     window.__ASHFALL_MODULE = false;
     window.__ASHFALL_PENDING = null;
@@ -538,18 +546,56 @@
       setTimeout(function () {
         if (window.__ASHFALL_BOOTED) return;
         if (window.__ASHFALL_MODULE) {
-          showBanner("The game file loaded, but startup is stuck (often a Safari WebGL or cache issue). Wait a moment, or clear this site's data and reload. Build r6.");
+          showBanner("The game file loaded, but startup is stuck (often a Safari WebGL or cache issue). Wait a moment, or clear this site's data and reload. Build r7.");
         } else {
-          showBanner("The game never started — the script did not load. If you opened this from an older Home Screen icon, delete it and reopen the page, or clear Safari cache for this site. Build r6.");
+          showBanner("The game never started — the script did not load. If you opened this from an older Home Screen icon, delete it and reopen the page, or clear Safari cache for this site. Build r7.");
         }
       }, 4000);
+      var EXPECTED = window.__ASHFALL_EXPECTED_BUILD || "r7";
+      window.__ashfallBustStaleBuild = function (found) {
+        var key = "ashfall-bust-" + EXPECTED;
+        var reloadOnce = function () {
+          try {
+            if (sessionStorage.getItem(key)) {
+              showBanner("A cached older build ( " + found + " ) loaded instead of " + EXPECTED + ". Clear this site's data and reload.");
+              return;
+            }
+            sessionStorage.setItem(key, "1");
+          } catch (err) {}
+          var go = function () { location.reload(); };
+          var chain = Promise.resolve();
+          if ("serviceWorker" in navigator) {
+            chain = navigator.serviceWorker.getRegistrations().then(function (regs) {
+              return Promise.all(regs.map(function (r) { return r.unregister(); }));
+            });
+          }
+          chain.then(function () {
+            if (!window.caches) return;
+            return caches.keys().then(function (keys) {
+              return Promise.all(keys.map(function (k) { return caches.delete(k); }));
+            });
+          }).then(go).catch(go);
+        };
+        reloadOnce();
+      };
+      var buildChecks = 0;
+      var buildTimer = setInterval(function () {
+        buildChecks++;
+        var found = window.__ASHFALL_BUILD;
+        if (found && found !== EXPECTED) {
+          clearInterval(buildTimer);
+          window.__ashfallBustStaleBuild(found);
+          return;
+        }
+        if (window.__ASHFALL_BOOTED || buildChecks > 80) clearInterval(buildTimer);
+      }, 50);
       if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("./sw.js?v=r6", { scope: "./" }).then(function (reg) {
+        navigator.serviceWorker.register("./sw.js?v=r7", { scope: "./" }).then(function (reg) {
           try { reg.update(); } catch (err) {}
         }).catch(function () {});
       }
     })();
   </script>
-  <script type="module" src="./js/game.js" onerror="window.__ASHFALL_MODULE_ERR=true; if (window.__ashfallBootFail) window.__ashfallBootFail('The game script failed to load. Try a hard refresh or clear this site\\'s data. Build r6.');"></script>
+  <script type="module" src="./js/game.js?v=r7" onerror="window.__ASHFALL_MODULE_ERR=true; if (window.__ashfallBootFail) window.__ashfallBootFail('The game script failed to load. Try a hard refresh or clear this site\\'s data. Build r7.');"></script>
 </body>
 </html>

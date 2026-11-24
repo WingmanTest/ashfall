@@ -1,11 +1,11 @@
 // Cartographer chapter loader. Builds geometry from levels/*.json (do not edit those files).
 import * as THREE from "three";
-import { CFG } from "./config.js";
-import { fitHeight, makePerson, makeDog } from "./world.js";
-import { evalCondition, applyEffects } from "./story.js";
-import { rollContainer, aliasItem } from "./systems.js";
-import { addItem, takeItem, hasItems } from "./inventory.js";
-import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js";
+import { CFG } from "./config.js?v=r7";
+import { fitHeight, makePerson, makeDog } from "./world.js?v=r7";
+import { evalCondition, applyEffects } from "./story.js?v=r7";
+import { rollContainer, aliasItem } from "./systems.js?v=r7";
+import { addItem, takeItem, hasItems } from "./inventory.js?v=r7";
+import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js?v=r7";
 
 function cleanLabel(s) {
   return String(s || "").replace(/\s*\(\s*filler\s*\)/gi, "").replace(/\s{2,}/g, " ").trim();

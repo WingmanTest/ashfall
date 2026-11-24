@@ -1,4 +1,4 @@
-import { CFG } from "./config.js";
+import { CFG } from "./config.js?v=r7";
 
 export function loadSave() {
   try {

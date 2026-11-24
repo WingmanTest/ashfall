@@ -1,7 +1,7 @@
 // Data-driven items / recipes / weapons / enemies / loot / survival.
 // Loads /systems/*.json when Quartermaster has written them. Never writes there.
-import { ITEMS as BASE_ITEMS, RECIPES as BASE_RECIPES, CFG } from "./config.js";
-import { tryFetch, loadJsonDir, listDir } from "./load.js";
+import { ITEMS as BASE_ITEMS, RECIPES as BASE_RECIPES, CFG } from "./config.js?v=r7";
+import { tryFetch, loadJsonDir, listDir } from "./load.js?v=r7";
 
 export const ITEM_ALIAS = {
   insulin_vial: "insulin",

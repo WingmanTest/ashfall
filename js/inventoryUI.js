@@ -1,9 +1,9 @@
-import { CFG } from "./config.js";
+import { CFG } from "./config.js?v=r7";
 import {
   GEAR_SLOTS, WEAPON_SLOTS, ALL_SLOTS, SLOT_LABELS, SLOT_COLORS,
   itemSlot, combinedInsulation, combinedWetResist, carryState,
   resolveDollLayers, wearItem, removeGear, emptyGear, canAddWeight,
-} from "./equipment.js";
+} from "./equipment.js?v=r7";
 
 const cache = new Map();
 function loadImg(src) {

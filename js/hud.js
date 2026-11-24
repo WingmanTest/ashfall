@@ -1,4 +1,4 @@
-import { CFG, ITEMS } from "./config.js";
+import { CFG, ITEMS } from "./config.js?v=r7";
 
 export class HUD {
   constructor(canvas) {
@@ -145,13 +145,18 @@ export class HUD {
     }
 
     if (this.toastT > 0) {
+      ctx.font = "9px monospace";
       ctx.textAlign = "center";
+      const lines = wrapLines(ctx, this.toast, w - 36);
+      const maxLineWidth = Math.max(0, ...lines.map((s) => ctx.measureText(s).width));
+      const tw = Math.min(w - 20, maxLineWidth + 16);
+      const th = lines.length * 11 + 10;
+      const tx = (w - tw) / 2;
+      const ty = h * 0.54;
       ctx.fillStyle = "rgba(10,13,18,0.7)";
-      const tw = Math.min(w - 24, ctx.measureText(this.toast).width + 16);
-      ctx.fillRect((w - tw) / 2, h * 0.54, tw, 22);
+      ctx.fillRect(tx, ty, tw, th);
       ctx.fillStyle = "#e8eef4";
-      ctx.font = "11px monospace";
-      ctx.fillText(this.toast, w / 2, h * 0.54 + 15);
+      lines.forEach((s, i) => ctx.fillText(s, w / 2, ty + 8 + i * 11));
     }
 
     if (opts.reloading) {
@@ -181,10 +186,24 @@ function wrapLines(ctx, text, max) {
   const words = String(text || "").split(/\s+/).filter(Boolean);
   const lines = [];
   let line = "";
-  for (const w of words) {
-    const t = line ? line + " " + w : w;
-    if (line && ctx.measureText(t).width > max) { lines.push(line); line = w; }
-    else line = t;
+  const splitWord = (word) => {
+    if (ctx.measureText(word).width <= max) return [word];
+    const parts = [];
+    let chunk = "";
+    for (const ch of word) {
+      const next = chunk + ch;
+      if (chunk && ctx.measureText(next).width > max) { parts.push(chunk); chunk = ch; }
+      else chunk = next;
+    }
+    if (chunk) parts.push(chunk);
+    return parts.length ? parts : [word];
+  };
+  for (const raw of words) {
+    for (const w of splitWord(raw)) {
+      const t = line ? line + " " + w : w;
+      if (line && ctx.measureText(t).width > max) { lines.push(line); line = w; }
+      else line = t;
+    }
   }
   if (line) lines.push(line);
   return lines.length ? lines : [String(text || "")];

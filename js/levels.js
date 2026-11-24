@@ -1,7 +1,7 @@
 // Per-chapter level JSON from Cartographer (/levels/). Fallback built-in layouts.
 // Never writes into /levels/.
-import { LOCATIONS } from "./config.js";
-import { tryFetch, listDir } from "./load.js";
+import { LOCATIONS } from "./config.js?v=r7";
+import { tryFetch, listDir } from "./load.js?v=r7";
 
 const FALLBACK_CHAPTERS = [
   { id: "ch01", title: "Day Three", act: "I" },

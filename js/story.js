@@ -1,8 +1,8 @@
 // Data-driven story loader. Reads /story/ when present. NEVER writes there.
 // Full Loremaster contract (SCHEMA.md): condition ops, not, count_true,
 // if/then/else, value_from, on_end, flags.ending, chapter start/end scripts.
-import { tryFetch, loadJsonDir, listDir } from "./load.js";
-import { aliasItem } from "./systems.js";
+import { tryFetch, loadJsonDir, listDir } from "./load.js?v=r7";
+import { aliasItem } from "./systems.js?v=r7";
 
 const STORY_ROOT = "./story/";
 
@@ -110,6 +110,40 @@ export function evalWhen(when, ctx) {
   return true;
 }
 
+export const FLAG_ALIASES = {
+  theo_talked: "ch01_theo_talked",
+  ch01_theo_talked: "theo_talked",
+  marg_talked: "ch01_marguerite_talked",
+  ch01_marguerite_talked: "marg_talked",
+};
+
+/** Objective-complete flags written when the matching conversation is finished. */
+export const DIALOGUE_OBJECTIVE_FLAGS = {
+  ch01_theo_morning: ["ch01_theo_talked"],
+  theo_start: ["ch01_theo_talked"],
+  ch01_marguerite_porch: ["ch01_marguerite_talked"],
+  marg_start: ["ch01_marguerite_talked"],
+};
+
+export function setFlag(flags, name, value = true) {
+  if (!flags || !name) return;
+  flags[name] = value;
+  const alias = FLAG_ALIASES[name];
+  if (alias) flags[alias] = value;
+}
+
+export function dialogueCompleteFlags(dlg) {
+  if (!dlg) return [];
+  if (DIALOGUE_OBJECTIVE_FLAGS[dlg.id]) return DIALOGUE_OBJECTIVE_FLAGS[dlg.id];
+  return [];
+}
+
+export function dialogueIsComplete(dlg, ctx) {
+  const flags = dialogueCompleteFlags(dlg);
+  if (flags.length) return flags.some((f) => !!(ctx.flags && ctx.flags[f]));
+  return !!(ctx.seen && dlg && ctx.seen[dlg.id]);
+}
+
 export function applyEffects(effects, ctx) {
   if (!effects) return;
   const list = Array.isArray(effects) ? effects : [effects];
@@ -126,11 +160,11 @@ export function applyEffects(effects, ctx) {
       continue;
     }
     if (e.set != null) {
-      flags[e.set] = e.value !== undefined ? e.value : true;
+      setFlag(flags, e.set, e.value !== undefined ? e.value : true);
       // Current ch08 draft sets this flag directly; also honor a dedicated event.
       if (e.set === "shelter_sealed" && flags.shelter_sealed) ctx.onEvent?.("seal_shelter", e);
     }
-    if (e.unset) flags[e.unset] = false;
+    if (e.unset) setFlag(flags, e.unset, false);
     if (e.add != null) {
       const n = e.value_from != null ? (Number(flags[e.value_from]) || 0) : (e.value ?? 1);
       flags[e.add] = (Number(flags[e.add]) || 0) + n;
@@ -162,7 +196,7 @@ export function applyEffects(effects, ctx) {
     }
     // Legacy placeholder fields only — canonical ending is flags.ending via {"set":"ending","value"}
     if (e.set_ending) flags.ending = e.set_ending;
-    if (e.set_flags) for (const f of e.set_flags) flags[f] = true;
+    if (e.set_flags) for (const f of e.set_flags) setFlag(flags, f, true);
   }
 }
 
@@ -323,14 +357,14 @@ export class StorySystem {
       else this.chapters.push(f.data);
     }
 
-    const { PLACEHOLDER } = await import("./data/placeholderStory.js");
+    const { PLACEHOLDER } = await import("./data/placeholderStory.js?v=r7");
     if (!this.npcs.length) this.npcs = PLACEHOLDER.npcs;
     if (!Object.keys(this.endings).length) this.endings = PLACEHOLDER.endings;
     this.notesCatalog = PLACEHOLDER.notes;
     const ids = new Set(this.dialogues.map((d) => d.id));
     // Story files always win; placeholder only fills missing ids (e.g. dam_console).
     for (const d of PLACEHOLDER.dialogues) {
-      if (!ids.has(d.id)) this.dialogues.push(d);
+      if (!ids.has(d.id)) this.dialogues.push({ ...d, placeholder: true });
     }
     if (!this.hooks) this.hooks = PLACEHOLDER.hooks;
     this._storyLoaded = new Set(["ch01"]);
@@ -471,7 +505,7 @@ export class StorySystem {
   pickDialogue(npcId, ctx) {
     const seen = ctx.seen || {};
     const chapter = ctx.chapter || "ch01";
-    const cands = this.dialogues
+    let cands = this.dialogues
       .filter((d) => this._npcMatch(d, npcId))
       .filter((d) => !d.chapter || d.chapter === chapter)
       .filter((d) => this.sceneAllowed(d.id, { ...ctx, npc: npcId }))
@@ -492,8 +526,12 @@ export class StorySystem {
         return (b.priority || 0) - (a.priority || 0);
       });
     // Don't replay a one-shot if something unseen exists; allow a fallback replay
+    // Real story files always beat placeholder filler (e.g. theo_start vs ch01_theo_morning).
+    const storyCands = cands.filter((d) => !d.placeholder);
+    if (storyCands.length) cands = storyCands;
+    const incomplete = cands.find((d) => !dialogueIsComplete(d, ctx));
     const fresh = cands.find((d) => !seen[d.id]);
-    return fresh || cands[0] || null;
+    return incomplete || fresh || cands[0] || null;
   }
 
   pickLocationDialogue(locId, ctx) {
