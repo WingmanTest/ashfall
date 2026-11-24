@@ -105,6 +105,10 @@
       border-radius:50%;
       background: rgba(232,238,244,0.55);
     }
+    .joy-base.sprint {
+      border-color: rgba(232,238,244,0.9);
+      box-shadow: 0 0 0 1px rgba(232,238,244,0.35), inset 0 0 18px rgba(232,238,244,0.16);
+    }
     .tbtn {
       pointer-events:auto;
       position:absolute;
@@ -117,14 +121,14 @@
       border-radius: 4px;
     }
     .tbtn:active { background: rgba(232,238,244,0.85); color:#0a0d12; }
-    #btn-fire { right: max(12px, env(safe-area-inset-right)); bottom: max(22px, env(safe-area-inset-bottom)); width:70px; height:70px; font-size:11px; }
-    #btn-reload { right: max(88px, calc(env(safe-area-inset-right) + 76px)); bottom: max(22px, env(safe-area-inset-bottom)); }
-    #btn-interact { right: max(12px, env(safe-area-inset-right)); bottom: max(100px, calc(env(safe-area-inset-bottom) + 78px)); }
-    #btn-sprint { left: max(126px, calc(env(safe-area-inset-left) + 116px)); bottom: max(22px, env(safe-area-inset-bottom)); }
-    #btn-aim { right: max(88px, calc(env(safe-area-inset-right) + 76px)); bottom: max(70px, calc(env(safe-area-inset-bottom) + 48px)); width:56px; height:36px; }
+    #btn-fire { right: max(12px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); width:72px; height:72px; font-size:11px; }
+    #btn-reload { right: max(96px, calc(env(safe-area-inset-right) + 84px)); bottom: max(16px, env(safe-area-inset-bottom)); width:56px; height:56px; }
+    #btn-aim { right: max(96px, calc(env(safe-area-inset-right) + 84px)); bottom: max(80px, calc(env(safe-area-inset-bottom) + 64px)); width:56px; height:40px; }
+    #btn-interact { right: max(12px, env(safe-area-inset-right)); bottom: max(100px, calc(env(safe-area-inset-bottom) + 84px)); width:72px; height:44px; }
     #btn-mode { right: max(12px, env(safe-area-inset-right)); bottom: max(178px, calc(env(safe-area-inset-bottom) + 156px)); width:56px; height:32px; font-size:10px; display:none; }
-    #btn-inv { right: max(12px, env(safe-area-inset-right)); top: max(86px, calc(env(safe-area-inset-top) + 78px)); width:48px; height:36px; }
-    #btn-craft { right: max(64px, calc(env(safe-area-inset-right) + 52px)); top: max(86px, calc(env(safe-area-inset-top) + 78px)); width:48px; height:36px; }
+    /* Below the HUD portrait (face sits in the top-right ~24–132px). */
+    #btn-craft { right: max(68px, calc(env(safe-area-inset-right) + 56px)); top: max(140px, calc(env(safe-area-inset-top) + 128px)); width:52px; height:36px; }
+    #btn-inv { right: max(12px, env(safe-area-inset-right)); top: max(140px, calc(env(safe-area-inset-top) + 128px)); width:52px; height:36px; }
     #look-pad {
       pointer-events:auto;
       position:absolute;
@@ -238,8 +242,24 @@
       padding: 24px 16px; overflow: auto; pointer-events: auto;
     }
     #boot-error.show { display: block; }
-    #boot-error h2 { letter-spacing: 0.16em; font-size: 14px; }
-    #boot-error pre { white-space: pre-wrap; font-size: 11px; color: #c5d0da; }
+    #boot-error h2 { letter-spacing: 0.16em; font-size: 14px; margin: 0 0 10px; }
+    #boot-error pre {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      font-size: 11px; color: #c5d0da;
+      max-width: 100%;
+      margin: 0 0 12px;
+    }
+    #boot-error-dismiss {
+      appearance: none; display: none;
+      background: transparent; color: var(--ice);
+      border: 1px solid var(--ice); padding: 8px 12px;
+      font: inherit; font-size: 11px; letter-spacing: 0.12em;
+    }
+    #boot-error.runtime #boot-error-dismiss { display: inline-block; }
+    .dlg-bar { display:flex; justify-content:flex-end; margin: 0 0 8px; }
+    .dlg-bar button { letter-spacing: 0.12em; font-size: 11px !important; padding: 6px 10px !important; }
 
     #btn-pause {
       left: 50%; top: max(10px, env(safe-area-inset-top));
@@ -309,7 +329,7 @@
 </head>
 <body>
   <div id="frame">
-    <div id="build-tag">r4</div>
+    <div id="build-tag">r5</div>
     <canvas id="view" width="180" height="320"></canvas>
     <canvas id="hud" width="360" height="640"></canvas>
     <div id="ui">
@@ -357,7 +377,7 @@
       <div class="load-bar"><div class="load-fill" id="load-fill"></div></div>
       <div class="load-pct" id="load-pct">Loading 0%…</div>
     </div>
-    <div id="boot-error"><h2>ASHFALL FAILED TO LOAD</h2><pre id="boot-error-pre"></pre></div>
+    <div id="boot-error"><h2 id="boot-error-title">ASHFALL FAILED TO LOAD</h2><pre id="boot-error-pre"></pre><button type="button" id="boot-error-dismiss" hidden>DISMISS</button></div>
     <div id="boot-banner" role="alert"></div>
     <div id="touch">
       <div id="look-pad"></div>
@@ -365,7 +385,6 @@
       <button class="tbtn" id="btn-fire">FIRE</button>
       <button class="tbtn" id="btn-reload">RELOAD</button>
       <button class="tbtn" id="btn-interact">USE</button>
-      <button class="tbtn" id="btn-sprint">SPRINT</button>
       <button class="tbtn" id="btn-aim">AIM</button>
       <button class="tbtn" id="btn-mode">SEMI</button>
       <button class="tbtn" id="btn-inv">BAG</button>
@@ -374,7 +393,7 @@
     </div>
   </div>
   <script>
-    window.__ASHFALL_BUILD = "r4";
+    window.__ASHFALL_BUILD = "r5";
     window.__ASHFALL_BOOTED = false;
     window.__ASHFALL_MODULE = false;
     window.__ASHFALL_PENDING = null;
@@ -397,8 +416,16 @@
       function showErr(msg) {
         var el = $("boot-error");
         var pre = $("boot-error-pre");
+        var title = $("boot-error-title");
+        var dismiss = $("boot-error-dismiss");
+        var runtime = !!window.__ASHFALL_BOOTED;
+        if (title) title.textContent = runtime ? "RUNTIME ERROR" : "ASHFALL FAILED TO LOAD";
         if (pre && !pre.textContent) pre.textContent = msg;
-        if (el) el.classList.add("show");
+        if (el) { el.classList.toggle("runtime", runtime); el.classList.add("show"); }
+        if (dismiss) {
+          dismiss.hidden = !runtime;
+          dismiss.onclick = function () { if (el) el.classList.remove("show"); };
+        }
         window.__ERROR = msg;
       }
       function showLoad(label) {
@@ -452,18 +479,18 @@
       setTimeout(function () {
         if (window.__ASHFALL_BOOTED) return;
         if (window.__ASHFALL_MODULE) {
-          showBanner("The game file loaded, but startup is stuck (often a Safari WebGL or cache issue). Wait a moment, or clear this site's data and reload. Build r4.");
+          showBanner("The game file loaded, but startup is stuck (often a Safari WebGL or cache issue). Wait a moment, or clear this site's data and reload. Build r5.");
         } else {
-          showBanner("The game never started — the script did not load. If you opened this from an older Home Screen icon, delete it and reopen the page, or clear Safari cache for this site. Build r4.");
+          showBanner("The game never started — the script did not load. If you opened this from an older Home Screen icon, delete it and reopen the page, or clear Safari cache for this site. Build r5.");
         }
       }, 4000);
       if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("./sw.js?v=r4", { scope: "./" }).then(function (reg) {
+        navigator.serviceWorker.register("./sw.js?v=r5", { scope: "./" }).then(function (reg) {
           try { reg.update(); } catch (err) {}
         }).catch(function () {});
       }
     })();
   </script>
-  <script type="module" src="./js/game.js" onerror="window.__ASHFALL_MODULE_ERR=true; if (window.__ashfallBootFail) window.__ashfallBootFail('The game script failed to load. Try a hard refresh or clear this site\\'s data. Build r4.');"></script>
+  <script type="module" src="./js/game.js" onerror="window.__ASHFALL_MODULE_ERR=true; if (window.__ashfallBootFail) window.__ashfallBootFail('The game script failed to load. Try a hard refresh or clear this site\\'s data. Build r5.');"></script>
 </body>
 </html>

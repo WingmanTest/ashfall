@@ -13,6 +13,8 @@ export class Input {
     this.interact = false;
     this.reload = false;
     this.sprint = false;
+    this.autoSprint = false;
+    this._fwdTime = 0;
     this.aim = false;
     this.fireMode = false;
     this.inv = false;
@@ -85,7 +87,6 @@ export class Input {
     setBtn("btn-fire", "fire");
     setBtn("btn-reload", "reload");
     setBtn("btn-interact", "interact");
-    setBtn("btn-sprint", "sprint");
     setBtn("btn-aim", "aim");
     setBtn("btn-mode", "fireMode");
     document.getElementById("btn-inv")?.addEventListener("pointerdown", (e) => { e.preventDefault(); e.stopPropagation(); this.onUnlock?.(); this.inv = true; });
@@ -189,7 +190,31 @@ export class Input {
     if (mlen > 1) { mx /= mlen; mz /= mlen; }
     this.moveX = mx;
     this.moveZ = mz;
-    this.sprint = this.sprint || !!(k["ShiftLeft"] || k["ShiftRight"]);
+    const keySprint = !!(k["ShiftLeft"] || k["ShiftRight"]);
+    this.sprint = keySprint || this.autoSprint;
+  }
+
+  tickAutoSprint(dt, allowed) {
+    const fwd = -this.moveZ; // negative moveZ is forward
+    const joy = document.getElementById("joy");
+    if (!this.touch || !allowed) {
+      this.autoSprint = false;
+      this._fwdTime = 0;
+      joy?.classList.remove("sprint");
+      if (!this.keys["ShiftLeft"] && !this.keys["ShiftRight"]) this.sprint = false;
+      return;
+    }
+    if (fwd >= 0.72) {
+      this._fwdTime += dt;
+      if (this._fwdTime >= 1.2) this.autoSprint = true;
+    } else if (this.autoSprint && fwd >= 0.55) {
+      // hold sprint while still pushing clearly forward
+    } else {
+      this.autoSprint = false;
+      this._fwdTime = 0;
+    }
+    this.sprint = this.autoSprint || !!(this.keys["ShiftLeft"] || this.keys["ShiftRight"]);
+    joy?.classList.toggle("sprint", this.autoSprint);
   }
 
   consumeLook(touch) {

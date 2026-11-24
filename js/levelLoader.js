@@ -7,6 +7,11 @@ import { rollContainer, aliasItem } from "./systems.js";
 import { addItem, takeItem, hasItems } from "./inventory.js";
 import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js";
 
+function cleanLabel(s) {
+  return String(s || "").replace(/\s*\(\s*filler\s*\)/gi, "").replace(/\s{2,}/g, " ").trim();
+}
+
+
 export function inShape(shape, x, z) {
   if (!shape) return false;
   if (shape.type === "rect" || (shape.x0 != null && shape.z0 != null)) {
@@ -409,7 +414,7 @@ export class LevelRuntime {
     for (const l of (L.spawns?.loot || [])) {
       if (l.when && !check(l.when)) continue;
       const items = rollContainer(l.container, l.location, ch, l.guaranteed, this.systems, l.id);
-      const rec = { ...l, taken: false, items, remaining: { ...items } };
+      const rec = { ...l, taken: false, items, remaining: { ...items }, label: cleanLabel(l.label || l.container || "Container") };
       const mesh = lootCrate();
       mesh.position.set(l.x, 0.2, l.z);
       this.group.add(mesh);
@@ -433,12 +438,12 @@ export class LevelRuntime {
       chosen.set(id, s);
     }
     for (const [id, s] of chosen) {
-      const mesh = makePerson({ color: 0x3a4550, hood: 0x2a3038 });
+      const mesh = makePerson({ id });
       mesh.position.set(s.x, 0, s.z);
       mesh.rotation.y = s.rotY || 0;
       this.group.add(mesh);
       world.npcs.push({
-        id, name: s.label || id, x: s.x, z: s.z, rotY: s.rotY || 0,
+        id, name: s.label || (id || '').replace(/_/g, ' '), x: s.x, z: s.z, rotY: s.rotY || 0,
         mesh, alive: true, dialogue: s.dialogue, behavior: s.behavior,
       });
     }
@@ -728,4 +733,3 @@ export class LevelRuntime {
     return true;
   }
 }
-

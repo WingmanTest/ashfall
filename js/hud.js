@@ -99,23 +99,32 @@ export class HUD {
     ctx.font = "11px monospace";
     wrap(ctx, this.objText || "", 12, y + 26, w - 24, 13);
 
-    // coat / filter pips
+    // coat / filter pips sit just above the weapon readout
     ctx.font = "9px monospace";
     ctx.fillStyle = "#8a9aaa";
-    let pip = 12;
-    if (player.coatOn) { ctx.fillText("COAT", pip, h - 118); pip += 36; }
-    if (player.filterOn && !has("filter")) { ctx.fillText("FILTER", pip, h - 118); }
+    ctx.textAlign = "left";
+    let pip = 10;
+    const wepBase = h - 68;
+    if (player.coatOn) { ctx.fillText("COAT", pip, wepBase - 22); pip += 36; }
+    if (player.filterOn && !has("filter")) { ctx.fillText("FILTER", pip, wepBase - 22); }
 
-    // weapon / ammo bottom (leave room for touch)
+    // weapon / ammo: bottom-left, clearly above the joystick / fire cluster
     const def = ITEMS[player.equipped];
     ctx.textAlign = "left";
     ctx.fillStyle = "#e8eef4";
-    ctx.font = "12px monospace";
+    ctx.font = "11px monospace";
+    const wepName = (def?.name || player.equipped || "").toUpperCase();
+    ctx.fillText(wepName, 10, wepBase);
     const ammo = def && def.ammo ? `${player.mags[player.equipped] || 0} / ${inv[def.ammo] || 0}` : "";
-    ctx.fillText((def?.name || player.equipped).toUpperCase(), 12, h - 96);
     if (ammo) {
       ctx.fillStyle = "#c5d0da";
-      ctx.fillText(ammo, 12, h - 82);
+      ctx.font = "10px monospace";
+      ctx.fillText(ammo, 10, wepBase + 12);
+    }
+    if (opts.sprinting) {
+      ctx.fillStyle = "#c5d0da";
+      ctx.font = "9px monospace";
+      ctx.fillText("SPRINT", 10 + ctx.measureText(wepName).width + 8, wepBase);
     }
 
     // crosshair
@@ -128,12 +137,18 @@ export class HUD {
     ctx.moveTo(cx, cy + 2); ctx.lineTo(cx, cy + 6);
     ctx.stroke();
 
-    // prompt
+    // interact prompt: just below the crosshair, never near the weapon readout
     if (this.prompt) {
+      ctx.font = "11px monospace";
       ctx.textAlign = "center";
+      const lines = wrapLines(ctx, this.prompt, w * 0.84);
+      const py = cy + 16;
+      const tw = Math.max(...lines.map((s) => ctx.measureText(s).width), 40) + 12;
+      const th = lines.length * 13 + 8;
+      ctx.fillStyle = "rgba(10,13,18,0.72)";
+      ctx.fillRect(cx - tw / 2, py - 11, tw, th);
       ctx.fillStyle = "#e8eef4";
-      ctx.font = "12px monospace";
-      ctx.fillText(this.prompt, w / 2, h * 0.62);
+      lines.forEach((s, i) => ctx.fillText(s, cx, py + i * 13));
     }
 
     if (this.toastT > 0) {
@@ -167,4 +182,17 @@ function wrap(ctx, text, x, y, max, lh) {
     } else line = t;
   }
   if (line) ctx.fillText(line, x, y);
+}
+
+function wrapLines(ctx, text, max) {
+  const words = String(text || "").split(/\s+/).filter(Boolean);
+  const lines = [];
+  let line = "";
+  for (const w of words) {
+    const t = line ? line + " " + w : w;
+    if (line && ctx.measureText(t).width > max) { lines.push(line); line = w; }
+    else line = t;
+  }
+  if (line) lines.push(line);
+  return lines.length ? lines : [String(text || "")];
 }

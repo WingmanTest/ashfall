@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { fitHeight, makePerson, makeDog } from "./world.js";
+import { tickActor } from "./actors.js";
 
 const KINDS = {
   husk: { hp: 48, spd: 1.25, dmg: 9, range: 1.45, detect: 11, color: 0xb89a8c, body: "husk" },
@@ -67,7 +68,7 @@ export class EnemySystem {
     } else if (body === "dog") {
       mesh = makeDog(def.color);
     } else if (body === "army") {
-      mesh = makePerson({ color: def.color, hood: 0x1a2018, skin: 0x8a735c });
+      mesh = makePerson({ id: kind, role: "army", color: def.color, hood: 0x1a2018, skin: 0x8a735c });
       const helm = new THREE.Mesh(
         new THREE.SphereGeometry(0.17, 8, 6, 0, Math.PI * 2, 0, Math.PI * 0.55),
         new THREE.MeshStandardMaterial({ color: 0x2a2e28, roughness: 0.7, metalness: 0.25 })
@@ -75,7 +76,7 @@ export class EnemySystem {
       helm.position.y = 1.55;
       mesh.add(helm);
     } else {
-      mesh = makePerson({ color: def.color, hood: 0x2a2420, skin: 0xc4a07a });
+      mesh = makePerson({ id: kind, role: body === "husk" ? "husk" : (kind || "raider"), color: def.color, hood: 0x2a2420, skin: def.skin || 0xc4a07a });
     }
     mesh.position.set(x, 0, z);
     this.scene.add(mesh);
@@ -151,6 +152,12 @@ export class EnemySystem {
       if (body === "army" && n < 5) continue;
     }
     for (const [k, x, z] of allowed) this.spawn(k, x, z, { ambient: true });
+  }
+
+  tickActors(dt, player) {
+    for (const e of this.list) {
+      if (e.alive && e.mesh?.userData?.actor) tickActor(e.mesh, dt, player);
+    }
   }
 
   update(dt, player, world, audio) {

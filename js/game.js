@@ -20,7 +20,7 @@ import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel
 import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js";
 
 window.__ASHFALL_MODULE = true;
-window.__ASHFALL_BUILD = "r4";
+window.__ASHFALL_BUILD = "r5";
 
 const $ = (id) => document.getElementById(id);
 const frame = $("frame");
@@ -45,10 +45,24 @@ function showError(err) {
   const msg = String(err && (err.stack || err.message) || err);
   const el = $("boot-error");
   const pre = $("boot-error-pre");
+  const title = $("boot-error-title");
+  const dismiss = $("boot-error-dismiss");
+  const runtime = !!window.__ASHFALL_BOOTED;
+  if (title) title.textContent = runtime ? "RUNTIME ERROR" : "ASHFALL FAILED TO LOAD";
   if (pre) pre.textContent = msg;
-  if (el) el.classList.add("show");
+  if (el) {
+    el.classList.toggle("runtime", runtime);
+    el.classList.add("show");
+  }
+  if (dismiss) {
+    dismiss.hidden = !runtime;
+    dismiss.onclick = () => { el?.classList.remove("show"); };
+  }
   window.__ERROR = msg;
   try { console.error(err); } catch {}
+}
+function cleanLabel(s) {
+  return String(s || "").replace(/\s*\(\s*filler\s*\)/gi, "").replace(/\s{2,}/g, " ").trim();
 }
 function showSaveNotice(msg) {
   const el = $("save-notice");
@@ -139,6 +153,11 @@ class Game {
       get player() { return self.player; },
       get inv() { return self.inv; },
       get fps() { return self.fps; },
+      get autoSprint() { return !!self.input.autoSprint; },
+      interact: () => self.interact(),
+      leaveDialogue: () => self.leaveDialogue(),
+      get sprinting() { return !!self.input.sprint; },
+      get loot() { return self.world && self.world.loot; },
       storyFiles: self.story.loadedFiles,
       systemsFiles: self.systems.loadedFiles,
       levelsFiles: self.levels.loadedFiles,
@@ -674,22 +693,40 @@ class Game {
 
   openDialogue(dlg) {
     if (!dlg) return;
+    if (this._talkLockUntil && performance.now() < this._talkLockUntil) return;
     this.dlg = dlg;
     this.dlgId = dlg.start || "start";
+    this._dlgWalk = new Set();
     this.mode = "dialogue";
     setMenuOpen(true);
     this.seen[dlg.id] = true;
     this._showNode(true);
   }
 
+  _lockTalk(ms = 600) {
+    this._talkLockUntil = performance.now() + ms;
+    try { this.input.interact = false; } catch {}
+  }
+
+  leaveDialogue() {
+    this._lockTalk(700);
+    return this._finishDialogue({ end: true });
+  }
+
   _showNode(entering) {
     if (!this.dlg) return;
     let id = this.dlgId;
     let node = this.dlg.nodes[id];
-    if (!node) { this.closePanel(); return; }
+    if (!node) { this._lockTalk(); this.closePanel(); return; }
+    this._dlgWalk = this._dlgWalk || new Set();
+    if (entering && this._dlgWalk.has(id) && node.branches && !node.text) {
+      return this._finishDialogue(node);
+    }
+    if (entering) this._dlgWalk.add(id);
     if (entering && node.branches && !node.text) {
       const nxt = resolveBranches(node.branches, this._storyCtx());
-      if (nxt) { this.dlgId = nxt; return this._showNode(true); }
+      if (nxt && nxt !== id) { this.dlgId = nxt; return this._showNode(true); }
+      if (!nxt) return this._finishDialogue(node);
     }
     if (entering && node.effects) applyEffects(node.effects, this._ctxFx());
     if (entering && this._pendingEvent && (this._pendingEvent.name === "encounter" || this._pendingEvent.name === "minigame") && !node.text && !node.choices?.length) {
@@ -701,7 +738,7 @@ class Game {
       : (node.speaker === "narrator" ? "" : this.story.npcName(this.dlg.npc));
     const choices = (node.choices || []).filter((c) => !c.conditions || evalCondition(c.conditions, this._storyCtx()));
     const canContinue = !choices.length && (node.next || node.branches || node.end || true);
-    let html = "";
+    let html = `<div class="dlg-bar"><button type="button" data-a="leave">LEAVE</button></div>`;
     if (who) html += `<div class="who">${escapeHtml(String(who).toUpperCase())}</div>`;
     html += `<p class="line">${escapeHtml(node.text || "")}</p><div class="choices">`;
     if (choices.length) {
@@ -721,6 +758,7 @@ class Game {
         if (locked) return;
         locked = true;
         this.audio.ui();
+        if (btn.dataset.a === "leave") return this.leaveDialogue();
         if (btn.dataset.i === "next") this._advanceNode(node);
         else this._pickChoice(choices[+btn.dataset.i], node);
       };
@@ -738,7 +776,7 @@ class Game {
       const nxt = resolveBranches(node.branches, this._storyCtx());
       if (nxt) { this.dlgId = nxt; return this._showNode(true); }
     }
-    if (node.next && !node.end) { this.dlgId = node.next; return this._showNode(true); }
+    if (node.next && !node.end && node.next !== this.dlgId) { this.dlgId = node.next; return this._showNode(true); }
     this._finishDialogue(node);
   }
 
@@ -776,6 +814,7 @@ class Game {
   }
 
   _finishDialogue(node) {
+    this._lockTalk(700);
     if (this.dlg?.on_end) applyEffects(this.dlg.on_end, this._ctxFx());
     const pending = this._pendingEvent;
     this._pendingEvent = null;
@@ -947,7 +986,7 @@ class Game {
     this.lootOpen = L;
     this.searchT = 0.42;
     this.audio.rummage();
-    panel.innerHTML = `<h2>${escapeHtml((L.label || "Container").toUpperCase())}</h2><div class="searching">SEARCHING…</div>`;
+    panel.innerHTML = `<h2>${escapeHtml(cleanLabel(L.label || "Container").toUpperCase())}</h2><div class="searching">SEARCHING…</div>`;
     panel.classList.add("show");
   }
 
@@ -957,7 +996,7 @@ class Game {
     // optional table extras already baked into items at apply-time
     const entries = Object.entries(left).filter(([, n]) => n > 0);
     L.remaining = left;
-    let html = `<h2>${escapeHtml((L.label || "Container").toUpperCase())}</h2>`;
+    let html = `<h2>${escapeHtml(cleanLabel(L.label || "Container").toUpperCase())}</h2>`;
     if (!entries.length) {
       html += `<p class="line">Empty. Whoever was here got here first.</p><div class="choices"><button data-a="leave">[Leave]</button></div>`;
     } else {
@@ -1038,8 +1077,7 @@ class Game {
       this.hud.say("Too heavy.");
       return false;
     }
-    if (!this.tryGive(id, n)) return;
-    return true;
+    return addItem(this.inv, id, n);
   }
 
   openInventory() {
@@ -1091,6 +1129,9 @@ class Game {
       showScreen(null);
       if (!Array.isArray(this.notes)) this.notes = [];
       let html = `<h2>FIELD NOTES</h2>`;
+      if (fromTitle) {
+        html += `<p class="line" style="color:#8a9aaa;font-size:11px;">On a phone: walk with the stick and keep pushing forward for a moment to sprint. Look on the right. USE to search and talk. On a keyboard, hold Shift to sprint.</p>`;
+      }
       if (!this.notes.length) html += `<p class="line">Nothing written down yet.</p>`;
       for (const n of this.notes) {
         const title = (n && n.title) || "Note";
@@ -1146,6 +1187,7 @@ class Game {
     if (hit.type === "loot") return this.beginSearch(hit.obj);
     if (hit.type === "npc") {
       if (this.alive[hit.obj.id] === false) { this.hud.say("They're gone."); return; }
+      if (this._talkLockUntil && performance.now() < this._talkLockUntil) return;
       const dlg = this.story.pickDialogue(hit.obj.id, this._storyCtx());
       if (dlg) return this.openDialogue(dlg);
       this.hud.say((hit.obj.name || "They") + " has nothing to say.");
@@ -1356,6 +1398,12 @@ class Game {
   update(dt) {
     this.hud.tick(dt);
     this.input.sample();
+    const canAutoSprint = this.mode === "play"
+      && !this.input.aim
+      && this.player.stats.stamina > 2
+      && !this.player.carryState?.overSoft
+      && !this.player.carryState?.overHard;
+    this.input.tickAutoSprint(dt, canAutoSprint);
     if (this.input.consume("pause") && this.mode === "play") return this.pause();
     if (this.mode === "pause" && this.input.consume("pause")) return this.resume();
 
@@ -1462,6 +1510,8 @@ class Game {
 
     this.enemies.update(dt, this.player, this.world, this.audio);
     this.player.syncCamera();
+    this.world.tickPeople?.(dt, this.player);
+    this.enemies.tickActors?.(dt, this.player);
 
     // Flashlight follows camera if we own one (Lumen owns its own)
     if (this.world.lights.flash && !this.pipeline) {
@@ -1476,10 +1526,10 @@ class Game {
 
     const near = this.world.nearestInteract(this.player.x, this.player.z, 2.3);
     if (near) {
-      const name = near.type === "loot" ? (near.obj.label || "Search")
-        : near.type === "npc" ? (near.obj.name || "Talk")
+      const raw = near.type === "loot" ? (near.obj.label || "Search")
+        : near.type === "npc" ? (this.story.npcName?.(near.obj.id) || near.obj.name || "Talk")
         : (near.obj.label || "Use");
-      this.hud.prompt = (this.input.touch ? "USE  " : "E  ") + name;
+      this.hud.prompt = (this.input.touch ? "USE  " : "E  ") + cleanLabel(raw);
     } else this.hud.prompt = "";
 
     if (loc?.id === "loc_thomson_dam") this.flags.at_dam = true;
@@ -1548,6 +1598,7 @@ class Game {
       unlocks: this.hudUnlocks,
       filter: this.flags.has_gas_mask ? (p.filterCharge || 0) : 0,
       seal: this._sealPct(this._currentShelterId() || Object.keys(this.shelterSeals)[0]),
+      sprinting: !!this.input.sprint && this.mode === "play",
     });
     else this.hud.ctx.clearRect(0, 0, this.hud.w, this.hud.h);
 
@@ -1806,7 +1857,7 @@ async function boot() {
     game.loop();
     window.__READY = true;
     window.__ASHFALL_BOOTED = true;
-    window.__ASHFALL_BUILD = "r4";
+    window.__ASHFALL_BUILD = "r5";
     const banner = $("boot-banner");
     if (banner) banner.classList.remove("show");
     window.__INTEGRATION = {

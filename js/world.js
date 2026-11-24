@@ -4,6 +4,7 @@ import { KTX2Loader } from "three/addons/loaders/KTX2Loader.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { LOCATIONS } from "./config.js";
 import { isMobileClient } from "./device.js";
+import { tickActor } from "./actors.js";
 
 export function makeLoader(renderer) {
   const loader = new GLTFLoader();
@@ -41,28 +42,7 @@ export function fitHeight(obj, height, alignBottom = true) {
   return obj;
 }
 
-export function makePerson({ color = 0x3a4550, hood = 0x2a3038, skin = 0xc4a07a } = {}) {
-  const g = new THREE.Group();
-  const coat = new THREE.Mesh(
-    new THREE.CapsuleGeometry(0.22, 0.7, 4, 8),
-    new THREE.MeshStandardMaterial({ color, roughness: 0.9 })
-  );
-  coat.position.y = 0.85;
-  const head = new THREE.Mesh(
-    new THREE.SphereGeometry(0.16, 8, 6),
-    new THREE.MeshStandardMaterial({ color: skin, roughness: 0.7 })
-  );
-  head.position.y = 1.42;
-  const hoodM = new THREE.Mesh(
-    new THREE.SphereGeometry(0.2, 8, 6, 0, Math.PI * 2, 0, Math.PI * 0.55),
-    new THREE.MeshStandardMaterial({ color: hood, roughness: 1, side: THREE.DoubleSide })
-  );
-  hoodM.position.y = 1.48;
-  hoodM.rotation.x = 0.3;
-  g.add(coat, head, hoodM);
-  g.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
-  return g;
-}
+export { makePerson, tickActor } from "./actors.js";
 
 export function makeDog(color = 0x3b322c) {
   const g = new THREE.Group();
@@ -505,7 +485,7 @@ export class World {
     for (const npc of list) {
       const p = places[npc.id];
       if (!p) continue;
-      const g = makePerson({ color: p.color, hood: p.hood });
+      const g = makePerson({ id: npc.id, color: p.color, hood: p.hood });
       g.position.set(p.x, 0, p.z);
       const name = npc.name || npc.id;
       g.add(labelSprite(name.toUpperCase()));
@@ -647,6 +627,12 @@ export class World {
         f.flame.scale.y = 0.85 + Math.sin(performance.now() * 0.012 + f.x) * 0.2;
       }
       if (f.light) f.light.intensity = 1.8 + Math.sin(performance.now() * 0.02) * 0.5;
+    }
+  }
+
+  tickPeople(dt, player) {
+    for (const n of this.npcs) {
+      if (n.mesh && n.alive !== false) tickActor(n.mesh, dt, player);
     }
   }
 
