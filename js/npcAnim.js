@@ -1,7 +1,7 @@
 // One AnimationMixer per rigged instance. Clips are in-place; locomotion
 // is driven by the object's path speed via clipTimeScale().
 import * as THREE from "three";
-import { playClip, clipTimeScale, getClips, isRigged } from "../models/registry.js?v=r16";
+import { playClip, clipTimeScale, getClips, isRigged } from "../models/registry.js?v=r16.1";
 
 export { isRigged, playClip, clipTimeScale, getClips };
 

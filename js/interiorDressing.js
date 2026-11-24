@@ -7,9 +7,9 @@ import {
   ARCH_CATALOG, ARCH_DECAL_FRAMES, ARCH_TEXTURES,
   loadArchModel, makeArchInstanced, setDoorOpen, setArchSeason,
   loadFloorTexture, makeArchFloorDecals, makeArchDust, archPoseMatrix,
-} from "../models/registry.js?v=r16";
-import { gltfLoader } from "./models3d.js?v=r16";
-import { ARCH_OPENINGS, addPunchedWall, applyWorldUV } from "./buildings.js?v=r16";
+} from "../models/registry.js?v=r16.1";
+import { gltfLoader } from "./models3d.js?v=r16.1";
+import { ARCH_OPENINGS, addPunchedWall, applyWorldUV } from "./buildings.js?v=r16.1";
 
 const KNOWN = new Set([
   "ch01_day_three", "ch02_the_registry", "ch03_the_long_cold", "ch04_black_start",
@@ -141,7 +141,10 @@ function tileCh(tiles, r, c) {
 }
 function isInteriorCh(ch, L) {
   const t = legendOf(L, ch);
-  return !!(t.name === "interior_floor" || t.name === "covered_floor" || t.roof || ch === ",");
+  // Only real room floors count as "inside". covered_floor / U is often an
+  // outdoor over-road deck (Ch2 4th Street); treating it as interior made the
+  // motel's street door look like a partition and face the wrong way.
+  return !!(t.name === "interior_floor" || ch === ",");
 }
 function isSolidCh(ch, L) {
   return !!(legendOf(L, ch).solid);

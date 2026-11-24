@@ -1,7 +1,7 @@
 // Story / ambient NPC patrol and wander. Quest posts stay nearby; talking or
 // approaching stops them, they face the player and idle, then resume.
-import { ANIMATIONS } from "../models/registry.js?v=r16";
-import { attachMixer, setLocomotion, updateMixer, faceToward, disposeMixer, isRigged, refreshNameplate } from "./npcAnim.js?v=r16";
+import { ANIMATIONS } from "../models/registry.js?v=r16.1";
+import { attachMixer, setLocomotion, updateMixer, faceToward, disposeMixer, isRigged, refreshNameplate } from "./npcAnim.js?v=r16.1";
 
 const APPROACH_R = 3.4;
 const TALK_HOLD = 0.6;

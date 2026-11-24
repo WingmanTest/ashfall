@@ -1,5 +1,5 @@
 /** B_round minimap: fixed-north circular map, per Cartographer NOTES.md. */
-import { currentMainObjective } from "./questTrack.js?v=r16";
+import { currentMainObjective } from "./questTrack.js?v=r16.1";
 
 const PLOT = 78;
 const BEZEL = 6;

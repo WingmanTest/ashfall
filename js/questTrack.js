@@ -1,5 +1,5 @@
-import { evalCondition } from "./story.js?v=r16";
-import { chapterNum } from "./save.js?v=r16";
+import { evalCondition } from "./story.js?v=r16.1";
+import { chapterNum } from "./save.js?v=r16.1";
 
 /** Companion tutorial and any objective marked side/tutorial stay off the main HUD. */
 export function isSideObjective(o) {
