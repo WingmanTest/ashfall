@@ -1,7 +1,7 @@
 /* ASHFALL service worker. Registered with scope "./" so it stays under
    https://wingmantest.github.io/ashfall/ (or any subpath host). Bump CACHE
    when publishing so Home Screen installs pick up the new build. */
-const CACHE = "ashfall-2026-11-23-r9";
+const CACHE = "ashfall-2026-11-23-r10";
 const CODE_RE = /\.(html?|js|mjs|css|json|webmanifest)$/i;
 
 function isCodeRequest(req, url) {

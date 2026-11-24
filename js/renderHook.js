@@ -29,7 +29,7 @@
 // If nothing usable is found, BuiltinPipeline is used (low-res RT + winter post).
 
 const CANDIDATES = [
-  "./render/index.js?v=r9",
+  "./render/index.js",
 ];
 
 export async function discoverRenderModule() {

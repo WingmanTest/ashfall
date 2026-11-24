@@ -2,9 +2,9 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { KTX2Loader } from "three/addons/loaders/KTX2Loader.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
-import { LOCATIONS } from "./config.js?v=r9";
-import { isMobileClient } from "./device.js?v=r9";
-import { tickActor } from "./actors.js?v=r9";
+import { LOCATIONS } from "./config.js?v=r10";
+import { isMobileClient } from "./device.js?v=r10";
+import { tickActor } from "./actors.js?v=r10";
 
 export function makeLoader(renderer) {
   const loader = new GLTFLoader();
@@ -42,7 +42,7 @@ export function fitHeight(obj, height, alignBottom = true) {
   return obj;
 }
 
-export { makePerson, tickActor } from "./actors.js?v=r9";
+export { makePerson, tickActor } from "./actors.js?v=r10";
 
 export function makeDog(color = 0x3b322c) {
   const g = new THREE.Group();

@@ -1,4 +1,4 @@
-import { CFG, ITEMS } from "./config.js?v=r9";
+import { CFG, ITEMS } from "./config.js?v=r10";
 
 export class HUD {
   constructor(canvas) {
@@ -63,28 +63,43 @@ export class HUD {
     if (has("hunger")) bars.push(["HUNGER", s.hunger, "#d4a15a", 100]);
     if (has("rad") && (s.rad || 0) > 0.5) bars.push(["RAD", s.rad, "#c8d45a", 100]);
     if (has("filter")) bars.push(["FILTER", opts.filter ?? 0, "#9ad4a8", 100]);
-    // Compact top-left vitals: never more than ~40% of the width, never under BAG / pause.
-    const barW = Math.min(Math.round(w * 0.38), 152);
-    const barX = 28;
-    let y = 10;
-    ctx.font = "7px monospace";
+    // Typography is authored for a 360×640 design grid (gameHudResize). Scale if the
+    // canvas is ever a different size so labels never collide with their meters.
+    const ui = w / 360;
+    const px = (n) => Math.max(1, Math.round(n * ui));
     ctx.textAlign = "left";
+    ctx.font = `${px(7)}px monospace`;
+    const labelGap = px(5);
+    const labelW = Math.ceil(Math.max(
+      ctx.measureText("HP").width,
+      ctx.measureText("WATER").width,
+      ctx.measureText("WARM").width,
+      ctx.measureText("HUNGER").width,
+      ctx.measureText("FILTER").width,
+      ...bars.map(([lab]) => ctx.measureText(lab).width),
+    ));
+    const barX = 8 + labelW + labelGap;
+    const barW = Math.min(Math.round(w * 0.38), px(152));
+    const barH = px(5);
+    const barGap = px(8);
+    let y = px(10);
     for (const [lab, v, col, max] of bars) {
       ctx.fillStyle = "rgba(10,13,18,0.55)";
-      ctx.fillRect(barX, y, barW, 5);
+      ctx.fillRect(barX, y, barW, barH);
       ctx.strokeStyle = "rgba(232,238,244,0.4)";
-      ctx.strokeRect(barX, y, barW, 5);
+      ctx.strokeRect(barX, y, barW, barH);
       ctx.fillStyle = col;
-      ctx.fillRect(barX, y, Math.max(0, barW * (v / max)), 5);
+      ctx.fillRect(barX, y, Math.max(0, barW * (v / max)), barH);
       ctx.fillStyle = "#e8eef4";
-      ctx.fillText(lab, 8, y + 5);
-      y += 8;
+      ctx.font = `${px(7)}px monospace`;
+      ctx.fillText(lab, 8, y + barH);
+      y += barGap;
     }
 
-    // Location / time / objective tucked under the bars, leaving the top-right free.
-    const metaMax = Math.min(w * 0.58, w - 96);
+    // Location / time tucked under the bars, leaving the top-right free for BAG / pause.
+    const metaMax = Math.min(w * 0.62, w - px(88));
     ctx.fillStyle = "#c5d0da";
-    ctx.font = "8px monospace";
+    ctx.font = `${px(8)}px monospace`;
     const loc = (this.loc || "").toUpperCase();
     const time = (this.clock || "").trim();
     const wx = (this.weather || "").trim();
@@ -92,11 +107,18 @@ export class HUD {
     while (meta.length > 3 && ctx.measureText(meta).width > metaMax) meta = meta.slice(0, -2);
     if (meta !== [loc, time, wx].filter(Boolean).join("  ") && meta.length > 1) meta = meta.slice(0, -1) + "…";
     ctx.textAlign = "left";
-    ctx.fillText(meta, 8, y + 10);
+    ctx.fillText(meta, 8, y + px(10));
 
+    // Compact OBJECTIVE block: small header + 11px body (≈12px CSS on iPhone 390).
+    const objRaw = String(this.objText || "");
+    const objBody = objRaw.replace(/^OBJECTIVE\s+/i, "").trim();
+    const objMax = metaMax;
+    ctx.fillStyle = "#9aa8b4";
+    ctx.font = `${px(8)}px monospace`;
+    if (objBody || objRaw) ctx.fillText("OBJECTIVE", 8, y + px(22));
     ctx.fillStyle = "#e8eef4";
-    ctx.font = "10px monospace";
-    wrap(ctx, this.objText || "", 8, y + 22, metaMax, 12);
+    ctx.font = `${px(11)}px monospace`;
+    wrap(ctx, objBody, 8, y + px(34), objMax, px(13));
 
     // Weapon name (and ammo) fade out after ~2s; only return on a swap.
     if (player.equipped !== this._lastWep) {

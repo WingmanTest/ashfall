@@ -9,7 +9,7 @@
   <link rel="icon" href="./favicon.ico" sizes="any" />
   <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
   <link rel="manifest" href="./manifest.webmanifest" />
-  <title>ASHFALL: Lakehead</title>
+  <title>ASHFALL: Truckee Meadows</title>
   <style>
     :root { --bg:#07090c; --ice:#e8eef4; --ink:#0a0d12; --muted:#8a9aaa; }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -394,23 +394,23 @@
 </head>
 <body class="wield-melee">
   <div id="frame">
-    <div id="build-tag">r9</div>
+    <div id="build-tag">r10</div>
     <canvas id="view" width="180" height="320"></canvas>
     <canvas id="hud" width="360" height="640"></canvas>
     <div id="ui">
       <div id="title" class="screen show top-safe">
-        <h1>ASHFALL<span>LAKEHEAD  ·  SECTOR 4</span></h1>
-        <p>October. The grid is dead. The lake is freezing. Your son’s insulin will not last the month.</p>
+        <h1>ASHFALL<span>SPARKS, NEVADA  ·  DAY THREE</span></h1>
+        <p>August. The grid is dead. Ninety-five by noon. Water is failing, and you stayed for Carly.</p>
         <div id="save-notice" hidden></div>
         <div class="btn-row">
-          <button class="menu" id="btn-new" type="button">NEW SHIFT</button>
+          <button class="menu" id="btn-new" type="button">NEW GAME</button>
           <button class="menu" id="btn-continue" type="button" style="display:none">CONTINUE</button>
           <button class="menu" id="btn-notes-title" type="button">FIELD NOTES</button>
         </div>
       </div>
       <div id="dead" class="screen">
         <h1>COLD<span>YOU DID NOT GET UP</span></h1>
-        <p id="dead-reason">Hypothermia, Sector 4.</p>
+        <p id="dead-reason">You did not get up.</p>
         <div class="btn-row">
           <button class="menu" id="btn-restart">BEGIN AGAIN</button>
           <button class="menu" id="btn-menu">TITLE</button>
@@ -460,8 +460,8 @@
     </div>
   </div>
   <script>
-    window.__ASHFALL_EXPECTED_BUILD = "r9";
-    window.__ASHFALL_BUILD = "r9";
+    window.__ASHFALL_EXPECTED_BUILD = "r10";
+    window.__ASHFALL_BUILD = "r10";
     window.__ASHFALL_BOOTED = false;
     window.__ASHFALL_MODULE = false;
     window.__ASHFALL_PENDING = null;
@@ -547,12 +547,12 @@
       setTimeout(function () {
         if (window.__ASHFALL_BOOTED) return;
         if (window.__ASHFALL_MODULE) {
-          showBanner("The game file loaded, but startup is stuck (often a Safari WebGL or cache issue). Wait a moment, or clear this site's data and reload. Build r9.");
+          showBanner("The game file loaded, but startup is stuck (often a Safari WebGL or cache issue). Wait a moment, or clear this site's data and reload. Build r10.");
         } else {
-          showBanner("The game never started — the script did not load. If you opened this from an older Home Screen icon, delete it and reopen the page, or clear Safari cache for this site. Build r9.");
+          showBanner("The game never started — the script did not load. If you opened this from an older Home Screen icon, delete it and reopen the page, or clear Safari cache for this site. Build r10.");
         }
       }, 4000);
-      var EXPECTED = window.__ASHFALL_EXPECTED_BUILD || "r9";
+      var EXPECTED = window.__ASHFALL_EXPECTED_BUILD || "r10";
       window.__ashfallBustStaleBuild = function (found) {
         var key = "ashfall-bust-" + EXPECTED;
         var reloadOnce = function () {
@@ -591,12 +591,12 @@
         if (window.__ASHFALL_BOOTED || buildChecks > 80) clearInterval(buildTimer);
       }, 50);
       if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("./sw.js?v=r9", { scope: "./" }).then(function (reg) {
+        navigator.serviceWorker.register("./sw.js?v=r10", { scope: "./" }).then(function (reg) {
           try { reg.update(); } catch (err) {}
         }).catch(function () {});
       }
     })();
   </script>
-  <script type="module" src="./js/game.js?v=r9" onerror="window.__ASHFALL_MODULE_ERR=true; if (window.__ashfallBootFail) window.__ashfallBootFail('The game script failed to load. Try a hard refresh or clear this site\\'s data. Build r9.');"></script>
+  <script type="module" src="./js/game.js?v=r10" onerror="window.__ASHFALL_MODULE_ERR=true; if (window.__ashfallBootFail) window.__ashfallBootFail('The game script failed to load. Try a hard refresh or clear this site\\'s data. Build r10.');"></script>
 </body>
 </html>

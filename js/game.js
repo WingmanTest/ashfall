@@ -1,33 +1,33 @@
 import * as THREE from "three";
-import { CFG, WEAPONS_ORDER } from "./config.js?v=r9";
-import { weaponKind } from "./weapons/viewmodels.js?v=r9";
-import { Input } from "./input.js?v=r9";
-import { HUD } from "./hud.js?v=r9";
-import { World } from "./world.js?v=r9";
-import { Player } from "./player.js?v=r9";
-import { EnemySystem } from "./enemies.js?v=r9";
-import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r9";
-import { openCharacterSheet } from "./inventoryUI.js?v=r9";
-import { stopDoll3D } from "./doll3d.js?v=r9";
-import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r9";
-import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r9";
-import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r9";
-import { tickCompanion, disposeCompanion } from "./companion.js?v=r9";
-import { BreathSystem } from "./breath.js?v=r9";
-import { openTradeModal } from "./trade.js?v=r9";
-import { preloadModels } from "./models3d.js?v=r9";
-import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r9";
-import { isMobileClient, canvasDpr } from "./device.js?v=r9";
-import { LevelRuntime } from "./levelLoader.js?v=r9";
-import { attachAudio } from "./audioHook.js?v=r9";
-import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r9";
-import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r9";
-import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r9";
-import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js?v=r9";
+import { CFG, WEAPONS_ORDER } from "./config.js?v=r10";
+import { weaponKind } from "./weapons/viewmodels.js?v=r10";
+import { Input } from "./input.js?v=r10";
+import { HUD } from "./hud.js?v=r10";
+import { World } from "./world.js?v=r10";
+import { Player } from "./player.js?v=r10";
+import { EnemySystem } from "./enemies.js?v=r10";
+import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r10";
+import { openCharacterSheet } from "./inventoryUI.js?v=r10";
+import { stopDoll3D } from "./doll3d.js?v=r10";
+import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r10";
+import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r10";
+import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r10";
+import { tickCompanion, disposeCompanion } from "./companion.js?v=r10";
+import { BreathSystem } from "./breath.js?v=r10";
+import { openTradeModal } from "./trade.js?v=r10";
+import { preloadModels } from "./models3d.js?v=r10";
+import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r10";
+import { isMobileClient, canvasDpr } from "./device.js?v=r10";
+import { LevelRuntime } from "./levelLoader.js?v=r10";
+import { attachAudio } from "./audioHook.js?v=r10";
+import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r10";
+import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r10";
+import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r10";
+import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js?v=r10";
 
 window.__ASHFALL_MODULE = true;
-window.__ASHFALL_BUILD = "r9";
-if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r9") {
+window.__ASHFALL_BUILD = "r10";
+if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r10") {
   if (typeof window.__ashfallBustStaleBuild === "function") window.__ashfallBustStaleBuild(window.__ASHFALL_BUILD);
 }
 
@@ -2183,7 +2183,7 @@ class Game {
   _render(dt) {
     const p = this.player;
     const loc = this.world.locationAt(p.x, p.z);
-    this.hud.loc = loc?.name || "Sector 4";
+    this.hud.loc = loc?.name || "Sparks";
     const hour = (this.timeOfDay * 24 + 6) % 24;
     const hh = Math.floor(hour), mm = Math.floor((hour - hh) * 60);
     this.hud.clock = String(hh).padStart(2, "0") + ":" + String(mm).padStart(2, "0");
@@ -2314,12 +2314,12 @@ function sizeView(renderer, pipeline) {
 }
 
 function gameHudResize(hud, pipeline, size) {
-  if (!hud || !pipeline) return;
-  // Draw HUD at the pipeline's internal pixel grid so text sits on the same pixels as the scene.
-  const s = pipeline.internalSize || size;
-  if (!s || !s.width) return;
-  const w = Math.max(160, Math.round(s.width));
-  const h = Math.max(256, Math.round(s.height));
+  if (!hud) return;
+  // Keep HUD typography on a 360×640 design grid. The 3D view may render at a
+  // much lower internal size (≈243×432 on the mobile tier); stretching that
+  // buffer made OBJECTIVE text dominate the iPhone viewport.
+  const w = 360;
+  const h = 640;
   if (hud.c.width !== w || hud.c.height !== h) {
     hud.c.width = w;
     hud.c.height = h;
@@ -2336,7 +2336,7 @@ async function boot() {
     await story.load();
     const systems = await loadSystems();
     const levels = await loadLevels();
-    const { rollTable } = await import("./systems.js?v=r9");
+    const { rollTable } = await import("./systems.js?v=r10");
 
     const renderer = new THREE.WebGLRenderer({
       canvas: view, antialias: false, alpha: false, powerPreference: "high-performance",
@@ -2417,7 +2417,7 @@ async function boot() {
         }
       }
       const tierNow = pipeline.getTier?.() || tier;
-      renderInfo = { source: "lumen", url: "../render/index.js?v=r9", api: Object.keys(pipeline), crt, tier: tierNow, requestedTier: tier, look, internal: pipeline.internalSize, caps: pipeline.caps || null };
+      renderInfo = { source: "lumen", url: "../render/index.js", api: Object.keys(pipeline), crt, tier: tierNow, requestedTier: tier, look, internal: pipeline.internalSize, caps: pipeline.caps || null };
       sizeView(renderer, pipeline);
       gameHudResize(hud, pipeline);
     } catch (err) {
@@ -2454,13 +2454,13 @@ async function boot() {
     });
     game.levelRuntime.levels = levels;
     game.levelRuntime.bind(game);
-    // Ch1 geometry is built when the player taps NEW SHIFT, behind a loading bar.
+    // Ch1 geometry is built when the player taps NEW GAME, behind a loading bar.
     // Preloading it here doubled the work on iPhone and exhausted Safari's RAM.
     window.addEventListener("resize", () => { sizeView(renderer, pipeline); gameHudResize(hud, pipeline); });
     game.loop();
     window.__READY = true;
     window.__ASHFALL_BOOTED = true;
-    window.__ASHFALL_BUILD = "r9";
+    window.__ASHFALL_BUILD = "r10";
     const banner = $("boot-banner");
     if (banner) banner.classList.remove("show");
     window.__INTEGRATION = {

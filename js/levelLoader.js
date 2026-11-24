@@ -1,12 +1,12 @@
 // Cartographer chapter loader. Builds geometry from levels/*.json (do not edit those files).
 import * as THREE from "three";
-import { CFG } from "./config.js?v=r9";
-import { fitHeight, makePerson, makeDog } from "./world.js?v=r9";
-import { evalCondition, applyEffects } from "./story.js?v=r9";
-import { rollContainer, aliasItem } from "./systems.js?v=r9";
-import { addItem, takeItem, hasItems } from "./inventory.js?v=r9";
-import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js?v=r9";
-import { getModel, fitToGround } from "./models3d.js?v=r9";
+import { CFG } from "./config.js?v=r10";
+import { fitHeight, makePerson, makeDog } from "./world.js?v=r10";
+import { evalCondition, applyEffects } from "./story.js?v=r10";
+import { rollContainer, aliasItem } from "./systems.js?v=r10";
+import { addItem, takeItem, hasItems } from "./inventory.js?v=r10";
+import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js?v=r10";
+import { getModel, fitToGround } from "./models3d.js?v=r10";
 
 const SNOW_HEX = 0xeef2f6;
 function stripSnow(obj) {

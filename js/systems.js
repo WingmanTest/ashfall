@@ -1,7 +1,7 @@
 // Data-driven items / recipes / weapons / enemies / loot / survival.
 // Loads /systems/*.json when Quartermaster has written them. Never writes there.
-import { ITEMS as BASE_ITEMS, RECIPES as BASE_RECIPES, CFG } from "./config.js?v=r9";
-import { tryFetch, loadJsonDir, listDir } from "./load.js?v=r9";
+import { ITEMS as BASE_ITEMS, RECIPES as BASE_RECIPES, CFG } from "./config.js?v=r10";
+import { tryFetch, loadJsonDir, listDir } from "./load.js?v=r10";
 
 // Rev 2 retired v1 ids (Quartermaster): stripped from catalogs, loot and saves.
 export const RETIRED_IDS = ["insulin_vial", "insulin", "insulin_vials", "cool_pack", "lake_cooler", "cooler", "wolf", "lineman_tools", "hank_keys", "strand_stance", "wren_dealt"];
