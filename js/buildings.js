@@ -21,9 +21,11 @@ export const KENNEY_BUILDINGS = [
 export function pbrMat(pbr, color = 0xffffff, extras = {}) {
   if (!pbr) return new THREE.MeshStandardMaterial({ color, roughness: 0.9, ...extras });
   const m = new THREE.MeshStandardMaterial({
-    map: pbr.diff, normalMap: pbr.nor, roughnessMap: pbr.rough,
+    map: pbr.diff || null,
     roughness: extras.roughness ?? 0.86, color, ...extras,
   });
+  if (pbr.nor) m.normalMap = pbr.nor;
+  if (pbr.rough) m.roughnessMap = pbr.rough;
   if (m.map) { m.map.wrapS = m.map.wrapT = THREE.RepeatWrapping; m.map.anisotropy = 1; }
   if (m.normalMap) { m.normalMap.wrapS = m.normalMap.wrapT = THREE.RepeatWrapping; }
   if (m.roughnessMap) { m.roughnessMap.wrapS = m.roughnessMap.wrapT = THREE.RepeatWrapping; }

@@ -3,6 +3,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { KTX2Loader } from "three/addons/loaders/KTX2Loader.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { LOCATIONS } from "./config.js";
+import { isMobileClient } from "./device.js";
 
 export function makeLoader(renderer) {
   const loader = new GLTFLoader();
@@ -124,12 +125,45 @@ export class World {
     if (map && typeof map === "object") this.locations = map;
   }
 
+  async ensureWeapon(id) {
+    if (!id) return null;
+    this.gunModels = this.gunModels || {};
+    if (this.gunModels[id]) return this.gunModels[id];
+    if (!this.tryGLB) return null;
+    const gltf = await this.tryGLB(`./assets/weapons/${id}.glb`);
+    if (gltf && (gltf.scene || gltf)) {
+      this.gunModels[id] = gltf.scene || gltf;
+      return this.gunModels[id];
+    }
+    return null;
+  }
+
+  async ensureZombie() {
+    if (this.zombieGltf) return this.zombieGltf;
+    if (!this.tryGLB) return null;
+    const g = await this.tryGLB("./assets/quaternius/zombie.glb");
+    this.zombieGltf = g;
+    return g;
+  }
+
   async build(scene, renderer, story) {
+    if (this._built) return this;
     this.scene = scene;
     const gltf = makeLoader(renderer);
     const texL = new THREE.TextureLoader();
+    const mobile = isMobileClient();
     const pbr = async (name) => {
       const b = `./assets/polyhaven/${name}/${name}`;
+      if (mobile) {
+        // Albedo-only 512px JPGs — skip 1k normal / roughness / ARM on phones.
+        try {
+          const diff = await loadTex(texL, `${b}_diff_512.jpg`, true);
+          return { diff, nor: null, rough: null };
+        } catch (e) {
+          const diff = await loadTex(texL, `${b}_diff_1k.jpg`, true);
+          return { diff, nor: null, rough: null };
+        }
+      }
       const [diff, nor, rough] = await Promise.all([
         loadTex(texL, `${b}_diff_1k.jpg`, true),
         loadTex(texL, `${b}_nor_1k.jpg`, false),
@@ -141,7 +175,7 @@ export class World {
       try { return await loadGLB(gltf, url); } catch (e) { console.warn("glb fail", url, e); return null; }
     };
 
-    const [snow, road, brick, rust, concrete, corr, rustc, dirt, sedanG, zombG, blastG, blastP, blastE] = await Promise.all([
+    const [snow, road, brick, rust, concrete, corr, rustc, dirt, sedanG] = await Promise.all([
       pbr("snow_02"),
       pbr("asphalt_snow"),
       pbr("red_brick"),
@@ -151,45 +185,39 @@ export class World {
       pbr("rust_coarse_01"),
       pbr("dirt"),
       tryGLB("./assets/tevy/wrecked-sedan-lod1.glb"),
-      tryGLB("./assets/quaternius/zombie.glb"),
-      tryGLB("./assets/kenney/blaster/blaster-f.glb"),
-      tryGLB("./assets/kenney/blaster/blaster-p.glb"),
-      tryGLB("./assets/kenney/blaster/blaster-e.glb"),
     ]);
     this.mats = { snow, road, brick, rust, concrete, corr, rustc, dirt };
-    this.zombieGltf = zombG;
-    const weaponIds = ["pistol","ar15","service_rifle","pump_shotgun","deer_rifle","knife","pipe","baseball_bat","crowbar","fire_axe","molotov","torch","flashlight"];
-    const weaponScenes = await Promise.all(weaponIds.map((id) => tryGLB(`./assets/weapons/${id}.glb`)));
-    this.gunModels = {};
-    weaponIds.forEach((id, i) => {
-      const gltf = weaponScenes[i];
-      if (gltf && (gltf.scene || gltf)) this.gunModels[id] = gltf.scene || gltf;
-    });
+    this.zombieGltf = null;
+    this.gunModels = this.gunModels || {};
+    const knifeG = await tryGLB("./assets/weapons/knife.glb");
+    if (knifeG && (knifeG.scene || knifeG)) this.gunModels.knife = knifeG.scene || knifeG;
+    this._weaponIds = ["pistol","ar15","service_rifle","pump_shotgun","deer_rifle","knife","pipe","baseball_bat","crowbar","fire_axe","molotov","torch","flashlight"];
+    this._built = true;
 
     // Ground + road
     const ground = new THREE.Mesh(
       new THREE.PlaneGeometry(80, 140),
       new THREE.MeshStandardMaterial({
-        map: snow.diff, normalMap: snow.nor, roughnessMap: snow.rough, roughness: 0.85, color: 0xd8e2ec,
+        map: snow.diff, ...(snow.nor ? { normalMap: snow.nor } : {}), ...(snow.rough ? { roughnessMap: snow.rough } : {}), roughness: 0.85, color: 0xd8e2ec,
       })
     );
     ground.rotation.x = -Math.PI / 2;
     ground.position.set(0, 0, -40);
     snow.diff.repeat.set(18, 30);
-    snow.nor.repeat.set(18, 30);
-    snow.rough.repeat.set(18, 30);
+    if (snow.nor) snow.nor.repeat.set(18, 30);
+    if (snow.rough) snow.rough.repeat.set(18, 30);
     ground.receiveShadow = true;
     scene.add(ground);
 
     const roadMesh = new THREE.Mesh(
       new THREE.PlaneGeometry(9.2, 120),
       new THREE.MeshStandardMaterial({
-        map: road.diff, normalMap: road.nor, roughnessMap: road.rough, roughness: 0.95, color: 0xc5cdd4,
+        map: road.diff, ...(road.nor ? { normalMap: road.nor } : {}), ...(road.rough ? { roughnessMap: road.rough } : {}), roughness: 0.95, color: 0xc5cdd4,
       })
     );
     road.diff.repeat.set(2, 22);
-    road.nor.repeat.set(2, 22);
-    road.rough.repeat.set(2, 22);
+    if (road.nor) road.nor.repeat.set(2, 22);
+    if (road.rough) road.rough.repeat.set(2, 22);
     roadMesh.rotation.x = -Math.PI / 2;
     roadMesh.position.set(0, 0.02, -40);
     roadMesh.receiveShadow = true;
@@ -200,8 +228,8 @@ export class World {
     const hemi = new THREE.HemisphereLight(0xc9d6e6, 0x3a4038, 0.45);
     const sun = new THREE.DirectionalLight(0xe8eef6, 1.15);
     sun.position.set(18, 28, 8);
-    sun.castShadow = renderer.shadowMap.enabled;
-    sun.shadow.mapSize.set(1024, 1024);
+    sun.castShadow = renderer.shadowMap.enabled && !mobile;
+    sun.shadow.mapSize.set(mobile ? 512 : 1024, mobile ? 512 : 1024);
     sun.shadow.camera.near = 2;
     sun.shadow.camera.far = 110;
     sun.shadow.camera.left = -30;
@@ -393,8 +421,6 @@ export class World {
     this._placeNpcs(scene, story);
     } // end placeholder street
 
-    this.props.blaster = blastG;
-    this.props.pistol = blastP;
     return this;
   }
 

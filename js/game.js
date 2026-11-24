@@ -10,7 +10,8 @@ import { openCharacterSheet } from "./inventoryUI.js";
 import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js";
 import { StorySystem, applyEffects, evalCondition, resolveBranches } from "./story.js";
 import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon } from "./systems.js";
-import { loadLevels, advanceChapter } from "./levels.js";
+import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js";
+import { isMobileClient, canvasDpr, preferredTier } from "./device.js";
 import { LevelRuntime } from "./levelLoader.js";
 import { attachAudio } from "./audioHook.js";
 import { discoverRenderModule, attachRenderModule } from "./renderHook.js";
@@ -23,6 +24,29 @@ const frame = $("frame");
 const view = $("view");
 const hudCanvas = $("hud");
 const panel = $("panel");
+
+function showLoad(pct, label) {
+  const el = $("loader");
+  if (!el) return;
+  el.classList.add("show");
+  const n = Math.max(0, Math.min(100, Math.round(pct || 0)));
+  const fill = $("load-fill");
+  const text = $("load-pct");
+  if (fill) fill.style.width = n + "%";
+  if (text) text.textContent = (label || "Loading") + " " + n + "%…";
+}
+function hideLoad() {
+  $("loader")?.classList.remove("show");
+}
+function showError(err) {
+  const msg = String(err && (err.stack || err.message) || err);
+  const el = $("boot-error");
+  const pre = $("boot-error-pre");
+  if (pre) pre.textContent = msg;
+  if (el) el.classList.add("show");
+  window.__ERROR = msg;
+  try { console.error(err); } catch {}
+}
 
 function showScreen(id) {
   for (const s of document.querySelectorAll(".screen")) s.classList.remove("show");
@@ -210,6 +234,7 @@ class Game {
   }
 
   newGame() {
+    showLoad(8, "Loading");
     this.flags = this.story.startingFlags();
     this.trust = this.story.startingTrust();
     this.alive = {};
@@ -254,7 +279,18 @@ class Game {
       wearItem(this.player, this.inv, id, this.systems.items, this.flags);
     }
     return this.setChapter("ch01", { endPrevious: false, fireLoad: true, teleport: true }).then(() => {
-      this.enterPlay();
+      hideLoad();
+      // fireLoadTriggers may have opened the opening dialogue — do not dismiss it.
+      if (this.mode === "dialogue" || panel.classList.contains("show")) {
+        showScreen(null);
+        setMenuOpen(true);
+        this.mode = "dialogue";
+      } else {
+        this.enterPlay();
+      }
+    }).catch((err) => {
+      hideLoad();
+      showError(err);
     });
   }
 
@@ -480,6 +516,14 @@ class Game {
   }
 
   async setChapter(id, { endPrevious = true, fireLoad = true, teleport = true } = {}) {
+    showLoad(20, "Loading");
+    try {
+      if (this.story?.ensureChapterStory) await this.story.ensureChapterStory(id);
+      if (this.levels) await ensureChapterLevel(this.levels, id);
+    } catch (err) {
+      console.warn("[chapter] lazy load", id, err);
+    }
+    showLoad(40, "Loading");
     const prev = this.flags.chapter;
     if (endPrevious && prev && prev !== id) {
       this.story.applyChapterEnd(prev, this._ctxFx());
@@ -505,8 +549,20 @@ class Game {
           this.player.x = sp.x;
           this.player.z = sp.z;
           if (sp.rotY != null) this.player.yaw = sp.rotY;
+          this.player.pitch = 0;
           this.player.syncCamera?.();
         }
+        // Ch1 JSON spawn is inside the house facing a tight interior (the
+        // live_pages_check shot looked like a close wall/floor). Start on the
+        // open street looking down the road toward the wrecked sedan.
+        if (ok && teleport && id === "ch01") {
+          this.player.x = 1.0;
+          this.player.z = -8.5;
+          this.player.yaw = 0;
+          this.player.pitch = 0;
+          this.player.syncCamera?.();
+        }
+        showLoad(75, "Loading");
         if (this.pipeline?.addCampfire) {
           for (const f of this.world.fires) {
             if (f.lumen) continue;
@@ -533,6 +589,7 @@ class Game {
     const n = parseInt(String(id).replace(/\D/g, ""), 10);
     this.audio?.impl?.setChapter?.(n);
     this.audio?.impl?.a?.setChapter?.(n);
+    showLoad(100, "Loading");
   }
 
   _syncAliveFromFlags() {
@@ -602,11 +659,17 @@ class Game {
     panel.innerHTML = html;
     panel.classList.add("show");
     panel.querySelectorAll("button").forEach((btn) => {
-      btn.onclick = () => {
+      let locked = false;
+      const go = (e) => {
+        if (e) { e.preventDefault(); e.stopPropagation(); }
+        if (locked) return;
+        locked = true;
         this.audio.ui();
         if (btn.dataset.i === "next") this._advanceNode(node);
         else this._pickChoice(choices[+btn.dataset.i], node);
       };
+      btn.addEventListener("pointerup", go);
+      btn.onclick = go;
     });
   }
 
@@ -1266,7 +1329,7 @@ class Game {
     this._syncFireModeBtn();
     if (this.input.slot) {
       const w = WEAPONS_ORDER[this.input.slot - 1];
-      if (w) this.player.tryEquip(w, this.inv);
+      if (w) this.equipWeapon(w);
       this.input.slot = 0;
     }
     if (this.input.keys["KeyF"] && !this._fLatch) {
@@ -1461,6 +1524,7 @@ class Game {
     try { this.update(dt); } catch (e) {
       console.error(e);
       window.__ERROR = String(e && e.stack || e);
+      if (!this._errShown) { this._errShown = true; showError(e); }
     }
     requestAnimationFrame(this.loop);
   };
@@ -1522,8 +1586,8 @@ function applyLevelData(world, scene, levels, systems, rollTable) {
 
 function sizeView(renderer, pipeline) {
   const r = frame.getBoundingClientRect();
-  // INTEGRATION.md: drawing buffer = CSS size × devicePixelRatio; setPixelRatio(1); pipeline.resize().
-  const dpr = window.devicePixelRatio || 1;
+  // Cap DPR: iPhone @3 would allocate a 1170×2532 canvas plus postprocess FBOs.
+  const dpr = canvasDpr();
   const cssW = Math.max(180, Math.round(r.width) || 360);
   const cssH = Math.max(320, Math.round(r.height) || 640);
   const w = Math.max(180, Math.round(cssW * dpr));
@@ -1570,7 +1634,7 @@ async function boot() {
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.05;
-    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.enabled = !isMobileClient();
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.setClearColor(0x9aa8b8, 1);
     sizeView(renderer, null);
@@ -1587,6 +1651,7 @@ async function boot() {
     if (!hasChapterLevels) applyLevelData(world, scene, levels, systems, rollTable);
 
     const player = new Player(camera, scene, world.gunModels);
+    player.attachWeaponLibrary?.(world.gunModels);
     scene.add(camera);
     player.x = levels.world.spawn?.x ?? 0;
     player.z = levels.world.spawn?.z ?? 8;
@@ -1606,7 +1671,7 @@ async function boot() {
     let renderInfo = { source: "builtin", url: null, tried: [] };
     const params = new URLSearchParams(location.search);
     const crt = params.get("crt") || localStorage.getItem("ashfall.crt") || "low";
-    const tier = params.get("tier") || "auto";
+    const tier = params.get("tier") || preferredTier();
     const pixel = await loadLumenPixelOverrides();
     const lookParam = params.get("look") || params.get("pixel") || localStorage.getItem("ashfall.look") || pixel.look || "refined";
     const look = (lookParam === "old" || lookParam === "coarse" || lookParam === "classic") ? "classic" : "refined";
@@ -1617,6 +1682,7 @@ async function boot() {
         sun: world.lights.sun,
         tier, look, crt, targetFps: 30, adaptive: true,
         particles: true, takeOverFog: true, updateCamera: true, flashlight: true,
+        mobile: isMobileClient(),
       });
       pipeline.setSun?.({ direction: [-0.45, 0.42, -1] });
       // HUD stays a crisp 9:16 overlay at internalSize (afterCRT). beforeCRT would curve it with the screen.
@@ -1669,20 +1735,8 @@ async function boot() {
     });
     game.levelRuntime.levels = levels;
     game.levelRuntime.bind(game);
-    if (hasChapterLevels) {
-      try { await game.levelRuntime.load("ch01", { fired: new Set() }); } catch (e) { console.warn("[boot] ch01 level", e); }
-      const sp = game.levelRuntime.spawn;
-      if (sp) { player.x = sp.x; player.z = sp.z; if (sp.rotY != null) player.yaw = sp.rotY; player.syncCamera(); }
-      if (pipeline?.addCampfire) {
-        for (const f of world.fires) {
-          try {
-            f.lumen = pipeline.addCampfire([f.x, 0.02, f.z]);
-            if (f.light) f.light.intensity = 0;
-            if (f.flame) f.flame.visible = false;
-          } catch {}
-        }
-      }
-    }
+    // Ch1 geometry is built when the player taps NEW SHIFT, behind a loading bar.
+    // Preloading it here doubled the work on iPhone and exhausted Safari's RAM.
     window.addEventListener("resize", () => { sizeView(renderer, pipeline); gameHudResize(hud, pipeline); });
     game.loop();
     window.__READY = true;
@@ -1701,6 +1755,7 @@ async function boot() {
     console.error(err);
     window.__ERROR = String(err && err.stack || err);
     window.__READY = "error";
+    showError(err);
   }
 }
 

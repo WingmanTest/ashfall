@@ -24,9 +24,12 @@ export function evalWhen(when, ctx) {
 
 function stdMat(pbr, color = 0x8899aa) {
   if (!pbr) return new THREE.MeshStandardMaterial({ color, roughness: 0.9 });
-  return new THREE.MeshStandardMaterial({
-    map: pbr.diff, normalMap: pbr.nor, roughnessMap: pbr.rough, roughness: 0.88, color,
+  const mat = new THREE.MeshStandardMaterial({
+    map: pbr.diff || null, roughness: 0.88, color,
   });
+  if (pbr.nor) mat.normalMap = pbr.nor;
+  if (pbr.rough) mat.roughnessMap = pbr.rough;
+  return mat;
 }
 
 function lootCrate() {
@@ -470,7 +473,7 @@ export class LevelRuntime {
         g.timeOfDay = env.timeStart;
       }
     }
-    if (env.timeStart != null && (g._bootEnv || g.flags?.chapter === (L.chapter || "").slice(0, 4))) {
+    if (env.timeStart != null && (g._bootEnv || String(g.flags?.chapter || "") === String(L.chapter || "") || String(g.flags?.chapter || "").startsWith("ch" + String(L.chapter || "").replace(/\D/g, "").padStart(2, "0")))) {
       g.timeOfDay = env.timeStart;
     }
     if (env.blizzard) g.blizzard = true;

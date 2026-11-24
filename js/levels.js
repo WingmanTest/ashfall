@@ -94,17 +94,16 @@ const FALLBACK_LEVEL = {
 export async function loadLevels() {
   const found = [];
   const listed = await listDir("./levels/");
-  const tryNames = [
-    "index.json", "levels.json", "world.json", "sector4.json", "map.json",
-    ...FALLBACK_CHAPTERS.map((c) => c.id + ".json"),
-    "ch01_day_three.json", "ch02_the_registry.json", "ch03_the_long_cold.json",
-    "ch04_black_start.json", "ch05_route_9.json", "ch06_the_lift_bridge.json",
-    "ch07_dead_air.json", "ch08_ashfall.json", "ch09_the_long_night.json",
-    "ch10_the_warm_room.json",
-  ];
+  // Boot only the catalog + Ch1. Later chapters are fetched in ensureChapterLevel().
+  const tryNames = ["index.json", "levels.json", "world.json", "schema.json", "id_registry.json", "ch01_day_three.json", "ch01.json"];
   const files = {};
-  const names = listed.length ? listed : tryNames;
-  for (const n of names) {
+  const names = listed.length ? listed.filter((n) => {
+    const s = String(n);
+    if (!s.endsWith(".json")) return false;
+    if (s === "index.json" || s === "levels.json" || s === "world.json" || s === "schema.json" || s === "id_registry.json") return true;
+    return s.startsWith("ch01");
+  }) : tryNames;
+  for (const n of [...new Set(names)]) {
     if (!String(n).endsWith(".json")) continue;
     const data = await tryFetch("./levels/" + n);
     if (data != null) { files[n] = data; found.push("levels/" + n); }
@@ -236,4 +235,30 @@ export function advanceChapter(current, flags, chapters) {
   const gate = gates[i];
   if (gate && gate() && i < order.length - 1) return order[i + 1];
   return current || "ch01";
+}
+
+
+/** Lazy-load a chapter level JSON the first time the player enters it. */
+export async function ensureChapterLevel(pack, id) {
+  if (!pack || !id) return null;
+  pack.perChapter = pack.perChapter || {};
+  if (pack.perChapter[id]) return pack.perChapter[id];
+  const cands = [id + ".json", id + "_day_three.json"];
+  const pretty = {
+    ch01: "ch01_day_three.json", ch02: "ch02_the_registry.json", ch03: "ch03_the_long_cold.json",
+    ch04: "ch04_black_start.json", ch05: "ch05_route_9.json", ch06: "ch06_the_lift_bridge.json",
+    ch07: "ch07_dead_air.json", ch08: "ch08_ashfall.json", ch09: "ch09_the_long_night.json",
+    ch10: "ch10_the_warm_room.json",
+  };
+  if (pretty[id]) cands.unshift(pretty[id]);
+  for (const n of cands) {
+    const data = await tryFetch("./levels/" + n);
+    if (data) {
+      pack.perChapter[id] = data;
+      pack.loadedFiles = pack.loadedFiles || [];
+      pack.loadedFiles.push("levels/" + n);
+      return data;
+    }
+  }
+  return null;
 }

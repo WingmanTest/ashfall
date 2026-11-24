@@ -1,7 +1,7 @@
 /* ASHFALL service worker. Registered with scope "./" so it stays under
    https://wingmantest.github.io/ashfall/ (or any subpath host). Bump CACHE
    when publishing so Home Screen installs pick up the new build. */
-const CACHE = "ashfall-2026-11-23-r2";
+const CACHE = "ashfall-2026-11-23-r3";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(self.skipWaiting());

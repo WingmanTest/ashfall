@@ -56,11 +56,8 @@ export class Player {
     this.camera.add(this.vm);
     if (!this._vmLights) this._vmLights = installViewmodelLights(this.camera);
     this.vmParts = {};
-    const ids = ["knife","pipe","baseball_bat","crowbar","fire_axe","pistol","blaster","pump_shotgun","deer_rifle","ar15","service_rifle","molotov","flare","torch","flashlight"];
-    for (const id of ids) {
-      try { this.vmParts[id] = createWeaponModel(id); }
-      catch (err) { console.warn("viewmodel", id, err); }
-    }
+    // Only the starting knife is built up front. Other viewmodels lazy-load with their GLB.
+    try { this.vmParts.knife = createWeaponModel("knife"); } catch (err) { console.warn("viewmodel knife", err); }
     const muzzle = new THREE.PointLight(0xffcc88, 0, 4, 2);
     this.muzzle = muzzle;
     const flash = new THREE.Mesh(
@@ -69,6 +66,21 @@ export class Player {
     );
     this.muzzleFlash = flash;
     this.showWeapon();
+  }
+
+  attachWeaponLibrary(gunModels) {
+    if (gunModels) setWeaponLibrary(gunModels);
+    if (!this.vmParts.knife) {
+      try { this.vmParts.knife = createWeaponModel("knife"); } catch {}
+    }
+    this.showWeapon();
+  }
+
+  buildViewmodelFor(id) {
+    if (!id || this.vmParts[id]) return this.vmParts[id];
+    try { this.vmParts[id] = createWeaponModel(id); }
+    catch (err) { console.warn("viewmodel", id, err); }
+    return this.vmParts[id];
   }
 
   showWeapon() {
@@ -100,6 +112,7 @@ export class Player {
     if ((inv[id] || 0) <= 0 && ITEMS[id].kind !== "melee") return false;
     if (!WEAPONS_ORDER.includes(id) && ITEMS[id].kind !== "gun" && ITEMS[id].kind !== "melee" && ITEMS[id].kind !== "throw") return false;
     this.equipped = id;
+    if (!this.vmParts[id]) this.buildViewmodelFor(id);
     this.showWeapon();
     return true;
   }

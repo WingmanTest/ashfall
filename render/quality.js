@@ -57,9 +57,8 @@ export function detectTier(renderer) {
   const mem = (typeof navigator !== 'undefined' && navigator.deviceMemory) || 8;
   if (/swiftshader|llvmpipe|software|basic render|mesa offscreen/i.test(glStr)) return 'low';
   if (isIOS) {
-    // A12+ handles medium at 30fps; older/low-mem devices start low. Adaptive will drop further.
-    const cores = navigator.hardwareConcurrency || 2;
-    return cores >= 6 && mem >= 3 ? 'medium' : 'low';
+    // iPhone Safari was falling over at medium + full-res FBOs / volumetrics. Stay on low.
+    return 'low';
   }
   if (isAndroid || /Mobi/i.test(ua)) {
     if (/Adreno \(TM\) (6[4-9]|7\d)\d|Mali-G(7[1-9]|71[0-9])|Immortalis/i.test(glStr) && mem >= 4) return 'medium';
@@ -144,6 +143,21 @@ export const LOOKS = {
     flameTexels: [16, 26],
   },
 };
+
+export function applyMobileQuality(T) {
+  return {
+    ...T,
+    internalHeight: Math.min(T.internalHeight || 480, 480),
+    sceneScale: 1,
+    shadow: { ...(T.shadow || {}), enabled: false, mapSize: 512, type: 'pcf', distance: 16, radius: 1 },
+    flashShadow: false,
+    volume: { ...(T.volume || {}), enabled: false, scale: 0.5, steps: 0, noise: false, shadow: false },
+    godSamples: 0,
+    bloom: { levels: Math.min((T.bloom && T.bloom.levels) || 2, 2) },
+    particles: Math.min(T.particles || 200, 200),
+    maxPoints: 1,
+  };
+}
 
 export function getTierConfig(look, tier) {
   const base = TIERS[tier];

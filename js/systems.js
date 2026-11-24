@@ -82,6 +82,7 @@ export async function loadSystems() {
   const names = listed.length ? listed : tryNames;
   for (const n of names) {
     if (!n.endsWith(".json")) continue;
+    if (/budget_report/i.test(n)) continue;
     const data = await tryFetch("./systems/" + n);
     if (data != null) { files[n] = data; found.push("systems/" + n); }
   }

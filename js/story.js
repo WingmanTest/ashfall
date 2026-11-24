@@ -268,7 +268,7 @@ export class StorySystem {
   }
 
   async load() {
-    const bible = await tryFetch(STORY_ROOT + "story_bible.md");
+    // Skip the long story bible on boot (not needed to play). Load core data + Ch1 only.
     const npcs = await tryFetch(STORY_ROOT + "npcs.json");
     const hooks = await tryFetch(STORY_ROOT + "gameplay_hooks.json");
     const flags = await tryFetch(STORY_ROOT + "flags.json");
@@ -276,7 +276,6 @@ export class StorySystem {
     const questsFile = await tryFetch(STORY_ROOT + "quests.json");
     const storyItems = await tryFetch(STORY_ROOT + "items.json");
 
-    if (bible) { this.bible = bible; this.loadedFiles.push("story/story_bible.md"); }
     if (npcs) {
       this.npcs = npcs.npcs || npcs.characters || [];
       this.minor = npcs.minor_characters || npcs.minor || [];
@@ -288,14 +287,31 @@ export class StorySystem {
     if (questsFile) { this.questDefs = questsFile.quests || questsFile; this.loadedFiles.push("story/quests.json"); }
     if (storyItems) { this.storyItems = storyItems.items || storyItems; this.loadedFiles.push("story/items.json"); }
 
-    const dlgFiles = await loadJsonDir(STORY_ROOT + "dialogue/");
+    const dlgListed = await listDir(STORY_ROOT + "dialogue/");
+    const dlgWant = (dlgListed.length ? dlgListed : [
+      "ch01_theo_morning.json", "ch01_theo_night.json", "ch01_marguerite_porch.json",
+      "ch01_ray_garage.json", "ch01_wren_pharmacy.json",
+    ]).filter((n) => n.endsWith(".json") && /ch01/.test(n));
+    const dlgFiles = [];
+    for (const n of dlgWant) {
+      const data = await tryFetch(STORY_ROOT + "dialogue/" + n);
+      if (data != null) dlgFiles.push({ name: n, data });
+    }
     for (const f of dlgFiles) {
       this.dialogues.push(...normalizeDialogue(f.data, f.name));
       this.loadedFiles.push("story/dialogue/" + f.name);
     }
 
-    const chFilesMd = await loadJsonDir(STORY_ROOT + "chapters/", ".md");
-    const chFilesJs = await loadJsonDir(STORY_ROOT + "chapters/", ".json");
+    const chListed = await listDir(STORY_ROOT + "chapters/");
+    const chWant = (chListed.length ? chListed : ["ch01_day_three.md"]).filter((n) => /ch01/.test(n));
+    const chFilesMd = [];
+    const chFilesJs = [];
+    for (const n of chWant) {
+      const data = await tryFetch(STORY_ROOT + "chapters/" + n);
+      if (data == null) continue;
+      if (n.endsWith(".md")) chFilesMd.push({ name: n, data });
+      else if (n.endsWith(".json")) chFilesJs.push({ name: n, data });
+    }
     for (const f of [...chFilesMd, ...chFilesJs]) {
       this.loadedFiles.push("story/chapters/" + f.name);
       if (typeof f.data === "string") {
@@ -317,6 +333,7 @@ export class StorySystem {
       if (!ids.has(d.id)) this.dialogues.push(d);
     }
     if (!this.hooks) this.hooks = PLACEHOLDER.hooks;
+    this._storyLoaded = new Set(["ch01"]);
     this.quests = this.questDefs || (this.hooks && this.hooks.quests) || PLACEHOLDER.hooks.quests;
     this.defaultFlags = { ...(PLACEHOLDER.defaultFlags) };
     const catalog = this.flagsMeta && (this.flagsMeta.flags || this.flagsMeta.defaults);
@@ -330,6 +347,39 @@ export class StorySystem {
     if (this.flagsMeta && this.flagsMeta.defaults) Object.assign(this.defaultFlags, this.flagsMeta.defaults);
     this.source = this.loadedFiles.length ? "story+placeholder" : "placeholder";
     return this;
+  }
+
+
+  /** Fetch remaining story files for a chapter the first time it is entered. */
+  async ensureChapterStory(id) {
+    const ch = String(id || "ch01");
+    const prefix = ch.replace(/_.*$/, "");
+    if (this._storyLoaded && this._storyLoaded.has(prefix)) return;
+    this._storyLoaded = this._storyLoaded || new Set(["ch01"]);
+    const dlgListed = await listDir(STORY_ROOT + "dialogue/");
+    const have = new Set(this.loadedFiles.map((f) => f.split("/").pop()));
+    const names = (dlgListed.length ? dlgListed : []).filter((n) => n.endsWith(".json") && n.startsWith(prefix) && !have.has(n));
+    for (const n of names) {
+      const data = await tryFetch(STORY_ROOT + "dialogue/" + n);
+      if (data != null) {
+        this.dialogues.push(...normalizeDialogue(data, n));
+        this.loadedFiles.push("story/dialogue/" + n);
+      }
+    }
+    const chListed = await listDir(STORY_ROOT + "chapters/");
+    for (const n of (chListed.length ? chListed : []).filter((n) => n.startsWith(prefix) && !have.has(n))) {
+      const data = await tryFetch(STORY_ROOT + "chapters/" + n);
+      if (data == null) continue;
+      this.loadedFiles.push("story/chapters/" + n);
+      if (typeof data === "string") {
+        const id0 = (n.match(/ch\d+/) || [n.replace(/\..+$/, "")])[0];
+        const title = (data.match(/^#\s+(.+)$/m) || [null, n])[1];
+        this.chapters.push({ id: id0, title, markdown: data });
+      } else if (data && typeof data === "object") {
+        this.chapters.push(data);
+      }
+    }
+    this._storyLoaded.add(prefix);
   }
 
   startingFlags() {

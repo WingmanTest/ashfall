@@ -5,7 +5,7 @@ import {
   HEADER, FULLSCREEN_VERT, VOLUME_FRAG, BLOOM_PREFILTER_FRAG, BLOOM_DOWN_FRAG,
   BLOOM_UP_FRAG, COMPOSITE_FRAG, BLIT_FRAG,
 } from './shaders.js';
-import { TIERS, TIER_ORDER, detectTier, AdaptiveQuality, CRT_PRESETS, LOOKS, getTierConfig } from './quality.js';
+import { TIERS, TIER_ORDER, detectTier, AdaptiveQuality, CRT_PRESETS, LOOKS, getTierConfig, applyMobileQuality } from './quality.js';
 import { GRADE_ASHFALL, PALETTES, buildPaletteLUT, resolvePalette } from './palette.js';
 import { getBlueNoiseTexture } from './bluenoise.js';
 import { fitSunShadow, setShadowMapSize, createFlashlight, createCampfire } from './lighting.js';
@@ -40,11 +40,14 @@ export function createRenderPipeline(o) {
     takeOverFog: true, updateCamera: true, particles: true, crt: 'low',
     ...o,
   };
+  const ua = (typeof navigator !== 'undefined' && navigator.userAgent) || '';
+  const mobile = !!(opts.mobile || /iPhone|iPad|iPod|Android/i.test(ua)
+    || (typeof navigator !== 'undefined' && navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
 
   // ---- capabilities -----------------------------------------------------------
   const ext = renderer.extensions;
-  const halfFloat = !opts.forceLDR && !!(ext.has('EXT_color_buffer_half_float') || ext.has('EXT_color_buffer_float'));
-  const hdrType = halfFloat ? THREE.HalfFloatType : THREE.UnsignedByteType;
+  let halfFloat = !opts.forceLDR && !!(ext.has('EXT_color_buffer_half_float') || ext.has('EXT_color_buffer_float'));
+  let hdrType = halfFloat ? THREE.HalfFloatType : THREE.UnsignedByteType;
   const volEncode = halfFloat ? 1.0 : 0.5;
 
   // ---- sun --------------------------------------------------------------------
@@ -182,6 +185,28 @@ export function createRenderPipeline(o) {
     }
     return rt;
   }
+  function testRT(type) {
+    let rt;
+    try {
+      rt = makeRT(4, 4, { type, depth: true });
+      renderer.setRenderTarget(rt);
+      renderer.clear();
+      const gl = renderer.getContext();
+      const ok = gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
+      renderer.setRenderTarget(null);
+      if (rt.depthTexture) rt.depthTexture.dispose();
+      rt.dispose();
+      return !!ok;
+    } catch (err) {
+      try { renderer.setRenderTarget(null); } catch {}
+      try { if (rt) { if (rt.depthTexture) rt.depthTexture.dispose(); rt.dispose(); } } catch {}
+      return false;
+    }
+  }
+  if (halfFloat && !testRT(THREE.HalfFloatType)) {
+    halfFloat = false;
+    hdrType = THREE.UnsignedByteType;
+  }
   function disposeTargets() {
     [sceneRT, volRT, postRT, ...down, ...up].forEach((rt) => { if (rt) { if (rt.depthTexture) rt.depthTexture.dispose(); rt.dispose(); } });
     down = []; up = [];
@@ -189,7 +214,13 @@ export function createRenderPipeline(o) {
   function buildTargets() {
     disposeTargets();
     const s = T.sceneScale;
-    sceneRT = makeRT(size.iw * s, size.ih * s, { type: hdrType, depth: true });
+    try {
+      sceneRT = makeRT(size.iw * s, size.ih * s, { type: hdrType, depth: true });
+    } catch (err) {
+      hdrType = THREE.UnsignedByteType;
+      halfFloat = false;
+      sceneRT = makeRT(size.iw * s, size.ih * s, { type: hdrType, depth: true });
+    }
     const vs = T.volume.scale;
     volRT = makeRT(Math.ceil(size.iw * vs), Math.ceil(size.ih * vs), { type: hdrType, filter: THREE.NearestFilter });
     postRT = makeRT(size.iw, size.ih, { filter: THREE.NearestFilter });
@@ -233,6 +264,7 @@ export function createRenderPipeline(o) {
     if (!TIERS[name]) throw new Error('unknown tier ' + name);
     const prevType = renderer.shadowMap.type;
     tierName = name; T = getTierConfig(look, name);
+    if (mobile) T = applyMobileQuality(T);
     renderer.shadowMap.enabled = T.shadow.enabled;
     renderer.shadowMap.type = T.shadow.type === 'pcfsoft' ? THREE.PCFSoftShadowMap : THREE.PCFShadowMap;
     sun.castShadow = T.shadow.enabled;
@@ -555,4 +587,4 @@ export function createRenderPipeline(o) {
   return api;
 }
 
-export { TIERS, TIER_ORDER, detectTier, CRT_PRESETS, LOOKS, getTierConfig, PALETTES };
+export { TIERS, TIER_ORDER, detectTier, CRT_PRESETS, LOOKS, getTierConfig, applyMobileQuality, PALETTES };

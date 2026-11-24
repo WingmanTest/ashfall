@@ -198,7 +198,7 @@ export function openCharacterSheet(game, panel) {
       return;
     }
     if (slot === "main_hand" || def.kind === "gun" || def.kind === "melee" || def.kind === "throw") {
-      game.player.tryEquip(id, game.inv);
+      if (game.equipWeapon) game.equipWeapon(id); else game.player.tryEquip(id, game.inv);
       game.player.gear.main_hand = { id, durability: game.player.wDur[id] ?? def.durability ?? 100 };
       paint();
       openCharacterSheet(game, panel);

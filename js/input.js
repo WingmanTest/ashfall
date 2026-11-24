@@ -88,10 +88,12 @@ export class Input {
     setBtn("btn-sprint", "sprint");
     setBtn("btn-aim", "aim");
     setBtn("btn-mode", "fireMode");
-    document.getElementById("btn-inv")?.addEventListener("pointerdown", (e) => { e.preventDefault(); this.onUnlock?.(); this.inv = true; });
-    document.getElementById("btn-craft")?.addEventListener("pointerdown", (e) => { e.preventDefault(); this.onUnlock?.(); this.craft = true; });
+    document.getElementById("btn-inv")?.addEventListener("pointerdown", (e) => { e.preventDefault(); e.stopPropagation(); this.onUnlock?.(); this.inv = true; });
+    document.getElementById("btn-craft")?.addEventListener("pointerdown", (e) => { e.preventDefault(); e.stopPropagation(); this.onUnlock?.(); this.craft = true; });
+    document.getElementById("btn-pause")?.addEventListener("pointerdown", (e) => { e.preventDefault(); e.stopPropagation(); this.onUnlock?.(); this.pause = true; });
 
     const joyStart = (e) => {
+      if (this._joy.active) return;
       const t = e.changedTouches ? e.changedTouches[0] : e;
       const r = joy.getBoundingClientRect();
       this._joy.active = true;
@@ -106,24 +108,29 @@ export class Input {
       if (!this._joy.active) return;
       const list = e.changedTouches || [e];
       for (const t of list) {
-        if ((t.identifier ?? t.pointerId) !== this._joy.id && e.changedTouches) continue;
+        if ((t.identifier ?? t.pointerId) !== this._joy.id) continue;
         const r = joy.getBoundingClientRect();
         this._joyMove(t.clientX, t.clientY, knob, r);
       }
       e.preventDefault();
     };
     const joyEnd = (e) => {
+      const t = e && (e.changedTouches ? e.changedTouches[0] : e);
+      if (t && this._joy.id != null && (t.identifier ?? t.pointerId) !== this._joy.id) return;
       this._joy.active = false;
+      this._joy.id = null;
       this._joy.x = 0; this._joy.y = 0;
       knob.style.transform = "translate(0,0)";
     };
-    joy.addEventListener("touchstart", joyStart, { passive: false });
-    joy.addEventListener("touchmove", joyMove, { passive: false });
-    joy.addEventListener("touchend", joyEnd);
-    joy.addEventListener("touchcancel", joyEnd);
-    joy.addEventListener("pointerdown", (e) => { if (!e.pointerType || e.pointerType === "mouse") return; joyStart(e); joy.setPointerCapture?.(e.pointerId); });
+    // Pointer Events only — iOS 13+ and Playwright. Avoid pairing with touch*
+    // handlers, which double-apply movement on Safari.
+    joy.addEventListener("pointerdown", (e) => { joyStart(e); joy.setPointerCapture?.(e.pointerId); }, { passive: false });
+    joy.addEventListener("pointermove", joyMove, { passive: false });
+    joy.addEventListener("pointerup", joyEnd);
+    joy.addEventListener("pointercancel", joyEnd);
 
     const lookStart = (e) => {
+      if (this._look.active) return;
       const t = e.changedTouches ? e.changedTouches[0] : e;
       this._look.active = true;
       this._look.id = t.identifier ?? t.pointerId;
@@ -136,7 +143,7 @@ export class Input {
       if (!this._look.active) return;
       const list = e.changedTouches || [e];
       for (const t of list) {
-        if (e.changedTouches && (t.identifier ?? t.pointerId) !== this._look.id) continue;
+        if ((t.identifier ?? t.pointerId) !== this._look.id) continue;
         this.lookX += (t.clientX - this._look.lx);
         this.lookY += (t.clientY - this._look.ly);
         this._look.lx = t.clientX;
@@ -144,14 +151,16 @@ export class Input {
       }
       e.preventDefault();
     };
-    const lookEnd = () => { this._look.active = false; };
-    look.addEventListener("touchstart", lookStart, { passive: false });
-    look.addEventListener("touchmove", lookMove, { passive: false });
-    look.addEventListener("touchend", lookEnd);
-    look.addEventListener("touchcancel", lookEnd);
-    look.addEventListener("pointerdown", (e) => { if (e.pointerType === "touch") { lookStart(e); look.setPointerCapture?.(e.pointerId); }});
-    look.addEventListener("pointermove", (e) => { if (e.pointerType === "touch") lookMove(e); });
+    const lookEnd = (e) => {
+      const t = e && (e.changedTouches ? e.changedTouches[0] : e);
+      if (t && this._look.id != null && (t.identifier ?? t.pointerId) !== this._look.id) return;
+      this._look.active = false;
+      this._look.id = null;
+    };
+    look.addEventListener("pointerdown", (e) => { lookStart(e); look.setPointerCapture?.(e.pointerId); }, { passive: false });
+    look.addEventListener("pointermove", lookMove, { passive: false });
     look.addEventListener("pointerup", lookEnd);
+    look.addEventListener("pointercancel", lookEnd);
   }
 
   _joyMove(x, y, knob, r) {
