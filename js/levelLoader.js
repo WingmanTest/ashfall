@@ -1,15 +1,15 @@
 // Cartographer chapter loader. Builds geometry from levels/*.json (do not edit those files).
 import * as THREE from "three";
-import { CFG } from "./config.js?v=r14.1";
-import { fitHeight, makePerson, makeDog } from "./world.js?v=r14.1";
-import { evalCondition, applyEffects, setFlag } from "./story.js?v=r14.1";
-import { rollContainer, aliasItem } from "./systems.js?v=r14.1";
-import { addItem, takeItem, hasItems } from "./inventory.js?v=r14.1";
-import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js?v=r14.1";
-import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r14.1";
-import { coverBuildingRoofs, extractShingleMaterial, fallbackShingleMat } from "./roofs.js?v=r14.1";
-import { startTracking } from "./companionCmd.js?v=r14.1";
-import { bindNpc, disposeMixer } from "./npcWander.js?v=r14.1";
+import { CFG } from "./config.js?v=r14.2";
+import { fitHeight, makePerson, makeDog } from "./world.js?v=r14.2";
+import { evalCondition, applyEffects, setFlag } from "./story.js?v=r14.2";
+import { rollContainer, aliasItem } from "./systems.js?v=r14.2";
+import { addItem, takeItem, hasItems } from "./inventory.js?v=r14.2";
+import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js?v=r14.2";
+import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r14.2";
+import { coverBuildingRoofs, extractShingleMaterial, fallbackShingleMat } from "./roofs.js?v=r14.2";
+import { startTracking } from "./companionCmd.js?v=r14.2";
+import { bindNpc, disposeMixer } from "./npcWander.js?v=r14.2";
 
 const SNOW_HEX = 0xeef2f6;
 function stripSnow(obj) {
@@ -984,6 +984,43 @@ export class LevelRuntime {
       swaps.push(this._swapNpcModel(rec, id, role, isWraith));
     }
     await Promise.all(swaps);
+  }
+
+  /** Add NPCs whose `when` just became true, without wiping anyone already placed (e.g. mid-session TRACK). */
+  async ensureConditionalNpcs() {
+    const L = this.L;
+    const world = this.world;
+    if (!L || !world) return [];
+    const check = (w) => evalWhen(w, this.ctx());
+    const have = new Set((world.npcs || []).map((n) => n.id));
+    const added = [];
+    const swaps = [];
+    for (const s of (L.spawns?.npcs || [])) {
+      const id = s.npc || s.id;
+      if (!id || have.has(id)) continue;
+      if (s.when && !check(s.when)) continue;
+      const isWraith = id === "wraith" || !!s.companion;
+      if (isWraith && world.companion) continue;
+      const mesh = isWraith ? makeDog(0x8a6a44) : makePerson({ id });
+      mesh.position.set(s.x, 0, s.z);
+      mesh.rotation.y = s.rotY || 0;
+      this.group.add(mesh);
+      const role = s.role || (s.trader ? "trader" : "") || (s.crowd ? "civilian" : "") || s.label || s.behavior || "";
+      const rec = {
+        id, name: s.label || (id || "").replace(/_/g, " "), x: s.x, z: s.z, rotY: s.rotY || 0,
+        homeX: s.x, homeZ: s.z,
+        mesh, alive: true, dialogue: s.dialogue, behavior: s.behavior,
+        companion: !!isWraith, trader: /^trader_/.test(id) ? id : (s.trader || null),
+        role, r: isWraith ? 1.6 : 2.0,
+      };
+      world.npcs.push(rec);
+      have.add(id);
+      if (isWraith) world.companion = rec;
+      added.push(rec);
+      swaps.push(this._swapNpcModel(rec, id, role, isWraith));
+    }
+    await Promise.all(swaps);
+    return added;
   }
 
   /** Replace a placeholder actor mesh with a Sculptor GLB once the template is loaded. */

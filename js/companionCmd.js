@@ -1,9 +1,10 @@
 // Companion command menu (TRACK / FOLLOW / STAY / GUARD / HOLD) and quest-gated
 // action choices that dialogue memory must never consume or hide.
 import * as THREE from "three";
-import { evalCondition, setFlag } from "./story.js?v=r14.1";
-import { hasItems } from "./inventory.js?v=r14.1";
-import { aliasItem } from "./systems.js?v=r14.1";
+import { evalCondition, setFlag } from "./story.js?v=r14.2";
+import { hasItems } from "./inventory.js?v=r14.2";
+import { aliasItem } from "./systems.js?v=r14.2";
+import { routeTrack } from "./companionNav.js?v=r14.2";
 
 export function isActionChoice(c) {
   if (!c) return false;
@@ -113,7 +114,23 @@ function pathFromSetpiece(game, it) {
   if (!sp) sp = pieces.find((s) => s.type === "scent_trail");
   const path = (sp && sp.path) || null;
   if (!path || !path.length) return null;
-  return path.map((p) => Array.isArray(p) ? { x: p[0], z: p[1] } : { x: p.x, z: p.z });
+  return path.map(mapPathPoint);
+}
+
+function mapPathPoint(p) {
+  if (Array.isArray(p)) return { x: p[0], z: p[1] };
+  return {
+    x: p.x, z: p.z,
+    beat: p.beat || null,
+    toast: p.toast || null,
+    prop: p.prop || null,
+  };
+}
+
+function sameTrail(a, b) {
+  if (!a || !b || !a.length || !b.length) return false;
+  const a0 = a[0], b0 = b[0], aN = a[a.length - 1], bN = b[b.length - 1];
+  return Math.hypot(a0.x - b0.x, a0.z - b0.z) < 1.5 && Math.hypot(aN.x - bN.x, aN.z - bN.z) < 1.5;
 }
 
 function trackLabel(it) {
@@ -142,7 +159,7 @@ export function findTrackTarget(game) {
         /* ok */
       } else continue;
     }
-    const path = (sp.path || []).map((p) => Array.isArray(p) ? { x: p[0], z: p[1] } : { x: p.x, z: p.z });
+    const path = (sp.path || []).map(mapPathPoint);
     return {
       id: sp.id,
       label: /pruitt/i.test(`${sp.id} ${sp.note || ""}`) ? "[TRACK] Mr. Pruitt" : "[TRACK] the scent",
@@ -252,10 +269,7 @@ export function setCompanionMode(game, mode, target) {
     game.hud?.say?.("Wraith holds.");
   } else if (mode === "track") {
     setFlag(game.flags, "wraith_stay", false);
-    if (rec) {
-      rec._path = (target && target.path) || rec._path || pathFromSetpiece(game, target);
-      rec._pathI = 0;
-    }
+    beginTrackRoute(game, target);
   } else {
     setFlag(game.flags, "wraith_stay", false);
     game.hud?.say?.("Wraith falls in.");
@@ -271,8 +285,12 @@ export function startTracking(game, target) {
   }
   if (target.setsFlag) setFlag(game.flags, target.setsFlag, true);
   setFlag(game.flags, "ch01_tracking", true);
+  const spawned = game.levelRuntime?.ensureConditionalNpcs?.(game);
   setCompanionMode(game, "track", target);
   syncScentTrail(game);
+  if (spawned && typeof spawned.then === "function") {
+    spawned.then(() => game.refreshObjective?.()).catch(() => {});
+  }
   try {
     const rec = game.world?.companion;
     const A = game.audio?.impl?.engine || game.audio?.impl?.a || (typeof window !== "undefined" ? window.GameAudio : null);
@@ -290,10 +308,59 @@ export function restoreTracking(game) {
     syncScentTrail(game);
     return false;
   }
+  const spawned = game.levelRuntime?.ensureConditionalNpcs?.(game);
   const target = findTrackTarget(game) || { path: pathFromSetpiece(game, null), setsFlag: "ch01_tracking" };
   setCompanionMode(game, "track", target);
   syncScentTrail(game);
+  if (spawned && typeof spawned.then === "function") {
+    spawned.then(() => game.refreshObjective?.()).catch(() => {});
+  }
   return true;
+}
+
+/** Build a walkable route from Wraith's current position along the remaining trail. */
+export function beginTrackRoute(game, target) {
+  const rec = game.world?.companion;
+  if (!rec) return null;
+  rec._arrived = false;
+  rec._beatT = 0;
+  rec._beatDone = null;
+  rec._stuckT = 0;
+  rec._repathOnce = false;
+  const authored = (target && target.path && target.path.length)
+    ? target.path
+    : pathFromSetpiece(game, target);
+  if (!authored || !authored.length) {
+    rec._pathI = 0;
+    return rec._path || null;
+  }
+  const same = sameTrail(authored, rec._authored);
+  if (!same) rec._trailProg = 0;
+  rec._authored = authored;
+  rec._path = routeTrack(game.world, { x: rec.x, z: rec.z }, authored, {
+    minIndex: rec._trailProg || 0,
+  });
+  rec._pathI = 0;
+  if (!game.flags?.ch01_scarf_found) {
+    rec._trackHint = "Follow Wraith — she's on Mr. Pruitt's scent";
+    game.refreshObjective?.();
+  }
+  return rec._path;
+}
+
+/** Recalculate the remaining walkable trail from where she is now (stuck / FOLLOW then TRACK). */
+export function repathFromHere(game) {
+  const rec = game.world?.companion;
+  if (!rec) return null;
+  const path = rec._path || [];
+  const rest = path.slice(Math.max(0, rec._pathI || 0));
+  const authored = rest.length ? rest : pathFromSetpiece(game, findTrackTarget(game));
+  rec._path = routeTrack(game.world, { x: rec.x, z: rec.z }, authored || []);
+  rec._pathI = 0;
+  rec._stuckT = 0;
+  rec._repathOnce = false;
+  syncScentTrail(game);
+  return rec._path;
 }
 
 function disposeTrail(game) {
@@ -308,7 +375,10 @@ function disposeTrail(game) {
 export function syncScentTrail(game) {
   disposeTrail(game);
   if (!game?.flags?.ch01_tracking) return null;
-  const path = pathFromSetpiece(game, findTrackTarget(game) || null);
+  const rec = game.world?.companion;
+  const path = (rec && rec._path && rec._path.length >= 2)
+    ? rec._path
+    : pathFromSetpiece(game, findTrackTarget(game) || null);
   if (!path || path.length < 2) return null;
   const pos = [], nrm = [], uv = [], idx = [];
   const pushQuad = (p0, p1, p2, p3) => {
@@ -359,8 +429,6 @@ export function syncScentTrail(game) {
   const parent = game.levelRuntime?.group || game.world?.levelGroup || game.scene;
   if (parent) parent.add(mesh);
   game._scentTrailMesh = mesh;
-  const rec = game.world?.companion;
-  if (rec) rec._path = path;
   return mesh;
 }
 

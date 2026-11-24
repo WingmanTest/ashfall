@@ -2,7 +2,8 @@
 // Pure gameplay glue: positions world.companion's mesh near the player and fires
 // playWraith cues once per threat within range. Never throws.
 
-import { attachMixer, setLocomotion, updateMixer } from "./npcAnim.js?v=r14.1";
+import { attachMixer, setLocomotion, updateMixer } from "./npcAnim.js?v=r14.2";
+import { repathFromHere } from "./companionCmd.js?v=r14.2";
 
 const FOLLOW_GAP = 2.2;     // she trots to ~2.2 m behind/right of Braith
 const TELL_RANGE = 12;
@@ -54,20 +55,99 @@ function _moveToward(game, rec, tx, tz, dt, spd) {
   return used;
 }
 
+function _pruittNear(game, rec) {
+  const n = (game.world?.npcs || []).find((p) => p.id === "pruitt" && p.alive !== false);
+  if (!n) return false;
+  return Math.hypot(rec.x - n.x, rec.z - n.z) < 4.2;
+}
+
+function _finishArrival(game, rec) {
+  if (rec._arrived) return;
+  rec._arrived = true;
+  rec._beatT = 0;
+  rec._pathI = (rec._path || []).length;
+  rec._trackHint = "Wraith found Mr. Pruitt — talk to him";
+  game.hud?.say?.("Wraith found him.");
+  game.refreshObjective?.();
+}
+
 function _leadAlongPath(game, rec, dt) {
   const path = rec._path;
-  if (!path || !path.length) return false;
+  if (!path || !path.length) return 0;
+  if (rec._arrived) return 0;
   if (rec._pathI == null) rec._pathI = 0;
-  while (rec._pathI < path.length - 1) {
-    const p = path[rec._pathI];
-    if (Math.hypot(rec.x - p.x, rec.z - p.z) < 1.1) rec._pathI++;
-    else break;
+
+  // Auto-sniff / pause beat — sit, toast once, then continue. No player action.
+  if (rec._beatT > 0) {
+    rec._beatT -= dt;
+    if (rec._beatT <= 0) {
+      rec._beatT = 0;
+      const wp = path[rec._pathI];
+      if (wp && wp.authoredI != null) rec._trailProg = Math.max(rec._trailProg || 0, wp.authoredI + 1);
+      rec._pathI = Math.min((rec._pathI || 0) + 1, path.length);
+    }
+    rec._stuckT = 0;
+    return 0;
   }
+
+  while (rec._pathI < path.length) {
+    const wp = path[rec._pathI];
+    const last = rec._pathI >= path.length - 1;
+    if (Math.hypot(rec.x - wp.x, rec.z - wp.z) < (last ? 1.4 : 1.1)) {
+      if (wp.beat && rec._beatDone !== rec._pathI) {
+        rec._beatDone = rec._pathI;
+        rec._beatT = 1.15;
+        if (wp.toast) game.hud?.say?.(wp.toast);
+        return 0;
+      }
+      if (wp.authoredI != null) rec._trailProg = Math.max(rec._trailProg || 0, wp.authoredI + 1);
+      if (last) {
+        _finishArrival(game, rec);
+        return 0;
+      }
+      rec._pathI++;
+    } else break;
+  }
+
+  if (rec._pathI >= path.length) {
+    _finishArrival(game, rec);
+    return 0;
+  }
+  if (_pruittNear(game, rec) && rec._pathI >= path.length - 2) {
+    _finishArrival(game, rec);
+    return 0;
+  }
+
   const i = Math.min(rec._pathI, path.length - 1);
   const p = path[i];
   const far = Math.hypot((game.player?.x || 0) - rec.x, (game.player?.z || 0) - rec.z);
   const spd = far > 10 ? 2.45 : 2.15;
-  return _moveToward(game, rec, p.x, p.z, dt, spd);
+  const used = _moveToward(game, rec, p.x, p.z, dt, spd) || 0;
+  const stillFar = Math.hypot(rec.x - p.x, rec.z - p.z) > 1.1;
+  if (used < 0.05 && stillFar) {
+    rec._stuckT = (rec._stuckT || 0) + dt;
+    if (rec._stuckT > 1.6) {
+      const ang = (rec.mesh?.rotation.y || 0) + Math.PI / 2;
+      const sx = rec.x + Math.sin(ang) * 1.2;
+      const sz = rec.z + Math.cos(ang) * 1.2;
+      if (game.world && !game.world.blocked?.(sx, sz, 0.3)) {
+        rec.x = sx; rec.z = sz;
+      } else if (game.world?.unstuckFrom) {
+        const u = game.world.unstuckFrom(rec.x, rec.z, 0.3, p);
+        rec.x = u.x; rec.z = u.z;
+      }
+      rec._stuckT = 0;
+      rec._repathOnce = false;
+      try { repathFromHere(game); } catch {}
+    } else if (rec._stuckT > 0.8 && !rec._repathOnce) {
+      rec._repathOnce = true;
+      try { repathFromHere(game); } catch {}
+    }
+  } else {
+    rec._stuckT = 0;
+    rec._repathOnce = false;
+  }
+  return used;
 }
 
 export function tickCompanion(game, dt) {
@@ -111,7 +191,7 @@ export function tickCompanion(game, dt) {
   const baseY = rec.mesh.userData.baseY;
   rec.mesh.position.set(rec.x, Number.isFinite(baseY) ? baseY : 0, rec.z);
   if (!rec.mesh.userData.mixer) attachMixer(rec.mesh, rec.model || rec.mesh.userData.model || "wraith_malinois");
-  const sit = (mode === "stay") && !st.moving;
+  const sit = ((mode === "stay") || (mode === "track" && (rec._arrived || rec._beatT > 0))) && !st.moving;
   setLocomotion(rec.mesh, speed, { sit, modelId: rec.model || rec.mesh.userData.model || "wraith_malinois" });
   const dist = Math.hypot(p.x - rec.x, p.z - rec.z);
   updateMixer(rec.mesh, dt, { dist, visible: dist < 28 });
