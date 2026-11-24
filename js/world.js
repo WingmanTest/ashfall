@@ -424,17 +424,47 @@ export class World {
     return this;
   }
 
+  bindPipeline(pipeline) {
+    this.pipeline = pipeline || null;
+    // The pipeline owns the flashlight. A leftover intensity-0 SpotLight is
+    // still a scene light (every lit fragment loops over it).
+    if (this.pipeline && this.lights?.flash) {
+      try { this.lights.flash.target?.removeFromParent?.(); } catch {}
+      try { this.lights.flash.removeFromParent?.(); } catch {}
+      try { this.lights.flash.dispose?.(); } catch {}
+      this.lights.flash = null;
+    }
+    for (const f of this.fires) this.stripHostFireLight(f);
+  }
+
+  stripHostFireLight(f) {
+    if (!f) return;
+    if (f.light) {
+      try { f.light.removeFromParent?.(); } catch {}
+      try { f.light.dispose?.(); } catch {}
+      f.light = null;
+    }
+    if (f.flame) f.flame.visible = false;
+  }
+
   clearLevel() {
     const g = this.levelGroup;
-    if (g) {
-      const kids = [...g.children];
-      for (const c of kids) g.remove(c);
-    }
     for (const f of this.fires) {
       try { f.sfx?.stop?.(); } catch {}
-      if (f.light?.parent) f.light.parent.remove(f.light);
+      if (f.lumen && this.pipeline?.removeCampfire) {
+        try { this.pipeline.removeCampfire(f.lumen); } catch {}
+      }
+      f.lumen = null;
+      this.stripHostFireLight(f);
       if (f.flame?.parent) f.flame.parent.remove(f.flame);
       if (f.logs?.parent) f.logs.parent.remove(f.logs);
+      disposeMesh(f.flame, this.pbrCache);
+      disposeMesh(f.logs, this.pbrCache);
+    }
+    if (g) {
+      g.traverse((o) => disposeMesh(o, this.pbrCache));
+      const kids = [...g.children];
+      for (const c of kids) g.remove(c);
     }
     this.fires = [];
     this.loot = [];
@@ -497,9 +527,15 @@ export class World {
   }
 
   _addFire(scene, x, z, id) {
-    const glow = new THREE.PointLight(0xff8844, 2.2, 8.5, 1.6);
-    glow.position.set(x, 0.7, z);
-    scene.add(glow);
+    // When the Lumen pipeline is attached it owns campfire lighting (a fixed
+    // 2-light pool). A host PointLight, even at intensity 0, still changes
+    // the scene light count and recompiles every material.
+    let glow = null;
+    if (!this.pipeline) {
+      glow = new THREE.PointLight(0xff8844, 2.2, 8.5, 1.6);
+      glow.position.set(x, 0.7, z);
+      scene.add(glow);
+    }
     const logs = new THREE.Mesh(
       new THREE.CylinderGeometry(0.35, 0.45, 0.25, 8),
       new THREE.MeshStandardMaterial({ color: 0x2a1a10, emissive: 0x331408, emissiveIntensity: 0.6 })
@@ -519,6 +555,12 @@ export class World {
 
   addCampfire(scene, x, z) {
     this._addFire(scene, x, z, "crafted_" + this.fires.length);
+    const last = this.fires[this.fires.length - 1];
+    if (last && this.pipeline?.addCampfire) {
+      try { last.lumen = this.pipeline.addCampfire([last.x, 0.02, last.z]); } catch {}
+      this.stripHostFireLight(last);
+    }
+    return last;
   }
 
   bindAudio(audio) {
@@ -595,10 +637,16 @@ export class World {
     }
     pos.needsUpdate = true;
     for (const f of this.fires) {
-      if (!f.on) { f.light.intensity = 0; f.flame.visible = false; continue; }
-      f.flame.visible = true;
-      f.flame.scale.y = 0.85 + Math.sin(performance.now() * 0.012 + f.x) * 0.2;
-      f.light.intensity = 1.8 + Math.sin(performance.now() * 0.02) * 0.5;
+      if (!f.on) {
+        if (f.light) f.light.intensity = 0;
+        if (f.flame) f.flame.visible = false;
+        continue;
+      }
+      if (f.flame && !f.lumen) {
+        f.flame.visible = true;
+        f.flame.scale.y = 0.85 + Math.sin(performance.now() * 0.012 + f.x) * 0.2;
+      }
+      if (f.light) f.light.intensity = 1.8 + Math.sin(performance.now() * 0.02) * 0.5;
     }
   }
 
@@ -687,5 +735,30 @@ export class World {
     if (this.blocksAirLOS && this.blocksAirLOS(x, z)) return true;
     const loc = this.locationAt(x, z);
     return !!(loc && loc.safe);
+  }
+}
+
+function isCachedTexture(tex, cache) {
+  if (!tex || !cache) return false;
+  for (const entry of Object.values(cache)) {
+    if (!entry) continue;
+    if (entry === tex || entry.diff === tex || entry.nor === tex || entry.rough === tex || entry.ao === tex || entry.map === tex) return true;
+  }
+  return false;
+}
+
+function disposeMesh(o, pbrCache) {
+  if (!o) return;
+  try { o.geometry?.dispose?.(); } catch {}
+  const mats = o.material ? (Array.isArray(o.material) ? o.material : [o.material]) : [];
+  for (const m of mats) {
+    if (!m) continue;
+    for (const key of ["map", "normalMap", "roughnessMap", "metalnessMap", "aoMap", "emissiveMap"]) {
+      const tex = m[key];
+      if (tex && !isCachedTexture(tex, pbrCache)) {
+        try { tex.dispose(); } catch {}
+      }
+    }
+    try { m.dispose(); } catch {}
   }
 }

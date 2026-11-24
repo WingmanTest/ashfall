@@ -303,7 +303,8 @@ uniform vec3 uLift;
 uniform float uGamma;
 uniform float uCrush;
 
-uniform sampler2D tLUT;   // 64^3 nearest-palette LUT (8x8 tiles of 64x64)
+uniform sampler2D tLUT;   // 64^3 nearest-palette index LUT (R8, 8x8 tiles of 64x64)
+uniform sampler2D tPal;   // 256x1 palette colours
 uniform sampler2D tBlue;  // 32x32 blue noise
 uniform int uPaletteOn;
 uniform int uDitherMode;  // 0 bayer4, 1 bayer8, 2 blue noise
@@ -313,6 +314,52 @@ uniform float uDither;
 uniform float uGrain;
 uniform float uWarmKeep;
 uniform float uToe;
+
+#ifdef CHEAP_VOL
+// Mobile tier: no raymarch pass / no low-res target / no bilateral upsample. In-scatter is
+// evaluated analytically per pixel here: fog colour + sun phase + flashlight cone (3 fixed taps)
+// + campfire glow (closed-form 1/r^2 integral). No shadows, no noise.
+uniform vec3 uSunDir;
+uniform vec3 uSunColor;
+uniform float uSunG;
+uniform vec3 uSpotPos;
+uniform vec3 uSpotDir;
+uniform vec3 uSpotColor;
+uniform vec2 uSpotCos;
+uniform float uSpotRange;
+uniform vec4 uPointPos[MAX_POINTS];
+uniform vec3 uPointColor[MAX_POINTS];
+uniform int uPointCount;
+vec3 cheapScatter(vec3 rd, float t0, float len, float opacity) {
+  vec3 L = uFogColor + uSunColor * hgPhase(dot(rd, uSunDir), uSunG);
+  // flashlight beam: average of 3 taps along the visible segment (front-weighted)
+  vec3 beam = vec3(0.0);
+  float seg = len - t0;
+  for (int i = 0; i < 3; i++) {
+    float t = t0 + seg * (float(i) * float(i) + 0.5) / 9.5;
+    vec3 ls = uSpotPos - (uCamPos + rd * t);
+    float dl = length(ls);
+    vec3 ln = ls / max(dl, 1e-3);
+    float cone = smoothstep(uSpotCos.x, uSpotCos.y, dot(-ln, uSpotDir));
+    float fall = (1.0 - smoothstep(0.0, uSpotRange, dl)) / (1.0 + dl * dl * 0.08);
+    beam += cone * fall * hgPhase(dot(ln, rd), 0.25);
+  }
+  L += uSpotColor * beam * (1.0 / 3.0);
+  vec3 scat = L * opacity;
+  for (int k = 0; k < MAX_POINTS; k++) {
+    if (k >= uPointCount) break;
+    vec3 lp = uPointPos[k].xyz - uCamPos;
+    float b = dot(lp, rd);
+    float h2 = max(dot(lp, lp) - b * b, 0.0) + 0.35;
+    float h = sqrt(h2);
+    float integ = (atan((len - b) / h) - atan(-b / h)) / h;
+    float yb = uCamPos.y + rd.y * clamp(b, 0.0, len);
+    float densL = uFogDensity * exp(-uFogFalloff * (yb - uFogBase));
+    scat += uPointColor[k] * integ * densL * exp(-densL * clamp(b, 0.0, len)) * uPointPos[k].w;
+  }
+  return scat;
+}
+#endif
 
 const float B4[16] = float[16](0.0, 8.0, 2.0, 10.0, 12.0, 4.0, 14.0, 6.0,
                                3.0, 11.0, 1.0, 9.0, 15.0, 7.0, 13.0, 5.0);
@@ -371,7 +418,8 @@ vec3 grade(vec3 c, float warm) {
 }
 vec3 paletteLUT(vec3 c) {
   ivec3 q = ivec3(clamp(c, 0.0, 1.0) * 63.0 + 0.5);
-  return texelFetch(tLUT, ivec2(q.r + (q.b & 7) * 64, q.g + (q.b >> 3) * 64), 0).rgb;
+  int idx = int(texelFetch(tLUT, ivec2(q.r + (q.b & 7) * 64, q.g + (q.b >> 3) * 64), 0).r * 255.0 + 0.5);
+  return texelFetch(tPal, ivec2(idx, 0), 0).rgb;
 }
 float bayer8(ivec2 p) {
   int x = p.x & 7, y = p.y & 7, xy = x ^ y;
@@ -395,6 +443,9 @@ void main() {
     float st = min(uFogStart, len);
     float Tp = exp(-fogOpticalDepth(uCamPos + rd * st, rd, len - st, uFogDensity, uFogBase, uFogFalloff));
 
+#ifdef CHEAP_VOL
+    col = col * Tp + cheapScatter(rd, st, len, 1.0 - Tp);
+#else
     // depth-aware upsample of low-res in-scatter radiance
     float dc = linDepth(d);
     vec2 vp = vUv * uVolRes - 0.5;
@@ -413,6 +464,7 @@ void main() {
     }
     vec3 rad = acc / max(wsum, 1e-5) * uDecode;
     col = col * Tp + rad * (1.0 - Tp);
+#endif
   }
 
   col += texture(tBloom, vUv).rgb * uBloomStrength;

@@ -5,16 +5,18 @@ import {
   HEADER, FULLSCREEN_VERT, VOLUME_FRAG, BLOOM_PREFILTER_FRAG, BLOOM_DOWN_FRAG,
   BLOOM_UP_FRAG, COMPOSITE_FRAG, BLIT_FRAG,
 } from './shaders.js';
-import { TIERS, TIER_ORDER, detectTier, AdaptiveQuality, CRT_PRESETS, LOOKS, getTierConfig, applyMobileQuality } from './quality.js';
-import { GRADE_ASHFALL, PALETTES, buildPaletteLUT, resolvePalette } from './palette.js';
+import { TIERS, TIER_ORDER, detectTier, AdaptiveQuality, CRT_PRESETS, LOOKS, getTierConfig, applyMobileQuality, isMobileDevice, isIOS } from './quality.js';
+import { GRADE_ASHFALL, PALETTES, buildPaletteLUTGPU, releasePaletteLUTs, lutStats, resolvePalette } from './palette.js';
 import { getBlueNoiseTexture } from './bluenoise.js';
 import { fitSunShadow, setShadowMapSize, createFlashlight, createCampfire } from './lighting.js';
 import { createParticles } from './particles.js';
 
 const MAX_POINTS = 4;
+const POINT_POOL = 2; // fixed number of scene PointLights for campfires (constant => no shader recompiles)
 const _v3 = new THREE.Vector3();
 const _v3b = new THREE.Vector3();
 const _col = new THREE.Color();
+const _m4 = new THREE.Matrix4();
 
 function raw(frag, uniforms, defines = {}) {
   return new THREE.RawShaderMaterial({
@@ -31,7 +33,10 @@ function raw(frag, uniforms, defines = {}) {
  * @param {THREE.WebGLRenderer} o.renderer
  * @param {THREE.Scene} o.scene
  * @param {THREE.PerspectiveCamera} o.camera
- * @param {'auto'|'low'|'medium'|'high'} [o.tier]
+ * @param {'auto'|'mobile'|'low'|'medium'|'high'} [o.tier]  'auto' => 'mobile' on phones/iOS
+ * @param {boolean} [o.mobile]  force (true) / forbid (false) the phone path; default: detected
+ * @param {boolean} [o.allowHeavyOnMobile=false]  let a phone run low/medium/high when asked explicitly
+ * @param {number} [o.shadowUpdateEvery]  override the tier's shadow refresh interval (frames)
  */
 export function createRenderPipeline(o) {
   const { renderer, scene, camera } = o;
@@ -40,15 +45,19 @@ export function createRenderPipeline(o) {
     takeOverFog: true, updateCamera: true, particles: true, crt: 'low',
     ...o,
   };
-  const ua = (typeof navigator !== 'undefined' && navigator.userAgent) || '';
-  const mobile = !!(opts.mobile || /iPhone|iPad|iPod|Android/i.test(ua)
-    || (typeof navigator !== 'undefined' && navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
+  const mobile = opts.mobile === false ? false : (!!opts.mobile || isMobileDevice(renderer));
+  const gl = renderer.getContext();
+  let disposed = false;
 
-  // ---- capabilities -----------------------------------------------------------
+  // ---- host state we touch (restored by dispose) -------------------------------
+  const hostShadow = { enabled: renderer.shadowMap.enabled, type: renderer.shadowMap.type, autoUpdate: renderer.shadowMap.autoUpdate };
+
+  // ---- capabilities (half-float verified later, after the quad helpers exist) ----
   const ext = renderer.extensions;
-  let halfFloat = !opts.forceLDR && !!(ext.has('EXT_color_buffer_half_float') || ext.has('EXT_color_buffer_float'));
+  const hfExt = !!(ext.has('EXT_color_buffer_half_float') || ext.has('EXT_color_buffer_float'));
+  let halfFloat = !opts.forceLDR && hfExt;
   let hdrType = halfFloat ? THREE.HalfFloatType : THREE.UnsignedByteType;
-  const volEncode = halfFloat ? 1.0 : 0.5;
+  const caps = { webgl2: renderer.capabilities.isWebGL2 !== false, hfExt, halfFloatVerified: false, hdrReason: opts.forceLDR ? 'forceLDR' : (hfExt ? 'pending' : 'no EXT_color_buffer_(half_)float'), maxTextureSize: renderer.capabilities.maxTextureSize, glRenderer: '' };
 
   // ---- sun --------------------------------------------------------------------
   let sun = opts.sun || null;
@@ -61,7 +70,8 @@ export function createRenderPipeline(o) {
     scene.add(sun); ownSun = true;
   }
   if (!sun.target.parent) scene.add(sun.target);
-  sun.castShadow = true;
+  const hostSun = { castShadow: sun.castShadow, mapSize: sun.shadow.mapSize.x, ownTarget: false };
+  // (castShadow is set per tier; never force it on here: the mobile tier has no shadow pass at all)
   const sunDir = new THREE.Vector3().subVectors(sun.position, sun.target.position).normalize();
   const sunState = { scatter: 0.05 };
 
@@ -92,12 +102,23 @@ export function createRenderPipeline(o) {
   const flash = createFlashlight(opts.flashlightOptions || {});
   flash.enabled = opts.flashlight !== false;
   scene.add(flash.light, flash.light.target);
+  // fixed campfire light pool: nearest POINT_POOL campfires drive these each frame; the rest are
+  // glow-only. Adding/removing fires therefore never changes the scene light count (no recompiles).
+  const pool = [];
+  for (let i = 0; i < POINT_POOL; i++) {
+    const pl = new THREE.PointLight(0xff7428, 0, 12, 1.6);
+    pl.name = 'ashfall-campfire-light-' + i;
+    pl.castShadow = false;
+    scene.add(pl);
+    pool.push(pl);
+  }
   const flashState = { scatter: 0.05 };
 
   const parts = opts.particles ? createParticles(opts.particleOptions || {}) : null;
   if (parts) scene.add(parts.points);
 
-  const pointLights = []; // { light, glow, campfire? }
+  const pointLights = []; // { light, glow, campfire?, pooled?, anchor?, pos, d2 }
+  const sorted = [];
 
   // ---- shared resources ----------------------------------------------------------
   const blue = getBlueNoiseTexture();
@@ -134,9 +155,9 @@ export function createRenderPipeline(o) {
     uPointCount: { value: 0 },
     uSunUV: { value: new THREE.Vector2() }, uSunVis: { value: 0 },
     uGodStrength: { value: 0.35 }, uGodDecay: { value: 0.96 }, uGodDensity: { value: 0.85 },
-    uEncode: { value: volEncode },
+    uEncode: { value: halfFloat ? 1.0 : 0.5 },
   };
-  const volMat = raw(VOLUME_FRAG, volU, { MAX_STEPS: 24, MAX_POINTS, GOD_SAMPLES: 0 });
+  const volMat = raw(VOLUME_FRAG, volU, { MAX_STEPS: 12, MAX_POINTS, GOD_SAMPLES: 0 });
 
   const preU = { tSrc: { value: null }, uTexel: { value: new THREE.Vector2() }, uThreshold: { value: grade.bloomThreshold }, uKnee: { value: 0.5 } };
   const preMat = raw(BLOOM_PREFILTER_FRAG, preU);
@@ -151,16 +172,27 @@ export function createRenderPipeline(o) {
     uNear: { value: camera.near }, uFar: { value: camera.far },
     uInvProj: volU.uInvProj, uCamWorld: volU.uCamWorld, uCamPos: volU.uCamPos,
     uMaxDist: volU.uMaxDist, uFogStart: volU.uFogStart, uFogDensity: volU.uFogDensity, uFogBase: volU.uFogBase, uFogFalloff: volU.uFogFalloff,
-    uDecode: { value: 1 / volEncode }, uVolOn: { value: 1 }, uFogColor: volU.uFogColor,
+    uDecode: { value: halfFloat ? 1.0 : 2.0 }, uVolOn: { value: 1 }, uFogColor: volU.uFogColor,
     uBloomStrength: { value: grade.bloom }, uExposure: { value: grade.exposure }, uTime: { value: 0 },
     uContrast: { value: grade.contrast }, uSaturation: { value: grade.saturation }, uBrightness: { value: grade.brightness },
     uTint: { value: new THREE.Vector3(...grade.tint) }, uLift: { value: new THREE.Vector3(...grade.lift) },
     uGamma: { value: grade.gamma }, uCrush: { value: grade.crush },
-    tLUT: { value: paletteHex ? buildPaletteLUT(paletteHex) : white }, tBlue: { value: blue },
+    tLUT: { value: white }, tPal: { value: white }, tBlue: { value: blue },
     uPaletteOn: { value: paletteHex ? 1 : 0 }, uDitherMode: { value: 1 }, uNoiseMix: { value: 0 },
     uPaletteMix: { value: grade.paletteMix }, uDither: { value: grade.dither }, uGrain: { value: grade.grain }, uWarmKeep: { value: 1 }, uToe: { value: 1 },
   };
-  const compMat = raw(COMPOSITE_FRAG, compU);
+  // analytic (mobile) volume path reads the volume uniforms directly
+  Object.assign(compU, {
+    uSunDir: volU.uSunDir, uSunColor: volU.uSunColor, uSunG: volU.uSunG,
+    uSpotPos: volU.uSpotPos, uSpotDir: volU.uSpotDir, uSpotColor: volU.uSpotColor, uSpotCos: volU.uSpotCos, uSpotRange: volU.uSpotRange,
+    uPointPos: volU.uPointPos, uPointColor: volU.uPointColor, uPointCount: volU.uPointCount,
+  });
+  const compMat = raw(COMPOSITE_FRAG, compU, { MAX_POINTS });
+  function bindLUT(hex) {
+    if (!hex) { compU.tLUT.value = white; compU.tPal.value = white; return; }
+    const t = buildPaletteLUTGPU(renderer, hex);
+    compU.tLUT.value = t; compU.tPal.value = t.userData.palette;
+  }
 
   const blitU = {
     tSrc: { value: null }, uInternal: { value: new THREE.Vector2() }, uCanvas: { value: new THREE.Vector2() },
@@ -174,55 +206,90 @@ export function createRenderPipeline(o) {
   let tierName = 'medium', T = TIERS.medium;
   const size = { w: 1, h: 1, iw: 1, ih: 1 };
 
-  function makeRT(w, h, { type = THREE.UnsignedByteType, filter = THREE.LinearFilter, depth = false } = {}) {
+  // Every target: no MSAA (samples 0), no stencil, no mipmaps. Depth only on the scene target,
+  // as a sampled DepthTexture (DEPTH_COMPONENT24 / UnsignedInt; core in WebGL2, fine on ANGLE-Metal).
+  function makeRT(w, h, { type = THREE.UnsignedByteType, filter = THREE.LinearFilter, depth = false, colorSpace = THREE.NoColorSpace } = {}) {
     const rt = new THREE.WebGLRenderTarget(Math.max(1, w), Math.max(1, h), {
       type, minFilter: filter, magFilter: filter, generateMipmaps: false, depthBuffer: depth,
-      colorSpace: THREE.NoColorSpace,
+      stencilBuffer: false, samples: 0, colorSpace,
     });
     if (depth) {
       rt.depthTexture = new THREE.DepthTexture(Math.max(1, w), Math.max(1, h));
+      rt.depthTexture.format = THREE.DepthFormat;
       rt.depthTexture.type = THREE.UnsignedIntType;
     }
     return rt;
   }
-  function testRT(type) {
-    let rt;
+  function freeRT(rt) { if (!rt) return; if (rt.depthTexture) rt.depthTexture.dispose(); rt.dispose(); }
+  function drainGLErrors() { let n = 0; while (gl.getError() !== gl.NO_ERROR && n < 16) n++; return n; }
+
+  /**
+   * Verify half-float really works on this GPU/driver before using it (WebKit ANGLE-Metal can
+   * report the extension yet render black / raise INVALID_OPERATION):
+   *  1. FBO with RGBA16F colour + depth texture must be FRAMEBUFFER_COMPLETE
+   *  2. write 2.0 (above LDR range) into it, then LINEAR-sample it into an RGBA8 target at 0.25x
+   *     and read back ~128 (checks storage > 1.0, renderability and half-float linear filtering)
+   *  3. gl.getError() must stay NO_ERROR
+   */
+  function verifyHalfFloat() {
+    let rt = null, out = null;
+    const testMat = raw(`in vec2 vUv; out vec4 outColor; uniform sampler2D tSrc; uniform float uMode;
+      void main(){ outColor = uMode < 0.5 ? vec4(2.0, 2.0, 2.0, 1.0) : vec4(texture(tSrc, vec2(0.5)).rgb * 0.25, 1.0); }`,
+      { tSrc: { value: null }, uMode: { value: 0 } });
+    const prevTarget = renderer.getRenderTarget();
     try {
-      rt = makeRT(4, 4, { type, depth: true });
+      drainGLErrors();
+      rt = makeRT(4, 4, { type: THREE.HalfFloatType, depth: true, filter: THREE.LinearFilter });
+      out = makeRT(1, 1, { type: THREE.UnsignedByteType });
       renderer.setRenderTarget(rt);
-      renderer.clear();
-      const gl = renderer.getContext();
-      const ok = gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
-      renderer.setRenderTarget(null);
-      if (rt.depthTexture) rt.depthTexture.dispose();
-      rt.dispose();
-      return !!ok;
-    } catch (err) {
-      try { renderer.setRenderTarget(null); } catch {}
-      try { if (rt) { if (rt.depthTexture) rt.depthTexture.dispose(); rt.dispose(); } } catch {}
-      return false;
+      if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE) return 'half-float FBO incomplete';
+      testMat.uniforms.uMode.value = 0; pass(testMat, rt);
+      testMat.uniforms.uMode.value = 1; testMat.uniforms.tSrc.value = rt.texture; pass(testMat, out);
+      const px = new Uint8Array(4);
+      renderer.readRenderTargetPixels(out, 0, 0, 1, 1, px);
+      const err = gl.getError();
+      if (err !== gl.NO_ERROR) return 'GL error 0x' + err.toString(16);
+      if (px[0] < 110 || px[0] > 146) return 'half-float readback ' + px[0] + ' (expected ~128)';
+      return 'ok';
+    } catch (e) {
+      return 'exception: ' + (e && e.message || e);
+    } finally {
+      renderer.setRenderTarget(prevTarget);
+      freeRT(rt); freeRT(out); testMat.dispose();
+      drainGLErrors();
     }
   }
-  if (halfFloat && !testRT(THREE.HalfFloatType)) {
-    halfFloat = false;
-    hdrType = THREE.UnsignedByteType;
+  function applyHDRMode() {
+    hdrType = halfFloat ? THREE.HalfFloatType : THREE.UnsignedByteType;
+    volU.uEncode.value = halfFloat ? 1.0 : 0.5;
+    compU.uDecode.value = halfFloat ? 1.0 : 2.0;
+    if (userGrade.bloomThreshold === undefined) grade.bloomThreshold = halfFloat ? 1.1 : 0.82;
+    stats.halfFloat = halfFloat;
   }
+
   function disposeTargets() {
-    [sceneRT, volRT, postRT, ...down, ...up].forEach((rt) => { if (rt) { if (rt.depthTexture) rt.depthTexture.dispose(); rt.dispose(); } });
+    [sceneRT, volRT, postRT, ...down, ...up].forEach(freeRT);
+    sceneRT = volRT = postRT = null;
     down = []; up = [];
+    targetKey = '';
   }
+  let targetKey = '';
   function buildTargets() {
-    disposeTargets();
     const s = T.sceneScale;
+    const vs = T.volume.enabled && T.volume.mode === 'raymarch' ? T.volume.scale : 0;
+    const key = [size.iw, size.ih, s, vs, T.bloom.levels, hdrType].join('|');
+    if (key === targetKey && sceneRT) { updateSizeUniforms(); return false; } // nothing to reallocate
+    disposeTargets();
+    // LDR fallback stores the scene as sRGB8_ALPHA8 (hardware encode/decode) so 8 bits are spent
+    // perceptually: linear RGBA8 would band badly in the night/dark interiors.
+    const sceneCS = halfFloat ? THREE.NoColorSpace : THREE.SRGBColorSpace;
     try {
-      sceneRT = makeRT(size.iw * s, size.ih * s, { type: hdrType, depth: true });
+      sceneRT = makeRT(size.iw * s, size.ih * s, { type: hdrType, depth: true, colorSpace: sceneCS });
     } catch (err) {
-      hdrType = THREE.UnsignedByteType;
-      halfFloat = false;
-      sceneRT = makeRT(size.iw * s, size.ih * s, { type: hdrType, depth: true });
+      halfFloat = false; caps.hdrReason = 'scene RT alloc failed'; applyHDRMode();
+      sceneRT = makeRT(size.iw * s, size.ih * s, { type: hdrType, depth: true, colorSpace: THREE.SRGBColorSpace });
     }
-    const vs = T.volume.scale;
-    volRT = makeRT(Math.ceil(size.iw * vs), Math.ceil(size.ih * vs), { type: hdrType, filter: THREE.NearestFilter });
+    volRT = vs > 0 ? makeRT(Math.ceil(size.iw * vs), Math.ceil(size.ih * vs), { type: hdrType, filter: THREE.NearestFilter }) : null;
     postRT = makeRT(size.iw, size.ih, { filter: THREE.NearestFilter });
     let bw = size.iw, bh = size.ih;
     for (let i = 0; i < T.bloom.levels; i++) {
@@ -230,24 +297,43 @@ export function createRenderPipeline(o) {
       down.push(makeRT(bw, bh, { type: hdrType }));
       if (i < T.bloom.levels - 1) up.push(makeRT(bw, bh, { type: hdrType }));
     }
-    compU.uVolRes.value.set(volRT.width, volRT.height);
+    targetKey = key;
+    stats.targetBuilds = (stats.targetBuilds || 0) + 1;
+    updateSizeUniforms();
+    return true;
+  }
+  function updateSizeUniforms() {
+    if (volRT) { compU.uVolRes.value.set(volRT.width, volRT.height); volU.uRes.value.set(volRT.width, volRT.height); }
     compU.uRes.value.set(size.iw, size.ih);
-    volU.uRes.value.set(volRT.width, volRT.height);
     blitU.uInternal.value.set(size.iw, size.ih);
     blitU.uCanvas.value.set(size.w, size.h);
   }
 
+  /**
+   * Internal targets depend ONLY on the tier's pixel-art height and the canvas aspect, never on
+   * devicePixelRatio (a DPR-3 canvas just gets a larger final blit). Unchanged internal size =>
+   * no reallocation, only uniforms (iOS fires resize on every URL-bar show/hide).
+   */
   function resize(width, height) {
+    if (disposed) return;
     if (width === undefined) {
       const v = renderer.getDrawingBufferSize(new THREE.Vector2());
       width = v.x; height = v.y;
     }
+    width = Math.max(1, width | 0); height = Math.max(1, height | 0);
     size.w = width; size.h = height;
-    size.ih = T.internalHeight;
-    size.iw = Math.max(2, Math.round((T.internalHeight * width / height) / 2) * 2);
+    let ih = T.internalHeight;
+    if (T.snap) {
+      // integer upscale: 844 -> 422 (2x), 1688 -> 422 (4x), 2532 -> 422 (6x), 1920 -> 480 (4x)
+      const k = Math.max(1, Math.round(height / T.internalHeight));
+      ih = Math.round(height / k);
+    }
+    ih = Math.max(64, Math.min(ih, height, T.internalHeight * 1.2) & ~1);
+    size.ih = ih;
+    size.iw = Math.max(2, Math.round((ih * width / height) / 2) * 2);
     if (opts.updateCamera && camera.isPerspectiveCamera) {
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
+      const asp = width / height;
+      if (Math.abs(camera.aspect - asp) > 1e-6) { camera.aspect = asp; camera.updateProjectionMatrix(); }
     }
     buildTargets();
   }
@@ -259,27 +345,51 @@ export function createRenderPipeline(o) {
     });
   }
 
+  function resolveTier(name) {
+    if (name === 'phone') name = 'mobile';
+    if (!name || name === 'auto') name = mobile ? 'mobile' : detectTier(renderer);
+    if (!TIERS[name]) throw new Error('unknown tier ' + name + ' (' + TIER_ORDER.join('|') + '|auto)');
+    // phones never start heavy unless the host explicitly opts in (jetsam/freeze risk on iOS)
+    if (mobile && name !== 'mobile' && !opts.allowHeavyOnMobile) name = 'mobile';
+    return name;
+  }
+  function setDefine(mat, key, val) {
+    const cur = mat.defines[key];
+    if (val === undefined || val === false) { if (key in mat.defines) { delete mat.defines[key]; mat.needsUpdate = true; } return; }
+    const v = val === true ? '' : val;
+    if (cur !== v) { mat.defines[key] = v; mat.needsUpdate = true; }
+  }
+  let shadowCountdown = 0;
   function setTier(name) {
-    if (name === 'auto') name = detectTier(renderer);
-    if (!TIERS[name]) throw new Error('unknown tier ' + name);
+    if (disposed) return;
+    name = resolveTier(name);
     const prevType = renderer.shadowMap.type;
+    const prevEnabled = renderer.shadowMap.enabled;
     tierName = name; T = getTierConfig(look, name);
-    if (mobile) T = applyMobileQuality(T);
+    if (opts.shadowUpdateEvery) T.shadow.updateEvery = opts.shadowUpdateEvery;
     renderer.shadowMap.enabled = T.shadow.enabled;
     renderer.shadowMap.type = T.shadow.type === 'pcfsoft' ? THREE.PCFSoftShadowMap : THREE.PCFShadowMap;
+    renderer.shadowMap.autoUpdate = false; // pipeline schedules shadow refreshes (T.shadow.updateEvery)
+    renderer.shadowMap.needsUpdate = T.shadow.enabled;
+    shadowCountdown = 0;
     sun.castShadow = T.shadow.enabled;
-    setShadowMapSize(sun, T.shadow.mapSize);
+    if (T.shadow.enabled) setShadowMapSize(sun, T.shadow.mapSize);
+    else if (sun.shadow.map) { sun.shadow.map.dispose(); sun.shadow.map = null; } // free VRAM
     flash.light.castShadow = T.flashShadow;
     if (T.flashShadow) setShadowMapSize(flash.light, flashState.shadowSize || T.flashShadowSize);
-    volMat.defines.MAX_STEPS = T.volume.steps;
-    volMat.defines.GOD_SAMPLES = T.godSamples;
-    if (T.volume.noise) volMat.defines.USE_NOISE = ''; else delete volMat.defines.USE_NOISE;
-    if (T.volume.shadow) volMat.defines.USE_SHADOW = ''; else delete volMat.defines.USE_SHADOW;
-    volMat.needsUpdate = true;
-    volU.uSteps.value = T.volume.steps;
+    else if (flash.light.shadow.map) { flash.light.shadow.map.dispose(); flash.light.shadow.map = null; }
+    const rm = T.volume.enabled && T.volume.mode === 'raymarch';
+    if (rm) {
+      setDefine(volMat, 'MAX_STEPS', T.volume.steps);
+      setDefine(volMat, 'GOD_SAMPLES', T.godSamples);
+      setDefine(volMat, 'USE_NOISE', !!T.volume.noise);
+      setDefine(volMat, 'USE_SHADOW', !!T.volume.shadow);
+      volU.uSteps.value = T.volume.steps;
+    }
+    setDefine(compMat, 'CHEAP_VOL', T.volume.enabled && T.volume.mode === 'analytic');
     compU.uVolOn.value = T.volume.enabled ? 1 : 0;
     if (parts) parts.setCount(T.particles);
-    if (prevType !== renderer.shadowMap.type) markMaterialsDirty();
+    if (prevType !== renderer.shadowMap.type && prevEnabled && T.shadow.enabled) markMaterialsDirty();
     adaptive.reset();
     resize(size.w > 1 ? size.w : undefined, size.h > 1 ? size.h : undefined);
     if (api.onTierChange) api.onTierChange(name);
@@ -295,9 +405,9 @@ export function createRenderPipeline(o) {
     onChange: (t, why) => {
       if (t) { console.info('[ashfall-render] tier', why, '->', t); setTier(t); return; }
       // refined/low still over budget: fall back to the classic (lower-res) look at medium, then low
+      // still over budget on the lightest tier: drop to the classic (lower-res) look, same tier
       if (look === 'refined' && opts.lookFallback !== false) {
-        console.info('[ashfall-render] refined/low over budget -> classic/medium');
-        tierName = 'medium';
+        console.info('[ashfall-render] refined/' + tierName + ' over budget -> classic/' + tierName);
         api.setLook('classic');
       }
     },
@@ -347,14 +457,31 @@ export function createRenderPipeline(o) {
     volU.uSpotCos.value.set(Math.cos(L.angle), Math.cos(L.angle * (1 - L.penumbra * 0.8)));
     volU.uSpotRange.value = L.distance || 30;
 
-    // point lights
-    const n = Math.min(pointLights.length, T.maxPoints, MAX_POINTS);
+    // point lights: nearest first (was: registration order, so far fires could steal the glow)
+    for (const p of pointLights) {
+      if (p.campfire) p.campfire.group.updateMatrixWorld();
+      if (p.light.parent) p.light.getWorldPosition(p.pos);
+      else p.pos.copy(p.light.position).applyMatrix4(p.anchor ? p.anchor.matrixWorld : _m4.identity());
+      p.d2 = p.pos.distanceToSquared(camPos);
+    }
+    sorted.length = 0;
+    for (const p of pointLights) sorted.push(p);
+    sorted.sort((a, b) => a.d2 - b.d2);
+    // drive the fixed scene light pool from the nearest pooled campfires
+    let pi = 0;
+    for (const p of sorted) {
+      if (!p.pooled || pi >= pool.length) continue;
+      const pl = pool[pi++];
+      pl.position.copy(p.pos); pl.color.copy(p.light.color);
+      pl.intensity = p.light.intensity; pl.distance = p.light.distance; pl.decay = p.light.decay;
+    }
+    for (; pi < pool.length; pi++) pool[pi].intensity = 0;
+    const n = Math.min(sorted.length, T.maxPoints, MAX_POINTS);
     volU.uPointCount.value = n;
     for (let i = 0; i < n; i++) {
-      const p = pointLights[i];
-      p.light.getWorldPosition(_v3);
+      const p = sorted[i];
       const c = _col.copy(p.light.color).multiplyScalar(p.light.visible ? p.light.intensity : 0);
-      volU.uPointPos.value[i].set(_v3.x, _v3.y, _v3.z, p.glow * 0.03);
+      volU.uPointPos.value[i].set(p.pos.x, p.pos.y, p.pos.z, p.glow * 0.03);
       volU.uPointColor.value[i].set(c.r, c.g, c.b);
     }
 
@@ -375,7 +502,7 @@ export function createRenderPipeline(o) {
       if (sun.shadow.map && sun.castShadow) { u.tShadow.value = sun.shadow.map.texture; u.uShadowMatrix.value.copy(sun.shadow.matrix); u.uUseShadow.value = 1; }
       else { u.tShadow.value = white; u.uUseShadow.value = 0; }
       for (let i = 0; i < n; i++) {
-        const p = pointLights[i];
+        const p = sorted[i];
         u.uPointPos.value[i].set(volU.uPointPos.value[i].x, volU.uPointPos.value[i].y, volU.uPointPos.value[i].z, p.light.distance || 12);
         u.uPointColor.value[i].copy(volU.uPointColor.value[i]).multiplyScalar(0.08);
       }
@@ -408,12 +535,26 @@ export function createRenderPipeline(o) {
   }
 
   function render(dt = 1 / 60) {
+    if (disposed) return;
     const t0 = performance.now();
     mark(null);
     time += dt; frame++;
     adaptive.sample(dt * 1000, tierName);
+    let passes = 0, shadowPasses = 0;
 
-    if (T.shadow.enabled) fitSunShadow(sun, camera, sunDir, T.shadow.distance);
+    // shadow scheduling: refit + re-render the map only on refresh frames. The shadow matrix is
+    // updated together with the map, so lit surfaces stay consistent between refreshes.
+    if (T.shadow.enabled) {
+      const doShadow = shadowCountdown <= 0;
+      renderer.shadowMap.autoUpdate = false;
+      renderer.shadowMap.needsUpdate = doShadow;
+      if (doShadow) {
+        fitSunShadow(sun, camera, sunDir, T.shadow.distance);
+        shadowCountdown = Math.max(1, T.shadow.updateEvery | 0);
+        shadowPasses = 1 + (T.flashShadow && flash.enabled ? 1 : 0);
+      }
+      shadowCountdown--;
+    }
     flash.update(camera, time);
     for (const p of pointLights) if (p.campfire) p.campfire.update(time, size.ih);
     if (parts) parts.update(camera, time);
@@ -425,26 +566,27 @@ export function createRenderPipeline(o) {
     // 1. scene at low internal res
     renderer.setRenderTarget(sceneRT);
     renderer.render(scene, camera);
+    passes++;
     stats.calls = renderer.info.render.calls;
     stats.triangles = renderer.info.render.triangles;
     mark('shadows+scene');
 
     // 2. volumetric in-scatter (+ god rays)
-    if (T.volume.enabled) {
+    if (volRT) {
       volU.tDepth.value = sceneRT.depthTexture;
-      pass(volMat, volRT);
+      pass(volMat, volRT); passes++;
       compU.tVol.value = volRT.texture;
-    }
+    } else compU.tVol.value = white;
     mark('volume+godrays');
 
     // 3. bloom mip chain
     preU.tSrc.value = sceneRT.texture;
     preU.uTexel.value.set(1 / sceneRT.width, 1 / sceneRT.height);
-    pass(preMat, down[0]);
+    pass(preMat, down[0]); passes++;
     for (let i = 1; i < down.length; i++) {
       downU.tSrc.value = down[i - 1].texture;
       downU.uTexel.value.set(1 / down[i - 1].width, 1 / down[i - 1].height);
-      pass(downMat, down[i]);
+      pass(downMat, down[i]); passes++;
     }
     let bloomTex = down[down.length - 1].texture;
     for (let i = down.length - 2; i >= 0; i--) {
@@ -452,7 +594,7 @@ export function createRenderPipeline(o) {
       upU.tLow.value = low.texture;
       upU.tCur.value = down[i].texture;
       upU.uTexel.value.set(1 / low.width, 1 / low.height);
-      pass(upMat, up[i]);
+      pass(upMat, up[i]); passes++;
       bloomTex = up[i].texture;
     }
 
@@ -461,7 +603,7 @@ export function createRenderPipeline(o) {
     compU.tScene.value = sceneRT.texture;
     compU.tDepth.value = sceneRT.depthTexture;
     compU.tBloom.value = bloomTex;
-    pass(compMat, postRT);
+    pass(compMat, postRT); passes++;
     mark('composite');
 
     if (api.hooks.beforeCRT) {
@@ -472,7 +614,7 @@ export function createRenderPipeline(o) {
 
     // 5. nearest upscale + CRT to the canvas
     blitU.tSrc.value = postRT.texture;
-    pass(blitMat, null);
+    pass(blitMat, null); passes++; // straight to the default framebuffer
     mark('crt-blit');
 
     if (api.hooks.afterCRT) {
@@ -485,6 +627,42 @@ export function createRenderPipeline(o) {
     stats.frameMs += (dt * 1000 - stats.frameMs) * 0.1;
     stats.tier = tierName; stats.look = look; stats.palette = paletteName;
     stats.internal = [size.iw, size.ih];
+    stats.passCount = passes; stats.shadowPasses = shadowPasses;
+  }
+
+  // ---- memory report -----------------------------------------------------------------
+  function bpp(tex) {
+    const t = tex.type;
+    const ch = tex.format === THREE.RedFormat ? 1 : 4;
+    const b = t === THREE.HalfFloatType ? 2 : (t === THREE.FloatType ? 4 : 1);
+    return ch * b;
+  }
+  function rtBytes(rt) {
+    if (!rt) return 0;
+    let n = rt.width * rt.height * bpp(rt.texture);
+    if (rt.depthTexture) n += rt.width * rt.height * 4;
+    else if (rt.depthBuffer) n += rt.width * rt.height * 4;
+    return n;
+  }
+  function shadowBytes(light) {
+    if (!light.castShadow) return 0;
+    const s = light.shadow.mapSize; // RGBA8 packed depth + depth renderbuffer
+    return s.x * s.y * 8;
+  }
+  /** Exact bytes of everything this pipeline owns on the GPU (+ canvas estimate). */
+  function getMemoryReport() {
+    const targets = { scene: rtBytes(sceneRT), volume: rtBytes(volRT), post: rtBytes(postRT),
+      bloom: [...down, ...up].reduce((a, r) => a + rtBytes(r), 0) };
+    const shadows = { sun: shadowBytes(sun), flashlight: shadowBytes(flash.light) };
+    const lut = compU.tLUT.value === white ? 0 : 512 * 512 + 256 * 4;
+    const textures = { lut, blueNoise: 32 * 32, white: 4 };
+    const fboCount = [sceneRT, volRT, postRT, ...down, ...up].filter(Boolean).length
+      + (sun.castShadow ? 1 : 0) + (flash.light.castShadow ? 1 : 0);
+    const owned = Object.values(targets).reduce((a, b) => a + b, 0) + shadows.sun + shadows.flashlight + lut + 1028;
+    const canvas = size.w * size.h * (4 + 4 + 4); // front+back colour + depth (estimate)
+    return { tier: tierName, look, internal: [size.iw, size.ih], canvas: [size.w, size.h], halfFloat,
+      targets, shadows, textures, fboCount, ownedBytes: owned, canvasBytesEstimate: canvas,
+      ownedKB: +(owned / 1024).toFixed(1), totalMB: +((owned + canvas) / 1048576).toFixed(2) };
   }
 
   // ---- public API --------------------------------------------------------------------
@@ -503,11 +681,12 @@ export function createRenderPipeline(o) {
     get internalSize() { return { width: size.iw, height: size.ih }; },
     adaptive,
     setFlashlight(v) {
-      if (typeof v === 'boolean') { flash.enabled = v; return; }
+      if (typeof v === 'boolean') { flash.enabled = v; return; } // intensity toggle, never visibility
+      if (!v) return;
       if (v.enabled !== undefined) flash.enabled = v.enabled;
       const L = flash.light;
       if (v.color !== undefined) L.color.set(v.color);
-      if (v.intensity !== undefined) L.intensity = v.intensity;
+      if (v.intensity !== undefined) flash.baseIntensity = v.intensity;
       if (v.angle !== undefined) L.angle = THREE.MathUtils.degToRad(v.angle);
       if (v.range !== undefined) L.distance = v.range;
       if (v.penumbra !== undefined) L.penumbra = v.penumbra;
@@ -516,6 +695,10 @@ export function createRenderPipeline(o) {
       if (v.sway !== undefined) flash.sway = v.sway;
       if (v.pitch !== undefined) flash.pitch = v.pitch;
       if (v.shadowMapSize !== undefined) { flashState.shadowSize = v.shadowMapSize; if (flash.light.castShadow) setShadowMapSize(flash.light, v.shadowMapSize); }
+      if (v.shadow !== undefined && v.shadow !== T.flashShadow) { // per-scene override (e.g. interiors on low)
+        T.flashShadow = !!v.shadow; flash.light.castShadow = T.flashShadow && renderer.shadowMap.enabled;
+        if (flash.light.castShadow) setShadowMapSize(flash.light, flashState.shadowSize || T.flashShadowSize);
+      }
     },
     setSun(v) {
       if (v.direction) sunDir.set(...(Array.isArray(v.direction) ? v.direction : v.direction.toArray())).normalize();
@@ -537,7 +720,7 @@ export function createRenderPipeline(o) {
       paletteName = v === false ? 'off' : typeof v === 'string' ? v : 'custom';
       paletteHex = hex;
       compU.uPaletteOn.value = hex ? 1 : 0;
-      if (hex) compU.tLUT.value = buildPaletteLUT(hex);
+      bindLUT(hex);
     },
     getPalette: () => paletteName,
     /** { pattern: 'bayer4'|'bayer8'|'blue', amount: 0..0.15, noiseMix: 0..1 } */
@@ -559,32 +742,94 @@ export function createRenderPipeline(o) {
       setTier(tierName);
     },
     getLook: () => look,
-    addPointLight(light, { glow = 1 } = {}) { pointLights.push({ light, glow }); return light; },
+    /** Host-owned light (already in the scene): adds only its volumetric glow. */
+    addPointLight(light, { glow = 1 } = {}) {
+      if (!pointLights.some((p) => p.light === light)) pointLights.push({ light, glow, pos: new THREE.Vector3(), d2: 0 });
+      return light;
+    },
     removePointLight(light) { const i = pointLights.findIndex((p) => p.light === light); if (i >= 0) pointLights.splice(i, 1); },
+    /** Campfire = merged logs/stones + flame cards + embers + glow. Its light is served from a fixed
+     *  pool of POINT_POOL scene lights (nearest fires), so adding fires never recompiles shaders. */
     addCampfire(position, o2 = {}) {
-      const cf = createCampfire({ position: position.isVector3 ? position : new THREE.Vector3(...position), ...o2 });
+      const cf = createCampfire({ position: position.isVector3 ? position : new THREE.Vector3(...position), ...o2, addLight: false });
       scene.add(cf.group);
-      pointLights.push({ light: cf.light, glow: cf.glow, campfire: cf });
+      pointLights.push({ light: cf.light, glow: cf.glow, campfire: cf, pooled: true, anchor: cf.group, pos: new THREE.Vector3(), d2: 0 });
       return cf;
     },
-    removeCampfire(cf) { api.removePointLight(cf.light); cf.dispose(); },
+    removeCampfire(cf) {
+      if (!cf) return;
+      const i = pointLights.findIndex((p) => p.campfire === cf);
+      if (i >= 0) pointLights.splice(i, 1);
+      cf.dispose();
+    },
+    getMemoryReport,
+    get caps() { return { ...caps }; },
+    get flashlightEnabled() { return flash.enabled; },
+    /**
+     * Optional: call behind a loading screen. Compiles scene + post shaders (parallel compile when
+     * KHR_parallel_shader_compile exists) and renders one frame, so the first gameplay frame
+     * doesn't stall on shader compilation.
+     */
+    async warmup() {
+      if (disposed) return;
+      try { if (renderer.compileAsync) await renderer.compileAsync(scene, camera); else renderer.compile(scene, camera); } catch (e) { /* ignore */ }
+      render(1 / 60);
+    },
+    /**
+     * Frees every GPU resource this pipeline created and restores what it changed on the host:
+     * targets + depth textures, post materials/geometry, LUT/palette/blue-noise/white textures,
+     * flashlight (+ its shadow map), campfire light pool, particles, pipeline campfires,
+     * shadow maps it resized, renderer.shadowMap settings, sun.castShadow/mapSize, scene.fog.
+     * Host-owned lights passed to addPointLight are left alone. Safe to call twice.
+     */
     dispose() {
+      if (disposed) return;
+      disposed = true;
       disposeTargets();
       [volMat, preMat, downMat, upMat, compMat, blitMat].forEach((m) => m.dispose());
-      quadGeo.dispose(); white.dispose();
+      quadGeo.dispose(); white.dispose(); blue.dispose();
+      releasePaletteLUTs();
       flash.light.removeFromParent(); flash.light.target.removeFromParent(); flash.light.dispose();
+      for (const pl of pool) { pl.removeFromParent(); pl.dispose(); }
+      pool.length = 0;
       if (parts) parts.dispose();
       for (const p of pointLights) if (p.campfire) p.campfire.dispose();
-      pointLights.length = 0;
-      if (ownSun) sun.removeFromParent();
+      pointLights.length = 0; sorted.length = 0;
+      if (sun.shadow.map) { sun.shadow.map.dispose(); sun.shadow.map = null; }
+      if (ownSun) { sun.removeFromParent(); sun.target.removeFromParent(); sun.dispose(); }
+      else { sun.castShadow = hostSun.castShadow; sun.shadow.mapSize.set(hostSun.mapSize, hostSun.mapSize); }
+      renderer.shadowMap.enabled = hostShadow.enabled;
+      renderer.shadowMap.type = hostShadow.type;
+      renderer.shadowMap.autoUpdate = hostShadow.autoUpdate;
+      renderer.shadowMap.needsUpdate = true;
       if (opts.takeOverFog) scene.fog = sceneFog;
+      api.hooks.beforeCRT = api.hooks.afterCRT = null;
+      api.onTierChange = null;
       renderer.setRenderTarget(null);
     },
+    get disposed() { return disposed; },
   };
+
+  // verify half-float renderability for real before allocating anything big
+  if (halfFloat) {
+    const r = verifyHalfFloat();
+    caps.halfFloatVerified = r === 'ok';
+    caps.hdrReason = r === 'ok' ? 'verified' : r;
+    if (r !== 'ok') { halfFloat = false; console.info('[ashfall-render] HDR off:', r); }
+  }
+  applyHDRMode();
+  try { caps.glRenderer = (gl.getParameter(gl.RENDERER) || '') + ''; } catch (e) { /* ignore */ }
+  caps.mobile = mobile; caps.ios = isIOS();
+  {
+    const t0 = performance.now();
+    bindLUT(paletteHex);
+    caps.lutMs = +(performance.now() - t0).toFixed(2);
+    caps.lutPath = lutStats.path;
+  }
 
   setCRT(opts.crt);
   setTier(opts.tier);
   return api;
 }
 
-export { TIERS, TIER_ORDER, detectTier, CRT_PRESETS, LOOKS, getTierConfig, applyMobileQuality, PALETTES };
+export { TIERS, TIER_ORDER, detectTier, isMobileDevice, CRT_PRESETS, LOOKS, getTierConfig, applyMobileQuality, PALETTES };

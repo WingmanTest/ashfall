@@ -11,13 +11,16 @@ import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } fro
 import { StorySystem, applyEffects, evalCondition, resolveBranches } from "./story.js";
 import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon } from "./systems.js";
 import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js";
-import { isMobileClient, canvasDpr, preferredTier } from "./device.js";
+import { isMobileClient, canvasDpr } from "./device.js";
 import { LevelRuntime } from "./levelLoader.js";
 import { attachAudio } from "./audioHook.js";
 import { discoverRenderModule, attachRenderModule } from "./renderHook.js";
 import { createRenderPipeline, TIERS } from "../render/index.js";
 import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js";
-import { loadSave, hasSave, writeSave } from "./save.js";
+import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js";
+
+window.__ASHFALL_MODULE = true;
+window.__ASHFALL_BUILD = "r4";
 
 const $ = (id) => document.getElementById(id);
 const frame = $("frame");
@@ -47,6 +50,32 @@ function showError(err) {
   window.__ERROR = msg;
   try { console.error(err); } catch {}
 }
+function showSaveNotice(msg) {
+  const el = $("save-notice");
+  if (el) {
+    el.hidden = false;
+    el.textContent = msg;
+    el.classList.add("show");
+  }
+  window.__SAVE_NOTICE = msg;
+  try { console.warn(msg); } catch {}
+}
+function bindTap(id, fn) {
+  const el = $(id);
+  if (!el) return;
+  let locked = false;
+  const go = (e) => {
+    if (e) {
+      try { e.preventDefault(); e.stopPropagation(); } catch {}
+    }
+    if (locked) return;
+    locked = true;
+    setTimeout(() => { locked = false; }, 450);
+    try { fn(e); } catch (err) { showError(err); }
+  };
+  el.addEventListener("pointerup", go);
+  el.addEventListener("click", go);
+}
 
 function showScreen(id) {
   for (const s of document.querySelectorAll(".screen")) s.classList.remove("show");
@@ -56,6 +85,9 @@ function showScreen(id) {
 function setMenuOpen(on) {
   document.body.classList.toggle("menu-open", !!on);
   if (on) document.exitPointerLock?.();
+}
+function setPlaying(on) {
+  document.body.classList.toggle("playing", !!on);
 }
 
 class Game {
@@ -177,27 +209,34 @@ class Game {
   }
 
   _bindUi() {
-    $("btn-new").onclick = () => { this.audio.unlock(); this.newGame(); };
-    $("btn-continue").onclick = () => { this.audio.unlock(); this.continueGame(); };
+    const unlock = () => { try { this.audio?.unlock(); } catch {} };
+    bindTap("btn-new", () => { unlock(); this.newGame(); });
+    bindTap("btn-continue", () => { unlock(); this.continueGame(); });
     $("btn-continue").style.display = hasSave() ? "" : "none";
-    $("btn-notes-title").onclick = () => this.openNotes(true);
-    $("btn-resume").onclick = () => this.resume();
+    bindTap("btn-notes-title", () => this.openNotes(true));
+    bindTap("btn-resume", () => this.resume());
     if ($("btn-look")) {
       const cur = (this.pipeline && this.pipeline.getLook && this.pipeline.getLook()) || this.look || localStorage.getItem("ashfall.look") || "refined";
       $("btn-look").textContent = "LOOK: " + String(cur).toUpperCase();
-      $("btn-look").onclick = () => this.cycleLook();
+      bindTap("btn-look", () => this.cycleLook());
     }
     if ($("btn-crt")) {
       const cur = (this.pipeline && this.pipeline.getCRT && this.pipeline.getCRT()) || localStorage.getItem("ashfall.crt") || "low";
       $("btn-crt").textContent = "CRT: " + String(cur).toUpperCase();
-      $("btn-crt").onclick = () => this.cycleCRT();
+      bindTap("btn-crt", () => this.cycleCRT());
     }
-    $("btn-save").onclick = () => { this.save(); this.hud.say("Saved."); };
-    $("btn-notes").onclick = () => this.openNotes(false);
-    $("btn-quit").onclick = () => this.toTitle();
-    $("btn-restart").onclick = () => this.newGame();
-    $("btn-menu").onclick = () => this.toTitle();
-    $("btn-ending-menu").onclick = () => this.toTitle();
+    bindTap("btn-save", () => { this.save(); this.hud.say("Saved."); });
+    bindTap("btn-notes", () => this.openNotes(false));
+    bindTap("btn-quit", () => this.toTitle());
+    bindTap("btn-restart", () => this.newGame());
+    bindTap("btn-menu", () => this.toTitle());
+    bindTap("btn-ending-menu", () => this.toTitle());
+
+    const pending = window.__ASHFALL_PENDING;
+    window.__ASHFALL_PENDING = null;
+    if (pending === "btn-new") this.newGame();
+    else if (pending === "btn-continue") this.continueGame();
+    else if (pending === "btn-notes-title") this.openNotes(true);
   }
 
   cycleLook() {
@@ -227,6 +266,7 @@ class Game {
 
   toTitle() {
     this.mode = "title";
+    setPlaying(false);
     setMenuOpen(false);
     panel.classList.remove("show", "char-sheet");
     showScreen("title");
@@ -295,56 +335,77 @@ class Game {
   }
 
   continueGame() {
-    const s = loadSave();
-    if (!s) return this.newGame();
-    this.flags = { ...this.story.startingFlags(), ...(s.flags || {}) };
-    this.trust = { ...this.story.startingTrust(), ...(s.trust || {}) };
-    this.alive = s.alive || {};
-    this.inv = s.inv || emptyInv();
-    this.quests = s.quests || {};
-    this.seen = s.seen || {};
-    this.notes = s.notes || [];
-    this.timeOfDay = s.timeOfDay ?? 0.4;
-    this.blizzard = !!s.blizzard;
-    this.dayN = s.dayN || 0;
-    this.player.restore(s.player);
-    this.shelterSeals = { ...(s.shelterSeals || {}) };
-    this._breakInCd = 0;
-    const taken = new Set(s.lootTaken || []);
-    for (const L of this.world.loot) {
-      if (taken.has(L.id)) {
-        L.taken = true;
-        L.remaining = {};
-        if (L.mesh) L.mesh.visible = false;
-      } else {
-        L.taken = false;
-        L.remaining = s.lootLeft?.[L.id] || { ...(L.items || {}) };
-      }
-    }
-    const ch = this.flags.chapter || "ch01";
-    this.hudUnlocks = new Set(["hp", "warmth", "hunger"]);
-    const hookUnlocks = this.story.hooks?.hud_unlocks || {};
-    const n = this._chapterNum(ch);
-    for (const [cid, list] of Object.entries(hookUnlocks)) {
-      if (this._chapterNum(cid) <= n) {
-        for (const u of list) {
-          if (String(u).toLowerCase() === "seal" && !this.flags.shelter_sealed) continue;
-          this.hudUnlocks.add(u);
+    showLoad(8, "Loading");
+    const startFresh = (notice) => {
+      const msg = notice || "Old save incompatible — starting a fresh shift";
+      showSaveNotice(msg);
+      try { this.hud?.say(msg); } catch {}
+      try { clearSave(); } catch {}
+      return this.newGame();
+    };
+    try {
+      const raw = loadSave();
+      if (!raw) return this.newGame();
+      const mig = migrateSave(raw);
+      if (!mig.ok) return startFresh(mig.notice);
+      const s = mig.save;
+      this.flags = { ...this.story.startingFlags(), ...(s.flags || {}) };
+      this.flags.chapter = s.flags.chapter;
+      this.trust = { ...this.story.startingTrust(), ...(s.trust || {}) };
+      this.alive = s.alive || {};
+      this.inv = s.inv || emptyInv();
+      this.quests = s.quests || {};
+      this.seen = s.seen || {};
+      this.notes = Array.isArray(s.notes) ? s.notes : [];
+      this.timeOfDay = s.timeOfDay ?? 0.4;
+      this.blizzard = !!s.blizzard;
+      this.dayN = s.dayN || 0;
+      this.player.restore(s.player);
+      this.shelterSeals = { ...(s.shelterSeals || {}) };
+      this._breakInCd = 0;
+      const taken = new Set(s.lootTaken || []);
+      for (const L of this.world.loot) {
+        if (taken.has(L.id)) {
+          L.taken = true;
+          L.remaining = {};
+          if (L.mesh) L.mesh.visible = false;
+        } else {
+          L.taken = false;
+          L.remaining = s.lootLeft?.[L.id] || { ...(L.items || {}) };
         }
       }
+      const ch = this.flags.chapter || "ch01";
+      this.hudUnlocks = new Set(["hp", "warmth", "hunger"]);
+      const hookUnlocks = this.story.hooks?.hud_unlocks || {};
+      const n = this._chapterNum(ch);
+      for (const [cid, list] of Object.entries(hookUnlocks)) {
+        if (this._chapterNum(cid) <= n) {
+          for (const u of list) {
+            if (String(u).toLowerCase() === "seal" && !this.flags.shelter_sealed) continue;
+            this.hudUnlocks.add(u);
+          }
+        }
+      }
+      if (s.hudUnlocks) for (const u of s.hudUnlocks) this.hudUnlocks.add(u);
+      if (this.flags.shelter_sealed && !Object.keys(this.shelterSeals).length) {
+        this.shelterSeals.loc_east_end = 100;
+        this.hudUnlocks.add("seal");
+      }
+      this._syncEnemiesForChapter(ch);
+      this._syncAliveFromFlags();
+      this.firedTriggers = new Set(s.firedTriggers || []);
+      return this.setChapter(ch, { endPrevious: false, fireLoad: false, teleport: false }).then(() => {
+        this.player.restore(s.player);
+        hideLoad();
+        this.enterPlay();
+      }).catch((err) => {
+        console.warn("[continue]", err);
+        return startFresh("Old save incompatible — starting a fresh shift");
+      });
+    } catch (err) {
+      console.warn("[continue]", err);
+      return startFresh("Old save incompatible — starting a fresh shift");
     }
-    if (s.hudUnlocks) for (const u of s.hudUnlocks) this.hudUnlocks.add(u);
-    if (this.flags.shelter_sealed && !Object.keys(this.shelterSeals).length) {
-      this.shelterSeals.loc_east_end = 100;
-      this.hudUnlocks.add("seal");
-    }
-    this._syncEnemiesForChapter(ch);
-    this._syncAliveFromFlags();
-    if (s.firedTriggers) this.firedTriggers = new Set(s.firedTriggers);
-    this.setChapter(ch, { endPrevious: false, fireLoad: false, teleport: false }).then(() => {
-      this.player.restore(s.player);
-      this.enterPlay();
-    });
   }
 
   snapshot() {
@@ -372,6 +433,7 @@ class Game {
 
   enterPlay() {
     this.mode = "play";
+    setPlaying(true);
     setMenuOpen(false);
     panel.classList.remove("show", "char-sheet");
     showScreen(null);
@@ -563,15 +625,9 @@ class Game {
           this.player.syncCamera?.();
         }
         showLoad(75, "Loading");
-        if (this.pipeline?.addCampfire) {
-          for (const f of this.world.fires) {
-            if (f.lumen) continue;
-            try {
-              f.lumen = this.pipeline.addCampfire([f.x, 0.02, f.z]);
-              if (f.light) f.light.intensity = 0;
-              if (f.flame) f.flame.visible = false;
-            } catch {}
-          }
+        this._attachLumenFires();
+        if (this.pipeline?.warmup) {
+          try { await this.pipeline.warmup(); } catch (err) { console.warn("[pipeline] warmup", err); }
         }
         this.world.bindAudio?.(this.audio);
         if (fireLoad) this.levelRuntime.fireLoadTriggers(this);
@@ -1020,16 +1076,7 @@ class Game {
           this.hud.say(res.msg);
           if (r.set_flags) for (const f of r.set_flags) this.flags[f] = true;
           if (r.id === "cooler" || r.out?.id === "cooler") this.flags.ch01_cooler_built = true;
-          if (r.special === "campfire" && this.pipeline) {
-            const last = this.world.fires[this.world.fires.length - 1];
-            if (last && this.pipeline.addCampfire) {
-              last.lumen = this.pipeline.addCampfire([last.x, 0.02, last.z]);
-              if (last.light) last.light.intensity = 0;
-              if (last.flame) last.flame.visible = false;
-            } else if (last?.light && this.pipeline.addPointLight) {
-              this.pipeline.addPointLight(last.light, { glow: 1 });
-            }
-          }
+          // World.addCampfire already bound a Lumen campfire if the pipeline is present.
         } else this.hud.say(res.msg || "Can't.");
         this.openCraft();
       };
@@ -1037,21 +1084,32 @@ class Game {
   }
 
   openNotes(fromTitle) {
-    this.mode = "notes";
-    setMenuOpen(true);
-    showScreen(null);
-    let html = `<h2>FIELD NOTES</h2>`;
-    if (!this.notes.length) html += `<p class="line">Nothing written down yet.</p>`;
-    for (const n of this.notes) {
-      html += `<div class="item-row" style="flex-direction:column;align-items:flex-start;gap:4px;"><strong>${escapeHtml(n.title || "Note")}</strong><span style="color:#c5d0da;font-size:11px;">${escapeHtml(n.body || "")}</span></div>`;
+    try {
+      this.mode = "notes";
+      setPlaying(false);
+      setMenuOpen(true);
+      showScreen(null);
+      if (!Array.isArray(this.notes)) this.notes = [];
+      let html = `<h2>FIELD NOTES</h2>`;
+      if (!this.notes.length) html += `<p class="line">Nothing written down yet.</p>`;
+      for (const n of this.notes) {
+        const title = (n && n.title) || "Note";
+        const body = (n && n.body) || "";
+        html += `<div class="item-row" style="flex-direction:column;align-items:flex-start;gap:4px;"><strong>${escapeHtml(title)}</strong><span style="color:#c5d0da;font-size:11px;">${escapeHtml(body)}</span></div>`;
+      }
+      html += `<div class="inv-actions"><button data-a="close">CLOSE</button></div>`;
+      panel.innerHTML = html;
+      panel.classList.add("show");
+      const close = panel.querySelector("button");
+      if (close) {
+        close.onclick = () => {
+          this.closePanel();
+          if (fromTitle) { this.mode = "title"; setMenuOpen(false); showScreen("title"); }
+        };
+      }
+    } catch (err) {
+      showError(err);
     }
-    html += `<div class="inv-actions"><button data-a="close">CLOSE</button></div>`;
-    panel.innerHTML = html;
-    panel.classList.add("show");
-    panel.querySelector("button").onclick = () => {
-      this.closePanel();
-      if (fromTitle) { this.mode = "title"; showScreen("title"); }
-    };
   }
 
   showEnding(id) {
@@ -1493,8 +1551,9 @@ class Game {
     });
     else this.hud.ctx.clearRect(0, 0, this.hud.w, this.hud.h);
 
-    // Shadows are the expensive pass (~105k tris). Refresh every 3 frames; first frames always update.
-    if (this.renderer.shadowMap) {
+    // The pipeline owns shadow scheduling (T.shadow.updateEvery). Do not
+    // fight it with autoUpdate/needsUpdate here — that desyncs the shadow matrix.
+    if (!this.pipeline && this.renderer.shadowMap) {
       this.renderer.shadowMap.autoUpdate = false;
       this._shadowFrame = (this._shadowFrame || 0) + 1;
       if (this._shadowFrame <= 12 || this._shadowFrame % 3 === 0) this.renderer.shadowMap.needsUpdate = true;
@@ -1504,7 +1563,9 @@ class Game {
       try { this.pipeline.render(dt); }
       catch (err) {
         console.warn("[render] fallback", err);
+        try { this.pipeline.dispose?.(); } catch {}
         this.pipeline = null;
+        this.world?.bindPipeline?.(null);
         this.renderer.setRenderTarget(null);
         this.renderer.render(this.scene, this.player.camera);
       }
@@ -1671,12 +1732,15 @@ async function boot() {
     let renderInfo = { source: "builtin", url: null, tried: [] };
     const params = new URLSearchParams(location.search);
     const crt = params.get("crt") || localStorage.getItem("ashfall.crt") || "low";
-    const tier = params.get("tier") || preferredTier();
+    const tier = params.get("tier") || "auto";
     const pixel = await loadLumenPixelOverrides();
     const lookParam = params.get("look") || params.get("pixel") || localStorage.getItem("ashfall.look") || pixel.look || "refined";
     const look = (lookParam === "old" || lookParam === "coarse" || lookParam === "classic") ? "classic" : "refined";
     try {
       // INTEGRATION.md: look 'refined' (default) or 'classic'; CRT 'low'.
+      // Lumen INTEGRATION.md §0 recommended boot call. tier 'auto' resolves to
+      // the 'mobile' preset on every phone/iPad (clamped unless allowHeavyOnMobile).
+      // forceLDR is a test-only 8-bit fallback, not the production mobile path.
       pipeline = createRenderPipeline({
         renderer, scene, camera,
         sun: world.lights.sun,
@@ -1688,17 +1752,18 @@ async function boot() {
       // HUD stays a crisp 9:16 overlay at internalSize (afterCRT). beforeCRT would curve it with the screen.
       pipeline.hooks.afterCRT = () => { gameHudResize(hud, pipeline); };
       pipeline.hooks.beforeCRT = null;
+      world.bindPipeline(pipeline);
       for (const f of world.fires) {
+        if (f.lumen) continue;
         if (typeof pipeline.addCampfire === "function") {
-          const cf = pipeline.addCampfire([f.x, 0.02, f.z]);
-          f.lumen = cf;
-          if (f.light) f.light.intensity = 0;
-          if (f.flame) f.flame.visible = false;
+          f.lumen = pipeline.addCampfire([f.x, 0.02, f.z]);
+          world.stripHostFireLight(f);
         } else if (typeof pipeline.addPointLight === "function" && f.light) {
           pipeline.addPointLight(f.light, { glow: 1.1 });
         }
       }
-      renderInfo = { source: "lumen", url: "../render/index.js", api: Object.keys(pipeline), crt, tier, look, internal: pipeline.internalSize };
+      const tierNow = pipeline.getTier?.() || tier;
+      renderInfo = { source: "lumen", url: "../render/index.js", api: Object.keys(pipeline), crt, tier: tierNow, requestedTier: tier, look, internal: pipeline.internalSize, caps: pipeline.caps || null };
       sizeView(renderer, pipeline);
       gameHudResize(hud, pipeline);
     } catch (err) {
@@ -1740,6 +1805,10 @@ async function boot() {
     window.addEventListener("resize", () => { sizeView(renderer, pipeline); gameHudResize(hud, pipeline); });
     game.loop();
     window.__READY = true;
+    window.__ASHFALL_BOOTED = true;
+    window.__ASHFALL_BUILD = "r4";
+    const banner = $("boot-banner");
+    if (banner) banner.classList.remove("show");
     window.__INTEGRATION = {
       story: story.loadedFiles,
       storySource: story.source,

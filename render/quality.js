@@ -1,16 +1,32 @@
 // Quality tiers + device detection + runtime frame-time adaptive downgrade.
 
-export const TIER_ORDER = ['low', 'medium', 'high'];
+export const TIER_ORDER = ['mobile', 'low', 'medium', 'high'];
 
-// internalHeight: low-res render height (width follows canvas aspect; 9:16 => 144/180/216 wide)
-// sceneScale: scene rendered at N x internal then box-filtered (2 => 4x SSAA, matches the
-//             area-averaged look of Echo's offline art_C pipeline)
+// internalHeight: low-res render height (width follows canvas aspect). Heights per look live in LOOKS.
+// sceneScale: scene rendered at N x internal then box-filtered.
+// shadow.updateEvery: re-render the shadow map every N frames (1 = every frame). The sun shadow is
+//   view-fitted and texel-snapped; the shadow matrix only changes when the map is re-rendered, so
+//   skipping frames lags the shadow slightly but never misaligns it.
+// volume.mode: 'raymarch' (low-res raymarch target + bilateral upsample) | 'analytic' (no extra pass:
+//   fog, sun phase, flashlight cone and campfire glow evaluated per pixel in the composite).
 export const TIERS = {
+  // iPhone Safari / phones: ZERO shadow passes, no volume target, 2-level bloom, light particles.
+  // Passes per frame: scene, bloom x3 (tiny), composite, CRT blit = 6.
+  mobile: {
+    internalHeight: 432, sceneScale: 1, snap: true,
+    shadow: { enabled: false, mapSize: 512, type: 'pcf', distance: 16, radius: 1, updateEvery: 4 },
+    flashShadow: false, flashShadowSize: 256,
+    volume: { enabled: true, mode: 'analytic', scale: 0, steps: 0, noise: false, shadow: false },
+    godSamples: 0,
+    bloom: { levels: 2 },
+    particles: 450,
+    maxPoints: 2,
+  },
   low: {
     internalHeight: 256, sceneScale: 1,
-    shadow: { enabled: true, mapSize: 512, type: 'pcf', distance: 18, radius: 1 },
-    flashShadow: true, flashShadowSize: 256, // flashlight is often the key light (interiors), keep its shadow
-    volume: { enabled: true, scale: 0.5, steps: 6, noise: false, shadow: false },
+    shadow: { enabled: true, mapSize: 512, type: 'pcf', distance: 18, radius: 1, updateEvery: 2 },
+    flashShadow: false, flashShadowSize: 256, // spot shadow = a 2nd full-scene depth pass; off on low
+    volume: { enabled: true, mode: 'raymarch', scale: 0.5, steps: 6, noise: false, shadow: false },
     godSamples: 0,
     bloom: { levels: 2 },
     particles: 600,
@@ -18,9 +34,9 @@ export const TIERS = {
   },
   medium: {
     internalHeight: 320, sceneScale: 1,
-    shadow: { enabled: true, mapSize: 1024, type: 'pcfsoft', distance: 28, radius: 1 },
+    shadow: { enabled: true, mapSize: 1024, type: 'pcfsoft', distance: 28, radius: 1, updateEvery: 1 },
     flashShadow: true, flashShadowSize: 256,
-    volume: { enabled: true, scale: 0.5, steps: 12, noise: true, shadow: true },
+    volume: { enabled: true, mode: 'raymarch', scale: 0.5, steps: 12, noise: true, shadow: true },
     godSamples: 16,
     bloom: { levels: 3 },
     particles: 1400,
@@ -28,43 +44,63 @@ export const TIERS = {
   },
   high: {
     internalHeight: 384, sceneScale: 2,
-    shadow: { enabled: true, mapSize: 2048, type: 'pcfsoft', distance: 40, radius: 1 },
+    shadow: { enabled: true, mapSize: 2048, type: 'pcfsoft', distance: 40, radius: 1, updateEvery: 1 },
     flashShadow: true, flashShadowSize: 512,
-    volume: { enabled: true, scale: 0.5, steps: 20, noise: true, shadow: true },
+    volume: { enabled: true, mode: 'raymarch', scale: 0.5, steps: 20, noise: true, shadow: true },
     godSamples: 32,
     bloom: { levels: 4 },
     particles: 2600,
     maxPoints: 4,
   },
 };
+Object.defineProperty(TIERS, 'phone', { value: TIERS.mobile, enumerable: false }); // alias
 
 export function getGLInfo(renderer) {
-  const gl = renderer.getContext();
   let str = '';
   try {
+    const gl = renderer.getContext();
+    // WEBGL_debug_renderer_info is deprecated/hidden on newer Safari & Firefox: RENDERER is
+    // then a masked string ("Apple GPU", "WebKit WebGL"), which is still enough for Apple detection.
     const dbg = gl.getExtension('WEBGL_debug_renderer_info');
-    str = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
+    str = (dbg && gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) || gl.getParameter(gl.RENDERER);
   } catch (e) { /* ignore */ }
   return String(str || '');
 }
 
+/**
+ * Phone / tablet detection that survives iPadOS "desktop mode" UA masking and hidden GPU strings.
+ * true for: iPhone/iPod/iPad UA, Android, iPadOS (MacIntel + touch), Apple GPU + touch,
+ * any coarse-pointer touch device with a small screen.
+ */
+export function isMobileDevice(renderer) {
+  if (typeof navigator === 'undefined') return false;
+  const ua = navigator.userAgent || '';
+  const touch = (navigator.maxTouchPoints || 0) > 1;
+  if (/iPhone|iPad|iPod|Android|Mobi/i.test(ua)) return true;
+  if (navigator.platform === 'MacIntel' && touch) return true; // iPadOS 13+ desktop UA
+  if (navigator.userAgentData && navigator.userAgentData.mobile) return true;
+  if (renderer && touch && /Apple (GPU|A\d|M\d)/i.test(getGLInfo(renderer))) return true;
+  try {
+    const coarse = typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
+    const small = typeof screen !== 'undefined' && Math.min(screen.width, screen.height) <= 920;
+    if (coarse && touch && small) return true;
+  } catch (e) { /* ignore */ }
+  return false;
+}
+export function isIOS() {
+  if (typeof navigator === 'undefined') return false;
+  return /iPhone|iPad|iPod/.test(navigator.userAgent || '') ||
+    (navigator.platform === 'MacIntel' && (navigator.maxTouchPoints || 0) > 1);
+}
+
+/** 'auto' resolution. Phones (incl. every iOS/iPadOS device) start on 'mobile' at boot. */
 export function detectTier(renderer) {
   const ua = (typeof navigator !== 'undefined' && navigator.userAgent) || '';
   const glStr = getGLInfo(renderer);
-  const isIOS = /iPhone|iPad|iPod/.test(ua) ||
-    (typeof navigator !== 'undefined' && navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  const isAndroid = /Android/i.test(ua);
-  const mem = (typeof navigator !== 'undefined' && navigator.deviceMemory) || 8;
+  if (isMobileDevice(renderer)) return 'mobile';
   if (/swiftshader|llvmpipe|software|basic render|mesa offscreen/i.test(glStr)) return 'low';
-  if (isIOS) {
-    // iPhone Safari was falling over at medium + full-res FBOs / volumetrics. Stay on low.
-    return 'low';
-  }
-  if (isAndroid || /Mobi/i.test(ua)) {
-    if (/Adreno \(TM\) (6[4-9]|7\d)\d|Mali-G(7[1-9]|71[0-9])|Immortalis/i.test(glStr) && mem >= 4) return 'medium';
-    return 'low';
-  }
   if (/Intel.*(HD|UHD) Graphics [2-6]\d\d\b/i.test(glStr)) return 'medium';
+  void ua;
   return 'high';
 }
 
@@ -80,7 +116,7 @@ export class AdaptiveQuality {
     this.under = 0;
     this.warmup = 45;
     this.enabled = true;
-    this.minTier = 'low';
+    this.minTier = 'mobile';
   }
   reset() { this.over = 0; this.under = 0; this.warmup = 45; }
   sample(dtMs, tier) {
@@ -124,6 +160,7 @@ export const LOOKS = {
     grain: 0.035,
     toe: 0,
     tiers: {
+      mobile: { internalHeight: 256, sceneScale: 1, volScale: 0, bloomLevels: 2 },
       low: { internalHeight: 256, sceneScale: 1, volScale: 0.5, bloomLevels: 2 },
       medium: { internalHeight: 320, sceneScale: 1, volScale: 0.5, bloomLevels: 3 },
       high: { internalHeight: 384, sceneScale: 2, volScale: 0.5, bloomLevels: 4 },
@@ -136,6 +173,8 @@ export const LOOKS = {
     grain: 0.018,
     toe: 1, // shadow toe + dark-adaptive dither/grain (see palette.js deep ramp)
     tiers: {
+      // mobile: 432 nominal; snapped per canvas to an integer upscale (390x844 @1x -> 422 = exactly 2x)
+      mobile: { internalHeight: 432, sceneScale: 1, volScale: 0, bloomLevels: 2 },
       low: { internalHeight: 480, sceneScale: 1, volScale: 0.3333, bloomLevels: 3 },
       medium: { internalHeight: 576, sceneScale: 1, volScale: 0.3333, bloomLevels: 4 },
       high: { internalHeight: 640, sceneScale: 1, volScale: 0.5, bloomLevels: 5 },
@@ -144,26 +183,18 @@ export const LOOKS = {
   },
 };
 
-export function applyMobileQuality(T) {
-  return {
-    ...T,
-    internalHeight: Math.min(T.internalHeight || 480, 480),
-    sceneScale: 1,
-    shadow: { ...(T.shadow || {}), enabled: false, mapSize: 512, type: 'pcf', distance: 16, radius: 1 },
-    flashShadow: false,
-    volume: { ...(T.volume || {}), enabled: false, scale: 0.5, steps: 0, noise: false, shadow: false },
-    godSamples: 0,
-    bloom: { levels: Math.min((T.bloom && T.bloom.levels) || 2, 2) },
-    particles: Math.min(T.particles || 200, 200),
-    maxPoints: 1,
-  };
+/** Back-compat (Prime's hot-fix): any tier config -> the mobile-safe tier config. */
+export function applyMobileQuality(T, look = 'refined') {
+  return { ...getTierConfig(look, 'mobile'), internalHeight: Math.min((T && T.internalHeight) || 432, getTierConfig(look, 'mobile').internalHeight) };
 }
 
 export function getTierConfig(look, tier) {
+  if (tier === 'phone') tier = 'mobile';
   const base = TIERS[tier];
   const o = (LOOKS[look] || LOOKS.refined).tiers[tier];
   return {
     ...base,
+    shadow: { ...base.shadow },
     internalHeight: o.internalHeight,
     sceneScale: o.sceneScale,
     volume: { ...base.volume, scale: o.volScale },

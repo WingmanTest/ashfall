@@ -718,9 +718,10 @@ export class LevelRuntime {
       /* flag already set — player hauled the water */
     }
     if (it.type === "light_fire") {
-      this.world._addFire(this.group || this.scene, it.x, it.z, it.id);
-      const pipe = game.pipeline;
-      if (pipe?.addCampfire) pipe.addCampfire([it.x, 0.02, it.z]);
+      // World.addCampfire attaches a Lumen campfire when a pipeline is bound
+      // and skips the host PointLight, so we do not double-light (which used
+      // to recompile every material).
+      this.world.addCampfire(this.group || this.scene, it.x, it.z);
     }
     if (it.type === "read" && it.label) game.hud.say(it.label);
     game.hud.say(it.label || "Done.");

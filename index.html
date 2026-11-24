@@ -21,7 +21,6 @@
       font-family: "ui-monospace", "Cascadia Code", "DejaVu Sans Mono", monospace;
     }
     #frame {
-      touch-action: none;
       position: absolute;
       left: 50%; top: 50%;
       transform: translate(-50%, -50%);
@@ -45,7 +44,7 @@
     }
     #hud, #ui { pointer-events: none; }
     #ui > * { pointer-events: auto; }
-    #ui { z-index: 5; }
+    #ui { z-index: 20; }
     #hud { z-index: 4; }
     #view { z-index: 1; }
     #fade {
@@ -87,7 +86,9 @@
       position:absolute; inset:0; z-index:6; pointer-events:none;
       display:none;
     }
-    body.touch #touch { display:block; }
+    /* Never let the joystick / FIRE layer sit over the title or menus.
+       pointer-events:none on #touch does not disable children with auto. */
+    body.touch.playing:not(.menu-open) #touch { display:block; }
     .joy-base {
       pointer-events:auto;
       position:absolute;
@@ -246,6 +247,56 @@
       width: 58px; height: 32px; font-size: 10px;
     }
 
+    #build-tag {
+      position: absolute;
+      top: max(6px, env(safe-area-inset-top));
+      right: 8px;
+      z-index: 30;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      pointer-events: none;
+    }
+    #save-notice {
+      display: none;
+      margin: 0 0 8px;
+      padding: 8px 10px;
+      border: 1px solid var(--ice);
+      background: rgba(20, 16, 10, 0.85);
+      color: var(--ice);
+      font-size: 11px;
+      line-height: 1.4;
+      letter-spacing: 0.04em;
+    }
+    #save-notice.show { display: block; }
+    #boot-banner {
+      display: none;
+      position: absolute;
+      left: 8px; right: 8px;
+      top: max(28px, calc(env(safe-area-inset-top) + 22px));
+      z-index: 42;
+      background: #140c0c;
+      border: 1px solid var(--ice);
+      color: var(--ice);
+      padding: 10px 12px;
+      font-size: 11px;
+      line-height: 1.45;
+      letter-spacing: 0.03em;
+      pointer-events: auto;
+    }
+    #boot-banner.show { display: block; }
+    #boot-banner button {
+      appearance: none;
+      margin-top: 8px;
+      background: transparent;
+      color: var(--ice);
+      border: 1px solid var(--ice);
+      padding: 8px 10px;
+      font: inherit;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+    }
+
   </style>
   <script type="importmap">
   {
@@ -258,16 +309,18 @@
 </head>
 <body>
   <div id="frame">
+    <div id="build-tag">r4</div>
     <canvas id="view" width="180" height="320"></canvas>
     <canvas id="hud" width="360" height="640"></canvas>
     <div id="ui">
       <div id="title" class="screen show top-safe">
         <h1>ASHFALL<span>LAKEHEAD  ·  SECTOR 4</span></h1>
         <p>October. The grid is dead. The lake is freezing. Your son’s insulin will not last the month.</p>
+        <div id="save-notice" hidden></div>
         <div class="btn-row">
-          <button class="menu" id="btn-new">NEW SHIFT</button>
-          <button class="menu" id="btn-continue">CONTINUE</button>
-          <button class="menu" id="btn-notes-title">FIELD NOTES</button>
+          <button class="menu" id="btn-new" type="button">NEW SHIFT</button>
+          <button class="menu" id="btn-continue" type="button" style="display:none">CONTINUE</button>
+          <button class="menu" id="btn-notes-title" type="button">FIELD NOTES</button>
         </div>
       </div>
       <div id="dead" class="screen">
@@ -305,6 +358,7 @@
       <div class="load-pct" id="load-pct">Loading 0%…</div>
     </div>
     <div id="boot-error"><h2>ASHFALL FAILED TO LOAD</h2><pre id="boot-error-pre"></pre></div>
+    <div id="boot-banner" role="alert"></div>
     <div id="touch">
       <div id="look-pad"></div>
       <div class="joy-base" id="joy"><div class="joy-knob" id="joy-knob"></div></div>
@@ -319,11 +373,97 @@
       <button class="tbtn" id="btn-pause">PAUSE</button>
     </div>
   </div>
-  <script type="module" src="./js/game.js"></script>
   <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(function () {});
-    }
+    window.__ASHFALL_BUILD = "r4";
+    window.__ASHFALL_BOOTED = false;
+    window.__ASHFALL_MODULE = false;
+    window.__ASHFALL_PENDING = null;
+    (function () {
+      function $(id) { return document.getElementById(id); }
+      function showBanner(msg) {
+        var el = $("boot-banner");
+        if (!el) return;
+        el.textContent = "";
+        var p = document.createElement("div");
+        p.textContent = msg;
+        el.appendChild(p);
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = "RELOAD";
+        btn.addEventListener("click", function () { location.reload(); });
+        el.appendChild(btn);
+        el.classList.add("show");
+      }
+      function showErr(msg) {
+        var el = $("boot-error");
+        var pre = $("boot-error-pre");
+        if (pre && !pre.textContent) pre.textContent = msg;
+        if (el) el.classList.add("show");
+        window.__ERROR = msg;
+      }
+      function showLoad(label) {
+        var el = $("loader");
+        if (!el) return;
+        el.classList.add("show");
+        var text = $("load-pct");
+        if (text) text.textContent = (label || "Loading") + " 8%…";
+        var fill = $("load-fill");
+        if (fill && !fill.style.width) fill.style.width = "8%";
+      }
+      window.__ashfallBootFail = function (msg) {
+        showBanner(msg);
+        showErr(msg);
+      };
+      window.addEventListener("error", function (e) {
+        var msg = (e && (e.message || (e.error && (e.error.stack || e.error.message)))) || "Script error";
+        if (e && e.filename) msg += " (" + e.filename + (e.lineno ? ":" + e.lineno : "") + ")";
+        window.__ERROR = msg;
+        if (!window.__ASHFALL_BOOTED) showBanner("A script error stopped the game from starting: " + msg);
+        showErr(msg);
+      });
+      window.addEventListener("unhandledrejection", function (e) {
+        var r = e && e.reason;
+        var msg = String((r && (r.stack || r.message)) || r || "Unhandled promise rejection");
+        window.__ERROR = msg;
+        if (!window.__ASHFALL_BOOTED) showBanner("A background error stopped the game from starting: " + msg);
+        showErr(msg);
+      });
+      function queueTitle(id) {
+        if (window.__ASHFALL_BOOTED) return;
+        window.__ASHFALL_PENDING = id;
+        showLoad(id === "btn-notes-title" ? "Opening notes" : "Loading");
+      }
+      document.addEventListener("pointerup", function (e) {
+        var t = e.target;
+        if (!t || !t.id) return;
+        if (t.id !== "btn-new" && t.id !== "btn-continue" && t.id !== "btn-notes-title") return;
+        if (window.__ASHFALL_BOOTED) return;
+        try { e.preventDefault(); e.stopPropagation(); } catch (err) {}
+        queueTitle(t.id);
+      }, true);
+      document.addEventListener("click", function (e) {
+        var t = e.target;
+        if (!t || !t.id) return;
+        if (t.id !== "btn-new" && t.id !== "btn-continue" && t.id !== "btn-notes-title") return;
+        if (window.__ASHFALL_BOOTED) return;
+        try { e.preventDefault(); e.stopPropagation(); } catch (err) {}
+        queueTitle(t.id);
+      }, true);
+      setTimeout(function () {
+        if (window.__ASHFALL_BOOTED) return;
+        if (window.__ASHFALL_MODULE) {
+          showBanner("The game file loaded, but startup is stuck (often a Safari WebGL or cache issue). Wait a moment, or clear this site's data and reload. Build r4.");
+        } else {
+          showBanner("The game never started — the script did not load. If you opened this from an older Home Screen icon, delete it and reopen the page, or clear Safari cache for this site. Build r4.");
+        }
+      }, 4000);
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./sw.js?v=r4", { scope: "./" }).then(function (reg) {
+          try { reg.update(); } catch (err) {}
+        }).catch(function () {});
+      }
+    })();
   </script>
+  <script type="module" src="./js/game.js" onerror="window.__ASHFALL_MODULE_ERR=true; if (window.__ashfallBootFail) window.__ashfallBootFail('The game script failed to load. Try a hard refresh or clear this site\\'s data. Build r4.');"></script>
 </body>
 </html>

@@ -8,6 +8,7 @@ const _mi = new THREE.Matrix4();
 const _up = new THREE.Vector3(0, 1, 0);
 const _zero = new THREE.Vector3(0, 0, 0);
 const _zup = new THREE.Vector3(0, 0, 1);
+const _center = new THREE.Vector3();
 
 /**
  * Fit a DirectionalLight's ortho shadow camera to the first `distance` metres of the
@@ -25,7 +26,7 @@ export function fitSunShadow(sun, camera, sunDir, distance) {
   const zc = Math.min(far, 0.5 * (far + near) * k * k);
   const radius = Math.sqrt((far - zc) ** 2 + (far * tanX) ** 2 + (far * tanY) ** 2);
   cam.getWorldDirection(_fwd);
-  const center = cam.getWorldPosition(new THREE.Vector3()).addScaledVector(_fwd, zc);
+  const center = cam.getWorldPosition(_center).addScaledVector(_fwd, zc);
 
   // snap in light space
   const mapSize = sun.shadow.mapSize.x;
@@ -67,10 +68,14 @@ export function createFlashlight({ color = 0xdfe8ff, intensity = 38, range = 26,
   light.shadow.bias = -0.0006;
   light.target.name = 'ashfall-flashlight-target';
   const off = new THREE.Vector3(...offset);
+  // NOTE: never toggle light.visible: three.js keys every lit shader on the number of visible
+  // lights, so a visibility flip recompiles ALL scene materials (multi-100 ms hitch on iPhone).
+  // On/off is done with intensity instead; `baseIntensity` holds the user value.
   return {
     light,
     offset: off,
     enabled: true,
+    baseIntensity: intensity,
     sway: 0,
     pitch: 0.12, // aim slightly below the crosshair so the pool lands a few metres ahead
     update(camera, t) {
@@ -83,7 +88,8 @@ export function createFlashlight({ color = 0xdfe8ff, intensity = 38, range = 26,
       _fwd.y += Math.sin(t * 2.1) * 0.008 * s - this.pitch;
       light.target.position.copy(light.position).addScaledVector(_fwd.normalize(), 10);
       light.target.updateMatrixWorld();
-      light.visible = this.enabled;
+      light.visible = true;
+      light.intensity = this.enabled ? this.baseIntensity : 0;
     },
   };
 }
@@ -153,7 +159,55 @@ void main() {
 }
 `;
 
-export function createCampfire({ position = new THREE.Vector3(), color = 0xff7428, intensity = 6, range = 12, glow = 1.0 } = {}) {
+// Shared, merged campfire base (4 logs + 9 stones) in one geometry with 2 groups => 2 draw calls
+// per campfire instead of 13, and one geometry upload shared by every campfire.
+let baseGeo = null, baseRefs = 0;
+function mergedBase() {
+  if (baseGeo) { baseRefs++; return baseGeo; }
+  const parts = [];
+  const m = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), sc = new THREE.Vector3();
+  const logG = new THREE.CylinderGeometry(0.06, 0.07, 0.8, 6).toNonIndexed();
+  for (let i = 0; i < 4; i++) {
+    e.set(0, (i / 4) * Math.PI * 2, Math.PI / 2 - 0.35, 'YXZ');
+    m.compose(new THREE.Vector3(0, 0.12, 0), q.setFromEuler(e), sc.set(1, 1, 1));
+    parts.push({ g: logG.clone().applyMatrix4(m), grp: 0 });
+  }
+  logG.dispose();
+  const stG = new THREE.DodecahedronGeometry(1, 0);
+  for (let i = 0; i < 9; i++) {
+    const a = (i / 9) * Math.PI * 2, r = 0.11 + 0.03 * Math.sin(i * 7.0);
+    m.compose(new THREE.Vector3(Math.cos(a) * 0.5, 0.06, Math.sin(a) * 0.5), q.identity(), sc.set(r, r, r));
+    parts.push({ g: stG.clone().applyMatrix4(m), grp: 1 });
+  }
+  stG.dispose();
+  let total = 0; for (const p of parts) total += p.g.attributes.position.count;
+  const pos = new Float32Array(total * 3), nor = new Float32Array(total * 3);
+  const geo = new THREE.BufferGeometry();
+  let off = 0, groupStart = 0, curGrp = 0;
+  for (const p of parts) {
+    if (p.grp !== curGrp) { geo.addGroup(groupStart, off - groupStart, curGrp); groupStart = off; curGrp = p.grp; }
+    pos.set(p.g.attributes.position.array, off * 3);
+    nor.set(p.g.attributes.normal.array, off * 3);
+    off += p.g.attributes.position.count;
+    p.g.dispose();
+  }
+  geo.addGroup(groupStart, off - groupStart, curGrp);
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute('normal', new THREE.BufferAttribute(nor, 3));
+  geo.computeBoundingSphere();
+  baseGeo = geo; baseRefs = 1;
+  return geo;
+}
+function releaseBase() {
+  if (--baseRefs <= 0 && baseGeo) { baseGeo.dispose(); baseGeo = null; baseRefs = 0; }
+}
+
+/**
+ * @param {object} o
+ * @param {boolean} [o.addLight=true]  false: the PointLight is NOT parented into the scene (the pipeline
+ *   drives a fixed-size light pool instead, so adding fires never changes the scene light count).
+ */
+export function createCampfire({ position = new THREE.Vector3(), color = 0xff7428, intensity = 6, range = 12, glow = 1.0, addLight = true } = {}) {
   const group = new THREE.Group();
   group.name = 'ashfall-campfire';
   group.position.copy(position);
@@ -161,38 +215,27 @@ export function createCampfire({ position = new THREE.Vector3(), color = 0xff742
   const light = new THREE.PointLight(color, intensity, range, 1.6);
   light.position.set(0, 0.55, 0);
   light.castShadow = false; // point shadows = 6 extra passes; not worth it on phones
-  group.add(light);
+  if (addLight) group.add(light);
+  else light.userData.anchor = group; // world pos = group.matrixWorld * light.position
 
-  const logMat = new THREE.MeshStandardMaterial({ color: 0x2a1d16, roughness: 0.95, emissive: 0x401204, emissiveIntensity: 0.6 });
-  for (let i = 0; i < 4; i++) {
-    const log = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.07, 0.8, 6), logMat);
-    log.rotation.z = Math.PI / 2 - 0.35;
-    log.rotation.y = (i / 4) * Math.PI * 2;
-    log.position.y = 0.12;
-    log.castShadow = true;
-    log.receiveShadow = true;
-    group.add(log);
-  }
-  const stoneMat = new THREE.MeshStandardMaterial({ color: 0x55595f, roughness: 1 });
-  for (let i = 0; i < 9; i++) {
-    const a = (i / 9) * Math.PI * 2;
-    const st = new THREE.Mesh(new THREE.DodecahedronGeometry(0.11 + 0.03 * Math.sin(i * 7.0), 0), stoneMat);
-    st.position.set(Math.cos(a) * 0.5, 0.06, Math.sin(a) * 0.5);
-    st.castShadow = true; st.receiveShadow = true;
-    group.add(st);
-  }
+  const logMat = new THREE.MeshStandardMaterial({ color: 0x2a1d16, roughness: 0.95, emissive: 0x401204, emissiveIntensity: 0.6});
+  const stoneMat = new THREE.MeshStandardMaterial({ color: 0x55595f, roughness: 1});
+  const base = new THREE.Mesh(mergedBase(), [logMat, stoneMat]);
+  base.castShadow = true; base.receiveShadow = true;
+  base.userData.sharedGeometry = true;
+  group.add(base);
 
   const flameUniforms = [];
+  const flameGeo = new THREE.PlaneGeometry(1, 1); // shared by the 3 flame cards
+  flameGeo.translate(0, 0.5, 0);
+  flameGeo.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0.5, 0), 1.2); // billboarded in VS
   for (let i = 0; i < 3; i++) {
     const u = { uTime: { value: 0 }, uSeed: { value: i * 0.37 }, uIntensity: { value: 3.0 }, uTexels: { value: new THREE.Vector2(10, 16) } };
     flameUniforms.push(u);
-    const geo = new THREE.PlaneGeometry(1, 1);
-    geo.translate(0, 0.5, 0);
     const mat = new THREE.ShaderMaterial({ uniforms: u, vertexShader: FLAME_VERT, fragmentShader: FLAME_FRAG, fog: false });
-    const flame = new THREE.Mesh(geo, mat);
+    const flame = new THREE.Mesh(flameGeo, mat);
     flame.scale.set(0.55 - i * 0.1, 0.9 - i * 0.15, 1);
     flame.position.set((i - 1) * 0.06, 0.1, (i - 1) * 0.04);
-    flame.frustumCulled = false;
     group.add(flame);
   }
 
@@ -210,16 +253,16 @@ export function createCampfire({ position = new THREE.Vector3(), color = 0xff742
   eg.setAttribute('aSeed', new THREE.BufferAttribute(es, 1));
   const emberU = { uTime: { value: 0 }, uViewH: { value: 320 } };
   const embers = new THREE.Points(eg, new THREE.ShaderMaterial({ uniforms: emberU, vertexShader: EMBER_VERT, fragmentShader: EMBER_FRAG, fog: false }));
-  embers.frustumCulled = false;
+  eg.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 1.0, 0), 1.6);
   group.add(embers);
 
-  const base = intensity;
+  const baseI = intensity;
   return {
     group, light, glow,
     update(t, viewH) {
       // layered flicker
       const f = 0.82 + 0.1 * Math.sin(t * 9.1) + 0.06 * Math.sin(t * 23.7 + 1.3) + 0.05 * Math.sin(t * 4.3);
-      light.intensity = base * f;
+      light.intensity = baseI * f;
       light.position.x = Math.sin(t * 7.0) * 0.03;
       const k = Math.max(1, viewH / 320);
       for (const u of flameUniforms) { u.uTime.value = t; u.uIntensity.value = 1.1 + 0.5 * f; u.uTexels.value.set(Math.round(10 * k), Math.round(16 * k)); }
@@ -227,7 +270,12 @@ export function createCampfire({ position = new THREE.Vector3(), color = 0xff742
       emberU.uViewH.value = viewH;
     },
     dispose() {
-      group.traverse((o) => { if (o.geometry) o.geometry.dispose(); if (o.material) o.material.dispose(); });
+      group.traverse((o) => {
+        if (o.geometry && !o.userData.sharedGeometry) o.geometry.dispose();
+        if (o.material) (Array.isArray(o.material) ? o.material : [o.material]).forEach((mm) => mm.dispose());
+      });
+      releaseBase();
+      light.removeFromParent(); light.dispose();
       group.removeFromParent();
     },
   };
