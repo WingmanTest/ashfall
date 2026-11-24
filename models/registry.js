@@ -3,7 +3,7 @@
 //   "three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/addons/"
 //
 //   import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-//   import { loadModel, fitToGround } from './models/registry.js?v=r15';
+//   import { loadModel, fitToGround } from './models/registry.js?v=r15.1';
 //   const loader = new GLTFLoader();
 //   const militia = await loadModel('watch_militia', loader);   // cached, cloned per call
 //   scene.add(militia);
@@ -345,7 +345,7 @@ export function playClip(mixer, root, name, { fade = 0.25, timeScale = 1, loop =
 // ready for THREE.InstancedMesh.  Trees, bushes and tufts all share ONE 256 px atlas (env/textures/env_atlas.png)
 // with 4 season bands; setEnvSeason() swaps every env mesh at once (no reload, no new materials).
 //
-//   import { makeEnvInstanced, envJitterMatrix, loadGroundTexture, setEnvSeason } from './models/registry.js?v=r15';
+//   import { makeEnvInstanced, envJitterMatrix, loadGroundTexture, setEnvSeason } from './models/registry.js?v=r15.1';
 //   setEnvSeason('autumn');                                       // once per level (summer|autumn|late_fall|fallout_winter)
 //   const trees = await makeEnvInstanced('env_tree_cottonwood_dead', 12);  // shared geometry + material
 //   const m = new THREE.Matrix4();

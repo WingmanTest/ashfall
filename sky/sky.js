@@ -2,7 +2,7 @@
 // ONE draw call: a single full-screen triangle at the far plane, view rays rebuilt per fragment.
 // No textures, no render targets, no loops. three.js r170, plain ES module.
 //
-//   import { createSky, hudHour } from '../sky/sky.js?v=r15';
+//   import { createSky, hudHour } from '../sky/sky.js?v=r15.1';
 //   const sky = createSky({ scene, camera, renderer, environment: 'fallout_winter' });
 //   sky.update(dt, { timeOfDay: hudHour(game.timeOfDay), weather: 'ashfall' });
 //   sky.applyTo({ sun, hemi, amb, fog: scene.fog, scene, pipeline });

@@ -4,8 +4,8 @@ import * as THREE from "three";
 import {
   setEnvSeason, makeEnvInstanced, makeEnvTuftCards, makeEnvDecals, makeEnvDecal,
   loadGroundTexture,
-} from "../models/registry.js?v=r15";
-import { gltfLoader } from "./models3d.js?v=r15";
+} from "../models/registry.js?v=r15.1";
+import { gltfLoader } from "./models3d.js?v=r15.1";
 
 const KNOWN_OVERLAYS = new Set(['ch01_day_three', 'ch02_the_registry', 'ch03_the_long_cold', 'ch04_black_start', 'ch05_route_9', 'ch06_the_trench', 'ch07_dead_air', 'ch07b_dixie_valley', 'ch08_ashfall', 'ch09_the_long_night', 'ch10_the_warm_room']);
 
@@ -60,14 +60,6 @@ function composeRow(x, y, z, rotY, scale, tiltX, tiltZ) {
   return _m.compose(_p.set(x, y || 0, z), _q.setFromEuler(_e), _s.set(sc, sc, sc)).clone();
 }
 
-function pushPlantCollider(world, x, z, radius, id) {
-  const r = Math.max(0.05, radius);
-  world.colliders.push({
-    minX: x - r, maxX: x + r, minZ: z - r, maxZ: z + r,
-    kind: "plant", src: id,
-  });
-}
-
 async function placeInstances(overlay, group, world, cull) {
   const inst = overlay.instances || {};
   for (const [id, rec] of Object.entries(inst)) {
@@ -99,10 +91,7 @@ async function placeInstances(overlay, group, world, cull) {
       if (isTuft && idx.tuftFrame != null) {
         try { mesh.setFrameAt(i, row[idx.tuftFrame]); } catch (err) { console.warn("[ground] tuft frame", err); }
       }
-      if (rec.solid) {
-        const rad = (rec.colliderR || 0) * (scale || 1);
-        if (rad > 0.05) pushPlantCollider(world, x, z, rad, id);
-      }
+      // r15.1: vegetation is decorative — do not add plant AABBs (they trapped the player).
       if (isTuft || isBush) items.push({ x, z, matrix: mat, frame: isTuft && idx.tuftFrame != null ? row[idx.tuftFrame] : null });
     }
     mesh.instanceMatrix.needsUpdate = true;

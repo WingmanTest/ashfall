@@ -1,43 +1,43 @@
 import * as THREE from "three";
-import { CFG, WEAPONS_ORDER } from "./config.js?v=r15";
-import { weaponKind } from "./weapons/viewmodels.js?v=r15";
-import { Input } from "./input.js?v=r15";
-import { HUD } from "./hud.js?v=r15";
-import { World } from "./world.js?v=r15";
-import { Player } from "./player.js?v=r15";
-import { EnemySystem } from "./enemies.js?v=r15";
-import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r15";
-import { openCharacterSheet } from "./inventoryUI.js?v=r15";
+import { CFG, WEAPONS_ORDER } from "./config.js?v=r15.1";
+import { weaponKind } from "./weapons/viewmodels.js?v=r15.1";
+import { Input } from "./input.js?v=r15.1";
+import { HUD } from "./hud.js?v=r15.1";
+import { World } from "./world.js?v=r15.1";
+import { Player } from "./player.js?v=r15.1";
+import { EnemySystem } from "./enemies.js?v=r15.1";
+import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r15.1";
+import { openCharacterSheet } from "./inventoryUI.js?v=r15.1";
 import {
   emptyDialogueMem, markNode, markChoice, markComplete, filterChoices, resumeNodeId,
   makeRevisitDialogue, authoredRevisit, hydrateDialogueMem, looksLikeFeedChoice,
   looksLikeFeedNode, choiceFlagName, memHasFeed,
-} from "./dialogueMem.js?v=r15";
-import { currentMainObjective, currentSideObjective, isSideObjective, noteSideQuestUpdate, renderQuestLogHtml } from "./questTrack.js?v=r15";
-import { createMinimap, loadObjectiveBinds, packExploredFog, restoreExploredFog } from "./minimap.js?v=r15";
-import { stopDoll3D } from "./doll3d.js?v=r15";
-import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r15";
-import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r15";
-import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r15";
-import { tickCompanion, disposeCompanion } from "./companion.js?v=r15";
-import { collectCompanionCommands, collectPendingActions, mergeActionChoices, startTracking, restoreTracking, findTrackTarget, setCompanionMode } from "./companionCmd.js?v=r15";
-import { pinNpc, unpinNpc, haltForTalk, findNpc } from "./npcWander.js?v=r15";
-import { BreathSystem } from "./breath.js?v=r15";
-import { openTradeModal } from "./trade.js?v=r15";
-import { preloadModels } from "./models3d.js?v=r15";
-import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r15";
-import { isMobileClient, canvasDpr } from "./device.js?v=r15";
-import { LevelRuntime } from "./levelLoader.js?v=r15";
-import { attachAudio } from "./audioHook.js?v=r15";
-import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r15";
-import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r15";
-import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r15";
-import { loadSave, hasSave, writeSave, clearSave, migrateSave, applyCh1CompleteFlags, normalizeChapter, CH02_SPAWN } from "./save.js?v=r15";
-import { createSky, hudHour } from "../sky/sky.js?v=r15";
+} from "./dialogueMem.js?v=r15.1";
+import { currentMainObjective, currentSideObjective, isSideObjective, noteSideQuestUpdate, renderQuestLogHtml } from "./questTrack.js?v=r15.1";
+import { createMinimap, loadObjectiveBinds, packExploredFog, restoreExploredFog } from "./minimap.js?v=r15.1";
+import { stopDoll3D } from "./doll3d.js?v=r15.1";
+import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r15.1";
+import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r15.1";
+import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r15.1";
+import { tickCompanion, disposeCompanion } from "./companion.js?v=r15.1";
+import { collectCompanionCommands, collectPendingActions, mergeActionChoices, startTracking, restoreTracking, findTrackTarget, setCompanionMode } from "./companionCmd.js?v=r15.1";
+import { pinNpc, unpinNpc, haltForTalk, findNpc } from "./npcWander.js?v=r15.1";
+import { BreathSystem } from "./breath.js?v=r15.1";
+import { openTradeModal } from "./trade.js?v=r15.1";
+import { preloadModels } from "./models3d.js?v=r15.1";
+import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r15.1";
+import { isMobileClient, canvasDpr } from "./device.js?v=r15.1";
+import { LevelRuntime } from "./levelLoader.js?v=r15.1";
+import { attachAudio } from "./audioHook.js?v=r15.1";
+import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r15.1";
+import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r15.1";
+import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r15.1";
+import { loadSave, hasSave, writeSave, clearSave, migrateSave, applyCh1CompleteFlags, normalizeChapter, CH02_SPAWN } from "./save.js?v=r15.1";
+import { createSky, hudHour } from "../sky/sky.js?v=r15.1";
 
 window.__ASHFALL_MODULE = true;
-window.__ASHFALL_BUILD = "r15";
-if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r15") {
+window.__ASHFALL_BUILD = "r15.1";
+if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r15.1") {
   if (typeof window.__ashfallBustStaleBuild === "function") window.__ashfallBustStaleBuild(window.__ASHFALL_BUILD);
 }
 
@@ -2658,7 +2658,7 @@ async function boot() {
     await story.load();
     const systems = await loadSystems();
     const levels = await loadLevels();
-    const { rollTable } = await import("./systems.js?v=r15");
+    const { rollTable } = await import("./systems.js?v=r15.1");
 
     const renderer = new THREE.WebGLRenderer({
       canvas: view, antialias: false, alpha: false, powerPreference: "high-performance",
@@ -2793,7 +2793,7 @@ async function boot() {
     game.loop();
     window.__READY = true;
     window.__ASHFALL_BOOTED = true;
-    window.__ASHFALL_BUILD = "r15";
+    window.__ASHFALL_BUILD = "r15.1";
     const banner = $("boot-banner");
     if (banner) banner.classList.remove("show");
     window.__INTEGRATION = {

@@ -2,8 +2,8 @@
 // Pure gameplay glue: positions world.companion's mesh near the player and fires
 // playWraith cues once per threat within range. Never throws.
 
-import { attachMixer, setLocomotion, updateMixer } from "./npcAnim.js?v=r15";
-import { repathFromHere } from "./companionCmd.js?v=r15";
+import { attachMixer, setLocomotion, updateMixer } from "./npcAnim.js?v=r15.1";
+import { repathFromHere } from "./companionCmd.js?v=r15.1";
 
 const FOLLOW_GAP = 2.2;     // she trots to ~2.2 m behind/right of Braith
 const TELL_RANGE = 12;
