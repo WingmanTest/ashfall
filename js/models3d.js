@@ -3,7 +3,7 @@
 // World.clearLevel() never disposes geometry/materials owned by a cached template.
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { MODEL_CATALOG, loadModel, fitToGround, modelUrl, attachMask as regAttachMask, resolveNpcModelId } from "../models/registry.js?v=r15.3";
+import { MODEL_CATALOG, loadModel, fitToGround, modelUrl, attachMask as regAttachMask, resolveNpcModelId } from "../models/registry.js?v=r16";
 
 let _loader = null;
 const _ready = new Map();   // id -> template-loaded boolean

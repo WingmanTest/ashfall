@@ -1,0 +1,5052 @@
+{
+ "$comment": "Room kits referenced by every <level>.interior.json (room.kit). Source: tools/catalog.py.",
+ "drawCallCap": 6,
+ "kits": {
+  "house_living": {
+   "type": "house",
+   "wall": [
+    [
+     "arch_sofa",
+     5,
+     0.24,
+     4
+    ],
+    [
+     "arch_shelf_metal",
+     2,
+     0.192,
+     4
+    ],
+    [
+     "arch_cabinet_file",
+     1,
+     0.12,
+     4
+    ],
+    [
+     "arch_stove_wood",
+     2,
+     0.12,
+     4
+    ],
+    [
+     "arch_shelf_empty",
+     3,
+     0.336,
+     8
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_armchair",
+     4,
+     0.02,
+     4
+    ],
+    [
+     "arch_table",
+     4,
+     0.02,
+     4
+    ],
+    [
+     "arch_chair",
+     3,
+     0.04,
+     6
+    ],
+    [
+     "arch_crate_wood",
+     1,
+     0.016,
+     4
+    ],
+    [
+     "arch_barricade",
+     1,
+     0.008,
+     4
+    ],
+    [
+     "arch_crate_small",
+     2,
+     0.024,
+     6
+    ]
+   ],
+   "mid_pick": 4,
+   "clutter": [
+    [
+     "arch_book_pile",
+     3
+    ],
+    [
+     "arch_box_cardboard",
+     3
+    ],
+    [
+     "arch_blanket_pile",
+     2
+    ],
+    [
+     "arch_cans",
+     2
+    ],
+    [
+     "arch_candle_cluster",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     1
+    ],
+    [
+     "arch_lantern",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ]
+   ],
+   "clutter_m2": 0.34,
+   "decals": {
+    "rug_worn": 4,
+    "papers_scatter": 2,
+    "mud_tracks": 1,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_carpet",
+    "arch_tex_planks"
+   ],
+   "wallTex": [
+    "arch_tex_drywall",
+    "arch_tex_panel_wood"
+   ],
+   "palettes": [
+    "warm",
+    "pastel",
+    "drab"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "house_kitchen": {
+   "type": "house",
+   "wall": [
+    [
+     "arch_counter",
+     6,
+     0.528,
+     6
+    ],
+    [
+     "arch_fridge",
+     4,
+     0.12,
+     4
+    ],
+    [
+     "arch_shelf_metal",
+     1,
+     0.12,
+     4
+    ],
+    [
+     "arch_stove_wood",
+     1,
+     0.096,
+     4
+    ],
+    [
+     "arch_counter_sink",
+     5,
+     0.24,
+     4
+    ],
+    [
+     "arch_fridge_ajar",
+     2,
+     0.12,
+     4
+    ],
+    [
+     "arch_shelf_empty",
+     3,
+     0.288,
+     6
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_table",
+     5,
+     0.024,
+     4
+    ],
+    [
+     "arch_chair",
+     5,
+     0.06,
+     8
+    ],
+    [
+     "arch_crate_wood",
+     1,
+     0.012,
+     4
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_cans",
+     4
+    ],
+    [
+     "arch_bucket",
+     3
+    ],
+    [
+     "arch_bottles",
+     3
+    ],
+    [
+     "arch_mug",
+     2
+    ],
+    [
+     "arch_box_cardboard",
+     2
+    ],
+    [
+     "arch_jerrycan",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.408,
+   "decals": {
+    "wrappers_cans": 3,
+    "water_stain": 1,
+    "papers_scatter": 1,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_linoleum",
+    "arch_tex_tile_ceramic"
+   ],
+   "wallTex": [
+    "arch_tex_drywall"
+   ],
+   "palettes": [
+    "warm",
+    "pastel",
+    "cool"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "house_bedroom": {
+   "type": "house",
+   "wall": [
+    [
+     "arch_bed",
+     6,
+     0.192,
+     4
+    ],
+    [
+     "arch_cabinet_file",
+     2,
+     0.096,
+     4
+    ],
+    [
+     "arch_shelf_metal",
+     1,
+     0.096,
+     4
+    ],
+    [
+     "arch_bed_messy",
+     4,
+     0.288,
+     6
+    ],
+    [
+     "arch_shelf_empty",
+     2,
+     0.288,
+     6
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_chair",
+     3,
+     0.04,
+     4
+    ],
+    [
+     "arch_crate_wood",
+     1,
+     0.012,
+     4
+    ],
+    [
+     "arch_barricade",
+     1,
+     0.008,
+     4
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_blanket_pile",
+     4
+    ],
+    [
+     "arch_box_cardboard",
+     3
+    ],
+    [
+     "arch_book_pile",
+     2
+    ],
+    [
+     "arch_duffel",
+     2
+    ],
+    [
+     "arch_shoes_pair",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.34,
+   "decals": {
+    "rug_worn": 3,
+    "papers_scatter": 1,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_carpet",
+    "arch_tex_planks"
+   ],
+   "wallTex": [
+    "arch_tex_drywall"
+   ],
+   "palettes": [
+    "pastel",
+    "warm",
+    "cool"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "house_open": {
+   "type": "house",
+   "wall": [
+    [
+     "arch_counter",
+     4,
+     0.24,
+     4
+    ],
+    [
+     "arch_sofa",
+     4,
+     0.144,
+     4
+    ],
+    [
+     "arch_bed",
+     3,
+     0.12,
+     4
+    ],
+    [
+     "arch_fridge",
+     2,
+     0.072,
+     4
+    ],
+    [
+     "arch_shelf_metal",
+     2,
+     0.12,
+     4
+    ],
+    [
+     "arch_stove_wood",
+     3,
+     0.096,
+     4
+    ],
+    [
+     "arch_counter_sink",
+     3,
+     0.192,
+     4
+    ],
+    [
+     "arch_bed_messy",
+     2,
+     0.192,
+     4
+    ]
+   ],
+   "wall_pick": 4,
+   "mid": [
+    [
+     "arch_table",
+     5,
+     0.016,
+     4
+    ],
+    [
+     "arch_chair",
+     5,
+     0.04,
+     8
+    ],
+    [
+     "arch_armchair",
+     3,
+     0.012,
+     4
+    ],
+    [
+     "arch_crate_wood",
+     1,
+     0.01,
+     4
+    ],
+    [
+     "arch_barricade",
+     1,
+     0.006,
+     4
+    ]
+   ],
+   "mid_pick": 4,
+   "clutter": [
+    [
+     "arch_book_pile",
+     2
+    ],
+    [
+     "arch_box_cardboard",
+     3
+    ],
+    [
+     "arch_cans",
+     3
+    ],
+    [
+     "arch_blanket_pile",
+     2
+    ],
+    [
+     "arch_bucket",
+     2
+    ],
+    [
+     "arch_candle_cluster",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ]
+   ],
+   "clutter_m2": 0.34,
+   "decals": {
+    "rug_worn": 3,
+    "papers_scatter": 2,
+    "mud_tracks": 2,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_planks",
+    "arch_tex_carpet",
+    "arch_tex_linoleum"
+   ],
+   "wallTex": [
+    "arch_tex_drywall",
+    "arch_tex_panel_wood"
+   ],
+   "palettes": [
+    "warm",
+    "drab",
+    "pastel",
+    "rust"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "house_hall": {
+   "type": "house",
+   "wall": [
+    [
+     "arch_shelf_metal",
+     2,
+     0.12,
+     4
+    ],
+    [
+     "arch_cabinet_file",
+     2,
+     0.12,
+     4
+    ],
+    [
+     "arch_shelf_empty",
+     3,
+     0.384,
+     8
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_chair",
+     3,
+     0.04,
+     4
+    ],
+    [
+     "arch_crate_wood",
+     2,
+     0.02,
+     4
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_shoes_pair",
+     3
+    ],
+    [
+     "arch_box_cardboard",
+     2
+    ],
+    [
+     "arch_duffel",
+     2
+    ],
+    [
+     "arch_bucket",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.28,
+   "decals": {
+    "mud_tracks": 3,
+    "ash_footprints": 2,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "papers_scatter": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_planks"
+   ],
+   "wallTex": [
+    "arch_tex_drywall"
+   ],
+   "palettes": [
+    "warm",
+    "drab"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "motel_room": {
+   "type": "motel",
+   "wall": [
+    [
+     "arch_bed",
+     6,
+     0.24,
+     4
+    ],
+    [
+     "arch_cabinet_file",
+     2,
+     0.096,
+     4
+    ],
+    [
+     "arch_counter",
+     1,
+     0.096,
+     4
+    ],
+    [
+     "arch_bed_messy",
+     5,
+     0.336,
+     6
+    ],
+    [
+     "arch_shelf_metal",
+     4,
+     0.384,
+     8
+    ],
+    [
+     "arch_fridge",
+     2,
+     0.144,
+     4
+    ],
+    [
+     "arch_counter",
+     3,
+     0.288,
+     4
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_chair",
+     3,
+     0.04,
+     4
+    ],
+    [
+     "arch_table",
+     2,
+     0.02,
+     4
+    ],
+    [
+     "arch_crate_wood",
+     1,
+     0.01,
+     4
+    ],
+    [
+     "arch_crate_small",
+     2,
+     0.028,
+     6
+    ],
+    [
+     "arch_chair",
+     4,
+     0.06,
+     8
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_cans",
+     3
+    ],
+    [
+     "arch_bottles",
+     3
+    ],
+    [
+     "arch_duffel",
+     2
+    ],
+    [
+     "arch_blanket_pile",
+     2
+    ],
+    [
+     "arch_box_cardboard",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.34,
+   "decals": {
+    "rug_worn": 3,
+    "wrappers_cans": 2,
+    "water_stain": 1,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "papers_scatter": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_carpet"
+   ],
+   "wallTex": [
+    "arch_tex_drywall",
+    "arch_tex_cinder"
+   ],
+   "palettes": [
+    "drab",
+    "pastel",
+    "warm"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "store_retail": {
+   "type": "store",
+   "wall": [
+    [
+     "arch_shelf_metal",
+     6,
+     0.72,
+     14
+    ],
+    [
+     "arch_counter",
+     4,
+     0.192,
+     4
+    ],
+    [
+     "arch_shelf_empty",
+     2,
+     0.24,
+     6
+    ],
+    [
+     "arch_fridge",
+     1,
+     0.096,
+     4
+    ],
+    [
+     "arch_wall_plank_2m",
+     2,
+     0.192,
+     8
+    ]
+   ],
+   "wall_pick": 4,
+   "mid": [
+    [
+     "arch_shelf_island",
+     5,
+     0.024,
+     6
+    ],
+    [
+     "arch_crate_wood",
+     2,
+     0.012,
+     4
+    ],
+    [
+     "arch_gondola_looted",
+     4,
+     0.032,
+     10
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_box_cardboard",
+     5
+    ],
+    [
+     "arch_bottles",
+     3
+    ],
+    [
+     "arch_cans",
+     3
+    ],
+    [
+     "arch_debris_pile",
+     1
+    ],
+    [
+     "arch_glass_shards_3d",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ]
+   ],
+   "clutter_m2": 0.476,
+   "decals": {
+    "papers_scatter": 3,
+    "wrappers_cans": 3,
+    "pill_scatter": 1,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.24,
+   "floor": [
+    "arch_tex_linoleum",
+    "arch_tex_tile_ceramic"
+   ],
+   "wallTex": [
+    "arch_tex_cinder",
+    "arch_tex_drywall"
+   ],
+   "palettes": [
+    "cool",
+    "drab"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "store_stockroom": {
+   "type": "store",
+   "wall": [
+    [
+     "arch_shelf_metal",
+     7,
+     0.96,
+     14
+    ],
+    [
+     "arch_pallet_rack",
+     2,
+     0.12,
+     4
+    ],
+    [
+     "arch_cabinet_file",
+     1,
+     0.072,
+     4
+    ],
+    [
+     "arch_crate_wood",
+     3,
+     0.336,
+     10
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_crate_wood",
+     5,
+     0.04,
+     8
+    ],
+    [
+     "arch_drum_steel",
+     1,
+     0.012,
+     4
+    ],
+    [
+     "arch_crate_small",
+     4,
+     0.036,
+     10
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_box_cardboard",
+     7
+    ],
+    [
+     "arch_case_hard",
+     2
+    ],
+    [
+     "arch_bottles",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ]
+   ],
+   "clutter_m2": 0.544,
+   "decals": {
+    "papers_scatter": 2,
+    "plank_scrap": 1,
+    "wrappers_cans": 1,
+    "rubble_dust": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_concrete_stained"
+   ],
+   "wallTex": [
+    "arch_tex_cinder",
+    "arch_tex_corrugated"
+   ],
+   "palettes": [
+    "drab",
+    "cool",
+    "rust"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "garage_workshop": {
+   "type": "garage",
+   "wall": [
+    [
+     "arch_workbench",
+     6,
+     0.24,
+     4
+    ],
+    [
+     "arch_shelf_metal",
+     4,
+     0.24,
+     6
+    ],
+    [
+     "arch_pallet_rack",
+     1,
+     0.072,
+     4
+    ],
+    [
+     "arch_crate_wood",
+     3,
+     0.336,
+     10
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_drum_steel",
+     4,
+     0.02,
+     6
+    ],
+    [
+     "arch_crate_wood",
+     3,
+     0.016,
+     6
+    ],
+    [
+     "arch_generator",
+     2,
+     0.006,
+     4
+    ],
+    [
+     "arch_tire_stack",
+     4,
+     0.028,
+     8
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_jerrycan",
+     4
+    ],
+    [
+     "arch_pipe_loose",
+     3
+    ],
+    [
+     "arch_plank_scatter",
+     2
+    ],
+    [
+     "arch_box_cardboard",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ],
+    [
+     "arch_bucket",
+     1
+    ],
+    [
+     "arch_tire",
+     3
+    ],
+    [
+     "arch_plank_stack",
+     2
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ]
+   ],
+   "clutter_m2": 0.34,
+   "decals": {
+    "oil_stain": 5,
+    "plank_scrap": 2,
+    "rubble_dust": 1,
+    "papers_scatter": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_concrete_stained"
+   ],
+   "wallTex": [
+    "arch_tex_corrugated",
+    "arch_tex_cinder"
+   ],
+   "palettes": [
+    "rust",
+    "drab"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "clinic": {
+   "type": "clinic",
+   "wall": [
+    [
+     "arch_bed",
+     5,
+     0.192,
+     6
+    ],
+    [
+     "arch_shelf_metal",
+     4,
+     0.24,
+     6
+    ],
+    [
+     "arch_counter",
+     3,
+     0.12,
+     4
+    ],
+    [
+     "arch_cabinet_file",
+     2,
+     0.096,
+     4
+    ],
+    [
+     "arch_med_cabinet",
+     5,
+     0.288,
+     6
+    ],
+    [
+     "arch_counter_sink",
+     3,
+     0.192,
+     4
+    ]
+   ],
+   "wall_pick": 4,
+   "mid": [
+    [
+     "arch_iv_stand",
+     4,
+     0.02,
+     4
+    ],
+    [
+     "arch_chair",
+     3,
+     0.03,
+     4
+    ],
+    [
+     "arch_table",
+     2,
+     0.012,
+     4
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_bottles",
+     4
+    ],
+    [
+     "arch_box_cardboard",
+     3
+    ],
+    [
+     "arch_blanket_pile",
+     2
+    ],
+    [
+     "arch_bucket",
+     1
+    ],
+    [
+     "arch_book_pile",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.34,
+   "decals": {
+    "pill_scatter": 2,
+    "papers_scatter": 1,
+    "rug_worn": 1,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_linoleum",
+    "arch_tex_planks"
+   ],
+   "wallTex": [
+    "arch_tex_drywall"
+   ],
+   "palettes": [
+    "cool",
+    "pastel",
+    "warm"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "hospital_ward": {
+   "type": "hospital",
+   "wall": [
+    [
+     "arch_bed",
+     7,
+     0.6,
+     14
+    ],
+    [
+     "arch_cabinet_file",
+     1,
+     0.072,
+     4
+    ],
+    [
+     "arch_shelf_metal",
+     1,
+     0.072,
+     4
+    ],
+    [
+     "arch_med_cabinet",
+     3,
+     0.192,
+     8
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_iv_stand",
+     5,
+     0.02,
+     8
+    ],
+    [
+     "arch_gurney",
+     2,
+     0.008,
+     4
+    ],
+    [
+     "arch_chair",
+     2,
+     0.012,
+     4
+    ],
+    [
+     "arch_cot",
+     4,
+     0.024,
+     10
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_blanket_pile",
+     4
+    ],
+    [
+     "arch_bottles",
+     3
+    ],
+    [
+     "arch_box_cardboard",
+     2
+    ],
+    [
+     "arch_bucket",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.28,
+   "decals": {
+    "papers_scatter": 2,
+    "pill_scatter": 2,
+    "blood_drag": 1,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_linoleum"
+   ],
+   "wallTex": [
+    "arch_tex_drywall",
+    "arch_tex_cinder"
+   ],
+   "palettes": [
+    "cool",
+    "drab"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "hospital_er": {
+   "type": "hospital",
+   "wall": [
+    [
+     "arch_reception_desk",
+     4,
+     0.072,
+     4
+    ],
+    [
+     "arch_shelf_metal",
+     3,
+     0.144,
+     6
+    ],
+    [
+     "arch_bed",
+     3,
+     0.144,
+     8
+    ],
+    [
+     "arch_cabinet_file",
+     1,
+     0.072,
+     4
+    ],
+    [
+     "arch_med_cabinet",
+     4,
+     0.192,
+     8
+    ]
+   ],
+   "wall_pick": 4,
+   "mid": [
+    [
+     "arch_gurney",
+     5,
+     0.016,
+     10
+    ],
+    [
+     "arch_iv_stand",
+     3,
+     0.016,
+     8
+    ],
+    [
+     "arch_chair",
+     2,
+     0.02,
+     8
+    ],
+    [
+     "arch_generator",
+     1,
+     0.004,
+     4
+    ]
+   ],
+   "mid_pick": 4,
+   "clutter": [
+    [
+     "arch_bottles",
+     4
+    ],
+    [
+     "arch_box_cardboard",
+     3
+    ],
+    [
+     "arch_blanket_pile",
+     2
+    ],
+    [
+     "arch_lantern",
+     2
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.28,
+   "decals": {
+    "papers_scatter": 3,
+    "pill_scatter": 2,
+    "blood_drag": 1,
+    "mud_tracks": 2,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_linoleum"
+   ],
+   "wallTex": [
+    "arch_tex_drywall"
+   ],
+   "palettes": [
+    "cool",
+    "drab"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "office": {
+   "type": "office",
+   "wall": [
+    [
+     "arch_cabinet_file",
+     6,
+     0.288,
+     8
+    ],
+    [
+     "arch_shelf_metal",
+     4,
+     0.192,
+     6
+    ],
+    [
+     "arch_reception_desk",
+     2,
+     0.072,
+     4
+    ],
+    [
+     "arch_whiteboard",
+     2,
+     0.096,
+     4
+    ]
+   ],
+   "wall_pick": 4,
+   "mid": [
+    [
+     "arch_table",
+     5,
+     0.03,
+     6
+    ],
+    [
+     "arch_chair",
+     5,
+     0.06,
+     12
+    ],
+    [
+     "arch_crate_wood",
+     1,
+     0.008,
+     4
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_book_pile",
+     4
+    ],
+    [
+     "arch_box_cardboard",
+     3
+    ],
+    [
+     "arch_radio_set",
+     1
+    ],
+    [
+     "arch_laptop",
+     1
+    ],
+    [
+     "arch_mug",
+     2
+    ],
+    [
+     "arch_note_card",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.34,
+   "decals": {
+    "papers_scatter": 5,
+    "paper_sheet": 2,
+    "wall_notice": 2,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1
+   },
+   "decal_m2": 0.24,
+   "floor": [
+    "arch_tex_linoleum",
+    "arch_tex_carpet"
+   ],
+   "wallTex": [
+    "arch_tex_drywall",
+    "arch_tex_cinder"
+   ],
+   "palettes": [
+    "drab",
+    "cool"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "civic_hall": {
+   "type": "civic",
+   "wall": [
+    [
+     "arch_whiteboard",
+     2,
+     0.048,
+     4
+    ],
+    [
+     "arch_shelf_metal",
+     2,
+     0.072,
+     8
+    ],
+    [
+     "arch_reception_desk",
+     1,
+     0.024,
+     4
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_table_folding",
+     6,
+     0.04,
+     16
+    ],
+    [
+     "arch_chair",
+     5,
+     0.08,
+     20
+    ],
+    [
+     "arch_barrier_crowd",
+     3,
+     0.012,
+     16
+    ],
+    [
+     "arch_crate_wood",
+     1,
+     0.006,
+     4
+    ],
+    [
+     "arch_cot",
+     3,
+     0.02,
+     12
+    ]
+   ],
+   "mid_pick": 4,
+   "clutter": [
+    [
+     "arch_box_cardboard",
+     4
+    ],
+    [
+     "arch_laptop",
+     2
+    ],
+    [
+     "arch_cans",
+     2
+    ],
+    [
+     "arch_book_pile",
+     1
+    ],
+    [
+     "arch_bottles",
+     2
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.28,
+   "decals": {
+    "papers_scatter": 3,
+    "mud_tracks": 3,
+    "wrappers_cans": 2,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_carpet",
+    "arch_tex_concrete_stained"
+   ],
+   "wallTex": [
+    "arch_tex_cinder"
+   ],
+   "palettes": [
+    "drab",
+    "cool"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "warehouse": {
+   "type": "warehouse",
+   "wall": [
+    [
+     "arch_pallet_rack",
+     6,
+     0.336,
+     14
+    ],
+    [
+     "arch_shelf_metal",
+     2,
+     0.12,
+     8
+    ],
+    [
+     "arch_wall_corrugated",
+     2,
+     0.096,
+     8
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_crate_wood",
+     6,
+     0.024,
+     16
+    ],
+    [
+     "arch_drum_steel",
+     3,
+     0.01,
+     8
+    ],
+    [
+     "arch_sandbag_row",
+     1,
+     0.004,
+     4
+    ],
+    [
+     "arch_crate_small",
+     4,
+     0.03,
+     12
+    ],
+    [
+     "arch_crate_broken",
+     2,
+     0.016,
+     6
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_box_cardboard",
+     5
+    ],
+    [
+     "arch_plank_scatter",
+     2
+    ],
+    [
+     "arch_pipe_loose",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ],
+    [
+     "arch_case_hard",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ]
+   ],
+   "clutter_m2": 0.28,
+   "decals": {
+    "oil_stain": 2,
+    "plank_scrap": 3,
+    "rubble_dust": 2,
+    "mud_tracks": 1,
+    "papers_scatter": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_concrete_stained"
+   ],
+   "wallTex": [
+    "arch_tex_corrugated"
+   ],
+   "palettes": [
+    "rust",
+    "drab"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "hangar": {
+   "type": "warehouse",
+   "wall": [
+    [
+     "arch_workbench",
+     4,
+     0.096,
+     6
+    ],
+    [
+     "arch_shelf_metal",
+     3,
+     0.12,
+     8
+    ],
+    [
+     "arch_pallet_rack",
+     2,
+     0.072,
+     4
+    ],
+    [
+     "arch_cage_mesh",
+     2,
+     0.072,
+     6
+    ]
+   ],
+   "wall_pick": 4,
+   "mid": [
+    [
+     "arch_crate_wood",
+     4,
+     0.016,
+     12
+    ],
+    [
+     "arch_drum_steel",
+     4,
+     0.01,
+     8
+    ],
+    [
+     "arch_mattress_floor",
+     2,
+     0.008,
+     12
+    ],
+    [
+     "arch_generator",
+     1,
+     0.004,
+     4
+    ],
+    [
+     "arch_crate_broken",
+     2,
+     0.012,
+     6
+    ]
+   ],
+   "mid_pick": 4,
+   "clutter": [
+    [
+     "arch_case_hard",
+     4
+    ],
+    [
+     "arch_jerrycan",
+     3
+    ],
+    [
+     "arch_box_cardboard",
+     2
+    ],
+    [
+     "arch_pipe_loose",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ]
+   ],
+   "clutter_m2": 0.28,
+   "decals": {
+    "oil_stain": 4,
+    "plank_scrap": 1,
+    "mud_tracks": 2,
+    "rubble_dust": 2,
+    "papers_scatter": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_concrete_stained"
+   ],
+   "wallTex": [
+    "arch_tex_corrugated"
+   ],
+   "palettes": [
+    "rust",
+    "drab",
+    "cool"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "parking_deck": {
+   "type": "warehouse",
+   "wall": [
+    [
+     "arch_wall_corrugated",
+     1,
+     0.048,
+     4
+    ],
+    [
+     "arch_pipe_run",
+     2,
+     0.096,
+     8
+    ],
+    [
+     "arch_shelf_metal",
+     2,
+     0.192,
+     8
+    ],
+    [
+     "arch_crate_wood",
+     3,
+     0.24,
+     12
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_drum_steel",
+     4,
+     0.008,
+     8
+    ],
+    [
+     "arch_crate_wood",
+     2,
+     0.006,
+     4
+    ],
+    [
+     "arch_barrier_crowd",
+     2,
+     0.004,
+     6
+    ],
+    [
+     "arch_tire_stack",
+     3,
+     0.016,
+     8
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_debris_pile",
+     3
+    ],
+    [
+     "arch_cans",
+     2
+    ],
+    [
+     "arch_jerrycan",
+     2
+    ],
+    [
+     "arch_plank_scatter",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ]
+   ],
+   "clutter_m2": 0.28,
+   "decals": {
+    "oil_stain": 5,
+    "rubble_dust": 2,
+    "mud_tracks": 1,
+    "plank_scrap": 2,
+    "papers_scatter": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_concrete_stained"
+   ],
+   "wallTex": [
+    "arch_tex_cinder"
+   ],
+   "palettes": [
+    "drab"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "shack_bunk": {
+   "type": "shack",
+   "wall": [
+    [
+     "arch_bunk",
+     6,
+     0.288,
+     4
+    ],
+    [
+     "arch_shelf_metal",
+     3,
+     0.144,
+     4
+    ],
+    [
+     "arch_stove_wood",
+     4,
+     0.12,
+     4
+    ],
+    [
+     "arch_wall_corrugated",
+     1,
+     0.096,
+     4
+    ],
+    [
+     "arch_workbench",
+     3,
+     0.288,
+     4
+    ],
+    [
+     "arch_counter",
+     2,
+     0.24,
+     4
+    ]
+   ],
+   "wall_pick": 4,
+   "mid": [
+    [
+     "arch_crate_wood",
+     4,
+     0.04,
+     6
+    ],
+    [
+     "arch_chair",
+     2,
+     0.04,
+     4
+    ],
+    [
+     "arch_drum_steel",
+     1,
+     0.012,
+     4
+    ],
+    [
+     "arch_cot",
+     4,
+     0.07,
+     6
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_blanket_pile",
+     4
+    ],
+    [
+     "arch_cans",
+     3
+    ],
+    [
+     "arch_lantern",
+     2
+    ],
+    [
+     "arch_box_cardboard",
+     2
+    ],
+    [
+     "arch_bucket",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.408,
+   "decals": {
+    "plank_scrap": 2,
+    "mud_tracks": 2,
+    "wrappers_cans": 2,
+    "rubble_dust": 2,
+    "papers_scatter": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_planks"
+   ],
+   "wallTex": [
+    "arch_tex_panel_wood",
+    "arch_tex_corrugated"
+   ],
+   "palettes": [
+    "warm",
+    "rust"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "shack_radio": {
+   "type": "shack",
+   "wall": [
+    [
+     "arch_workbench",
+     7,
+     0.48,
+     6
+    ],
+    [
+     "arch_shelf_metal",
+     3,
+     0.192,
+     4
+    ],
+    [
+     "arch_cabinet_file",
+     1,
+     0.096,
+     4
+    ],
+    [
+     "arch_shelf_empty",
+     3,
+     0.384,
+     6
+    ],
+    [
+     "arch_bunk",
+     2,
+     0.192,
+     4
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_chair",
+     4,
+     0.06,
+     4
+    ],
+    [
+     "arch_crate_wood",
+     3,
+     0.04,
+     4
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_radio_set",
+     6
+    ],
+    [
+     "arch_box_cardboard",
+     2
+    ],
+    [
+     "arch_case_hard",
+     2
+    ],
+    [
+     "arch_mug",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.476,
+   "decals": {
+    "papers_scatter": 2,
+    "plank_scrap": 1,
+    "rubble_dust": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_planks"
+   ],
+   "wallTex": [
+    "arch_tex_panel_wood"
+   ],
+   "palettes": [
+    "warm",
+    "drab"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "control_room": {
+   "type": "industrial",
+   "wall": [
+    [
+     "arch_console_panel",
+     7,
+     0.48,
+     12
+    ],
+    [
+     "arch_cabinet_file",
+     3,
+     0.12,
+     4
+    ],
+    [
+     "arch_whiteboard",
+     1,
+     0.048,
+     4
+    ],
+    [
+     "arch_pipe_run",
+     1,
+     0.072,
+     4
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_chair",
+     5,
+     0.04,
+     8
+    ],
+    [
+     "arch_table",
+     2,
+     0.012,
+     4
+    ],
+    [
+     "arch_crate_wood",
+     1,
+     0.006,
+     4
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_radio_set",
+     3
+    ],
+    [
+     "arch_book_pile",
+     3
+    ],
+    [
+     "arch_mug",
+     2
+    ],
+    [
+     "arch_box_cardboard",
+     2
+    ],
+    [
+     "arch_lantern",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.28,
+   "decals": {
+    "papers_scatter": 3,
+    "paper_sheet": 2,
+    "wall_notice": 1,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_linoleum"
+   ],
+   "wallTex": [
+    "arch_tex_cinder"
+   ],
+   "palettes": [
+    "cool",
+    "drab"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "break_room": {
+   "type": "industrial",
+   "wall": [
+    [
+     "arch_counter",
+     5,
+     0.24,
+     4
+    ],
+    [
+     "arch_fridge",
+     3,
+     0.096,
+     4
+    ],
+    [
+     "arch_cabinet_file",
+     3,
+     0.096,
+     4
+    ],
+    [
+     "arch_sofa",
+     2,
+     0.072,
+     4
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_table",
+     5,
+     0.02,
+     4
+    ],
+    [
+     "arch_chair",
+     5,
+     0.05,
+     12
+    ],
+    [
+     "arch_mattress_floor",
+     2,
+     0.012,
+     4
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_cans",
+     4
+    ],
+    [
+     "arch_mug",
+     3
+    ],
+    [
+     "arch_blanket_pile",
+     2
+    ],
+    [
+     "arch_box_cardboard",
+     2
+    ],
+    [
+     "arch_bucket",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.28,
+   "decals": {
+    "wrappers_cans": 3,
+    "mud_tracks": 2,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "papers_scatter": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_linoleum"
+   ],
+   "wallTex": [
+    "arch_tex_cinder"
+   ],
+   "palettes": [
+    "drab",
+    "cool",
+    "warm"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "plant_hall": {
+   "type": "industrial",
+   "wall": [
+    [
+     "arch_pipe_run",
+     6,
+     0.6,
+     14
+    ],
+    [
+     "arch_shelf_metal",
+     2,
+     0.072,
+     6
+    ],
+    [
+     "arch_workbench",
+     2,
+     0.048,
+     4
+    ],
+    [
+     "arch_cage_mesh",
+     1,
+     0.048,
+     4
+    ]
+   ],
+   "wall_pick": 4,
+   "mid": [
+    [
+     "arch_drum_steel",
+     4,
+     0.012,
+     10
+    ],
+    [
+     "arch_crate_wood",
+     3,
+     0.008,
+     8
+    ],
+    [
+     "arch_generator",
+     1,
+     0.002,
+     4
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_pipe_loose",
+     4
+    ],
+    [
+     "arch_case_hard",
+     2
+    ],
+    [
+     "arch_jerrycan",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ],
+    [
+     "arch_bucket",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ]
+   ],
+   "clutter_m2": 0.28,
+   "decals": {
+    "oil_stain": 3,
+    "plank_scrap": 1,
+    "rubble_dust": 1,
+    "papers_scatter": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_concrete_stained"
+   ],
+   "wallTex": [
+    "arch_tex_corrugated",
+    "arch_tex_cinder"
+   ],
+   "palettes": [
+    "rust",
+    "drab"
+   ],
+   "atmos": "steam",
+   "drawCallCap": 6
+  },
+  "steam_tunnel": {
+   "type": "industrial",
+   "wall": [
+    [
+     "arch_pipe_run",
+     8,
+     1.08,
+     20
+    ],
+    [
+     "arch_shelf_metal",
+     1,
+     0.048,
+     4
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_drum_steel",
+     3,
+     0.012,
+     4
+    ],
+    [
+     "arch_crate_wood",
+     2,
+     0.008,
+     4
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_pipe_loose",
+     4
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ],
+    [
+     "arch_lantern",
+     1
+    ],
+    [
+     "arch_bucket",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ]
+   ],
+   "clutter_m2": 0.28,
+   "decals": {
+    "water_stain": 3,
+    "rubble_dust": 2,
+    "oil_stain": 1,
+    "plank_scrap": 2,
+    "papers_scatter": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_concrete_stained"
+   ],
+   "wallTex": [
+    "arch_tex_cinder"
+   ],
+   "palettes": [
+    "rust"
+   ],
+   "atmos": "steam",
+   "drawCallCap": 6
+  },
+  "shelter_communal": {
+   "type": "shelter",
+   "wall": [
+    [
+     "arch_stove_wood",
+     6,
+     0.096,
+     4
+    ],
+    [
+     "arch_shelf_metal",
+     3,
+     0.144,
+     6
+    ],
+    [
+     "arch_sofa",
+     2,
+     0.096,
+     4
+    ],
+    [
+     "arch_bunk",
+     2,
+     0.12,
+     4
+    ]
+   ],
+   "wall_pick": 4,
+   "mid": [
+    [
+     "arch_mattress_floor",
+     7,
+     0.06,
+     16
+    ],
+    [
+     "arch_chair",
+     3,
+     0.03,
+     12
+    ],
+    [
+     "arch_crate_wood",
+     2,
+     0.012,
+     6
+    ],
+    [
+     "arch_table",
+     1,
+     0.008,
+     4
+    ],
+    [
+     "arch_cot",
+     5,
+     0.044,
+     16
+    ]
+   ],
+   "mid_pick": 4,
+   "clutter": [
+    [
+     "arch_blanket_pile",
+     5
+    ],
+    [
+     "arch_cans",
+     3
+    ],
+    [
+     "arch_bucket",
+     2
+    ],
+    [
+     "arch_candle_cluster",
+     3
+    ],
+    [
+     "arch_duffel",
+     2
+    ],
+    [
+     "arch_lantern",
+     2
+    ],
+    [
+     "arch_box_cardboard",
+     2
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.408,
+   "decals": {
+    "sleeping_bag": 4,
+    "mud_tracks": 2,
+    "wrappers_cans": 2,
+    "ash_footprints": 1,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "papers_scatter": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_planks",
+    "arch_tex_carpet",
+    "arch_tex_linoleum"
+   ],
+   "wallTex": [
+    "arch_tex_drywall"
+   ],
+   "palettes": [
+    "warm",
+    "drab"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "guard_post": {
+   "type": "post",
+   "wall": [
+    [
+     "arch_cabinet_file",
+     3,
+     0.12,
+     4
+    ],
+    [
+     "arch_shelf_metal",
+     3,
+     0.144,
+     4
+    ],
+    [
+     "arch_console_panel",
+     2,
+     0.096,
+     4
+    ],
+    [
+     "arch_bunk",
+     2,
+     0.096,
+     4
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_sandbag_row",
+     4,
+     0.02,
+     6
+    ],
+    [
+     "arch_table",
+     4,
+     0.02,
+     4
+    ],
+    [
+     "arch_chair",
+     3,
+     0.04,
+     4
+    ],
+    [
+     "arch_crate_wood",
+     3,
+     0.02,
+     4
+    ],
+    [
+     "arch_drum_steel",
+     1,
+     0.01,
+     4
+    ]
+   ],
+   "mid_pick": 4,
+   "clutter": [
+    [
+     "arch_case_hard",
+     4
+    ],
+    [
+     "arch_radio_set",
+     2
+    ],
+    [
+     "arch_cans",
+     2
+    ],
+    [
+     "arch_mug",
+     1
+    ],
+    [
+     "arch_book_pile",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.34,
+   "decals": {
+    "mud_tracks": 3,
+    "papers_scatter": 2,
+    "wall_map_marked": 1,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_concrete_stained",
+    "arch_tex_planks"
+   ],
+   "wallTex": [
+    "arch_tex_cinder",
+    "arch_tex_corrugated"
+   ],
+   "palettes": [
+    "drab",
+    "cool"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "lab_holds": {
+   "type": "lab",
+   "wall": [
+    [
+     "arch_glass_hold",
+     8,
+     0.432,
+     6
+    ],
+    [
+     "arch_cabinet_file",
+     1,
+     0.072,
+     4
+    ],
+    [
+     "arch_pipe_run",
+     2,
+     0.12,
+     4
+    ],
+    [
+     "arch_shelf_metal",
+     4,
+     0.432,
+     12
+    ],
+    [
+     "arch_workbench",
+     3,
+     0.288,
+     6
+    ],
+    [
+     "arch_med_cabinet",
+     2,
+     0.192,
+     6
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_chair",
+     2,
+     0.016,
+     4
+    ],
+    [
+     "arch_gurney",
+     2,
+     0.008,
+     4
+    ],
+    [
+     "arch_crate_wood",
+     1,
+     0.006,
+     4
+    ],
+    [
+     "arch_crate_small",
+     3,
+     0.028,
+     8
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_glass_shards_3d",
+     5
+    ],
+    [
+     "arch_book_pile",
+     1
+    ],
+    [
+     "arch_case_hard",
+     1
+    ],
+    [
+     "arch_rubble_chunks",
+     2
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.28,
+   "decals": {
+    "water_stain": 4,
+    "glass_shards": 4,
+    "papers_scatter": 1,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_linoleum",
+    "arch_tex_concrete_stained"
+   ],
+   "wallTex": [
+    "arch_tex_cinder",
+    "arch_tex_corrugated"
+   ],
+   "palettes": [
+    "cool",
+    "drab",
+    "ash"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "lab_corridor": {
+   "type": "lab",
+   "wall": [
+    [
+     "arch_pipe_run",
+     5,
+     0.288,
+     14
+    ],
+    [
+     "arch_cabinet_file",
+     1,
+     0.048,
+     4
+    ],
+    [
+     "arch_shelf_metal",
+     3,
+     0.384,
+     12
+    ],
+    [
+     "arch_med_cabinet",
+     2,
+     0.192,
+     6
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_gurney",
+     2,
+     0.008,
+     4
+    ],
+    [
+     "arch_chair",
+     1,
+     0.008,
+     4
+    ],
+    [
+     "arch_crate_broken",
+     2,
+     0.02,
+     6
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_rubble_chunks",
+     3
+    ],
+    [
+     "arch_glass_shards_3d",
+     2
+    ],
+    [
+     "arch_book_pile",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.28,
+   "decals": {
+    "water_stain": 5,
+    "glass_shards": 2,
+    "papers_scatter": 2,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_linoleum",
+    "arch_tex_concrete_stained"
+   ],
+   "wallTex": [
+    "arch_tex_cinder",
+    "arch_tex_corrugated"
+   ],
+   "palettes": [
+    "cool",
+    "drab",
+    "ash"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "library_stacks": {
+   "type": "library",
+   "wall": [
+    [
+     "arch_shelf_metal",
+     7,
+     0.72,
+     14
+    ],
+    [
+     "arch_cabinet_file",
+     1,
+     0.048,
+     4
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_shelf_island",
+     7,
+     0.024,
+     16
+    ],
+    [
+     "arch_table",
+     2,
+     0.008,
+     4
+    ],
+    [
+     "arch_chair",
+     2,
+     0.016,
+     8
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_book_pile",
+     8
+    ],
+    [
+     "arch_box_cardboard",
+     1
+    ],
+    [
+     "arch_candle_cluster",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.28,
+   "decals": {
+    "papers_scatter": 4,
+    "paper_sheet": 3,
+    "frost_rime": 1,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_carpet"
+   ],
+   "wallTex": [
+    "arch_tex_drywall"
+   ],
+   "palettes": [
+    "warm",
+    "drab"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "greenhouse_atrium": {
+   "type": "library",
+   "wall": [
+    [
+     "arch_counter",
+     2,
+     0.072,
+     4
+    ],
+    [
+     "arch_shelf_metal",
+     2,
+     0.096,
+     6
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_seed_rack",
+     7,
+     0.03,
+     16
+    ],
+    [
+     "arch_table_folding",
+     3,
+     0.012,
+     6
+    ],
+    [
+     "arch_chair",
+     1,
+     0.008,
+     4
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_seed_tray",
+     7
+    ],
+    [
+     "arch_bucket",
+     2
+    ],
+    [
+     "arch_blanket_pile",
+     3
+    ],
+    [
+     "arch_candle_cluster",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.28,
+   "decals": {
+    "ash_drift": 2,
+    "water_stain": 2,
+    "mud_tracks": 1,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "papers_scatter": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_tile_ceramic"
+   ],
+   "wallTex": [
+    "arch_tex_drywall"
+   ],
+   "palettes": [
+    "warm",
+    "pastel"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  },
+  "kitchen_commercial": {
+   "type": "kitchen",
+   "wall": [
+    [
+     "arch_steam_table",
+     5,
+     0.288,
+     6
+    ],
+    [
+     "arch_counter",
+     5,
+     0.36,
+     8
+    ],
+    [
+     "arch_shelf_metal",
+     3,
+     0.192,
+     6
+    ],
+    [
+     "arch_fridge",
+     2,
+     0.096,
+     4
+    ]
+   ],
+   "wall_pick": 4,
+   "mid": [
+    [
+     "arch_table",
+     3,
+     0.012,
+     4
+    ],
+    [
+     "arch_crate_wood",
+     3,
+     0.012,
+     6
+    ],
+    [
+     "arch_drum_steel",
+     1,
+     0.006,
+     4
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_cans",
+     4
+    ],
+    [
+     "arch_bucket",
+     3
+    ],
+    [
+     "arch_box_cardboard",
+     3
+    ],
+    [
+     "arch_bottles",
+     2
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.28,
+   "decals": {
+    "grease_film": 4,
+    "water_stain": 2,
+    "wrappers_cans": 2,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "papers_scatter": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_tile_ceramic"
+   ],
+   "wallTex": [
+    "arch_tex_cinder"
+   ],
+   "palettes": [
+    "cool",
+    "drab"
+   ],
+   "atmos": "steam",
+   "drawCallCap": 6
+  },
+  "casino_switchboard": {
+   "type": "office",
+   "wall": [
+    [
+     "arch_console_panel",
+     4,
+     0.24,
+     8
+    ],
+    [
+     "arch_cabinet_file",
+     3,
+     0.12,
+     6
+    ],
+    [
+     "arch_shelf_metal",
+     2,
+     0.12,
+     6
+    ]
+   ],
+   "wall_pick": 3,
+   "mid": [
+    [
+     "arch_table_blackjack",
+     6,
+     0.012,
+     8
+    ],
+    [
+     "arch_chair",
+     5,
+     0.04,
+     16
+    ],
+    [
+     "arch_crate_wood",
+     1,
+     0.006,
+     4
+    ]
+   ],
+   "mid_pick": 3,
+   "clutter": [
+    [
+     "arch_radio_set",
+     6
+    ],
+    [
+     "arch_laptop",
+     2
+    ],
+    [
+     "arch_mug",
+     2
+    ],
+    [
+     "arch_box_cardboard",
+     2
+    ],
+    [
+     "arch_book_pile",
+     1
+    ],
+    [
+     "arch_box_collapsed",
+     2
+    ],
+    [
+     "arch_paper_pile",
+     2
+    ],
+    [
+     "arch_rubble_large",
+     2
+    ],
+    [
+     "arch_rubble_small",
+     2
+    ],
+    [
+     "arch_plank_broken_b",
+     2
+    ],
+    [
+     "arch_plank_loose",
+     1
+    ],
+    [
+     "arch_pipe_loose",
+     1
+    ],
+    [
+     "arch_pipe_elbow",
+     1
+    ],
+    [
+     "arch_box_small",
+     2
+    ],
+    [
+     "arch_debris_pile",
+     2
+    ]
+   ],
+   "clutter_m2": 0.28,
+   "decals": {
+    "rug_worn": 3,
+    "papers_scatter": 3,
+    "paper_sheet": 2,
+    "rubble_dust": 2,
+    "plank_scrap": 2,
+    "plaster_chunks": 1,
+    "wall_water_stain": 1,
+    "wall_notice": 1
+   },
+   "decal_m2": 0.22,
+   "floor": [
+    "arch_tex_carpet"
+   ],
+   "wallTex": [
+    "arch_tex_drywall"
+   ],
+   "palettes": [
+    "warm",
+    "drab"
+   ],
+   "atmos": "dust",
+   "drawCallCap": 6
+  }
+ },
+ "damage": {
+  "intact": {
+   "dens": 1.0,
+   "tip": 0.03,
+   "win": {
+    "arch_window_intact": 6,
+    "arch_window_cracked": 1
+   },
+   "decals": {
+    "rug_worn": 3,
+    "papers_scatter": 1
+   }
+  },
+  "lived_in": {
+   "dens": 1.15,
+   "tip": 0.05,
+   "win": {
+    "arch_window_intact": 4,
+    "arch_window_cracked": 2
+   },
+   "decals": {
+    "rug_worn": 3,
+    "papers_scatter": 2,
+    "mud_tracks": 2,
+    "wrappers_cans": 2
+   }
+  },
+  "ransacked": {
+   "dens": 1.3,
+   "tip": 0.45,
+   "win": {
+    "arch_window_broken": 4,
+    "arch_window_cracked": 2,
+    "arch_window_boarded": 1
+   },
+   "decals": {
+    "papers_scatter": 5,
+    "glass_shards": 3,
+    "rubble_dust": 2,
+    "wrappers_cans": 3,
+    "pill_scatter": 1
+   },
+   "shelf_empty": 0.6
+  },
+  "burned": {
+   "dens": 0.8,
+   "tip": 0.35,
+   "win": {
+    "arch_window_broken": 5,
+    "arch_boards_overlay": 2
+   },
+   "decals": {
+    "scorch": 6,
+    "rubble_dust": 3,
+    "plank_scrap": 2,
+    "wall_scorch": 3
+   },
+   "shelf_empty": 0.5
+  },
+  "flooded": {
+   "dens": 0.9,
+   "tip": 0.25,
+   "win": {
+    "arch_window_cracked": 3,
+    "arch_window_broken": 2
+   },
+   "decals": {
+    "water_stain": 6,
+    "mud_tracks": 3,
+    "papers_scatter": 2,
+    "wall_water_stain": 3
+   }
+  },
+  "frozen": {
+   "dens": 0.95,
+   "tip": 0.2,
+   "win": {
+    "arch_window_cracked": 3,
+    "arch_plastic_sheet": 3,
+    "arch_window_boarded": 2
+   },
+   "decals": {
+    "frost_rime": 5,
+    "ash_drift": 3,
+    "snow_drift_in": 2,
+    "wall_frost": 3
+   }
+  },
+  "boarded": {
+   "dens": 1.0,
+   "tip": 0.1,
+   "win": {
+    "arch_window_boarded": 6,
+    "arch_wall_corrugated": 3,
+    "arch_boards_overlay": 2
+   },
+   "decals": {
+    "plank_scrap": 3,
+    "rubble_dust": 2,
+    "mud_tracks": 1
+   }
+  }
+ },
+ "chapterBias": {
+  "1": {
+   "intact": 4,
+   "lived_in": 5,
+   "ransacked": 2,
+   "boarded": 1
+  },
+  "2": {
+   "intact": 3,
+   "lived_in": 5,
+   "ransacked": 3,
+   "boarded": 1
+  },
+  "3": {
+   "lived_in": 4,
+   "ransacked": 3,
+   "boarded": 2,
+   "intact": 1,
+   "flooded": 1
+  },
+  "4": {
+   "lived_in": 3,
+   "ransacked": 4,
+   "boarded": 3,
+   "flooded": 1
+  },
+  "5": {
+   "ransacked": 4,
+   "boarded": 3,
+   "lived_in": 2,
+   "flooded": 2
+  },
+  "6": {
+   "ransacked": 5,
+   "boarded": 3,
+   "lived_in": 2,
+   "burned": 1,
+   "flooded": 1
+  },
+  "7": {
+   "ransacked": 4,
+   "boarded": 3,
+   "flooded": 2,
+   "burned": 1,
+   "lived_in": 1
+  },
+  "8": {
+   "frozen": 5,
+   "ransacked": 3,
+   "boarded": 3,
+   "burned": 1,
+   "lived_in": 1
+  },
+  "9": {
+   "frozen": 7,
+   "boarded": 2,
+   "ransacked": 2
+  },
+  "10": {
+   "frozen": 5,
+   "lived_in": 3,
+   "boarded": 2
+  }
+ },
+ "palettes": {
+  "warm": [
+   "#ffffff",
+   "#f2e3cc",
+   "#e8d2b0",
+   "#d9c6a8"
+  ],
+  "cool": [
+   "#ffffff",
+   "#d8e0e6",
+   "#c8d2da",
+   "#b9c4cc"
+  ],
+  "drab": [
+   "#ffffff",
+   "#e0dccf",
+   "#cfcab8",
+   "#bdb7a4"
+  ],
+  "pastel": [
+   "#ffffff",
+   "#f0dede",
+   "#dfe8d8",
+   "#dde0f0"
+  ],
+  "rust": [
+   "#ffffff",
+   "#e8cfb8",
+   "#d6b49a",
+   "#c8a68e"
+  ],
+  "ash": [
+   "#ffffff",
+   "#d6d4d0",
+   "#c4c2bd",
+   "#b2b0ab"
+  ]
+ },
+ "keepsakes": {
+  "house": [
+   "arch_photo_frame",
+   "arch_toy_kid",
+   "arch_suitcase_packed",
+   "arch_pet_bowl",
+   "arch_shoes_pair",
+   "arch_mug",
+   "arch_note_card",
+   "wall_calendar",
+   "wall_kid_drawing"
+  ],
+  "motel": [
+   "arch_suitcase_packed",
+   "arch_shoes_pair",
+   "arch_note_card",
+   "arch_photo_frame",
+   "arch_bottles"
+  ],
+  "store": [
+   "arch_note_card",
+   "wall_notice",
+   "arch_mug",
+   "wall_names_list"
+  ],
+  "garage": [
+   "arch_photo_frame",
+   "arch_mug",
+   "arch_note_card",
+   "wall_calendar",
+   "arch_shoes_pair"
+  ],
+  "clinic": [
+   "arch_note_card",
+   "wall_names_list",
+   "arch_photo_frame",
+   "arch_mug",
+   "arch_blanket_pile"
+  ],
+  "hospital": [
+   "arch_note_card",
+   "wall_names_list",
+   "arch_shoes_pair",
+   "arch_photo_frame",
+   "arch_toy_kid"
+  ],
+  "office": [
+   "arch_note_card",
+   "arch_mug",
+   "arch_photo_frame",
+   "wall_calendar",
+   "wall_map_marked"
+  ],
+  "civic": [
+   "arch_toy_kid",
+   "arch_note_card",
+   "wall_names_list",
+   "arch_shoes_pair",
+   "arch_suitcase_packed"
+  ],
+  "warehouse": [
+   "arch_note_card",
+   "arch_mug",
+   "arch_duffel",
+   "wall_calendar"
+  ],
+  "shack": [
+   "arch_photo_frame",
+   "arch_mug",
+   "arch_note_card",
+   "wall_calendar",
+   "arch_shoes_pair"
+  ],
+  "industrial": [
+   "arch_mug",
+   "arch_note_card",
+   "arch_photo_frame",
+   "wall_calendar"
+  ],
+  "shelter": [
+   "arch_toy_kid",
+   "arch_photo_frame",
+   "arch_suitcase_packed",
+   "arch_pet_bowl",
+   "arch_shoes_pair",
+   "arch_note_card",
+   "wall_kid_drawing"
+  ],
+  "post": [
+   "arch_photo_frame",
+   "arch_note_card",
+   "arch_mug",
+   "wall_map_marked"
+  ],
+  "lab": [
+   "arch_note_card",
+   "wall_redacted_manifest",
+   "arch_shoes_pair"
+  ],
+  "library": [
+   "arch_note_card",
+   "arch_mug",
+   "arch_toy_kid",
+   "wall_notice"
+  ],
+  "kitchen": [
+   "arch_note_card",
+   "arch_mug",
+   "wall_handsign_chips"
+  ]
+ },
+ "roomAssignment": {
+  "b_ch01_pharmacy_r0": {
+   "kit": "store_stockroom",
+   "name": "stock room (north)"
+  },
+  "b_ch01_pharmacy_r1": {
+   "kit": "store_retail",
+   "name": "front counter (south)"
+  },
+  "b_ch01_pruitt_r0": {
+   "kit": "house_open",
+   "name": "the Pruitts' house"
+  },
+  "b_ch01_home_r0": {
+   "kit": "house_kitchen",
+   "name": "kitchen + water station"
+  },
+  "b_ch01_home_r1": {
+   "kit": "house_living",
+   "name": "living room + phone"
+  },
+  "b_ch01_gil_r0": {
+   "kit": "garage_workshop",
+   "name": "Gil's two-bay garage"
+  },
+  "b_ch01_lolo_r0": {
+   "kit": "clinic",
+   "name": "Lolo's house and clinic"
+  },
+  "b_ch02_hospital_r0": {
+   "kit": "hospital_ward",
+   "name": "wards (north)"
+  },
+  "b_ch02_hospital_r1": {
+   "kit": "hospital_er",
+   "name": "main hallway + ER"
+  },
+  "b_ch02_ramp_r0": {
+   "kit": "parking_deck",
+   "name": "parking ramp level 3"
+  },
+  "b_ch02_motel_r0": {
+   "kit": "motel_room",
+   "name": "motel room 1"
+  },
+  "b_ch02_motel_r1": {
+   "kit": "motel_room",
+   "name": "motel room 2"
+  },
+  "b_ch02_motel_r2": {
+   "kit": "motel_room",
+   "name": "motel room 3"
+  },
+  "b_ch02_pawn_r0": {
+   "kit": "store_retail",
+   "name": "Silver State Pawn"
+  },
+  "b_ch02_rscc_r0": {
+   "kit": "civic_hall",
+   "name": "registry hall (north)"
+  },
+  "b_ch02_rscc_r1": {
+   "kit": "civic_hall",
+   "name": "ration hall (south)"
+  },
+  "b_ch03_shack_r0": {
+   "kit": "shack_bunk",
+   "name": "bunk room"
+  },
+  "b_ch03_shack_r1": {
+   "kit": "shack_radio",
+   "name": "radio room"
+  },
+  "b_ch03_rscc_r0": {
+   "kit": "civic_hall",
+   "name": "registry hall"
+  },
+  "b_ch03_rscc_r1": {
+   "kit": "office",
+   "name": "stores office"
+  },
+  "b_ch03_tric_r0": {
+   "kit": "warehouse",
+   "name": "TRIC warehouse"
+  },
+  "b_ch03_home_r0": {
+   "kit": "house_kitchen",
+   "name": "kitchen"
+  },
+  "b_ch03_home_r1": {
+   "kit": "house_living",
+   "name": "living room + radio"
+  },
+  "b_ch03_gil_r0": {
+   "kit": "garage_workshop",
+   "name": "Gil's garage"
+  },
+  "b_ch03_lolo_r0": {
+   "kit": "clinic",
+   "name": "Lolo's house and clinic"
+  },
+  "b_ch04_hangar_r0": {
+   "kit": "hangar",
+   "name": "Hangar 2 maintenance bay"
+  },
+  "b_ch04_ranch_r0": {
+   "kit": "house_open",
+   "name": "Steamboat ranch house"
+  },
+  "b_ch04_plant_r0": {
+   "kit": "control_room",
+   "name": "control room (NW)"
+  },
+  "b_ch04_plant_r1": {
+   "kit": "break_room",
+   "name": "break room (the Lunds)"
+  },
+  "b_ch04_plant_r2": {
+   "kit": "plant_hall",
+   "name": "turbine hall"
+  },
+  "b_ch05_truckstop_r0": {
+   "kit": "store_retail",
+   "name": "Mustang truck stop: store + Mo's counter"
+  },
+  "b_ch05_depot_r0": {
+   "kit": "store_stockroom",
+   "name": "Boone's back room"
+  },
+  "b_ch05_tric_r0": {
+   "kit": "warehouse",
+   "name": "TRIC convoy staging"
+  },
+  "b_ch06_spur_r0": {
+   "kit": "casino_switchboard",
+   "name": "Switchboard (surveillance room)"
+  },
+  "b_ch06_spur_r1": {
+   "kit": "kitchen_commercial",
+   "name": "kitchens + commissary"
+  },
+  "b_ch06_motel_r0": {
+   "kit": "motel_room",
+   "name": "Room 9"
+  },
+  "b_ch06_motel_r1": {
+   "kit": "office",
+   "name": "motel office"
+  },
+  "b_ch06_rscc_r0": {
+   "kit": "office",
+   "name": "Avila's command post"
+  },
+  "b_ch06_home_r0": {
+   "kit": "house_open",
+   "name": "Braith and Carly's house"
+  },
+  "b_ch06_lolo_r0": {
+   "kit": "clinic",
+   "name": "Lolo's house and clinic"
+  },
+  "b_ch07_shack_r0": {
+   "kit": "shack_bunk",
+   "name": "bunk room"
+  },
+  "b_ch07_shack_r1": {
+   "kit": "shack_radio",
+   "name": "radio room"
+  },
+  "b_ch07_checkpoint_r0": {
+   "kit": "guard_post",
+   "name": "Compact checkpoint post"
+  },
+  "b_ch07_ross_r0": {
+   "kit": "house_open",
+   "name": "Ross's farmhouse"
+  },
+  "b_ch07b_annex_r0": {
+   "kit": "lab_holds",
+   "name": "Hold A1"
+  },
+  "b_ch07b_annex_r1": {
+   "kit": "lab_holds",
+   "name": "Hold A2 (records)"
+  },
+  "b_ch07b_annex_r2": {
+   "kit": "lab_holds",
+   "name": "Hold A3"
+  },
+  "b_ch07b_annex_r3": {
+   "kit": "lab_holds",
+   "name": "Hold A4"
+  },
+  "b_ch07b_annex_r4": {
+   "kit": "lab_holds",
+   "name": "Hold A5"
+  },
+  "b_ch07b_annex_r5": {
+   "kit": "lab_holds",
+   "name": "Hold A6 (cards)"
+  },
+  "b_ch07b_annex_r6": {
+   "kit": "lab_corridor",
+   "name": "Wing B (sealed, no door)"
+  },
+  "b_ch07b_annex_r7": {
+   "kit": "lab_corridor",
+   "name": "corridor"
+  },
+  "b_ch07b_annex_r8": {
+   "kit": "office",
+   "name": "entry hall"
+  },
+  "b_ch07b_hangar_r0": {
+   "kit": "hangar",
+   "name": "recovery detail camp"
+  },
+  "b_ch08_depot_r0": {
+   "kit": "store_stockroom",
+   "name": "Boone's depot"
+  },
+  "b_ch08_gatehouse_r0": {
+   "kit": "guard_post",
+   "name": "Galena gatehouse"
+  },
+  "b_ch08_hospital_r0": {
+   "kit": "hospital_ward",
+   "name": "ward W (dark)"
+  },
+  "b_ch08_hospital_r1": {
+   "kit": "hospital_ward",
+   "name": "ward E (dark)"
+  },
+  "b_ch08_hospital_r2": {
+   "kit": "hospital_er",
+   "name": "ER + Ames"
+  },
+  "b_ch08_library_r0": {
+   "kit": "library_stacks",
+   "name": "stacks (dark)"
+  },
+  "b_ch08_library_r1": {
+   "kit": "greenhouse_atrium",
+   "name": "glass atrium greenhouse"
+  },
+  "b_ch08_shelter_r0": {
+   "kit": "shelter_communal",
+   "name": "living rooms (10-20 people)"
+  },
+  "b_ch08_shelter_r1": {
+   "kit": "house_hall",
+   "name": "front hallway + mail-slot door"
+  },
+  "b_ch08_lolo_r0": {
+   "kit": "clinic",
+   "name": "Lolo's clinic"
+  },
+  "b_ch08_henley_r0": {
+   "kit": "house_living",
+   "name": "Henleys' front room"
+  },
+  "b_ch08_henley_r1": {
+   "kit": "house_kitchen",
+   "name": "Henleys' kitchen (Dale)"
+  },
+  "b_ch09_shelter_r0": {
+   "kit": "shelter_communal",
+   "name": "shelter (column muster)"
+  },
+  "b_ch09_picket_hut_r0": {
+   "kit": "guard_post",
+   "name": "Remnant picket hut"
+  },
+  "b_ch09_gatehouse_r0": {
+   "kit": "guard_post",
+   "name": "Galena gatehouse"
+  },
+  "b_ch10_plant_r0": {
+   "kit": "control_room",
+   "name": "control room (NW)"
+  },
+  "b_ch10_plant_r1": {
+   "kit": "break_room",
+   "name": "break room (NE)"
+  },
+  "b_ch10_plant_r2": {
+   "kit": "shelter_communal",
+   "name": "the warm room"
+  },
+  "b_ch10_plant_r3": {
+   "kit": "plant_hall",
+   "name": "turbine hall"
+  },
+  "b_ch10_tunnel_r0": {
+   "kit": "steam_tunnel",
+   "name": "steam tunnel head"
+  }
+ },
+ "forcedDamage": {
+  "b_ch01_pharmacy_r1": "ransacked",
+  "b_ch01_pharmacy_r0": "ransacked",
+  "b_ch01_home_r0": "lived_in",
+  "b_ch01_home_r1": "lived_in",
+  "b_ch01_lolo_r0": "lived_in",
+  "b_ch01_gil_r0": "lived_in",
+  "b_ch02_rscc_r0": "lived_in",
+  "b_ch02_rscc_r1": "lived_in",
+  "b_ch03_home_r0": "lived_in",
+  "b_ch03_home_r1": "lived_in",
+  "b_ch03_shack_r0": "lived_in",
+  "b_ch03_shack_r1": "lived_in",
+  "b_ch04_plant_r1": "lived_in",
+  "b_ch05_truckstop_r0": "lived_in",
+  "b_ch06_spur_r0": "lived_in",
+  "b_ch06_spur_r1": "lived_in",
+  "b_ch06_home_r0": "ransacked",
+  "b_ch07b_annex_r1": "flooded",
+  "b_ch07b_annex_r6": "flooded",
+  "b_ch07b_annex_r7": "flooded",
+  "b_ch08_shelter_r0": "boarded",
+  "b_ch08_shelter_r1": "boarded",
+  "b_ch08_henley_r0": "frozen",
+  "b_ch08_henley_r1": "frozen",
+  "b_ch08_library_r1": "lived_in",
+  "b_ch08_lolo_r0": "boarded",
+  "b_ch09_shelter_r0": "boarded",
+  "b_ch10_plant_r2": "lived_in",
+  "b_ch03_gil_r0": "lived_in"
+ },
+ "variation": {
+  "seed": "sha1(level|roomId|'v'|salt)[:12]; salt = rerolls[building]*100 + rerolls[room]*10 + autoAttempt",
+  "similarityThreshold": 0.7,
+  "neighbourM": 60.0
+ }
+}

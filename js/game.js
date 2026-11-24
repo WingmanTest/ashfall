@@ -1,43 +1,43 @@
 import * as THREE from "three";
-import { CFG, WEAPONS_ORDER } from "./config.js?v=r15.3";
-import { weaponKind } from "./weapons/viewmodels.js?v=r15.3";
-import { Input } from "./input.js?v=r15.3";
-import { HUD } from "./hud.js?v=r15.3";
-import { World } from "./world.js?v=r15.3";
-import { Player } from "./player.js?v=r15.3";
-import { EnemySystem } from "./enemies.js?v=r15.3";
-import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r15.3";
-import { openCharacterSheet } from "./inventoryUI.js?v=r15.3";
+import { CFG, WEAPONS_ORDER } from "./config.js?v=r16";
+import { weaponKind } from "./weapons/viewmodels.js?v=r16";
+import { Input } from "./input.js?v=r16";
+import { HUD } from "./hud.js?v=r16";
+import { World } from "./world.js?v=r16";
+import { Player } from "./player.js?v=r16";
+import { EnemySystem } from "./enemies.js?v=r16";
+import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r16";
+import { openCharacterSheet } from "./inventoryUI.js?v=r16";
 import {
   emptyDialogueMem, markNode, markChoice, markComplete, filterChoices, resumeNodeId,
   makeRevisitDialogue, authoredRevisit, hydrateDialogueMem, looksLikeFeedChoice,
   looksLikeFeedNode, choiceFlagName, memHasFeed,
-} from "./dialogueMem.js?v=r15.3";
-import { currentMainObjective, currentSideObjective, isSideObjective, noteSideQuestUpdate, renderQuestLogHtml } from "./questTrack.js?v=r15.3";
-import { createMinimap, loadObjectiveBinds, packExploredFog, restoreExploredFog } from "./minimap.js?v=r15.3";
-import { stopDoll3D } from "./doll3d.js?v=r15.3";
-import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r15.3";
-import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r15.3";
-import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r15.3";
-import { tickCompanion, disposeCompanion } from "./companion.js?v=r15.3";
-import { collectCompanionCommands, collectPendingActions, mergeActionChoices, startTracking, restoreTracking, findTrackTarget, setCompanionMode } from "./companionCmd.js?v=r15.3";
-import { pinNpc, unpinNpc, haltForTalk, findNpc } from "./npcWander.js?v=r15.3";
-import { BreathSystem } from "./breath.js?v=r15.3";
-import { openTradeModal } from "./trade.js?v=r15.3";
-import { preloadModels } from "./models3d.js?v=r15.3";
-import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r15.3";
-import { isMobileClient, canvasDpr } from "./device.js?v=r15.3";
-import { LevelRuntime } from "./levelLoader.js?v=r15.3";
-import { attachAudio } from "./audioHook.js?v=r15.3";
-import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r15.3";
-import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r15.3";
-import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r15.3";
-import { loadSave, hasSave, writeSave, clearSave, migrateSave, applyCh1CompleteFlags, completePriorChapterProgress, chapterHeading, normalizeChapter, CH02_SPAWN } from "./save.js?v=r15.3";
-import { createSky, hudHour } from "../sky/sky.js?v=r15.3";
+} from "./dialogueMem.js?v=r16";
+import { currentMainObjective, currentSideObjective, isSideObjective, noteSideQuestUpdate, renderQuestLogHtml } from "./questTrack.js?v=r16";
+import { createMinimap, loadObjectiveBinds, packExploredFog, restoreExploredFog } from "./minimap.js?v=r16";
+import { stopDoll3D } from "./doll3d.js?v=r16";
+import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r16";
+import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r16";
+import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r16";
+import { tickCompanion, disposeCompanion } from "./companion.js?v=r16";
+import { collectCompanionCommands, collectPendingActions, mergeActionChoices, startTracking, restoreTracking, findTrackTarget, setCompanionMode } from "./companionCmd.js?v=r16";
+import { pinNpc, unpinNpc, haltForTalk, findNpc } from "./npcWander.js?v=r16";
+import { BreathSystem } from "./breath.js?v=r16";
+import { openTradeModal } from "./trade.js?v=r16";
+import { preloadModels } from "./models3d.js?v=r16";
+import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r16";
+import { isMobileClient, canvasDpr } from "./device.js?v=r16";
+import { LevelRuntime } from "./levelLoader.js?v=r16";
+import { attachAudio } from "./audioHook.js?v=r16";
+import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r16";
+import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r16";
+import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r16";
+import { loadSave, hasSave, writeSave, clearSave, migrateSave, applyCh1CompleteFlags, completePriorChapterProgress, chapterHeading, normalizeChapter, CH02_SPAWN } from "./save.js?v=r16";
+import { createSky, hudHour } from "../sky/sky.js?v=r16";
 
 window.__ASHFALL_MODULE = true;
-window.__ASHFALL_BUILD = "r15.3";
-if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r15.3") {
+window.__ASHFALL_BUILD = "r16";
+if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r16") {
   if (typeof window.__ashfallBustStaleBuild === "function") window.__ashfallBustStaleBuild(window.__ASHFALL_BUILD);
 }
 
@@ -189,6 +189,7 @@ class Game {
         (document.getElementById("frame") || document.body).appendChild(el);
       }
       this.minimap = createMinimap(el);
+      window.__ASHFALL_GAME = this;
       loadObjectiveBinds();
     } catch (err) {
       console.warn("[minimap] init", err);
@@ -2257,6 +2258,20 @@ class Game {
       && !this.player.carryState?.overSoft
       && !this.player.carryState?.overHard;
     this.input.tickAutoSprint(dt, canAutoSprint);
+    if (this._mapOpen) {
+      if (this.input.consume("pause") || this.input.consume("interact")) {
+        this.minimap?.close(this);
+      }
+      try {
+        this.input.moveX = 0;
+        this.input.moveZ = 0;
+        this.input.lookX = 0;
+        this.input.resetTouch?.();
+      } catch {}
+      this._render(dt);
+      try { this.minimap?.tick(this, performance.now()); } catch {}
+      return;
+    }
     if (this.input.consume("pause") && this.mode === "play") return this.pause();
     if (this.mode === "pause" && this.input.consume("pause")) return this.resume();
 
@@ -2369,6 +2384,7 @@ class Game {
         weather: this.blizzard ? "blizzard" : (this._weather || "clear"),
         environment: this._envCfg?.id,
         pipeline: this.pipeline,
+        interior: { amount: indoor ? 1 : 0, window: loc?.window ?? this.levelRuntime?._windowAmt ?? this._windowAmt ?? 0 },
       });
       this.sky.applyTo({
         sun: this.world.lights.sun,
@@ -2666,7 +2682,7 @@ async function boot() {
     await story.load();
     const systems = await loadSystems();
     const levels = await loadLevels();
-    const { rollTable } = await import("./systems.js?v=r15.3");
+    const { rollTable } = await import("./systems.js?v=r16");
 
     const renderer = new THREE.WebGLRenderer({
       canvas: view, antialias: false, alpha: false, powerPreference: "high-performance",
@@ -2801,7 +2817,7 @@ async function boot() {
     game.loop();
     window.__READY = true;
     window.__ASHFALL_BOOTED = true;
-    window.__ASHFALL_BUILD = "r15.3";
+    window.__ASHFALL_BUILD = "r16";
     const banner = $("boot-banner");
     if (banner) banner.classList.remove("show");
     window.__INTEGRATION = {

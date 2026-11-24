@@ -2,7 +2,7 @@
 // ONE draw call: a single full-screen triangle at the far plane, view rays rebuilt per fragment.
 // No textures, no render targets, no loops. three.js r170, plain ES module.
 //
-//   import { createSky, hudHour } from '../sky/sky.js?v=r15.2';
+//   import { createSky, hudHour } from '../sky/sky.js?v=r16';
 //   const sky = createSky({ scene, camera, renderer, environment: 'fallout_winter' });
 //   sky.update(dt, { timeOfDay: hudHour(game.timeOfDay), weather: 'ashfall' });
 //   sky.applyTo({ sun, hemi, amb, fog: scene.fog, scene, pipeline });
@@ -203,7 +203,9 @@ void main() {
     vec3 mc = uMoonCol * mix(0.07, shade, lit);
     col = mix(col, mc, moonMask * uMoonVis);
   }
-  float moonHalo = pow(max(md, 0.0), 300.0) * uMoonHaloAmt;    // halo, added after clouds (reads through ash)
+  float moonHalo = pow(max(md, 0.0), 300.0) * uMoonHaloAmt;    // tight disc glow (r15.2)
+  // wider soft corona: stands in for the bloom the night grade now crushes, same visual size as r15.2
+  moonHalo += pow(max(md, 0.0), 70.0) * uMoonHaloAmt * 0.55;
 
   float cloudC = 0.0;
   // --- ash clouds: planar projection, 3 octaves + 1 shading tap, posterized ------------------
@@ -236,6 +238,10 @@ void main() {
   col = mix(col, uSunCol * 2.0, disc * uSunVis * through);
   col += uMoonCol * moonHalo * (1.0 - cloudC * 0.55);
 
+  // Moon disc + glow mask. Night crush / dense pipeline fog must not eat these —
+  // they keep the r15.2 size and brightness; everything else still uses the cap.
+  float moonFeat = max(moonMask * uMoonVis, clamp(moonHalo, 0.0, 1.0));
+
   // --- PS1 colour quantization with ordered dither (sqrt space keeps darks) ------------------
   // --- render/ pipeline: its composite fogs sky pixels (depth 1) as if they sat at uMaxDist. Pre-compensate
   // with the same analytic height-fog transmittance so the sky keeps its contrast after the composite.
@@ -247,7 +253,10 @@ void main() {
     float od = abs(b) > 1e-4 ? a * (1.0 - exp(-b * L)) / b : a * L;
     float T = exp(-od);
     vec3 cc = uFogCol + (col - uFogCol) / mix(1.0, max(T, 0.3), uFogComp);
-    col = min(cc, col * 1.6 + 0.01);           // cap the boost on bright features (moon/sun) -> no bloom blow-out
+    vec3 capped = min(cc, col * 1.6 + 0.01);   // cap the boost on bright features (sun) -> no bloom blow-out
+    // full inverse-fog on the moon (lower T floor) so the disc + glow survive night density
+    vec3 moonCc = uFogCol + (col - uFogCol) / mix(1.0, max(T, 0.12), uFogComp);
+    col = mix(capped, moonCc, moonFeat);
   }
 
   gl_FragColor = vec4(max(col, 0.0), 1.0);
@@ -307,6 +316,46 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
 /**
  * createSky({ scene, camera, renderer?, environment?, weather?, timeOfDay?, pixelSize?, latitude?, moonPhase? })
  */
+
+// ---------------------------------------------------------------------------------------------
+// Night / interior look. Tuned against refs/interior_target_lumen.png (darkhouse hero):
+// out-of-cone mean luminance ~10, in-cone cold blue-grey (B/R ≈ 1.33), flashlight is the key light,
+// moonlight only a faint silhouette (or a slim shaft through a window).
+export const NIGHT_LOOK = {
+  ambScale: 0.04,       // * preset noon amb at full night (summer ≈ 0.016, fallout ≈ 0.007)
+  hemiScale: 0.08,      // * preset noon hemi (≈ 0.05, matches the reference's HemisphereLight 0.05)
+  moonScale: 0.22,      // * preset noon moon — silhouette only, not fill
+  fog: 0x07090c,        // near-black fog / clear colour (same as the darkhouse demo)
+  fogLerp: 0.85,
+  lift: [0.018, 0.020, 0.026], // grade lift ≈ the reference's RGB 9–11 floor (slightly cold)
+  warmKeep: 0,          // don't re-warm the flashlight cone
+  brightness: 0.96,
+  bloom: 0.16,
+  tint: [1.00, 1.01, 1.05], // subtle cold, cancels summer's warm grade tint
+  flash: { color: 0xd0e3ff, intensity: 26, angle: 24, penumbra: 0.68, range: 18, scatter: 0.052, pitch: 0.05 },
+  motes: {
+    fall: 0.035, wind: [0.045, 0, 0.025], ashRatio: 1.0,
+    colorA: [0.88, 0.92, 1.0], colorB: [0.55, 0.62, 0.75],
+    sizeA: 0.026, sizeB: 0.018, maxPxA: 2.2, maxPxB: 1.6,
+    sway: 0.55, streak: 0, countScale: 0.7,
+    boxOutdoor: [14, 6, 16], boxInterior: [7, 3.2, 8],
+  },
+};
+// Interior occlusion. amount 0 = outdoors, 1 = fully enclosed. window 0..1 is how much sky/sun still enters.
+export const INTERIOR_LOOK = {
+  sunScale: 0,          // no direct sun when fully closed
+  ambFloor: 0.008,
+  hemiFloor: 0.022,
+  windowDirect: 0.70,   // fraction of outdoor direct light admitted by a fully open window
+  windowFill: 0.22,     // fraction of outdoor amb/hemi admitted
+  windowMoon: 0.40,     // night-time moon shaft through a fully open window (cinematic, still room-dark)
+};
+export const ADAPT_LOOK = {
+  tauDown: 2.4,         // seconds to ease fill lights down (day → night / entering a building)
+  tauUp: 0.7,           // faster coming back into the light
+  floor: 0.008,         // never let applied amb drop below this (playable, not a crushed void)
+};
+
 export function createSky(opts = {}) {
   const { scene, renderer = null } = opts;
   let pipeline = opts.pipeline || null;
@@ -398,7 +447,17 @@ export function createSky(opts = {}) {
     ambientColor: _c(), ambientIntensity: 0.3,
     hemiSky: _c(), hemiGround: _c(), hemiIntensity: 0.4,
     day: 1, night: 0, sunElevation: 1, moonElevation: -1, weather: wxKey, environment: envKey, hour,
+    interior: 0, window: 0, adapt: 0, darkMix: 0,
   };
+  // eased occlusion (Prime drives the target with setInterior)
+  let interiorT = opts.interior ?? 0, windowT = opts.window ?? 0;
+  let interior = interiorT, windowAmt = windowT;
+  const windowDirT = new THREE.Vector3();
+  let hasWindowDir = false;
+  if (opts.windowDir) { windowDirT.set(...(opts.windowDir.toArray ? opts.windowDir.toArray() : opts.windowDir)).normalize(); hasWindowDir = true; }
+  // applied fill (eased toward the target for eye-adaptation)
+  const applied = { amb: 0, hemi: 0, intensity: 0, fog: _c(), lift: [0, 0, 0], ready: false };
+
   const lat = THREE.MathUtils.degToRad(opts.latitude ?? 39.5); // Sparks / Reno
   const starAxis = new THREE.Vector3(0, Math.sin(lat), -Math.cos(lat)).normalize();
   const _q = new THREE.Quaternion(), _m4 = new THREE.Matrix4();
@@ -430,9 +489,10 @@ export function createSky(opts = {}) {
     // weather tint & darkening
     const day = smooth(-0.12, 0.25, e);
     const night = 1 - day;
-    if (wx.tintAmt > 0) {
-      U.uZen.value.lerp(tmp.copy(wxTint).multiplyScalar(0.25 + 0.75 * day), wx.tintAmt * 0.6);
-      U.uHor.value.lerp(tmp.copy(wxTint).multiplyScalar(0.25 + 0.75 * day), wx.tintAmt);
+    if (wx.tintAmt > 0 && day > 0.02) {
+      const tw = wx.tintAmt * day; // HEAT HAZE / brown_sky must not keep a warm washed dome at night
+      U.uZen.value.lerp(tmp.copy(wxTint).multiplyScalar(0.25 + 0.75 * day), tw * 0.6);
+      U.uHor.value.lerp(tmp.copy(wxTint).multiplyScalar(0.25 + 0.75 * day), tw);
     }
     // heavy cloud decks flatten the gradient toward a grey lid
     U.uZen.value.lerp(U.uHor.value, wx.cover * 0.35);
@@ -441,6 +501,16 @@ export function createSky(opts = {}) {
     U.uHaze.value.copy(wxHaze).multiplyScalar(0.12 + 0.88 * day).lerp(U.uHor.value, 0.35 + 0.4 * night);
     U.uHazeAmt.value = wx.haze;
     U.uShimmer.value = wx.shimmer * day;
+    // Night crush: seasonal palettes + weather haze cannot leave a daytime sky after sunset
+    // (Ch1 HEAT HAZE at 02:15 was still a washed ochre dome). Stars need a near-black field.
+    if (night > 0.01) {
+      const k = night * night;
+      U.uZen.value.lerp(tmp.setHex(0x05070b), k * 0.94);
+      U.uHor.value.lerp(tmp.setHex(0x0c1016), k * 0.90);
+      U.uGnd.value.lerp(tmp.setHex(0x050608), k * 0.92);
+      U.uHaze.value.lerp(tmp.setHex(NIGHT_LOOK.fog), k * 0.90);
+      U.uHazeAmt.value *= 1 - k * 0.75;
+    }
 
     // sun
     const sunUp = smooth(-0.06, 0.04, e);
@@ -450,7 +520,7 @@ export function createSky(opts = {}) {
     const ashDim = 1 - S.ash * 0.45;
     U.uSunVis.value = sunUp * wx.sunVis * (envKey === 'fallout_winter' ? 0.8 : 1);
     // the pipeline adds its own sun in-scatter + bloom around the sun, so halve our glow there
-    U.uSunGlow.value = sunUp * (0.35 + 0.65 * wx.sunVis) * ashDim * (1 + wx.shimmer * 0.3) * (pipeline ? 0.5 : 1);
+    U.uSunGlow.value = sunUp * (0.35 + 0.65 * wx.sunVis) * ashDim * (1 + wx.shimmer * 0.3) * (pipeline ? 0.5 : 1) * (1 - night * night * 0.5);
     U.uSunSize.value = S.sunSize * (1 + wx.shimmer * 0.25);
     U.uSunCol.value.multiplyScalar(envKey === 'fallout_winter' ? 0.42 : 0.5); // half-bright base; disc = 2x
 
@@ -491,27 +561,52 @@ export function createSky(opts = {}) {
     }
 
     // ---- light state (sRGB colours, three's Color management converts on set) ---------------
+    const NL = NIGHT_LOOK, IL = INTERIOR_LOOK;
     const wl = 0.5 + 0.5 * wx.light; // weather scales direct light relative to the preset's own noon value
-    const sunI = L.sun * (0.1 + 0.9 * smooth(-0.03, 0.3, e)) * wl * (1 - low * 0.3) * sunUp;
+    let sunI = L.sun * (0.1 + 0.9 * smooth(-0.03, 0.3, e)) * wl * (1 - low * 0.3) * sunUp;
     const moonIllum = 0.5 - 0.5 * Math.cos(moonPhase * Math.PI * 2);
-    const moonI = L.moon * mUp * (0.35 + 0.65 * moonIllum) * wl * night;
-    const useSun = sunI >= moonI;
-    state.source = useSun ? 'sun' : 'moon';
-    state.dir.copy(useSun ? sunDir : moonDir);
-    if (state.dir.y < 0.08) { state.dir.y = 0.08; state.dir.normalize(); } // keep shadows sane at the horizon
+    // night moon is a faint silhouette, not a fill light (darkhouse reference)
+    let moonI = L.moon * NL.moonScale * mUp * (0.35 + 0.65 * moonIllum) * wl * night;
+
+    // outdoor fill: almost nothing at night (hemi ≈ 0.05, amb ≈ 0.01)
+    let ambI = L.amb * (NL.ambScale + (1 - NL.ambScale) * day) * (1 - dark * 0.3);
+    let hemiI = L.hemi * (NL.hemiScale + (1 - NL.hemiScale) * day) * (1 - dark * 0.3);
+
+    // interior occlusion: even at noon a closed room goes near-black; a window lets a shaft back in
+    const I = interior, W = windowAmt;
+    const closedAmb = IL.ambFloor, closedHemi = IL.hemiFloor;
+    const winAmb = ambI * IL.windowFill;
+    const winHemi = hemiI * IL.windowFill + 0.03 * W * (0.25 + 0.75 * day);
+    ambI = ambI * (1 - I) + I * (closedAmb * (1 - W) + winAmb * W);
+    hemiI = hemiI * (1 - I) + I * (closedHemi * (1 - W) + winHemi * W);
+    const winMoon = IL.windowMoon * mUp * night * (0.35 + 0.65 * moonIllum);
+    const outdoorDirect = Math.max(sunI, moonI);
+    const shaft = (sunI > moonI ? sunI * IL.windowDirect : Math.max(moonI, winMoon)) * W;
+    const direct = outdoorDirect * (1 - I) + shaft * I;
+    sunI *= (1 - I) + I * W * IL.windowDirect;
+    moonI = (moonI * (1 - I)) + I * W * Math.max(moonI, winMoon);
+
+    const useSun = sunI >= moonI && sunI > 1e-4;
+    state.source = useSun ? 'sun' : (direct > 1e-4 ? 'moon' : 'none');
+    if (I > 0.4 && W > 0.05 && hasWindowDir) state.dir.copy(windowDirT);
+    else state.dir.copy(useSun ? sunDir : moonDir);
+    if (state.dir.y < 0.08 && state.dir.y > -0.2) { state.dir.y = 0.08; state.dir.normalize(); }
     if (useSun) state.color.setHex(S.sun).lerp(tmp.setHex(S.sunLow), low);
     else state.color.setHex(S.moonLight);
-    if (wx.tintAmt > 0) state.color.lerp(wxTint, wx.tintAmt * 0.4);
-    state.intensity = Math.max(sunI, moonI);
+    if (wx.tintAmt > 0 && day > 0.2) state.color.lerp(wxTint, wx.tintAmt * 0.4 * day);
+    state.intensity = direct;
 
-    // fog = exact horizon colour seen by the shader at y = 0 (gradient + haze band)
+    // fog: horizon colour outdoors; lerp to near-black at night / in closed rooms so geometry melts into void
     state.fogColor.copy(U.uHor.value).lerp(U.uHaze.value, wx.haze);
+    const darkMix = Math.max(night, I * 0.9);
+    state.fogColor.lerp(tmp.setHex(NL.fog), darkMix * NL.fogLerp);
     state.horizonColor.copy(U.uHor.value);
     state.zenithColor.copy(U.uZen.value);
     state.skyColor.copy(state.fogColor);
     U.uFogCol.value.copy(state.fogColor);
     state.ambientColor.setHex(L.ambColor).lerp(state.displayHorizon, 0.5);
-    state.ambientIntensity = L.amb * (0.3 + 0.7 * day) * (1 - dark * 0.3);
+    if (night > 0.4) state.ambientColor.lerp(tmp.setHex(S.moonLight), (night - 0.4) * 0.6);
+    state.ambientIntensity = ambI;
     // hemi sky: the preset's light colour pulled toward the current sky hue (same brightness)
     state.hemiSky.setHex(L.hemiSky);
     const hm = Math.max(state.hemiSky.r, state.hemiSky.g, state.hemiSky.b);
@@ -519,11 +614,12 @@ export function createSky(opts = {}) {
     tmp2.multiplyScalar(hm / Math.max(tmp2.r, tmp2.g, tmp2.b, 1e-3));
     state.hemiSky.lerp(tmp2, 0.45);
     if (night > 0.5) state.hemiSky.lerp(tmp2.setHex(S.moonLight), (night - 0.5) * 0.8);
-    state.hemiGround.setHex(L.hemiGround).multiplyScalar(0.35 + 0.65 * day);
-    state.hemiIntensity = L.hemi * (0.3 + 0.7 * day) * (1 - dark * 0.3);
+    state.hemiGround.setHex(L.hemiGround).multiplyScalar(0.25 + 0.75 * day * (1 - I));
+    state.hemiIntensity = hemiI;
     state.day = day; state.night = night;
     state.sunElevation = e; state.moonElevation = moonDir.y;
     state.weather = wxKey; state.environment = envKey; state.hour = hour;
+    state.interior = I; state.window = W; state.darkMix = darkMix;
   }
 
   const seedFog = () => {
@@ -535,7 +631,13 @@ export function createSky(opts = {}) {
     mesh, material, uniforms: U,
     /** dt seconds; o: { timeOfDay (hours 0..24), weather, environment, moonPhase (0 new..0.5 full..1), snap } */
     update(dt = 0, o = {}) {
-      if (o.timeOfDay !== undefined && o.timeOfDay !== hour) { hour = ((o.timeOfDay % 24) + 24) % 24; dirty = true; }
+      let jump = false;
+      if (o.timeOfDay !== undefined && o.timeOfDay !== hour) {
+        const next = ((o.timeOfDay % 24) + 24) % 24;
+        const dh = Math.abs(next - hour);
+        jump = dh > 0.75 && dh < 23.25; // setTime / sleep / capture — snap adaptation so we don't linger at daytime fill
+        hour = next; dirty = true;
+      }
       if (o.environment !== undefined) { const k = resolveEnv(o.environment); if (k !== envKey) { envKey = k; dirty = true; seedFog(); } }
       if (o.moonPhase !== undefined && o.moonPhase !== moonPhase) { moonPhase = o.moonPhase; dirty = true; }
       if (o.pipeline !== undefined && o.pipeline !== pipeline) {
@@ -551,12 +653,52 @@ export function createSky(opts = {}) {
       const a = o.snap ? 1 : 1 - Math.exp(-dt * 0.6);
       for (const k of WX_KEYS) { const t = T[k]; if (Math.abs(wx[k] - t) > 1e-4) { wx[k] += (t - wx[k]) * a; dirty = true; } }
       wxHaze.lerp(tmp.setHex(T.hazeCol), a); wxTint.lerp(tmp.setHex(T.tint), a);
+      if (o.interior !== undefined) {
+        const v = o.interior;
+        if (v && typeof v === 'object') {
+          if (v.amount !== undefined) interiorT = Math.min(1, Math.max(0, +v.amount));
+          if (v.window !== undefined) windowT = Math.min(1, Math.max(0, +v.window));
+          if (v.windowDir) { windowDirT.set(...(v.windowDir.toArray ? v.windowDir.toArray() : v.windowDir)).normalize(); hasWindowDir = true; dirty = true; }
+        } else interiorT = Math.min(1, Math.max(0, +v));
+      }
+      if (o.window !== undefined) windowT = Math.min(1, Math.max(0, +o.window));
+      if (o.windowDir) { windowDirT.set(...(o.windowDir.toArray ? o.windowDir.toArray() : o.windowDir)).normalize(); hasWindowDir = true; dirty = true; }
+      const ia = o.snap ? 1 : 1 - Math.exp(-dt * 1.8);
+      if (Math.abs(interior - interiorT) > 1e-4) { interior += (interiorT - interior) * ia; dirty = true; }
+      if (Math.abs(windowAmt - windowT) > 1e-4) { windowAmt += (windowT - windowAmt) * ia; dirty = true; }
+
       time += dt;
       U.uTime.value = time;
       cloudOff.x += dt * 0.012 * wx.drift; cloudOff.y += dt * 0.005 * wx.drift;
       if (dirty || a < 1) { recompute(); dirty = false; }
+
+      // eye-adaptation: ease applied fill toward the target (slow into darkness, faster into light)
+      const AL = ADAPT_LOOK;
+      const tau = (state.ambientIntensity + state.hemiIntensity + state.intensity)
+                < (applied.amb + applied.hemi + applied.intensity)
+        ? AL.tauDown : AL.tauUp;
+      const k = (o.snap || jump || !applied.ready) ? 1 : 1 - Math.exp(-dt / Math.max(tau, 1e-3));
+      applied.amb += (state.ambientIntensity - applied.amb) * k;
+      applied.hemi += (state.hemiIntensity - applied.hemi) * k;
+      applied.intensity += (state.intensity - applied.intensity) * k;
+      applied.fog.lerp(state.fogColor, k);
+      applied.ready = true;
+      // playable floor: never a crushed void (matches the reference's ~RGB 10 black)
+      const floor = AL.floor;
+      state.adapt = Math.max(0, applied.amb - state.ambientIntensity);
+      state.ambientIntensity = Math.max(floor, applied.amb);
+      state.hemiIntensity = Math.max(floor * 2, applied.hemi);
+      state.intensity = applied.intensity;
+      state.fogColor.copy(applied.fog);
+      U.uFogCol.value.copy(state.fogColor);
       return state;
     },
+    /** 0 = outdoors, 1 = fully enclosed. Also accepts { amount, window, windowDir, snap }. */
+    setInterior(amount, opts = {}) {
+      if (amount && typeof amount === 'object') return api.update(0, { interior: amount, snap: !!amount.snap });
+      return api.update(0, { interior: { amount, window: opts.window, windowDir: opts.windowDir }, snap: !!opts.snap });
+    },
+    get interior() { return interior; }, get window() { return windowAmt; },
     setWeather(w, snap = false) { return api.update(0, { weather: w, snap }); },
     setEnvironment(id) { return api.update(0, { environment: id, snap: true }); },
     setTime(h) { return api.update(0, { timeOfDay: h }); },
@@ -585,8 +727,9 @@ export function createSky(opts = {}) {
      *   pipeline: render/ pipeline -> setSun({direction,color,intensity}) + setFog({color}),
      *   distance: how far from sun.target the light is placed (default 30).
      */
-    applyTo({ sun, hemi, amb, fog, scene: sc, pipeline, distance = 30, fogOnly = false } = {}) {
+    applyTo({ sun, hemi, amb, fog, scene: sc, pipeline: pipe, flashlight, particles = true, distance = 30, fogOnly = false, motes } = {}) {
       const s = state;
+      const P = pipe || pipeline;
       if (sun && !fogOnly) {
         sun.color.copy(s.color); sun.intensity = s.intensity;
         const tgt = sun.target ? sun.target.position : new THREE.Vector3();
@@ -596,11 +739,93 @@ export function createSky(opts = {}) {
       if (amb && !fogOnly) { amb.color.copy(s.ambientColor); amb.intensity = s.ambientIntensity; }
       if (fog && fog.color) fog.color.copy(s.fogColor);
       if (sc && sc.background && sc.background.isColor) sc.background.copy(s.fogColor);
-      if (pipeline) {
-        if (!fogOnly && typeof pipeline.setSun === 'function') pipeline.setSun({ direction: s.dir, color: s.color, intensity: s.intensity });
-        if (typeof pipeline.setFog === 'function') pipeline.setFog({ color: s.fogColor });
+      if (P) {
+        if (!fogOnly && typeof P.setSun === 'function') P.setSun({ direction: s.dir, color: s.color, intensity: s.intensity });
+        if (typeof P.setFog === 'function') P.setFog({ color: s.fogColor });
+        if (!fogOnly) api._applyNightGrade(P);
+        if (!fogOnly && flashlight !== false) api._applyFlashlight(P, flashlight);
+        if (!fogOnly && particles) api._applyMotes(P, motes);
+      } else if (flashlight && flashlight.isLight && !fogOnly) {
+        const F = NIGHT_LOOK.flash;
+        if (s.darkMix > 0.05) flashlight.color.setHex(F.color);
       }
       return s;
+    },
+    getFlashlightState() {
+      const F = NIGHT_LOOK.flash, w = state.darkMix;
+      return { ...F, active: w > 0.05, mix: w };
+    },
+    getMoteConfig() {
+      const M = NIGHT_LOOK.motes, indoor = interior > 0.35;
+      return { ...M, box: indoor ? M.boxInterior.slice() : M.boxOutdoor.slice(), interior: indoor };
+    },
+    _hostFlash: null, _hostGrade: null, _motesOn: false, _hostMotes: null,
+    _applyNightGrade(P) {
+      if (!P.setGrade) return;
+      const NL = NIGHT_LOOK, w = state.darkMix;
+      let g = this._hostGrade;
+      if (!g && P.getEnvironmentConfig) {
+        try {
+          const E = P.getEnvironmentConfig();
+          if (E?.grade) g = this._hostGrade = {
+            lift: (E.grade.lift || [0, 0, 0]).slice(),
+            tint: (E.grade.tint || [1, 1, 1]).slice(),
+            warmKeep: E.grade.warmKeep ?? 1,
+            exposure: E.grade.exposure ?? 1,
+            brightness: E.grade.brightness ?? 1,
+            bloom: E.grade.bloom ?? 0.4,
+          };
+        } catch {}
+      }
+      if (!g) g = this._hostGrade = { lift: [0.02, 0.018, 0.012], tint: [1, 1, 1], warmKeep: 1, exposure: 1, brightness: 1, bloom: 0.4 };
+      const lerp = (a, b) => a + (b - a) * w;
+      P.setGrade({
+        lift: [lerp(g.lift[0], NL.lift[0]), lerp(g.lift[1], NL.lift[1]), lerp(g.lift[2], NL.lift[2])],
+        tint: [lerp(g.tint[0], NL.tint[0]), lerp(g.tint[1], NL.tint[1]), lerp(g.tint[2], NL.tint[2])],
+        warmKeep: lerp(g.warmKeep, NL.warmKeep),
+        brightness: lerp(g.brightness, NL.brightness),
+        bloom: lerp(g.bloom, NL.bloom),
+      });
+    },
+    _applyFlashlight(P, explicit) {
+      const F = NIGHT_LOOK.flash, w = state.darkMix;
+      const L = P.flashlight;
+      if (!this._hostFlash) {
+        this._hostFlash = { color: (L && L.color && L.color.getHex()) || 0xdfe8ff, intensity: 38, angle: 22, penumbra: 0.45, range: 26, scatter: 0.05, pitch: 0.12 };
+      }
+      if (!P.setFlashlight) return;
+      const lerp = (a, b) => a + (b - a) * w;
+      const H = this._hostFlash || F;
+      const args = {
+        color: w > 0.5 ? F.color : H.color,
+        intensity: lerp(H.intensity, F.intensity),
+        angle: lerp(H.angle, F.angle),
+        penumbra: lerp(H.penumbra, F.penumbra),
+        range: lerp(H.range, F.range),
+        scatter: lerp(H.scatter ?? 0.05, F.scatter),
+        pitch: lerp(H.pitch ?? 0.12, F.pitch),
+      };
+      if (explicit && typeof explicit === 'object' && !explicit.isLight) Object.assign(args, explicit);
+      P.setFlashlight(args);
+    },
+    _applyMotes(P, force) {
+      const parts = P.particles; if (!parts || !parts.setConfig) return;
+      const precip = /blizzard|sleet|rain|fallout_rain/.test(wxKey);
+      const want = (force === true) || (!precip && !force && state.darkMix > 0.35);
+      if (want && !this._motesOn) {
+        this._hostMotes = null; // seasonal config is re-applied by setEnvironment; we just overlay
+        const cfg = api.getMoteConfig();
+        parts.setConfig({ ...cfg, box: cfg.box });
+        if (parts.setCount && P.stats) { /* keep the tier's count; motes.countScale is a hint for Prime */ }
+        this._motesOn = true;
+      } else if (!want && this._motesOn) {
+        // restore the active seasonal particle config
+        try { const E = P.getEnvironmentConfig?.(); if (E?.particles) parts.setConfig(E.particles); } catch {}
+        this._motesOn = false;
+      } else if (want && this._motesOn) {
+        const cfg = api.getMoteConfig();
+        parts.setConfig({ box: cfg.box, wind: cfg.wind, fall: cfg.fall }); // box follows interior without a recompile
+      }
     },
     dispose() {
       mesh.removeFromParent();

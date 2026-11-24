@@ -414,3 +414,205 @@ Added without moving any existing decal frame (existing `uvRect`s are unchanged 
 Both are 128 px, 2 m/tile, RepeatWrapping, alphaTest 0.5. `makeEnvDecal('env_tex_snow_dust_light', { width, depth })` lays the light overlay.
 
 Previews: `previews/env_extras_sheet.png` (street-tree season strip, 3 m vs tight corner, ash road, new decal frames, dust comparison, and an intersection street with tight corners + street trees: late_fall + light dust, and winter + full dust).
+
+## Architecture set
+
+Doors, windows, trim, wall panels, interior dressing, furniture/room kits, and tiling floor/wall textures for the
+house, store, garage, clinic and warehouse interiors. They're built by `tools/arch.py` (`python3 models/tools/arch.py`,
+also run by `build_all.py` after `build_prototypes.build()`). Previews come from `tools/render_arch.py` (headless
+WebKit through `registry.js`).
+
+- **Files**: `arch/*.glb` (58 models), `arch/textures/*.png` (33 textures). The manifest section is `manifest.json` → `arch`.
+  It covers models, textures, atlas layout, decal frames and `roomKits`, plus the counts `arch_models`/`arch_textures`.
+- **Atlas and materials**: every GLB uses one 512 px atlas, `arch_atlas.png`, plus a 128 px MR map, `arch_atlas_mr.png`.
+  - The MR map follows glTF: G = roughness, B = metalness. Glass is the one glossy area (roughness ~0.45).
+  - Each mesh has 1 material: `arch_atlas` (opaque) or `arch_cutout` (the same atlas with alphaTest 0.5). Only
+    `window_broken` and `window_boarded_diagonal` use the cutout. Nothing is alpha-blended, so there's no sorting.
+  - Textures use NEAREST filtering, no mipmaps, SRGB and RepeatWrapping.
+- **Wear bands**: band 0 is `weathered` (summer, autumn, late_fall). Band 1 is `ashfall` (fallout_winter), at v + 0.5.
+  - `setArchSeason(season[, root])` swaps a shared material whose texture is a clone with `offset.y = 0.5`. It's the
+    same GPU image, so nothing is re-uploaded and no extra program is compiled.
+  - Up-facing facets use `*_top` swatches, which carry the ash in band 1.
+- **Conventions**: units are meters, faces are flat-shaded and geometry is non-indexed.
+  - Openings (doors/windows): x is centred, y = 0 is the bottom of the opening (threshold, or the sill for windows),
+    z = 0 is the exterior wall face, and +Z faces the street.
+  - Frames are authored for a **0.20 m wall** (z 0 to -0.20). For another thickness, use `scale.z = wall / 0.20`
+    (safe range 0.15-10 m).
+  - Props and furniture are ground-centred (min y = 0) and face +Z.
+- **Nodes**: each GLB is a root node named by id, with one child mesh per part. Doors have `frame` and `leaf` (the leaf
+  node sits on its pivot); everything else has `main`. 1 draw call per part.
+
+### Doors
+| door | opening (rough) | clear | motion | leaf pivot | notes |
+|---|---|---|---|---|---|
+| `door_residential_wood` | 0.98 × 2.09 (depth 0.2) | 0.92 × 2.06 | swing 90° | [-0.455, 0.0, -0.1] | Stained 6-panel slab 0.91 x 2.03 m, brass knob + deadbolt both faces, jambs + stops + threshold + casing on both faces. In-swing: rotation.y 0 -> +90 deg swings the leaf into the room (-Z). |
+| `door_storefront` | 1.1 × 2.17 (depth 0.115) | 1.0 × 2.12 | swing -90° | [-0.49, 0.0, -0.035] | Bronze-anodised aluminium frame + closer, glass leaf 0.98 x 2.09 m with interior push bar and exterior pull. Out-swing (egress): rotation.y 0 -> -90 deg swings the leaf out to the street (+Z). |
+| `door_garage_rollup` | 3.06 × 2.48 (depth 0.2) | 2.9 × 2.4 | roll (rollMin 0.07) | [0.0, 2.4, -0.11] | Rolling steel door: steel jambs, guide channels, exterior trim, coil hood on the interior face (top y 2.94: needs >= 3.0 m of wall inside). Leaf pivot = top centre of the curtain; open = leaf.scale.y 1 -> 0.07 (rolls into the hood, leaves the bottom bar under the header: 2.23 m clear). |
+| `door_boarded` | 0.98 × 2.09 (depth 0.2) | 0.92 × 2.06 | remove | [0.0, 0.0, 0.0] | Dark-trim residential frame + an old peeling painted slab 4 mm proud of the wall face (so it also works on an UNCUT wall), leaf = 4 planks + diagonal brace. setDoorOpen(obj, 1) hides the boards ("cleared"); the slab stays (swap to door_residential_wood if the player should enter). |
+
+- `setDoorOpen(obj, t)` takes t from 0 (closed) to 1 (open):
+  - swing: `leaf.rotation.y = hand · openAngle · t`.
+    - The residential door swings **in** (+90°, into the room, -Z).
+    - The storefront door swings **out** (-90°, to the street, +Z). It's an egress door.
+  - roll: `leaf.scale.y = 1 - 0.93 t`. The curtain rolls up into the interior hood, leaving 2.23 m clear. The hood top
+    is at y 2.94, so the wall needs at least 3.0 m on the inside.
+  - remove (boarded): the boards are hidden when t ≥ 0.5. The old slab stays.
+- **Hand**: `hand: 'R'` mirrors the geometry at load. It negates x and normal.x, swaps the triangle winding, mirrors
+  the pivot and flips the angle sign, so the hinge moves to +X.
+  - `makeArchInstanced` needs a separate call per hand, because InstancedMesh won't flip winding for negative-scale
+    instances. Never mirror by putting `scale.x = -1` on instances.
+- **Colliders**: `collider.frameBoxes` are the frame members, which are always solid. `collider.leafClosed` is the
+  closed leaf box. `collider.swingRadius` is the leaf width; keep that circle clear of furniture on the swing side.
+- `door_boards_overlay` (50 tris) is four planks plus a brace at z 0.03-0.10, so it sits in front of any casing.
+  - It's sized for 1.0 × 2.1 m.
+  - Scale it x 0.8-2.9 to cover anything up to the garage door, or x 2.2 / y 0.98 for a storefront window.
+
+### Windows
+- All windows are opaque glass: the front (+Z) has a baked faint interior and the back (-Z) has a hazy exterior.
+  They're glossy via the MR map.
+  - `window_cracked` adds a crack web.
+  - `window_broken` cuts an alphaTest hole, so you see the real room or street through it, with shards on the sill.
+  - `window_boarded` has 3 planks over a broken lite.
+  - `window_boarded_diagonal` is the concept-match window: crossed planks plus one slanted board over a broken lite.
+- **Opening**: residential windows are 0.90 × 1.20 (sill 0.90 m). Storefront is 2.40 × 1.80 (sill 0.45 m, frame
+  depth 0.115).
+- **Safe scales**: residential x 0.75-1.6, y 0.75-1.4. Storefront x 0.6-1.5, y 0.7-1.3.
+- **Boarded from inside**: the planks are on the exterior (+Z) face, so to board a window from the inside, place it
+  rotated 180° (the concept room does this).
+
+### All models
+| id | kind | tris | W × H × D (m) | collider | rooms | notes |
+|---|---|---|---|---|---|---|
+| `door_residential_wood` | door/swing | 158 | 1.09 × 2.15 × 0.25 | frame boxes + closed leaf, swing r 0.91 m | any, bedroom, living, kitchen | swing 90°, pivot [-0.455, 0.0, -0.1] |
+| `door_storefront` | door/swing | 142 | 1.10 × 2.17 × 0.20 | frame boxes + closed leaf, swing r 0.98 m | store, clinic | swing -90°, pivot [-0.49, 0.0, -0.035] |
+| `door_garage_rollup` | door/roll | 108 | 3.22 × 2.94 × 0.63 | frame boxes + closed leaf | garage, warehouse, store | roll, pivot [0.0, 2.4, -0.11] |
+| `door_boarded` | door/boarded | 120 | 1.17 × 2.15 × 0.31 | frame boxes + closed leaf | any | remove, pivot [0.0, 0.0, 0.0] |
+| `door_boards_overlay` | overlay/boards | 50 | 1.26 × 1.75 × 0.07 | none | any |  |
+| `window_intact` | window/residential | 142 | 1.12 × 1.38 × 0.32 | frame box | any |  |
+| `window_cracked` | window/residential | 142 | 1.12 × 1.38 × 0.32 | frame box | any |  |
+| `window_broken` | window/residential | 147 | 1.12 × 1.38 × 0.33 | frame box | any | cutout |
+| `window_boarded` | window/residential | 140 | 1.18 × 1.38 × 0.32 | frame box | any |  |
+| `window_boarded_diagonal` | window/residential | 140 | 1.14 × 1.38 × 0.36 | frame box | any, warehouse | cutout |
+| `window_storefront` | window/storefront | 50 | 2.44 × 1.82 × 0.16 | frame box | store, clinic |  |
+| `arch_baseboard_2m` | trim/baseboard | 4 | 2.00 × 0.09 × 0.01 | none | any |  |
+| `arch_wall_corrugated_1m` | wall_panel/panel | 46 | 1.00 × 2.40 × 0.04 | box | warehouse, garage |  |
+| `arch_wall_corrugated_2m` | wall_panel/panel | 86 | 2.00 × 2.40 × 0.04 | box | warehouse, garage |  |
+| `arch_wall_plank_1m` | wall_panel/panel | 14 | 1.00 × 2.40 × 0.02 | box | warehouse, garage, any |  |
+| `arch_wall_plank_2m` | wall_panel/panel | 16 | 2.00 × 2.40 × 0.02 | box | warehouse, garage, any |  |
+| `arch_glass_shards_a` | dressing/small | 6 | 0.33 × 0.01 × 0.32 | none | any |  |
+| `arch_glass_shards_b` | dressing/small | 14 | 0.65 × 0.01 × 0.53 | none | any |  |
+| `arch_glass_pane_fallen` | dressing/small | 35 | 0.90 × 0.13 × 0.64 | none | any |  |
+| `arch_glass_hanging` | dressing/small | 10 | 0.78 × 1.05 × 0.00 | none | any |  |
+| `arch_paper_pile` | dressing/small | 50 | 0.68 × 0.07 × 0.63 | none | any, clinic, store |  |
+| `arch_debris_pile` | dressing/small | 86 | 0.84 × 0.08 × 0.51 | none | any |  |
+| `arch_rubble_small` | dressing/small | 12 | 0.15 × 0.05 × 0.12 | none | any, warehouse |  |
+| `arch_rubble_medium` | dressing/small | 27 | 0.45 × 0.10 × 0.28 | none | any, warehouse |  |
+| `arch_rubble_large` | dressing/small | 42 | 0.82 × 0.20 × 0.59 | box | any, warehouse |  |
+| `arch_can` | dressing/small | 19 | 0.07 × 0.12 × 0.07 | none | any |  |
+| `arch_can_cluster` | dressing/small | 81 | 0.23 × 0.12 × 0.25 | none | any, kitchen, store |  |
+| `arch_pipe_straight` | dressing/small | 40 | 1.50 × 0.11 × 0.10 | none | warehouse, garage, any |  |
+| `arch_pipe_elbow` | dressing/small | 44 | 0.60 × 0.09 × 0.55 | none | warehouse, garage, any |  |
+| `arch_plank_loose` | dressing/small | 10 | 2.00 × 0.03 × 0.14 | none | any, warehouse |  |
+| `arch_plank_broken_a` | dressing/small | 12 | 1.12 × 0.03 × 0.14 | none | any, warehouse |  |
+| `arch_plank_broken_b` | dressing/small | 24 | 0.69 × 0.05 × 0.38 | none | any, warehouse |  |
+| `arch_plank_stack` | dressing/small | 60 | 1.91 × 0.15 × 0.70 | box | warehouse, garage |  |
+| `arch_chair` | furniture/furniture | 88 | 0.44 × 0.92 × 0.42 | box | kitchen, living, clinic, any | poses: overturned, on_side |
+| `arch_table` | furniture/furniture | 56 | 1.20 × 0.76 × 0.76 | box | kitchen, living, any | poses: overturned, on_side |
+| `arch_counter` | furniture/furniture | 112 | 1.84 × 0.90 × 0.64 | box | kitchen, store |  |
+| `arch_counter_sink` | furniture/furniture | 162 | 1.84 × 1.15 × 0.64 | box | kitchen, clinic |  |
+| `arch_shelf_metal` | furniture/furniture | 80 | 1.23 × 2.10 × 0.46 | box | warehouse, garage, store, any | poses: toppled |
+| `arch_shelf_metal_boxes` | furniture/furniture | 190 | 1.23 × 2.10 × 0.47 | box | warehouse, garage, store | poses: toppled |
+| `arch_box_small` | dressing/small | 10 | 0.42 × 0.30 × 0.32 | none | any |  |
+| `arch_box_large` | dressing/box | 10 | 0.70 × 0.52 × 0.52 | box | any, warehouse, store |  |
+| `arch_box_collapsed` | dressing/small | 14 | 0.69 × 0.16 × 0.70 | none | any |  |
+| `arch_crate_large` | furniture/crate | 70 | 1.14 × 0.85 × 0.89 | box | warehouse, garage, any |  |
+| `arch_crate_small` | furniture/crate | 74 | 0.64 × 0.48 × 0.54 | box | warehouse, garage, store, any |  |
+| `arch_crate_broken` | furniture/crate | 92 | 1.03 × 0.76 × 1.39 | box | warehouse, garage, any |  |
+| `arch_fridge` | furniture/kitchen | 36 | 0.76 × 1.70 × 0.70 | box | kitchen |  |
+| `arch_fridge_ajar` | furniture/kitchen | 46 | 0.79 × 1.70 × 1.16 | box | kitchen |  |
+| `arch_bed` | furniture/bedroom | 72 | 1.44 × 1.05 × 2.05 | box | bedroom |  |
+| `arch_bed_messy` | furniture/bedroom | 92 | 1.47 × 1.05 × 2.11 | box | bedroom |  |
+| `arch_couch` | furniture/living | 82 | 1.90 × 0.92 × 0.89 | box | living |  |
+| `arch_gondola_stocked` | furniture/store | 74 | 1.28 × 1.60 × 0.50 | box | store | poses: toppled |
+| `arch_gondola_looted` | furniture/store | 114 | 1.28 × 1.60 × 0.74 | box | store | poses: toppled |
+| `arch_cash_register` | dressing/store | 36 | 0.40 × 0.30 × 0.44 | none | store |  |
+| `arch_workbench` | furniture/garage | 138 | 1.80 × 1.75 × 0.72 | box | garage, warehouse |  |
+| `arch_tire` | dressing/garage | 80 | 0.66 × 0.63 × 0.20 | none | garage, warehouse |  |
+| `arch_tire_stack` | furniture/garage | 240 | 0.73 × 0.61 × 0.68 | box | garage, warehouse |  |
+| `arch_cot` | furniture/clinic | 119 | 0.74 × 0.54 × 1.90 | box | clinic, warehouse, any |  |
+| `arch_med_cabinet` | furniture/clinic | 70 | 0.82 × 1.83 × 0.43 | box | clinic | poses: toppled |
+
+- **Budgets**: doors 60-250, windows 20-150 (diagonal 160), small props 6-120 (no collider), furniture and room kits
+  30-350 (box colliders). Every model passes `tools/arch.py` checks: in budget, 0 degenerate triangles, 0 same-facing
+  coplanar overlaps (z-fight check).
+- **Poses** (`ARCH_CATALOG[id].poses`, `loadArchModel(id, loader, { pose })` or `archPoseMatrix(id, pose, x, z, yaw)`)
+  use the same mesh rotated and lifted onto the floor:
+  - `overturned` (onto its back) and `on_side`: chair, table.
+  - `toppled` (onto its front): the shelves, the gondolas and the medical cabinet.
+- `arch_cash_register` sits on `arch_counter` at y = 0.90. `arch_glass_hanging` sits at the window origin of a
+  boarded or empty frame. Wall panels are 1 or 2 m wide × 2.4 m, with the back face on z = 0, and snap along X.
+
+### Floors and walls (`arch/textures/`, `loadFloorTexture(id, { size: [w, d] })` sets repeat = size / metersPerTile)
+| texture | px | m/tile | variants |
+|---|---|---|---|
+| `floor_hardwood` | 128 | 2.0 | `_dirty` `_ash` |
+| `floor_linoleum` | 128 | 1.2 | `_dirty` `_ash` |
+| `floor_ceramic_tile` | 128 | 1.6 | `_dirty` `_ash` |
+| `floor_carpet` | 64 | 1.0 | `_dirty` `_ash` |
+| `floor_concrete_stained` | 128 | 4.0 | `_dirty` `_ash` |
+| `floor_wood_plank` | 128 | 2.0 | `_dirty` `_ash` |
+| `wall_corrugated` | 64 | 1.0 | `_dirty` `_ash` |
+| `wall_drywall` | 64 | 1.0 | `_dirty` `_ash` |
+| `wall_drywall_stained` | 64 | 1.0 | n/a |
+| `wall_wood_panel` | 64 | 1.0 | `_dirty` `_ash` |
+| `wall_brick` | 64 | 1.0 | `_dirty` `_ash` |
+
+- Every tiling texture passes the seam check in `render_arch.py`: the wrap step is no stronger than the strongest
+  interior step. Designed edge joints (the concrete saw-cut, the panel groove) are measured across the joint.
+- **Decals**: `arch_floor_decals.png` is 256 px, 4 × 4 cells. The 16 frames are in `ARCH_DECAL_FRAMES`:
+  rug_rect, rug_round, doormat, footprints, stain_water/oil/dark, puddle, debris, papers, glass_shards, ash_drift,
+  plaster, leaves, scorch, sawdust.
+  - `makeArchFloorDecals(n)` puts all of them in **one** InstancedMesh: `setDecalAt(i, frame, x, z, yaw, scale)`.
+    They're lifted 1 cm, with alphaTest and polygonOffset.
+- **Dust**: `makeArchDust(n, { min, max })` makes one `THREE.Points` draw call. Call `pts.userData.update(dt)` each frame.
+
+### Registry helpers (additive; generated block `// <arch-catalog>` + `// <arch-helpers>` from `tools/arch_helpers.js`)
+- Data exports: `ARCH_CATALOG`, `ARCH_TEXTURES`, `ARCH_ATLAS`, `ARCH_DECAL_FRAMES`, `ARCH_WEAR`.
+- Loading:
+  - `loadArchModel(id, loader, { wear, hand, open, pose })` returns a Group with `frame`/`leaf` or `main` children.
+  - `loadArchGeometry(id, part, { hand })` returns the shared geometry for one part.
+  - `getArchMaterial('atlas' | 'cutout', { wear })` returns the shared material.
+  - `archTexturesReady()` resolves once the arch textures are loaded.
+- Doors: `setDoorOpen(obj, t)` and `archLeafMatrix(id, t, hand)`.
+- Instancing: `makeArchInstanced(id, n, { part, wear, hand })` returns an InstancedMesh. For doors it returns a Group
+  with `.frame`/`.leaf` and `setDoorAt(i, matrix, t)`, which costs 2 draw calls for every door of that id.
+- Other helpers: `archPoseMatrix`, `setArchSeason`, `loadFloorTexture`, `makeArchFloorDecals`, `makeArchDust`.
+
+### Placement notes for Prime and Cartographer
+- **Wall cut-outs**: cut a hole of `opening.width × opening.height` from y = sill (doors use 0) and place the model at
+  the hole's bottom centre, on the exterior face. Casings overlap the wall face by 5-11 cm on both sides and stand
+  proud of it, so there's no z-fight.
+  - Rotate 180° to flip which side is the exterior.
+- **Uncut "mass" walls**: `door_boarded` and `window_boarded*` already carry their own backer/void, so they can be
+  stuck onto an uncut wall. Set `position.z = +0.004`. The interior half of the frame is buried in the wall and
+  unseen (see the "UNCUT wall" tiles in `arch_sheet.png`).
+  - Don't do this with open doors or `window_broken`: they need a real hole.
+- **Grid (2 m cells, 4 m walls)**:
+  - A 'D' cell takes `door_residential_wood` centred at x = 0 of the cell edge, or `door_storefront` on store blocks.
+  - The garage roll-up needs a 3.06 m hole, so two cells, and at least 3.0 m of wall height inside.
+  - Windows: sill 0.9 m for residential, 0.45 m for storefront.
+- **Room tags**: `manifest.arch.roomKits[room]` lists the models and textures for kitchen, bedroom, living, store,
+  garage, clinic, warehouse and any. Each model also carries `tags` (glass/papers/overturned/store/kitchen/...).
+- **Draw calls** (main pass, measured with `renderer.info` in `render_arch.py`):
+
+  | scene | draw calls | tris |
+  |---|---|---|
+  | facade (5 openings, roof, ground) | 19 | 881 |
+  | storefront strip | 17 | 774 |
+  | first-person interior | 23 (22 without the NPC) | about 2.0k |
+  | concept-match flashlight room (16 corrugated panels in 1 InstancedMesh call, 18 rubble instances in 2 calls) | 23 | 1902 |
+  | room-kit vignettes | 9-12 | 240-620 |
+
+  Instance repeated pieces with `makeArchInstanced`: baseboards, panels, rubble, cans, tires.
+- **Previews**: `previews/arch_sheet.png`, `previews/arch_in_context.png` (raw renders plus the seasonal-palette
+  quantise of each), `previews/arch_room_kits.png`.

@@ -4,13 +4,13 @@ import * as THREE from 'three';
 import {
   HEADER, FULLSCREEN_VERT, VOLUME_FRAG, BLOOM_PREFILTER_FRAG, BLOOM_DOWN_FRAG,
   BLOOM_UP_FRAG, COMPOSITE_FRAG, BLIT_FRAG,
-} from './shaders.js?v=r15.3';
-import { TIERS, TIER_ORDER, detectTier, AdaptiveQuality, CRT_PRESETS, LOOKS, getTierConfig, applyMobileQuality, isMobileDevice, isIOS } from './quality.js?v=r15.3';
-import { GRADE_ASHFALL, PALETTES, buildPaletteLUTGPU, releasePaletteLUTs, lutStats, resolvePalette } from './palette.js?v=r15.3';
-import { ENVIRONMENTS, ENVIRONMENT_ORDER, resolveEnvironment, environmentForChapter, getEnvironmentConfig } from './environments.js?v=r15.3';
-import { getBlueNoiseTexture } from './bluenoise.js?v=r15.3';
-import { fitSunShadow, setShadowMapSize, createFlashlight, createCampfire } from './lighting.js?v=r15.3';
-import { createParticles } from './particles.js?v=r15.3';
+} from './shaders.js?v=r16';
+import { TIERS, TIER_ORDER, detectTier, AdaptiveQuality, CRT_PRESETS, LOOKS, getTierConfig, applyMobileQuality, isMobileDevice, isIOS } from './quality.js?v=r16';
+import { GRADE_ASHFALL, PALETTES, buildPaletteLUTGPU, releasePaletteLUTs, lutStats, resolvePalette } from './palette.js?v=r16';
+import { ENVIRONMENTS, ENVIRONMENT_ORDER, resolveEnvironment, environmentForChapter, getEnvironmentConfig } from './environments.js?v=r16';
+import { getBlueNoiseTexture } from './bluenoise.js?v=r16';
+import { fitSunShadow, setShadowMapSize, createFlashlight, createCampfire } from './lighting.js?v=r16';
+import { createParticles } from './particles.js?v=r16';
 
 const MAX_POINTS = 4;
 const POINT_POOL = 2; // fixed number of scene PointLights for campfires (constant => no shader recompiles)

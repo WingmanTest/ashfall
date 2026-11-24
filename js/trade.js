@@ -1,7 +1,7 @@
 // Rev 2 traders (npcs.json traders[] + gameplay_hooks.barter): compact mobile trade modal.
 // Prices = items.json value × price_mult_by_act[act]. Payment is auto-barter from the bag:
 // wanted goods count at value / 0.7 (the "x0.7 price when paying in a wanted good" rule).
-import { addItem, takeItem } from "./inventory.js?v=r15.3";
+import { addItem, takeItem } from "./inventory.js?v=r16";
 
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const NEVER_PAY = new Set(["quest", "key"]);

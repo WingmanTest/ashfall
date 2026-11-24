@@ -179,9 +179,9 @@
     }
     /* B_round minimap: 180px on a 720-wide frame, top-right under the HUD (y=114). */
     #minimap {
-      pointer-events: none;
+      pointer-events: auto;
       position: absolute;
-      z-index: 6;
+      z-index: 8;
       right: calc(16 / 720 * 100%);
       top: calc(114 / 1280 * 100%);
       width: 25%;
@@ -190,7 +190,68 @@
       display: none;
       image-rendering: pixelated;
       image-rendering: crisp-edges;
+      cursor: pointer;
+      touch-action: manipulation;
     }
+    body.map-open #minimap { z-index: 32; }
+    #worldmap {
+      display: none;
+      position: absolute;
+      inset: 0;
+      z-index: 25;
+      background: rgba(10, 13, 18, 0.96);
+      color: var(--ice);
+      pointer-events: auto;
+      flex-direction: column;
+    }
+    #worldmap.show { display: flex; }
+    #worldmap-bar {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px 6px;
+      border-bottom: 1px solid #2a3340;
+    }
+    #worldmap-title {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: var(--ice);
+    }
+    #worldmap-close {
+      appearance: none;
+      background: transparent;
+      color: var(--ice);
+      border: 1px solid var(--ice);
+      width: 36px; height: 36px;
+      font: inherit;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+    #worldmap-close:hover, #worldmap-close:active { background: var(--ice); color: var(--ink); }
+    #worldmap-canvas {
+      flex: 1 1 auto;
+      width: 100%;
+      height: auto;
+      display: block;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+    #worldmap-hint {
+      flex: 0 0 auto;
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      text-align: center;
+      padding: 6px 8px max(10px, env(safe-area-inset-bottom));
+    }
+    body.map-open #touch,
+    body.map-open #touch * { pointer-events: none !important; }
+    body.map-open #touch { opacity: 0; }
+    body.map-open #ui { z-index: 20; }
+    body.map-open #hud { visibility: hidden; }
 
     /* Dialogue / inventory panels */
     #panel {
@@ -439,9 +500,17 @@
 </head>
 <body class="wield-melee">
   <div id="frame">
-    <div id="build-tag">r15.3</div>
+    <div id="build-tag">r16</div>
     <canvas id="view" width="180" height="320"></canvas>
     <canvas id="minimap" width="180" height="180"></canvas>
+    <div id="worldmap" hidden>
+      <div id="worldmap-bar">
+        <div id="worldmap-title">MAP</div>
+        <button type="button" id="worldmap-close" aria-label="Close map">X</button>
+      </div>
+      <canvas id="worldmap-canvas"></canvas>
+      <div id="worldmap-hint">TAP MAP OR X TO CLOSE</div>
+    </div>
     <canvas id="hud" width="360" height="640"></canvas>
     <div id="ui">
       <div id="title" class="screen show top-safe">
@@ -507,8 +576,8 @@
     </div>
   </div>
   <script>
-    window.__ASHFALL_EXPECTED_BUILD = "r15.3";
-    window.__ASHFALL_BUILD = "r15.3";
+    window.__ASHFALL_EXPECTED_BUILD = "r16";
+    window.__ASHFALL_BUILD = "r16";
     window.__ASHFALL_BOOTED = false;
     window.__ASHFALL_MODULE = false;
     window.__ASHFALL_PENDING = null;
@@ -594,12 +663,12 @@
       setTimeout(function () {
         if (window.__ASHFALL_BOOTED) return;
         if (window.__ASHFALL_MODULE) {
-          showBanner("The game file loaded, but startup is stuck (often a Safari WebGL or cache issue). Wait a moment, or clear this site's data and reload. Build r15.3.");
+          showBanner("The game file loaded, but startup is stuck (often a Safari WebGL or cache issue). Wait a moment, or clear this site's data and reload. Build r16.");
         } else {
-          showBanner("The game never started — the script did not load. If you opened this from an older Home Screen icon, delete it and reopen the page, or clear Safari cache for this site. Build r15.3.");
+          showBanner("The game never started — the script did not load. If you opened this from an older Home Screen icon, delete it and reopen the page, or clear Safari cache for this site. Build r16.");
         }
       }, 4000);
-      var EXPECTED = window.__ASHFALL_EXPECTED_BUILD || "r15.3";
+      var EXPECTED = window.__ASHFALL_EXPECTED_BUILD || "r16";
       window.__ashfallBustStaleBuild = function (found) {
         var key = "ashfall-bust-" + EXPECTED;
         var reloadOnce = function () {
@@ -638,12 +707,12 @@
         if (window.__ASHFALL_BOOTED || buildChecks > 80) clearInterval(buildTimer);
       }, 50);
       if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("./sw.js?v=r15.3", { scope: "./" }).then(function (reg) {
+        navigator.serviceWorker.register("./sw.js?v=r16", { scope: "./" }).then(function (reg) {
           try { reg.update(); } catch (err) {}
         }).catch(function () {});
       }
     })();
   </script>
-  <script type="module" src="./js/game.js?v=r15.3" onerror="window.__ASHFALL_MODULE_ERR=true; if (window.__ashfallBootFail) window.__ashfallBootFail('The game script failed to load. Try a hard refresh or clear this site\\'s data. Build r15.3.');"></script>
+  <script type="module" src="./js/game.js?v=r16" onerror="window.__ASHFALL_MODULE_ERR=true; if (window.__ashfallBootFail) window.__ashfallBootFail('The game script failed to load. Try a hard refresh or clear this site\\'s data. Build r16.');"></script>
 </body>
 </html>

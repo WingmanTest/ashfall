@@ -1,5 +1,5 @@
 /** B_round minimap: fixed-north circular map, per Cartographer NOTES.md. */
-import { currentMainObjective } from "./questTrack.js?v=r15.3";
+import { currentMainObjective } from "./questTrack.js?v=r16";
 
 const PLOT = 78;
 const BEZEL = 6;
@@ -525,6 +525,7 @@ export function createMinimap(canvas) {
   }
 
   function tick(game, now) {
+    view._ashGame = game;
     const mode = game.mode;
     const show = mode === "play" || mode === "dialogue";
     view.style.display = show ? "block" : "none";
@@ -543,7 +544,208 @@ export function createMinimap(canvas) {
     try { draw(game); } catch (err) {
       if (!tick._warned) { tick._warned = true; console.warn("[minimap]", err); }
     }
+    if (api.isOpen()) drawWorldMap(game);
   }
 
-  return { tick, draw, canvas: view };
+  const api = { tick, draw, canvas: view, isOpen: () => false, open() {}, close() {}, toggle() {} };
+  bindWorldMap(api, view, tick);
+  return api;
+}
+
+function buildingLabel(b) {
+  return String(b?.label || b?.name || "").trim();
+}
+
+function bindWorldMap(api, mini, tick) {
+  const wrap = document.getElementById("worldmap");
+  const canvas = document.getElementById("worldmap-canvas");
+  const closeBtn = document.getElementById("worldmap-close");
+  if (!wrap || !canvas) return;
+  let open = false;
+  let gameRef = null;
+
+  function setOpen(on, game) {
+    open = !!on;
+    if (game) gameRef = game;
+    const g = game || gameRef;
+    wrap.classList.toggle("show", open);
+    wrap.hidden = !open;
+    document.body.classList.toggle("map-open", open);
+    if (g) {
+      g._mapOpen = open;
+      if (open) {
+        document.exitPointerLock?.();
+        try { g.input?.resetTouch?.(); } catch {}
+        drawWorldMap(g);
+      }
+    }
+  }
+  api.isOpen = () => open;
+  api.open = (game) => setOpen(true, game);
+  api.close = (game) => setOpen(false, game);
+  api.toggle = (game) => setOpen(!open, game);
+
+  const onToggle = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    gameRef = mini._ashGame || gameRef || window.__ASHFALL_GAME;
+    setOpen(!open, gameRef);
+  };
+  mini.addEventListener("pointerdown", onToggle);
+  mini.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); });
+  closeBtn?.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); setOpen(false, gameRef); });
+  wrap.addEventListener("click", (e) => {
+    if (e.target === wrap || e.target.id === "worldmap-hint" || e.target.id === "worldmap-bar" || e.target.id === "worldmap-title") {
+      setOpen(false, gameRef);
+    }
+  });
+}
+
+export function drawWorldMap(game) {
+  const canvas = document.getElementById("worldmap-canvas");
+  const wrap = document.getElementById("worldmap");
+  if (!canvas || !wrap || !wrap.classList.contains("show")) return;
+  const L = game.levelRuntime?.L;
+  const p = game.player;
+  if (!L?.grid || !p) return;
+  const g = L.grid;
+  const cs = g.cellSize || 2;
+  const tiles = g.tiles || [];
+  const legend = g.legend || {};
+  const cols = g.cols || (tiles[0] && tiles[0].length) || 1;
+  const rows = g.rows || tiles.length || 1;
+  const origin = g.origin || { x: 0, z: 0 };
+  const worldW = cols * cs;
+  const worldH = rows * cs;
+
+  const bar = document.getElementById("worldmap-bar");
+  const hint = document.getElementById("worldmap-hint");
+  const cssW = Math.max(64, wrap.clientWidth || 390);
+  const cssH = Math.max(64, (wrap.clientHeight || 844) - (bar?.offsetHeight || 40) - (hint?.offsetHeight || 28));
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  if (canvas.width !== Math.round(cssW * dpr) || canvas.height !== Math.round(cssH * dpr)) {
+    canvas.width = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
+    canvas.style.width = cssW + "px";
+    canvas.style.height = cssH + "px";
+  }
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = "#0a0d12";
+  ctx.fillRect(0, 0, W, H);
+
+  const padL = Math.round(22 * dpr);
+  const padR = Math.round(52 * dpr); // leave the corner minimap chip clear
+  const padT = Math.round(36 * dpr);
+  const padB = Math.round(16 * dpr);
+  const scale = Math.min((W - padL - padR) / worldW, (H - padT - padB) / worldH);
+  const ox = padL + (W - padL - padR - worldW * scale) / 2;
+  const oy = padT + (H - padT - padB - worldH * scale) / 2;
+  const toS = (x, z) => [ox + (x - origin.x) * scale, oy + (z - origin.z) * scale];
+
+  // Terrain
+  for (let r = 0; r < rows; r++) {
+    const row = tiles[r] || "";
+    for (let c = 0; c < cols; c++) {
+      const ch = row[c];
+      const col = tileColor(legend[ch]);
+      const [sx, sy] = toS(origin.x + c * cs, origin.z + r * cs);
+      ctx.fillStyle = `rgb(${col[0]},${col[1]},${col[2]})`;
+      ctx.fillRect(sx, sy, Math.ceil(cs * scale) + 0.5, Math.ceil(cs * scale) + 0.5);
+    }
+  }
+
+  // Building footprints (subtle)
+  ctx.lineWidth = Math.max(1, 1 * dpr);
+  for (const b of L.buildings || []) {
+    const R = b.rect;
+    if (!R) continue;
+    const minX = Math.min(R.x0, R.x1), maxX = Math.max(R.x0, R.x1);
+    const minZ = Math.min(R.z0, R.z1), maxZ = Math.max(R.z0, R.z1);
+    const [x0, y0] = toS(minX, minZ);
+    const [x1, y1] = toS(maxX, maxZ);
+    ctx.strokeStyle = "rgba(200,220,230,0.35)";
+    ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+  }
+
+  // Objective
+  const obj = boundObjectivePosition(game);
+  if (obj) {
+    const [sx, sy] = toS(obj.x, obj.z);
+    const s = Math.max(5, 6 * dpr);
+    ctx.fillStyle = "rgb(80, 220, 230)";
+    ctx.beginPath();
+    ctx.moveTo(sx, sy - s);
+    ctx.lineTo(sx + s, sy);
+    ctx.lineTo(sx, sy + s);
+    ctx.lineTo(sx - s, sy);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // Player
+  {
+    const [sx, sy] = toS(p.x, p.z);
+    const yaw = p.yaw || 0;
+    const lookAng = Math.atan2(-Math.sin(yaw), Math.cos(yaw));
+    const canvasFwd = lookAng - Math.PI / 2;
+    ctx.save();
+    ctx.translate(sx, sy);
+    ctx.rotate(canvasFwd + Math.PI / 2);
+    const s = Math.max(5, 6 * dpr);
+    ctx.fillStyle = "#e8eef4";
+    ctx.beginPath();
+    ctx.moveTo(0, -s * 1.2);
+    ctx.lineTo(s * 0.75, s * 0.8);
+    ctx.lineTo(0, s * 0.4);
+    ctx.lineTo(-s * 0.75, s * 0.8);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = "rgb(80, 220, 230)";
+    ctx.fillRect(-s * 0.22, -s * 0.2, s * 0.44, s * 0.75);
+    ctx.restore();
+  }
+
+  // Building name labels ABOVE each building (toward north / top of the map)
+  ctx.font = `${Math.max(10, Math.round(11 * dpr))}px ui-monospace, Cascadia Code, DejaVu Sans Mono, monospace`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "bottom";
+  ctx.letterSpacing = "0.08em";
+  const placed = [];
+  const labels = [];
+  for (const b of L.buildings || []) {
+    const name = buildingLabel(b);
+    if (!name) continue;
+    const R = b.rect;
+    if (!R) continue;
+    const cx = (R.x0 + R.x1) / 2;
+    const minZ = Math.min(R.z0, R.z1);
+    labels.push({ name, cx, minZ, w: Math.abs(R.x1 - R.x0) });
+  }
+  labels.sort((a, b) => a.minZ - b.minZ);
+  for (const lab of labels) {
+    let [sx, sy] = toS(lab.cx, lab.minZ);
+    sy -= 4 * dpr;
+    const tw = ctx.measureText(lab.name).width;
+    let ly = sy;
+    for (let k = 0; k < 8; k++) {
+      const hit = placed.some((q) => Math.abs(q.x - sx) < (q.w + tw) / 2 + 4 && Math.abs(q.y - ly) < 14 * dpr);
+      if (!hit) break;
+      ly -= 12 * dpr;
+    }
+    placed.push({ x: sx, y: ly, w: tw });
+    ctx.fillStyle = "rgba(10,13,18,0.72)";
+    ctx.fillRect(sx - tw / 2 - 3 * dpr, ly - 12 * dpr, tw + 6 * dpr, 14 * dpr);
+    ctx.fillStyle = "#e8eef4";
+    ctx.fillText(lab.name, sx, ly);
+  }
+
+  // Gold N at the top of the plot
+  ctx.fillStyle = "rgb(212,168,58)";
+  ctx.font = `${Math.max(10, Math.round(10 * dpr))}px ui-monospace, monospace`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText("N", W / 2, Math.max(10 * dpr, oy - 10 * dpr));
 }

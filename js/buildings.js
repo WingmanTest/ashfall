@@ -1,6 +1,7 @@
 // Visual dressing for Cartographer solid tiles. Colliders stay merged AABBs.
 import * as THREE from "three";
-import { fitHeight } from "./world.js?v=r15.3";
+import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
+import { fitHeight } from "./world.js?v=r16";
 
 export const KENNEY_BUILDINGS = [
   "assets/kenney/industrial/building-a.glb",
@@ -342,4 +343,145 @@ export function instanceSmallBoxes(group, maxDim = 2.2) {
     merged += b.items.length;
   }
   return merged;
+}
+
+/** Authored opening sizes (meters). Sill is 0 for doors. */
+export const ARCH_OPENINGS = {
+  door_residential_wood: { width: 0.98, height: 2.09, sill: 0, depth: 0.20 },
+  door_storefront: { width: 1.10, height: 2.17, sill: 0, depth: 0.115 },
+  door_garage_rollup: { width: 3.06, height: 2.48, sill: 0, depth: 0.20 },
+  door_boarded: { width: 0.98, height: 2.09, sill: 0, depth: 0.20 },
+  window_intact: { width: 0.90, height: 1.20, sill: 0.90, depth: 0.20 },
+  window_cracked: { width: 0.90, height: 1.20, sill: 0.90, depth: 0.20 },
+  window_broken: { width: 0.90, height: 1.20, sill: 0.90, depth: 0.20 },
+  window_boarded: { width: 0.90, height: 1.20, sill: 0.90, depth: 0.20 },
+  window_boarded_diagonal: { width: 0.90, height: 1.20, sill: 0.90, depth: 0.20 },
+  window_storefront: { width: 2.40, height: 1.80, sill: 0.45, depth: 0.115 },
+};
+
+/** Subtract axis-aligned rectangles in 2D (x/y). */
+export function subtractRects(rects, hole) {
+  const out = [];
+  for (const r of rects) {
+    const x0 = Math.max(r.x0, hole.x0), x1 = Math.min(r.x1, hole.x1);
+    const y0 = Math.max(r.y0, hole.y0), y1 = Math.min(r.y1, hole.y1);
+    if (x0 >= x1 - 1e-4 || y0 >= y1 - 1e-4) { out.push(r); continue; }
+    if (r.x0 < hole.x0 - 1e-4) out.push({ x0: r.x0, x1: hole.x0, y0: r.y0, y1: r.y1 });
+    if (r.x1 > hole.x1 + 1e-4) out.push({ x0: hole.x1, x1: r.x1, y0: r.y0, y1: r.y1 });
+    const mx0 = Math.max(r.x0, hole.x0), mx1 = Math.min(r.x1, hole.x1);
+    if (mx1 - mx0 > 1e-4) {
+      if (r.y0 < hole.y0 - 1e-4) out.push({ x0: mx0, x1: mx1, y0: r.y0, y1: hole.y0 });
+      if (r.y1 > hole.y1 + 1e-4) out.push({ x0: mx0, x1: mx1, y0: hole.y1, y1: r.y1 });
+    }
+  }
+  return out;
+}
+
+/**
+ * Split a wall AABB into leftover boxes around openings.
+ * openings: { axis: 'x'|'z', along, y0, width, height }
+ * `axis` is the thin axis the hole goes through; `along` is the hole centre on the long axis.
+ */
+export function cutWallBoxes(box, openings, h) {
+  const height = h ?? box.h ?? (box.maxY - (box.minY || 0));
+  const minY = box.minY || 0;
+  const longX = (box.maxX - box.minX) >= (box.maxZ - box.minZ);
+  let rects = longX
+    ? [{ x0: box.minX, x1: box.maxX, y0: minY, y1: minY + height }]
+    : [{ x0: box.minZ, x1: box.maxZ, y0: minY, y1: minY + height }];
+  for (const op of openings || []) {
+    const along = op.along;
+    const half = (op.width || 1) / 2;
+    const y0 = (op.y0 ?? op.sill ?? 0);
+    const y1 = y0 + (op.height || 1);
+    const hole = { x0: along - half, x1: along + half, y0, y1 };
+    rects = subtractRects(rects, hole);
+  }
+  const pieces = [];
+  for (const r of rects) {
+    if (r.x1 - r.x0 < 0.04 || r.y1 - r.y0 < 0.04) continue;
+    if (longX) {
+      pieces.push({ minX: r.x0, maxX: r.x1, minZ: box.minZ, maxZ: box.maxZ, minY: r.y0, maxY: r.y1 });
+    } else {
+      pieces.push({ minX: box.minX, maxX: box.maxX, minZ: r.x0, maxZ: r.x1, minY: r.y0, maxY: r.y1 });
+    }
+  }
+  return pieces;
+}
+
+export function openingsHittingBox(openings, box, pad = 0.35) {
+  const hit = [];
+  for (const op of openings || []) {
+    const half = (op.width || 1) / 2 + pad;
+    const thin = op.axis || ((box.maxX - box.minX) >= (box.maxZ - box.minZ) ? "z" : "x");
+    if (thin === "z") {
+      if (op.z < box.minZ - pad || op.z > box.maxZ + pad) continue;
+      if (op.along + half < box.minX || op.along - half > box.maxX) continue;
+    } else {
+      if (op.x < box.minX - pad || op.x > box.maxX + pad) continue;
+      if (op.along + half < box.minZ || op.along - half > box.maxZ) continue;
+    }
+    hit.push(op);
+  }
+  return hit;
+}
+
+/** Build a (possibly punched) wall mesh. No colliders are added here. */
+export function addPunchedWall(scene, box, h, mat, tile, openings) {
+  const holes = openingsHittingBox(openings, box);
+  const longX = (box.maxX - box.minX) >= (box.maxZ - box.minZ);
+  if (!holes.length) {
+    const mesh = boxMesh(box.w ?? (box.maxX - box.minX), h, box.d ?? (box.maxZ - box.minZ), mat, tile);
+    mesh.position.set(box.cx ?? (box.minX + box.maxX) / 2, h / 2, box.cz ?? (box.minZ + box.maxZ) / 2);
+    mesh.userData.kind = "wall";
+    scene.add(mesh);
+    return mesh;
+  }
+  const pieces = cutWallBoxes(box, holes.map((op) => ({
+    ...op,
+    along: op.along,
+    width: op.width,
+    height: op.height,
+    y0: op.y0 ?? op.sill ?? 0,
+  })), h);
+  const geos = [];
+  for (const p of pieces) {
+    const w = p.maxX - p.minX, d = p.maxZ - p.minZ, hh = p.maxY - p.minY;
+    if (w < 0.03 || d < 0.03 || hh < 0.03) continue;
+    const geo = new THREE.BoxGeometry(w, hh, d);
+    applyWorldUV(geo, tile);
+    geo.translate((p.minX + p.maxX) / 2, (p.minY + p.maxY) / 2, (p.minZ + p.maxZ) / 2);
+    geos.push(geo);
+  }
+  if (!geos.length) return null;
+  const merged = mergeGeometries(geos, false);
+  for (const g of geos) g.dispose();
+  const mesh = new THREE.Mesh(merged, mat);
+  mesh.castShadow = h >= 1.2;
+  mesh.receiveShadow = true;
+  mesh.userData.kind = "wall_cut";
+  mesh.userData.openings = holes.length;
+  scene.add(mesh);
+  return mesh;
+}
+
+export function isWalledBuildingWall(box, walledRects, pad = 0.6) {
+  for (const b of walledRects || []) {
+    const overlap = !(box.maxX < b.minX - pad || box.minX > b.maxX + pad || box.maxZ < b.minZ - pad || box.minZ > b.maxZ + pad);
+    if (overlap) return true;
+  }
+  return false;
+}
+
+export function walledBuildingBoxes(L) {
+  const out = [];
+  for (const b of L?.buildings || []) {
+    if (b.kind !== "walled" || !b.rect) continue;
+    const r = b.rect;
+    out.push({
+      id: b.id, label: b.label, minX: Math.min(r.x0, r.x1), maxX: Math.max(r.x0, r.x1),
+      minZ: Math.min(r.z0, r.z1), maxZ: Math.max(r.z0, r.z1),
+    });
+  }
+  return out;
 }

@@ -1,19 +1,23 @@
 // Cartographer chapter loader. Builds geometry from levels/*.json (do not edit those files).
 import * as THREE from "three";
-import { CFG } from "./config.js?v=r15.3";
-import { fitHeight, makePerson, makeDog } from "./world.js?v=r15.3";
-import { evalCondition, applyEffects, setFlag } from "./story.js?v=r15.3";
-import { rollContainer, aliasItem } from "./systems.js?v=r15.3";
-import { addItem, takeItem, hasItems } from "./inventory.js?v=r15.3";
-import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings, instanceSmallBoxes } from "./buildings.js?v=r15.3";
-import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r15.3";
-import { coverBuildingRoofs, extractShingleMaterial, fallbackShingleMat } from "./roofs.js?v=r15.3";
-import { startTracking } from "./companionCmd.js?v=r15.3";
-import { bindNpc, disposeMixer } from "./npcWander.js?v=r15.3";
+import { CFG } from "./config.js?v=r16";
+import { fitHeight, makePerson, makeDog } from "./world.js?v=r16";
+import { evalCondition, applyEffects, setFlag } from "./story.js?v=r16";
+import { rollContainer, aliasItem } from "./systems.js?v=r16";
+import { addItem, takeItem, hasItems } from "./inventory.js?v=r16";
+import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings, instanceSmallBoxes, addPunchedWall, walledBuildingBoxes, isWalledBuildingWall } from "./buildings.js?v=r16";
+import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r16";
+import { coverBuildingRoofs, extractShingleMaterial, fallbackShingleMat } from "./roofs.js?v=r16";
+import { startTracking } from "./companionCmd.js?v=r16";
+import { bindNpc, disposeMixer } from "./npcWander.js?v=r16";
 import {
   loadGroundOverlay, floorSkipSet, decorateFloorMaterial,
   applyGroundDressing, tickGroundDressing, replacesSagebrush,
-} from "./groundDressing.js?v=r15.3";
+} from "./groundDressing.js?v=r16";
+import {
+  loadInteriorOverlay, collectOpenings, applyInteriorDressing,
+  tickInteriorDressing, toggleArchDoor, auditQuestAccess,
+} from "./interiorDressing.js?v=r16";
 
 const SNOW_HEX = 0xeef2f6;
 function stripSnow(obj) {
@@ -409,6 +413,8 @@ export class LevelRuntime {
     world.pbrCache = pbrCache;
 
     this._ground = await loadGroundOverlay(L.id);
+    this._interiorOverlay = await loadInteriorOverlay(L.id);
+    this._archOpenings = collectOpenings(L, this._interiorOverlay);
     const skipFloor = floorSkipSet(this._ground);
 
     // Floors grouped by legend char
@@ -573,11 +579,12 @@ export class LevelRuntime {
         const tex = await getPbr(t.wallTex);
         mat = pbrMat(tex, 0xffffff);
       }
-      const mesh = boxMesh(box.w, h, box.d, mat, tile);
-      mesh.position.set(box.cx, h / 2, box.cz);
-      scene.add(mesh);
-      if (h < 2.2) world.farProps.push(mesh);
-      if (h >= 2.4 && rec.ch !== "f") addFacadeDetails(scene, { ...box, h, y0: 0 }, facadeMats);
+      const walled = walledBuildingBoxes(L);
+      const openings = this._archOpenings?.all || [];
+      const punched = addPunchedWall(scene, box, h, mat, tile, openings);
+      if (h < 2.2 && punched) world.farProps.push(punched);
+      const skipFacade = rec.ch === "f" || isWalledBuildingWall(box, walled);
+      if (h >= 2.4 && !skipFacade) addFacadeDetails(scene, { ...box, h, y0: 0 }, facadeMats);
       if (snowMat && h >= 1.2 && rec.ch !== "G") {
         const cap = snowCap(box.w, box.d, h, snowMat, rec.ch === "H" ? 0.14 : 0.08);
         cap.position.x = box.cx;
@@ -619,6 +626,13 @@ export class LevelRuntime {
       await applyGroundDressing(this, this._ground, scene, world);
     } catch (err) {
       console.warn("[ground] apply failed", err);
+    }
+    try {
+      await applyInteriorDressing(this, this._interiorOverlay, scene, world, L, this._archOpenings);
+      this._accessAudit = auditQuestAccess(world, L, this._archOpenings);
+      window.__ASHFALL_AUDIT_DOORS = () => auditQuestAccess(this.world, this.L, this._archOpenings);
+    } catch (err) {
+      console.warn("[interior] apply failed", err);
     }
 
     if (!this._shingleMat) {
@@ -1164,6 +1178,7 @@ export class LevelRuntime {
     this.tickEncounters(game.player.x, game.player.z);
     this.tickTriggers(game);
     tickGroundDressing(this, game.player, dt);
+    tickInteriorDressing(this, game.player, dt);
   }
 
   _updateGates() {
@@ -1371,6 +1386,9 @@ export class LevelRuntime {
   }
 
   useInteractive(it, game) {
+    if (it && it.type === "door") {
+      return toggleArchDoor(it, game);
+    }
     const check = (w) => evalWhen(w, this.ctx());
     if (it.when && !check(it.when)) { game.hud.say("Not now."); return false; }
     if (it.requiresFlags && !evalWhen(it.requiresFlags.map ? it.requiresFlags : it.requiresFlags, this.ctx())
