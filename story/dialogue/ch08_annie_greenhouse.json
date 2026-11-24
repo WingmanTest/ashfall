@@ -1,0 +1,103 @@
+{
+  "id": "ch08_annie_greenhouse",
+  "chapter": "ch08",
+  "location": "loc_sparks_library",
+  "trigger": "Annie's library atrium (q_annie_greenhouse).",
+  "speakers": [
+    "narrator",
+    "trader_annie",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "The Sparks library atrium. Glass roof, gray with ash. Rows of seed trays under blankets. Annie, in two coats.",
+      "next": "a1"
+    },
+    {
+      "id": "a1",
+      "speaker": "trader_annie",
+      "text": "You came. I've been keeping them alive with candles. Candles are not a long-term agricultural solution.",
+      "next": "a2"
+    },
+    {
+      "id": "a2",
+      "speaker": "trader_annie",
+      "text": "If Galena runs, a heat line here would make this a greenhouse. Kale, potatoes, beans. Food in the dark.",
+      "choices": [
+        {
+          "text": "I'll run the line. Spring.",
+          "next": "yes",
+          "effects": [
+            {
+              "quest": "q_annie_greenhouse",
+              "state": "start"
+            },
+            {
+              "add": "trader_annie_rep",
+              "value": 2
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "[Trade batteries for iodide]",
+          "next": "trade",
+          "conditions": [
+            {
+              "item": "batteries",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "batteries",
+              "qty": 1
+            },
+            {
+              "give": "iodide_tablets",
+              "qty": 2
+            },
+            {
+              "add": "trader_annie_rep",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "Galena can't heat everything.",
+          "next": "no"
+        }
+      ]
+    },
+    {
+      "id": "yes",
+      "speaker": "trader_annie",
+      "text": "Thank you. I'll keep the seeds alive until you do. That's a promise between librarians and mechanics.",
+      "next": "end"
+    },
+    {
+      "id": "trade",
+      "speaker": "trader_annie",
+      "text": "Iodide. Good trade for a bad sky.",
+      "next": "end"
+    },
+    {
+      "id": "no",
+      "speaker": "trader_annie",
+      "text": "No. But it could heat this. Think about it. The seeds will wait. Seeds are patient.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "The seedlings lean toward the one candle. So does Annie.",
+      "end": true
+    }
+  ]
+}

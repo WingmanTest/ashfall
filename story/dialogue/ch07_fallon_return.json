@@ -1,0 +1,152 @@
+{
+  "id": "ch07_fallon_return",
+  "chapter": "ch07",
+  "location": "loc_us50_fallon",
+  "trigger": "Heading home through Fallon with the control cards.",
+  "speakers": [
+    "narrator",
+    "ross",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Back through Fallon at dusk. Ross is waiting at the canal bridge, like he never moved.",
+      "next": "r1"
+    },
+    {
+      "id": "r1",
+      "speaker": "ross",
+      "text": "You found what you went for. I can see it on you. And something else. You look older.",
+      "next": "r2"
+    },
+    {
+      "id": "r2",
+      "speaker": "ross",
+      "text": "Ander wants to know what's out there. What's in that fence. Do I tell him you told me?",
+      "choices": [
+        {
+          "text": "Shielded spares and filters. Take them.",
+          "next": "tell",
+          "effects": [
+            {
+              "set": "annex_told",
+              "value": "compact"
+            },
+            {
+              "add": "rep_compact",
+              "value": 2
+            },
+            {
+              "trust": "ross",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "text": "Nothing. Stay away from it, Dad.",
+          "next": "none",
+          "effects": [
+            {
+              "set": "annex_told",
+              "value": "none"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tell",
+      "speaker": "ross",
+      "text": "That'll help us get through the winter. Thank you, son. Ander will owe you. I'll make sure.",
+      "next": "bye"
+    },
+    {
+      "id": "none",
+      "speaker": "ross",
+      "text": "...Okay. I believe you. Mostly. I'll keep the riders away.",
+      "next": "bye"
+    },
+    {
+      "id": "bye",
+      "speaker": "ross",
+      "text": "This might be the last time for a while. Roads'll close when the snow comes.",
+      "choices": [
+        {
+          "text": "I'm proud of you, Dad. I should've said.",
+          "next": "honest",
+          "effects": [
+            {
+              "set": "ross_goodbye",
+              "value": "honest"
+            },
+            {
+              "trust": "ross",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "text": "I'll come back. I promise.",
+          "next": "promise",
+          "effects": [
+            {
+              "set": "ross_goodbye",
+              "value": "promise"
+            },
+            {
+              "trust": "ross",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "text": "You chose your side. I chose mine.",
+          "next": "argue",
+          "effects": [
+            {
+              "set": "ross_goodbye",
+              "value": "argue"
+            },
+            {
+              "trust": "ross",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "honest",
+      "speaker": "ross",
+      "text": "[Long silence.] ...Your mother'd have liked to hear you say that. So did I. Go on. Go.",
+      "next": "end"
+    },
+    {
+      "id": "promise",
+      "speaker": "ross",
+      "text": "Don't promise. Just come back.",
+      "next": "end"
+    },
+    {
+      "id": "argue",
+      "speaker": "ross",
+      "text": "Yeah. I suppose we did. Drive safe anyway.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "In the mirror, Ross stands on the bridge until you can't see him anymore.",
+      "effects": [
+        {
+          "quest": "q_control_cards",
+          "state": "complete"
+        }
+      ],
+      "end": true
+    }
+  ]
+}

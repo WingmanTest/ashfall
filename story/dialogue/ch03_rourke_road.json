@@ -1,0 +1,106 @@
+{
+  "id": "ch03_rourke_road",
+  "chapter": "ch03",
+  "location": "loc_peavine_shack",
+  "trigger": "On the Peavine road: a man with burros (trader).",
+  "speakers": [
+    "narrator",
+    "trader_rourke",
+    "braith",
+    "wraith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Three burros on the switchback, packs piled like hay bales. An old man walking beside them, talking to them.",
+      "next": "r1"
+    },
+    {
+      "id": "r1",
+      "speaker": "trader_rourke",
+      "text": "Whoa, Maisie. Afternoon! Wendell Rourke, Virginia City. I trade. Stories and salt, mostly.",
+      "effects": [
+        {
+          "set": "rourke_met",
+          "value": true
+        }
+      ],
+      "next": "r2"
+    },
+    {
+      "id": "r2",
+      "speaker": "trader_rourke",
+      "text": "I'll sell you a candle for a story. Real one. If it's good I'll throw in tea.",
+      "choices": [
+        {
+          "text": "[Tell him about the voicemail]",
+          "next": "story",
+          "effects": [
+            {
+              "give": "candles",
+              "qty": 2
+            },
+            {
+              "add": "trader_rourke_rep",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "[Trade a rumor]",
+          "next": "rumor",
+          "conditions": [
+            {
+              "item": "rumor",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "rumor",
+              "qty": 1
+            },
+            {
+              "give": "whiskey",
+              "qty": 1
+            },
+            {
+              "add": "trader_rourke_rep",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "What's out east?",
+          "next": "east"
+        }
+      ]
+    },
+    {
+      "id": "story",
+      "speaker": "trader_rourke",
+      "text": "Hm. That's a good one. Sad, but good. Father stories always are. Here.",
+      "next": "east"
+    },
+    {
+      "id": "rumor",
+      "speaker": "trader_rourke",
+      "text": "Ohh, that's a juicy one. Whiskey for you. Don't tell Maisie.",
+      "next": "east"
+    },
+    {
+      "id": "east",
+      "speaker": "trader_rourke",
+      "text": "Out east? Fallon's organized. Good folks, armed folks. And Dixie Valley's got a fence nobody talks about.",
+      "next": "r3"
+    },
+    {
+      "id": "r3",
+      "speaker": "trader_rourke",
+      "text": "Something got loose out there, the sheepmen say. Took forty head in a night. No blood on the sage. Ha. Tall tales.",
+      "end": true
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "id": "ch08_mask",
+  "chapter": "ch08",
+  "location": "loc_sparks_block",
+  "trigger": "Chapter start. Fallout rain. Braith digs out his Air Force mask (sets has_gas_mask via hooks).",
+  "speakers": [
+    "narrator",
+    "braith",
+    "carly",
+    "wraith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "January. The rain is grey and leaves grit on the windowsill. The dosimeter Augie gave you ticks like a cheap watch.",
+      "next": "m1"
+    },
+    {
+      "id": "m1",
+      "speaker": "narrator",
+      "text": "Your deployment bag, bottom of the closet. Under the flight suit: your old Air Force gas mask, still in its pouch.",
+      "next": "m2"
+    },
+    {
+      "id": "m2",
+      "speaker": "braith",
+      "text": "Filters screw in here. One mask. One.",
+      "next": "m3"
+    },
+    {
+      "id": "m3",
+      "speaker": "carly",
+      "text": "Then I wear a wet towel and stay inside, and you wear the mask and go out. That's not chivalry, it's logistics.",
+      "choices": [
+        {
+          "text": "We find you a mask. First thing.",
+          "next": "find",
+          "effects": [
+            {
+              "trust": "carly",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "text": "Logistics. Copy.",
+          "next": "copy"
+        }
+      ]
+    },
+    {
+      "id": "find",
+      "speaker": "carly",
+      "text": "Second thing. First thing is sealing this house. Plastic, tape, everything.",
+      "next": "m4"
+    },
+    {
+      "id": "copy",
+      "speaker": "carly",
+      "text": "Good. Now seal the house. Plastic, tape, every window. Before the next rain.",
+      "next": "m4"
+    },
+    {
+      "id": "m4",
+      "speaker": "wraith",
+      "text": "[Sneezing at the grit on her nose. Pawing at it. Looking at you like you can fix the sky.]",
+      "next": "m5"
+    },
+    {
+      "id": "m5",
+      "speaker": "narrator",
+      "text": "FILTER and SEAL are now on the HUD. Filters run out. Seals break. Neither forgives.",
+      "effects": [
+        {
+          "event": "hud_unlock",
+          "hud": "filter"
+        }
+      ],
+      "end": true
+    }
+  ]
+}

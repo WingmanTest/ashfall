@@ -1,12 +1,15 @@
 {
   "id": "ch10_epilogue",
   "chapter": "ch10",
-  "location": "loc_thomson_dam",
-  "trigger": "Triggered by event play_epilogue. Branches on `ending`, then on Theo.",
+  "location": "loc_galena_station",
+  "trigger": "Triggered by event play_epilogue. Branches on ending, then the Pearce family modifier, then Carly and Wraith.",
   "speakers": [
     "narrator",
-    "theo",
-    "wren"
+    "kit",
+    "ross",
+    "wes",
+    "carly",
+    "wraith"
   ],
   "start": "start",
   "nodes": [
@@ -34,11 +37,11 @@
           ]
         },
         {
-          "next": "ir1",
+          "next": "st1",
           "conditions": [
             {
               "flag": "ending",
-              "eq": "end_iron_range"
+              "eq": "end_stillwater"
             }
           ]
         },
@@ -59,31 +62,25 @@
     {
       "id": "wr1",
       "speaker": "narrator",
-      "text": "The census board covers a whole wall of the powerhouse. Names in chalk. More every week.",
+      "text": "The census board covers a whole wall of the turbine hall. Names in chalk. Carly adds more every week.",
       "next": "wr2"
     },
     {
       "id": "wr2",
       "speaker": "narrator",
-      "text": "The hospital ward runs on Feeder 3. Elevator 6 is a greenhouse: potatoes, kale, lamps humming.",
+      "text": "The hospital ward runs on Galena heat. The library atrium is green: kale, potatoes, beans under lamps.",
       "next": "wr3"
     },
     {
       "id": "wr3",
       "speaker": "narrator",
-      "text": "The council argues every night. Bea calls it democracy. Jory calls it a migraine. Both show up.",
-      "next": "wr4"
-    },
-    {
-      "id": "wr4",
-      "speaker": "narrator",
-      "text": "No one is coming. There's a plan for this winter, and a draft for the next one.",
+      "text": "The council argues every night. Roz calls it democracy. Avila calls it a migraine. Both show up.",
       "branches": [
         {
-          "next": "wr_lou",
+          "next": "wr_aug",
           "conditions": [
             {
-              "flag": "lou_broadcast",
+              "flag": "augie_broadcast",
               "eq": "truth"
             }
           ]
@@ -98,14 +95,14 @@
           ]
         },
         {
-          "next": "wr5"
+          "next": "wr4"
         }
       ]
     },
     {
-      "id": "wr_lou",
+      "id": "wr_aug",
       "speaker": "narrator",
-      "text": "Above the board, someone has chalked Lou's words: SOMETHING TERRIBLE HAPPENED. WE DON'T KNOW WHAT. BE KIND.",
+      "text": "Over the door, someone painted Augie's words: SOMETHING TERRIBLE HAPPENED. WE DON'T KNOW WHAT. BE KIND.",
       "branches": [
         {
           "next": "wr_kess",
@@ -117,7 +114,7 @@
           ]
         },
         {
-          "next": "wr5"
+          "next": "wr4"
         }
       ]
     },
@@ -125,54 +122,54 @@
       "id": "wr_kess",
       "speaker": "narrator",
       "text": "Kessler runs the motor pool. He has one vote. He says it's the hardest posting he's ever had.",
-      "next": "wr5"
+      "next": "wr4"
     },
     {
-      "id": "wr5",
+      "id": "wr4",
       "speaker": "narrator",
-      "text": "In March, for eleven minutes, the sun comes through the ash. Nobody says anything. Everybody goes outside.",
-      "next": "theo"
+      "text": "Every night the lamp line burns. Some nights something at the fence calls names. Nobody answers. Nobody knows how many. The lights stay on.",
+      "next": "fam"
     },
     {
       "id": "le1",
       "speaker": "narrator",
-      "text": "The list has 412 names. In December the city had nine thousand.",
+      "text": "The list has 412 names. In December the valley had thirty thousand.",
       "next": "le2"
     },
     {
       "id": "le2",
       "speaker": "narrator",
-      "text": "It's honest now. Strand reads it aloud every Sunday, including the names she crossed off.",
+      "text": "It's honest now. Avila reads it aloud every Sunday, including the names she crossed off.",
       "next": "le3"
     },
     {
       "id": "le3",
       "speaker": "narrator",
-      "text": "You have a desk. A warm bed. A pencil with an eraser. You use the eraser.",
-      "next": "theo"
+      "text": "You keep the turbines. You have a warm bed and a pencil with an eraser. You use the eraser.",
+      "next": "fam"
     },
     {
-      "id": "ir1",
+      "id": "st1",
       "speaker": "narrator",
-      "text": "The turbines go north on logging sleds. Behind you, the dam goes dark, then the hospital.",
-      "next": "ir2"
+      "text": "The turbines go east on hay sleds. Behind you, Galena goes cold, then the hospital.",
+      "next": "st2"
     },
     {
-      "id": "ir2",
+      "id": "st2",
       "speaker": "narrator",
-      "text": "Seven hundred meters down, it's always seven degrees. Mushrooms. Potatoes. Lamps.",
-      "next": "ir3"
+      "text": "At Stillwater, the ground is warm and the Compact's greenhouses glow. Your father meets the first sled.",
+      "next": "st3"
     },
     {
-      "id": "ir3",
+      "id": "st3",
       "speaker": "narrator",
-      "text": "From the Highway 53 overlook you watch Duluth go black, one window at a time.",
-      "next": "theo"
+      "text": "From the canyon you watch Reno go dark, one window at a time. Something tall walks toward the last warm ones.",
+      "next": "fam"
     },
     {
       "id": "dw1",
       "speaker": "narrator",
-      "text": "The spillways roar open. Unit 2 dies with a sound Hank would have hated.",
+      "text": "You crack the wellheads. Steam screams out of the ground for an hour, then fades.",
       "branches": [
         {
           "next": "dw_ruiz",
@@ -191,13 +188,13 @@
     {
       "id": "dw_ruiz",
       "speaker": "narrator",
-      "text": "Ruiz's charges are clean. Nobody is hurt. Nobody will ever kill for this room again.",
+      "text": "Ruiz's charges are clean. Nobody is hurt. Nobody will ever kill for this place again.",
       "next": "dw2"
     },
     {
       "id": "dw_hand",
       "speaker": "narrator",
-      "text": "You do it by hand, with a sledge and a breaker bar. It costs you. It's done.",
+      "text": "You do it by hand, with a breaker bar and a sledge. It costs you. It's done.",
       "effects": [
         {
           "stat": "health",
@@ -209,8 +206,8 @@
     {
       "id": "dw2",
       "speaker": "narrator",
-      "text": "Then the long walk south over the ice, toward camps nobody has seen. Everyone who trusts you comes.",
-      "next": "theo"
+      "text": "The valley goes cold. The tall ones go still in the snow, sleeping. You walk south with everyone who trusts you.",
+      "next": "fam"
     },
     {
       "id": "tc1",
@@ -218,94 +215,183 @@
       "text": "You slip out before dawn with two packs and two coats. Nobody stops you. Nobody notices.",
       "branches": [
         {
-          "next": "tc_wren",
+          "next": "tc_kit",
           "conditions": [
             {
-              "flag": "wren_alive",
+              "flag": "kit_alive",
               "eq": true
             }
           ]
         },
         {
-          "next": "theo"
+          "next": "fam"
         }
       ]
     },
     {
-      "id": "tc_wren",
-      "speaker": "wren",
-      "text": "[Radio static] ...Sparky? If you hear this, I'm heading for Bayfield. Owe you three. Bye.",
-      "next": "theo"
+      "id": "tc_kit",
+      "speaker": "kit",
+      "text": "[Radio static] ...Wrench? If you hear this, I'm going over Donner. Owe you three. Bye.",
+      "next": "fam"
     },
     {
-      "id": "theo",
+      "id": "fam",
       "speaker": "narrator",
-      "text": "And Theo—",
+      "text": "And the Pearces—",
       "branches": [
         {
-          "next": "theo_dead",
+          "next": "f_both",
           "conditions": [
             {
-              "flag": "theo_alive",
-              "eq": false
+              "flag": "ross_alive",
+              "eq": true
+            },
+            {
+              "flag": "wes_alive",
+              "eq": true
+            },
+            {
+              "flag": "pearce_reconciled",
+              "eq": true
             }
           ]
         },
         {
-          "next": "theo_apart",
+          "next": "f_ross",
           "conditions": [
             {
-              "flag": "theo_side",
-              "ne": "none"
+              "flag": "ross_alive",
+              "eq": true
+            },
+            {
+              "flag": "pearce_reconciled",
+              "eq": true
             }
           ]
         },
         {
-          "next": "theo_here"
+          "next": "f_cold",
+          "conditions": [
+            {
+              "flag": "ross_alive",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "f_gone"
         }
       ]
     },
     {
-      "id": "theo_here",
-      "speaker": "theo",
-      "text": "ma. exciter, sync, breaker. i still remember. forty-one times.",
+      "id": "f_both",
+      "speaker": "ross",
+      "text": "[A letter on a feed receipt] Seed hay on the spring sled. Wes is bossing everybody. Come for lambing. — Dad",
+      "next": "carly"
+    },
+    {
+      "id": "f_ross",
+      "speaker": "ross",
+      "text": "[A letter on a feed receipt] Hay on the spring sled. I'm proud of you. Should've said it first. — Dad",
+      "next": "carly"
+    },
+    {
+      "id": "f_cold",
+      "speaker": "narrator",
+      "text": "A letter comes in spring. One line on a feed receipt: 'Glad you're alive. — R.' You read it forty times.",
+      "next": "carly"
+    },
+    {
+      "id": "f_gone",
+      "speaker": "narrator",
+      "text": "Ross Pearce died in Fallon in the second winter. Wes brings the news in person. He stays.",
       "branches": [
         {
-          "next": "theo_foot",
+          "next": "carly",
           "conditions": [
             {
-              "flag": "ch08_foot_saved",
-              "eq": false
+              "flag": "wes_alive",
+              "eq": true
             }
           ]
         },
         {
-          "next": "theo_end"
+          "next": "f_gone2"
         }
       ]
     },
     {
-      "id": "theo_foot",
+      "id": "f_gone2",
       "speaker": "narrator",
-      "text": "He walks with a crutch Ray made. He races it anyway.",
-      "next": "theo_end"
+      "text": "There's no one left to bring the news. You find out from a stranger on the road. You keep walking.",
+      "next": "carly"
     },
     {
-      "id": "theo_end",
+      "id": "carly",
+      "speaker": "narrator",
+      "text": "And Carly—",
+      "branches": [
+        {
+          "next": "c_gone",
+          "conditions": [
+            {
+              "flag": "carly_left",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "c_here"
+        }
+      ]
+    },
+    {
+      "id": "c_here",
+      "speaker": "carly",
+      "text": "Address? Here. Breathing? Yes. Injuries? ...A few. Okay. Writing it down. So it happened.",
+      "next": "dog"
+    },
+    {
+      "id": "c_gone",
+      "speaker": "narrator",
+      "text": "Carly runs the Switchboard for her own people now. Some nights she radios. You always answer.",
+      "next": "dog"
+    },
+    {
+      "id": "dog",
+      "speaker": "narrator",
+      "text": "And Wraith—",
+      "branches": [
+        {
+          "next": "d_alive",
+          "conditions": [
+            {
+              "flag": "wraith_alive",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "d_gone"
+        }
+      ]
+    },
+    {
+      "id": "d_alive",
+      "speaker": "wraith",
+      "text": "[Asleep against the warmest wall in the world, paws twitching, chasing something in a dream. Winning.]",
+      "next": "end"
+    },
+    {
+      "id": "d_gone",
+      "speaker": "narrator",
+      "text": "Her collar hangs on the hook by the door. Every kid who comes in asks about it. You tell them. Every time.",
+      "next": "end"
+    },
+    {
+      "id": "end",
       "speaker": "narrator",
       "text": "ASHFALL",
-      "end": true
-    },
-    {
-      "id": "theo_apart",
-      "speaker": "narrator",
-      "text": "He's with his people now. A letter comes in spring: 'i'm taking my insulin. i promise. — T'",
-      "end": true
-    },
-    {
-      "id": "theo_dead",
-      "speaker": "narrator",
-      "text": "It happened in the cold, in March. You keep his meter in your coat. It still turns on.",
       "end": true
     }
   ]

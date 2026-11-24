@@ -1,0 +1,136 @@
+{
+  "id": "ch08_lolo_list",
+  "chapter": "ch08",
+  "location": "loc_sparks_block",
+  "trigger": "Lolo's clinic. A notebook left open.",
+  "speakers": [
+    "narrator",
+    "lolo",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Lolo's clinic. She's asleep in her chair. A notebook open on the table, names in careful handwriting.",
+      "effects": [
+        {
+          "set": "lolo_list_seen",
+          "value": true
+        }
+      ],
+      "next": "l1"
+    },
+    {
+      "id": "l1",
+      "speaker": "narrator",
+      "text": "Mr. Pruitt is on the first page, if his oxygen ran out. A line through it. A date. Then more names.",
+      "branches": [
+        {
+          "next": "wes",
+          "conditions": [
+            {
+              "flag": "wes_spared",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "l2"
+        }
+      ]
+    },
+    {
+      "id": "wes",
+      "speaker": "narrator",
+      "text": "Last page: IF IT COMES TO IT. The third name is Wes Pearce. His leg never healed clean.",
+      "effects": [
+        {
+          "set": "wes_crossed_off",
+          "value": true
+        }
+      ],
+      "next": "wes2"
+    },
+    {
+      "id": "wes2",
+      "speaker": "lolo",
+      "text": "[Awake. Not pretending otherwise.] You found it. Good. Somebody should know.",
+      "next": "l3"
+    },
+    {
+      "id": "l2",
+      "speaker": "lolo",
+      "text": "[Awake behind you] You found it. Good. Someone should know what this costs.",
+      "next": "l3"
+    },
+    {
+      "id": "l3",
+      "speaker": "lolo",
+      "text": "I help people go, maitia. When it is time and there is nothing else. I write them down so it happened.",
+      "choices": [
+        {
+          "text": "You don't get to decide who goes.",
+          "next": "harsh",
+          "effects": [
+            {
+              "trust": "lolo",
+              "delta": -3
+            }
+          ]
+        },
+        {
+          "text": "Who decides, then?",
+          "next": "who"
+        },
+        {
+          "text": "[Take the notebook. Burn it]",
+          "next": "burn",
+          "effects": [
+            {
+              "trust": "lolo",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "harsh",
+      "speaker": "lolo",
+      "text": "No? Then who? Avila? A soldier? You? At least I hold their hand.",
+      "next": "end"
+    },
+    {
+      "id": "who",
+      "speaker": "lolo",
+      "text": "Nobody. That's the problem. So somebody who loves them does it. And then carries it.",
+      "effects": [
+        {
+          "trust": "lolo",
+          "delta": 2
+        }
+      ],
+      "next": "who2"
+    },
+    {
+      "id": "who2",
+      "speaker": "lolo",
+      "text": "Your brother is strong. He'll probably never need that page. I write the page anyway.",
+      "next": "end"
+    },
+    {
+      "id": "burn",
+      "speaker": "lolo",
+      "text": "Burn it, then. I remember every name. The paper was for you, not me.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "She closes the notebook gently, like a door to a sleeping child's room.",
+      "end": true
+    }
+  ]
+}

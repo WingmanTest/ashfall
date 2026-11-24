@@ -1,0 +1,236 @@
+{
+  "id": "ch05_ander_blockade",
+  "chapter": "ch05",
+  "location": "loc_i80_blockade",
+  "trigger": "Ander Etcheverry walks out to talk.",
+  "speakers": [
+    "narrator",
+    "ander",
+    "braith",
+    "ross"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "ander",
+      "text": "Ander Etcheverry. Lahontan Compact. I want to talk to the mechanic, not the Army.",
+      "effects": [
+        {
+          "set": "ander_met",
+          "value": true
+        }
+      ],
+      "next": "a1"
+    },
+    {
+      "id": "a1",
+      "speaker": "ander",
+      "text": "Thirty trucks of food leave Nevada tonight. Our old people eat sagebrush tea. Explain to me the justice.",
+      "next": "a2"
+    },
+    {
+      "id": "a2",
+      "speaker": "ross",
+      "text": "Braith.",
+      "effects": [
+        {
+          "set": "ross_met",
+          "value": true
+        }
+      ],
+      "next": "a3"
+    },
+    {
+      "id": "a3",
+      "speaker": "narrator",
+      "text": "Your father. Behind the bales. Older than three months should have made him. A rifle across his chest.",
+      "choices": [
+        {
+          "text": "Dad.",
+          "next": "dad"
+        },
+        {
+          "text": "[Say nothing. Look at Ander]",
+          "next": "ander"
+        }
+      ]
+    },
+    {
+      "id": "dad",
+      "speaker": "ross",
+      "text": "You got my letter. ...You came anyway. On their side.",
+      "choices": [
+        {
+          "text": "I'm on nobody's side. I fix trucks.",
+          "next": "nobody"
+        },
+        {
+          "text": "I'm on Carly's side. Reno's side.",
+          "next": "reno",
+          "effects": [
+            {
+              "trust": "ross",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "text": "Get off the road, Dad. Please.",
+          "next": "please",
+          "effects": [
+            {
+              "trust": "ross",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nobody",
+      "speaker": "ross",
+      "text": "That's the lie everybody tells right before they pick a side.",
+      "next": "choice"
+    },
+    {
+      "id": "reno",
+      "speaker": "ross",
+      "text": "Reno's side. Okay. Your mother would've liked her. That doesn't change the road.",
+      "next": "choice"
+    },
+    {
+      "id": "please",
+      "speaker": "ross",
+      "text": "Can't. Every rancher in Mason Valley is behind me. I made them promises.",
+      "next": "choice"
+    },
+    {
+      "id": "ander",
+      "speaker": "ander",
+      "text": "Your father is a good man. He's the reason half these men came. Think about that.",
+      "next": "choice"
+    },
+    {
+      "id": "choice",
+      "speaker": "ander",
+      "text": "So. Do the trucks roll, or do they stay in Nevada?",
+      "choices": [
+        {
+          "text": "[Escort the convoy through]",
+          "next": "escort",
+          "effects": [
+            {
+              "set": "convoy_choice",
+              "value": "escort"
+            },
+            {
+              "add": "rep_authority",
+              "value": 2
+            },
+            {
+              "add": "rep_compact",
+              "value": -2
+            },
+            {
+              "event": "encounter",
+              "id": "enc_ch05_compact_attack"
+            },
+            {
+              "trust": "ross",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "text": "[Sabotage the lead truck]",
+          "next": "sab",
+          "effects": [
+            {
+              "set": "convoy_choice",
+              "value": "sabotage"
+            },
+            {
+              "add": "rep_compact",
+              "value": 2
+            },
+            {
+              "add": "ironwood_hostility",
+              "value": 2
+            },
+            {
+              "event": "encounter",
+              "id": "enc_ch05_ironwood_turn"
+            },
+            {
+              "trust": "ross",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "text": "[Divert half to the Floor]",
+          "next": "div",
+          "effects": [
+            {
+              "set": "convoy_choice",
+              "value": "divert"
+            },
+            {
+              "add": "rep_harbor",
+              "value": 2
+            },
+            {
+              "add": "rep_compact",
+              "value": 1
+            },
+            {
+              "add": "ironwood_hostility",
+              "value": 1
+            },
+            {
+              "event": "encounter",
+              "id": "enc_ch05_crossfire"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "escort",
+      "speaker": "narrator",
+      "text": "The MRAPs push. The Compact fires. You fire back, because they're firing at you. Your father is out there.",
+      "effects": [
+        {
+          "set": "fired_on_blockade",
+          "value": true
+        }
+      ],
+      "next": "fired"
+    },
+    {
+      "id": "sab",
+      "speaker": "narrator",
+      "text": "You pull the fuel line on the lead truck. It dies across both lanes. Ruiz looks at you for a long second.",
+      "next": "end"
+    },
+    {
+      "id": "div",
+      "speaker": "narrator",
+      "text": "Fifteen trucks peel off toward Sparks. The Army doesn't know who to shoot. Everyone shoots a little.",
+      "next": "end"
+    },
+    {
+      "id": "fired",
+      "speaker": "narrator",
+      "text": "When the shooting stops, the bales are burning. You don't see your father. You don't see Wes either.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "Then you hear him. Wes. Screaming your name from under the overpass.",
+      "end": true
+    }
+  ]
+}

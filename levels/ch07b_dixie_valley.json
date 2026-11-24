@@ -1,0 +1,1650 @@
+{
+ "$schema": "./schema.json",
+ "formatVersion": 1,
+ "storyVersion": 2,
+ "id": "ch07b_dixie_valley",
+ "chapter": 7,
+ "storyChapter": "ch07",
+ "title": "Dead Air: Dixie Valley",
+ "act": 2,
+ "storyFile": "story/chapters/ch07_dead_air.md",
+ "next": "ch08_ashfall",
+ "returnTo": "ch07_dead_air",
+ "difficulty": 4,
+ "summary": "Dixie Valley after the bursts. The truck stalls on the valley road and the first Tallman comes out of the dark; Tolliver still holding the Annex gate; the Ironwood recovery detail stranded in the hangar; the cart powers the maglocks and the torpor holds open (Wing A). Wing B is sealed: flooded stair, collapsed ceiling, a door bent outward. Optional: the hot-springs den with two Tallmen in torpor.",
+ "startInventory": {
+  "gpu_cart": 1,
+  "flashlight": 1,
+  "mech_tools": 1,
+  "hand_radio": 1
+ },
+ "startInventoryNote": "gpu_cart in the truck bed",
+ "units": "meters",
+ "grid": {
+  "cellSize": 2.0,
+  "cols": 52,
+  "rows": 90,
+  "origin": {
+   "x": -52.0,
+   "z": -172.0
+  },
+  "legend": {
+   "#": {
+    "name": "wall",
+    "walkable": false,
+    "solid": true,
+    "height": 4,
+    "wallTex": "red_brick",
+    "preview": "#5a3a32"
+   },
+   ",": {
+    "name": "interior_floor",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirty_concrete",
+    "roof": true,
+    "preview": "#b8ad98"
+   },
+   ".": {
+    "name": "mud",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirt",
+    "groundType": "mud_wet",
+    "preview": "#7a6852"
+   },
+   "B": {
+    "name": "building_mass",
+    "walkable": false,
+    "solid": true,
+    "height": 0,
+    "wallTex": "red_brick",
+    "massOnly": true,
+    "preview": "#4a4f57"
+   },
+   "D": {
+    "name": "door",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirty_concrete",
+    "door": true,
+    "preview": "#e0a040"
+   },
+   "H": {
+    "name": "high_wall",
+    "walkable": false,
+    "solid": true,
+    "height": 8,
+    "wallTex": "dirty_concrete",
+    "preview": "#3c3f44"
+   },
+   "l": {
+    "name": "salt_flat",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirt",
+    "groundType": "playa_salt",
+    "preview": "#d9d1c0"
+   },
+   "r": {
+    "name": "road_wet_cracked",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "road_damaged",
+    "groundType": "asphalt_wet_cracked",
+    "wet": true,
+    "preview": "#62666a"
+   },
+   "x": {
+    "name": "debris",
+    "walkable": false,
+    "solid": true,
+    "height": 0.9,
+    "wallTex": "rust_coarse_01",
+    "preview": "#6e5545"
+   },
+   "y": {
+    "name": "frost_grass",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirt",
+    "groundType": "frosted_dead_grass",
+    "scatter": "frost_grass",
+    "preview": "#8a8a72"
+   },
+   "~": {
+    "name": "open_water",
+    "walkable": false,
+    "solid": false,
+    "height": -0.6,
+    "floorTex": "dirty_concrete",
+    "water": true,
+    "preview": "#2f4a63"
+   }
+  },
+  "tiles": [
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",
+   "H..................................................H",
+   "H..................................................H",
+   "H..######################################..........H",
+   "H..#,,,#,,,#,,,#,,,#,,,#,,,,#,,,,,,,,,,,#..........H",
+   "H..#,,,#,,,#,,,#,,,#,,,#,,,,#,,,,,,,,,,,#..........H",
+   "H..#,,,#,,,#,,,#,,,#,,,#,,,,#,,,,xxxx,,,#..........H",
+   "H..#,,,#,,,#,,,#,,,#,,,#,,,,#,,,,xxxx,,,#..........H",
+   "H..#,,,#,,,#,,,#,,,#,,,#,,,,#,,,,xxxx,,,#..........H",
+   "H..#,,,#,,,#,,,#,,,#,,,#,,,,#,,,,xxxx,,,#..........H",
+   "H..#,,,#,,,#,,,#,,,#,,,#,,,,#,,,,,,,,,,,#..........H",
+   "H..#,,,#,,,#,,,#,,,#,,,#,,,,#,,,,,,,,,,,#..........H",
+   "H..#,,,#,,,#,,,#,,,#,,,#,,,,#,,,,,,,,,,,#..........H",
+   "H..#,,,#,,,#,,,#,,,#,,,#,,,,#,~~~~,,,,,,#..........H",
+   "H..#,,,#,,,#,,,#,,,#,,,#,,,,#,~~~~,,,,,,#..........H",
+   "H..#,,,#,,,#,,,#,,,#,,,#,,,,#,~~~~,,,,,,#..........H",
+   "H..##D###D###D###D###D###D###,~~~~,,,,,,#..........H",
+   "H..#,,,,,,,,,,,,,,,,,,,,,,,,#,~~~~,,,,,,#..........H",
+   "H..#,,,,,,,,,,,,,,,,,,,,,,,,#,~~~~,,,,,,#..........H",
+   "H..#,,,,,,,,,,,,,,,,,,,,,,,,#,~~~~,,,,,,#..........H",
+   "H..#,,,,,,,,,,,,,,,,,,,,,,,,#,,,,,,,,,,,#..........H",
+   "H..######################D###############..........H",
+   "H..#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#..........H",
+   "H..#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#..........H",
+   "H..#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#..........H",
+   "H..#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#..........H",
+   "H..#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#..........H",
+   "H..#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#..........H",
+   "H..######################D###############..........H",
+   "H.......................rrrr.......................H",
+   "H.......................rrrr.......................H",
+   "H.......................rrrr.......................H",
+   "H.......................rrrr.......................H",
+   "H...BBBBBBBBB...........rrrr..#################....H",
+   "H...BBBBBBBBB...........rrrr..#,,,,,,,,,,,,,,,#....H",
+   "H...BBBBBBBBB...........rrrr..#,,,,,,,,,,,,,,,#....H",
+   "H...BBBBBBBBB...........rrrr..#,,,,,,,,,,,,,,,#....H",
+   "H...BBBBBBBBB...........rrrr..#,,,,,,,,,,,,,,,#....H",
+   "H...BBBBBBBBB...........rrrr..D,,,,,,,,,,,,,,,#....H",
+   "H.......................rrrr..#,,,,,,,,,,,,,,,#....H",
+   "H.......................rrrr..#,,,,,,,,,,,,,,,#....H",
+   "H.......................rrrr..#,,,,,,,,,,,,,,,#....H",
+   "H.......................rrrr..#,,,,,,,,,,,,,,,#....H",
+   "H.......................rrrr..#,,,,,,,,,,,,,,,#....H",
+   "H.......................rrrr..########D########....H",
+   "H.......................rrrr.......................H",
+   "H.......................rrrr.......................H",
+   "H.......................rrrr.......................H",
+   "H.......................rrrr.......................H",
+   "H.......................rrrr.......................H",
+   "HHHHHHHHHHHHHHHHHHHHHHHH....HHHHHHHHHHHHHHHHHHHHHHHH",
+   "HlllllllllllllllllllllllrrrrlllllllllllllllllllllllH",
+   "HlllllllllllllllllllllllrrrrlllllllllllllllllllllllH",
+   "HlllllllllllllllllllllllrrrrlllllllllllllllllllllllH",
+   "HlllllllllllllllllllllllrrrrlllllllllllllllllllllllH",
+   "HlllllllllllllllllllllllrrrrlllllllllllllllllllllllH",
+   "HlllllllllllllllllllllllrrrrlllllllllllllllllllllllH",
+   "HlllllllllllllllllllllllrrrrlllllllllllllllllllllllH",
+   "HlllllllllllllllllllllllrrrrlllllllllllllllllllllllH",
+   "HlllllllllllllllllllllllrrrrlllllllllllllllllllllllH",
+   "HlllllllllllllllllllllllrrrrlllllllllllllllllllllllH",
+   "HlllllllllllllllllllllllrrrrlllllllllllllllllllllllH",
+   "HrrrrrrrrrrrrrrrrrrrrrrrrrrrlllllllllllllllllllllllH",
+   "HrrrrrrrrrrrrrrrrrrrrrrrrrrrlllllllllllllllllllllllH",
+   "HllllllllllllllllllllllllllllllllllllllllllllllllllH",
+   "HllllllllllllllllllllllllllllllllllllllllllllllllllH",
+   "HllllllllllllllllllllllllllllllllllllllllllllllllllH",
+   "HllllllllllllllllllllllllllllllllllllllllllllllllllH",
+   "HllllllllllllllllllllllllllllllllllllllllllllllllllH",
+   "HllllllllllllllllllllllllllllllllllllllllllllllllllH",
+   "HllllllllllllllllllllllllllllllllllllllllllllllllllH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyBBBBBBBBByyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyBBBBBBBBByyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyBBBBBBBBByyyyyyy~~~~~~~~~yyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyBBBBBBBBByyyyyyy~~~~~~~~~yyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyBBBBBBBBByyyyyyy~~~~~~~~~yyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy~~~~~~~~~yyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy~~~~~~~~~yyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy~~~~~~~~~yyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy~~~~~~~~~yyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
+  ]
+ },
+ "environment": {
+  "seasonArc": "civil_war_late_autumn",
+  "season": "late_fall",
+  "actName": "Civil War",
+  "groundType": "mud_wet_asphalt",
+  "precipitation": "drizzle",
+  "particles": "rain",
+  "snowCover": 0.0,
+  "wetness": 0.8,
+  "fogColor": "#6a747d",
+  "skyColor": "#5c6872",
+  "sunColor": "#b8bcc2",
+  "ambientColor": "#7a8088",
+  "visibilityM": 48,
+  "fogNear": 4,
+  "fogFar": 48,
+  "windMs": 7,
+  "atmosphere": "Cold overcast late autumn: low cloud ceiling, drizzle and cold rain, mud and wet asphalt, smoke plumes over barricades and checkpoints.",
+  "environmentPreset": "late_fall",
+  "storySeason": "late_fall",
+  "storyPalette": "overcast slate grey, wet asphalt, sodium-orange dead lamps",
+  "storyWeather": "overcast",
+  "weather": "brown_sky",
+  "weatherOverride": "Dixie Valley is played after the Dec 5 bursts: story weather_after_bursts 'brown_sky' replaces the chapter-start 'overcast' for this whole level (storyWeather keeps the story id).",
+  "storyWeatherLate": "brown_sky",
+  "storyTempC": -1,
+  "tempC": -1,
+  "nightTempC": -3,
+  "survivalFocus": [
+   "warmth",
+   "wind",
+   "desert_night_cold"
+  ],
+  "timeStart": 0.9,
+  "timeEnd": 0.3,
+  "timeLocked": false,
+  "blizzard": false,
+  "warmthDrainMul": 1.25,
+  "seasonNote": "Desert night cold under a brown sky; salt playa and frost grass, a few grey flakes; no snow cover.",
+  "hud": {
+   "hp": true,
+   "hydration": true,
+   "hunger": true,
+   "companion": true,
+   "warmth": true,
+   "temp": true,
+   "ammo_military": true,
+   "rad": true
+  }
+ },
+ "locations": [
+  {
+   "id": "loc_annex_holds",
+   "x": 0.0,
+   "z": -140.0,
+   "rect": {
+    "type": "rect",
+    "x0": -50.0,
+    "z0": -170.0,
+    "x1": 50.0,
+    "z1": -110.0
+   },
+   "safe": false,
+   "name": "Annex holds"
+  },
+  {
+   "id": "loc_dixie_annex",
+   "x": 0.0,
+   "z": -70.0,
+   "rect": {
+    "type": "rect",
+    "x0": -50.0,
+    "z0": -110.0,
+    "x1": 50.0,
+    "z1": -30.0
+   },
+   "safe": false,
+   "name": "Dixie Valley Annex (exterior)"
+  },
+  {
+   "id": "loc_dixie_hotsprings",
+   "x": 0.0,
+   "z": -12.0,
+   "rect": {
+    "type": "rect",
+    "x0": -50.0,
+    "z0": -30.0,
+    "x1": 50.0,
+    "z1": 6.0
+   },
+   "safe": false,
+   "name": "Dixie hot springs (den)"
+  }
+ ],
+ "landmarks": [],
+ "buildings": [
+  {
+   "id": "b_ch07b_annex",
+   "label": "Dixie Valley Annex",
+   "kind": "walled",
+   "cells": [
+    3,
+    3,
+    40,
+    28
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -46.0,
+    "z0": -166.0,
+    "x1": 30.0,
+    "z1": -114.0
+   },
+   "doors": [
+    [
+     -1.0,
+     -115.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_annex_holds",
+   "interior": "entry hall (rows 22-27), corridor (rows 17-20), Wing A holds A1-A6 (rows 4-15), Wing B sealed (cols 29-39)"
+  },
+  {
+   "id": "b_ch07b_hangar",
+   "label": "Annex hangar",
+   "kind": "walled",
+   "cells": [
+    30,
+    33,
+    46,
+    44
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 8.0,
+    "z0": -106.0,
+    "x1": 42.0,
+    "z1": -82.0
+   },
+   "doors": [
+    [
+     9.0,
+     -95.0
+    ],
+    [
+     25.0,
+     -83.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_dixie_annex",
+   "interior": "recovery detail camp"
+  },
+  {
+   "id": "m_ch07b_generator",
+   "label": "Dead generator shed",
+   "kind": "mass",
+   "cells": [
+    4,
+    33,
+    12,
+    38
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -44.0,
+    "z0": -106.0,
+    "x1": -26.0,
+    "z1": -94.0
+   },
+   "doors": [],
+   "location": "loc_dixie_annex",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  },
+  {
+   "id": "m_ch07b_den_rock",
+   "label": "Den rock shelf",
+   "kind": "mass",
+   "cells": [
+    20,
+    74,
+    28,
+    78
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -12.0,
+    "z0": -24.0,
+    "x1": 6.0,
+    "z1": -14.0
+   },
+   "doors": [],
+   "location": "loc_dixie_hotsprings",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  }
+ ],
+ "paths": {
+  "critical": [
+   [
+    -45.0,
+    -47.0
+   ],
+   [
+    -31.0,
+    -47.0
+   ],
+   [
+    -1.0,
+    -47.0
+   ],
+   [
+    -1.0,
+    -67.0
+   ],
+   [
+    -1.0,
+    -81.0
+   ],
+   [
+    -1.0,
+    -111.0
+   ],
+   [
+    -1.0,
+    -117.0
+   ],
+   [
+    -9.0,
+    -123.0
+   ],
+   [
+    -1.0,
+    -127.0
+   ],
+   [
+    -1.0,
+    -135.0
+   ],
+   [
+    -1.0,
+    -143.0
+   ],
+   [
+    -1.0,
+    -135.0
+   ],
+   [
+    -1.0,
+    -127.0
+   ],
+   [
+    -1.0,
+    -111.0
+   ],
+   [
+    -1.0,
+    -67.0
+   ],
+   [
+    -1.0,
+    -47.0
+   ],
+   [
+    -47.0,
+    -47.0
+   ]
+  ],
+  "optional": [
+   {
+    "id": "b_ch07b_hangar",
+    "label": "Hangar (recovery detail)",
+    "points": [
+     [
+      -1.0,
+      -91.0
+     ],
+     [
+      7.0,
+      -95.0
+     ],
+     [
+      21.0,
+      -95.0
+     ]
+    ]
+   },
+   {
+    "id": "b_ch07b_den",
+    "label": "Hot-springs den",
+    "points": [
+     [
+      -1.0,
+      -47.0
+     ],
+     [
+      -1.0,
+      -27.0
+     ],
+     [
+      -11.0,
+      -7.0
+     ]
+    ]
+   }
+  ]
+ },
+ "spawns": {
+  "player": [
+   {
+    "id": "spawn_default",
+    "x": -45.0,
+    "z": -47.0,
+    "rotY": 1.571
+   }
+  ],
+  "npcs": [
+   {
+    "id": "npc_wraith",
+    "npc": "wraith",
+    "x": -43.0,
+    "z": -49.0,
+    "rotY": 0.0,
+    "behavior": "companion_follow",
+    "when": [
+     {
+      "flag": "wraith_alive",
+      "eq": true
+     }
+    ],
+    "label": "Wraith",
+    "companion": true
+   },
+   {
+    "id": "npc_reyne",
+    "npc": "reyne",
+    "x": -41.0,
+    "z": -45.0,
+    "rotY": 0.0,
+    "behavior": "idle"
+   },
+   {
+    "id": "npc_amb_tolliver",
+    "npc": "amb_tolliver",
+    "x": -7.0,
+    "z": -65.0,
+    "rotY": 0.0,
+    "behavior": "guard_gate",
+    "label": "Tolliver (the guard who never left)",
+    "hostile": "never"
+   },
+   {
+    "id": "npc_sfc_brandt",
+    "npc": "sfc_brandt",
+    "x": 21.0,
+    "z": -95.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch07_recovery_detail"
+   },
+   {
+    "id": "npc_ruiz",
+    "npc": "ruiz",
+    "x": 17.0,
+    "z": -89.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "ruiz_spared",
+      "eq": true
+     }
+    ]
+   }
+  ],
+  "enemies": [
+   {
+    "id": "en_01",
+    "type": "tallman",
+    "x": -23.0,
+    "z": -39.0,
+    "group": "g_ch07b_road",
+    "tier": 1,
+    "behavior": "stalk",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch07_road_tallman",
+    "note": "FIRST Tallman fight. Light pushes it back; it retreats wounded.",
+    "lightAversion": true
+   },
+   {
+    "id": "en_02",
+    "type": "coyote",
+    "x": 13.0,
+    "z": -59.0,
+    "group": "g_ch07b_flats",
+    "tier": 1,
+    "behavior": "pack",
+    "hostile": "always",
+    "activate": "load"
+   },
+   {
+    "id": "en_03",
+    "type": "coyote",
+    "x": 29.0,
+    "z": -51.0,
+    "group": "g_ch07b_flats",
+    "tier": 1,
+    "behavior": "pack",
+    "hostile": "always",
+    "activate": "load"
+   },
+   {
+    "id": "en_04",
+    "type": "coyote",
+    "x": 41.0,
+    "z": -39.0,
+    "group": "g_ch07b_flats",
+    "tier": 1,
+    "behavior": "pack",
+    "hostile": "always",
+    "activate": "load"
+   },
+   {
+    "id": "en_05",
+    "type": "recovery_detail",
+    "x": 15.0,
+    "z": -99.0,
+    "group": "g_ch07b_detail_w1",
+    "tier": 1,
+    "behavior": "hold_cover",
+    "hostile": "conditional",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch07_recovery_detail",
+    "hostileWhen": [
+     {
+      "flag": "recovery_detail_outcome",
+      "eq": "fought"
+     }
+    ]
+   },
+   {
+    "id": "en_06",
+    "type": "recovery_detail",
+    "x": 21.0,
+    "z": -101.0,
+    "group": "g_ch07b_detail_w1",
+    "tier": 1,
+    "behavior": "hold_cover",
+    "hostile": "conditional",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch07_recovery_detail",
+    "hostileWhen": [
+     {
+      "flag": "recovery_detail_outcome",
+      "eq": "fought"
+     }
+    ]
+   },
+   {
+    "id": "en_07",
+    "type": "recovery_detail",
+    "x": 29.0,
+    "z": -99.0,
+    "group": "g_ch07b_detail_w1",
+    "tier": 1,
+    "behavior": "hold_cover",
+    "hostile": "conditional",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch07_recovery_detail",
+    "hostileWhen": [
+     {
+      "flag": "recovery_detail_outcome",
+      "eq": "fought"
+     }
+    ]
+   },
+   {
+    "id": "en_08",
+    "type": "recovery_detail",
+    "x": 37.0,
+    "z": -93.0,
+    "group": "g_ch07b_detail_w1",
+    "tier": 1,
+    "behavior": "hold_cover",
+    "hostile": "conditional",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch07_recovery_detail",
+    "hostileWhen": [
+     {
+      "flag": "recovery_detail_outcome",
+      "eq": "fought"
+     }
+    ]
+   },
+   {
+    "id": "en_09",
+    "type": "recovery_detail",
+    "x": 19.0,
+    "z": -87.0,
+    "group": "g_ch07b_detail_w2",
+    "tier": 1,
+    "behavior": "hold_cover",
+    "hostile": "conditional",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch07_recovery_detail",
+    "hostileWhen": [
+     {
+      "flag": "recovery_detail_outcome",
+      "eq": "fought"
+     }
+    ]
+   },
+   {
+    "id": "en_10",
+    "type": "recovery_detail",
+    "x": 35.0,
+    "z": -87.0,
+    "group": "g_ch07b_detail_w2",
+    "tier": 1,
+    "behavior": "hold_cover",
+    "hostile": "conditional",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch07_recovery_detail",
+    "hostileWhen": [
+     {
+      "flag": "recovery_detail_outcome",
+      "eq": "fought"
+     }
+    ]
+   },
+   {
+    "id": "en_11",
+    "type": "tallman",
+    "x": -15.0,
+    "z": -135.0,
+    "group": "g_ch07b_holds",
+    "tier": 1,
+    "behavior": "stalk",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch07_holds_tallman",
+    "note": "Wing A corridor; flees toward the flooded stair (Wing B) and is lost behind the bent door.",
+    "fleeTo": [
+     7.0,
+     -133.0
+    ]
+   },
+   {
+    "id": "en_12",
+    "type": "tallman",
+    "x": -23.0,
+    "z": -9.0,
+    "group": "g_ch07b_den",
+    "tier": 1,
+    "behavior": "torpor",
+    "hostile": "on_provoke",
+    "activate": "load",
+    "hostileWhen": [
+     {
+      "flag": "ch07b_den_shot",
+      "eq": true
+     }
+    ],
+    "note": "Torpid in the den: non-hostile unless shot (den_killed).",
+    "torpid": true
+   },
+   {
+    "id": "en_13",
+    "type": "tallman",
+    "x": 11.0,
+    "z": -1.0,
+    "group": "g_ch07b_den",
+    "tier": 1,
+    "behavior": "torpor",
+    "hostile": "on_provoke",
+    "activate": "load",
+    "hostileWhen": [
+     {
+      "flag": "ch07b_den_shot",
+      "eq": true
+     }
+    ],
+    "note": "Torpid in the den: non-hostile unless shot (den_killed).",
+    "torpid": true
+   }
+  ],
+  "loot": [
+   {
+    "id": "loot_01",
+    "x": -33.0,
+    "z": -51.0,
+    "r": 3.1,
+    "label": "The stalled truck",
+    "container": "car_trunk",
+    "propRef": "prop_01",
+    "render": "prop",
+    "location": "loc_dixie_annex",
+    "guaranteed": [
+     {
+      "item": "mask_filter",
+      "n": 1
+     }
+    ]
+   },
+   {
+    "id": "loot_02",
+    "x": -15.0,
+    "z": -87.0,
+    "r": 3.1,
+    "label": "Annex motor-pool car",
+    "container": "car_trunk",
+    "propRef": "prop_02",
+    "render": "prop",
+    "location": "loc_dixie_annex"
+   },
+   {
+    "id": "loot_03",
+    "x": -41.0,
+    "z": -121.0,
+    "r": 1.6,
+    "label": "Entry-hall locker",
+    "container": "locker",
+    "location": "loc_annex_holds",
+    "guaranteed": [
+     {
+      "item": "iodide_tablets",
+      "n": 1
+     }
+    ]
+   },
+   {
+    "id": "loot_04",
+    "x": 21.0,
+    "z": -121.0,
+    "r": 1.6,
+    "label": "Guard-desk cabinet",
+    "container": "medicine_cabinet",
+    "location": "loc_annex_holds",
+    "guaranteed": [
+     {
+      "item": "med_kit",
+      "n": 1
+     }
+    ]
+   },
+   {
+    "id": "loot_05",
+    "x": -41.0,
+    "z": -155.0,
+    "r": 1.6,
+    "label": "Hold A1 locker",
+    "container": "locker",
+    "location": "loc_annex_holds",
+    "guaranteed": [
+     {
+      "item": "bandage",
+      "n": 2
+     }
+    ]
+   },
+   {
+    "id": "loot_06",
+    "x": -25.0,
+    "z": -155.0,
+    "r": 1.6,
+    "label": "Hold A3 cabinet",
+    "container": "medicine_cabinet",
+    "location": "loc_annex_holds"
+   },
+   {
+    "id": "loot_07",
+    "x": -1.0,
+    "z": -155.0,
+    "r": 1.6,
+    "label": "Hold A6 crate",
+    "container": "military_crate",
+    "location": "loc_annex_holds"
+   },
+   {
+    "id": "loot_08",
+    "x": -33.0,
+    "z": -107.0,
+    "r": 1.6,
+    "label": "Generator-shed toolbox",
+    "container": "toolbox",
+    "location": "loc_dixie_annex"
+   },
+   {
+    "id": "loot_09",
+    "x": 39.0,
+    "z": -103.0,
+    "r": 1.6,
+    "label": "Locker",
+    "container": "locker",
+    "location": "loc_dixie_annex",
+    "filler": true
+   },
+   {
+    "id": "loot_10",
+    "x": 11.0,
+    "z": -103.0,
+    "r": 1.6,
+    "label": "Toolbox / workbench drawer",
+    "container": "toolbox",
+    "location": "loc_dixie_annex",
+    "filler": true
+   },
+   {
+    "id": "loot_11",
+    "x": 49.0,
+    "z": -31.0,
+    "r": 1.6,
+    "label": "Military crate",
+    "container": "military_crate",
+    "location": "loc_dixie_annex",
+    "filler": true
+   },
+   {
+    "id": "loot_12",
+    "x": 11.0,
+    "z": -31.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture",
+    "container": "woodpile",
+    "location": "loc_dixie_annex",
+    "filler": true
+   },
+   {
+    "id": "loot_13",
+    "x": -25.0,
+    "z": -131.0,
+    "r": 1.6,
+    "label": "Locker",
+    "container": "locker",
+    "location": "loc_annex_holds",
+    "filler": true
+   },
+   {
+    "id": "loot_14",
+    "x": -27.0,
+    "z": 5.0,
+    "r": 1.6,
+    "label": "Frozen body",
+    "container": "corpse",
+    "location": "loc_dixie_hotsprings",
+    "filler": true
+   },
+   {
+    "id": "loot_15",
+    "x": 29.0,
+    "z": 5.0,
+    "r": 1.6,
+    "label": "Frozen body",
+    "container": "corpse",
+    "location": "loc_dixie_hotsprings",
+    "filler": true
+   }
+  ]
+ },
+ "props": [
+  {
+   "id": "prop_01",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -33.0,
+   "z": -51.0,
+   "rotY": 1.571,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
+  },
+  {
+   "id": "prop_02",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -15.0,
+   "z": -87.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
+  },
+  {
+   "id": "prop_03",
+   "asset": "assets/kenney/roads/construction-barrier.glb",
+   "x": -5.0,
+   "z": -67.0,
+   "rotY": 0.0,
+   "h": 1.1,
+   "collide": false
+  },
+  {
+   "id": "prop_04",
+   "asset": "assets/kenney/roads/light-square-double.glb",
+   "x": -7.0,
+   "z": -77.0,
+   "rotY": 0.0,
+   "h": 6,
+   "collide": false,
+   "tag": "gate_flood"
+  },
+  {
+   "id": "prop_05",
+   "asset": "assets/kenney/roads/electricity-pole.glb",
+   "x": -15.0,
+   "z": -81.0,
+   "rotY": 0.0,
+   "h": 7,
+   "collide": false
+  },
+  {
+   "id": "prop_06",
+   "asset": "assets/kenney/roads/electricity-pole.glb",
+   "x": 37.0,
+   "z": -77.0,
+   "rotY": 0.0,
+   "h": 7,
+   "collide": false
+  }
+ ],
+ "interactives": [
+  {
+   "id": "ch07b_maglocks",
+   "type": "hookup",
+   "x": -9.0,
+   "z": -123.0,
+   "r": 1.8,
+   "label": "Maglock bus: tie in the ground power cart",
+   "requiresItems": {
+    "gpu_cart": 1
+   },
+   "setsFlag": "ch07b_maglocks_on",
+   "storyHook": "annex_maglock_power",
+   "quest": "q_control_cards"
+  },
+  {
+   "id": "ch07b_cards",
+   "type": "open",
+   "x": 1.0,
+   "z": -147.0,
+   "r": 1.8,
+   "label": "Hold A6: hardened control cards",
+   "requiresFlags": [
+    "ch07b_maglocks_on"
+   ],
+   "setsFlag": "ch07b_cards_taken",
+   "givesItems": {
+    "control_cards": 1,
+    "lamp_kit": 1
+   },
+   "quest": "q_control_cards"
+  },
+  {
+   "id": "ch07b_annex_log",
+   "type": "read",
+   "x": -33.0,
+   "z": -147.0,
+   "r": 1.8,
+   "label": "Hold A2: water-swollen log",
+   "requiresFlags": [
+    "ch07b_maglocks_on"
+   ],
+   "givesItems": {
+    "annex_log": 1
+   }
+  },
+  {
+   "id": "ch07b_issue",
+   "type": "open",
+   "x": 33.0,
+   "z": -89.0,
+   "r": 1.8,
+   "label": "Detail supply shelf",
+   "givesItems": {
+    "mask_filter": 1,
+    "canned_food": 2
+   }
+  }
+ ],
+ "safeZones": [
+  {
+   "id": "safe_01",
+   "kind": "camp",
+   "x": -35.0,
+   "z": -125.0,
+   "r": 3.0,
+   "label": "Entry hall (out of the wind)",
+   "warmth": false,
+   "save": true,
+   "sealed": false
+  }
+ ],
+ "setPieces": [
+  {
+   "id": "sp_ch07b_tolliver",
+   "type": "standoff",
+   "area": {
+    "type": "rect",
+    "x0": -12.0,
+    "z0": -70.0,
+    "x1": 10.0,
+    "z1": -60.0
+   },
+   "note": "Single armed guard; a fight only if Braith fires first.",
+   "storyEncounter": "enc_ch07_tolliver",
+   "npc": "amb_tolliver",
+   "guardStats": "authority_guard"
+  },
+  {
+   "id": "sp_ch07b_truck_stall",
+   "type": "vehicle_stall",
+   "path": [
+    [
+     -49.0,
+     -47.0
+    ],
+    [
+     -33.0,
+     -51.0
+    ]
+   ],
+   "note": "The truck dies on the valley road; headlights flicker."
+  },
+  {
+   "id": "sp_wing_b",
+   "type": "sealed_wing",
+   "area": {
+    "type": "rect",
+    "x0": 6.0,
+    "z0": -164.0,
+    "x1": 28.0,
+    "z1": -130.0
+   },
+   "note": "Wing B: no door in the partition; the bent-outward door is a wall decal at (28,18). Flooded stair + rubble.",
+   "features": [
+    "flooded_stair",
+    "collapsed_ceiling",
+    "door_bent_outward"
+   ],
+   "enterable": false,
+   "doorAt": [
+    11.0,
+    -153.0
+   ],
+   "bentDoorAt": [
+    5.0,
+    -135.0
+   ]
+  }
+ ],
+ "encounters": [
+  {
+   "id": "z_ch07b_road",
+   "area": {
+    "type": "rect",
+    "x0": -50.0,
+    "z0": -44.0,
+    "x1": -10.0,
+    "z1": -30.0
+   },
+   "groups": [
+    {
+     "group": "g_ch07b_road",
+     "wave": 1
+    }
+   ],
+   "storyEncounters": [
+    "enc_ch07_road_tallman"
+   ]
+  },
+  {
+   "id": "z_ch07b_flats",
+   "area": {
+    "type": "rect",
+    "x0": 8.0,
+    "z0": -68.0,
+    "x1": 50.0,
+    "z1": -30.0
+   },
+   "groups": [
+    {
+     "group": "g_ch07b_flats",
+     "wave": 1
+    }
+   ]
+  },
+  {
+   "id": "z_ch07b_hangar",
+   "area": {
+    "type": "rect",
+    "x0": 10.0,
+    "z0": -104.0,
+    "x1": 40.0,
+    "z1": -84.0
+   },
+   "groups": [
+    {
+     "group": "g_ch07b_detail_w1",
+     "wave": 1
+    },
+    {
+     "group": "g_ch07b_detail_w2",
+     "wave": 2
+    }
+   ],
+   "storyEncounters": [
+    "enc_ch07_recovery_detail"
+   ],
+   "note": "Only if fought (recovery_detail_outcome=fought): 4 then 2 (systems ch07 cap 5)."
+  },
+  {
+   "id": "z_ch07b_corridor",
+   "area": {
+    "type": "rect",
+    "x0": -44.0,
+    "z0": -138.0,
+    "x1": 4.0,
+    "z1": -130.0
+   },
+   "groups": [
+    {
+     "group": "g_ch07b_holds",
+     "wave": 1
+    }
+   ],
+   "storyEncounters": [
+    "enc_ch07_holds_tallman"
+   ]
+  },
+  {
+   "id": "z_ch07b_den",
+   "area": {
+    "type": "rect",
+    "x0": -48.0,
+    "z0": -14.0,
+    "x1": 18.0,
+    "z1": 6.0
+   },
+   "groups": [
+    {
+     "group": "g_ch07b_den",
+     "wave": 1
+    }
+   ],
+   "note": "Two torpid Tallmen; 0 active unless shot."
+  }
+ ],
+ "triggers": [
+  {
+   "id": "t_ch07b_start",
+   "on": "load",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": -45.0,
+    "z": -47.0,
+    "r": 3
+   },
+   "actions": [
+    {
+     "type": "set_time",
+     "value": 0.9
+    },
+    {
+     "type": "set_weather",
+     "weather": "brown_sky"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch07b_started",
+     "value": true
+    },
+    {
+     "type": "checkpoint"
+    }
+   ]
+  },
+  {
+   "id": "t_ch07_dixie_road",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -36.0,
+    "z0": -50.0,
+    "x1": -26.0,
+    "z1": -42.0
+   },
+   "actions": [
+    {
+     "type": "spawn_setpiece",
+     "id": "sp_ch07b_truck_stall"
+    },
+    {
+     "type": "dialogue",
+     "id": "ch07_dixie_road"
+    },
+    {
+     "type": "activate_group",
+     "group": "g_ch07b_road"
+    },
+    {
+     "type": "checkpoint"
+    }
+   ]
+  },
+  {
+   "id": "t_ch07_annex_gate",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -8.0,
+    "z0": -70.0,
+    "x1": 8.0,
+    "z1": -60.0
+   },
+   "actions": [
+    {
+     "type": "spawn_setpiece",
+     "id": "sp_ch07b_tolliver"
+    },
+    {
+     "type": "dialogue",
+     "id": "ch07_annex_gate"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch07b_gate_open",
+     "value": true
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch07b_started",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch07_recovery_detail",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": 10.0,
+    "z0": -104.0,
+    "x1": 40.0,
+    "z1": -84.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch07_recovery_detail"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch07b_gate_open",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch07b_detail_fight",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": 10.0,
+    "z0": -104.0,
+    "x1": 40.0,
+    "z1": -84.0
+   },
+   "actions": [
+    {
+     "type": "activate_group",
+     "group": "g_ch07b_detail_w1"
+    },
+    {
+     "type": "activate_group",
+     "group": "g_ch07b_detail_w2"
+    }
+   ],
+   "when": [
+    {
+     "flag": "recovery_detail_outcome",
+     "eq": "fought"
+    }
+   ]
+  },
+  {
+   "id": "t_ch07_annex_holds",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -44.0,
+    "z0": -138.0,
+    "x1": 4.0,
+    "z1": -130.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch07_annex_holds"
+    },
+    {
+     "type": "activate_group",
+     "group": "g_ch07b_holds"
+    },
+    {
+     "type": "checkpoint"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch07b_maglocks_on",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch07_hotsprings_den",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -48.0,
+    "z0": -28.0,
+    "x1": 18.0,
+    "z1": -14.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch07_hotsprings_den"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch07b_den_seen",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch07b_den_shot",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -48.0,
+    "z0": -14.0,
+    "x1": 18.0,
+    "z1": 6.0
+   },
+   "actions": [
+    {
+     "type": "activate_group",
+     "group": "g_ch07b_den"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch07b_den_shot",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch07b_leave",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -50.0,
+    "z0": -50.0,
+    "x1": -46.0,
+    "z1": -42.0
+   },
+   "actions": [
+    {
+     "type": "set_flag",
+     "flag": "ch07b_done",
+     "value": true
+    },
+    {
+     "type": "checkpoint"
+    },
+    {
+     "type": "chapter_end",
+     "next": "ch07_dead_air"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch07b_cards_taken",
+     "eq": true
+    }
+   ],
+   "note": "Return leg: back to ch07_dead_air (spawn_return at Fallon). The story-order next level stays ch08_ashfall."
+  }
+ ],
+ "objectives": [
+  {
+   "id": "o1",
+   "order": 1,
+   "text": "Get the truck to the Annex",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch07b_gate_open",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o2",
+   "order": 2,
+   "text": "Power the maglocks with the cart",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch07b_maglocks_on",
+     "eq": true
+    }
+   ],
+   "quest": "q_control_cards"
+  },
+  {
+   "id": "o3",
+   "order": 3,
+   "text": "Take the hardened control cards",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch07b_cards_taken",
+     "eq": true
+    }
+   ],
+   "quest": "q_control_cards"
+  },
+  {
+   "id": "o4",
+   "order": 4,
+   "text": "The recovery detail in the hangar",
+   "optional": true,
+   "completeWhen": [
+    {
+     "flag": "recovery_detail_outcome"
+    }
+   ]
+  },
+  {
+   "id": "o5",
+   "order": 5,
+   "text": "The hot-springs den",
+   "optional": true,
+   "completeWhen": [
+    {
+     "flag": "ch07b_den_seen",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o6",
+   "order": 6,
+   "text": "Back to the truck",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch07b_done",
+     "eq": true
+    }
+   ]
+  }
+ ],
+ "storyEnemyTypes": [
+  "coyote",
+  "recovery_detail",
+  "tallman"
+ ],
+ "levelSplit": {
+  "chapter": "ch07",
+  "this": "loc_dixie_annex + loc_annex_holds + loc_dixie_hotsprings",
+  "other": "ch07_dead_air",
+  "returnLeg": "chapter_end -> ch07_dead_air with ch07b_done=true (spawn_return at Fallon)"
+ },
+ "companion": {
+  "id": "wraith",
+  "spawn": {
+   "x": -43.0,
+   "z": -49.0
+  },
+  "when": [
+   {
+    "flag": "wraith_alive",
+    "eq": true
+   }
+  ],
+  "follow": {
+   "leashM": 6.0,
+   "catchUpM": 14.0,
+   "nav": "grid_bfs_walkable",
+   "avoid": [
+    "door_clearance_cells",
+    "loot_cells"
+   ],
+   "note": "Follows Braith over walkable tiles; idles at heel inside buildings."
+  },
+  "verbs": [
+   "track",
+   "warn",
+   "guard",
+   "hold"
+  ],
+  "injuredWhen": [
+   {
+    "flag": "wraith_injured",
+    "eq": true
+   }
+  ]
+ },
+ "lootSource": "v2"
+}

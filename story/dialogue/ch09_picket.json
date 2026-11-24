@@ -1,23 +1,29 @@
 {
   "id": "ch09_picket",
   "chapter": "ch09",
-  "location": "loc_jay_cooke",
-  "trigger": "Remnant picket on the Hwy 210 bridge. Searchlight in the snow.",
+  "location": "river_ice",
+  "trigger": "The Remnant picket at the Glendale bridge over the frozen Truckee.",
   "speakers": [
+    "narrator",
     "ruiz",
-    "kessler",
-    "dell",
-    "narrator"
+    "braith",
+    "ironwood_soldier"
   ],
   "start": "start",
   "nodes": [
     {
       "id": "start",
       "speaker": "narrator",
-      "text": "Sandbags on the bridge. A searchlight sweeping the snow. Kessler's last loyalists, and the last diesel.",
+      "text": "The Truckee is frozen solid, edge to edge. A searchlight on the bridge ahead sweeps the ice. Kessler's picket.",
+      "next": "p1"
+    },
+    {
+      "id": "p1",
+      "speaker": "narrator",
+      "text": "Thirty people behind you. Kids. Sleds. The searchlight crosses the ice every forty seconds.",
       "branches": [
         {
-          "next": "ruiz",
+          "next": "gap",
           "conditions": [
             {
               "flag": "ruiz_defected",
@@ -26,104 +32,20 @@
           ]
         },
         {
-          "next": "noruiz"
+          "next": "p2"
         }
       ]
-    },
-    {
-      "id": "ruiz",
-      "speaker": "ruiz",
-      "text": "Shift change is at the hour. Eight-minute gap on the east end. I built that schedule.",
-      "next": "ruiz2"
-    },
-    {
-      "id": "ruiz2",
-      "speaker": "ruiz",
-      "text": "We go quiet, in a line, no lights. If anyone coughs, we go anyway.",
-      "choices": [
-        {
-          "text": "[Take Ruiz's gap]",
-          "next": "gap"
-        },
-        {
-          "text": "[Hit the picket. Take their fuel.]",
-          "next": "fight"
-        }
-      ]
-    },
-    {
-      "id": "noruiz",
-      "speaker": "narrator",
-      "text": "No way around but the thin ice downstream, or straight through.",
-      "choices": [
-        {
-          "text": "[Detour across the thin ice]",
-          "next": "ice"
-        },
-        {
-          "text": "[Hit the picket. Take their fuel.]",
-          "next": "fight"
-        },
-        {
-          "text": "[Talk to them]",
-          "next": "talk"
-        }
-      ]
-    },
-    {
-      "id": "talk",
-      "speaker": "kessler",
-      "text": "[Loudspeaker] Civilian column, you are approaching a federal position. State your number and purpose.",
-      "choices": [
-        {
-          "text": "Twenty people. Freezing. Let us pass.",
-          "next": "talk2"
-        },
-        {
-          "text": "[Back off]",
-          "next": "noruiz"
-        }
-      ]
-    },
-    {
-      "id": "talk2",
-      "speaker": "kessler",
-      "text": "[Loudspeaker] Negative. Leave your fuel and medical supplies at the marker, then pass.",
-      "choices": [
-        {
-          "text": "[Leave the supplies]",
-          "next": "pay",
-          "effects": [
-            {
-              "take": "firewood",
-              "qty": 4
-            },
-            {
-              "take": "med_kit",
-              "qty": 1
-            },
-            {
-              "take": "antibiotics",
-              "qty": 1
-            }
-          ]
-        },
-        {
-          "text": "[Hit the picket]",
-          "next": "fight"
-        }
-      ]
-    },
-    {
-      "id": "pay",
-      "speaker": "narrator",
-      "text": "You leave it at the marker. They let you pass. A soldier on the sandbags lifts a hand, ashamed.",
-      "next": "end"
     },
     {
       "id": "gap",
+      "speaker": "ruiz",
+      "text": "East pier. The searchlight's motor hangs every third pass. I installed it. Nine seconds of dark. Go on my mark.",
+      "next": "gap2"
+    },
+    {
+      "id": "gap2",
       "speaker": "narrator",
-      "text": "Eight minutes. Twenty people. Nobody coughs. On the far side, Ruiz is shaking.",
+      "text": "Nine seconds at a time, thirty people cross under the bridge. Nobody coughs. Nobody cries. A miracle of cold.",
       "effects": [
         {
           "set": "ch09_ruiz_gap",
@@ -133,37 +55,82 @@
       "next": "end"
     },
     {
-      "id": "ice",
+      "id": "p2",
       "speaker": "narrator",
-      "text": "The ice groans under the column. Everyone gets across. The sled nearly doesn't.",
-      "effects": [
+      "text": "No way under without being seen.",
+      "choices": [
         {
-          "stat": "warmth",
-          "delta": -20
+          "text": "[Ironwood ID. Talk your way through]",
+          "next": "id",
+          "conditions": [
+            {
+              "item": "ironwood_id",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "ironwood_id",
+              "qty": 1
+            }
+          ]
+        },
+        {
+          "text": "[Assault the picket]",
+          "next": "fight",
+          "effects": [
+            {
+              "event": "encounter",
+              "id": "enc_ch09_picket_assault"
+            },
+            {
+              "add": "ironwood_hostility",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "text": "[Wait for the blizzard to peak]",
+          "next": "wait",
+          "effects": [
+            {
+              "event": "time_skip",
+              "hours": 3
+            },
+            {
+              "stat": "warmth",
+              "delta": -30
+            },
+            {
+              "add": "column_size",
+              "value": -2
+            }
+          ]
         }
-      ],
+      ]
+    },
+    {
+      "id": "id",
+      "speaker": "ironwood_soldier",
+      "text": "Ruiz's ID? ...She's alive? Go. Go before the lieutenant wakes up. I didn't see you.",
       "next": "end"
     },
     {
       "id": "fight",
       "speaker": "narrator",
-      "text": "Muzzle flashes in the snow. Kessler's voice on the speaker, perfectly calm, counting casualties.",
-      "effects": [
-        {
-          "add": "ironwood_hostility",
-          "value": 2
-        },
-        {
-          "event": "encounter",
-          "id": "enc_ch09_picket_assault"
-        }
-      ],
+      "text": "Muzzle flash on the ice. The searchlight dies. So do two of them. The column runs.",
+      "next": "end"
+    },
+    {
+      "id": "wait",
+      "speaker": "narrator",
+      "text": "Three hours in the whiteout. When it's thick enough, you cross. Two people don't get up from the snow.",
       "next": "end"
     },
     {
       "id": "end",
       "speaker": "narrator",
-      "text": "Jay Cooke. The trees are black. Somewhere ahead, wolves.",
+      "text": "Past the bridge, the river bends south toward Steamboat Creek. The blizzard closes behind you.",
       "end": true
     }
   ]

@@ -1,18 +1,23 @@
-// ASHFALL: Lakehead - audio manager (ES module; also exposes window.GameAudio).
+// ASHFALL: Truckee Meadows (Revision 2, Nevada) - audio manager (ES module; also exposes window.GameAudio).
 // Owner: audio. Zero dependencies. Every public method is a safe no-op if WebAudio is missing or fails.
 //
-//   import { GameAudio } from "../audio/audio.js";
+//   import { GameAudio } from "../audio/audio.js?v=r9";
 //   GameAudio.init();                       // attaches first-gesture unlock (iOS/Safari safe)
 //   GameAudio.play("gun_pistol");           // or a pool: GameAudio.play("footstep_snow")
 //   GameAudio.setListenerFromObject(camera);// each frame (three.js camera)
 //   GameAudio.emitter(e).play("enemy_growl")// 3D positional (HRTF, equalpower fallback)
-//   GameAudio.playLine("ray", "ch01_ray_garage.r1")      // voiced NPC line (lazy-loaded, ducks music/ambience)
+//   GameAudio.playLine("gil", "ch01_gil_garage.g1")      // voiced NPC line (lazy-loaded, ducks music/ambience)
 //   GameAudio.playBark("raider", "spot", { emitter })    // random non-repeating combat bark, 3D
 //   GameAudio.onLine((text, who, dur) => showSubtitle(text, who, dur))
+//   GameAudio.setChapter("ch03")                         // act music + seasonal ambience + footstep surface (Rev 2)
+//   GameAudio.setSeason("late_fall", { fade: 4 })        // explicit: summer | autumn | late_fall | winter
+//   GameAudio.playCreature("tallman", "call", { emitter }) // Tallmen / Hollows (assimilated_human|animal), 3D
+//   GameAudio.playWraith("hollow_tell", { emitter })      // companion: growl|bark|whine|pant|hollow_tell|husk_tell
+//   GameAudio.playMimic("walt", { emitter })              // Hollow borrowed-voice mimicry (VO), = playBark("hollow","mimic",{borrow})
 //
 // See README.md for the full API.
 
-import { MANIFEST } from "./manifest.js";
+import { MANIFEST } from "./manifest.js?v=r9";
 
 const BUSES = ["master", "sfx", "ambience", "music", "ui", "vo"];
 const DEFAULT_VOL = { master: 0.9, sfx: 0.9, ambience: 0.7, music: 0.55, ui: 0.7, vo: 1.0 };
@@ -27,9 +32,80 @@ export const CHAPTER_TO_ACT = { 1: "blackout", 2: "blackout", 3: "collapse", 4: 
 // Bark factions to prefetch per act (chapter changes trigger it in attachAshfallAudio).
 const ACT_BARKS = { blackout: ["raider", "looter", "watch_militia", "authority_guard", "trader"],
   collapse: ["raider", "desperate_family", "authority_guard", "trader"],
-  civil_war: ["ironwood", "compact_militia", "harbor_militia", "drone", "authority_guard"],
-  nuclear_winter: ["remnant", "husk", "trader", "desperate_family"] };
-const AMB_LAYERS = { wind: "amb_wind", blizzard: "amb_blizzard", fire: "amb_fire", war: "amb_war" };
+  civil_war: ["ironwood", "compact_militia", "harbor_militia", "drone", "authority_guard", "deserter"],
+  nuclear_winter: ["remnant", "husk", "trader", "desperate_family", "hollow", "boot_strippers"] };
+const AMB_LAYERS = { wind: "amb_wind", blizzard: "amb_blizzard", fire: "amb_fire", war: "amb_war",
+  // Revision 2 seasonal layers (layer name -> loop). setLayer("cicadas", 0.4) etc. also works directly.
+  summer_wind: "amb_summer_wind", cicadas: "amb_cicadas", stillness: "amb_stillness", autumn_wind: "amb_autumn_wind",
+  dry_brush: "amb_dry_brush", fall_rain: "amb_fall_rain", sleet: "amb_sleet", subzero_creaks: "amb_subzero_creaks",
+  ash_hush: "amb_ash_hush", floodlight: "amb_floodlight_hum" };
+
+// ---------------------------------------------------------------------------------------------
+// Revision 2 (Nevada): seasons. Chapter -> season drives ambience beds, the "wind"/"blizzard" layer sounds
+// and the default footstep surface. Override GameAudio.chapterToSeason / GameAudio.seasonProfiles if needed.
+// ---------------------------------------------------------------------------------------------
+export const SEASONS = ["summer", "autumn", "late_fall", "winter"];
+export const CHAPTER_TO_SEASON = { 1: "summer", 2: "summer", 3: "autumn", 4: "autumn", 5: "late_fall", 6: "late_fall",
+  7: "late_fall", 8: "winter", 9: "winter", 10: "winter" };
+// story/gameplay_hooks.json uses late_summer | autumn | late_fall | nuclear_winter; acts are accepted too.
+const SEASON_ALIAS = { summer: "summer", late_summer: "summer", blackout: "summer", autumn: "autumn", fall: "autumn",
+  collapse: "autumn", late_fall: "late_fall", latefall: "late_fall", civil_war: "late_fall", winter: "winter",
+  nuclear_winter: "winter", fallout_winter: "winter" };
+// wind: sound for the "wind" layer (setWind). storm: sound for the "blizzard" layer (setBlizzard); null = storms just
+// push the wind harder (no blizzard loop in summer/autumn rain). beds: layer -> level when the season is active.
+export const SEASON_PROFILES = {
+  summer: { act: "blackout", wind: "amb_summer_wind", storm: "amb_autumn_wind", surface: "dirt",
+    beds: { cicadas: 0.45, stillness: 0.3 } },
+  autumn: { act: "collapse", wind: "amb_autumn_wind", storm: null, surface: "dirt",
+    beds: { dry_brush: 0.42 } },
+  late_fall: { act: "civil_war", wind: "amb_wind", storm: null, surface: "wet",
+    beds: { fall_rain: 0.32, sleet: 0.22, war: 0.3 } },
+  winter: { act: "nuclear_winter", wind: "amb_wind", storm: "amb_blizzard", surface: "snow",
+    beds: { ash_hush: 0.4, subzero_creaks: 0.38, floodlight: 0.1 } },
+};
+// gameplay_hooks weather ids -> layer overrides on top of the season (setWeatherType).
+export const WEATHER_TYPES = {
+  heat_haze: { wind: 0.2, blizzard: 0, cicadas: 0.5, stillness: 0.35 }, dust_wind: { wind: 0.75, blizzard: 0.55, cicadas: 0.2 },
+  clear: { wind: 0.3, blizzard: 0 }, clear_autumn: { wind: 0.35, blizzard: 0, dry_brush: 0.35 },
+  autumn_wind: { wind: 0.85, blizzard: 0, dry_brush: 0.55 }, frost: { wind: 0.3, blizzard: 0 },
+  overcast: { wind: 0.45, blizzard: 0, fall_rain: 0.12, sleet: 0 }, drizzle: { wind: 0.4, blizzard: 0, fall_rain: 0.35, sleet: 0 },
+  sleet: { wind: 0.6, blizzard: 0, sleet: 0.5, fall_rain: 0.15 }, freezing_rain: { wind: 0.5, blizzard: 0, fall_rain: 0.45, sleet: 0.3 },
+  clear_cold: { wind: 0.3, blizzard: 0 }, brown_sky: { wind: 0.3, blizzard: 0, fall_rain: 0, sleet: 0 },
+  snow: { wind: 0.45, blizzard: 0, ash_hush: 0.45 }, grey_snow: { wind: 0.45, blizzard: 0, ash_hush: 0.5 },
+  fallout_rain: { wind: 0.4, blizzard: 0, fall_rain: 0.35, ash_hush: 0.25 }, ashfall: { wind: 0.35, blizzard: 0, ash_hush: 0.55 },
+  blizzard: { wind: 1, blizzard: 1 },
+};
+const SURFACE_ALIAS = { concrete: "hard", asphalt: "hard", ice: "hard", wood: "hard", floor: "hard", indoor: "hard",
+  sand: "dirt", dust: "dirt", earth: "dirt", grass: "dirt", stone: "gravel", rubble: "gravel", mud: "wet", puddle: "wet",
+  rain: "wet", ash: "snow", powder: "snow" };
+const SURFACE_FALLBACK = { gravel: "dirt", dirt: "hard", wet: "hard", snow: "hard" };
+// Creatures (Act III). kind aliases: code_kind "stalker" (gameplay_hooks), speaker "hollow", Rev 2 enemy types.
+const CREATURE_ALIAS = { tallman: "tallman", tallmen: "tallman", stalker: "tallman",
+  assimilated_human: "assim_human", assim_human: "assim_human", hollow: "assim_human", hollows: "assim_human", assimilated: "assim_human",
+  hollow_human: "assim_human", assimilated_animal: "assim_animal", assim_animal: "assim_animal", hollow_animal: "assim_animal",
+  assimilated_dog: "assim_animal", assimilated_coyote: "assim_animal" };
+// event -> pool/sound or [sound, extra opts]. Loops (stalk) return a handle you stop with stopCreature().
+export const CREATURE_EVENTS = {
+  tallman: { stalk: ["tallman_stalk", { loop: true }], idle: "tallman_click", spot: "tallman_click", click: "tallman_click",
+    chitter: "tallman_click", call: "tallman_call", mimic: "tallman_call", ambush: ["tallman_ambush", { refDistance: 3.5 }],
+    lunge: ["tallman_ambush", { refDistance: 3.5 }], attack: ["tallman_ambush", { refDistance: 3.5 }],
+    hurt: ["tallman_click", { rate: 1.25 }], retreat: ["tallman_click", { rate: 0.85, volume: 0.8 }], death: ["tallman_call", { rate: 0.7 }] },
+  assim_human: { stalk: ["assim_human_stalk", { loop: true }], idle: "assim_human_call", spot: "assim_human_call",
+    call: "assim_human_call", mimic: "assim_human_call", lunge: ["assim_human_lunge", { refDistance: 3 }],
+    attack: ["assim_human_lunge", { refDistance: 3 }], ambush: ["assim_human_lunge", { refDistance: 3 }],
+    hurt: ["assim_human_lunge", { rate: 1.2, volume: 0.6 }], death: ["assim_human_call", { rate: 0.75, volume: 0.8 }] },
+  // Hollow animals are near-silent (story): movement scrapes + rare bone chitter; "call" is a single pitched-down yip.
+  assim_animal: { stalk: "assim_animal_scrape", move: "assim_animal_scrape", scrape: "assim_animal_scrape", spot: "assim_animal_scrape",
+    idle: ["assim_animal_chitter", { volume: 0.7 }], chitter: "assim_animal_chitter", call: "assim_animal_call", yip: "assim_animal_call",
+    lunge: ["assim_animal_lunge", { refDistance: 3 }], attack: ["assim_animal_lunge", { refDistance: 3 }],
+    ambush: ["assim_animal_lunge", { refDistance: 3 }], hurt: ["assim_animal_chitter", { rate: 1.2 }], death: ["assim_animal_call", { rate: 0.8 }] },
+};
+// Wraith (Belgian Malinois companion). hollow_tell vs husk_tell is a GAMEPLAY TELL - see README §13.
+export const WRAITH_EVENTS = { growl: "wraith_growl", warn: "wraith_growl", tallman: "wraith_growl", bark: "wraith_bark",
+  alert: "wraith_bark", whine: "wraith_whine", anxious: "wraith_whine", fear: "wraith_whine", scared: "wraith_whine",
+  refuse: "wraith_whine", pant: ["wraith_pant", { loop: true }], calm: ["wraith_pant", { loop: true }],
+  hollow_tell: "wraith_hollow_tell", hollow: "wraith_hollow_tell", assimilated: "wraith_hollow_tell", mimic: "wraith_hollow_tell",
+  husk_tell: "wraith_husk_tell", husk: "wraith_husk_tell", stranger: "wraith_husk_tell" };
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const now = () => (typeof performance !== "undefined" ? performance.now() : Date.now());
@@ -104,8 +180,72 @@ const SYNTH = {
       x[i] = sw * (0.5 * Math.sin(2 * Math.PI * f * t) + 0.25 * Math.sin(2 * Math.PI * f * 1.5 * t) + 0.12 * Math.sin(2 * Math.PI * f * 2 * t)); }
     return normalize(x, 0.35); },
 };
+// Revision 2 fallbacks (only used if a file is missing / fails to decode).
+function loopify(x, sr) { const n = x.length, X = Math.floor(sr * 0.5); for (let i = 0; i < X; i++) { const g = i / X; x[i] = x[i] * g + x[n - X + i] * (1 - g); } return x.subarray(0, n - X); }
+function amLoop(sr, dur, { lp = 6000, hp = 3000, rate = 120, swell = 0.25, seed = 1, gain = 0.4, pow = 3 } = {}) {
+  const n = Math.floor(dur * sr), x = new Float32Array(n), r = rnd(seed); for (let i = 0; i < n; i++) x[i] = r();
+  onePoleHP(x, hp, sr); onePoleLP(x, lp, sr); onePoleLP(x, lp, sr);
+  for (let i = 0; i < n; i++) { const t = i / sr; x[i] *= Math.pow(0.5 + 0.5 * Math.sin(2 * Math.PI * rate * t), pow) * (1 - swell + swell * Math.sin(Math.PI * t / dur)); }
+  return normalize(loopify(x, sr), gain);
+}
+function sparkLoop(sr, dur, { density = 400, hp = 1500, lp = 7000, bed = 0.05, seed = 1, gain = 0.4 } = {}) {
+  const n = Math.floor(dur * sr), x = new Float32Array(n), r = rnd(seed);
+  for (let i = 0; i < n; i++) x[i] = r() * bed;
+  for (let k = 0; k < density * dur; k++) { const at = Math.floor((r() * 0.5 + 0.5) * (n - 1)); x[at] += r(); }
+  onePoleHP(x, hp, sr); onePoleLP(x, lp, sr); return normalize(loopify(x, sr), gain);
+}
+function voiceTone(sr, dur, f0, f1, { lp = 1800, am = 0, amRate = 14, noise = 0.3, seed = 1, peak = 0.7, cut = 1 } = {}) {
+  const n = Math.floor(dur * sr), x = new Float32Array(n), r = rnd(seed); let ph = 0;
+  for (let i = 0; i < n; i++) { const t = i / sr, f = f0 * Math.pow(f1 / f0, t / dur); ph += f / sr;
+    const s = (ph % 1) * 2 - 1 + noise * r(); const e = Math.min(1, t / 0.03) * Math.min(1, (dur * cut - t) / 0.08);
+    x[i] = s * Math.max(0, e) * (1 - am + am * (0.5 + 0.5 * Math.sign(Math.sin(2 * Math.PI * amRate * t)))); }
+  onePoleLP(x, lp, sr); onePoleLP(x, lp, sr); return normalize(x, peak);
+}
+function clickTrain(sr, dur, rate, { seed = 1, lo = 1200, peak = 0.7 } = {}) {
+  const n = Math.floor(dur * sr), x = new Float32Array(n), r = rnd(seed); let t = 0.02;
+  while (t < dur - 0.03) { const at = Math.floor(t * sr); for (let i = 0; i < 90 && at + i < n; i++) x[at + i] += Math.sin(2 * Math.PI * lo * i / sr) * Math.exp(-i / 18) * (0.6 + 0.4 * r()); t += (1 / rate) * (0.7 + 0.6 * Math.abs(r())); }
+  return normalize(x, peak);
+}
+Object.assign(SYNTH, {
+  amb_summer_wind: (sr) => normalize(noiseLoop(sr, 8, { lp: 450, gust: 0.4, seed: 13 }), 0.35),
+  amb_autumn_wind: (sr) => normalize(noiseLoop(sr, 8, { lp: 900, gust: 0.6, seed: 14 }), 0.5),
+  amb_cicadas: (sr) => amLoop(sr, 8, { rate: 118, swell: 0.5, seed: 15, gain: 0.25 }),
+  amb_stillness: (sr) => normalize(noiseLoop(sr, 8, { lp: 300, gust: 0.1, seed: 16 }), 0.12),
+  amb_dry_brush: (sr) => sparkLoop(sr, 8, { density: 900, hp: 1000, seed: 17, gain: 0.3 }),
+  amb_fall_rain: (sr) => sparkLoop(sr, 8, { density: 1400, hp: 1200, bed: 0.3, seed: 18, gain: 0.4 }),
+  amb_sleet: (sr) => sparkLoop(sr, 8, { density: 700, hp: 3000, lp: 9000, bed: 0.2, seed: 19, gain: 0.35 }),
+  amb_subzero_creaks: (sr) => { const x = normalize(noiseLoop(sr, 8, { lp: 150, gust: 0.1, seed: 20 }), 0.1); const c = clickTrain(sr, 1.2, 40, { seed: 21, lo: 700, peak: 0.25 }); for (const at of [1, 5]) { const o = Math.floor(at * sr); for (let i = 0; i < c.length && o + i < x.length; i++) x[o + i] += c[i] * Math.sin(Math.PI * i / c.length); } return x; },
+  amb_ash_hush: (sr) => normalize(noiseLoop(sr, 8, { lp: 1200, gust: 0.15, seed: 22 }), 0.15),
+  amb_floodlight_hum: (sr) => { const n = sr, x = new Float32Array(n); for (let i = 0; i < n; i++) { const p = 2 * Math.PI * 60 * i / sr; x[i] = Math.tanh(1.5 * (Math.sin(2 * p) + 0.45 * Math.sin(4 * p) + 0.3 * Math.sin(6 * p) + 0.15 * Math.sin(3 * p))); } return normalize(x, 0.12); },
+  tallman_stalk: (sr) => amLoop(sr, 6, { lp: 1400, hp: 250, rate: 0.55, swell: 0.3, seed: 23, gain: 0.35, pow: 2 }),
+  tallman_click: (sr, s) => clickTrain(sr, 1.0, 14 + 10 * s, { seed: 24 + s, lo: 1300 }),
+  tallman_call: (sr, s) => voiceTone(sr, 1.6, 212 + 20 * s, 140, { lp: 1200, am: 0.4, amRate: 31, noise: 0.25, seed: 25 + s }),
+  tallman_ambush: (sr) => normalize(mix(Math.floor(sr * 1.6), [tone(sr, 1.2, 1180, 1180, { decay: 0.5, amp: 0.5 })], [tone(sr, 1.2, 1251, 1251, { decay: 0.5, amp: 0.4 })], [tone(sr, 0.8, 70, 28, { decay: 0.2 })], [noiseBurst(sr, 0.9, { lp: 2500, decay: 0.4, seed: 26, attack: 0.5 }), Math.floor(sr * 0.3), 0.8]), 0.95),
+  assim_human_call: (sr, s) => voiceTone(sr, 1.4, 150 + 10 * s, 190, { lp: 1600, am: 0.6, amRate: 2.6, noise: 0.15, seed: 27 + s, peak: 0.55 }),
+  assim_human_stalk: (sr) => sparkLoop(sr, 6, { density: 6, hp: 200, lp: 900, bed: 0.01, seed: 28, gain: 0.3 }),
+  assim_human_lunge: (sr) => normalize(mix(Math.floor(sr * 1.0), [voiceTone(sr, 0.8, 320, 220, { lp: 2500, noise: 0.6, seed: 29 })], [noiseBurst(sr, 0.6, { lp: 2500, decay: 0.3, seed: 30, attack: 0.3 })]), 0.9),
+  assim_animal_chitter: (sr, s) => clickTrain(sr, 0.9, 28 + 8 * s, { seed: 31 + s, lo: 1500, peak: 0.4 }),
+  assim_animal_call: (sr) => voiceTone(sr, 0.5, 420, 260, { lp: 1500, noise: 0.15, seed: 33, peak: 0.35, cut: 0.95 }),
+  assim_animal_scrape: (sr, s) => normalize(noiseBurst(sr, 0.4, { lp: 5000, hp: 1500, decay: 0.12, seed: 34 + s, attack: 0.01 }), 0.4),
+  assim_animal_lunge: (sr) => normalize(mix(Math.floor(sr * 0.8), [noiseBurst(sr, 0.5, { lp: 3000, decay: 0.2, seed: 36, attack: 0.25 })], [noiseBurst(sr, 0.03, { lp: 7000, hp: 1500, decay: 0.004, seed: 37 }), Math.floor(sr * 0.5)]), 0.9),
+  wraith_growl: (sr, s) => voiceTone(sr, 1.4, 115 - 8 * s, 105, { lp: 900, am: 0.35, amRate: 22, noise: 0.8, seed: 38 + s, peak: 0.6 }),
+  wraith_hollow_tell: (sr) => voiceTone(sr, 2.2, 88, 84, { lp: 700, am: 0.6, amRate: 14, noise: 0.9, seed: 40, peak: 0.75 }),
+  wraith_bark: (sr, s) => SYNTH.bark(sr, s),
+  wraith_whine: (sr, s) => { const x = tone(sr, 1.1, 850 + 50 * s, 1150, { decay: 0.6, amp: 0.4 }); for (let i = 0; i < x.length; i++) x[i] *= Math.sin(Math.PI * i / x.length); return normalize(x, 0.35); },
+  wraith_husk_tell: (sr) => { const x = tone(sr, 1.2, 950, 1250, { decay: 0.8, amp: 0.3 }); for (let i = 0; i < x.length; i++) x[i] *= Math.sin(Math.PI * i / x.length) ** 2; return normalize(x, 0.3); },
+  wraith_pant: (sr) => { const n = Math.floor(sr * 3), x = new Float32Array(n), r = rnd(41); for (let i = 0; i < n; i++) { const ph = (i / n * 8) % 1; x[i] = r() * Math.pow(Math.sin(Math.PI * ph), 2) * (ph < 0.5 ? 1 : 0.6); } onePoleHP(x, 700, sr); onePoleLP(x, 3500, sr); return normalize(x, 0.25); },
+  power_hum_drop: (sr) => { const n = Math.floor(sr * 2.5), x = new Float32Array(n); let ph = 0; for (let i = 0; i < n; i++) { const t = i / sr, k = t < 0.8 ? 1 : Math.exp(-(t - 0.8) / 0.5); ph += 60 * (0.35 + 0.65 * k) / sr; x[i] = (Math.sin(2 * Math.PI * 2 * ph) + 0.5 * Math.sin(2 * Math.PI * ph)) * k * Math.min(1, t / 0.2); } return normalize(x, 0.3); },
+});
 function synthFor(name) {
-  const rules = [[/^footstep/, "footstep"], [/^gun_/, "gun"], [/^reload/, "reload"], [/^dry_fire/, "dry_fire"],
+  const rules = [[/^wraith_hollow_tell/, "wraith_hollow_tell"], [/^wraith_husk_tell/, "wraith_husk_tell"],
+    [/^wraith_growl/, "wraith_growl"], [/^wraith_bark/, "wraith_bark"], [/^wraith_whine/, "wraith_whine"], [/^wraith_pant/, "wraith_pant"],
+    [/^tallman_stalk/, "tallman_stalk"], [/^tallman_click/, "tallman_click"], [/^tallman_call/, "tallman_call"], [/^tallman_ambush/, "tallman_ambush"],
+    [/^assim_human_call/, "assim_human_call"], [/^assim_human_stalk/, "assim_human_stalk"], [/^assim_human_lunge/, "assim_human_lunge"],
+    [/^assim_animal_chitter/, "assim_animal_chitter"], [/^assim_animal_call/, "assim_animal_call"], [/^assim_animal_scrape/, "assim_animal_scrape"],
+    [/^assim_animal_lunge/, "assim_animal_lunge"], [/^power_hum_drop/, "power_hum_drop"],
+    [/^amb_summer_wind/, "amb_summer_wind"], [/^amb_autumn_wind/, "amb_autumn_wind"], [/^amb_cicadas/, "amb_cicadas"],
+    [/^amb_stillness/, "amb_stillness"], [/^amb_dry_brush/, "amb_dry_brush"], [/^amb_fall_rain/, "amb_fall_rain"], [/^amb_sleet/, "amb_sleet"],
+    [/^amb_subzero_creaks/, "amb_subzero_creaks"], [/^amb_ash_hush/, "amb_ash_hush"], [/^amb_floodlight/, "amb_floodlight_hum"],[/^footstep/, "footstep"], [/^gun_/, "gun"], [/^reload/, "reload"], [/^dry_fire/, "dry_fire"],
     [/^melee_swing/, "melee_swing"], [/^melee_hit/, "melee_hit"], [/^craft/, "craft"], [/^ui_click/, "ui_click"],
     [/^ui_confirm/, "ui_confirm"], [/^ui_back/, "ui_back"], [/^ui_error/, "ui_error"], [/^pickup/, "pickup"],
     [/growl/, "growl"], [/shout/, "shout"], [/bark/, "bark"], [/hurt/, "hurt"], [/radio/, "radio"], [/geiger/, "geiger"],
@@ -142,6 +282,11 @@ class AudioEngine {
     this._paused = false;
     this._blizzard = 0;
     this.chapterToAct = { ...CHAPTER_TO_ACT };
+    this.chapterToSeason = { ...CHAPTER_TO_SEASON };
+    this.seasonProfiles = JSON.parse(JSON.stringify(SEASON_PROFILES));
+    this.season = null;        // set by setSeason / setChapter (null = v1 behaviour: winter wind, snow steps)
+    this.autoSeason = true;    // setChapter() also switches the seasonal ambience + footsteps
+    this._bedScale = 1;
     this.listener = { x: 0, y: 1.6, z: 0, fx: 0, fy: 0, fz: -1 };
     this._rebuildPools();
     // voice-over state (see "voice-over" section)
@@ -512,10 +657,13 @@ class AudioEngine {
 
   // ------------------------------------------------------------------ footsteps
   /**
-   * Call every frame: footsteps(dt, { moving, sprint, speed (m/s, optional), surface: "snow"|"hard" })
+   * Call every frame: footsteps(dt, { moving, sprint, speed (m/s, optional), surface })
+   * surface: "snow"|"hard"|"dirt"|"gravel"|"wet" (+ aliases: concrete, ice, sand, mud, ...). Omitted = season default
+   * (dirt in summer/autumn, wet in late_fall, snow in winter; snow before any season is set, as in v1).
    * Steps fire by distance travelled, so speed changes the cadence naturally.
    */
-  footsteps(dt, { moving = false, sprint = false, speed, surface = "snow", volume = 1 } = {}) {
+  footsteps(dt, { moving = false, sprint = false, speed, surface, volume = 1 } = {}) {
+    surface = this.surfaceFor(surface);
     if (!moving) { this._foot.dist = Math.min(this._foot.dist, 0.9); return; }
     const v = speed ?? (sprint ? 4.85 : 3.15);
     const stride = sprint ? 1.65 : 1.4;
@@ -525,6 +673,22 @@ class AudioEngine {
       this._foot.side *= -1;
       this.play("footstep_" + surface, { volume: (sprint ? 0.9 : 0.6) * volume, randomPitch: 0.07, pan: 0.12 * this._foot.side, minGap: 0.12 });
     }
+  }
+
+  /** Resolve a footstep surface (aliases, season default, fallback if a pool is missing). */
+  surfaceFor(surface) {
+    let s = surface ? (SURFACE_ALIAS[surface] || surface) : (this.seasonProfiles[this.season]?.surface || "snow");
+    for (let i = 0; i < 4 && !this.pools.has("footstep_" + s); i++) s = SURFACE_FALLBACK[s] || "snow";
+    return s;
+  }
+  /** One footstep now: playFootstep({ surface, sprint, speed, volume, position | emitter, pan }). Returns a handle. */
+  playFootstep(o = {}) {
+    const surface = this.surfaceFor(o.surface), sp = o.speed ?? (o.sprint ? 4.85 : 3.15);
+    const vol = (o.volume ?? 1) * clamp(0.45 + sp * 0.1, 0.4, 1);
+    const opts = { volume: vol, randomPitch: 0.07, minGap: 0.08, pan: o.pan || 0 };
+    if (o.emitter) return o.emitter.play("footstep_" + surface, opts);
+    if (o.position) return this.play("footstep_" + surface, { ...opts, position: o.position });
+    return this.play("footstep_" + surface, opts);
   }
 
   /** Geiger counter: call every frame with level 0..1 (e.g. rad zone strength or stats.rad/100). */
@@ -564,8 +728,61 @@ class AudioEngine {
   setBlizzard(v, fade = 3) { this._blizzard = clamp(v, 0, 1); this._mixWeather(fade); }
   _mixWeather(fade) {
     const w = this._wind ?? 0.5, b = this._blizzard || 0;
+    const P = this.seasonProfiles[this.season];
+    if (P && !P.storm) {   // no storm loop this season: storms just push the seasonal wind harder
+      this.setLayer("wind", Math.min(1, (0.35 + 0.65 * w) * (1 + 0.45 * b)), fade);
+      this.setLayer("blizzard", 0, fade);
+      return;
+    }
     this.setLayer("wind", (0.35 + 0.65 * w) * Math.cos(b * Math.PI / 2), fade);
     this.setLayer("blizzard", Math.sin(b * Math.PI / 2), fade);
+  }
+  /** Point a layer at a different loop, crossfading if it is playing (used for season changes). */
+  _swapLayerSound(layer, sound, fade = 3) {
+    const L = this.amb[layer] || (this.amb[layer] = { name: sound, target: 0, gain: null, src: null });
+    if (L.name === sound) return;
+    if (L.src && this.ctx) {
+      const { src, gain } = L, t = this.ctx.currentTime;
+      try { gain.gain.cancelScheduledValues(t); gain.gain.setTargetAtTime(0, t, Math.max(0.01, fade / 3)); src.stop(t + fade + 0.5); } catch (_) {}
+      clearTimeout(L._stopT);
+    }
+    L.src = null; L.gain = null; L.name = sound;
+    if (L.target > 0.001) this.setLayer(layer, L.target, fade);
+  }
+  /**
+   * Seasonal ambience + footsteps. season: "summer"|"autumn"|"late_fall"|"winter" (also late_summer, nuclear_winter, or an act).
+   * opts: fade (s, default 4), beds (0..1 scale of the season's bed layers, default 1), music (true = also play the act loop),
+   * wind (false = leave the wind/blizzard layers alone). Crossfades out the previous season's beds. Returns the season or null.
+   */
+  setSeason(season, { fade = 4, beds, music = false, wind = true } = {}) {
+    const s = SEASON_ALIAS[String(season || "").toLowerCase()];
+    const P = s && this.seasonProfiles[s]; if (!P) return null;
+    if (beds != null) this._bedScale = clamp(+beds, 0, 1);
+    const changed = s !== this.season;
+    this.season = s;
+    if (wind) {
+      this._swapLayerSound("wind", P.wind || "amb_wind", fade);
+      this._swapLayerSound("blizzard", P.storm || "amb_blizzard", fade);
+      this._mixWeather(fade);
+    }
+    const all = new Set(); for (const p of Object.values(this.seasonProfiles)) for (const k of Object.keys(p.beds || {})) all.add(k);
+    if (changed || beds != null) for (const k of all) this.setLayer(k, (P.beds?.[k] || 0) * this._bedScale, fade);
+    if (music && P.act) this.playMusic(P.act, { fade });
+    if (this.ctx) for (const k of Object.keys(P.beds || {})) this.load(AMB_LAYERS[k] || k);
+    return s;
+  }
+  getSeason() { return this.season; }
+  /** Season for a chapter ("ch05" | 5). */
+  seasonFor(ch) { return this.chapterToSeason[ch] || this.chapterToSeason[parseInt(String(ch).replace(/\D/g, ""), 10)] || null; }
+  /** Story weather id (gameplay_hooks weather_types, e.g. "heat_haze", "sleet", "ashfall", "blizzard") -> layer mix. */
+  setWeatherType(type, fade = 3) {
+    const W = WEATHER_TYPES[type]; if (!W) return false;
+    if (W.wind != null) this._wind = clamp(W.wind, 0, 1);
+    if (W.blizzard != null) this._blizzard = clamp(W.blizzard, 0, 1);
+    this._mixWeather(fade);
+    for (const [k, v] of Object.entries(W)) if (k !== "wind" && k !== "blizzard") this.setLayer(k, v * this._bedScale, fade);
+    this.weatherType = type;
+    return true;
   }
   /** Convenience: setWeather({ wind, blizzard, fire, war }) - any subset. */
   setWeather({ wind, blizzard, fire, war } = {}, fade = 2) {
@@ -596,7 +813,17 @@ class AudioEngine {
     this.music = { ...this.music, name, src, gain: g };
   }
   /** Music for a chapter number (1..10) using chapterToAct. */
-  setChapter(n, o) { const act = this.chapterToAct[n] || this.chapterToAct[parseInt(String(n).replace(/\D/g, ""), 10)]; if (act) this.playMusic(act, o); return act; }
+  /**
+   * Chapter (1..10 or "ch05"): crossfades the act music AND (Rev 2) the seasonal ambience + footstep surface.
+   * opts: fade, volume, music (false = ambience only), ambience (false = music only). Returns the act (as in v1).
+   */
+  setChapter(n, o = {}) {
+    const num = parseInt(String(n).replace(/\D/g, ""), 10);
+    const act = this.chapterToAct[n] || this.chapterToAct[num];
+    if (act && o.music !== false) this.playMusic(act, o);
+    if (this.autoSeason && o.ambience !== false) { const s = this.seasonFor(n); if (s) this.setSeason(s, { fade: o.fade ?? 4 }); }
+    return act;
+  }
   stopMusic(fade = 3) { this.pendingMusic = null; this._stopMusicNodes(fade); this.music.name = null; }
   _stopMusicNodes(fade) {
     const { src, gain } = this.music; if (!src) return;
@@ -610,6 +837,52 @@ class AudioEngine {
   _applyPending() {
     if (this.pendingMusic) { const p = this.pendingMusic; this.playMusic(p.name, p); }
     for (const [k, L] of Object.entries(this.amb)) if (L.target > 0) this.setLayer(k, L.target, 2);
+  }
+
+  // ------------------------------------------------------------------ creatures + Wraith (Revision 2)
+  _3dPlay(name, o, base) {
+    const opts = { ...base, ...o };
+    const pos = o.position || (o.x != null ? { x: o.x, y: o.y ?? 1.6, z: o.z } : null);
+    if (opts.loop) {
+      if (o.emitter) return o.emitter.loop(name, { bus: "sfx", ...opts, minGap: 0 });
+      return this.play(name, { ...opts, position: pos || undefined, loop: true, minGap: 0 });
+    }
+    if (o.emitter) return o.emitter.play(name, opts);
+    return this.play(name, { ...opts, position: pos || undefined });
+  }
+  /**
+   * Act III creatures. kind: "tallman"|"stalker", "assimilated_human"|"hollow", "assimilated_animal".
+   * event: stalk (loop) | idle | spot | call | mimic | click | chitter | scrape | yip | ambush | lunge | attack | hurt | retreat | death.
+   * opts: emitter (A.emitter, follows the body) | position {x,y,z} | x,y,z; volume, rate, randomPitch, refDistance, maxDistance.
+   * Returns a handle (stop(fade)) or null. Loops: stop with stopCreature(emitterOrHandle).
+   */
+  playCreature(kind, event = "spot", o = {}) {
+    const k = CREATURE_ALIAS[String(kind || "").toLowerCase()] || kind;
+    // Borrowed-voice mimicry (VO): playCreature("assimilated_human", "speak", { emitter, borrow: "walt" }), or any of
+    // call|mimic|spot|idle with { voice: true } / { borrow }. Returns the playBark Promise. Without those opts the
+    // event plays the synthetic creature SFX exactly as before.
+    if (k === "assim_human" && (event === "speak" || ((o.voice || o.borrow) && /^(call|mimic|spot|idle)$/.test(event))))
+      return this.playMimic(o.borrow || null, o);
+    const ev = CREATURE_EVENTS[k]?.[event] ?? CREATURE_EVENTS[k]?.spot;
+    if (!ev) return null;
+    const [name, extra] = Array.isArray(ev) ? ev : [ev, {}];
+    const base = { randomPitch: 0.05, refDistance: 2.5, maxDistance: 45, rolloff: 1.0, minGap: 0.25, ...extra };
+    if (k === "assim_animal") base.volume = (extra.volume ?? 1) * 0.85;
+    return this._3dPlay(name, o, base);
+  }
+  stopCreature(target, fade = 0.6) { if (!target) return; if (typeof target.stopLoop === "function") target.stopLoop(fade); else target.stop?.(fade); }
+  /**
+   * Wraith: growl | bark | whine | pant (loop) | hollow_tell | husk_tell (+ aliases warn, alert, fear, refuse, calm, hollow, husk).
+   * hollow_tell (low growl + hackle rattle) vs husk_tell (sniffs + soft high whine) are a gameplay tell (README §13).
+   * Without emitter/position it plays close beside the player (slight pan). Returns a handle.
+   */
+  playWraith(event = "growl", o = {}) {
+    const ev = WRAITH_EVENTS[event] ?? (this.pools.has("wraith_" + event) || this.manifest["wraith_" + event] ? "wraith_" + event : null);
+    if (!ev) return null;
+    const [name, extra] = Array.isArray(ev) ? ev : [ev, {}];
+    const base = { randomPitch: 0.03, refDistance: 1.5, maxDistance: 30, minGap: 0.4, volume: 0.9, ...extra };
+    if (!o.emitter && !o.position && o.x == null && o.pan == null) base.pan = 0.18;
+    return this._3dPlay(name, o, base);
   }
 
   // ------------------------------------------------------------------ voice-over
@@ -628,6 +901,7 @@ class AudioEngine {
           if (!m || !m.lines) { V.loading = null; return null; }
           V.manifest = m; V.byText = new Map();
           for (const [id, L] of Object.entries(m.lines)) { const k = normText(L.t); if (!V.byText.has(k)) V.byText.set(k, []); V.byText.get(k).push(id); }
+          V.cueByText = new Map(); for (const [id, C] of Object.entries(m.cues || {})) V.cueByText.set(normText(C.t), id);
           return m;
         })
         .catch(() => { V.loading = null; return null; });
@@ -739,6 +1013,10 @@ class AudioEngine {
     if (o.interrupt !== false) this.stopLine(0.08);
     return this.voReady().then((m) => {
       const L = m?.lines?.[lineId];
+      if (!L && m?.cues?.[lineId]) {   // Wraith action line -> companion SFX (hollow_tell / husk_tell are gameplay tells)
+        if (token !== this.vo.token) return null;
+        return this.playWraith(m.cues[lineId].e, { emitter: o.emitter, position: o.position }) || null;
+      }
       if (!L) { if (m && typeof console !== "undefined") console.debug?.("[GameAudio] no VO for", lineId); return null; }
       return this._voLoad(L.f).then((buf) => {
         if (!buf || token !== this.vo.token) return null;   // missing, or superseded by a newer line
@@ -759,20 +1037,33 @@ class AudioEngine {
     return this.voReady().then((m) => {
       if (!m) return null;
       const fac = m.barks[who] ? who : m.alias?.[who];
-      const list = fac && m.barks[fac]?.[type];
+      let list = fac && (m.barks[fac]?.[type] || m.barks[fac]?.[m.bark_fallback?.[fac]?.[type]]);
+      if (list && o.borrow) { const sub = list.filter((B) => B.b === o.borrow); if (sub.length) list = sub; }
       if (!list || !list.length) return null;
       const em = o.emitter; if (em && !em._id) em._id = Math.random();
-      const key = fac + "." + type + "@" + (em ? em._id : "g"), t = now();
-      if (!o.force && t - (this.vo.lastBark.get(key) || 0) < (o.minGap ?? 2.2) * 1000) return null;
+      const key = fac + "." + type + (o.borrow ? ":" + o.borrow : "") + "@" + (em ? em._id : "g"), t = now();
+      if (!o.force && this.vo.lastBark.has(key) && t - this.vo.lastBark.get(key) < (o.minGap ?? 2.2) * 1000) return null;
       let n = 0; for (const h of this.vo.active) if (h.kind === "bark") n++;
       if (!o.force && n >= 3) return null;
       this.vo.lastBark.set(key, t);
-      const B = list[this._voBag(fac + "." + type, list.length)];
+      const B = list[this._voBag(fac + "." + type + (o.borrow ? ":" + o.borrow : ""), list.length)];
       return this._voLoad(B.f).then((buf) => (buf ? this._voStart(buf, {
         randomPitch: 0.03, ...o, volume: (o.volume ?? 1) * (this.vo.current ? 0.6 : 1), kind: "bark", text: B.t, who: fac, id: B.id, f: B.f, baked: B.m,
         subtitle: o.subtitle ?? this.vo.barkSubtitles }) : null));
     });
   }
+  /**
+   * Hollow (assimilated_human) mimicry in a borrowed voice: borrow = "walt" | "halvorsen" | "lolo" | "braith" | "dale_henley" |
+   * "stranger_mother" | "carly" | null (any). Same take, same inflection every time - that's the tell. 3D via emitter/position.
+   * Default minGap 4 s per emitter. Resolves to a handle or null (no VO shipped).
+   */
+  playMimic(borrow = null, o = {}) {
+    return this.playBark("hollow", "mimic", { minGap: 4, randomPitch: 0, refDistance: 3, ...o, borrow: borrow || o.borrow || undefined });
+  }
+  /** Borrowed voices available for playMimic() (after voReady()). */
+  mimicVoices() { return this.vo.manifest?.mimic_voices || []; }
+  /** Wraith cue for a story line id (Wraith's bracketed action lines): { w, e, t, ch } or null. */
+  cueInfo(lineId) { return this.vo.manifest?.cues?.[lineId] || null; }
   /** Subscribe to subtitles: cb(text, character, durationSeconds, handle). Fires when audio actually starts. Returns unsubscribe. */
   onLine(cb) { if (typeof cb !== "function") return () => {}; this.vo.listeners.add(cb); return () => this.vo.listeners.delete(cb); }
   /** Barks also fire onLine() when true (default false). */
@@ -872,7 +1163,7 @@ class AudioEngine {
 
 // ---------------------------------------------------------------------------------------------
 // Drop-in replacement for the prototype's js/audio.js `AudioBus` (same method names),
-// so the swap is one import line:  import { AudioBusCompat as AudioBus } from "../audio/audio.js";
+// so the swap is one import line:  import { AudioBusCompat as AudioBus } from "../audio/audio.js?v=r9";
 // ---------------------------------------------------------------------------------------------
 export class AudioBusCompat {
   constructor(engine = GameAudio) { this.a = engine; if (!engine._listening) engine.init(); }
@@ -880,7 +1171,7 @@ export class AudioBusCompat {
   get ctx() { return this.a.ctx; }
   unlock() { this.a.unlock(); if (this.a.amb.wind == null) this.a.setWind(0.4); }
   setWind(amount) { this.a.setWind(amount); }
-  foot(snow = true) { this.a.play(snow ? "footstep_snow" : "footstep_hard", { volume: 0.7, randomPitch: 0.07 }); }
+  foot(snow) { this.a.playFootstep({ surface: snow === false ? "hard" : typeof snow === "string" ? snow : undefined, volume: 0.9 }); }
   maybeFoot(dt, moving, sprint) { this.a.footsteps(dt, { moving, sprint }); }
   gunshot(heavy = true) { this.a.play(heavy ? "gun_shotgun" : "gun_pistol", { randomPitch: 0.03 }); }
   melee() { this.a.play("melee_swing", { randomPitch: 0.08 }); }
@@ -926,7 +1217,8 @@ export function attachAshfallAudio(ctx = {}) {
     A.voReady().then(() => {
       if (lastPanelKey !== key) return;
       const id = A.lineIdFor(lineEl.textContent, who);
-      if (id) A.playLine(null, id, { source: "auto" }); else A.stopLine(0.12);
+      const cue = id ? null : A.vo.cueByText?.get(normText(lineEl.textContent));
+      if (id) A.playLine(null, id, { source: "auto" }); else { A.stopLine(0.12); if (cue) A.playLine(null, cue, { source: "auto" }); }
     });
   };
   const tick = (dt) => {
@@ -960,7 +1252,8 @@ export function attachAshfallAudio(ctx = {}) {
     resume() { return api.unlock(); },
     setWind(v) { const b = v >= 0.9 ? 1 : 0; if (b !== (A._blizzard > 0.5 ? 1 : 0)) A.setBlizzard(b, 4); A.setWind(Math.min(1, v), 2); return true; },
     setBlizzard(v) { A.setBlizzard(+v, 4); return true; },
-    foot(snow = true) { A.play(snow ? "footstep_snow" : "footstep_hard", { volume: 0.7, randomPitch: 0.07 }); return true; },
+    // foot(): season default surface; foot(false) = hard; foot("gravel") = explicit surface.
+    foot(snow) { A.playFootstep({ surface: snow === false ? "hard" : typeof snow === "string" ? snow : undefined, volume: 0.9 }); return true; },
     maybeFoot(dt, moving, sprint) { A.footsteps(dt, { moving, sprint }); return true; },
     gunshot(heavy) {
       const id = equipped();
@@ -992,6 +1285,15 @@ export function attachAshfallAudio(ctx = {}) {
     playBark(who, type, o) { return A.playBark(who, type, o); },
     onLine(cb) { return A.onLine(cb); },
     stopVO(f) { A.stopVO(f); return true; },
+    // Revision 2 (game.js already calls audio.impl.setChapter?.(n) on chapter load)
+    setChapter(n, o) { lastChapter = typeof n === "number" ? "ch" + String(n).padStart(2, "0") : n; return A.setChapter(n, { fade: 5, ...(o || {}) }); },
+    setSeason(s, o) { return A.setSeason(s, o); },
+    setWeatherType(t, f) { return A.setWeatherType(t, f); },
+    playFootstep(o) { return A.playFootstep(o); },
+    playCreature(kind, ev, o) { return A.playCreature(kind, ev, o); },
+    stopCreature(t, f) { A.stopCreature(t, f); return true; },
+    playWraith(ev, o) { return A.playWraith(ev, o); },
+    playMimic(borrow, o) { return A.playMimic(borrow, o); },
   };
   return api;
 }

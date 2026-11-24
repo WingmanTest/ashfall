@@ -4,7 +4,7 @@ Every sound in `audio/` is **original offline synthesis** (Python numpy + scipy,
 No recorded samples, no downloaded audio, no third-party sound libraries: **zero license risk**.
 The project may treat these files as CC0 1.0 / public domain; attribution is optional.
 
-- Generators: `tools/synth_lib.py` (DSP helpers), `tools/gen_sfx.py` (one-shots), `tools/gen_loops.py` (ambience + music)
+- Generators: `tools/synth_lib.py` (DSP helpers), `tools/gen_sfx.py` (one-shots), `tools/gen_loops.py` (v1 ambience), `tools/gen_rev2.py` (Revision 2: Nevada seasonal ambience, all 4 act music loops, seasonal footsteps, Tallmen, Hollows, Wraith)
 - Build: `cd audio/tools && python3 build_all.py` (re-renders WAVs to `tools/_wav/`, encodes .ogg Vorbis + .m4a AAC, rewrites `manifest.js`)
 - Tools used: numpy, scipy (BSD), ffmpeg with libvorbis + native AAC encoder (LGPL/GPL tools; they put no license on the output)
 - Procedural fallbacks inside `audio.js` (the `SYNTH` table) are also original code.
@@ -51,13 +51,71 @@ add a row with its URL, author and license (CC0 or CC-BY only) and keep the lice
 | `sfx/molotov_ignite.ogg` / `.m4a` | 1.68s | 31 KB | original synthesis, `tools/gen_sfx.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
 | `sfx/drone_flyby.ogg` / `.m4a` | 3.477s | 57 KB | original synthesis, `tools/gen_sfx.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
 | `amb/amb_wind.ogg` / `.m4a` | 16s loop | 186 KB | original synthesis, `tools/gen_loops.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
-| `amb/amb_blizzard.ogg` / `.m4a` | 16s loop | 189 KB | original synthesis, `tools/gen_loops.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
 | `amb/amb_fire.ogg` / `.m4a` | 10s loop | 124 KB | original synthesis, `tools/gen_loops.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
-| `amb/amb_war.ogg` / `.m4a` | 24s loop | 190 KB | original synthesis, `tools/gen_loops.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
-| `music/music_blackout.ogg` / `.m4a` | 43.636s loop | 328 KB | original synthesis, `tools/gen_loops.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
-| `music/music_collapse.ogg` / `.m4a` | 40s loop | 406 KB | original synthesis, `tools/gen_loops.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
-| `music/music_civil_war.ogg` / `.m4a` | 40s loop | 400 KB | original synthesis, `tools/gen_loops.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
-| `music/music_nuclear_winter.ogg` / `.m4a` | 48s loop | 461 KB | original synthesis, `tools/gen_loops.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+
+## Revision 2 (Nevada, Nov 23 2026): new and regenerated assets
+
+All rows below are **original synthesis in `tools/gen_rev2.py`** (numpy + scipy; glottal-pulse + formant voice models,
+Karplus-Strong strings, periodic FFT noise beds). No samples, no downloads, no CC-BY: zero license risk.
+`amb_war`, `amb_blizzard` and the four `music_*` loops keep their keys but were **regenerated** (the v1 renders in
+`gen_loops.py` are skipped unless `ASHFALL_V1_AMB=1` / `ASHFALL_V1_MUSIC=1`). Unchanged v1 files are listed above.
+
+| File | Length | Size (ogg+m4a) | Source | Author | License |
+|---|---|---|---|---|---|
+| `sfx/footstep_dirt_1.ogg` / `.m4a` | 0.187s | 7 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/footstep_dirt_2.ogg` / `.m4a` | 0.197s | 7 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/footstep_dirt_3.ogg` / `.m4a` | 0.207s | 7 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/footstep_dirt_4.ogg` / `.m4a` | 0.217s | 8 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/footstep_gravel_1.ogg` / `.m4a` | 0.21s | 7 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/footstep_gravel_2.ogg` / `.m4a` | 0.21s | 7 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/footstep_gravel_3.ogg` / `.m4a` | 0.211s | 8 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/footstep_gravel_4.ogg` / `.m4a` | 0.211s | 7 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/footstep_wet_1.ogg` / `.m4a` | 0.185s | 7 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/footstep_wet_2.ogg` / `.m4a` | 0.185s | 7 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/footstep_wet_3.ogg` / `.m4a` | 0.184s | 7 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/footstep_wet_4.ogg` / `.m4a` | 0.185s | 7 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/tallman_stalk.ogg` / `.m4a` | 10.0s loop | 145 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/tallman_call_1.ogg` / `.m4a` | 5.212s | 75 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/tallman_call_2.ogg` / `.m4a` | 6.129s | 87 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/tallman_click_1.ogg` / `.m4a` | 1.371s | 25 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/tallman_click_2.ogg` / `.m4a` | 1.488s | 28 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/tallman_ambush.ogg` / `.m4a` | 3.176s | 51 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/assim_human_call_1.ogg` / `.m4a` | 4.504s | 68 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/assim_human_call_2.ogg` / `.m4a` | 4.922s | 78 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/assim_human_stalk.ogg` / `.m4a` | 8.0s loop | 79 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/assim_human_lunge.ogg` / `.m4a` | 1.611s | 28 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/assim_animal_chitter_1.ogg` / `.m4a` | 1.464s | 29 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/assim_animal_chitter_2.ogg` / `.m4a` | 1.714s | 32 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/assim_animal_call.ogg` / `.m4a` | 3.936s | 60 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/assim_animal_scrape_1.ogg` / `.m4a` | 1.959s | 32 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/assim_animal_scrape_2.ogg` / `.m4a` | 1.668s | 28 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/assim_animal_lunge.ogg` / `.m4a` | 1.325s | 24 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/wraith_growl_1.ogg` / `.m4a` | 1.726s | 29 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/wraith_growl_2.ogg` / `.m4a` | 2.317s | 39 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/wraith_bark_1.ogg` / `.m4a` | 0.9s | 17 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/wraith_bark_2.ogg` / `.m4a` | 0.9s | 17 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/wraith_whine_1.ogg` / `.m4a` | 1.282s | 22 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/wraith_whine_2.ogg` / `.m4a` | 1.297s | 21 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/wraith_pant.ogg` / `.m4a` | 3.0s loop | 50 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/wraith_hollow_tell.ogg` / `.m4a` | 2.655s | 44 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/wraith_husk_tell.ogg` / `.m4a` | 1.594s | 25 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `sfx/power_hum_drop.ogg` / `.m4a` | 3.4s | 48 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `amb/amb_summer_wind.ogg` / `.m4a` | 20.0s loop | 229 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `amb/amb_cicadas.ogg` / `.m4a` | 24.0s loop | 281 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `amb/amb_stillness.ogg` / `.m4a` | 16.0s loop | 185 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `amb/amb_autumn_wind.ogg` / `.m4a` | 18.0s loop | 235 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `amb/amb_dry_brush.ogg` / `.m4a` | 16.0s loop | 210 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `amb/amb_fall_rain.ogg` / `.m4a` | 20.0s loop | 232 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `amb/amb_war.ogg` / `.m4a` | 32.0s loop | 297 KB | REGENERATED (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `amb/amb_blizzard.ogg` / `.m4a` | 20.0s loop | 232 KB | REGENERATED (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `amb/amb_subzero_creaks.ogg` / `.m4a` | 24.0s loop | 286 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `amb/amb_sleet.ogg` / `.m4a` | 16.0s loop | 192 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `amb/amb_ash_hush.ogg` / `.m4a` | 16.0s loop | 222 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `amb/amb_floodlight_hum.ogg` / `.m4a` | 12.0s loop | 125 KB | NEW (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `music/music_blackout.ogg` / `.m4a` | 48.0s loop | 519 KB | REGENERATED (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `music/music_collapse.ogg` / `.m4a` | 40.0s loop | 416 KB | REGENERATED (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `music/music_civil_war.ogg` / `.m4a` | 37.5s loop | 418 KB | REGENERATED (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
+| `music/music_nuclear_winter.ogg` / `.m4a` | 48.0s loop | 475 KB | REGENERATED (Rev 2): original synthesis, `tools/gen_rev2.py` | ASHFALL audio (Echoes, Grok Bot) | CC0 1.0 (project-owned) |
 
 ## Voice-over (`vo/`): generated speech
 
@@ -88,4 +146,5 @@ Coqui XTTS-v2 was not used because of the Coqui Public Model License, which is *
 Kokoro's training data includes SIWIS (CC BY 4.0) and Koniwa (CC BY 3.0)."
 
 Generated files: `vo/<character>/<scene>__<node>.ogg|.m4a` (story lines) and `vo/barks/<faction>/<type>_<n>.ogg|.m4a`.
+Revision 2 VO totals: 485 story lines + 199 barks (684 clips × ogg/m4a, 5.69 MB ogg / 6.40 MB m4a), all Kokoro-82M (Apache-2.0) + own DSP; v1 Wisconsin VO removed.
 The full list with text and durations is in `vo/manifest.json`. All of them are © the project, generated with the tools above.

@@ -1,0 +1,95 @@
+{
+  "id": "ch02_dutch_pawn",
+  "chapter": "ch02",
+  "location": "loc_fourth_street",
+  "trigger": "Optional: Silver State Pawn on 4th Street (trader).",
+  "speakers": [
+    "narrator",
+    "trader_dutch",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "SILVER STATE PAWN — WE BUY GOLD. The neon is dead. The door is open. A man is eating peaches from the can.",
+      "next": "d1"
+    },
+    {
+      "id": "d1",
+      "speaker": "trader_dutch",
+      "text": "Welcome, welcome. Dutch Albertson. Everything has a price, my friend, and today the prices are very interesting.",
+      "effects": [
+        {
+          "set": "dutch_met",
+          "value": true
+        }
+      ],
+      "next": "d2"
+    },
+    {
+      "id": "d2",
+      "speaker": "trader_dutch",
+      "text": "Cash? I'll still take cash. For about a week. After that it's kindling.",
+      "choices": [
+        {
+          "text": "What do you have?",
+          "next": "stock"
+        },
+        {
+          "text": "What do you want?",
+          "next": "want"
+        },
+        {
+          "text": "[Trade cigarettes for ammo]",
+          "next": "trade",
+          "conditions": [
+            {
+              "item": "cigarettes",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "cigarettes",
+              "qty": 1
+            },
+            {
+              "give": "ammo_9mm",
+              "qty": 12
+            },
+            {
+              "add": "trader_dutch_rep",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stock",
+      "speaker": "trader_dutch",
+      "text": "Tools, a few guns, cigarettes, a very nice bass boat. Meds, if you don't ask where from.",
+      "next": "d2"
+    },
+    {
+      "id": "want",
+      "speaker": "trader_dutch",
+      "text": "Batteries. Ammo. Jewelry, for sentimental people. And news. News is the new gold.",
+      "next": "d3"
+    },
+    {
+      "id": "trade",
+      "speaker": "trader_dutch",
+      "text": "Pleasure. You come back. Dutch remembers good customers. And bad ones.",
+      "next": "d3"
+    },
+    {
+      "id": "d3",
+      "speaker": "trader_dutch",
+      "text": "Also, a free tip: don't walk 4th Street after dark. The viaduct boys are hungry and not shy.",
+      "end": true
+    }
+  ]
+}

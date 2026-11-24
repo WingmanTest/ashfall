@@ -1,23 +1,32 @@
 {
  "$schema": "https://json-schema.org/draft/2020-12/schema",
- "$id": "ashfall/levels/schema.json",
- "title": "ASHFALL: Lakehead level file",
- "description": "One chapter map. Units are meters. World axes match js/world.js: +x east (right), -z north (forward, away from the start), y up. rotY is radians about +Y (three.js); rotY=PI faces -z.",
+ "$id": "levels/schema.json",
+ "title": "ASHFALL: Truckee Meadows level (Revision 2)",
  "type": "object",
  "required": [
   "formatVersion",
+  "storyVersion",
   "id",
   "chapter",
+  "storyChapter",
   "title",
+  "act",
+  "next",
   "units",
   "grid",
   "environment",
+  "locations",
+  "buildings",
+  "paths",
   "spawns",
   "props",
+  "interactives",
+  "safeZones",
+  "setPieces",
+  "encounters",
   "triggers",
   "objectives"
  ],
- "additionalProperties": false,
  "properties": {
   "$schema": {
    "type": "string"
@@ -25,22 +34,29 @@
   "formatVersion": {
    "const": 1
   },
+  "storyVersion": {
+   "const": 2
+  },
   "id": {
    "type": "string",
-   "pattern": "^ch[0-9]{2}_[a-z0-9_]+$"
+   "pattern": "^ch[0-9]{2}b?_[a-z0-9_]+$"
   },
   "chapter": {
    "type": "integer",
-   "minimum": 1
+   "minimum": 1,
+   "maximum": 10
+  },
+  "storyChapter": {
+   "type": "string",
+   "pattern": "^ch[0-9]{2}$"
   },
   "title": {
    "type": "string"
   },
   "act": {
-   "type": "string"
-  },
-  "storyFile": {
-   "type": "string"
+   "type": "integer",
+   "minimum": 1,
+   "maximum": 3
   },
   "next": {
    "type": [
@@ -48,16 +64,32 @@
     "null"
    ]
   },
+  "returnTo": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "storyFile": {
+   "type": "string"
+  },
   "summary": {
    "type": "string"
   },
   "difficulty": {
-   "type": "integer",
-   "minimum": 1,
-   "maximum": 5
+   "type": "integer"
   },
   "units": {
    "const": "meters"
+  },
+  "startInventory": {
+   "type": "object"
+  },
+  "storyEnemyTypes": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
   },
   "grid": {
    "type": "object",
@@ -69,19 +101,15 @@
     "legend",
     "tiles"
    ],
-   "additionalProperties": false,
    "properties": {
     "cellSize": {
-     "type": "number",
-     "exclusiveMinimum": 0
+     "const": 2.0
     },
     "cols": {
-     "type": "integer",
-     "minimum": 4
+     "type": "integer"
     },
     "rows": {
-     "type": "integer",
-     "minimum": 4
+     "type": "integer"
     },
     "origin": {
      "type": "object",
@@ -97,30 +125,219 @@
        "type": "number"
       }
      },
-     "additionalProperties": false,
-     "description": "World position of the NW (top-left) corner of cell (col 0,row 0). Cell (c,r) spans x=[ox+c*cs, ox+(c+1)*cs], z=[oz+r*cs, oz+(r+1)*cs]."
+     "additionalProperties": true
     },
     "legend": {
      "type": "object",
-     "propertyNames": {
-      "minLength": 1,
-      "maxLength": 1
-     },
      "additionalProperties": {
-      "$ref": "#/$defs/tile"
+      "type": "object",
+      "required": [
+       "name",
+       "walkable",
+       "solid",
+       "height",
+       "preview"
+      ],
+      "properties": {
+       "name": {
+        "type": "string"
+       },
+       "walkable": {
+        "type": "boolean"
+       },
+       "solid": {
+        "type": "boolean"
+       },
+       "height": {
+        "type": "number"
+       },
+       "preview": {
+        "type": "string"
+       },
+       "floorTex": {
+        "type": "string"
+       },
+       "wallTex": {
+        "type": "string"
+       },
+       "groundType": {
+        "type": "string"
+       }
+      },
+      "additionalProperties": true
      }
     },
     "tiles": {
      "type": "array",
      "items": {
       "type": "string"
-     },
-     "description": "rows top(north,-z)->bottom(south,+z); each char = one cell"
+     }
     }
-   }
+   },
+   "additionalProperties": true
   },
   "environment": {
-   "$ref": "#/$defs/environment"
+   "type": "object",
+   "required": [
+    "seasonArc",
+    "season",
+    "environmentPreset",
+    "storySeason",
+    "actName",
+    "weather",
+    "storyWeather",
+    "tempC",
+    "storyTempC",
+    "groundType",
+    "precipitation",
+    "particles",
+    "visibilityM",
+    "fogNear",
+    "fogFar",
+    "fogColor",
+    "skyColor",
+    "snowCover",
+    "timeStart",
+    "atmosphere"
+   ],
+   "properties": {
+    "seasonArc": {
+     "enum": [
+      "blackout_late_summer",
+      "devolving_autumn",
+      "civil_war_late_autumn",
+      "fallout_nuclear_winter"
+     ]
+    },
+    "season": {
+     "enum": [
+      "summer",
+      "autumn",
+      "late_fall",
+      "fallout_winter"
+     ]
+    },
+    "environmentPreset": {
+     "enum": [
+      "summer",
+      "autumn",
+      "late_fall",
+      "fallout_winter"
+     ]
+    },
+    "storySeason": {
+     "enum": [
+      "late_summer",
+      "autumn",
+      "late_fall",
+      "nuclear_winter"
+     ]
+    },
+    "weather": {
+     "type": "string"
+    },
+    "storyWeather": {
+     "type": "string"
+    },
+    "weatherOverride": {
+     "type": "string"
+    },
+    "tempC": {
+     "type": "number"
+    },
+    "storyTempC": {
+     "type": "number"
+    },
+    "nightTempC": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "groundType": {
+     "type": "string"
+    },
+    "precipitation": {
+     "enum": [
+      "none",
+      "cold_rain",
+      "drizzle",
+      "sleet",
+      "ash_snow",
+      "ash",
+      "snow",
+      "fallout_rain"
+     ]
+    },
+    "particles": {
+     "type": "string"
+    },
+    "visibilityM": {
+     "type": "number"
+    },
+    "fogNear": {
+     "type": "number"
+    },
+    "fogFar": {
+     "type": "number"
+    },
+    "fogColor": {
+     "type": "string",
+     "pattern": "^#[0-9a-f]{6}$"
+    },
+    "skyColor": {
+     "type": "string",
+     "pattern": "^#[0-9a-f]{6}$"
+    },
+    "sunColor": {
+     "type": "string"
+    },
+    "ambientColor": {
+     "type": "string"
+    },
+    "snowCover": {
+     "type": "number",
+     "minimum": 0,
+     "maximum": 1
+    },
+    "wetness": {
+     "type": "number"
+    },
+    "windMs": {
+     "type": "number"
+    },
+    "timeStart": {
+     "type": "number"
+    },
+    "timeEnd": {
+     "type": "number"
+    },
+    "timeLocked": {
+     "type": "boolean"
+    },
+    "blizzard": {
+     "type": "boolean"
+    },
+    "warmthDrainMul": {
+     "type": "number"
+    },
+    "hud": {
+     "type": "object"
+    },
+    "transitions": {
+     "type": "array",
+     "items": {
+      "type": "object"
+     }
+    },
+    "mechanics": {
+     "type": "object"
+    },
+    "atmosphere": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": true
   },
   "locations": {
    "type": "array",
@@ -129,12 +346,13 @@
     "required": [
      "id",
      "x",
-     "z"
+     "z",
+     "rect",
+     "safe"
     ],
     "properties": {
      "id": {
-      "type": "string",
-      "pattern": "^[a-z0-9_]+$"
+      "type": "string"
      },
      "x": {
       "type": "number"
@@ -143,42 +361,9 @@
       "type": "number"
      },
      "rect": {
+      "type": "object",
       "oneOf": [
        {
-        "type": "object",
-        "required": [
-         "type",
-         "x",
-         "z",
-         "r"
-        ],
-        "additionalProperties": false,
-        "properties": {
-         "type": {
-          "const": "circle"
-         },
-         "x": {
-          "type": "number"
-         },
-         "z": {
-          "type": "number"
-         },
-         "r": {
-          "type": "number",
-          "exclusiveMinimum": 0
-         }
-        }
-       },
-       {
-        "type": "object",
-        "required": [
-         "type",
-         "x0",
-         "z0",
-         "x1",
-         "z1"
-        ],
-        "additionalProperties": false,
         "properties": {
          "type": {
           "const": "rect"
@@ -195,15 +380,47 @@
          "z1": {
           "type": "number"
          }
-        }
+        },
+        "required": [
+         "type",
+         "x0",
+         "z0",
+         "x1",
+         "z1"
+        ]
+       },
+       {
+        "properties": {
+         "type": {
+          "const": "circle"
+         },
+         "x": {
+          "type": "number"
+         },
+         "z": {
+          "type": "number"
+         },
+         "r": {
+          "type": "number"
+         }
+        },
+        "required": [
+         "type",
+         "x",
+         "z",
+         "r"
+        ]
        }
       ]
      },
      "safe": {
       "type": "boolean"
+     },
+     "name": {
+      "type": "string"
      }
     },
-    "additionalProperties": false
+    "additionalProperties": true
    }
   },
   "landmarks": {
@@ -226,11 +443,122 @@
       "type": "number"
      }
     },
-    "additionalProperties": false
+    "additionalProperties": true
+   }
+  },
+  "buildings": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "id",
+     "label",
+     "kind",
+     "cells",
+     "rect",
+     "doors"
+    ],
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "label": {
+      "type": "string"
+     },
+     "kind": {
+      "enum": [
+       "walled",
+       "mass"
+      ]
+     },
+     "cells": {
+      "type": "array",
+      "items": {
+       "type": "integer"
+      },
+      "minItems": 4,
+      "maxItems": 4
+     },
+     "rect": {
+      "type": "object",
+      "oneOf": [
+       {
+        "properties": {
+         "type": {
+          "const": "rect"
+         },
+         "x0": {
+          "type": "number"
+         },
+         "z0": {
+          "type": "number"
+         },
+         "x1": {
+          "type": "number"
+         },
+         "z1": {
+          "type": "number"
+         }
+        },
+        "required": [
+         "type",
+         "x0",
+         "z0",
+         "x1",
+         "z1"
+        ]
+       },
+       {
+        "properties": {
+         "type": {
+          "const": "circle"
+         },
+         "x": {
+          "type": "number"
+         },
+         "z": {
+          "type": "number"
+         },
+         "r": {
+          "type": "number"
+         }
+        },
+        "required": [
+         "type",
+         "x",
+         "z",
+         "r"
+        ]
+       }
+      ]
+     },
+     "doors": {
+      "type": "array",
+      "items": {
+       "type": "array",
+       "items": {
+        "type": "number"
+       },
+       "minItems": 2,
+       "maxItems": 2
+      }
+     },
+     "location": {
+      "type": [
+       "string",
+       "null"
+      ]
+     }
+    },
+    "additionalProperties": true
    }
   },
   "paths": {
    "type": "object",
+   "required": [
+    "critical",
+    "optional"
+   ],
    "properties": {
     "critical": {
      "type": "array",
@@ -244,45 +572,19 @@
      }
     },
     "optional": {
-     "type": "array",
-     "items": {
-      "type": "object",
-      "required": [
-       "id",
-       "points"
-      ],
-      "additionalProperties": false,
-      "properties": {
-       "id": {
-        "type": "string",
-        "pattern": "^[a-z0-9_]+$"
-       },
-       "label": {
-        "type": "string"
-       },
-       "points": {
-        "type": "array",
-        "items": {
-         "type": "array",
-         "items": {
-          "type": "number"
-         },
-         "minItems": 2,
-         "maxItems": 2
-        }
-       }
-      }
-     }
+     "type": "array"
     }
    },
-   "additionalProperties": false
+   "additionalProperties": true
   },
   "spawns": {
    "type": "object",
    "required": [
-    "player"
+    "player",
+    "npcs",
+    "enemies",
+    "loot"
    ],
-   "additionalProperties": false,
    "properties": {
     "player": {
      "type": "array",
@@ -292,14 +594,11 @@
       "required": [
        "id",
        "x",
-       "z",
-       "rotY"
+       "z"
       ],
-      "additionalProperties": false,
       "properties": {
        "id": {
-        "type": "string",
-        "pattern": "^[a-z0-9_]+$"
+        "type": "string"
        },
        "x": {
         "type": "number"
@@ -311,12 +610,18 @@
         "type": "number"
        },
        "when": {
-        "type": "array",
-        "items": {
-         "$ref": "#/$defs/condition"
-        }
+        "description": "story/SCHEMA.md condition(s): {flag, eq|ne|gt|gte|lt|lte} | {item, gte} | {trust} | {any|all|none|not}",
+        "anyOf": [
+         {
+          "type": "array"
+         },
+         {
+          "type": "object"
+         }
+        ]
        }
-      }
+      },
+      "additionalProperties": true
      }
     },
     "npcs": {
@@ -325,19 +630,14 @@
       "type": "object",
       "required": [
        "id",
-       "npc",
        "x",
-       "z"
+       "z",
+       "npc",
+       "behavior"
       ],
-      "additionalProperties": false,
       "properties": {
        "id": {
-        "type": "string",
-        "pattern": "^[a-z0-9_]+$"
-       },
-       "npc": {
-        "type": "string",
-        "pattern": "^[a-z0-9_]+$"
+        "type": "string"
        },
        "x": {
         "type": "number"
@@ -345,30 +645,46 @@
        "z": {
         "type": "number"
        },
-       "rotY": {
-        "type": "number"
+       "npc": {
+        "type": "string"
        },
        "behavior": {
         "type": "string"
        },
        "dialogue": {
-        "type": "string",
-        "pattern": "^[a-z0-9_]+$"
+        "type": "string"
        },
        "when": {
-        "type": "array",
-        "items": {
-         "$ref": "#/$defs/condition"
-        }
+        "description": "story/SCHEMA.md condition(s): {flag, eq|ne|gt|gte|lt|lte} | {item, gte} | {trust} | {any|all|none|not}",
+        "anyOf": [
+         {
+          "type": "array"
+         },
+         {
+          "type": "object"
+         }
+        ]
        },
        "label": {
         "type": "string"
        },
-       "combatProfile": {
-        "type": "string",
-        "pattern": "^[a-z0-9_]+$"
+       "rotY": {
+        "type": "number"
+       },
+       "trader": {
+        "type": "object"
+       },
+       "crowd": {
+        "type": "boolean"
+       },
+       "companion": {
+        "type": "boolean"
+       },
+       "relocatedFrom": {
+        "type": "string"
        }
-      }
+      },
+      "additionalProperties": true
      }
     },
     "enemies": {
@@ -377,20 +693,16 @@
       "type": "object",
       "required": [
        "id",
-       "type",
        "x",
        "z",
-       "group"
+       "type",
+       "group",
+       "hostile",
+       "activate"
       ],
-      "additionalProperties": false,
       "properties": {
        "id": {
-        "type": "string",
-        "pattern": "^[a-z0-9_]+$"
-       },
-       "type": {
-        "type": "string",
-        "pattern": "^[a-z0-9_]+$"
+        "type": "string"
        },
        "x": {
         "type": "number"
@@ -398,20 +710,14 @@
        "z": {
         "type": "number"
        },
-       "rotY": {
-        "type": "number"
-       },
-       "patrolWaitSec": {
-        "type": "number"
+       "type": {
+        "type": "string"
        },
        "group": {
-        "type": "string",
-        "pattern": "^[a-z0-9_]+$"
+        "type": "string"
        },
        "tier": {
-        "type": "integer",
-        "minimum": 1,
-        "maximum": 5
+        "type": "integer"
        },
        "behavior": {
         "type": "string"
@@ -436,16 +742,26 @@
         ]
        },
        "hostileWhen": {
-        "type": "array",
-        "items": {
-         "$ref": "#/$defs/condition"
-        }
+        "description": "story/SCHEMA.md condition(s): {flag, eq|ne|gt|gte|lt|lte} | {item, gte} | {trust} | {any|all|none|not}",
+        "anyOf": [
+         {
+          "type": "array"
+         },
+         {
+          "type": "object"
+         }
+        ]
        },
        "when": {
-        "type": "array",
-        "items": {
-         "$ref": "#/$defs/condition"
-        }
+        "description": "story/SCHEMA.md condition(s): {flag, eq|ne|gt|gte|lt|lte} | {item, gte} | {trust} | {any|all|none|not}",
+        "anyOf": [
+         {
+          "type": "array"
+         },
+         {
+          "type": "object"
+         }
+        ]
        },
        "activate": {
         "enum": [
@@ -453,10 +769,23 @@
          "trigger"
         ]
        },
-       "note": {
+       "storyEncounter": {
         "type": "string"
+       },
+       "variant": {
+        "type": "string"
+       },
+       "ambush": {
+        "type": "boolean"
+       },
+       "lowVisibilityTrigger": {
+        "type": "boolean"
+       },
+       "torpid": {
+        "type": "boolean"
        }
-      }
+      },
+      "additionalProperties": true
      }
     },
     "loot": {
@@ -468,13 +797,12 @@
        "x",
        "z",
        "container",
-       "location"
+       "label",
+       "r"
       ],
-      "additionalProperties": false,
       "properties": {
        "id": {
-        "type": "string",
-        "pattern": "^[a-z0-9_]+$"
+        "type": "string"
        },
        "x": {
         "type": "number"
@@ -482,26 +810,29 @@
        "z": {
         "type": "number"
        },
-       "r": {
-        "type": "number"
+       "container": {
+        "type": "string"
        },
        "label": {
         "type": "string"
        },
-       "container": {
-        "$ref": "#/$defs/sysid",
-        "description": "systems/loot_tables.json container_types key"
+       "r": {
+        "type": "number"
        },
        "location": {
         "type": [
          "string",
          "null"
-        ],
-        "description": "area id (systems areas / story hooks locations) this container counts toward"
+        ]
        },
-       "filler": {
-        "type": "boolean",
-        "description": "auto-placed to meet the systems container budget"
+       "propRef": {
+        "type": "string"
+       },
+       "render": {
+        "enum": [
+         "prop",
+         "crate"
+        ]
        },
        "guaranteed": {
         "type": "array",
@@ -511,33 +842,23 @@
           "item",
           "n"
          ],
-         "additionalProperties": false,
          "properties": {
           "item": {
-           "type": "string",
-           "pattern": "^[a-z0-9_]+$"
+           "type": "string"
           },
           "n": {
-           "type": "integer",
-           "minimum": 1
+           "type": "integer"
           }
-         }
+         },
+         "additionalProperties": true
         }
-       },
-       "when": {
-        "type": "array",
-        "items": {
-         "$ref": "#/$defs/condition"
-        }
-       },
-       "setsFlag": {
-        "type": "string",
-        "pattern": "^[a-z0-9_]+$"
        }
-      }
+      },
+      "additionalProperties": true
      }
     }
-   }
+   },
+   "additionalProperties": true
   },
   "props": {
    "type": "array",
@@ -545,20 +866,15 @@
     "type": "object",
     "required": [
      "id",
-     "asset",
      "x",
      "z",
-     "h"
+     "asset",
+     "h",
+     "collide"
     ],
-    "additionalProperties": false,
     "properties": {
      "id": {
-      "type": "string",
-      "pattern": "^[a-z0-9_]+$"
-     },
-     "asset": {
-      "type": "string",
-      "pattern": "^assets/.+\\.(glb|gltf|png)$"
+      "type": "string"
      },
      "x": {
       "type": "number"
@@ -566,21 +882,26 @@
      "z": {
       "type": "number"
      },
-     "rotY": {
-      "type": "number"
+     "asset": {
+      "type": "string"
      },
      "h": {
-      "type": "number",
-      "exclusiveMinimum": 0,
-      "description": "target height in m, applied with fitHeight()"
+      "type": "number"
      },
      "collide": {
       "type": "boolean"
      },
+     "rotY": {
+      "type": "number"
+     },
+     "footprintR": {
+      "type": "number"
+     },
      "tag": {
       "type": "string"
      }
-    }
+    },
+    "additionalProperties": true
    }
   },
   "interactives": {
@@ -589,21 +910,15 @@
     "type": "object",
     "required": [
      "id",
-     "type",
      "x",
      "z",
-     "r",
-     "label"
+     "type",
+     "label",
+     "r"
     ],
-    "additionalProperties": false,
     "properties": {
      "id": {
-      "type": "string",
-      "pattern": "^[a-z0-9_]+$"
-     },
-     "type": {
-      "type": "string",
-      "pattern": "^[a-z0-9_]+$"
+      "type": "string"
      },
      "x": {
       "type": "number"
@@ -611,39 +926,20 @@
      "z": {
       "type": "number"
      },
-     "r": {
-      "type": "number"
+     "type": {
+      "type": "string"
      },
      "label": {
       "type": "string"
      },
-     "requiresItems": {
-      "type": "array",
-      "items": {
-       "type": "string",
-       "pattern": "^[a-z0-9_]+$"
-      }
-     },
-     "requiresFlags": {
-      "type": "array",
-      "items": {
-       "$ref": "#/$defs/condition"
-      }
+     "r": {
+      "type": "number"
      },
      "setsFlag": {
-      "type": "string",
-      "pattern": "^[a-z0-9_]+$"
-     },
-     "sequenceStep": {
-      "type": "integer"
-     },
-     "when": {
-      "type": "array",
-      "items": {
-       "$ref": "#/$defs/condition"
-      }
+      "type": "string"
      }
-    }
+    },
+    "additionalProperties": true
    }
   },
   "safeZones": {
@@ -652,26 +948,14 @@
     "type": "object",
     "required": [
      "id",
-     "kind",
      "x",
      "z",
+     "kind",
      "r"
     ],
-    "additionalProperties": false,
     "properties": {
      "id": {
-      "type": "string",
-      "pattern": "^[a-z0-9_]+$"
-     },
-     "kind": {
-      "enum": [
-       "campfire",
-       "burn_barrel",
-       "indoor",
-       "sealed",
-       "tent",
-       "warm_room"
-      ]
+      "type": "string"
      },
      "x": {
       "type": "number"
@@ -679,28 +963,17 @@
      "z": {
       "type": "number"
      },
+     "kind": {
+      "type": "string"
+     },
      "r": {
       "type": "number"
      },
-     "label": {
-      "type": "string"
-     },
-     "warmth": {
-      "type": "boolean"
-     },
-     "save": {
-      "type": "boolean"
-     },
      "sealed": {
       "type": "boolean"
-     },
-     "when": {
-      "type": "array",
-      "items": {
-       "$ref": "#/$defs/condition"
-      }
      }
-    }
+    },
+    "additionalProperties": true
    }
   },
   "setPieces": {
@@ -711,99 +984,34 @@
      "id",
      "type"
     ],
-    "additionalProperties": false,
     "properties": {
      "id": {
-      "type": "string",
-      "pattern": "^[a-z0-9_]+$"
+      "type": "string"
      },
      "type": {
-      "type": "string",
-      "pattern": "^[a-z0-9_]+$"
+      "type": "string"
      },
-     "path": {
-      "type": "array",
-      "items": {
-       "type": "array",
-       "items": {
-        "type": "number"
-       },
-       "minItems": 2,
-       "maxItems": 2
-      }
+     "glimpse": {
+      "type": "string"
      },
-     "area": {
-      "oneOf": [
-       {
-        "type": "object",
-        "required": [
-         "type",
-         "x",
-         "z",
-         "r"
-        ],
-        "additionalProperties": false,
-        "properties": {
-         "type": {
-          "const": "circle"
-         },
-         "x": {
-          "type": "number"
-         },
-         "z": {
-          "type": "number"
-         },
-         "r": {
-          "type": "number",
-          "exclusiveMinimum": 0
-         }
-        }
-       },
-       {
-        "type": "object",
-        "required": [
-         "type",
-         "x0",
-         "z0",
-         "x1",
-         "z1"
-        ],
-        "additionalProperties": false,
-        "properties": {
-         "type": {
-          "const": "rect"
-         },
-         "x0": {
-          "type": "number"
-         },
-         "z0": {
-          "type": "number"
-         },
-         "x1": {
-          "type": "number"
-         },
-         "z1": {
-          "type": "number"
-         }
-        }
-       }
-      ]
+     "interactable": {
+      "type": "boolean"
      },
-     "when": {
-      "type": "array",
-      "items": {
-       "$ref": "#/$defs/condition"
-      }
+     "collider": {
+      "type": "boolean"
      },
-     "note": {
+     "ai": {
+      "type": "boolean"
+     },
+     "storyEncounter": {
       "type": "string"
      }
-    }
+    },
+    "additionalProperties": true
    }
   },
   "encounters": {
    "type": "array",
-   "description": "Encounter zones. Engine keeps only enemies of the zone containing the player alive (dormant otherwise). Waves: wave n+1 activates when wave n is cleared or fled (flag cleared.<group>).",
    "items": {
     "type": "object",
     "required": [
@@ -811,49 +1019,14 @@
      "area",
      "groups"
     ],
-    "additionalProperties": false,
     "properties": {
      "id": {
-      "type": "string",
-      "pattern": "^[a-z0-9_]+$"
+      "type": "string"
      },
      "area": {
+      "type": "object",
       "oneOf": [
        {
-        "type": "object",
-        "required": [
-         "type",
-         "x",
-         "z",
-         "r"
-        ],
-        "additionalProperties": false,
-        "properties": {
-         "type": {
-          "const": "circle"
-         },
-         "x": {
-          "type": "number"
-         },
-         "z": {
-          "type": "number"
-         },
-         "r": {
-          "type": "number",
-          "exclusiveMinimum": 0
-         }
-        }
-       },
-       {
-        "type": "object",
-        "required": [
-         "type",
-         "x0",
-         "z0",
-         "x1",
-         "z1"
-        ],
-        "additionalProperties": false,
         "properties": {
          "type": {
           "const": "rect"
@@ -870,75 +1043,84 @@
          "z1": {
           "type": "number"
          }
-        }
+        },
+        "required": [
+         "type",
+         "x0",
+         "z0",
+         "x1",
+         "z1"
+        ]
+       },
+       {
+        "properties": {
+         "type": {
+          "const": "circle"
+         },
+         "x": {
+          "type": "number"
+         },
+         "z": {
+          "type": "number"
+         },
+         "r": {
+          "type": "number"
+         }
+        },
+        "required": [
+         "type",
+         "x",
+         "z",
+         "r"
+        ]
        }
       ]
      },
-     "note": {
-      "type": "string"
+     "storyEncounters": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
      },
      "groups": {
       "type": "array",
-      "minItems": 1,
       "items": {
        "type": "object",
        "required": [
         "group",
         "wave"
        ],
-       "additionalProperties": false,
        "properties": {
         "group": {
-         "type": "string",
-         "pattern": "^[a-z0-9_]+$"
+         "type": "string"
         },
         "wave": {
-         "type": "integer",
-         "minimum": 1
+         "type": "integer"
+        },
+        "branch": {
+         "type": "string"
         }
-       }
+       },
+       "additionalProperties": true
       }
+     },
+     "maxActive": {
+      "type": "integer",
+      "maximum": 6
      }
-    }
+    },
+    "additionalProperties": true
    }
   },
   "stealth": {
    "type": "object",
-   "additionalProperties": false,
+   "required": [
+    "routes",
+    "blindSpots"
+   ],
    "properties": {
     "routes": {
-     "type": "array",
-     "items": {
-      "type": "object",
-      "required": [
-       "id",
-       "points"
-      ],
-      "additionalProperties": false,
-      "properties": {
-       "id": {
-        "type": "string",
-        "pattern": "^[a-z0-9_]+$"
-       },
-       "label": {
-        "type": "string"
-       },
-       "points": {
-        "type": "array",
-        "items": {
-         "type": "array",
-         "items": {
-          "type": "number"
-         },
-         "minItems": 2,
-         "maxItems": 2
-        }
-       },
-       "note": {
-        "type": "string"
-       }
-      }
-     }
+     "type": "array"
     },
     "blindSpots": {
      "type": "array",
@@ -948,49 +1130,14 @@
        "id",
        "shape"
       ],
-      "additionalProperties": false,
       "properties": {
        "id": {
-        "type": "string",
-        "pattern": "^[a-z0-9_]+$"
+        "type": "string"
        },
        "shape": {
+        "type": "object",
         "oneOf": [
          {
-          "type": "object",
-          "required": [
-           "type",
-           "x",
-           "z",
-           "r"
-          ],
-          "additionalProperties": false,
-          "properties": {
-           "type": {
-            "const": "circle"
-           },
-           "x": {
-            "type": "number"
-           },
-           "z": {
-            "type": "number"
-           },
-           "r": {
-            "type": "number",
-            "exclusiveMinimum": 0
-           }
-          }
-         },
-         {
-          "type": "object",
-          "required": [
-           "type",
-           "x0",
-           "z0",
-           "x1",
-           "z1"
-          ],
-          "additionalProperties": false,
           "properties": {
            "type": {
             "const": "rect"
@@ -1007,17 +1154,45 @@
            "z1": {
             "type": "number"
            }
-          }
+          },
+          "required": [
+           "type",
+           "x0",
+           "z0",
+           "x1",
+           "z1"
+          ]
+         },
+         {
+          "properties": {
+           "type": {
+            "const": "circle"
+           },
+           "x": {
+            "type": "number"
+           },
+           "z": {
+            "type": "number"
+           },
+           "r": {
+            "type": "number"
+           }
+          },
+          "required": [
+           "type",
+           "x",
+           "z",
+           "r"
+          ]
          }
         ]
-       },
-       "note": {
-        "type": "string"
        }
-      }
+      },
+      "additionalProperties": true
      }
     }
-   }
+   },
+   "additionalProperties": true
   },
   "triggers": {
    "type": "array",
@@ -1026,64 +1201,30 @@
     "required": [
      "id",
      "on",
+     "once",
      "shape",
      "actions"
     ],
-    "additionalProperties": false,
     "properties": {
      "id": {
-      "type": "string",
-      "pattern": "^[a-z0-9_]+$"
+      "type": "string"
      },
      "on": {
       "enum": [
        "enter",
        "exit",
        "interact",
-       "load",
-       "flag"
+       "flag",
+       "load"
       ]
      },
      "once": {
       "type": "boolean"
      },
      "shape": {
+      "type": "object",
       "oneOf": [
        {
-        "type": "object",
-        "required": [
-         "type",
-         "x",
-         "z",
-         "r"
-        ],
-        "additionalProperties": false,
-        "properties": {
-         "type": {
-          "const": "circle"
-         },
-         "x": {
-          "type": "number"
-         },
-         "z": {
-          "type": "number"
-         },
-         "r": {
-          "type": "number",
-          "exclusiveMinimum": 0
-         }
-        }
-       },
-       {
-        "type": "object",
-        "required": [
-         "type",
-         "x0",
-         "z0",
-         "x1",
-         "z1"
-        ],
-        "additionalProperties": false,
         "properties": {
          "type": {
           "const": "rect"
@@ -1100,27 +1241,84 @@
          "z1": {
           "type": "number"
          }
-        }
+        },
+        "required": [
+         "type",
+         "x0",
+         "z0",
+         "x1",
+         "z1"
+        ]
+       },
+       {
+        "properties": {
+         "type": {
+          "const": "circle"
+         },
+         "x": {
+          "type": "number"
+         },
+         "z": {
+          "type": "number"
+         },
+         "r": {
+          "type": "number"
+         }
+        },
+        "required": [
+         "type",
+         "x",
+         "z",
+         "r"
+        ]
        }
       ]
      },
      "when": {
-      "type": "array",
-      "items": {
-       "$ref": "#/$defs/condition"
-      }
-     },
-     "note": {
-      "type": "string"
+      "description": "story/SCHEMA.md condition(s): {flag, eq|ne|gt|gte|lt|lte} | {item, gte} | {trust} | {any|all|none|not}",
+      "anyOf": [
+       {
+        "type": "array"
+       },
+       {
+        "type": "object"
+       }
+      ]
      },
      "actions": {
       "type": "array",
-      "minItems": 1,
       "items": {
-       "$ref": "#/$defs/action"
+       "type": "object",
+       "required": [
+        "type"
+       ],
+       "properties": {
+        "type": {
+         "enum": [
+          "dialogue",
+          "set_flag",
+          "activate_group",
+          "set_time",
+          "set_weather",
+          "cutscene",
+          "bark",
+          "checkpoint",
+          "start_sequence",
+          "spawn_setpiece",
+          "hud_unlock",
+          "encounter",
+          "push_back",
+          "teleport",
+          "chapter_end",
+          "story_check"
+         ]
+        }
+       },
+       "additionalProperties": true
       }
      }
-    }
+    },
+    "additionalProperties": true
    }
   },
   "objectives": {
@@ -1131,531 +1329,64 @@
      "id",
      "order",
      "text",
+     "optional",
      "completeWhen"
     ],
-    "additionalProperties": false,
     "properties": {
      "id": {
-      "type": "string",
-      "pattern": "^[a-z0-9_]+$"
+      "type": "string"
      },
      "order": {
       "type": "integer"
      },
      "text": {
-      "type": "string",
-      "maxLength": 60
+      "type": "string"
      },
      "optional": {
       "type": "boolean"
      },
      "completeWhen": {
-      "type": "array",
-      "items": {
-       "$ref": "#/$defs/condition"
-      }
+      "description": "story/SCHEMA.md condition(s): {flag, eq|ne|gt|gte|lt|lte} | {item, gte} | {trust} | {any|all|none|not}",
+      "anyOf": [
+       {
+        "type": "array"
+       },
+       {
+        "type": "object"
+       }
+      ]
      },
-     "startWhen": {
-      "type": "array",
-      "items": {
-       "$ref": "#/$defs/condition"
-      }
+     "quest": {
+      "type": "string"
      }
-    }
-   }
-  }
- },
- "$defs": {
-  "tile": {
-   "type": "object",
-   "required": [
-    "name",
-    "walkable",
-    "solid",
-    "height"
-   ],
-   "additionalProperties": false,
-   "properties": {
-    "name": {
-     "type": "string"
     },
-    "walkable": {
-     "type": "boolean"
-    },
-    "solid": {
-     "type": "boolean"
-    },
-    "height": {
-     "type": "number"
-    },
-    "floorTex": {
-     "type": "string"
-    },
-    "wallTex": {
-     "type": "string"
-    },
-    "roof": {
-     "type": "boolean"
-    },
-    "roofHeight": {
-     "type": "number"
-    },
-    "door": {
-     "type": "boolean"
-    },
-    "massOnly": {
-     "type": "boolean"
-    },
-    "cover": {
-     "type": "boolean"
-    },
-    "water": {
-     "type": "boolean"
-    },
-    "ice": {
-     "type": "boolean"
-    },
-    "void": {
-     "type": "boolean"
-    },
-    "tree": {
-     "type": "boolean"
-    },
-    "hazard": {
-     "type": "string"
-    },
-    "blocksAirLOS": {
-     "type": "boolean"
-    },
-    "gate": {
-     "type": "boolean"
-    },
-    "preview": {
-     "type": "string",
-     "pattern": "^#[0-9a-fA-F]{6}$"
-    }
+    "additionalProperties": true
    }
   },
-  "condition": {
-   "description": "Same shape as story/dialogue conditions: {flag, eq|ne|gt|gte|lt|lte}. Extensions: {item, gte|lt...} checks inventory count; {any:[...]} is OR. A list of conditions is AND.",
-   "oneOf": [
-    {
-     "type": "object",
-     "required": [
-      "flag"
-     ],
-     "minProperties": 2,
-     "maxProperties": 2,
-     "properties": {
-      "flag": {
-       "type": "string"
-      },
-      "eq": {},
-      "ne": {},
-      "gt": {
-       "type": "number"
-      },
-      "gte": {
-       "type": "number"
-      },
-      "lt": {
-       "type": "number"
-      },
-      "lte": {
-       "type": "number"
-      }
-     },
-     "additionalProperties": false
-    },
-    {
-     "type": "object",
-     "required": [
-      "item"
-     ],
-     "minProperties": 2,
-     "maxProperties": 2,
-     "properties": {
-      "item": {
-       "type": "string",
-       "pattern": "^[a-z0-9_]+$"
-      },
-      "eq": {
-       "type": "number"
-      },
-      "gt": {
-       "type": "number"
-      },
-      "gte": {
-       "type": "number"
-      },
-      "lt": {
-       "type": "number"
-      },
-      "lte": {
-       "type": "number"
-      }
-     },
-     "additionalProperties": false
-    },
-    {
-     "type": "object",
-     "required": [
-      "any"
-     ],
-     "properties": {
-      "any": {
-       "type": "array",
-       "minItems": 1,
-       "items": {
-        "$ref": "#/$defs/condition"
-       }
-      }
-     },
-     "additionalProperties": false
-    }
-   ]
+  "companion": {
+   "type": "object"
   },
-  "action": {
+  "horror": {
    "type": "object",
    "required": [
-    "type"
+    "sightlineM",
+    "ambushPoints"
    ],
    "properties": {
-    "type": {
-     "enum": [
-      "dialogue",
-      "cutscene",
-      "bark",
-      "set_flag",
-      "activate_group",
-      "set_time",
-      "set_weather",
-      "checkpoint",
-      "hud_unlock",
-      "story_check",
-      "start_sequence",
-      "push_back",
-      "spawn_setpiece",
-      "chapter_end",
-      "teleport"
-     ]
+    "sightlineM": {
+     "type": "number"
+    },
+    "ambushPoints": {
+     "type": "array"
     }
    },
-   "allOf": [
-    {
-     "if": {
-      "properties": {
-       "type": {
-        "const": "dialogue"
-       }
-      }
-     },
-     "then": {
-      "required": [
-       "id"
-      ]
-     }
-    },
-    {
-     "if": {
-      "properties": {
-       "type": {
-        "const": "cutscene"
-       }
-      }
-     },
-     "then": {
-      "required": [
-       "id",
-       "text"
-      ]
-     }
-    },
-    {
-     "if": {
-      "properties": {
-       "type": {
-        "const": "bark"
-       }
-      }
-     },
-     "then": {
-      "required": [
-       "speaker",
-       "text"
-      ]
-     }
-    },
-    {
-     "if": {
-      "properties": {
-       "type": {
-        "const": "set_flag"
-       }
-      }
-     },
-     "then": {
-      "required": [
-       "flag",
-       "value"
-      ]
-     }
-    },
-    {
-     "if": {
-      "properties": {
-       "type": {
-        "const": "activate_group"
-       }
-      }
-     },
-     "then": {
-      "required": [
-       "group"
-      ]
-     }
-    },
-    {
-     "if": {
-      "properties": {
-       "type": {
-        "const": "set_time"
-       }
-      }
-     },
-     "then": {
-      "required": [
-       "value"
-      ],
-      "properties": {
-       "value": {
-        "type": "number",
-        "minimum": 0,
-        "maximum": 1
-       }
-      }
-     }
-    },
-    {
-     "if": {
-      "properties": {
-       "type": {
-        "const": "set_weather"
-       }
-      }
-     },
-     "then": {
-      "required": [
-       "weather"
-      ]
-     }
-    },
-    {
-     "if": {
-      "properties": {
-       "type": {
-        "const": "hud_unlock"
-       }
-      }
-     },
-     "then": {
-      "required": [
-       "stat"
-      ],
-      "properties": {
-       "stat": {
-        "enum": [
-         "hp",
-         "warmth",
-         "temp",
-         "hunger",
-         "rad",
-         "filter",
-         "seal",
-         "ammo_military"
-        ]
-       }
-      }
-     }
-    },
-    {
-     "if": {
-      "properties": {
-       "type": {
-        "const": "story_check"
-       }
-      }
-     },
-     "then": {
-      "required": [
-       "id"
-      ]
-     }
-    },
-    {
-     "if": {
-      "properties": {
-       "type": {
-        "const": "start_sequence"
-       }
-      }
-     },
-     "then": {
-      "required": [
-       "id"
-      ]
-     }
-    },
-    {
-     "if": {
-      "properties": {
-       "type": {
-        "const": "spawn_setpiece"
-       }
-      }
-     },
-     "then": {
-      "required": [
-       "id"
-      ]
-     }
-    },
-    {
-     "if": {
-      "properties": {
-       "type": {
-        "const": "chapter_end"
-       }
-      }
-     },
-     "then": {
-      "required": [
-       "next"
-      ]
-     }
-    },
-    {
-     "if": {
-      "properties": {
-       "type": {
-        "const": "teleport"
-       }
-      }
-     },
-     "then": {
-      "required": [
-       "x",
-       "z"
-      ]
-     }
-    }
-   ]
+   "additionalProperties": true
   },
-  "sysid": {
-   "type": "string",
-   "pattern": "^[a-z0-9_]+$"
+  "ambientDensity": {
+   "type": "object"
   },
-  "environment": {
-   "type": "object",
-   "required": [
-    "timeStart",
-    "weather",
-    "tempC",
-    "hud"
-   ],
-   "properties": {
-    "timeStart": {
-     "type": "number",
-     "minimum": 0,
-     "maximum": 1,
-     "description": "engine timeOfDay: 0 night, .25 dawn, .5 noon, .75 dusk"
-    },
-    "timeEnd": {
-     "type": "number",
-     "minimum": 0,
-     "maximum": 1
-    },
-    "timeLocked": {
-     "type": "boolean"
-    },
-    "weather": {
-     "type": "string",
-     "description": "story/gameplay_hooks.json weather_types; must equal the chapter hook weather"
-    },
-    "startWeather": {
-     "type": "string"
-    },
-    "startTempC": {
-     "type": "number"
-    },
-    "tempC": {
-     "type": "number"
-    },
-    "blizzard": {
-     "type": "boolean"
-    },
-    "snowCover": {
-     "type": "number",
-     "minimum": 0,
-     "maximum": 1
-    },
-    "particles": {
-     "type": "string"
-    },
-    "fogNear": {
-     "type": "number"
-    },
-    "fogFar": {
-     "type": "number"
-    },
-    "palette": {
-     "type": "string",
-     "pattern": "^assets/palettes/.+\\.json$"
-    },
-    "ambientTint": {
-     "type": "string"
-    },
-    "warmthDrainMul": {
-     "type": "number"
-    },
-    "maxAliveEnemies": {
-     "type": "integer"
-    },
-    "hud": {
-     "type": "object",
-     "properties": {
-      "temp": {
-       "type": "boolean"
-      },
-      "hunger": {
-       "type": "boolean"
-      },
-      "rad": {
-       "type": "boolean"
-      },
-      "filter": {
-       "type": "boolean"
-      },
-      "seal": {
-       "type": "boolean"
-      }
-     },
-     "additionalProperties": false
-    },
-    "mechanics": {
-     "type": "object"
-    },
-    "transitions": {
-     "type": "array",
-     "items": {
-      "type": "object",
-      "required": [
-       "at"
-      ]
-     }
-    }
-   },
-   "additionalProperties": false
+  "returnLeg": {
+   "type": "object"
   }
  }
 }

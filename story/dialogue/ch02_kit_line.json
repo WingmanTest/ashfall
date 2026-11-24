@@ -1,0 +1,141 @@
+{
+  "id": "ch02_kit_line",
+  "chapter": "ch02",
+  "location": "loc_rscc_registry",
+  "trigger": "In the ration line: Kit lifting ration cards.",
+  "speakers": [
+    "narrator",
+    "kit",
+    "braith",
+    "authority_guard"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Three people up, Kit. She lifts a ration card from a man's back pocket like she's brushing off lint.",
+      "branches": [
+        {
+          "next": "know",
+          "conditions": [
+            {
+              "flag": "ch01_kit_let_go",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "stranger"
+        }
+      ]
+    },
+    {
+      "id": "know",
+      "speaker": "kit",
+      "text": "Wrench! And the wolf! Okay, you didn't see that. You're my alibi.",
+      "effects": [
+        {
+          "trust": "kit",
+          "delta": 1
+        }
+      ],
+      "next": "k1"
+    },
+    {
+      "id": "stranger",
+      "speaker": "kit",
+      "text": "Oh. You. The bag guy. Please don't make this weird.",
+      "next": "k1"
+    },
+    {
+      "id": "k1",
+      "speaker": "authority_guard",
+      "text": "Hey! You in the goggles. Hands where I can see them.",
+      "choices": [
+        {
+          "text": "She's with me. We're together.",
+          "next": "cover",
+          "effects": [
+            {
+              "set": "ch02_covered_kit",
+              "value": true
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            },
+            {
+              "trust": "kit",
+              "delta": 3
+            },
+            {
+              "event": "time_skip",
+              "hours": 2
+            }
+          ]
+        },
+        {
+          "text": "[Say nothing]",
+          "next": "quiet"
+        },
+        {
+          "text": "She took a card. Back pocket.",
+          "next": "report",
+          "effects": [
+            {
+              "add": "rep_authority",
+              "value": 1
+            },
+            {
+              "trust": "kit",
+              "delta": -4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cover",
+      "speaker": "authority_guard",
+      "text": "Together. Right. Both of you, step out. You lose your place. Next time I take the cards.",
+      "next": "cover2"
+    },
+    {
+      "id": "cover2",
+      "speaker": "kit",
+      "text": "You lost your spot for me. That's so stupid. Okay. Listen.",
+      "next": "tip"
+    },
+    {
+      "id": "tip",
+      "speaker": "kit",
+      "text": "At the desk they ask you for names. Hoarders. Don't give names. Names come back around.",
+      "effects": [
+        {
+          "set": "ch02_kit_tip",
+          "value": true
+        }
+      ],
+      "next": "tipend"
+    },
+    {
+      "id": "tipend",
+      "speaker": "kit",
+      "text": "I owe you. I actually pay my debts. Ask anyone. Don't ask anyone.",
+      "end": true
+    },
+    {
+      "id": "quiet",
+      "speaker": "narrator",
+      "text": "The guard pats Kit down and finds nothing. The card's gone. So is she.",
+      "end": true
+    },
+    {
+      "id": "report",
+      "speaker": "narrator",
+      "text": "They take her out of line. She doesn't look back. That's worse.",
+      "end": true
+    }
+  ]
+}

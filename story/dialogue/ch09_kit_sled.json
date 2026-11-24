@@ -1,0 +1,69 @@
+{
+  "id": "ch09_kit_sled",
+  "chapter": "ch09",
+  "location": "loc_sparks_block",
+  "trigger": "Before the march: Kit arrives with an Army sled (if trust.kit>=5 and kit_alive).",
+  "speakers": [
+    "narrator",
+    "kit",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Minus forty. The column is forming in the street: blankets, sleds, kids on shoulders. A snowmobile engine, then Kit.",
+      "next": "k1"
+    },
+    {
+      "id": "k1",
+      "speaker": "kit",
+      "text": "Wrench! I stole the Army a present. From the Army. It's a cargo sled. Don't ask about the guy who had it.",
+      "effects": [
+        {
+          "set": "ch09_sled_brought",
+          "value": true
+        },
+        {
+          "give": "sled",
+          "qty": 1
+        }
+      ],
+      "next": "k2"
+    },
+    {
+      "id": "k2",
+      "speaker": "kit",
+      "text": "I owe you like three. This is one. I'm coming too. Somebody has to steal stuff on the way.",
+      "choices": [
+        {
+          "text": "Glad you're here, Kit.",
+          "next": "glad",
+          "effects": [
+            {
+              "trust": "kit",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "text": "Don't steal from the column.",
+          "next": "rule"
+        }
+      ]
+    },
+    {
+      "id": "glad",
+      "speaker": "kit",
+      "text": "Ew. Feelings. Okay. Let's go before I cry from the cold.",
+      "end": true
+    },
+    {
+      "id": "rule",
+      "speaker": "kit",
+      "text": "I would NEVER. ...From the column. Okay. Rules. Let's go.",
+      "end": true
+    }
+  ]
+}

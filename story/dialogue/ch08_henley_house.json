@@ -1,0 +1,158 @@
+{
+  "id": "ch08_henley_house",
+  "chapter": "ch08",
+  "location": "loc_sparks_block",
+  "trigger": "Morning after a tall shape entered the Henleys' unsealed house. First discovery of assimilation (enc_ch08_hollow_first).",
+  "speakers": [
+    "narrator",
+    "braith",
+    "wraith",
+    "hollow",
+    "reyne",
+    "carly"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Morning, if you can call it that. The Henleys' door hangs open. Ash drifted down the hall. No prints come out.",
+      "next": "h1"
+    },
+    {
+      "id": "h1",
+      "speaker": "wraith",
+      "text": "[Stops on the porch. Hackles up from neck to tail. A growl so low you feel it in your boots.]",
+      "effects": [
+        {
+          "set": "wraith_mimic_warned",
+          "value": true
+        }
+      ],
+      "next": "h2"
+    },
+    {
+      "id": "h2",
+      "speaker": "narrator",
+      "text": "Dale Henley is standing in the kitchen, facing the wall. It's minus ten in here. No breath fog. None.",
+      "next": "h3"
+    },
+    {
+      "id": "h3",
+      "speaker": "hollow",
+      "text": "Morning, neighbor. Morning, neighbor. Got any filters? Morning, neighbor.",
+      "next": "h4"
+    },
+    {
+      "id": "h4",
+      "speaker": "narrator",
+      "text": "The voice is right. The rhythm is wrong. Like a song played back by someone who heard it once.",
+      "effects": [
+        {
+          "set": "assimilation_discovered",
+          "value": true
+        }
+      ],
+      "choices": [
+        {
+          "text": "[Flashlight in his face]",
+          "next": "light"
+        },
+        {
+          "text": "Dale? It's Braith.",
+          "next": "name"
+        },
+        {
+          "text": "[Back out. Nail the door shut]",
+          "next": "nail"
+        }
+      ]
+    },
+    {
+      "id": "name",
+      "speaker": "hollow",
+      "text": "Braith? Braith. Let me in. I have filters. Braith?",
+      "next": "light"
+    },
+    {
+      "id": "light",
+      "speaker": "narrator",
+      "text": "He turns. His neck keeps turning after his shoulders stop. His eyes catch the light flat, like theirs do.",
+      "choices": [
+        {
+          "text": "[Shoot]",
+          "next": "shoot",
+          "effects": [
+            {
+              "event": "encounter",
+              "id": "enc_ch08_hollow_first"
+            },
+            {
+              "add": "assimilated_killed",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "[Back out. Nail the door shut]",
+          "next": "nail"
+        }
+      ]
+    },
+    {
+      "id": "shoot",
+      "speaker": "narrator",
+      "text": "Three rounds. It doesn't scream. It makes the sound of the Henleys' kettle. Then it's still.",
+      "next": "after"
+    },
+    {
+      "id": "nail",
+      "speaker": "narrator",
+      "text": "You nail plywood over the door. All afternoon, from inside: 'Morning, neighbor.' At dusk, nothing.",
+      "next": "after"
+    },
+    {
+      "id": "after",
+      "speaker": "narrator",
+      "text": "Back home, you tell them what you saw.",
+      "branches": [
+        {
+          "next": "r1",
+          "conditions": [
+            {
+              "flag": "reyne_with_you",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "c1"
+        }
+      ]
+    },
+    {
+      "id": "r1",
+      "speaker": "reyne",
+      "text": "[White-faced] The page I couldn't read. Integration. They don't just take the warmth. They keep what's left.",
+      "next": "r2"
+    },
+    {
+      "id": "r2",
+      "speaker": "reyne",
+      "text": "And use it. I didn't know it worked outside a lab. I swear to you I didn't know.",
+      "next": "end"
+    },
+    {
+      "id": "c1",
+      "speaker": "carly",
+      "text": "That was Dale. That was Dale's voice. Braith. How do we know who's knocking now?",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "A new rule on the door, in Carly's handwriting: CHECK FOR BREATH. ASK THE DOG. NOBODY OPENS ALONE.",
+      "end": true
+    }
+  ]
+}

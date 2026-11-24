@@ -1,0 +1,114 @@
+{
+  "id": "ch03_kit_warning",
+  "chapter": "ch03",
+  "location": "loc_sparks_block",
+  "trigger": "Night. Kit at the back door (if trust.kit >= 3).",
+  "speakers": [
+    "narrator",
+    "kit",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "A tap at the back door. Three, then two. Kit, white with cold, goggles iced over.",
+      "next": "k1"
+    },
+    {
+      "id": "k1",
+      "speaker": "kit",
+      "text": "Don't talk. Listen. The Viaduct guys are hitting Gil's garage tonight. For the diesel.",
+      "effects": [
+        {
+          "set": "ch03_kit_warned",
+          "value": true
+        }
+      ],
+      "next": "k2"
+    },
+    {
+      "id": "k2",
+      "speaker": "kit",
+      "text": "They've got bottles. Gas bottles. Somebody's going to burn that garage, Wrench.",
+      "choices": [
+        {
+          "text": "How do you know?",
+          "next": "how"
+        },
+        {
+          "text": "Thank you. Go. Get out of here.",
+          "next": "go",
+          "effects": [
+            {
+              "trust": "kit",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "speaker": "kit",
+      "text": "Because I scouted it. Okay? I walked by twice. They paid me in soup. I'm sorry.",
+      "effects": [
+        {
+          "set": "kit_scouted_known",
+          "value": true
+        }
+      ],
+      "next": "how2"
+    },
+    {
+      "id": "how2",
+      "speaker": "kit",
+      "text": "I didn't know they had bottles. I swear I didn't know about the bottles.",
+      "choices": [
+        {
+          "text": "You're here now. That counts.",
+          "next": "counts",
+          "effects": [
+            {
+              "trust": "kit",
+              "delta": 2
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "You sold out my neighbor for soup.",
+          "next": "harsh",
+          "effects": [
+            {
+              "trust": "kit",
+              "delta": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "counts",
+      "speaker": "kit",
+      "text": "...Okay. That's. Okay. Bye.",
+      "end": true
+    },
+    {
+      "id": "harsh",
+      "speaker": "kit",
+      "text": "Yeah. I did. You want to fight about soup or you want to wake up your neighbor?",
+      "end": true
+    },
+    {
+      "id": "go",
+      "speaker": "kit",
+      "text": "Already gone.",
+      "end": true
+    }
+  ]
+}

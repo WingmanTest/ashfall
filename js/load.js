@@ -28,7 +28,7 @@ export async function tryImport(url) {
     const text = await r.text();
     if (!text || !text.trim()) return null;
     // import() is resolved against this module (js/load.js). Use the document base
-    // so './audio/audio.js' and './render/index.js' hit the project root, not /js/.
+    // so './audio/audio.js?v=r9' and './render/index.js?v=r9' hit the project root, not /js/.
     return await import(href + (href.includes("?") ? "&" : "?") + "t=" + Date.now());
   } catch {
     return null;

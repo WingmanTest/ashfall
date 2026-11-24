@@ -1,0 +1,59 @@
+{
+  "id": "ch09_walt",
+  "chapter": "ch09",
+  "location": "loc_steamboat_creek",
+  "trigger": "Walt, on the sled, near the end.",
+  "speakers": [
+    "narrator",
+    "walt",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Walt rides the sled now. His breath sounds like a valve that won't seat.",
+      "next": "w1"
+    },
+    {
+      "id": "w1",
+      "speaker": "walt",
+      "text": "Listen. The cards. Rack two, slots four through nine. Sequence matters. Pumps, then fans, then the turbine.",
+      "next": "w2"
+    },
+    {
+      "id": "w2",
+      "speaker": "walt",
+      "text": "You know it. You knew it in October. I'm just saying it out loud so I can hear it one more time.",
+      "choices": [
+        {
+          "text": "Pumps, fans, turbine. I've got it.",
+          "next": "got"
+        },
+        {
+          "text": "You'll start it yourself, Walt.",
+          "next": "you"
+        }
+      ]
+    },
+    {
+      "id": "got",
+      "speaker": "walt",
+      "text": "Good. Good. You're a good crew chief. I'd have hired you.",
+      "next": "w3"
+    },
+    {
+      "id": "you",
+      "speaker": "walt",
+      "text": "Ha. Sure I will. ...No. I won't. That's okay. I got to hear it run once more. That was the deal.",
+      "next": "w3"
+    },
+    {
+      "id": "w3",
+      "speaker": "walt",
+      "text": "When you see the steam over the ridge, wake me. I want to see it.",
+      "end": true
+    }
+  ]
+}

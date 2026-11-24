@@ -4,12 +4,9 @@
 
 export const PLACEHOLDER = {
   defaultFlags: {
-    theo_alive: true,
-    theo_side: "none",
+    carly_side: "none",
     kindness: 0,
     dam_running: false,
-    insulin_found: false,
-    radio_delivered: false,
     chapter: "ch01",
   },
   endings: {

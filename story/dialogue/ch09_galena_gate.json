@@ -1,0 +1,110 @@
+{
+  "id": "ch09_galena_gate",
+  "chapter": "ch09",
+  "location": "loc_galena_station",
+  "trigger": "Arrival at Galena's gate (v1 gap: gate scene). Install the control cards if not done.",
+  "speakers": [
+    "narrator",
+    "braith",
+    "walt",
+    "pete_lund",
+    "carly"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "The fence. The gate. Steam rising out of the dark like breath. Somebody inside has a lantern.",
+      "branches": [
+        {
+          "next": "lund",
+          "conditions": [
+            {
+              "flag": "lunds_stayed",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "empty"
+        }
+      ]
+    },
+    {
+      "id": "lund",
+      "speaker": "pete_lund",
+      "text": "WHO GOES— Pearce? PEARCE! Open the gate! It's the mechanic! He brought half of Sparks!",
+      "next": "cards"
+    },
+    {
+      "id": "empty",
+      "speaker": "narrator",
+      "text": "Nobody inside. Snow drifted in the control room door. Cold as the river.",
+      "next": "cards"
+    },
+    {
+      "id": "cards",
+      "speaker": "narrator",
+      "text": "Rack two, slots four through nine. Pumps, then fans, then the turbine. Your hands know it now.",
+      "branches": [
+        {
+          "next": "walt",
+          "conditions": [
+            {
+              "flag": "walt_alive",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "nowalt"
+        }
+      ]
+    },
+    {
+      "id": "walt",
+      "speaker": "walt",
+      "text": "[From the sled, barely a whisper] ...There it is. Hear it? That's... the only good sound...",
+      "effects": [
+        {
+          "set": "dam_running",
+          "value": true
+        },
+        {
+          "set": "cards_installed",
+          "value": true
+        }
+      ],
+      "next": "walt2"
+    },
+    {
+      "id": "walt2",
+      "speaker": "narrator",
+      "text": "Walt Okada dies with the turbine whining up to speed, smiling, his hand on the control room window.",
+      "next": "end"
+    },
+    {
+      "id": "nowalt",
+      "speaker": "narrator",
+      "text": "The turbine whines up to speed. The lights come on. Thirty people laugh and cry at once.",
+      "effects": [
+        {
+          "set": "dam_running",
+          "value": true
+        },
+        {
+          "set": "cards_installed",
+          "value": true
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "carly",
+      "text": "Names. Everybody. Line up by the door. I'm writing everybody down. Everybody.",
+      "end": true
+    }
+  ]
+}

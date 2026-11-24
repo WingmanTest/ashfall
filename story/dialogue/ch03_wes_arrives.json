@@ -1,0 +1,154 @@
+{
+  "id": "ch03_wes_arrives",
+  "chapter": "ch03",
+  "location": "loc_sparks_block",
+  "trigger": "Chapter start. A dirt bike in the dust, mid-morning.",
+  "speakers": [
+    "narrator",
+    "wes",
+    "braith",
+    "carly",
+    "wraith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Day fifty. October. Last night dropped to thirty-nine. A two-stroke engine screams up the dead street. Wraith loses it.",
+      "next": "w1"
+    },
+    {
+      "id": "w1",
+      "speaker": "wraith",
+      "text": "[Not a warning bark. A happy one. She knows that engine.]",
+      "next": "w2"
+    },
+    {
+      "id": "w2",
+      "speaker": "wes",
+      "text": "BRAITH! Big brother! You look terrible! I brought beef!",
+      "effects": [
+        {
+          "set": "wes_met",
+          "value": true
+        }
+      ],
+      "next": "w3"
+    },
+    {
+      "id": "w3",
+      "speaker": "narrator",
+      "text": "Wes. Nineteen. Road dust in his eyebrows, a cooler bungeed to the back of a KTM. Seventy miles of empty highway.",
+      "next": "w4"
+    },
+    {
+      "id": "w4",
+      "speaker": "wes",
+      "text": "Dad sent me. Here. He wrote it on a feed receipt because he's Dad.",
+      "effects": [
+        {
+          "give": "ross_letter",
+          "qty": 1
+        }
+      ],
+      "next": "w5"
+    },
+    {
+      "id": "w5",
+      "speaker": "narrator",
+      "text": "The letter: 'Ranch is fine. Hay for the winter. Ander Etcheverry's organizing the valley. Come home. Bring the girl. — R.'",
+      "next": "w6"
+    },
+    {
+      "id": "w6",
+      "speaker": "wes",
+      "text": "He won't say it, so I will. He's scared. He keeps the radio on all night.",
+      "choices": [
+        {
+          "text": "Stay with us. It's safer here.",
+          "next": "stay"
+        },
+        {
+          "text": "Go home. Tell him we're okay.",
+          "next": "home"
+        },
+        {
+          "text": "Who's Ander Etcheverry?",
+          "next": "ander"
+        }
+      ]
+    },
+    {
+      "id": "ander",
+      "speaker": "wes",
+      "text": "Sheep guy from Fallon. Basque. Talks like a preacher. He's got the farms working together. It's actually cool.",
+      "next": "w6b"
+    },
+    {
+      "id": "w6b",
+      "speaker": "wes",
+      "text": "They're calling it the Compact. Water, feed, trucks. Dad's like his right hand now.",
+      "choices": [
+        {
+          "text": "Stay with us. It's safer here.",
+          "next": "stay"
+        },
+        {
+          "text": "Go home. Tell him we're okay.",
+          "next": "home"
+        }
+      ]
+    },
+    {
+      "id": "stay",
+      "speaker": "wes",
+      "text": "Here? In the city? With the gangs and the line? ...Okay. A week. For Carly's cooking. Not yours.",
+      "effects": [
+        {
+          "set": "ch03_wes_stayed",
+          "value": true
+        },
+        {
+          "trust": "wes",
+          "delta": 1
+        }
+      ],
+      "next": "stay2"
+    },
+    {
+      "id": "stay2",
+      "speaker": "carly",
+      "text": "I don't cook. I boil things. Welcome to the boiling house, Wes.",
+      "next": "end"
+    },
+    {
+      "id": "home",
+      "speaker": "wes",
+      "text": "Yeah. Okay. Write him something back. He'll read it like forty times.",
+      "effects": [
+        {
+          "trust": "wes",
+          "delta": 1
+        },
+        {
+          "trust": "ross",
+          "delta": 1
+        }
+      ],
+      "next": "home2"
+    },
+    {
+      "id": "home2",
+      "speaker": "narrator",
+      "text": "You write four lines on the back of the feed receipt. It takes you twenty minutes.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "The beef is real. For one night the house smells like the ranch.",
+      "end": true
+    }
+  ]
+}

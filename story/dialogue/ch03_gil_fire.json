@@ -1,0 +1,201 @@
+{
+  "id": "ch03_gil_fire",
+  "chapter": "ch03",
+  "location": "loc_sparks_block",
+  "trigger": "Gil's garage catches fire (enc_ch03_fire_*).",
+  "speakers": [
+    "narrator",
+    "braith",
+    "carly",
+    "gil",
+    "wraith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "wraith",
+      "text": "[Out of a dead sleep. Barking at the window. Orange light on the ceiling.]",
+      "next": "f1"
+    },
+    {
+      "id": "f1",
+      "speaker": "narrator",
+      "text": "Gil's garage is burning. Shapes in the alley with bottles. Gil's shotgun goes off once, then nothing.",
+      "branches": [
+        {
+          "next": "f_rep",
+          "conditions": [
+            {
+              "flag": "ch02_reported_gil",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "f2"
+        }
+      ]
+    },
+    {
+      "id": "f_rep",
+      "speaker": "narrator",
+      "text": "Someone's spray-painted the door: REQUISITIONED. The Authority came Tuesday. Gil fought. Now this.",
+      "next": "f2"
+    },
+    {
+      "id": "f2",
+      "speaker": "carly",
+      "text": "I'm going. Get the extinguisher. Braith, the extinguisher—",
+      "choices": [
+        {
+          "text": "[Go out. Fight them off]",
+          "next": "defend",
+          "effects": [
+            {
+              "event": "encounter",
+              "id": "enc_ch03_fire_defend"
+            },
+            {
+              "set": "ch03_helped_gil",
+              "value": true
+            },
+            {
+              "trust": "gil",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "text": "[Go in for Gil]",
+          "next": "rescue",
+          "effects": [
+            {
+              "event": "encounter",
+              "id": "enc_ch03_fire_rescue"
+            },
+            {
+              "set": "ch03_helped_gil",
+              "value": true
+            },
+            {
+              "trust": "gil",
+              "delta": 3
+            },
+            {
+              "stat": "health",
+              "delta": -20
+            }
+          ]
+        },
+        {
+          "text": "Carly, stay inside!",
+          "next": "stay"
+        }
+      ]
+    },
+    {
+      "id": "stay",
+      "speaker": "carly",
+      "text": "No. I'm the one who knows where his bedroom is. Cover me or don't.",
+      "next": "stay2"
+    },
+    {
+      "id": "stay2",
+      "speaker": "narrator",
+      "text": "She's already out the door. You go after her, because what else is there.",
+      "effects": [
+        {
+          "event": "encounter",
+          "id": "enc_ch03_fire_rescue"
+        },
+        {
+          "set": "ch03_helped_gil",
+          "value": true
+        },
+        {
+          "trust": "carly",
+          "delta": 1
+        },
+        {
+          "stat": "health",
+          "delta": -15
+        }
+      ],
+      "next": "rescue_c"
+    },
+    {
+      "id": "defend",
+      "speaker": "narrator",
+      "text": "They scatter when Wraith hits the first one. Half the garage is gone. Gil is sitting in the gutter.",
+      "effects": [
+        {
+          "set": "gil_house_burned",
+          "value": true
+        }
+      ],
+      "next": "after"
+    },
+    {
+      "id": "rescue",
+      "speaker": "narrator",
+      "text": "Smoke like a wall. Carly ahead of you, low, calling his name. She finds him. You carry him.",
+      "effects": [
+        {
+          "set": "gil_house_burned",
+          "value": true
+        }
+      ],
+      "next": "after"
+    },
+    {
+      "id": "rescue_c",
+      "speaker": "narrator",
+      "text": "Carly finds Gil in the kitchen behind the garage. She drags; you lift. Out onto the cold lawn.",
+      "effects": [
+        {
+          "set": "gil_house_burned",
+          "value": true
+        }
+      ],
+      "next": "after"
+    },
+    {
+      "id": "after",
+      "speaker": "gil",
+      "text": "My tools. Thirty-one years of tools. ...Listen here. Thank you. Don't make it weird.",
+      "branches": [
+        {
+          "next": "after_tools",
+          "conditions": [
+            {
+              "flag": "ch01_gil_traded",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "end"
+        }
+      ]
+    },
+    {
+      "id": "after_tools",
+      "speaker": "gil",
+      "text": "Your tool roll was in my truck. Truck's fine. It's yours. You'll need it more than me.",
+      "effects": [
+        {
+          "give": "mech_tools",
+          "qty": 1
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "The fire burns down by dawn. The cottonwood leaves along the street are black with soot.",
+      "end": true
+    }
+  ]
+}

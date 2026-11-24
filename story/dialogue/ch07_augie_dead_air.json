@@ -1,0 +1,140 @@
+{
+  "id": "ch07_augie_dead_air",
+  "chapter": "ch07",
+  "location": "loc_peavine_shack",
+  "trigger": "December 5, night. Augie's shack. Every frequency dies.",
+  "speakers": [
+    "narrator",
+    "augie",
+    "braith",
+    "walt"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "December fifth. Twenty-six degrees on Peavine, frost on the towers. Augie has every radio on, every band, at once.",
+      "next": "a1"
+    },
+    {
+      "id": "a1",
+      "speaker": "augie",
+      "text": "Denver went quiet an hour ago. Then Omaha. Then the Navy net out of Fallon stopped mid-sentence.",
+      "next": "a2"
+    },
+    {
+      "id": "a2",
+      "speaker": "narrator",
+      "text": "Over the eastern horizon the sky turns green. Not aurora green. Wrong green. It ripples once and fades.",
+      "next": "a3"
+    },
+    {
+      "id": "a3",
+      "speaker": "narrator",
+      "text": "Every radio in the shack dies at once. The lights on the towers go out. Then the silence.",
+      "effects": [
+        {
+          "set": "ironwood_split",
+          "value": true
+        }
+      ],
+      "next": "a4"
+    },
+    {
+      "id": "a4",
+      "speaker": "walt",
+      "text": "[Into a dead handset] Galena. Galena, come in. ...Pete? Anybody?",
+      "next": "a5"
+    },
+    {
+      "id": "a5",
+      "speaker": "walt",
+      "text": "High-altitude burst. Has to be. Fries anything with a chip. Galena's control racks just cooked.",
+      "effects": [
+        {
+          "set": "dam_running",
+          "value": false
+        }
+      ],
+      "next": "a6"
+    },
+    {
+      "id": "a6",
+      "speaker": "augie",
+      "text": "The spare transmitter's in the ammo can. Grounded. It might live. What do I tell people, Braith?",
+      "choices": [
+        {
+          "text": "The truth. We don't know.",
+          "next": "truth",
+          "effects": [
+            {
+              "set": "augie_broadcast",
+              "value": "truth"
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            },
+            {
+              "trust": "augie",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "text": "Tell them it was a foreign attack.",
+          "next": "foreign",
+          "effects": [
+            {
+              "set": "augie_broadcast",
+              "value": "foreign"
+            },
+            {
+              "add": "rep_compact",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "Tell them the government will fix it.",
+          "next": "fed",
+          "effects": [
+            {
+              "set": "augie_broadcast",
+              "value": "federal"
+            },
+            {
+              "add": "rep_authority",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "truth",
+      "speaker": "augie",
+      "text": "'Something terrible happened. We don't know what. Be kind to each other.' ...God. Okay.",
+      "next": "end"
+    },
+    {
+      "id": "foreign",
+      "speaker": "augie",
+      "text": "Someone to blame. It'll keep them together a while. It'll also get people killed.",
+      "next": "end"
+    },
+    {
+      "id": "fed",
+      "speaker": "augie",
+      "text": "'Help is coming.' The oldest lie on the air. Fine. It's yours, not mine.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "Walt sits down slowly on an ammo crate. 'Without controls, the plant is a hot rock. We need hardened spares.'",
+      "end": true
+    }
+  ]
+}

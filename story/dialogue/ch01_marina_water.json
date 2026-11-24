@@ -1,0 +1,113 @@
+{
+  "id": "ch01_marina_water",
+  "chapter": "ch01",
+  "location": "loc_sparks_marina",
+  "trigger": "Reach the shore at the Sparks Marina (ch01_lake_edge).",
+  "speakers": [
+    "narrator",
+    "braith",
+    "amb_deputy_lusk",
+    "wraith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "The marina is a flat, glaring mirror. Thirty people with buckets in the heat. Somebody's set up a fire to boil.",
+      "next": "m1"
+    },
+    {
+      "id": "m1",
+      "speaker": "amb_deputy_lusk",
+      "text": "Hey. Pearce, right? Stead hangar guy. Fill up and move along. We're doing one trip a family.",
+      "next": "m2"
+    },
+    {
+      "id": "m2",
+      "speaker": "narrator",
+      "text": "Cal Lusk is a county deputy. He's in a uniform jacket over pajama pants. He hasn't been to work since Monday.",
+      "choices": [
+        {
+          "text": "Who made that rule?",
+          "next": "rule"
+        },
+        {
+          "text": "Copy. One trip.",
+          "next": "fill",
+          "effects": [
+            {
+              "add": "lusk_rep",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "[Fill extra while he's not looking]",
+          "next": "extra"
+        }
+      ]
+    },
+    {
+      "id": "rule",
+      "speaker": "amb_deputy_lusk",
+      "text": "I did. Somebody has to. Yesterday two guys fought over a Home Depot bucket. One went in.",
+      "next": "rule2"
+    },
+    {
+      "id": "rule2",
+      "speaker": "amb_deputy_lusk",
+      "text": "Water's warm and green and ten feet deep off the dock. He came out. Next one might not.",
+      "next": "fill"
+    },
+    {
+      "id": "extra",
+      "speaker": "narrator",
+      "text": "You fill a second jug behind a parked boat. Wraith watches Lusk the whole time, like a lookout.",
+      "effects": [
+        {
+          "give": "water_dirty",
+          "qty": 2
+        }
+      ],
+      "next": "extra2"
+    },
+    {
+      "id": "extra2",
+      "speaker": "amb_deputy_lusk",
+      "text": "...I saw that. Your dog's a better liar than you are. Go home.",
+      "effects": [
+        {
+          "add": "lusk_rep",
+          "value": -1
+        }
+      ],
+      "next": "fill"
+    },
+    {
+      "id": "fill",
+      "speaker": "narrator",
+      "text": "You fill the jugs. Marina water: dirty, but it boils. Fifteen minutes at a rolling boil.",
+      "effects": [
+        {
+          "give": "water_dirty",
+          "qty": 4
+        }
+      ],
+      "next": "fill2"
+    },
+    {
+      "id": "fill2",
+      "speaker": "narrator",
+      "text": "BOIL water at home on the stove (WATER STATION). Clean water doesn't spoil. Dirty water makes you sick.",
+      "effects": [
+        {
+          "quest": "q_water",
+          "state": "update",
+          "stage": "boil"
+        }
+      ],
+      "end": true
+    }
+  ]
+}

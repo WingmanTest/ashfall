@@ -1,44 +1,110 @@
 # Chapter 4: Black Start
-**Act II: The Split** · Late January · Jay Cooke → Thomson Dam · Dialogue: `dialogue/ch04_*.json`
+
+*Act 2 · season `autumn` · Day 66 (Wed Oct 28, Year 1) · level id(s): ch04_black_start*
 
 ## Summary
-Hank and Dell (with Theo, or help depending on `dam_secret_told`) walk up the frozen St. Louis River to Thomson hydro station. Someone is already living in the powerhouse: the Lunds, a farm family from Esko with three kids, who've been burning the plant's manuals for heat. Restarting Unit 2 means opening the headgates, faking a relay, and bringing a dead machine up by hand. Then the first line has to go *somewhere*.
+
+Day 66: Wednesday, October 28. Late autumn wind, cold nights, the valley thinking about winter heat. Galena can't black-start without outside power for its pumps and controls. Braith takes a -86 ground power cart off the Air Guard ramp at Reno-Tahoe at night, tows it up the Steamboat Creek road past Salt's culvert, clears the Lund family squatting in the break room, and brings Unit 1 up with Walt. Steam lights the dark. There's a shape in the steam.
 
 ## Goals
-1. Reach the dam (Jay Cooke swinging bridge, frozen gorge).
-2. Deal with the Lunds in the powerhouse.
-3. Get a relay: Authority kit (if told Strand), Harbor-stolen kit (if told Bea), or Hank's improvised bypass (a longer, dangerous minigame).
-4. Black start: headgate wheel → exciter → sync → close breaker.
-5. Choose the first line.
 
-## Locations
-`loc_jay_cooke` → `loc_thomson_dam` (headgate deck, powerhouse floor, control room)
+- Take the ground power cart (q_ground_power; gpu_method).
+- Tow it up Steamboat Creek.
+- Deal with the Lunds.
+- Black start Unit 1 (mg_black_start).
+- Choose the first feeder (power_priority).
 
 ## NPCs
-hank, theo, bea or strand (depending on `dam_secret_told`) · minor: the Lund family (Pete Lund, 40, and wife Annie, with kids)
+
+Walt, Salt (ambient), Pete Lund and Mia, Avila (if told), Dutch (ambush, if rep low).
 
 ## Key beats
-1. **Swinging bridge.** Ice and wind. A short balance sequence. Hank tells a story that turns out to be the startup sequence.
-2. **The Lunds.** Pete has a shotgun and three hungry kids. Options: talk (share food, they stay as plant hands), threaten (they leave into the cold), or pay. → `ch04_lunds`
-3. **Standoff** (if `dam_secret_told=authority`): Guard soldiers arrive. If `trust.strand < 2` a nervous private fires and Hank is hit (`hank_alive=false`, so Theo/Dell must finish the start alone).
-4. **Black start.** Hank coughs blood; Dell learns his secret if she presses. The turbine spins up; lights flicker across the control room. → `ch04_black_start`
-5. **The first line.** One feeder can be energized. Hospital (Lakehead Memorial), Harbor (ore docks, elevators, soup kitchens), or Authority (DECC, comms, the Proctor rail signals).
+
+- C-130s asleep under a cold moon. Stealth, talk or force your way to Hangar 2.
+- If trader_dutch_rep<=-1: the Viaduct Crew is waiting on the Steamboat road (ch04_dutch_ambush).
+- Salt in his culvert: 'They've been watching me since September.' The first person to name them.
+- The Lunds: fight, pay, or make them crew (lunds_stayed).
+- If dam_secret_told=authority: Avila's Guard arrives with conditions (ch04_standoff, relay_source).
+- Black start. The turbine spins up; steam lit from below; a tall shape stands inside the plume.
 
 ## Choices & consequences
-| Choice | Flags | Later |
-|---|---|---|
-| Lunds stay | `lunds_stayed`, kindness+1 | Ch9: the Lunds keep the plant warm and unlock the side door |
-| Lunds driven out | `lunds_stayed=false` | Ch8: Pete Lund is among the husks (`ch08` special encounter) |
-| Power → hospital | `power_priority=hospital`, `ames_deal` | Ch8: Ames saves Theo's foot; Theo's insulin is secure |
-| Power → Harbor | `power_priority=harbor`, rep_harbor+2 | Ch6: the Harbor can raise the lift bridge |
-| Power → Authority | `power_priority=authority`, rep_authority+2, Hank trust−3 | Ch5: Ironwood learns of the dam through Authority comms |
+
+| Choice | Consequence |
+|---|---|
+| gpu_method: stealth / talk / force | force raises rep_authority loss and the ramp chase. |
+| The Lunds: stay as crew / leave / fight | lunds_stayed counts toward the Warm Room. |
+| First feeder: hospital / Floor / Authority | power_priority; hospital → Ames saves Braith's hand in Ch8. |
 
 ## Flags
-- **Set:** `lunds_stayed`, `hank_alive`, `hank_secret_known`, `relay_source`, `dam_running`, `power_priority`, `ames_deal`
-- **Read:** `dam_secret_told`, `trust.strand`, `ch01_ray_traded` (no lineman tools = Hank's tools, longer), `hank_recruited`
+
+gpu_method, dutch_betrayed, salt_met, salt_fed, lunds_stayed, relay_source, dam_running, power_priority, tallman_glimpses.
+
+## Level notes (for Cartographer)
+
+Level ch04_black_start: empty roads, burned cars, an airfield guard. gpu_tow set piece. Wraith won't go near the cooling towers.
 
 ## Gameplay hooks
-- **Player does:** traverse (swinging bridge balance), negotiate or fight the Lunds, the **black-start minigame** (4 steps, mistakes trip the breaker and drain time), lever/valve interaction.
-- **Enemies (people only):** Lund family (`desperate_family`, 1 armed adult, hostile only if threatened); optional `bridge_boy` scavengers (2) on the river ice; `authority_guard` squad (story-driven standoff).
-- **Items:** `relay_kit`, `hank_keys`, `lineman_tools`, `canned_food`, `firewood`.
-- **Weather/time:** snow, −24 °C, day → night. When the lights come on at night, the control room is the first warm space in the game (a big warmth restore).
+
+*Generated from `gameplay_hooks.json` and `npcs.json` by `authoring/chapters.py`.*
+
+- **Level file(s):** `ch04_black_start`
+- **Season:** `autumn` (October, Year 1). Palette: autumn gold, yellow cottonwoods along the Truckee, long shadows.
+- **Date / weather / temperature:** Day 66 (Wed Oct 28, Year 1); `autumn_wind`; 12 °C, night 5 °C. Time of day: night, dawn.
+- **Survival focus:** cold_nights, fuel, heating. HUD unlocks: none new.
+
+**Locations**
+
+- `loc_airguard_ramp`: Air Guard ramp, Reno-Tahoe Airport. C-130s parked in rows; -86 ground power carts by Hangar 2.
+- `loc_steamboat_creek`: Steamboat Creek corridor and hot-spring vents. Salt's culvert. Approach to Galena.
+- `loc_galena_station`: Galena Station geothermal plant (fictional, at the Steamboat field): well field, steam, break room, control room, fence and lamp line.
+
+**Enemies** (max active counts; Tallmen are never a horde, never more than 3 visible)
+
+- `desperate_family` ×1: Pete Lund
+- `bridge_boy` ×5: Only if trader_dutch_rep<=-1 (Dutch's ambush)
+- `authority_guard` ×8: Ramp sentry (1) + standoff only if dam_secret_told=authority
+
+**Encounters** (`gameplay_hooks.encounters`)
+
+- `enc_ch04_ramp_chase`: authority_guard×3. Tug chase off the ramp; no kills required.
+- `enc_ch04_dutch_ambush`: bridge_boy×5. Only if trader_dutch_rep<=-1.
+- `enc_ch04_lund_fight`: desperate_family×1. Avoidable.
+
+**Traders**
+
+- None in this chapter.
+
+**Ambient NPCs**
+
+- `amb_salt` ('Salt'): Desert hermit in a culvert by the Steamboat hot springs. First person to name the Tallmen: 'They've been watching me since September.'
+
+**Set pieces**
+
+- C-130s asleep under a cold moon
+- gpu_tow
+- Turbine spin-up; steam lit from below
+- Shape in the steam
+
+**Tallman glimpses** (non-interactable billboards; no collider or AI)
+
+- `glimpse_ch04_steam`: Galena steam field, ~120 m, an upright shape inside the steam plume; gone when the plume shifts.  Played inside ch04_black_start.
+- `glimpse_ch04_cow`: A dead cow in a field with its chest opened; no figure.  Static prop, not a creature.
+
+**Items placed or awarded**
+
+`gpu_cart`, `relay_kit`, `walt_keys`, `mech_tools`, `canned_food`, `firewood`, `flashlight`
+
+**Player actions:** stealth_or_talk, tow_vehicle, negotiate, minigame_black_start, valves_levers
+
+**Minigames:** `mg_black_start`
+
+**Dialogue scenes** (in order)
+
+- `ch04_airguard_ramp` @ `loc_airguard_ramp`: Night. The Air Guard ramp at Reno-Tahoe. The -86 ground power cart.
+- `ch04_dutch_ambush` @ `loc_steamboat_creek`: On the Steamboat road, if trader_dutch_rep <= -1: Dutch sold your route. *(conditional)*
+- `ch04_salt_culvert` @ `loc_steamboat_creek`: Pass the culvert by the hot springs on Steamboat Creek.
+- `ch04_lunds` @ `loc_galena_station`: The Lund family squatting in the plant's break room.
+- `ch04_standoff` @ `loc_galena_station`: If dam_secret_told=authority: Avila's Guard arrives with conditions. *(conditional)*
+- `ch04_black_start` @ `loc_galena_station`: After mg_black_start succeeds: the plant comes up.
+
+**Chapter start/end effects:** see `gameplay_hooks.json` → `chapters[].chapter_start_effects` / `chapter_end_effects`.

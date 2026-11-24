@@ -1,0 +1,103 @@
+{
+  "id": "ch06_trench",
+  "chapter": "ch06",
+  "location": "loc_rail_trench",
+  "trigger": "Set piece: the freight car on the siding above the trench.",
+  "speakers": [
+    "narrator",
+    "braith",
+    "roz"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "The freight car sits on a siding above the trench. Brake on, coupler free. Drop it and the Bradley's stuck.",
+      "next": "t1"
+    },
+    {
+      "id": "t1",
+      "speaker": "roz",
+      "text": "[Over the radio] Pearce! Baby! Whatever you're doing up there, do it now! They're at the warehouse gates!",
+      "next": "t2"
+    },
+    {
+      "id": "t2",
+      "speaker": "narrator",
+      "text": "If the car drops, the trench is blocked for a year. The Floor keeps its warehouses. The Army gets angry.",
+      "choices": [
+        {
+          "text": "[Release the brake. Drop the car]",
+          "next": "block",
+          "effects": [
+            {
+              "set": "bridge_choice",
+              "value": "blocked"
+            },
+            {
+              "add": "rep_harbor",
+              "value": 2
+            },
+            {
+              "add": "ironwood_hostility",
+              "value": 2
+            },
+            {
+              "trust": "roz",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "text": "[Leave it. Let the Bradley pass]",
+          "next": "open",
+          "effects": [
+            {
+              "set": "bridge_choice",
+              "value": "open"
+            },
+            {
+              "add": "rep_authority",
+              "value": 1
+            },
+            {
+              "add": "rep_harbor",
+              "value": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "block",
+      "speaker": "narrator",
+      "text": "Forty tons of grain hopper tip into the trench. The Bradley stops a car-length short. Downtown cheers.",
+      "next": "block2"
+    },
+    {
+      "id": "block2",
+      "speaker": "roz",
+      "text": "THAT'S MY MECHANIC! Baby, you eat free at the Spur for the rest of your life! However long that is!",
+      "effects": [
+        {
+          "set": "roz_guns_known",
+          "value": true
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "open",
+      "speaker": "narrator",
+      "text": "The Bradley grinds past below you. By morning the Floor's warehouses are empty. Roz stops answering.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "Dawn. Rain. The city counts its dead and its stores, and neither number is honest.",
+      "end": true
+    }
+  ]
+}

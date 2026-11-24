@@ -1,0 +1,149 @@
+{
+  "id": "ch04_airguard_ramp",
+  "chapter": "ch04",
+  "location": "loc_airguard_ramp",
+  "trigger": "Night. The Air Guard ramp at Reno-Tahoe. The -86 ground power cart.",
+  "speakers": [
+    "narrator",
+    "braith",
+    "wraith",
+    "authority_guard"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Late October. The ramp is dark. Three C-130s under a cold moon, like sleeping cattle.",
+      "next": "r1"
+    },
+    {
+      "id": "r1",
+      "speaker": "narrator",
+      "text": "The power carts sit by Hangar 2. Yellow, 90 kilowatts, tow bar up. A sentry stamps his feet by a burn barrel.",
+      "choices": [
+        {
+          "text": "[Sneak. Wraith, quiet]",
+          "next": "sneak",
+          "effects": [
+            {
+              "set": "gpu_method",
+              "value": "stealth"
+            },
+            {
+              "trust": "wraith",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "text": "[Walk up. Talk shop]",
+          "next": "talk",
+          "effects": [
+            {
+              "set": "gpu_method",
+              "value": "talk"
+            }
+          ]
+        },
+        {
+          "text": "[Hotwire the tug and go loud]",
+          "next": "loud",
+          "effects": [
+            {
+              "set": "gpu_method",
+              "value": "force"
+            },
+            {
+              "add": "ironwood_hostility",
+              "value": 1
+            },
+            {
+              "add": "rep_authority",
+              "value": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sneak",
+      "speaker": "narrator",
+      "text": "You belly across the ramp. Wraith flattens beside you, perfect as a training video. The sentry never turns.",
+      "next": "hook"
+    },
+    {
+      "id": "talk",
+      "speaker": "authority_guard",
+      "text": "Who's there? ...Wait. Are you motor pool? You look like motor pool.",
+      "choices": [
+        {
+          "text": "Captain wants a cart at Steamboat.",
+          "next": "bluff",
+          "conditions": [
+            {
+              "item": "priority_card",
+              "gte": 1
+            }
+          ]
+        },
+        {
+          "text": "I was a crew chief. Just looking.",
+          "next": "honest"
+        }
+      ]
+    },
+    {
+      "id": "bluff",
+      "speaker": "authority_guard",
+      "text": "Nobody tells me anything. Sign here. Bring it back with gas in it.",
+      "effects": [
+        {
+          "add": "rep_authority",
+          "value": 1
+        }
+      ],
+      "next": "hook"
+    },
+    {
+      "id": "honest",
+      "speaker": "authority_guard",
+      "text": "Crew chief? I'm a Guard cook. They gave me a rifle and a barrel. ...Take it. I didn't see.",
+      "effects": [
+        {
+          "add": "kindness",
+          "value": 1
+        }
+      ],
+      "next": "hook"
+    },
+    {
+      "id": "loud",
+      "speaker": "narrator",
+      "text": "The tug coughs, catches. A flashlight swings. Somebody yells. You're already moving.",
+      "effects": [
+        {
+          "event": "encounter",
+          "id": "enc_ch04_ramp_chase"
+        }
+      ],
+      "next": "hook"
+    },
+    {
+      "id": "hook",
+      "speaker": "narrator",
+      "text": "Tow bar on the pintle. Fuel gauge: three-quarters. Eight miles of dark road to Steamboat.",
+      "effects": [
+        {
+          "give": "gpu_cart",
+          "qty": 1
+        },
+        {
+          "quest": "q_ground_power",
+          "state": "complete"
+        }
+      ],
+      "end": true
+    }
+  ]
+}

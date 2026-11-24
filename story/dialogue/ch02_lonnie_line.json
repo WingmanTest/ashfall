@@ -1,0 +1,90 @@
+{
+  "id": "ch02_lonnie_line",
+  "chapter": "ch02",
+  "location": "loc_rscc_registry",
+  "trigger": "Ambient: the singer in the ration line.",
+  "speakers": [
+    "narrator",
+    "amb_lonnie",
+    "braith",
+    "amb_brother_amos"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "A man in a gold sequined jacket is singing Sinatra to the ration line. Badly. Beautifully.",
+      "next": "l1"
+    },
+    {
+      "id": "l1",
+      "speaker": "amb_lonnie",
+      "text": "Thank you, thank you. Lonnie Vance, Silver Spur lounge, Tuesdays and Thursdays. Well. Formerly.",
+      "next": "l2"
+    },
+    {
+      "id": "l2",
+      "speaker": "amb_lonnie",
+      "text": "I take requests. I also take crackers. The crackers are not optional.",
+      "choices": [
+        {
+          "text": "[Give him crackers]",
+          "next": "give",
+          "conditions": [
+            {
+              "item": "canned_food",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "canned_food",
+              "qty": 1
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            },
+            {
+              "set": "lonnie_fed",
+              "value": true
+            }
+          ]
+        },
+        {
+          "text": "Play something for the line.",
+          "next": "play"
+        },
+        {
+          "text": "Not today, Lonnie.",
+          "next": "no"
+        }
+      ]
+    },
+    {
+      "id": "give",
+      "speaker": "amb_lonnie",
+      "text": "Sir, you are a patron of the arts. This one's for you and the wolf.",
+      "next": "play"
+    },
+    {
+      "id": "play",
+      "speaker": "narrator",
+      "text": "He sings 'Fly Me to the Moon.' A kid in line starts crying. Then laughing. The line moves a foot.",
+      "next": "amos"
+    },
+    {
+      "id": "no",
+      "speaker": "amb_lonnie",
+      "text": "No? No. That's fair. Nobody's got crackers. I'll sing anyway. Union rules.",
+      "next": "amos"
+    },
+    {
+      "id": "amos",
+      "speaker": "amb_brother_amos",
+      "text": "Nineteen days! Two hundred and six dead in this county that I know of! I'm counting! Somebody has to count!",
+      "end": true
+    }
+  ]
+}

@@ -1,38 +1,65 @@
 {
-  "version": 1,
+  "version": 2,
   "quests": {
-    "q_cooler": {
-      "title": "Keep It Cold",
+    "q_water": {
+      "title": "Rolling Boil",
       "chapter": "ch01",
-      "desc": "Build a lake-water cooler for Theo's spare insulin.",
+      "desc": "Haul water from the Sparks Marina and boil it.",
+      "stages": [
+        "start",
+        "boil",
+        "complete"
+      ]
+    },
+    "q_find_pruitt": {
+      "title": "Feed the Ducks",
+      "chapter": "ch01",
+      "desc": "Wraith tracks Mr. Pruitt from his scarf.",
       "stages": [
         "start",
         "complete"
       ]
     },
-    "q_insulin": {
-      "title": "Tier Two",
-      "chapter": "ch02",
-      "desc": "Get Theo's insulin through the registry or otherwise.",
+    "q_clinic_supplies": {
+      "title": "For the Clinic",
+      "chapter": "ch01",
+      "desc": "Get clinic supplies for Lolo from the Prater Way pharmacy.",
       "stages": [
         "start",
-        "hospital",
+        "complete"
+      ]
+    },
+    "q_essential_card": {
+      "title": "Essential",
+      "chapter": "ch02",
+      "desc": "Earn an essential-worker card: registry, Ames's letter, or a report.",
+      "stages": [
+        "start",
         "complete"
       ]
     },
     "q_hospital_diesel": {
       "title": "Level Three",
       "chapter": "ch02",
-      "desc": "Drain the tanker in the hospital parking ramp for Dr. Ames.",
+      "desc": "Drain the tanker on level three of the hospital ramp for Dr. Ames.",
       "stages": [
         "start",
         "complete"
       ]
     },
-    "q_find_hank": {
-      "title": "Bring Your Head",
+    "q_find_walt": {
+      "title": "The Old Operator",
       "chapter": "ch03",
-      "desc": "Reach Hank at Lou's shack in Proctor.",
+      "desc": "Fix Augie's transmitter on Peavine; meet Walt.",
+      "stages": [
+        "start",
+        "complete"
+      ]
+    },
+    "q_ground_power": {
+      "title": "Borrowed Power",
+      "chapter": "ch04",
+      "desc": "Take a -86 ground power cart off the Air Guard ramp.",
       "stages": [
         "start",
         "complete"
@@ -41,16 +68,62 @@
     "q_black_start": {
       "title": "Black Start",
       "chapter": "ch03-ch04",
-      "desc": "Restart Thomson Unit 2.",
+      "desc": "Bring Galena Station Unit 1 up from cart power.",
       "stages": [
         "start",
         "complete"
       ]
     },
-    "q_find_theo": {
-      "title": "don't be mad",
-      "chapter": "ch06",
-      "desc": "Find Theo in the port.",
+    "q_find_wes": {
+      "title": "Under the Overpass",
+      "chapter": "ch05",
+      "desc": "Find Wes after the canyon firefight.",
+      "stages": [
+        "start",
+        "complete"
+      ]
+    },
+    "q_mo_pump": {
+      "title": "Bad Bearing",
+      "chapter": "ch05",
+      "desc": "Fix Mo's transfer pump for standing credit.",
+      "stages": [
+        "start",
+        "complete"
+      ]
+    },
+    "q_rourke_escort": {
+      "title": "Maisie Won't Walk",
+      "chapter": "ch05",
+      "desc": "Get Rourke's burros through the canyon.",
+      "stages": [
+        "start",
+        "complete"
+      ]
+    },
+    "q_control_cards": {
+      "title": "Hardened",
+      "chapter": "ch07",
+      "desc": "Bring hardened control cards back from the Dixie Valley Annex.",
+      "stages": [
+        "start",
+        "cards",
+        "complete"
+      ]
+    },
+    "q_annie_greenhouse": {
+      "title": "Seeds Are Patient",
+      "chapter": "ch08",
+      "desc": "Promise Annie a Galena heat line to the library atrium.",
+      "stages": [
+        "start",
+        "complete"
+      ]
+    },
+    "q_lamp_line": {
+      "title": "The Lamp Line",
+      "chapter": "ch10",
+      "desc": "Keep the floodlight perimeter lit through the siege.",
       "stages": [
         "start",
         "complete"

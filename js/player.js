@@ -1,8 +1,8 @@
 import * as THREE from "three";
-import { CFG, ITEMS, WEAPONS_ORDER } from "./config.js?v=r8";
-import { combinedInsulation } from "./equipment.js?v=r8";
-import { fitHeight } from "./world.js?v=r8";
-import { createWeaponModel, setWeaponLibrary, mountViewmodel, applyHold, installViewmodelLights, weaponKind } from "./weapons/viewmodels.js?v=r8";
+import { CFG, ITEMS, WEAPONS_ORDER } from "./config.js?v=r9";
+import { combinedInsulation } from "./equipment.js?v=r9";
+import { fitHeight } from "./world.js?v=r9";
+import { createWeaponModel, setWeaponLibrary, mountViewmodel, applyHold, installViewmodelLights, weaponKind } from "./weapons/viewmodels.js?v=r9";
 
 export function defaultStats() {
   return {
@@ -12,7 +12,6 @@ export function defaultStats() {
     hydration: 75,
     stamina: 100,
     rad: 0,
-    insulinHours: 72,
   };
 }
 
@@ -197,13 +196,20 @@ export class Player {
 
     // Warmth
     const wBase = prs(statsDef.warmth, 0.30);
-    let wMul = (climate.ambient_cold ?? 1) * (mul.warmth_drain_mult ?? 1);
+    // Quartermaster: chapter_climate[ch].night_cold_mult is ABSOLUTE at night (it replaces
+    // ambient_cold); never stack it with an environment night multiplier.
+    const hasNightAbs = typeof climate.night_cold_mult === "number";
+    const coldBase = night && hasNightAbs ? climate.night_cold_mult : (climate.ambient_cold ?? 1);
+    let wMul = coldBase * (mul.warmth_drain_mult ?? 1);
     if (indoor && inFire) { /* regen replaces drain */ }
     else if (inFire) { /* near_fire regen */ }
     else {
       if (indoor) wMul *= (envm.indoors_heated && false) ? 1 : (envm.indoors_unheated?.warmth_drain_mult ?? 0.35);
       else wMul *= (envm.outdoors?.warmth_drain_mult ?? 1);
-      if (night) wMul *= (envm.night?.warmth_drain_mult ?? 1.4) * (wdef.night_extra_mult ?? 1);
+      if (night && !hasNightAbs) {
+        const nm = Number(envm.night?.warmth_drain_mult);
+        wMul *= (Number.isFinite(nm) ? nm : 1.4) * (wdef.night_extra_mult ?? 1);
+      }
       if (blizzard) wMul *= (envm.blizzard?.warmth_drain_mult ?? wdef.warmth_drain_mult ?? 2.2);
       else if (wdef.warmth_drain_mult) wMul *= wdef.warmth_drain_mult;
       if (sprinting) wMul *= (envm.sprinting?.warmth_drain_mult ?? 0.8);
@@ -216,8 +222,11 @@ export class Player {
       this.stats.warmth = Math.min(100, this.stats.warmth + regen * dt);
     } else if (indoor && envm.indoors_heated && this._heated) {
       this.stats.warmth = Math.min(100, this.stats.warmth + (envm.indoors_heated.warmth_regen_per_real_second ?? 2) * dt);
+    } else if (coldBase <= 0 && (climate.ambient_warmth_regen_per_real_second || 0) > 0) {
+      // Late-summer Sparks: no cold drain; warmth drifts back up.
+      this.stats.warmth = Math.min(100, this.stats.warmth + climate.ambient_warmth_regen_per_real_second * dt);
     } else {
-      this.stats.warmth = Math.max(0, this.stats.warmth - wBase * wMul * dt);
+      this.stats.warmth = Math.max(0, this.stats.warmth - wBase * (Number.isFinite(wMul) ? wMul : 1) * dt);
     }
 
     // Satiety / hunger (code stores fullness)
@@ -229,6 +238,8 @@ export class Player {
 
     // Hydration
     let dMul = 1 * (mul.hydration_drain_mult ?? 1);
+    const thirst = (night || indoor) ? (climate.thirst_drain_mult_night_or_indoors ?? climate.thirst_drain_mult) : climate.thirst_drain_mult;
+    if (typeof thirst === "number" && thirst > 0) dMul *= thirst;
     if (sprinting) dMul *= 1.3;
     if (inFire) dMul *= 1.2;
     this.stats.hydration = Math.max(0, this.stats.hydration - prs(statsDef.hydration, 0.075) * dMul * dt);
@@ -275,7 +286,6 @@ export class Player {
       this.stats.health = Math.min(soft.cap ?? 70, this.stats.health + (soft.per_real_second ?? 0.04) * dt);
     }
 
-    this.stats.insulinHours = Math.max(0, this.stats.insulinHours - dt / 3600);
   }
 
   damage(n, reason) {
@@ -313,10 +323,6 @@ export class Player {
       return true;
     }
     if (id === "coat") { this.coatOn = true; return true; }
-    if (id === "insulin") {
-      this.stats.insulinHours = Math.min(96, this.stats.insulinHours + 48);
-      return false; // quest item, don't auto-consume here
-    }
     return false;
   }
 

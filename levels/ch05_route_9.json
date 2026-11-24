@@ -1,39 +1,67 @@
 {
  "$schema": "./schema.json",
  "formatVersion": 1,
+ "storyVersion": 2,
  "id": "ch05_route_9",
  "chapter": 5,
+ "storyChapter": "ch05",
  "title": "Route 9",
- "act": "II",
+ "act": 2,
  "storyFile": "story/chapters/ch05_route_9.md",
- "next": "ch06_the_lift_bridge",
- "summary": "Ore docks muster -> on-rails convoy up ROUTE 9 -> Hwy 53 overpass blockade, signal cabinet under fire, Cody -> Proctor junction.",
+ "next": "ch06_the_trench",
  "difficulty": 3,
+ "summary": "Sleet, Day 83, dusk into night. Ruiz's convoy stages at the TRIC warehouses; Boone's back door at the Sparks yard and Mo's pump at the Mustang truck stop; then the I-80 canyon: the rail signal cabinet, Ander walks out from the Compact barricade, and the convoy choice (escort / sabotage / divert) picks one of three non-overlapping fights. Wes is hit under the overpass. Flare glimpse on the hillside.",
+ "startInventory": {
+  "mech_tools": 1,
+  "flashlight": 1,
+  "hand_radio": 1
+ },
+ "startInventoryNote": "carried over from Ch1-4",
  "units": "meters",
  "grid": {
   "cellSize": 2.0,
-  "cols": 22,
-  "rows": 64,
+  "cols": 48,
+  "rows": 104,
   "origin": {
-   "x": -22.0,
-   "z": -120.0
+   "x": -48.0,
+   "z": -200.0
   },
   "legend": {
-   ".": {
-    "name": "snow_ground",
+   "#": {
+    "name": "wall",
+    "walkable": false,
+    "solid": true,
+    "height": 4,
+    "wallTex": "red_brick",
+    "preview": "#5a3a32"
+   },
+   ",": {
+    "name": "interior_floor",
     "walkable": true,
     "solid": false,
     "height": 0,
-    "floorTex": "snow_02",
-    "preview": "#d9e1e8"
+    "floorTex": "dirty_concrete",
+    "roof": true,
+    "preview": "#b8ad98"
+   },
+   ".": {
+    "name": "mud",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirt",
+    "groundType": "mud_wet",
+    "preview": "#7a6852"
    },
    "=": {
-    "name": "road",
+    "name": "asphalt_wet",
     "walkable": true,
     "solid": false,
     "height": 0,
-    "floorTex": "asphalt_snow",
-    "preview": "#8d969e"
+    "floorTex": "road_damaged",
+    "groundType": "asphalt_wet",
+    "wet": true,
+    "preview": "#6e737a"
    },
    "B": {
     "name": "building_mass",
@@ -44,6 +72,15 @@
     "massOnly": true,
     "preview": "#4a4f57"
    },
+   "D": {
+    "name": "door",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirty_concrete",
+    "door": true,
+    "preview": "#e0a040"
+   },
    "H": {
     "name": "high_wall",
     "walkable": false,
@@ -51,14 +88,6 @@
     "height": 8,
     "wallTex": "dirty_concrete",
     "preview": "#3c3f44"
-   },
-   "T": {
-    "name": "tree",
-    "walkable": false,
-    "solid": true,
-    "height": 6,
-    "tree": true,
-    "preview": "#2e4a34"
    },
    "U": {
     "name": "covered_floor",
@@ -80,21 +109,13 @@
     "cover": true,
     "preview": "#a08850"
    },
-   "g": {
-    "name": "dirt_gravel",
+   "k": {
+    "name": "rail_track",
     "walkable": true,
     "solid": false,
     "height": 0,
-    "floorTex": "dirt",
-    "preview": "#9c8f7a"
-   },
-   "x": {
-    "name": "debris",
-    "walkable": false,
-    "solid": true,
-    "height": 0.9,
-    "wallTex": "rust_coarse_01",
-    "preview": "#6e5545"
+    "floorTex": "rusty_metal",
+    "preview": "#6a5a4e"
    },
    "~": {
     "name": "open_water",
@@ -107,236 +128,415 @@
    }
   },
   "tiles": [
-   "HHHHHHHHHHHHHHHHHHHHHH",
-   "Hggg=gggggg==ggggggggH",
-   "Hggg=gggggg==ggggggggH",
-   "Hggg=gggggg==ggBBBBBgH",
-   "Hggg=gggggg==ggBBBBBgH",
-   "Hggg=gggggg==ggBBBBBgH",
-   "Hggg=gggggg==ggBBBBBgH",
-   "Hggg=gggggg==ggBBBBBgH",
-   "Hggg=gggggg==ggBBBBBgH",
-   "Hggg=gggggg==ggBBBBBgH",
-   "Hggg=gggggg==ggBBBBBgH",
-   "Hggg=gggggg==ggggggggH",
-   "Hggg=gggggg==ggggggggH",
-   "Hggg=gggggg==ggggggggH",
-   "HHHHHHHHHHH==HHHHHHHHH",
-   "HHHHHHHHHHH==HHHHHHHHH",
-   "H..UUUUUUUUUUUUUUUU..H",
-   "H..UUUxUUUUUUUUxUUU..H",
-   "H..UUUxUUUUUUUUxUUU..H",
-   "H..UUUUUUUUUUUUUUUU..H",
-   "H........====........H",
-   "H..cc....====...cc...H",
-   "H.......cc===........H",
-   "H........====........H",
-   "H....BBBBBBBB=BBB....H",
-   "H....BBBBBBBB=BBB....H",
-   "H........====........H",
-   "H...T.T..====...T..TTH",
-   "H.T......====..TT.T..H",
-   "H.TTT.T..====.....T..H",
-   "HTTTT.T..====....T...H",
-   "H.T......====.......TH",
-   "H....T...====.T.T.T..H",
-   "HT.......====.T.T....H",
-   "HT.T..T..====...T.T.TH",
-   "HTT...TT.====.......TH",
-   "H.T.T....====....T..TH",
-   "H....TT..====..T....TH",
-   "H........====..T.T..TH",
-   "H....T...====..T..T.TH",
-   "H.T.T.T..====........H",
-   "H.T....T.====.TT.....H",
-   "H.TT...T.====......TTH",
-   "H.T..T.T.====...TT...H",
-   "H........====...T...TH",
-   "H..TT....====....T.TTH",
-   "H....TTT.====........H",
-   "H........====........H",
-   "H.....TT.====....~~~~H",
-   "H........====....~~~~H",
-   "H........====....~~~~H",
-   "H........====....~~~~H",
-   "HBBBBBB..====....~~~~H",
-   "HBBBBBB..====....~~~~H",
-   "HBBBBBB..====....~~~~H",
-   "HBBBBBB..====....~~~~H",
-   "HBBBBBB..====....~~~~H",
-   "HBBBBBB..====....~~~~H",
-   "HBBBBBB..====....~~~~H",
-   "HBBBBBB..====....~~~~H",
-   "HBBBBBB..====....~~~~H",
-   "H........====....~~~~H",
-   "H........====....~~~~H",
-   "HHHHHHHHHHHHHHHHHHHHHH"
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....cccc==cccccccc==cccc...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....UUUUUUUUUUUUUUUUUUUU...~~~~..HHHHH",
+   "HHHHH..kk.....UUUUUUUUUUUUUUUUUUUU...~~~~..HHHHH",
+   "HHHHH..kk.....UUUUUUUUUUUUUUUUUUUU...~~~~..HHHHH",
+   "HHHHH..kk.....UUUUUUUUUUUUUUUUUUUU...~~~~..HHHHH",
+   "HHHHH..kk.....UUUUUUUUUUUUUUUUUUUU...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "HHHHH..kk.....====================...~~~~..HHHHH",
+   "H.............====================.............H",
+   "H.............====================.............H",
+   "H.............====================.............H",
+   "H..#########..====================..#########..H",
+   "H..#,,,,,,,#..====================..#,,,,,,,#..H",
+   "H..#,,,,,,,#..====================..#,,,,,,,#..H",
+   "H..#,,,,,,,#..====================..#,,,,,,,#..H",
+   "H..#,,,,,,,D..====================..D,,,,,,,#..H",
+   "H..#,,,,,,,#..====================..#,,,,,,,#..H",
+   "H..#,,,,,,,#..====================..#,,,,,,,#..H",
+   "H..#,,,,,,,#..====================..#,,,,,,,#..H",
+   "H..#########..====================..#########..H",
+   "H.............====================.............H",
+   "H.............====================.............H",
+   "H.............====================.............H",
+   "H..UUUUUUUUU..====================kkkkkkkkkkkk.H",
+   "H..UUUUUUUUU..====================.............H",
+   "H..UUUUUUUUU..====================.............H",
+   "H..UUUUUUUUU..====================.............H",
+   "H..UUUUUUUUU..====================.............H",
+   "H.............====================.............H",
+   "H.............====================kkkkkkkkkkkk.H",
+   "H.............====================.............H",
+   "H.............====================.............H",
+   "H.............====================.............H",
+   "H.............====================.............H",
+   "H.............====================.............H",
+   "H.............====================.............H",
+   "H.............====================.............H",
+   "H.............====================.............H",
+   "H.............====================.............H",
+   "H...#################=============..BBBBBBBBB..H",
+   "H...#,,,,,,,,,,,,,,,#=============..BBBBBBBBB..H",
+   "H...#,,,,,,,,,,,,,,,#=============..BBBBBBBBB..H",
+   "H...#,,,,,,,,,,,,,,,#=============..BBBBBBBBB..H",
+   "H...#,,,,,,,,,,,,,,,#=============..BBBBBBBBB..H",
+   "H...#,,,,,,,,,,,,,,,#=============..BBBBBBBBB..H",
+   "H...#,,,,,,,,,,,,,,,D=============..BBBBBBBBB..H",
+   "H...#,,,,,,,,,,,,,,,#=============..BBBBBBBBB..H",
+   "H...#,,,,,,,,,,,,,,,#=============..BBBBBBBBB..H",
+   "H...#,,,,,,,,,,,,,,,#=============.............H",
+   "H...#,,,,,,,,,,,,,,,#=============.............H",
+   "H...#,,,,,,,,,,,,,,,#=============.............H",
+   "H...########D########=============.............H",
+   "H.............====================.............H",
+   "H.............====================.............H",
+   "H.............====================.............H",
+   "H.............====================.............H",
+   "H.............====================.............H",
+   "H.............====================.............H",
+   "H.............====================.............H",
+   "H.............====================.............H",
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
   ]
  },
  "environment": {
-  "timeStart": 0.88,
-  "timeEnd": 0.98,
-  "timeLocked": true,
-  "weather": "freezing_rain",
-  "tempC": -8,
-  "blizzard": false,
-  "snowCover": 0.8,
+  "seasonArc": "civil_war_late_autumn",
+  "season": "late_fall",
+  "actName": "Civil War",
+  "groundType": "mud_wet_asphalt",
+  "precipitation": "sleet",
   "particles": "rain",
-  "fogNear": 6,
-  "fogFar": 34,
-  "palette": "assets/palettes/oil-6.json",
-  "ambientTint": "#c9d6e6",
+  "snowCover": 0.0,
+  "wetness": 0.8,
+  "fogColor": "#6a747d",
+  "skyColor": "#5c6872",
+  "sunColor": "#b8bcc2",
+  "ambientColor": "#7a8088",
+  "visibilityM": 48,
+  "fogNear": 4,
+  "fogFar": 48,
+  "windMs": 7,
+  "atmosphere": "Cold overcast late autumn: low cloud ceiling, drizzle and cold rain, mud and wet asphalt, smoke plumes over barricades and checkpoints.",
+  "environmentPreset": "late_fall",
+  "storySeason": "late_fall",
+  "storyPalette": "overcast slate grey, wet asphalt, sodium-orange dead lamps",
+  "storyWeather": "sleet",
+  "weather": "sleet",
+  "storyTempC": 2,
+  "tempC": 2,
+  "nightTempC": -3,
+  "survivalFocus": [
+   "warmth",
+   "wet_cold",
+   "wind"
+  ],
+  "timeStart": 0.72,
+  "timeEnd": 0.9,
+  "timeLocked": false,
+  "blizzard": false,
+  "warmthDrainMul": 1.0,
+  "transitions": [
+   {
+    "trigger": "t_ch05_canyon",
+    "time": 0.8,
+    "light": "sleet_dusk_headlights"
+   }
+  ],
+  "barricades": [
+   "c tiles row 9 (Compact barricade)",
+   "overpass U deck"
+  ],
+  "seasonNote": "Day 83 (mid November): sleet, wet asphalt and mud in the canyon, sodium lamps dead; no snow cover.",
   "hud": {
-   "temp": true,
+   "hp": true,
+   "hydration": true,
    "hunger": true,
-   "rad": false,
-   "filter": false,
-   "seal": false
-  },
-  "warmthDrainMul": 1.2,
-  "maxAliveEnemies": 5
+   "companion": true,
+   "warmth": true,
+   "temp": true,
+   "ammo_military": true
+  }
  },
  "locations": [
   {
-   "id": "loc_ore_docks",
+   "id": "loc_i80_blockade",
    "x": 0.0,
-   "z": -9.0,
+   "z": -148.0,
    "rect": {
     "type": "rect",
-    "x0": -20.0,
-    "z0": -24.0,
-    "x1": 20.0,
+    "x0": -46.0,
+    "z0": -198.0,
+    "x1": 46.0,
+    "z1": -98.0
+   },
+   "safe": false,
+   "name": "I-80 canyon blockade"
+  },
+  {
+   "id": "loc_mustang_truckstop",
+   "x": -23.0,
+   "z": -70.0,
+   "rect": {
+    "type": "rect",
+    "x0": -46.0,
+    "z0": -98.0,
+    "x1": 0.0,
+    "z1": -42.0
+   },
+   "safe": false,
+   "name": "Mustang truck stop"
+  },
+  {
+   "id": "loc_sparks_yard",
+   "x": 23.0,
+   "z": -70.0,
+   "rect": {
+    "type": "rect",
+    "x0": 0.0,
+    "z0": -98.0,
+    "x1": 46.0,
+    "z1": -42.0
+   },
+   "safe": false,
+   "name": "Sparks yard"
+  },
+  {
+   "id": "loc_tric_warehouses",
+   "x": 0.0,
+   "z": -18.0,
+   "rect": {
+    "type": "rect",
+    "x0": -46.0,
+    "z0": -42.0,
+    "x1": 46.0,
     "z1": 6.0
    },
-   "safe": false
-  },
-  {
-   "id": "loc_hwy53_blockade",
-   "x": 0.0,
-   "z": -75.0,
-   "rect": {
-    "type": "rect",
-    "x0": -20.0,
-    "z0": -92.0,
-    "x1": 20.0,
-    "z1": -58.0
-   },
-   "safe": false
-  },
-  {
-   "id": "loc_proctor_yard",
-   "x": 0.0,
-   "z": -105.0,
-   "rect": {
-    "type": "rect",
-    "x0": -20.0,
-    "z0": -118.0,
-    "x1": 20.0,
-    "z1": -92.0
-   },
-   "safe": false
+   "safe": false,
+   "name": "TRIC warehouses"
   }
  ],
- "landmarks": [
+ "landmarks": [],
+ "buildings": [
   {
-   "label": "Grain elevator",
-   "x": -14.0,
-   "z": -7.0
+   "id": "b_ch05_truckstop",
+   "label": "Mustang truck stop",
+   "kind": "walled",
+   "cells": [
+    3,
+    54,
+    11,
+    62
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -42.0,
+    "z0": -92.0,
+    "x1": -24.0,
+    "z1": -74.0
+   },
+   "doors": [
+    [
+     -25.0,
+     -83.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_mustang_truckstop",
+   "interior": "store + Mo's counter"
   },
   {
-   "label": "Blockade",
-   "x": 0.0,
-   "z": -70.0
+   "id": "b_ch05_depot",
+   "label": "Sparks yard depot",
+   "kind": "walled",
+   "cells": [
+    36,
+    54,
+    44,
+    62
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 24.0,
+    "z0": -92.0,
+    "x1": 42.0,
+    "z1": -74.0
+   },
+   "doors": [
+    [
+     25.0,
+     -83.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_sparks_yard",
+   "interior": "Boone's back room"
   },
   {
-   "label": "Signal cabinet",
-   "x": 13.0,
-   "z": -83.0
+   "id": "b_ch05_tric",
+   "label": "TRIC warehouse (convoy staging)",
+   "kind": "walled",
+   "cells": [
+    4,
+    82,
+    20,
+    94
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -40.0,
+    "z0": -36.0,
+    "x1": -6.0,
+    "z1": -10.0
+   },
+   "doors": [
+    [
+     -7.0,
+     -23.0
+    ],
+    [
+     -23.0,
+     -11.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_tric_warehouses"
   },
   {
-   "label": "Cody (under overpass)",
-   "x": -13.0,
-   "z": -85.0
-  },
-  {
-   "label": "Junction switch",
-   "x": -7.0,
-   "z": -105.0
+   "id": "m_ch05_tric_b",
+   "label": "Warehouse B",
+   "kind": "mass",
+   "cells": [
+    36,
+    82,
+    44,
+    90
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 24.0,
+    "z0": -36.0,
+    "x1": 42.0,
+    "z1": -18.0
+   },
+   "doors": [],
+   "location": "loc_tric_warehouses",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
   }
  ],
  "paths": {
   "critical": [
    [
-    -1.0,
+    1.0,
     -1.0
    ],
    [
-    0.0,
-    -13.0
+    1.0,
+    -17.0
    ],
    [
-    0.0,
-    -65.0
+    1.0,
+    -39.0
    ],
    [
-    5.0,
-    -67.0
+    1.0,
+    -79.0
    ],
    [
-    5.0,
-    -71.0
-   ],
-   [
-    5.0,
-    -75.0
-   ],
-   [
-    11.0,
-    -81.0
-   ],
-   [
-    13.0,
+    -17.0,
     -83.0
    ],
    [
-    3.0,
-    -85.0
+    1.0,
+    -79.0
    ],
    [
-    2.0,
-    -89.0
+    19.0,
+    -83.0
    ],
    [
-    2.0,
-    -113.0
+    1.0,
+    -79.0
+   ],
+   [
+    1.0,
+    -101.0
+   ],
+   [
+    1.0,
+    -119.0
+   ],
+   [
+    1.0,
+    -139.0
+   ],
+   [
+    1.0,
+    -159.0
+   ],
+   [
+    1.0,
+    -119.0
+   ],
+   [
+    1.0,
+    -79.0
+   ],
+   [
+    1.0,
+    1.0
    ]
   ],
   "optional": [
    {
-    "id": "b_cody",
-    "label": "Cody under the overpass",
+    "id": "b_ch05_sabotage",
+    "label": "Sabotage: the rail cut",
     "points": [
      [
-      3.0,
-      -85.0
+      -21.0,
+      -101.0
      ],
      [
-      -13.0,
-      -85.0
-     ]
-    ]
-   },
-   {
-    "id": "b_divert",
-    "label": "Divert: junction switch",
-    "points": [
-     [
-      1.0,
-      -95.0
+      -29.0,
+      -107.0
      ],
      [
-      -7.0,
-      -105.0
+      -29.0,
+      -163.0
      ]
     ]
    }
@@ -346,103 +546,156 @@
   "player": [
    {
     "id": "spawn_default",
-    "x": -1.0,
+    "x": 1.0,
     "z": -1.0,
-    "rotY": 3.142
+    "rotY": 0.0
    }
   ],
   "npcs": [
    {
-    "id": "npc_strand",
-    "npc": "strand",
-    "x": -4.0,
-    "z": -3.0,
-    "rotY": -1.571,
-    "behavior": "idle"
+    "id": "npc_wraith",
+    "npc": "wraith",
+    "x": 3.0,
+    "z": -1.0,
+    "rotY": 0.0,
+    "behavior": "companion_follow",
+    "when": [
+     {
+      "flag": "wraith_alive",
+      "eq": true
+     }
+    ],
+    "label": "Wraith",
+    "companion": true
    },
    {
     "id": "npc_ruiz",
     "npc": "ruiz",
     "x": 1.0,
-    "z": -13.0,
+    "z": -15.0,
     "rotY": 0.0,
     "behavior": "idle",
-    "dialogue": "ch05_ruiz_convoy",
-    "label": "Sgt. Ruiz (MRAP)"
+    "dialogue": "ch05_ruiz_convoy"
    },
    {
-    "id": "npc_ray",
-    "npc": "ray",
-    "x": 5.0,
-    "z": 3.0,
-    "rotY": 1.571,
+    "id": "npc_wes",
+    "npc": "wes",
+    "x": 7.0,
+    "z": -15.0,
+    "rotY": 0.0,
+    "behavior": "idle"
+   },
+   {
+    "id": "npc_amb_darlene",
+    "npc": "amb_darlene",
+    "x": 13.0,
+    "z": -27.0,
+    "rotY": 0.0,
     "behavior": "idle",
+    "label": "Darlene (driving a convoy truck)"
+   },
+   {
+    "id": "npc_trader_mo",
+    "npc": "trader_mo",
+    "x": -33.0,
+    "z": -85.0,
+    "rotY": 0.0,
+    "behavior": "trade",
+    "label": "Mo's counter (Mustang truck stop)",
+    "trader": {
+     "stall": "Mo's counter (Mustang truck stop)",
+     "repFlag": "trader_mo_rep",
+     "stockFrom": "story/npcs.json traders[].stock_by_act"
+    }
+   },
+   {
+    "id": "npc_trader_boone",
+    "npc": "trader_boone",
+    "x": 33.0,
+    "z": -85.0,
+    "rotY": 0.0,
+    "behavior": "trade",
+    "label": "Boone's back door (Sparks yard depot)",
+    "trader": {
+     "stall": "Boone's back door (Sparks yard depot)",
+     "repFlag": "trader_boone_rep",
+     "stockFrom": "story/npcs.json traders[].stock_by_act"
+    }
+   },
+   {
+    "id": "npc_trader_rourke",
+    "npc": "trader_rourke",
+    "x": 9.0,
+    "z": -147.0,
+    "rotY": 0.0,
+    "behavior": "trade",
+    "label": "Rourke's burros (stuck at the blockade)",
+    "trader": {
+     "stall": "Rourke's burros (stuck at the blockade)",
+     "repFlag": "trader_rourke_rep",
+     "stockFrom": "story/npcs.json traders[].stock_by_act"
+    }
+   },
+   {
+    "id": "npc_ander",
+    "npc": "ander",
+    "x": 1.0,
+    "z": -171.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch05_ander_blockade",
     "when": [
      {
-      "flag": "ray_alive",
-      "ne": false
+      "flag": "ch05_canyon",
+      "eq": true
      }
     ]
    },
    {
-    "id": "npc_bea",
-    "npc": "bea",
-    "x": 10.0,
-    "z": -19.0,
-    "rotY": 1.571,
-    "behavior": "idle"
-   },
-   {
-    "id": "npc_jory",
-    "npc": "jory",
+    "id": "npc_ross",
+    "npc": "ross",
     "x": 5.0,
-    "z": -66.0,
+    "z": -173.0,
     "rotY": 0.0,
     "behavior": "idle",
-    "dialogue": "ch05_jory_blockade",
     "when": [
      {
-      "flag": "ch05_parley",
+      "flag": "ch05_canyon",
       "eq": true
      }
-    ],
-    "label": "Jory (white rag)"
+    ]
    },
    {
-    "id": "npc_cody",
-    "npc": "cody",
-    "x": -13.0,
-    "z": -85.0,
-    "rotY": -1.571,
-    "behavior": "idle",
-    "dialogue": "ch05_cody",
-    "label": "Cody (gut-shot)"
-   },
-   {
-    "id": "npc_kessler",
-    "npc": "kessler",
-    "x": -5.0,
-    "z": -6.6,
+    "id": "npc_wes_overpass",
+    "npc": "wes",
+    "x": 1.0,
+    "z": -119.0,
     "rotY": 0.0,
-    "behavior": "voice",
-    "label": "Kessler (loudspeaker, voice only)"
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "convoy_choice"
+     }
+    ],
+    "label": "Wes (hit)"
    }
   ],
   "enemies": [
    {
     "id": "en_01",
     "type": "compact_militia",
-    "x": -9.0,
-    "z": -75.0,
-    "group": "g_blockade_front",
-    "tier": 3,
-    "behavior": "guard",
+    "x": -15.0,
+    "z": -187.0,
+    "group": "g_ch05_barricade_w1",
+    "tier": 1,
+    "behavior": "hold_cover",
     "hostile": "always",
     "activate": "trigger",
+    "storyEncounter": "enc_ch05_compact_attack",
     "when": [
      {
       "flag": "convoy_choice",
-      "ne": "sabotage"
+      "eq": "escort"
      }
     ]
    },
@@ -450,16 +703,17 @@
     "id": "en_02",
     "type": "compact_militia",
     "x": -3.0,
-    "z": -77.0,
-    "group": "g_blockade_front",
-    "tier": 3,
-    "behavior": "guard",
+    "z": -189.0,
+    "group": "g_ch05_barricade_w1",
+    "tier": 1,
+    "behavior": "hold_cover",
     "hostile": "always",
     "activate": "trigger",
+    "storyEncounter": "enc_ch05_compact_attack",
     "when": [
      {
       "flag": "convoy_choice",
-      "ne": "sabotage"
+      "eq": "escort"
      }
     ]
    },
@@ -467,33 +721,35 @@
     "id": "en_03",
     "type": "compact_militia",
     "x": 7.0,
-    "z": -76.0,
-    "group": "g_blockade_front",
-    "tier": 3,
-    "behavior": "guard",
+    "z": -187.0,
+    "group": "g_ch05_barricade_w1",
+    "tier": 1,
+    "behavior": "hold_cover",
     "hostile": "always",
     "activate": "trigger",
+    "storyEncounter": "enc_ch05_compact_attack",
     "when": [
      {
       "flag": "convoy_choice",
-      "ne": "sabotage"
+      "eq": "escort"
      }
     ]
    },
    {
     "id": "en_04",
     "type": "compact_militia",
-    "x": 13.0,
-    "z": -75.0,
-    "group": "g_blockade_front",
-    "tier": 3,
-    "behavior": "guard",
+    "x": 17.0,
+    "z": -189.0,
+    "group": "g_ch05_barricade_w1",
+    "tier": 1,
+    "behavior": "hold_cover",
     "hostile": "always",
     "activate": "trigger",
+    "storyEncounter": "enc_ch05_compact_attack",
     "when": [
      {
       "flag": "convoy_choice",
-      "ne": "sabotage"
+      "eq": "escort"
      }
     ]
    },
@@ -501,50 +757,53 @@
     "id": "en_05",
     "type": "compact_militia",
     "x": -17.0,
-    "z": -77.0,
-    "group": "g_blockade_flank",
-    "tier": 3,
-    "behavior": "ambush",
+    "z": -193.0,
+    "group": "g_ch05_barricade_w2",
+    "tier": 1,
+    "behavior": "assault",
     "hostile": "always",
     "activate": "trigger",
+    "storyEncounter": "enc_ch05_compact_attack",
     "when": [
      {
       "flag": "convoy_choice",
-      "ne": "sabotage"
+      "eq": "escort"
      }
     ]
    },
    {
     "id": "en_06",
     "type": "compact_militia",
-    "x": 17.0,
-    "z": -78.0,
-    "group": "g_blockade_flank",
-    "tier": 3,
-    "behavior": "ambush",
+    "x": -5.0,
+    "z": -195.0,
+    "group": "g_ch05_barricade_w2",
+    "tier": 1,
+    "behavior": "assault",
     "hostile": "always",
     "activate": "trigger",
+    "storyEncounter": "enc_ch05_compact_attack",
     "when": [
      {
       "flag": "convoy_choice",
-      "ne": "sabotage"
+      "eq": "escort"
      }
     ]
    },
    {
     "id": "en_07",
     "type": "compact_militia",
-    "x": -5.0,
-    "z": -63.0,
-    "group": "g_blockade_flank",
-    "tier": 3,
-    "behavior": "ambush",
+    "x": 5.0,
+    "z": -193.0,
+    "group": "g_ch05_barricade_w2",
+    "tier": 1,
+    "behavior": "assault",
     "hostile": "always",
     "activate": "trigger",
+    "storyEncounter": "enc_ch05_compact_attack",
     "when": [
      {
       "flag": "convoy_choice",
-      "ne": "sabotage"
+      "eq": "escort"
      }
     ]
    },
@@ -552,304 +811,542 @@
     "id": "en_08",
     "type": "compact_militia",
     "x": 15.0,
-    "z": -67.0,
-    "group": "g_blockade_flank",
-    "tier": 3,
-    "behavior": "ambush",
+    "z": -195.0,
+    "group": "g_ch05_barricade_w2",
+    "tier": 1,
+    "behavior": "assault",
     "hostile": "always",
     "activate": "trigger",
+    "storyEncounter": "enc_ch05_compact_attack",
     "when": [
      {
       "flag": "convoy_choice",
-      "ne": "sabotage"
+      "eq": "escort"
      }
     ]
    },
    {
     "id": "en_09",
     "type": "ironwood_patrol",
-    "x": -1.0,
-    "z": -59.0,
-    "group": "g_ironwood_turn",
-    "tier": 4,
-    "behavior": "assault",
+    "x": -31.0,
+    "z": -159.0,
+    "group": "g_ch05_railcut",
+    "tier": 1,
+    "behavior": "patrol",
     "hostile": "always",
     "activate": "trigger",
+    "storyEncounter": "enc_ch05_ironwood_turn",
+    "patrol": [
+     [
+      -31.0,
+      -159.0
+     ],
+     [
+      -31.0,
+      -153.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
     "when": [
      {
       "flag": "convoy_choice",
       "eq": "sabotage"
      }
-    ],
-    "note": "Sabotage flips the fight: break drone LOS under the overpass."
+    ]
    },
    {
     "id": "en_10",
     "type": "ironwood_patrol",
-    "x": 1.0,
-    "z": -57.0,
-    "group": "g_ironwood_turn",
-    "tier": 4,
-    "behavior": "assault",
+    "x": -27.0,
+    "z": -145.0,
+    "group": "g_ch05_railcut",
+    "tier": 1,
+    "behavior": "patrol",
     "hostile": "always",
     "activate": "trigger",
+    "storyEncounter": "enc_ch05_ironwood_turn",
+    "patrol": [
+     [
+      -27.0,
+      -145.0
+     ],
+     [
+      -27.0,
+      -139.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
     "when": [
      {
       "flag": "convoy_choice",
       "eq": "sabotage"
      }
-    ],
-    "note": "Sabotage flips the fight: break drone LOS under the overpass."
+    ]
    },
    {
     "id": "en_11",
     "type": "ironwood_patrol",
-    "x": -2.0,
-    "z": -55.0,
-    "group": "g_ironwood_turn",
-    "tier": 4,
-    "behavior": "assault",
+    "x": -31.0,
+    "z": -129.0,
+    "group": "g_ch05_railcut",
+    "tier": 1,
+    "behavior": "patrol",
     "hostile": "always",
     "activate": "trigger",
+    "storyEncounter": "enc_ch05_ironwood_turn",
+    "patrol": [
+     [
+      -31.0,
+      -129.0
+     ],
+     [
+      -31.0,
+      -123.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
     "when": [
      {
       "flag": "convoy_choice",
       "eq": "sabotage"
      }
-    ],
-    "note": "Sabotage flips the fight: break drone LOS under the overpass."
+    ]
    },
    {
     "id": "en_12",
     "type": "ironwood_patrol",
-    "x": 3.0,
-    "z": -55.0,
-    "group": "g_ironwood_turn",
-    "tier": 4,
-    "behavior": "assault",
+    "x": -27.0,
+    "z": -111.0,
+    "group": "g_ch05_railcut",
+    "tier": 1,
+    "behavior": "patrol",
     "hostile": "always",
     "activate": "trigger",
+    "storyEncounter": "enc_ch05_ironwood_turn",
+    "patrol": [
+     [
+      -27.0,
+      -111.0
+     ],
+     [
+      -27.0,
+      -105.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
     "when": [
      {
       "flag": "convoy_choice",
       "eq": "sabotage"
      }
-    ],
-    "note": "Sabotage flips the fight: break drone LOS under the overpass."
+    ]
+   },
+   {
+    "id": "en_13",
+    "type": "compact_militia",
+    "x": -15.0,
+    "z": -127.0,
+    "group": "g_ch05_under_w1",
+    "tier": 1,
+    "behavior": "hold_cover",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch05_crossfire",
+    "when": [
+     {
+      "flag": "convoy_choice",
+      "eq": "divert"
+     }
+    ]
+   },
+   {
+    "id": "en_14",
+    "type": "compact_militia",
+    "x": -3.0,
+    "z": -129.0,
+    "group": "g_ch05_under_w1",
+    "tier": 1,
+    "behavior": "hold_cover",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch05_crossfire",
+    "when": [
+     {
+      "flag": "convoy_choice",
+      "eq": "divert"
+     }
+    ]
+   },
+   {
+    "id": "en_15",
+    "type": "compact_militia",
+    "x": 9.0,
+    "z": -127.0,
+    "group": "g_ch05_under_w1",
+    "tier": 1,
+    "behavior": "hold_cover",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch05_crossfire",
+    "when": [
+     {
+      "flag": "convoy_choice",
+      "eq": "divert"
+     }
+    ]
+   },
+   {
+    "id": "en_16",
+    "type": "compact_militia",
+    "x": 17.0,
+    "z": -129.0,
+    "group": "g_ch05_under_w1",
+    "tier": 1,
+    "behavior": "hold_cover",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch05_crossfire",
+    "when": [
+     {
+      "flag": "convoy_choice",
+      "eq": "divert"
+     }
+    ]
+   },
+   {
+    "id": "en_17",
+    "type": "ironwood_patrol",
+    "x": -15.0,
+    "z": -107.0,
+    "group": "g_ch05_under_w2",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch05_crossfire",
+    "when": [
+     {
+      "flag": "convoy_choice",
+      "eq": "divert"
+     }
+    ]
+   },
+   {
+    "id": "en_18",
+    "type": "ironwood_patrol",
+    "x": -5.0,
+    "z": -107.0,
+    "group": "g_ch05_under_w2",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch05_crossfire",
+    "when": [
+     {
+      "flag": "convoy_choice",
+      "eq": "divert"
+     }
+    ]
+   },
+   {
+    "id": "en_19",
+    "type": "ironwood_patrol",
+    "x": 7.0,
+    "z": -107.0,
+    "group": "g_ch05_under_w2",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch05_crossfire",
+    "when": [
+     {
+      "flag": "convoy_choice",
+      "eq": "divert"
+     }
+    ]
+   },
+   {
+    "id": "en_20",
+    "type": "ironwood_patrol",
+    "x": 17.0,
+    "z": -107.0,
+    "group": "g_ch05_under_w2",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch05_crossfire",
+    "when": [
+     {
+      "flag": "convoy_choice",
+      "eq": "divert"
+     }
+    ]
    }
   ],
   "loot": [
    {
     "id": "loot_01",
-    "x": 5.0,
-    "z": -7.0,
-    "r": 1.6,
-    "label": "Dock crate",
-    "container": "locker",
-    "location": "loc_ore_docks"
+    "x": 13.0,
+    "z": -51.0,
+    "r": 3.1,
+    "label": "Stalled pickup",
+    "container": "car_trunk",
+    "propRef": "prop_04",
+    "render": "prop",
+    "location": "loc_sparks_yard",
+    "guaranteed": [
+     {
+      "item": "canned_food",
+      "n": 1
+     }
+    ]
    },
    {
     "id": "loot_02",
-    "x": 0.0,
-    "z": -15.0,
-    "r": 1.6,
-    "label": "MRAP locker",
-    "container": "locker",
-    "location": "loc_ore_docks"
+    "x": -13.0,
+    "z": -79.0,
+    "r": 3.1,
+    "label": "Abandoned sedan",
+    "container": "car_trunk",
+    "propRef": "prop_05",
+    "render": "prop",
+    "location": "loc_mustang_truckstop"
    },
    {
     "id": "loot_03",
-    "x": 14.0,
-    "z": -82.0,
-    "r": 1.6,
-    "label": "Cabinet spares",
-    "container": "supply_cache",
-    "guaranteed": [
-     {
-      "item": "signal_fuse",
-      "n": 1
-     }
-    ],
-    "location": "loc_hwy53_blockade"
-   },
-   {
-    "id": "loot_04",
-    "x": -15.0,
-    "z": -74.0,
-    "r": 1.6,
-    "label": "Militia nest",
-    "container": "military_crate",
-    "location": "loc_hwy53_blockade"
-   },
-   {
-    "id": "loot_05",
-    "x": 7.0,
-    "z": -86.0,
-    "r": 1.6,
-    "label": "Overpass drift",
-    "container": "corpse",
+    "x": -9.0,
+    "z": -139.0,
+    "r": 3.1,
+    "label": "Car in the canyon jam",
+    "container": "car_trunk",
+    "propRef": "prop_06",
+    "render": "prop",
+    "location": "loc_i80_blockade",
     "guaranteed": [
      {
       "item": "flare",
-      "n": 1
-     }
-    ],
-    "location": "loc_hwy53_blockade"
-   },
-   {
-    "id": "loot_06",
-    "x": -11.0,
-    "z": -101.0,
-    "r": 1.6,
-    "label": "Spilled hopper",
-    "container": "toolbox",
-    "location": "loc_proctor_yard"
-   },
-   {
-    "id": "loot_07",
-    "x": 5.0,
-    "z": -2.0,
-    "r": 1.6,
-    "label": "Elevator sack pile",
-    "container": "kitchen_cabinet",
-    "guaranteed": [
-     {
-      "item": "grain_sack",
-      "n": 1
-     }
-    ],
-    "location": "loc_ore_docks"
-   },
-   {
-    "id": "loot_08",
-    "x": -19.0,
-    "z": -23.0,
-    "r": 1.6,
-    "label": "Kitchen cabinet (filler)",
-    "container": "kitchen_cabinet",
-    "location": "loc_ore_docks",
-    "filler": true,
-    "guaranteed": [
-     {
-      "item": "water_clean",
       "n": 2
      }
     ]
    },
    {
-    "id": "loot_09",
-    "x": -19.0,
-    "z": 5.0,
-    "r": 1.6,
-    "label": "Woodpile / pallets / broken furniture (filler)",
-    "container": "woodpile",
-    "location": "loc_ore_docks",
-    "filler": true
+    "id": "loot_04",
+    "x": 11.0,
+    "z": -155.0,
+    "r": 3.1,
+    "label": "Burned-out sedan",
+    "container": "car_trunk",
+    "propRef": "prop_07",
+    "render": "prop",
+    "location": "loc_i80_blockade"
    },
    {
-    "id": "loot_10",
-    "x": 19.0,
-    "z": -59.0,
+    "id": "loot_05",
+    "x": -37.0,
+    "z": -87.0,
     "r": 1.6,
-    "label": "Car trunk (filler)",
-    "container": "car_trunk",
-    "location": "loc_hwy53_blockade",
-    "filler": true,
+    "label": "Truck-stop kitchen",
+    "container": "kitchen_cabinet",
+    "location": "loc_mustang_truckstop"
+   },
+   {
+    "id": "loot_06",
+    "x": 37.0,
+    "z": -79.0,
+    "r": 1.6,
+    "label": "Depot locker",
+    "container": "locker",
+    "location": "loc_sparks_yard"
+   },
+   {
+    "id": "loot_07",
+    "x": -35.0,
+    "z": -29.0,
+    "r": 1.6,
+    "label": "Warehouse kitchen",
+    "container": "kitchen_cabinet",
+    "location": "loc_tric_warehouses",
     "guaranteed": [
      {
-      "item": "flare",
+      "item": "grain_sack",
       "n": 1
      }
     ]
    },
    {
-    "id": "loot_11",
+    "id": "loot_08",
     "x": -11.0,
-    "z": -59.0,
+    "z": -15.0,
     "r": 1.6,
-    "label": "Car trunk (filler)",
+    "label": "Staging locker",
+    "container": "locker",
+    "location": "loc_tric_warehouses",
+    "guaranteed": [
+     {
+      "item": "water_clean",
+      "n": 1
+     }
+    ]
+   },
+   {
+    "id": "loot_09",
+    "x": -17.0,
+    "z": -33.0,
+    "r": 1.6,
+    "label": "Kitchen cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_tric_warehouses",
+    "filler": true
+   },
+   {
+    "id": "loot_10",
+    "x": 45.0,
+    "z": 5.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture",
+    "container": "woodpile",
+    "location": "loc_tric_warehouses",
+    "filler": true
+   },
+   {
+    "id": "loot_11",
+    "x": -33.0,
+    "z": -193.0,
+    "r": 3.1,
+    "label": "Car trunk",
     "container": "car_trunk",
-    "location": "loc_hwy53_blockade",
+    "propRef": "prop_13",
+    "render": "prop",
+    "location": "loc_i80_blockade",
     "filler": true
    },
    {
     "id": "loot_12",
-    "x": -3.0,
-    "z": -77.0,
+    "x": 37.0,
+    "z": -197.0,
     "r": 1.6,
-    "label": "Car trunk (filler)",
-    "container": "car_trunk",
-    "location": "loc_hwy53_blockade",
+    "label": "Locker",
+    "container": "locker",
+    "location": "loc_i80_blockade",
     "filler": true
    },
    {
     "id": "loot_13",
-    "x": 19.0,
-    "z": -71.0,
+    "x": 37.0,
+    "z": -123.0,
     "r": 1.6,
-    "label": "Locker (filler)",
-    "container": "locker",
-    "location": "loc_hwy53_blockade",
+    "label": "Frozen body",
+    "container": "corpse",
+    "location": "loc_i80_blockade",
     "filler": true
    },
    {
     "id": "loot_14",
-    "x": -3.0,
-    "z": -87.0,
+    "x": -37.0,
+    "z": -159.0,
     "r": 1.6,
-    "label": "Woodpile / pallets / broken furniture (filler)",
-    "container": "woodpile",
-    "location": "loc_hwy53_blockade",
+    "label": "Military crate",
+    "container": "military_crate",
+    "location": "loc_i80_blockade",
     "filler": true
    },
    {
     "id": "loot_15",
-    "x": -5.0,
-    "z": -67.0,
+    "x": -37.0,
+    "z": -129.0,
     "r": 1.6,
-    "label": "Woodpile / pallets / broken furniture (filler)",
+    "label": "Woodpile / pallets / broken furniture",
     "container": "woodpile",
-    "location": "loc_hwy53_blockade",
+    "location": "loc_i80_blockade",
     "filler": true
    },
    {
     "id": "loot_16",
-    "x": 19.0,
-    "z": -117.0,
+    "x": 37.0,
+    "z": -167.0,
     "r": 1.6,
-    "label": "Toolbox / workbench drawer (filler)",
-    "container": "toolbox",
-    "location": "loc_proctor_yard",
+    "label": "Woodpile / pallets / broken furniture",
+    "container": "woodpile",
+    "location": "loc_i80_blockade",
     "filler": true
    },
    {
     "id": "loot_17",
-    "x": 19.0,
-    "z": -99.0,
+    "x": -39.0,
+    "z": -77.0,
     "r": 1.6,
-    "label": "Locker (filler)",
-    "container": "locker",
-    "location": "loc_proctor_yard",
+    "label": "Kitchen cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_mustang_truckstop",
     "filler": true
    },
    {
     "id": "loot_18",
-    "x": -19.0,
-    "z": -117.0,
-    "r": 1.6,
-    "label": "Car trunk (filler)",
+    "x": -11.0,
+    "z": -55.0,
+    "r": 3.1,
+    "label": "Car trunk",
     "container": "car_trunk",
-    "location": "loc_proctor_yard",
+    "propRef": "prop_14",
+    "render": "prop",
+    "location": "loc_mustang_truckstop",
     "filler": true
    },
    {
     "id": "loot_19",
-    "x": 3.0,
-    "z": -117.0,
-    "r": 1.6,
-    "label": "Car trunk (filler)",
+    "x": -1.0,
+    "z": -97.0,
+    "r": 3.1,
+    "label": "Car trunk",
     "container": "car_trunk",
-    "location": "loc_proctor_yard",
+    "propRef": "prop_15",
+    "render": "prop",
+    "location": "loc_mustang_truckstop",
+    "filler": true
+   },
+   {
+    "id": "loot_20",
+    "x": -27.0,
+    "z": -89.0,
+    "r": 1.6,
+    "label": "Locker",
+    "container": "locker",
+    "location": "loc_mustang_truckstop",
+    "filler": true
+   },
+   {
+    "id": "loot_21",
+    "x": 27.0,
+    "z": -77.0,
+    "r": 1.6,
+    "label": "Toolbox / workbench drawer",
+    "container": "toolbox",
+    "location": "loc_sparks_yard",
+    "filler": true
+   },
+   {
+    "id": "loot_22",
+    "x": 27.0,
+    "z": -89.0,
+    "r": 1.6,
+    "label": "Toolbox / workbench drawer",
+    "container": "toolbox",
+    "location": "loc_sparks_yard",
+    "filler": true
+   },
+   {
+    "id": "loot_23",
+    "x": 41.0,
+    "z": -43.0,
+    "r": 3.1,
+    "label": "Car trunk",
+    "container": "car_trunk",
+    "propRef": "prop_16",
+    "render": "prop",
+    "location": "loc_sparks_yard",
     "filler": true
    }
   ]
@@ -857,251 +1354,265 @@
  "props": [
   {
    "id": "prop_01",
-   "asset": "assets/kenney/industrial/detail-tank-large.glb",
-   "x": -16.0,
-   "z": -11.0,
-   "rotY": 0,
-   "h": 9,
+   "asset": "assets/kenney/industrial/shipping-container-a.glb",
+   "x": -13.0,
+   "z": -7.0,
+   "rotY": 1.571,
+   "h": 2.6,
    "collide": true,
-   "tag": "grain silo"
+   "footprintR": 3.0,
+   "tag": "convoy_truck"
   },
   {
    "id": "prop_02",
-   "asset": "assets/kenney/industrial/detail-tank-large.glb",
-   "x": -11.0,
-   "z": -11.0,
-   "rotY": 0,
-   "h": 9,
-   "collide": true
+   "asset": "assets/kenney/industrial/shipping-container-a.glb",
+   "x": -5.0,
+   "z": -7.0,
+   "rotY": 1.571,
+   "h": 2.6,
+   "collide": true,
+   "footprintR": 3.0,
+   "tag": "convoy_truck"
   },
   {
    "id": "prop_03",
-   "asset": "assets/kenney/industrial/chimney-large.glb",
-   "x": -14.0,
-   "z": -2.0,
-   "rotY": 0,
-   "h": 18,
+   "asset": "assets/kenney/industrial/shipping-container-a.glb",
+   "x": 7.0,
+   "z": -7.0,
+   "rotY": 1.571,
+   "h": 2.6,
    "collide": true,
-   "tag": "elevator head"
+   "footprintR": 3.0,
+   "tag": "convoy_truck"
   },
   {
    "id": "prop_04",
-   "asset": "assets/kenney/industrial/shipping-container-a.glb",
-   "x": 7.0,
-   "z": -3.0,
-   "rotY": 0,
-   "h": 2.6,
-   "collide": true
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": 13.0,
+   "z": -51.0,
+   "rotY": 1.571,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_05",
-   "asset": "assets/kenney/industrial/shipping-container-b.glb",
-   "x": 7.0,
-   "z": -9.0,
-   "rotY": 0.05,
-   "h": 2.6,
-   "collide": true
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -13.0,
+   "z": -79.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_06",
-   "asset": "assets/kenney/industrial/shipping-container-c.glb",
-   "x": 9.0,
-   "z": -15.0,
-   "rotY": 0,
-   "h": 2.6,
-   "collide": true
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -9.0,
+   "z": -139.0,
+   "rotY": 0.3,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_07",
-   "asset": "assets/kenney/roads/light-square-double.glb",
-   "x": -5.0,
-   "z": -7.0,
-   "rotY": 0,
-   "h": 6,
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": 11.0,
+   "z": -155.0,
+   "rotY": -0.4,
+   "h": 1.5,
    "collide": true,
-   "tag": "Kessler loudspeaker mast"
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_08",
-   "asset": "assets/kenney/roads/electricity-pole.glb",
-   "x": 6.0,
-   "z": -59.0,
-   "rotY": 0,
-   "h": 8,
-   "collide": true
-  },
-  {
-   "id": "prop_09",
-   "asset": "assets/kenney/roads/electricity-pole.glb",
-   "x": 6.0,
-   "z": -43.0,
-   "rotY": 0,
-   "h": 8,
-   "collide": true
-  },
-  {
-   "id": "prop_10",
-   "asset": "assets/kenney/roads/electricity-pole.glb",
-   "x": 6.0,
-   "z": -27.0,
-   "rotY": 0,
-   "h": 8,
-   "collide": true
-  },
-  {
-   "id": "prop_11",
-   "asset": "assets/kenney/industrial/shipping-container-a.glb",
-   "x": -7.0,
-   "z": -70.0,
+   "asset": "assets/kenney/industrial/shipping-container-b.glb",
+   "x": 33.0,
+   "z": -61.0,
    "rotY": 1.571,
    "h": 2.6,
    "collide": true,
-   "tag": "logging truck stand-in"
+   "footprintR": 3.0,
+   "tag": "boxcar"
+  },
+  {
+   "id": "prop_09",
+   "asset": "assets/kenney/roads/construction-barrier.glb",
+   "x": -10.0,
+   "z": -178.0,
+   "rotY": 0.0,
+   "h": 1.1,
+   "collide": false
+  },
+  {
+   "id": "prop_10",
+   "asset": "assets/kenney/roads/light-square.glb",
+   "x": -21.0,
+   "z": -95.0,
+   "rotY": 0.0,
+   "h": 5,
+   "collide": false
+  },
+  {
+   "id": "prop_11",
+   "asset": "assets/kenney/roads/light-square.glb",
+   "x": 21.0,
+   "z": -95.0,
+   "rotY": 0.0,
+   "h": 5,
+   "collide": false
   },
   {
    "id": "prop_12",
-   "asset": "assets/kenney/industrial/shipping-container-b.glb",
-   "x": 0.0,
-   "z": -70.0,
-   "rotY": 1.571,
-   "h": 2.6,
-   "collide": true
+   "asset": "assets/kenney/roads/light-square.glb",
+   "x": -21.0,
+   "z": -39.0,
+   "rotY": 0.0,
+   "h": 5,
+   "collide": false
   },
   {
    "id": "prop_13",
-   "asset": "assets/kenney/industrial/shipping-container-c.glb",
-   "x": 9.0,
-   "z": -70.0,
-   "rotY": 1.571,
-   "h": 2.6,
-   "collide": true
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -33.0,
+   "z": -193.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_14",
-   "asset": "assets/kenney/roads/construction-barrier.glb",
-   "x": 5.0,
-   "z": -67.0,
-   "rotY": 0,
-   "h": 1.1,
-   "collide": true
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -11.0,
+   "z": -55.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_15",
-   "asset": "assets/kenney/roads/road-sign-warning.glb",
-   "x": -5.0,
-   "z": -65.0,
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -1.0,
+   "z": -97.0,
    "rotY": 0.0,
-   "h": 2.6,
-   "collide": true
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_16",
    "asset": "assets/tevy/wrecked-sedan-lod1.glb",
-   "x": 18.0,
-   "z": -75.0,
-   "rotY": 1.2,
-   "h": 1.45,
+   "x": 41.0,
+   "z": -43.0,
+   "rotY": 0.0,
+   "h": 1.5,
    "collide": true,
-   "tag": "armored plow truck stand-in"
-  },
-  {
-   "id": "prop_17",
-   "asset": "assets/kenney/roads/traffic-light.glb",
-   "x": 12.0,
-   "z": -85.0,
-   "rotY": 1.571,
-   "h": 4.5,
-   "collide": true,
-   "tag": "signal cabinet mast"
-  },
-  {
-   "id": "prop_18",
-   "asset": "assets/kenney/industrial/building-e.glb",
-   "x": 13.0,
-   "z": -106.0,
-   "rotY": 1.571,
-   "h": 10,
-   "collide": false
-  },
-  {
-   "id": "prop_19",
-   "asset": "assets/kenney/industrial/water-tower.glb",
-   "x": -17.0,
-   "z": -113.0,
-   "rotY": 0,
-   "h": 15,
-   "collide": true,
-   "tag": "Proctor water tower"
+   "footprintR": 2.2,
+   "tag": "container"
   }
  ],
  "interactives": [
   {
-   "id": "ch05_mrap",
-   "type": "vehicle",
-   "x": 0.0,
-   "z": -13.0,
+   "id": "ch05_convoy_crate",
+   "type": "open",
+   "x": 1.0,
+   "z": -21.0,
    "r": 1.8,
-   "label": "Board the MRAP",
-   "setsFlag": "ch05_convoy_started"
+   "label": "Convoy issue crate",
+   "setsFlag": "ch05_issued",
+   "givesItems": {
+    "med_kit": 1,
+    "rifle_ammo": 6,
+    "flare": 2
+   }
   },
   {
-   "id": "ch05_cabinet",
+   "id": "ch05_mo_pump",
    "type": "repair",
-   "x": 13.0,
-   "z": -83.0,
-   "r": 2.0,
-   "label": "Signal cabinet (repair under fire)",
-   "requiresItems": [
-    "signal_fuse"
-   ],
-   "setsFlag": "ch05_cabinet_open"
+   "x": -33.0,
+   "z": -63.0,
+   "r": 1.8,
+   "label": "Mo's diesel pump (bad bearing)",
+   "requiresItems": {
+    "mech_tools": 1
+   },
+   "setsFlag": "ch05_pump_fixed",
+   "givesItems": {
+    "diesel_jug": 1
+   },
+   "quest": "q_mo_pump"
   },
   {
-   "id": "ch05_switch",
-   "type": "lever",
-   "x": -7.0,
-   "z": -105.0,
+   "id": "ch05_signal_cabinet",
+   "type": "cabinet",
+   "x": -27.0,
+   "z": -101.0,
    "r": 1.8,
-   "label": "Junction switch (divert half to Harbor siding)",
-   "setsFlag": "ch05_switch_thrown",
+   "label": "Rail signal cabinet (crossing gates + floodlights)",
+   "requiresItems": {
+    "signal_fuse": 1
+   },
+   "setsFlag": "ch05_cabinet_used"
+  },
+  {
+   "id": "ch05_truckstop_shelf",
+   "type": "open",
+   "x": -29.0,
+   "z": -79.0,
+   "r": 1.8,
+   "label": "Behind Mo's counter (he looks away)",
+   "givesItems": {
+    "whiskey": 1,
+    "cigarettes": 2
+   },
    "when": [
     {
-     "flag": "convoy_choice",
-     "eq": "divert"
+     "flag": "ch05_mo_met",
+     "eq": true
     }
    ]
+  },
+  {
+   "id": "ch05_grain",
+   "type": "open",
+   "x": -29.0,
+   "z": -15.0,
+   "r": 1.8,
+   "label": "Grain sacks (convoy cargo)",
+   "givesItems": {
+    "grain_sack": 1
+   }
   }
  ],
  "safeZones": [
   {
    "id": "safe_01",
-   "kind": "indoor",
-   "x": -8.0,
-   "z": 3.0,
-   "r": 2.5,
-   "label": "Elevator gatehouse",
+   "kind": "camp",
+   "x": -33.0,
+   "z": -79.0,
+   "r": 3.0,
+   "label": "Mo's stove",
    "warmth": true,
    "save": true,
    "sealed": false
   },
   {
    "id": "safe_02",
-   "kind": "burn_barrel",
-   "x": 5.0,
-   "z": -21.0,
-   "r": 2.6,
-   "label": "Dock burn barrel",
-   "warmth": true,
-   "save": true,
-   "sealed": false
-  },
-  {
-   "id": "safe_03",
-   "kind": "indoor",
-   "x": 15.0,
-   "z": -95.0,
-   "r": 2.5,
-   "label": "Yard switch house",
+   "kind": "camp",
+   "x": 3.0,
+   "z": -31.0,
+   "r": 3.0,
+   "label": "Convoy burn barrel",
    "warmth": true,
    "save": true,
    "sealed": false
@@ -1109,177 +1620,198 @@
  ],
  "setPieces": [
   {
-   "id": "sp_ch05_mrap",
-   "type": "ironwood_mrap",
-   "path": [
-    [
-     0.0,
-     -11.0
-    ],
-    [
-     0.0,
-     -59.0
-    ],
-    [
-     0.0,
-     -65.0
-    ]
-   ],
-   "note": "Convoy lead; on-rails ride camera."
-  },
-  {
    "id": "sp_ch05_drone",
    "type": "ironwood_drone",
    "path": [
     [
-     -1.0,
-     -39.0
+     -29.0,
+     -107.0
     ],
     [
-     -1.0,
-     -67.0
+     -29.0,
+     -139.0
     ],
     [
-     -11.0,
-     -79.0
-    ],
-    [
-     11.0,
-     -79.0
-    ],
-    [
-     -1.0,
-     -67.0
+     -29.0,
+     -163.0
     ]
    ],
-   "note": "Spotter. Covered 'U' tiles break its line of sight."
+   "when": [
+    {
+     "flag": "convoy_choice",
+     "eq": "sabotage"
+    }
+   ],
+   "note": "Quadcopter spotter; flares blind it.",
+   "storyEncounter": "enc_ch05_ironwood_turn"
   },
   {
-   "id": "sp_ch05_plow",
-   "type": "armored_plow_truck",
+   "id": "sp_ch05_mrap",
+   "type": "ironwood_mrap",
    "path": [
     [
-     18.0,
-     -75.0
+     1.0,
+     -101.0
     ],
     [
-     5.0,
-     -75.0
+     1.0,
+     -111.0
     ]
    ],
-   "note": "Compact homemade armored plow; scripted charge."
+   "when": [
+    {
+     "flag": "convoy_choice"
+    }
+   ],
+   "note": "Ironwood MRAP noses into the canyon mouth behind the convoy (all branches)."
+  },
+  {
+   "id": "sp_glimpse_ch05_flare",
+   "type": "tallman_glimpse",
+   "note": "Ironwood radio chatter plays: 'contact, not human, repeat not\u2014'.",
+   "glimpse": "glimpse_ch05_flare",
+   "kind": "silhouette",
+   "x": -67.94,
+   "z": -161.16,
+   "distanceM": 70,
+   "bearingDeg": 280,
+   "durationS": 2.0,
+   "interactable": false,
+   "collider": false,
+   "ai": false,
+   "hudCue": false,
+   "musicSting": false,
+   "despawn": "after duration OR player within 60 m OR LOS lost",
+   "onShow": [
+    {
+     "add": "tallman_glimpses",
+     "value": 1
+    }
+   ],
+   "companionReaction": "wraith_stare",
+   "where": "Hillside above the canyon, ~70 m, lit by the flare: one figure, mid-stride, then gone",
+   "offMap": true
   }
  ],
  "encounters": [
   {
-   "id": "enc_blockade",
+   "id": "z_ch05_barricade",
    "area": {
     "type": "rect",
-    "x0": -20.0,
-    "z0": -92.0,
-    "x1": 20.0,
-    "z1": -52.0
+    "x0": -22.0,
+    "z0": -198.0,
+    "x1": 22.0,
+    "z1": -166.0
    },
    "groups": [
     {
-     "group": "g_blockade_front",
+     "group": "g_ch05_barricade_w1",
      "wave": 1
     },
     {
-     "group": "g_blockade_flank",
+     "group": "g_ch05_barricade_w2",
      "wave": 2
-    },
+    }
+   ],
+   "storyEncounters": [
+    "enc_ch05_compact_attack"
+   ],
+   "note": "Escort path: two waves of 4 at the barricade."
+  },
+  {
+   "id": "z_ch05_railcut",
+   "area": {
+    "type": "rect",
+    "x0": -38.0,
+    "z0": -166.0,
+    "x1": -22.0,
+    "z1": -102.0
+   },
+   "groups": [
     {
-     "group": "g_ironwood_turn",
+     "group": "g_ch05_railcut",
      "wave": 1
     }
    ],
-   "note": "Compact 4+4 in two waves; ironwood_turn is the exclusive sabotage branch."
+   "storyEncounters": [
+    "enc_ch05_ironwood_turn"
+   ],
+   "note": "Sabotage path; drone overhead."
+  },
+  {
+   "id": "z_ch05_underpass",
+   "area": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -134.0,
+    "x1": 24.0,
+    "z1": -102.0
+   },
+   "groups": [
+    {
+     "group": "g_ch05_under_w1",
+     "wave": 1
+    },
+    {
+     "group": "g_ch05_under_w2",
+     "wave": 2
+    }
+   ],
+   "storyEncounters": [
+    "enc_ch05_crossfire"
+   ],
+   "note": "Divert path: Compact (wave 1) and Ironwood (wave 2) catch the convoy in a crossfire."
   }
  ],
  "triggers": [
+  {
+   "id": "t_glimpse_ch05_flare",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -38.0,
+    "z0": -198.0,
+    "x1": 38.0,
+    "z1": -102.0
+   },
+   "actions": [
+    {
+     "type": "spawn_setpiece",
+     "id": "sp_glimpse_ch05_flare"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch05_flare_fired",
+     "eq": true
+    }
+   ],
+   "note": "During the canyon firefight, when any flare is fired"
+  },
   {
    "id": "t_ch05_start",
    "on": "load",
    "once": true,
    "shape": {
     "type": "circle",
-    "x": -1.0,
+    "x": 1.0,
     "z": -1.0,
     "r": 3
    },
    "actions": [
     {
-     "type": "cutscene",
-     "id": "cs_ch05_ask",
-     "text": "Strand, very quietly: \"They didn't ask me either.\""
+     "type": "set_time",
+     "value": 0.72
     },
-    {
-     "type": "hud_unlock",
-     "stat": "ammo_military"
-    },
-    {
-     "type": "checkpoint"
-    }
-   ]
-  },
-  {
-   "id": "t_ch05_ride",
-   "on": "flag",
-   "once": true,
-   "shape": {
-    "type": "rect",
-    "x0": -4.0,
-    "z0": -16.0,
-    "x1": 4.0,
-    "z1": -10.0
-   },
-   "actions": [
     {
      "type": "dialogue",
      "id": "ch05_ruiz_convoy"
     },
     {
-     "type": "start_sequence",
-     "id": "seq_ch05_convoy_ride"
-    },
-    {
-     "type": "spawn_setpiece",
-     "id": "sp_ch05_mrap"
-    },
-    {
-     "type": "spawn_setpiece",
-     "id": "sp_ch05_drone"
-    }
-   ],
-   "when": [
-    {
-     "flag": "ch05_convoy_started",
-     "eq": true
-    }
-   ],
-   "note": "On-rails look-and-shoot from the MRAP up to r=27; hold fire allowed."
-  },
-  {
-   "id": "t_ch05_parley",
-   "on": "enter",
-   "once": true,
-   "shape": {
-    "type": "rect",
-    "x0": -6.0,
-    "z0": -68.0,
-    "x1": 12.0,
-    "z1": -62.0
-   },
-   "actions": [
-    {
      "type": "set_flag",
-     "flag": "ch05_parley",
+     "flag": "ch05_briefed",
      "value": true
-    },
-    {
-     "type": "dialogue",
-     "id": "ch05_jory_blockade"
     },
     {
      "type": "checkpoint"
@@ -1287,77 +1819,147 @@
    ]
   },
   {
-   "id": "t_ch05_fight",
-   "on": "flag",
-   "once": true,
-   "shape": {
-    "type": "rect",
-    "x0": -6.0,
-    "z0": -68.0,
-    "x1": 12.0,
-    "z1": -62.0
-   },
-   "actions": [
-    {
-     "type": "activate_group",
-     "group": "g_blockade_front"
-    },
-    {
-     "type": "spawn_setpiece",
-     "id": "sp_ch05_plow"
-    }
-   ],
-   "when": [
-    {
-     "flag": "ch05_parley_failed",
-     "eq": true
-    }
-   ]
-  },
-  {
-   "id": "t_ch05_flank",
-   "on": "flag",
-   "once": true,
-   "shape": {
-    "type": "rect",
-    "x0": -20.0,
-    "z0": -92.0,
-    "x1": 20.0,
-    "z1": -58.0
-   },
-   "actions": [
-    {
-     "type": "activate_group",
-     "group": "g_blockade_flank"
-    }
-   ],
-   "when": [
-    {
-     "flag": "cleared.g_blockade_front",
-     "eq": true
-    }
-   ]
-  },
-  {
-   "id": "t_ch05_cabinet_choice",
-   "on": "flag",
+   "id": "t_ch05_boone_backdoor",
+   "on": "interact",
    "once": true,
    "shape": {
     "type": "circle",
-    "x": 13.0,
-    "z": -83.0,
-    "r": 2
+    "x": 33.0,
+    "z": -85.0,
+    "r": 3
    },
    "actions": [
     {
-     "type": "start_sequence",
-     "id": "seq_ch05_cabinet_choice"
+     "type": "dialogue",
+     "id": "ch05_boone_backdoor"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch05_boone_met",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch05_mo_truckstop",
+   "on": "interact",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": -33.0,
+    "z": -85.0,
+    "r": 3
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch05_mo_truckstop"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch05_mo_met",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch05_canyon",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -102.0,
+    "x1": 22.0,
+    "z1": -98.0
+   },
+   "actions": [
+    {
+     "type": "set_time",
+     "value": 0.8
+    },
+    {
+     "type": "cutscene",
+     "id": "cs_ch05_canyon",
+     "text": "Sleet in the headlights. The convoy stops at the canyon mouth."
+    },
+    {
+     "type": "dialogue",
+     "id": "ch05_signal_cabinet"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch05_canyon",
+     "value": true
+    },
+    {
+     "type": "checkpoint"
     }
    ],
    "when": [
     {
-     "flag": "ch05_cabinet_open",
+     "flag": "ch05_briefed",
      "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch05_ander_blockade",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -166.0,
+    "x1": 22.0,
+    "z1": -158.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch05_ander_blockade"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch05_ander_talked",
+     "value": true
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch05_canyon",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch05_escort",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -166.0,
+    "x1": 22.0,
+    "z1": -158.0
+   },
+   "actions": [
+    {
+     "type": "activate_group",
+     "group": "g_ch05_barricade_w1"
+    },
+    {
+     "type": "activate_group",
+     "group": "g_ch05_barricade_w2"
+    },
+    {
+     "type": "checkpoint"
+    }
+   ],
+   "when": [
+    {
+     "flag": "convoy_choice",
+     "eq": "escort"
     }
    ]
   },
@@ -1367,15 +1969,22 @@
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -20.0,
-    "z0": -88.0,
-    "x1": 20.0,
-    "z1": -80.0
+    "x0": -38.0,
+    "z0": -166.0,
+    "x1": -22.0,
+    "z1": -158.0
    },
    "actions": [
     {
      "type": "activate_group",
-     "group": "g_ironwood_turn"
+     "group": "g_ch05_railcut"
+    },
+    {
+     "type": "spawn_setpiece",
+     "id": "sp_ch05_drone"
+    },
+    {
+     "type": "checkpoint"
     }
    ],
    "when": [
@@ -1386,19 +1995,113 @@
    ]
   },
   {
-   "id": "t_ch05_cody",
+   "id": "t_ch05_divert",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -134.0,
+    "x1": 24.0,
+    "z1": -126.0
+   },
+   "actions": [
+    {
+     "type": "activate_group",
+     "group": "g_ch05_under_w1"
+    },
+    {
+     "type": "activate_group",
+     "group": "g_ch05_under_w2"
+    },
+    {
+     "type": "checkpoint"
+    }
+   ],
+   "when": [
+    {
+     "flag": "convoy_choice",
+     "eq": "divert"
+    }
+   ]
+  },
+  {
+   "id": "t_ch05_mrap",
    "on": "enter",
    "once": true,
    "shape": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -112.0,
+    "x1": 22.0,
+    "z1": -102.0
+   },
+   "actions": [
+    {
+     "type": "spawn_setpiece",
+     "id": "sp_ch05_mrap"
+    }
+   ],
+   "when": [
+    {
+     "flag": "convoy_choice"
+    }
+   ]
+  },
+  {
+   "id": "t_ch05_rourke_canyon",
+   "on": "interact",
+   "once": true,
+   "shape": {
     "type": "circle",
-    "x": -13.0,
-    "z": -85.0,
-    "r": 2.2
+    "x": 9.0,
+    "z": -147.0,
+    "r": 3
    },
    "actions": [
     {
      "type": "dialogue",
-     "id": "ch05_cody"
+     "id": "ch05_rourke_canyon"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch05_rourke_helped",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch05_wes_wounded",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -20.0,
+    "z0": -124.0,
+    "x1": 20.0,
+    "z1": -114.0
+   },
+   "actions": [
+    {
+     "type": "set_time",
+     "value": 0.9
+    },
+    {
+     "type": "dialogue",
+     "id": "ch05_wes_wounded"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch05_wes_found",
+     "value": true
+    },
+    {
+     "type": "checkpoint"
+    }
+   ],
+   "when": [
+    {
+     "flag": "convoy_choice"
     }
    ]
   },
@@ -1408,37 +2111,35 @@
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -4.0,
-    "z0": -118.0,
-    "x1": 6.0,
-    "z1": -112.0
+    "x0": -22.0,
+    "z0": 0.0,
+    "x1": 22.0,
+    "z1": 6.0
    },
    "actions": [
     {
-     "type": "checkpoint"
-    },
-    {
      "type": "chapter_end",
-     "next": "ch06_the_lift_bridge"
+     "next": "ch06_the_trench"
     }
    ],
    "when": [
     {
-     "flag": "convoy_choice",
-     "ne": null
+     "flag": "ch05_wes_found",
+     "eq": true
     }
-   ]
+   ],
+   "note": "Back down to the warehouses with Wes on the tailgate."
   }
  ],
  "objectives": [
   {
    "id": "o1",
    "order": 1,
-   "text": "Ride the convoy with Ironwood",
+   "text": "Convoy briefing at the warehouses",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch05_convoy_started",
+     "flag": "ch05_briefed",
      "eq": true
     }
    ]
@@ -1446,50 +2147,113 @@
   {
    "id": "o2",
    "order": 2,
-   "text": "Restore the signal cabinet under fire",
-   "optional": false,
+   "text": "Mo's pump (optional)",
+   "optional": true,
    "completeWhen": [
     {
-     "flag": "ch05_cabinet_open",
+     "flag": "ch05_pump_fixed",
      "eq": true
     }
-   ]
+   ],
+   "quest": "q_mo_pump"
   },
   {
    "id": "o3",
    "order": 3,
-   "text": "Decide the convoy's fate",
+   "text": "Reach the canyon; the signal cabinet",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "convoy_choice",
-     "ne": null
+     "flag": "ch05_canyon",
+     "eq": true
     }
    ]
   },
   {
    "id": "o4",
    "order": 4,
-   "text": "Find the wounded fighter under the overpass",
+   "text": "Talk to Ander at the blockade",
    "optional": false,
    "completeWhen": [
     {
-     "any": [
-      {
-       "flag": "cody_spared",
-       "eq": true
-      },
-      {
-       "flag": "cody_prisoner",
-       "eq": true
-      },
-      {
-       "flag": "cody_alive",
-       "eq": false
-      }
-     ]
+     "flag": "ch05_ander_talked",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o5",
+   "order": 5,
+   "text": "Rourke's burros (optional)",
+   "optional": true,
+   "completeWhen": [
+    {
+     "flag": "ch05_rourke_helped",
+     "eq": true
+    }
+   ],
+   "quest": "q_rourke_escort"
+  },
+  {
+   "id": "o6",
+   "order": 6,
+   "text": "Find Wes under the overpass",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch05_wes_found",
+     "eq": true
+    }
+   ],
+   "quest": "q_find_wes"
+  },
+  {
+   "id": "o7",
+   "order": 7,
+   "text": "Get Wes back to the warehouses",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch05_wes_found",
+     "eq": true
     }
    ]
   }
- ]
+ ],
+ "companion": {
+  "id": "wraith",
+  "spawn": {
+   "x": 3.0,
+   "z": -1.0
+  },
+  "when": [
+   {
+    "flag": "wraith_alive",
+    "eq": true
+   }
+  ],
+  "follow": {
+   "leashM": 6.0,
+   "catchUpM": 14.0,
+   "nav": "grid_bfs_walkable",
+   "avoid": [
+    "door_clearance_cells",
+    "loot_cells"
+   ],
+   "note": "Follows Braith over walkable tiles; idles at heel inside buildings."
+  },
+  "verbs": [
+   "track",
+   "warn",
+   "guard",
+   "hold"
+  ],
+  "injuredWhen": [
+   {
+    "flag": "wraith_injured",
+    "eq": true
+   }
+  ]
+ },
+ "lootSource": "v2"
 }

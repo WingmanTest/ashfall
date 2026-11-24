@@ -1,0 +1,77 @@
+{
+  "id": "ch05_rourke_canyon",
+  "chapter": "ch05",
+  "location": "loc_i80_blockade",
+  "trigger": "Rourke's burros stuck at the blockade (q_rourke_escort).",
+  "speakers": [
+    "narrator",
+    "trader_rourke",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "trader_rourke",
+      "text": "My friend! Help an old man. Maisie won't walk past the soldiers and the soldiers won't walk past Maisie.",
+      "next": "r1"
+    },
+    {
+      "id": "r1",
+      "speaker": "trader_rourke",
+      "text": "Get us through the canyon and I'll give you the best thing I own. A rumor. A good one.",
+      "choices": [
+        {
+          "text": "[Escort the burros]",
+          "next": "yes",
+          "effects": [
+            {
+              "quest": "q_rourke_escort",
+              "state": "complete"
+            },
+            {
+              "add": "trader_rourke_rep",
+              "value": 2
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            },
+            {
+              "give": "rumor",
+              "qty": 1
+            }
+          ]
+        },
+        {
+          "text": "Not now, Wendell.",
+          "next": "no"
+        }
+      ]
+    },
+    {
+      "id": "yes",
+      "speaker": "trader_rourke",
+      "text": "Here's my rumor, worth every step: the fenced place in Dixie Valley has its own power. Hardened. Military.",
+      "effects": [
+        {
+          "set": "annex_known",
+          "value": true
+        }
+      ],
+      "next": "yes2"
+    },
+    {
+      "id": "yes2",
+      "speaker": "trader_rourke",
+      "text": "Whatever's out there came from inside that fence. Ask the sheepmen. Ask anybody who's been east.",
+      "end": true
+    },
+    {
+      "id": "no",
+      "speaker": "trader_rourke",
+      "text": "Ah. Another time. Maisie forgives. I hold grudges for her.",
+      "end": true
+    }
+  ]
+}

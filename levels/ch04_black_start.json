@@ -1,22 +1,30 @@
 {
  "$schema": "./schema.json",
  "formatVersion": 1,
+ "storyVersion": 2,
  "id": "ch04_black_start",
  "chapter": 4,
+ "storyChapter": "ch04",
  "title": "Black Start",
- "act": "II",
+ "act": 2,
  "storyFile": "story/chapters/ch04_black_start.md",
  "next": "ch05_route_9",
- "summary": "Jay Cooke trail and swinging bridge -> Thomson Dam: Lunds, relay, 4-step black start, first-line choice.",
  "difficulty": 2,
+ "summary": "Autumn wind, Day 66, night into dawn. Steal the -86 ground power cart off the Air Guard ramp (tug chase), tow it down the Steamboat Creek road (Salt's culvert, the dead cow, Dutch's ambush if he sold the route), then the Lunds in Galena's break room and the black start. Steam glimpse when the breaker closes.",
+ "startInventory": {
+  "walt_keys": 1,
+  "mech_tools": 1,
+  "flashlight": 1
+ },
+ "startInventoryNote": "walt_keys from chapter_start_effects; mech_tools + flashlight carried over from Ch1-3.",
  "units": "meters",
  "grid": {
   "cellSize": 2.0,
-  "cols": 24,
-  "rows": 64,
+  "cols": 46,
+  "rows": 100,
   "origin": {
-   "x": -24.0,
-   "z": -120.0
+   "x": -46.0,
+   "z": -192.0
   },
   "legend": {
    "#": {
@@ -37,20 +45,31 @@
     "preview": "#b8ad98"
    },
    ".": {
-    "name": "snow_ground",
+    "name": "autumn_dirt",
     "walkable": true,
     "solid": false,
     "height": 0,
-    "floorTex": "snow_02",
-    "preview": "#d9e1e8"
+    "floorTex": "dirt",
+    "groundType": "dusty_dirt_leaves",
+    "preview": "#b48c5c"
    },
    "=": {
-    "name": "road",
+    "name": "asphalt_dusty",
     "walkable": true,
     "solid": false,
     "height": 0,
-    "floorTex": "asphalt_snow",
-    "preview": "#8d969e"
+    "floorTex": "road_damaged",
+    "groundType": "asphalt_dusty",
+    "preview": "#9b9488"
+   },
+   "B": {
+    "name": "building_mass",
+    "walkable": false,
+    "solid": true,
+    "height": 0,
+    "wallTex": "red_brick",
+    "massOnly": true,
+    "preview": "#4a4f57"
    },
    "D": {
     "name": "door",
@@ -61,30 +80,13 @@
     "door": true,
     "preview": "#e0a040"
    },
-   "I": {
-    "name": "river_ice",
-    "walkable": true,
-    "solid": false,
-    "height": 0,
-    "floorTex": "snow_02",
-    "ice": true,
-    "preview": "#b9d3e3"
-   },
-   "T": {
-    "name": "tree",
+   "H": {
+    "name": "high_wall",
     "walkable": false,
     "solid": true,
-    "height": 6,
-    "tree": true,
-    "preview": "#2e4a34"
-   },
-   "_": {
-    "name": "chasm",
-    "walkable": false,
-    "solid": false,
-    "height": -8,
-    "void": true,
-    "preview": "#14181c"
+    "height": 8,
+    "wallTex": "dirty_concrete",
+    "preview": "#3c3f44"
    },
    "b": {
     "name": "bridge_deck",
@@ -94,22 +96,14 @@
     "floorTex": "rusty_metal",
     "preview": "#7a6a5a"
    },
-   "c": {
-    "name": "cover_low",
-    "walkable": false,
-    "solid": true,
-    "height": 1.0,
-    "wallTex": "dirt",
-    "cover": true,
-    "preview": "#a08850"
-   },
-   "g": {
-    "name": "dirt_gravel",
+   "r": {
+    "name": "road_cracked",
     "walkable": true,
     "solid": false,
     "height": 0,
-    "floorTex": "dirt",
-    "preview": "#9c8f7a"
+    "floorTex": "road_damaged",
+    "groundType": "asphalt_cracked",
+    "preview": "#857c70"
    },
    "x": {
     "name": "debris",
@@ -118,6 +112,16 @@
     "height": 0.9,
     "wallTex": "rust_coarse_01",
     "preview": "#6e5545"
+   },
+   "y": {
+    "name": "dry_leaves",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirt",
+    "groundType": "dry_leaves",
+    "scatter": "leaves",
+    "preview": "#a8743e"
    },
    "~": {
     "name": "open_water",
@@ -130,249 +134,490 @@
    }
   },
   "tiles": [
-   "TTTTTTTTTTTTTTTTTTTTTTTT",
-   "T...............~~~~~..T",
-   "T.bbbbbbbbbbbbbbbbbbbb.T",
-   "T.bbbbbbbbbbbbbbbbbbbb.T",
-   "T......................T",
-   "T......................T",
-   "T..#########D##........T",
-   "T..#,,,,,,,,,,#........T",
-   "T..#,,,,,,,,,,#........T",
-   "T..#,,,,,,,,,,#........T",
-   "T..###D########........T",
-   "T..#,,,,,,,,,,#........T",
-   "T..#,,x,,x,,x,#........T",
-   "T..#,,x,,x,,x,#........T",
-   "T..#,,,,,,,,,,#........T",
-   "T..#,,,,,,,,,,#........T",
-   "T..#,,,,,,,,,,#........T",
-   "T..#,,,,,,,,,,#........T",
-   "T..#####D######........T",
-   "T.....==========IIIII..T",
-   "T...c.=======c==IIIII..T",
-   "T.....==========IIIII..T",
-   "TTT.....TggggT..IIIIIT.T",
-   "T....TTT.ggggT..IIIII..T",
-   "TTT.TT..TggggT..IIIII..T",
-   "TT.T...TTgggg..TIIIII..T",
-   "T...TT..Tgggg...IIIII..T",
-   "T......T.ggggT..IIIII..T",
-   "T.....TTTgggg..TIIIII..T",
-   "T.T..T..Tgggg..TIIIII..T",
-   "T....T...gggg...IIIIIT.T",
-   "T...T....gggg...IIIII.TT",
-   "T.T......gggg...IIIIITTT",
-   "TTT....T.gggg...IIIIIT.T",
-   "T...TT.T.gggg...IIIII..T",
-   "TT..TT...ggggT..IIIII.TT",
-   "T__________b____~~~~~__T",
-   "T__________b____~~~~~__T",
-   "T__________b____~~~~~__T",
-   "T__________b____~~~~~__T",
-   "T__________b____~~~~~__T",
-   "T__________b____~~~~~__T",
-   "T.T.gggggggggTTTIIIII..T",
-   "T..Tggggggggg...IIIII..T",
-   "T...ggg.T.TggT..IIIII.TT",
-   "T...ggg..T......IIIIIT.T",
-   "T...gggTTTT..T..IIIII.TT",
-   "T.T.ggg.....TT.TIIIIIT.T",
-   "TT..gggT...T.T.TIIIII.TT",
-   "T.T.ggg..T...T..IIIII..T",
-   "TT..ggg..TTT....IIIIIT.T",
-   "T.T.gggT...T..T.IIIII..T",
-   "T.TTggg....T.T.TIIIII..T",
-   "TTT.ggg.T..T....IIIIITTT",
-   "T..Tggg..TT...TTIIIII..T",
-   "TT.TgggT...T....IIIII.TT",
-   "TTTTggg..T..T..TIIIII..T",
-   "T...ggg.TT.T...TIIIIITTT",
-   "TT..ggg.TT...T..IIIII.TT",
-   "T.TTgggTT.....T.IIIII.TT",
-   "T...gggTT...TT.TIIIIITTT",
-   "TT.Tggg.T.T.TT.TIIIII.TT",
-   "T...ggg..T......IIIII..T",
-   "TTTTTTTTTTTTTTTTTTTTTTTT"
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",
+   "H============================================H",
+   "H============================================H",
+   "H============================================H",
+   "H===#################======BBBBBBBBBBB=======H",
+   "H===#,,,,,,,,,,,,,,,#======BBBBBBBBBBB=======H",
+   "H===#,,,,,,,,,,,,,,,#======BBBBBBBBBBB=======H",
+   "H===#,,,,,,,,,,,,,,,#======BBBBBBBBBBB=======H",
+   "H===#,,,,,,,,,,,,,,,#======BBBBBBBBBBB=======H",
+   "H===#,,,,,,,,,,,,,,,#======BBBBBBBBBBB=======H",
+   "H===#,,,,,,,,,,,,,,,D======BBBBBBBBBBB=======H",
+   "H===#,,,,,,,,,,,,,,,#========================H",
+   "H===#,,,,,,,,,,,,,,,#========================H",
+   "H===#,,,,,,,,,,,,,,,#========================H",
+   "H===#,,,,,,,,,,,,,,,#========================H",
+   "H===#,,,,,,,,,,,,,,,#========================H",
+   "H===########D########========================H",
+   "H============================================H",
+   "H============================================H",
+   "H===============================xxx==========H",
+   "H===============================xxx==========H",
+   "H===============================xxx==========H",
+   "H==========================xxxxxxxxxxxxx=====H",
+   "H==========================xxxxxxxxxxxxx=====H",
+   "H===============================xxx==========H",
+   "H===============================xxx==========H",
+   "H===============================xxx==========H",
+   "H============================================H",
+   "H============================================H",
+   "H============================================H",
+   "H============================================H",
+   "H============================================H",
+   "H============================================H",
+   "H============================================H",
+   "HyyyyyyyyyyyyyyyyyyyyyrryyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyy###########yyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyy#,,,,,,,,,#yyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyy#,,,,,,,,,#yyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyy#,,,,,,,,,#yyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyy#,,,,,,,,,Dyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyy#,,,,,,,,,#yyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyy#,,,,,,,,,#yyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyy#,,,,,,,,,#yyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyy###########yyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyrrrrrrrrbbbrrrrrrrrrrrrH",
+   "HyyyyyyyyyyyyyyyyyyyyyrrrrrrrrbbbrrrrrrrrrrrrH",
+   "Hyyyyyyyyyyyyyyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "HyyyBBBBBBBBByyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "HyyyBBBBBBBBByyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "HyyyBBBBBBBBByyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "HyyyBBBBBBBBByyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "HyyyBBBBBBBBByyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "HyyyBBBBBBBBByyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "HyyyBBBBBBBBByyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyyrryyyyyy~~~yyyyyyyyyyyyH",
+   "H.....................rr.....................H",
+   "H.....................rr.....................H",
+   "H.....................rr.....................H",
+   "H.....................rr.....................H",
+   "H.....................rr.....................H",
+   "H...#####################.........BBBBBBB....H",
+   "H...#,,,,,,,,,#,,,,,,,,,#.........BBBBBBB....H",
+   "H...#,,,,,,,,,#,,,,,,,,,#.........BBBBBBB....H",
+   "H...#,,,,,,,,,#,,,,,,,,,#.........BBBBBBB....H",
+   "H...#,,,,,,,,,#,,,,,,,,,#.........BBBBBBB....H",
+   "H...#,,,,,,,,,#,,,,,,,,,#....................H",
+   "H...#,,,,,,,,,#,,,,,,,,,#....................H",
+   "H...#,,,,,,,,,#,,,,,,,,,#....................H",
+   "H...#,,,,,,,,,#,,,,,,,,,#....................H",
+   "H...######D########D#####....................H",
+   "H...#,,,,,,,,,,,,,,,,,,,#.........BBBBBBB....H",
+   "H...#,,,,,,,,,,,,,,,,,,,#.........BBBBBBB....H",
+   "H...#,,,,,,,,,,,,,,,,,,,#.........BBBBBBB....H",
+   "H...#,,,,,,,,,,,,,,,,,,,#.........BBBBBBB....H",
+   "H...#,,,,,,,,,,,,,,,,,,,D.........BBBBBBB....H",
+   "H...#,,,,,,,,,,,,,,,,,,,#....................H",
+   "H...#,,,,,,,,,,,,,,,,,,,#....................H",
+   "H...#,,,,,,,,,,,,,,,,,,,#....................H",
+   "H...##########D##########....................H",
+   "H.....................rr.....................H",
+   "H.....................rr.....................H",
+   "H.....................rr.....................H",
+   "H.....................rr.....................H",
+   "H.....................rr.....................H",
+   "H.....................rr.....................H",
+   "H.....................rr.....................H",
+   "H.....................rr.....................H",
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
   ]
  },
  "environment": {
-  "timeStart": 0.4,
-  "timeEnd": 0.9,
+  "seasonArc": "devolving_autumn",
+  "season": "autumn",
+  "actName": "Society Devolving",
+  "groundType": "dusty_dirt_dry_leaves",
+  "precipitation": "none",
+  "particles": "leaves",
+  "snowCover": 0.0,
+  "wetness": 0.0,
+  "fogColor": "#b9926d",
+  "skyColor": "#8e7c82",
+  "sunColor": "#f2d2a0",
+  "ambientColor": "#a99a86",
+  "visibilityM": 70,
+  "fogNear": 6,
+  "fogFar": 70,
+  "windMs": 6,
+  "atmosphere": "Crisp, dusty autumn: cold clear air, gusts carrying grit and dry leaves, muted ochre palette, chimney smoke, no snow.",
+  "environmentPreset": "autumn",
+  "storySeason": "autumn",
+  "storyPalette": "autumn gold, yellow cottonwoods along the Truckee, long shadows",
+  "storyWeather": "autumn_wind",
+  "weather": "autumn_wind",
+  "storyTempC": 12,
+  "tempC": 12,
+  "nightTempC": 5,
+  "survivalFocus": [
+   "cold_nights",
+   "fuel",
+   "heating"
+  ],
+  "timeStart": 0.86,
+  "timeEnd": 0.27,
   "timeLocked": false,
-  "weather": "snow",
-  "tempC": -24,
   "blizzard": false,
-  "snowCover": 1.0,
-  "particles": "snow",
-  "fogNear": 8,
-  "fogFar": 36,
-  "palette": "assets/palettes/slso8.json",
-  "ambientTint": "#c9d6e6",
+  "warmthDrainMul": 0.55,
+  "transitions": [
+   {
+    "trigger": "t_ch04_off_ramp",
+    "time": 0.92,
+    "light": "windy_night"
+   },
+   {
+    "trigger": "t_ch04_dawn",
+    "time": 0.27,
+    "light": "gold_dawn_steam"
+   }
+  ],
+  "seasonNote": "Day 66 (late October): dry autumn wind over the ramp, leaves and grit in the floodlights, 5 C night; no snow.",
   "hud": {
-   "temp": true,
+   "hp": true,
+   "hydration": true,
    "hunger": true,
-   "rad": false,
-   "filter": false,
-   "seal": false
-  },
-  "warmthDrainMul": 1.3,
-  "maxAliveEnemies": 5
+   "companion": true,
+   "warmth": true,
+   "temp": true
+  }
  },
  "locations": [
   {
-   "id": "loc_jay_cooke",
+   "id": "loc_airguard_ramp",
    "x": 0.0,
-   "z": -35.0,
+   "z": -157.0,
    "rect": {
     "type": "rect",
-    "x0": -22.0,
-    "z0": -76.0,
-    "x1": 22.0,
+    "x0": -44.0,
+    "z0": -190.0,
+    "x1": 44.0,
+    "z1": -124.0
+   },
+   "safe": false,
+   "name": "Air Guard ramp (Reno-Tahoe)"
+  },
+  {
+   "id": "loc_steamboat_creek",
+   "x": 0.0,
+   "z": -91.0,
+   "rect": {
+    "type": "rect",
+    "x0": -44.0,
+    "z0": -124.0,
+    "x1": 44.0,
+    "z1": -58.0
+   },
+   "safe": false,
+   "name": "Steamboat Creek"
+  },
+  {
+   "id": "loc_galena_station",
+   "x": 0.0,
+   "z": -26.0,
+   "rect": {
+    "type": "rect",
+    "x0": -44.0,
+    "z0": -58.0,
+    "x1": 44.0,
     "z1": 6.0
    },
-   "safe": false
-  },
-  {
-   "id": "loc_thomson_dam",
-   "x": 0.0,
-   "z": -97.0,
-   "rect": {
-    "type": "rect",
-    "x0": -22.0,
-    "z0": -118.0,
-    "x1": 22.0,
-    "z1": -76.0
-   },
-   "safe": false
+   "safe": false,
+   "name": "Galena Station"
   }
  ],
- "landmarks": [
+ "landmarks": [],
+ "buildings": [
   {
-   "label": "Swinging bridge",
-   "x": -1.0,
-   "z": -42.0
+   "id": "b_ch04_hangar",
+   "label": "Hangar 2",
+   "kind": "walled",
+   "cells": [
+    4,
+    4,
+    20,
+    16
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -38.0,
+    "z0": -184.0,
+    "x1": -4.0,
+    "z1": -158.0
+   },
+   "doors": [
+    [
+     -21.0,
+     -159.0
+    ],
+    [
+     -5.0,
+     -171.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_airguard_ramp",
+   "interior": "maintenance bay; the -86 cart"
   },
   {
-   "label": "Headgate deck",
-   "x": 1.0,
-   "z": -114.0
+   "id": "m_ch04_ops",
+   "label": "Air Guard ops building",
+   "kind": "mass",
+   "cells": [
+    27,
+    4,
+    37,
+    10
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 8.0,
+    "z0": -184.0,
+    "x1": 30.0,
+    "z1": -170.0
+   },
+   "doors": [],
+   "location": "loc_airguard_ramp",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
   },
   {
-   "label": "Powerhouse",
-   "x": -6.0,
-   "z": -91.0
+   "id": "b_ch04_ranch",
+   "label": "Ranch house (Steamboat)",
+   "kind": "walled",
+   "cells": [
+    4,
+    39,
+    14,
+    47
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -38.0,
+    "z0": -114.0,
+    "x1": -16.0,
+    "z1": -96.0
+   },
+   "doors": [
+    [
+     -17.0,
+     -105.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_steamboat_creek"
   },
   {
-   "label": "Control room",
-   "x": -7.0,
-   "z": -103.0
+   "id": "m_ch04_barn",
+   "label": "Hay barn",
+   "kind": "mass",
+   "cells": [
+    4,
+    54,
+    12,
+    60
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -38.0,
+    "z0": -84.0,
+    "x1": -20.0,
+    "z1": -70.0
+   },
+   "doors": [],
+   "location": "loc_steamboat_creek",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
   },
   {
-   "label": "Surge tower",
-   "x": 19.0,
-   "z": -110.0
+   "id": "b_ch04_plant",
+   "label": "Galena Station plant",
+   "kind": "walled",
+   "cells": [
+    4,
+    72,
+    24,
+    90
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -38.0,
+    "z0": -48.0,
+    "x1": 4.0,
+    "z1": -10.0
+   },
+   "doors": [
+    [
+     -17.0,
+     -11.0
+    ],
+    [
+     3.0,
+     -19.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_galena_station",
+   "interior": "control room (NW), break room (NE, the Lunds), turbine hall (south)"
+  },
+  {
+   "id": "m_ch04_wellhead",
+   "label": "Geothermal wellhead",
+   "kind": "mass",
+   "cells": [
+    34,
+    72,
+    40,
+    76
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 22.0,
+    "z0": -48.0,
+    "x1": 36.0,
+    "z1": -38.0
+   },
+   "doors": [],
+   "location": "loc_galena_station",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  },
+  {
+   "id": "m_ch04_cooling",
+   "label": "Cooling tower base",
+   "kind": "mass",
+   "cells": [
+    34,
+    82,
+    40,
+    86
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 22.0,
+    "z0": -28.0,
+    "x1": 36.0,
+    "z1": -18.0
+   },
+   "doors": [],
+   "location": "loc_galena_station",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
   }
  ],
  "paths": {
   "critical": [
    [
-    -13.0,
-    3.0
+    1.0,
+    -129.0
    ],
    [
-    -13.0,
-    -33.0
-   ],
-   [
-    -1.0,
-    -34.0
-   ],
-   [
-    -1.0,
-    -47.0
-   ],
-   [
-    -1.0,
-    -51.0
+    1.0,
+    -151.0
    ],
    [
     -3.0,
-    -75.0
+    -171.0
    ],
    [
-    -7.0,
-    -79.0
-   ],
-   [
-    -7.0,
-    -83.0
+    -21.0,
+    -171.0
    ],
    [
     -3.0,
-    -89.0
+    -171.0
    ],
    [
     1.0,
-    -105.0
+    -151.0
    ],
    [
     1.0,
-    -111.0
-   ],
-   [
-    11.0,
-    -114.0
+    -125.0
    ],
    [
     1.0,
-    -111.0
+    -91.0
    ],
    [
     1.0,
-    -107.0
+    -59.0
    ],
    [
-    -1.0,
-    -97.0
+    1.0,
+    -7.0
    ],
    [
-    -11.0,
-    -99.0
+    -17.0,
+    -7.0
    ],
    [
-    -9.0,
-    -103.0
+    -17.0,
+    -19.0
    ],
    [
-    -13.0,
-    -103.0
+    -7.0,
+    -25.0
    ],
    [
-    -5.0,
-    -103.0
+    -7.0,
+    -35.0
+   ],
+   [
+    -7.0,
+    -25.0
+   ],
+   [
+    -25.0,
+    -25.0
+   ],
+   [
+    -29.0,
+    -35.0
    ]
   ],
   "optional": [
    {
-    "id": "b_ice",
-    "label": "River ice scavengers + fishing shack",
+    "id": "b_ch04_salt",
+    "label": "Salt's culvert",
     "points": [
      [
-      -1.0,
-      -33.0
+      1.0,
+      -103.0
      ],
      [
-      9.0,
-      -27.0
+      11.0,
+      -107.0
      ],
      [
-      13.0,
-      -25.0
+      21.0,
+      -107.0
+     ]
+    ]
+   },
+   {
+    "id": "b_ch04_ranch",
+    "label": "Ranch house",
+    "points": [
+     [
+      1.0,
+      -105.0
      ],
      [
-      13.0,
-      -13.0
+      -13.0,
+      -105.0
+     ],
+     [
+      -25.0,
+      -105.0
      ]
     ]
    }
@@ -382,528 +627,632 @@
   "player": [
    {
     "id": "spawn_default",
-    "x": -13.0,
-    "z": 3.0,
-    "rotY": 3.142
+    "x": 1.0,
+    "z": -129.0,
+    "rotY": 0.0
    }
   ],
   "npcs": [
    {
-    "id": "npc_hank",
-    "npc": "hank",
-    "x": -13.0,
-    "z": 0.0,
+    "id": "npc_wraith",
+    "npc": "wraith",
+    "x": 3.0,
+    "z": -129.0,
     "rotY": 0.0,
-    "behavior": "follow",
+    "behavior": "companion_follow",
     "when": [
      {
-      "flag": "hank_alive",
-      "ne": false
+      "flag": "wraith_alive",
+      "eq": true
+     }
+    ],
+    "label": "Wraith",
+    "companion": true
+   },
+   {
+    "id": "npc_walt",
+    "npc": "walt",
+    "x": -27.0,
+    "z": -39.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch04_black_start",
+    "when": [
+     {
+      "flag": "ch04_cart_towed",
+      "eq": true
      }
     ]
    },
    {
-    "id": "npc_theo",
-    "npc": "theo",
-    "x": -11.0,
-    "z": 2.0,
-    "rotY": 0.0,
-    "behavior": "follow"
-   },
-   {
     "id": "npc_pete_lund",
     "npc": "pete_lund",
-    "x": -1.0,
-    "z": -89.0,
+    "x": -7.0,
+    "z": -39.0,
     "rotY": 0.0,
     "behavior": "idle",
-    "dialogue": "ch04_lunds",
-    "label": "Pete Lund (shotgun)",
-    "combatProfile": "desperate_family"
+    "dialogue": "ch04_lunds"
    },
    {
-    "id": "npc_annie_lund",
-    "npc": "annie_lund",
-    "x": 1.0,
-    "z": -87.0,
+    "id": "npc_lund_kid",
+    "npc": "lund_kid",
+    "x": -3.0,
+    "z": -35.0,
     "rotY": 0.0,
-    "behavior": "idle",
-    "label": "Annie Lund + kids"
+    "behavior": "idle"
    },
    {
-    "id": "npc_bea",
-    "npc": "bea",
-    "x": -5.0,
-    "z": -79.0,
+    "id": "npc_avila",
+    "npc": "avila",
+    "x": 15.0,
+    "z": -3.0,
     "rotY": 0.0,
     "behavior": "idle",
-    "when": [
-     {
-      "flag": "dam_secret_told",
-      "eq": "harbor"
-     }
-    ],
-    "label": "Bea + Harbor volunteers"
-   },
-   {
-    "id": "npc_strand",
-    "npc": "strand",
-    "x": -5.0,
-    "z": -79.0,
-    "rotY": 0.0,
-    "behavior": "idle",
+    "dialogue": "ch04_standoff",
     "when": [
      {
       "flag": "dam_secret_told",
       "eq": "authority"
      }
     ]
+   },
+   {
+    "id": "npc_amb_salt",
+    "npc": "amb_salt",
+    "x": 23.0,
+    "z": -107.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch04_salt_culvert",
+    "label": "Salt (hot-springs culvert)"
    }
   ],
   "enemies": [
    {
     "id": "en_01",
     "type": "authority_guard",
-    "x": -13.0,
-    "z": -77.0,
-    "group": "g_standoff_gate",
-    "tier": 2,
+    "x": 3.0,
+    "z": -165.0,
+    "group": "g_ch04_sentry",
+    "tier": 1,
     "behavior": "guard",
     "hostile": "conditional",
-    "activate": "trigger",
+    "activate": "load",
+    "patrol": [
+     [
+      3.0,
+      -165.0
+     ],
+     [
+      3.0,
+      -151.0
+     ],
+     [
+      -13.0,
+      -151.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
     "hostileWhen": [
      {
-      "flag": "ch04_standoff_fired",
+      "flag": "ch04_spotted",
       "eq": true
      }
     ],
-    "when": [
-     {
-      "flag": "dam_secret_told",
-      "eq": "authority"
-     }
-    ],
-    "note": "Story standoff; scripted shot if trust.strand < 2."
+    "note": "Ramp sentry; spot = alarm."
    },
    {
     "id": "en_02",
     "type": "authority_guard",
-    "x": -11.0,
-    "z": -77.0,
-    "group": "g_standoff_gate",
-    "tier": 2,
-    "behavior": "guard",
+    "x": 15.0,
+    "z": -131.0,
+    "group": "g_ch04_chase",
+    "tier": 1,
+    "behavior": "pursue_vehicle",
     "hostile": "conditional",
     "activate": "trigger",
+    "storyEncounter": "enc_ch04_ramp_chase",
     "hostileWhen": [
      {
-      "flag": "ch04_standoff_fired",
+      "flag": "ch04_spotted",
       "eq": true
      }
     ],
-    "when": [
-     {
-      "flag": "dam_secret_told",
-      "eq": "authority"
-     }
-    ],
-    "note": "Story standoff; scripted shot if trust.strand < 2."
+    "note": "Tug chase off the ramp; no kills required."
    },
    {
     "id": "en_03",
     "type": "authority_guard",
-    "x": -9.0,
-    "z": -77.0,
-    "group": "g_standoff_gate",
-    "tier": 2,
-    "behavior": "guard",
+    "x": -13.0,
+    "z": -131.0,
+    "group": "g_ch04_chase",
+    "tier": 1,
+    "behavior": "pursue_vehicle",
     "hostile": "conditional",
     "activate": "trigger",
+    "storyEncounter": "enc_ch04_ramp_chase",
     "hostileWhen": [
      {
-      "flag": "ch04_standoff_fired",
+      "flag": "ch04_spotted",
       "eq": true
      }
     ],
-    "when": [
-     {
-      "flag": "dam_secret_told",
-      "eq": "authority"
-     }
-    ],
-    "note": "Story standoff; scripted shot if trust.strand < 2."
+    "note": "Tug chase off the ramp; no kills required."
    },
    {
     "id": "en_04",
     "type": "authority_guard",
-    "x": -7.0,
-    "z": -77.0,
-    "group": "g_standoff_gate",
-    "tier": 2,
-    "behavior": "guard",
+    "x": 35.0,
+    "z": -155.0,
+    "group": "g_ch04_chase",
+    "tier": 1,
+    "behavior": "pursue_vehicle",
     "hostile": "conditional",
     "activate": "trigger",
+    "storyEncounter": "enc_ch04_ramp_chase",
     "hostileWhen": [
      {
-      "flag": "ch04_standoff_fired",
+      "flag": "ch04_spotted",
       "eq": true
      }
     ],
-    "when": [
-     {
-      "flag": "dam_secret_told",
-      "eq": "authority"
-     }
-    ],
-    "note": "Story standoff; scripted shot if trust.strand < 2."
+    "note": "Tug chase off the ramp; no kills required."
    },
    {
     "id": "en_05",
-    "type": "authority_guard",
-    "x": -15.0,
-    "z": -111.0,
-    "group": "g_standoff_deck",
-    "tier": 2,
-    "behavior": "guard",
-    "hostile": "conditional",
+    "type": "bridge_boy",
+    "x": -11.0,
+    "z": -83.0,
+    "group": "g_ch04_dutch",
+    "tier": 1,
+    "behavior": "ambush",
+    "hostile": "always",
     "activate": "trigger",
-    "hostileWhen": [
-     {
-      "flag": "ch04_standoff_fired",
-      "eq": true
-     }
-    ],
+    "storyEncounter": "enc_ch04_dutch_ambush",
     "when": [
      {
-      "flag": "dam_secret_told",
-      "eq": "authority"
+      "flag": "trader_dutch_rep",
+      "lte": -1
      }
-    ],
-    "note": "Story standoff; scripted shot if trust.strand < 2."
+    ]
    },
    {
     "id": "en_06",
-    "type": "authority_guard",
-    "x": -9.0,
-    "z": -111.0,
-    "group": "g_standoff_deck",
-    "tier": 2,
-    "behavior": "guard",
-    "hostile": "conditional",
+    "type": "bridge_boy",
+    "x": -7.0,
+    "z": -75.0,
+    "group": "g_ch04_dutch",
+    "tier": 1,
+    "behavior": "ambush",
+    "hostile": "always",
     "activate": "trigger",
-    "hostileWhen": [
-     {
-      "flag": "ch04_standoff_fired",
-      "eq": true
-     }
-    ],
+    "storyEncounter": "enc_ch04_dutch_ambush",
     "when": [
      {
-      "flag": "dam_secret_told",
-      "eq": "authority"
+      "flag": "trader_dutch_rep",
+      "lte": -1
      }
-    ],
-    "note": "Story standoff; scripted shot if trust.strand < 2."
+    ]
    },
    {
     "id": "en_07",
-    "type": "authority_guard",
-    "x": 5.0,
-    "z": -111.0,
-    "group": "g_standoff_deck",
-    "tier": 2,
-    "behavior": "guard",
-    "hostile": "conditional",
+    "type": "bridge_boy",
+    "x": 7.0,
+    "z": -81.0,
+    "group": "g_ch04_dutch",
+    "tier": 1,
+    "behavior": "ambush",
+    "hostile": "always",
     "activate": "trigger",
-    "hostileWhen": [
-     {
-      "flag": "ch04_standoff_fired",
-      "eq": true
-     }
-    ],
+    "storyEncounter": "enc_ch04_dutch_ambush",
     "when": [
      {
-      "flag": "dam_secret_told",
-      "eq": "authority"
+      "flag": "trader_dutch_rep",
+      "lte": -1
      }
-    ],
-    "note": "Story standoff; scripted shot if trust.strand < 2."
+    ]
    },
    {
     "id": "en_08",
-    "type": "authority_guard",
-    "x": 11.0,
-    "z": -110.0,
-    "group": "g_standoff_deck",
-    "tier": 2,
-    "behavior": "guard",
-    "hostile": "conditional",
+    "type": "bridge_boy",
+    "x": 9.0,
+    "z": -71.0,
+    "group": "g_ch04_dutch",
+    "tier": 1,
+    "behavior": "ambush",
+    "hostile": "always",
     "activate": "trigger",
-    "hostileWhen": [
-     {
-      "flag": "ch04_standoff_fired",
-      "eq": true
-     }
-    ],
+    "storyEncounter": "enc_ch04_dutch_ambush",
     "when": [
      {
-      "flag": "dam_secret_told",
-      "eq": "authority"
+      "flag": "trader_dutch_rep",
+      "lte": -1
      }
-    ],
-    "note": "Story standoff; scripted shot if trust.strand < 2."
+    ]
    },
    {
     "id": "en_09",
     "type": "bridge_boy",
-    "x": 13.0,
-    "z": -19.0,
-    "group": "g_ice_scav",
-    "tier": 2,
-    "behavior": "wander",
-    "hostile": "on_provoke",
-    "activate": "load"
+    "x": -11.0,
+    "z": -65.0,
+    "group": "g_ch04_dutch",
+    "tier": 1,
+    "behavior": "ambush",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch04_dutch_ambush",
+    "when": [
+     {
+      "flag": "trader_dutch_rep",
+      "lte": -1
+     }
+    ]
    },
    {
     "id": "en_10",
-    "type": "bridge_boy",
-    "x": 15.0,
-    "z": -13.0,
-    "group": "g_ice_scav",
-    "tier": 2,
+    "type": "desperate_family",
+    "x": -11.0,
+    "z": -41.0,
+    "group": "g_ch04_lund",
+    "tier": 1,
     "behavior": "wander",
-    "hostile": "on_provoke",
-    "activate": "load"
+    "hostile": "conditional",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch04_lund_fight",
+    "hostileWhen": [
+     {
+      "flag": "ch04_lund_fight",
+      "eq": true
+     }
+    ],
+    "note": "Pete Lund with a shotgun; avoidable."
+   },
+   {
+    "id": "en_11",
+    "type": "authority_guard",
+    "x": 11.0,
+    "z": -7.0,
+    "group": "g_ch04_standoff",
+    "tier": 1,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "load",
+    "hostileWhen": [
+     {
+      "flag": "ch04_standoff_fired",
+      "eq": true
+     }
+    ],
+    "when": [
+     {
+      "flag": "dam_secret_told",
+      "eq": "authority"
+     }
+    ],
+    "note": "Avila's Guard at the gate (ch04_standoff)."
+   },
+   {
+    "id": "en_12",
+    "type": "authority_guard",
+    "x": 21.0,
+    "z": -1.0,
+    "group": "g_ch04_standoff",
+    "tier": 1,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "load",
+    "hostileWhen": [
+     {
+      "flag": "ch04_standoff_fired",
+      "eq": true
+     }
+    ],
+    "when": [
+     {
+      "flag": "dam_secret_told",
+      "eq": "authority"
+     }
+    ],
+    "note": "Avila's Guard at the gate (ch04_standoff)."
+   },
+   {
+    "id": "en_13",
+    "type": "authority_guard",
+    "x": 31.0,
+    "z": -7.0,
+    "group": "g_ch04_standoff",
+    "tier": 1,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "load",
+    "hostileWhen": [
+     {
+      "flag": "ch04_standoff_fired",
+      "eq": true
+     }
+    ],
+    "when": [
+     {
+      "flag": "dam_secret_told",
+      "eq": "authority"
+     }
+    ],
+    "note": "Avila's Guard at the gate (ch04_standoff)."
+   },
+   {
+    "id": "en_14",
+    "type": "authority_guard",
+    "x": 39.0,
+    "z": -1.0,
+    "group": "g_ch04_standoff",
+    "tier": 1,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "load",
+    "hostileWhen": [
+     {
+      "flag": "ch04_standoff_fired",
+      "eq": true
+     }
+    ],
+    "when": [
+     {
+      "flag": "dam_secret_told",
+      "eq": "authority"
+     }
+    ],
+    "note": "Avila's Guard at the gate (ch04_standoff)."
    }
   ],
   "loot": [
    {
     "id": "loot_01",
-    "x": -7.0,
-    "z": -11.0,
+    "x": -33.0,
+    "z": -179.0,
     "r": 1.6,
-    "label": "Park shelter",
-    "container": "woodpile",
-    "guaranteed": [
-     {
-      "item": "firewood",
-      "n": 2
-     }
-    ],
-    "location": "loc_jay_cooke"
+    "label": "Hangar tool locker",
+    "container": "locker",
+    "location": "loc_airguard_ramp"
    },
    {
     "id": "loot_02",
-    "x": 13.0,
-    "z": -25.0,
+    "x": -9.0,
+    "z": -179.0,
     "r": 1.6,
-    "label": "Ice-fishing shack",
-    "container": "woodpile",
-    "location": "loc_jay_cooke"
+    "label": "Hangar toolbox",
+    "container": "toolbox",
+    "location": "loc_airguard_ramp"
    },
    {
     "id": "loot_03",
-    "x": -14.0,
-    "z": -86.0,
+    "x": -33.0,
+    "z": -109.0,
     "r": 1.6,
-    "label": "Plant locker",
-    "container": "locker",
-    "guaranteed": [
-     {
-      "item": "hank_keys",
-      "n": 1
-     }
-    ],
-    "location": "loc_thomson_dam"
-   },
-   {
-    "id": "loot_04",
-    "x": 3.0,
-    "z": -104.0,
-    "r": 1.6,
-    "label": "Relay cabinet",
-    "container": "supply_cache",
-    "guaranteed": [
-     {
-      "item": "relay_kit",
-      "n": 1
-     }
-    ],
-    "when": [
-     {
-      "flag": "dam_secret_told",
-      "ne": "none"
-     }
-    ],
-    "location": "loc_thomson_dam"
-   },
-   {
-    "id": "loot_05",
-    "x": -3.0,
-    "z": -86.0,
-    "r": 1.6,
-    "label": "Lunds' larder",
+    "label": "Ranch kitchen",
     "container": "kitchen_cabinet",
-    "when": [
-     {
-      "flag": "lunds_stayed",
-      "ne": true
-     }
-    ],
-    "location": "loc_thomson_dam"
-   },
-   {
-    "id": "loot_06",
-    "x": 21.0,
-    "z": 5.0,
-    "r": 1.6,
-    "label": "Car trunk (filler)",
-    "container": "car_trunk",
-    "location": "loc_jay_cooke",
-    "filler": true,
+    "location": "loc_steamboat_creek",
     "guaranteed": [
      {
       "item": "firewood",
       "n": 2
+     }
+    ]
+   },
+   {
+    "id": "loot_04",
+    "x": -21.0,
+    "z": -99.0,
+    "r": 1.6,
+    "label": "Ranch wardrobe",
+    "container": "wardrobe",
+    "location": "loc_steamboat_creek"
+   },
+   {
+    "id": "loot_05",
+    "x": -33.0,
+    "z": -43.0,
+    "r": 1.6,
+    "label": "Control-room locker",
+    "container": "locker",
+    "location": "loc_galena_station",
+    "guaranteed": [
+     {
+      "item": "canned_food",
+      "n": 2
+     }
+    ]
+   },
+   {
+    "id": "loot_06",
+    "x": -33.0,
+    "z": -15.0,
+    "r": 1.6,
+    "label": "Turbine-hall toolbox",
+    "container": "toolbox",
+    "location": "loc_galena_station",
+    "guaranteed": [
+     {
+      "item": "water_clean",
+      "n": 1
      }
     ]
    },
    {
     "id": "loot_07",
-    "x": 21.0,
-    "z": -63.0,
+    "x": -35.0,
+    "z": -161.0,
     "r": 1.6,
-    "label": "Car trunk (filler)",
-    "container": "car_trunk",
-    "location": "loc_jay_cooke",
+    "label": "Toolbox / workbench drawer",
+    "container": "toolbox",
+    "location": "loc_airguard_ramp",
     "filler": true
    },
    {
     "id": "loot_08",
-    "x": -21.0,
-    "z": -59.0,
-    "r": 1.6,
-    "label": "Frozen body (filler)",
-    "container": "corpse",
-    "location": "loc_jay_cooke",
+    "x": -17.0,
+    "z": -137.0,
+    "r": 3.1,
+    "label": "Car trunk",
+    "container": "car_trunk",
+    "propRef": "prop_10",
+    "render": "prop",
+    "location": "loc_airguard_ramp",
     "filler": true
    },
    {
     "id": "loot_09",
-    "x": -21.0,
-    "z": -31.0,
-    "r": 1.6,
-    "label": "Kitchen cabinet (filler)",
-    "container": "kitchen_cabinet",
-    "location": "loc_jay_cooke",
+    "x": 9.0,
+    "z": -155.0,
+    "r": 3.1,
+    "label": "Car trunk",
+    "container": "car_trunk",
+    "propRef": "prop_11",
+    "render": "prop",
+    "location": "loc_airguard_ramp",
     "filler": true
    },
    {
     "id": "loot_10",
-    "x": 3.0,
-    "z": -63.0,
+    "x": -7.0,
+    "z": -161.0,
     "r": 1.6,
-    "label": "Closet / wardrobe (filler)",
-    "container": "wardrobe",
-    "location": "loc_jay_cooke",
+    "label": "Kitchen cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_airguard_ramp",
     "filler": true
    },
    {
     "id": "loot_11",
-    "x": 7.0,
-    "z": -3.0,
-    "r": 1.6,
-    "label": "Closet / wardrobe (filler)",
-    "container": "wardrobe",
-    "location": "loc_jay_cooke",
+    "x": -15.0,
+    "z": -69.0,
+    "r": 3.1,
+    "label": "Car trunk",
+    "container": "car_trunk",
+    "propRef": "prop_12",
+    "render": "prop",
+    "location": "loc_steamboat_creek",
     "filler": true
    },
    {
     "id": "loot_12",
-    "x": -9.0,
-    "z": -93.0,
-    "r": 1.6,
-    "label": "Locker (filler)",
-    "container": "locker",
-    "location": "loc_thomson_dam",
-    "filler": true,
-    "guaranteed": [
-     {
-      "item": "canned_food",
-      "n": 1
-     }
-    ]
+    "x": 5.0,
+    "z": -115.0,
+    "r": 3.1,
+    "label": "Car trunk",
+    "container": "car_trunk",
+    "propRef": "prop_13",
+    "render": "prop",
+    "location": "loc_steamboat_creek",
+    "filler": true
    },
    {
     "id": "loot_13",
-    "x": -15.0,
-    "z": -97.0,
+    "x": 43.0,
+    "z": -59.0,
     "r": 1.6,
-    "label": "Toolbox / workbench drawer (filler)",
-    "container": "toolbox",
-    "location": "loc_thomson_dam",
-    "filler": true,
-    "guaranteed": [
-     {
-      "item": "start_battery",
-      "n": 1
-     }
-    ]
+    "label": "Woodpile / pallets / broken furniture",
+    "container": "woodpile",
+    "location": "loc_steamboat_creek",
+    "filler": true
    },
    {
     "id": "loot_14",
-    "x": 3.0,
-    "z": -93.0,
+    "x": 13.0,
+    "z": -79.0,
     "r": 1.6,
-    "label": "Toolbox / workbench drawer (filler)",
-    "container": "toolbox",
-    "location": "loc_thomson_dam",
-    "filler": true,
-    "guaranteed": [
-     {
-      "item": "water_clean",
-      "n": 2
-     }
-    ]
+    "label": "Frozen body",
+    "container": "corpse",
+    "location": "loc_steamboat_creek",
+    "filler": true
    },
    {
     "id": "loot_15",
-    "x": -15.0,
-    "z": -91.0,
+    "x": -19.0,
+    "z": -111.0,
     "r": 1.6,
-    "label": "Toolbox / workbench drawer (filler)",
-    "container": "toolbox",
-    "location": "loc_thomson_dam",
+    "label": "Kitchen cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_steamboat_creek",
     "filler": true
    },
    {
     "id": "loot_16",
-    "x": -9.0,
-    "z": -85.0,
+    "x": -35.0,
+    "z": -99.0,
     "r": 1.6,
-    "label": "Kitchen cabinet (filler)",
-    "container": "kitchen_cabinet",
-    "location": "loc_thomson_dam",
+    "label": "Closet / wardrobe",
+    "container": "wardrobe",
+    "location": "loc_steamboat_creek",
     "filler": true
    },
    {
     "id": "loot_17",
-    "x": -7.0,
-    "z": -97.0,
+    "x": -27.0,
+    "z": -111.0,
     "r": 1.6,
-    "label": "Medicine cabinet (filler)",
-    "container": "medicine_cabinet",
-    "location": "loc_thomson_dam",
+    "label": "Gun safe / prepper locker",
+    "container": "gun_safe",
+    "location": "loc_steamboat_creek",
     "filler": true
    },
    {
     "id": "loot_18",
     "x": -3.0,
-    "z": -93.0,
+    "z": -13.0,
     "r": 1.6,
-    "label": "Closet / wardrobe (filler)",
+    "label": "Toolbox / workbench drawer",
+    "container": "toolbox",
+    "location": "loc_galena_station",
+    "filler": true
+   },
+   {
+    "id": "loot_19",
+    "x": -13.0,
+    "z": -27.0,
+    "r": 1.6,
+    "label": "Toolbox / workbench drawer",
+    "container": "toolbox",
+    "location": "loc_galena_station",
+    "filler": true
+   },
+   {
+    "id": "loot_20",
+    "x": 1.0,
+    "z": -25.0,
+    "r": 1.6,
+    "label": "Kitchen cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_galena_station",
+    "filler": true
+   },
+   {
+    "id": "loot_21",
+    "x": -35.0,
+    "z": -25.0,
+    "r": 1.6,
+    "label": "Kitchen cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_galena_station",
+    "filler": true
+   },
+   {
+    "id": "loot_22",
+    "x": -13.0,
+    "z": -15.0,
+    "r": 1.6,
+    "label": "Medicine cabinet",
+    "container": "medicine_cabinet",
+    "location": "loc_galena_station",
+    "filler": true
+   },
+   {
+    "id": "loot_23",
+    "x": -19.0,
+    "z": -45.0,
+    "r": 1.6,
+    "label": "Closet / wardrobe",
     "container": "wardrobe",
-    "location": "loc_thomson_dam",
+    "location": "loc_galena_station",
     "filler": true
    }
   ]
@@ -912,365 +1261,602 @@
   {
    "id": "prop_01",
    "asset": "assets/kenney/industrial/detail-tank-large.glb",
-   "x": -11.0,
-   "z": -94.0,
-   "rotY": 0,
-   "h": 3.2,
+   "x": 37.0,
+   "z": -163.0,
+   "rotY": 0.0,
+   "h": 3,
    "collide": true,
-   "tag": "Unit 1"
+   "footprintR": 2.0,
+   "tag": "fuel_bowser"
   },
   {
    "id": "prop_02",
-   "asset": "assets/kenney/industrial/detail-tank-large.glb",
-   "x": -5.0,
-   "z": -94.0,
-   "rotY": 0,
-   "h": 3.2,
+   "asset": "assets/kenney/industrial/shipping-container-a.glb",
+   "x": -27.0,
+   "z": -139.0,
+   "rotY": 0.0,
+   "h": 2.6,
    "collide": true,
-   "tag": "Unit 2 (black-start)"
+   "footprintR": 3.0
   },
   {
    "id": "prop_03",
-   "asset": "assets/kenney/industrial/detail-tank-large.glb",
-   "x": 1.0,
-   "z": -94.0,
-   "rotY": 0,
-   "h": 3.2,
-   "collide": true,
-   "tag": "Unit 3"
+   "asset": "assets/kenney/roads/construction-barrier.glb",
+   "x": -1.0,
+   "z": -125.0,
+   "rotY": 0.0,
+   "h": 1.1,
+   "collide": false
   },
   {
    "id": "prop_04",
-   "asset": "assets/kenney/industrial/building-m.glb",
-   "x": -6.0,
-   "z": -106.0,
+   "asset": "assets/kenney/roads/light-square-double.glb",
+   "x": -41.0,
+   "z": -187.0,
    "rotY": 0.0,
-   "h": 12,
-   "collide": false,
-   "tag": "powerhouse silhouette"
+   "h": 6,
+   "collide": false
   },
   {
    "id": "prop_05",
-   "asset": "assets/kenney/industrial/chimney-medium.glb",
-   "x": 19.0,
-   "z": -110.0,
-   "rotY": 0,
-   "h": 11,
-   "collide": true,
-   "tag": "surge tower"
+   "asset": "assets/kenney/roads/light-square-double.glb",
+   "x": 39.0,
+   "z": -187.0,
+   "rotY": 0.0,
+   "h": 6,
+   "collide": false
   },
   {
    "id": "prop_06",
-   "asset": "assets/kenney/roads/electricity-pole.glb",
-   "x": -19.0,
-   "z": -79.0,
-   "rotY": 0,
-   "h": 9,
-   "collide": true
+   "asset": "assets/kenney/roads/light-square-double.glb",
+   "x": -41.0,
+   "z": -131.0,
+   "rotY": 0.0,
+   "h": 6,
+   "collide": false
   },
   {
    "id": "prop_07",
-   "asset": "assets/kenney/roads/electricity-pole.glb",
-   "x": 7.0,
-   "z": -79.0,
-   "rotY": 0,
-   "h": 9,
-   "collide": true
+   "asset": "assets/kenney/industrial/chimney-medium.glb",
+   "x": 29.0,
+   "z": -33.0,
+   "rotY": 0.0,
+   "h": 6,
+   "collide": false,
+   "tag": "steam_vent",
+   "note": "Steam vent plume (non-colliding FX anchor)"
   },
   {
    "id": "prop_08",
    "asset": "assets/kenney/roads/electricity-pole.glb",
-   "x": -19.0,
-   "z": -91.0,
-   "rotY": 0,
-   "h": 9,
-   "collide": true
+   "x": 7.0,
+   "z": -55.0,
+   "rotY": 0.0,
+   "h": 7,
+   "collide": false
   },
   {
    "id": "prop_09",
-   "asset": "assets/kenney/roads/light-square.glb",
-   "x": -9.0,
-   "z": -80.0,
+   "asset": "assets/kenney/roads/electricity-pole.glb",
+   "x": 7.0,
+   "z": 1.0,
    "rotY": 0.0,
-   "h": 5,
-   "collide": true
+   "h": 7,
+   "collide": false
   },
   {
    "id": "prop_10",
-   "asset": "assets/kenney/roads/road-sign-warning.glb",
-   "x": -3.0,
-   "z": -34.0,
-   "rotY": 3.142,
-   "h": 2.4,
-   "collide": true
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -17.0,
+   "z": -137.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_11",
-   "asset": "assets/kenney/roads/construction-fence.glb",
-   "x": -3.0,
-   "z": -49.0,
-   "rotY": 0,
-   "h": 1.6,
-   "collide": true
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": 9.0,
+   "z": -155.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
+  },
+  {
+   "id": "prop_12",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -15.0,
+   "z": -69.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
+  },
+  {
+   "id": "prop_13",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": 5.0,
+   "z": -115.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   }
  ],
  "interactives": [
   {
-   "id": "ch04_balance",
-   "type": "balance",
-   "x": -1.0,
-   "z": -42.0,
-   "r": 2.2,
-   "label": "Swinging bridge",
-   "setsFlag": "ch04_bridge_crossed"
+   "id": "ch04_gpu_cart",
+   "type": "hitch",
+   "x": -21.0,
+   "z": -173.0,
+   "r": 1.8,
+   "label": "-86 ground power cart: hitch to the tug",
+   "setsFlag": "ch04_cart_hooked",
+   "givesItems": {
+    "gpu_cart": 1
+   },
+   "quest": "q_ground_power"
   },
   {
-   "id": "ch04_headgate",
-   "type": "valve",
-   "x": 11.0,
-   "z": -114.0,
+   "id": "ch04_cart_dock",
+   "type": "hookup",
+   "x": -23.0,
+   "z": -19.0,
    "r": 1.8,
-   "label": "Headgate wheel",
-   "requiresFlags": [
-    {
-     "flag": "ch04_lunds_resolved",
-     "eq": true
-    }
-   ],
-   "setsFlag": "bs_headgate",
-   "sequenceStep": 1
-  },
-  {
-   "id": "ch04_exciter",
-   "type": "panel",
-   "x": -1.0,
-   "z": -97.0,
-   "r": 1.8,
-   "label": "Exciter",
-   "requiresFlags": [
-    {
-     "flag": "bs_headgate",
-     "eq": true
-    },
-    {
-     "any": [
-      {
-       "item": "relay_kit",
-       "gte": 1
-      },
-      {
-       "flag": "ch04_bypass_built",
-       "eq": true
-      }
-     ]
-    }
-   ],
-   "setsFlag": "bs_exciter",
-   "sequenceStep": 2
-  },
-  {
-   "id": "ch04_sync",
-   "type": "panel",
-   "x": -9.0,
-   "z": -103.0,
-   "r": 1.8,
-   "label": "Synchroscope",
-   "requiresFlags": [
-    {
-     "flag": "bs_exciter",
-     "eq": true
-    }
-   ],
-   "setsFlag": "bs_sync",
-   "sequenceStep": 3
+   "label": "Tie the cart into the station bus",
+   "requiresItems": {
+    "gpu_cart": 1
+   },
+   "setsFlag": "ch04_cart_towed",
+   "quest": "q_black_start"
   },
   {
    "id": "ch04_breaker",
-   "type": "lever",
-   "x": -13.0,
-   "z": -103.0,
+   "type": "breaker",
+   "x": -29.0,
+   "z": -35.0,
    "r": 1.8,
-   "label": "Main breaker",
+   "label": "Main breaker: close for black start",
    "requiresFlags": [
-    {
-     "flag": "bs_sync",
-     "eq": true
-    }
+    "ch04_cart_towed"
    ],
-   "setsFlag": "dam_running",
-   "sequenceStep": 4
+   "setsFlag": "ch04_breaker_closed",
+   "quest": "q_black_start"
   },
   {
-   "id": "ch04_bypass",
-   "type": "minigame",
-   "x": 2.0,
+   "id": "ch04_ranch_stove",
+   "type": "boil",
+   "x": -27.0,
    "z": -103.0,
    "r": 1.8,
-   "label": "Hank's improvised relay bypass",
-   "setsFlag": "ch04_bypass_built",
-   "when": [
-    {
-     "flag": "dam_secret_told",
-     "eq": "none"
-    }
-   ]
-  },
-  {
-   "id": "ch04_feeder",
-   "type": "choice_panel",
-   "x": -5.0,
-   "z": -103.0,
-   "r": 1.8,
-   "label": "Feeder selector (first line)",
-   "requiresFlags": [
-    {
-     "flag": "dam_running",
-     "eq": true
-    }
-   ]
+   "label": "Ranch wood stove (warmth)",
+   "requiresItems": {
+    "firewood": 1
+   },
+   "givesItems": {
+    "water_clean": 1
+   }
   }
  ],
  "safeZones": [
   {
    "id": "safe_01",
-   "kind": "campfire",
-   "x": -9.0,
-   "z": -11.0,
-   "r": 3.4,
-   "label": "Park shelter fire",
+   "kind": "camp",
+   "x": -27.0,
+   "z": -101.0,
+   "r": 3.0,
+   "label": "Ranch house stove",
    "warmth": true,
    "save": true,
    "sealed": false
   },
   {
    "id": "safe_02",
-   "kind": "campfire",
-   "x": 1.0,
-   "z": -27.0,
-   "r": 3.0,
-   "label": "Trailhead fire ring",
-   "warmth": true,
-   "save": true,
-   "sealed": false
-  },
-  {
-   "id": "safe_03",
-   "kind": "campfire",
-   "x": -2.0,
-   "z": -88.0,
-   "r": 3.2,
-   "label": "Lunds' fire (manuals burning)",
-   "warmth": true,
-   "save": false,
-   "sealed": false
-  },
-  {
-   "id": "safe_04",
-   "kind": "warm_room",
-   "x": -7.0,
-   "z": -103.0,
+   "kind": "home",
+   "x": -27.0,
+   "z": -21.0,
    "r": 4.0,
-   "label": "Control room (lights on)",
+   "label": "Galena turbine hall (warm)",
    "warmth": true,
    "save": true,
    "sealed": false,
    "when": [
     {
-     "flag": "dam_running",
+     "flag": "ch04_breaker_closed",
      "eq": true
     }
    ]
   }
  ],
- "setPieces": [],
+ "setPieces": [
+  {
+   "id": "sp_ch04_tug_chase",
+   "type": "vehicle_chase",
+   "path": [
+    [
+     -5.0,
+     -171.0
+    ],
+    [
+     1.0,
+     -151.0
+    ],
+    [
+     1.0,
+     -125.0
+    ],
+    [
+     1.0,
+     -95.0
+    ],
+    [
+     1.0,
+     -59.0
+    ]
+   ],
+   "when": [
+    {
+     "flag": "ch04_cart_hooked",
+     "eq": true
+    }
+   ],
+   "note": "Tug tows the -86 cart off the ramp; guards pursue on foot, no kills required.",
+   "vehicle": "tug+gpu_cart"
+  },
+  {
+   "id": "sp_glimpse_ch04_cow",
+   "type": "tallman_glimpse",
+   "note": "Static prop, not a creature.",
+   "glimpse": "glimpse_ch04_cow",
+   "kind": "static_prop_dead_cow",
+   "x": -25.0,
+   "z": -75.0,
+   "distanceM": 26,
+   "bearingDeg": 270,
+   "durationS": 999.0,
+   "interactable": false,
+   "collider": false,
+   "ai": false,
+   "hudCue": false,
+   "musicSting": false,
+   "despawn": "after duration OR player within 60 m OR LOS lost",
+   "onShow": [
+    {
+     "add": "tallman_glimpses",
+     "value": 1
+    }
+   ],
+   "companionReaction": "wraith_stare",
+   "where": "A dead cow in a field with its chest opened; no figure",
+   "offMap": false
+  },
+  {
+   "id": "sp_glimpse_ch04_steam",
+   "type": "tallman_glimpse",
+   "note": "Played inside ch04_black_start.",
+   "glimpse": "glimpse_ch04_steam",
+   "kind": "silhouette",
+   "x": 90.54,
+   "z": -24.54,
+   "distanceM": 120,
+   "bearingDeg": 95,
+   "durationS": 3.0,
+   "interactable": false,
+   "collider": false,
+   "ai": false,
+   "hudCue": false,
+   "musicSting": false,
+   "despawn": "after duration OR player within 60 m OR LOS lost",
+   "onShow": [
+    {
+     "add": "tallman_glimpses",
+     "value": 1
+    }
+   ],
+   "companionReaction": "wraith_stare",
+   "where": "Galena steam field, ~120 m, an upright shape inside the steam plume; gone when the plume shifts",
+   "offMap": true
+  }
+ ],
  "encounters": [
   {
-   "id": "enc_ice",
+   "id": "z_ch04_ramp",
    "area": {
     "type": "rect",
-    "x0": 2.0,
-    "z0": -36.0,
-    "x1": 22.0,
+    "x0": -44.0,
+    "z0": -168.0,
+    "x1": 44.0,
+    "z1": -124.0
+   },
+   "groups": [
+    {
+     "group": "g_ch04_sentry",
+     "wave": 1
+    },
+    {
+     "group": "g_ch04_chase",
+     "wave": 1
+    }
+   ],
+   "storyEncounters": [
+    "enc_ch04_ramp_chase"
+   ]
+  },
+  {
+   "id": "z_ch04_steamboat_road",
+   "area": {
+    "type": "rect",
+    "x0": -16.0,
+    "z0": -86.0,
+    "x1": 14.0,
+    "z1": -60.0
+   },
+   "groups": [
+    {
+     "group": "g_ch04_dutch",
+     "wave": 1
+    }
+   ],
+   "storyEncounters": [
+    "enc_ch04_dutch_ambush"
+   ],
+   "note": "Only if trader_dutch_rep <= -1 (Dutch sold the route)."
+  },
+  {
+   "id": "z_ch04_breakroom",
+   "area": {
+    "type": "rect",
+    "x0": -16.0,
+    "z0": -46.0,
+    "x1": 2.0,
+    "z1": -30.0
+   },
+   "groups": [
+    {
+     "group": "g_ch04_lund",
+     "wave": 1
+    }
+   ],
+   "storyEncounters": [
+    "enc_ch04_lund_fight"
+   ]
+  },
+  {
+   "id": "z_ch04_gate",
+   "area": {
+    "type": "rect",
+    "x0": 6.0,
+    "z0": -14.0,
+    "x1": 44.0,
     "z1": 6.0
    },
    "groups": [
     {
-     "group": "g_ice_scav",
-     "wave": 1
-    }
-   ]
-  },
-  {
-   "id": "enc_gate",
-   "area": {
-    "type": "rect",
-    "x0": -22.0,
-    "z0": -82.0,
-    "x1": 8.0,
-    "z1": -72.0
-   },
-   "groups": [
-    {
-     "group": "g_standoff_gate",
+     "group": "g_ch04_standoff",
      "wave": 1
     }
    ],
-   "note": "Guard squad split 4+4 (gate / headgate deck) to respect the cap."
-  },
-  {
-   "id": "enc_deck",
-   "area": {
-    "type": "rect",
-    "x0": -22.0,
-    "z0": -118.0,
-    "x1": 22.0,
-    "z1": -108.0
-   },
-   "groups": [
-    {
-     "group": "g_standoff_deck",
-     "wave": 1
-    }
-   ]
+   "note": "Standoff; only if dam_secret_told=authority."
   }
  ],
  "triggers": [
+  {
+   "id": "t_glimpse_ch04_cow",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -4.0,
+    "z0": -80.0,
+    "x1": 4.0,
+    "z1": -70.0
+   },
+   "actions": [
+    {
+     "type": "spawn_setpiece",
+     "id": "sp_glimpse_ch04_cow"
+    }
+   ],
+   "note": "Steamboat Creek tow route"
+  },
+  {
+   "id": "t_glimpse_ch04_steam",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -36.0,
+    "z0": -46.0,
+    "x1": -18.0,
+    "z1": -30.0
+   },
+   "actions": [
+    {
+     "type": "spawn_setpiece",
+     "id": "sp_glimpse_ch04_steam"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch04_breaker_closed",
+     "eq": true
+    }
+   ],
+   "note": "Immediately after the breaker closes"
+  },
   {
    "id": "t_ch04_start",
    "on": "load",
    "once": true,
    "shape": {
     "type": "circle",
-    "x": -13.0,
-    "z": 3.0,
+    "x": 1.0,
+    "z": -129.0,
     "r": 3
    },
    "actions": [
+    {
+     "type": "set_time",
+     "value": 0.86
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch04_started",
+     "value": true
+    },
     {
      "type": "checkpoint"
     }
    ]
   },
   {
-   "id": "t_ch04_bridge",
+   "id": "t_ch04_airguard_ramp",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -36.0,
+    "z0": -182.0,
+    "x1": -6.0,
+    "z1": -160.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch04_airguard_ramp"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch04_in_hangar",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch04_chase",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -36.0,
+    "z0": -182.0,
+    "x1": -6.0,
+    "z1": -160.0
+   },
+   "actions": [
+    {
+     "type": "spawn_setpiece",
+     "id": "sp_ch04_tug_chase"
+    },
+    {
+     "type": "activate_group",
+     "group": "g_ch04_chase"
+    },
+    {
+     "type": "bark",
+     "speaker": "braith",
+     "text": "Go. Go."
+    },
+    {
+     "type": "checkpoint"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch04_cart_hooked",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch04_off_ramp",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -6.0,
+    "z0": -120.0,
+    "x1": 6.0,
+    "z1": -114.0
+   },
+   "actions": [
+    {
+     "type": "set_time",
+     "value": 0.92
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch04_ramp_clear",
+     "value": true
+    },
+    {
+     "type": "checkpoint"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch04_cart_hooked",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch04_salt_culvert",
+   "on": "interact",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": 23.0,
+    "z": -107.0,
+    "r": 3.5
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch04_salt_culvert"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch04_salt_seen",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch04_dutch",
    "on": "enter",
    "once": true,
    "shape": {
     "type": "rect",
     "x0": -4.0,
-    "z0": -38.0,
-    "x1": 2.0,
-    "z1": -34.0
+    "z0": -88.0,
+    "x1": 4.0,
+    "z1": -80.0
    },
    "actions": [
     {
-     "type": "bark",
-     "speaker": "hank",
-     "text": "Story time. Listen, it's the startup."
+     "type": "dialogue",
+     "id": "ch04_dutch_ambush"
     },
     {
-     "type": "start_sequence",
-     "id": "seq_ch04_balance"
+     "type": "activate_group",
+     "group": "g_ch04_dutch"
+    }
+   ],
+   "when": [
+    {
+     "flag": "trader_dutch_rep",
+     "lte": -1
+    },
+    {
+     "flag": "ch04_ramp_clear",
+     "eq": true
     }
    ]
   },
@@ -1280,74 +1866,100 @@
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -8.0,
-    "z0": -92.0,
-    "x1": 4.0,
-    "z1": -84.0
+    "x0": -16.0,
+    "z0": -46.0,
+    "x1": 2.0,
+    "z1": -30.0
    },
    "actions": [
     {
      "type": "dialogue",
      "id": "ch04_lunds"
-    }
-   ]
-  },
-  {
-   "id": "t_ch04_standoff",
-   "on": "flag",
-   "once": true,
-   "shape": {
-    "type": "rect",
-    "x0": -14.0,
-    "z0": -82.0,
-    "x1": 2.0,
-    "z1": -76.0
-   },
-   "actions": [
-    {
-     "type": "activate_group",
-     "group": "g_standoff_gate"
     },
     {
-     "type": "activate_group",
-     "group": "g_standoff_deck"
-    },
-    {
-     "type": "dialogue",
-     "id": "ch04_standoff"
+     "type": "set_flag",
+     "flag": "ch04_lunds_met",
+     "value": true
     }
    ],
    "when": [
     {
-     "flag": "bs_headgate",
+     "flag": "ch04_ramp_clear",
      "eq": true
-    },
-    {
-     "flag": "dam_secret_told",
-     "eq": "authority"
     }
    ]
   },
   {
-   "id": "t_ch04_spinup",
+   "id": "t_ch04_lund_fight",
    "on": "flag",
    "once": true,
    "shape": {
     "type": "rect",
     "x0": -16.0,
-    "z0": -106.0,
-    "x1": 4.0,
-    "z1": -100.0
+    "z0": -46.0,
+    "x1": 2.0,
+    "z1": -30.0
+   },
+   "actions": [
+    {
+     "type": "activate_group",
+     "group": "g_ch04_lund"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch04_lund_fight",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch04_standoff",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": 6.0,
+    "z0": -14.0,
+    "x1": 44.0,
+    "z1": -4.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch04_standoff"
+    },
+    {
+     "type": "activate_group",
+     "group": "g_ch04_standoff"
+    }
+   ],
+   "when": [
+    {
+     "flag": "dam_secret_told",
+     "eq": "authority"
+    },
+    {
+     "flag": "ch04_ramp_clear",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch04_dawn",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -36.0,
+    "z0": -46.0,
+    "x1": -18.0,
+    "z1": -30.0
    },
    "actions": [
     {
      "type": "set_time",
-     "value": 0.88
-    },
-    {
-     "type": "cutscene",
-     "id": "cs_ch04_spinup",
-     "text": "Unit 2 groans awake. The lights crawl across the ceiling."
+     "value": 0.27
     },
     {
      "type": "dialogue",
@@ -1355,27 +1967,7 @@
     },
     {
      "type": "checkpoint"
-    }
-   ],
-   "when": [
-    {
-     "flag": "dam_running",
-     "eq": true
-    }
-   ]
-  },
-  {
-   "id": "t_ch04_end",
-   "on": "flag",
-   "once": true,
-   "shape": {
-    "type": "rect",
-    "x0": -16.0,
-    "z0": -106.0,
-    "x1": 4.0,
-    "z1": -100.0
-   },
-   "actions": [
+    },
     {
      "type": "chapter_end",
      "next": "ch05_route_9"
@@ -1383,65 +1975,61 @@
    ],
    "when": [
     {
-     "flag": "power_priority",
-     "ne": null
+     "flag": "ch04_breaker_closed",
+     "eq": true
     }
-   ]
+   ],
+   "note": "Plant comes up at dawn; the steam glimpse fires from t_glimpse_ch04_steam."
   }
  ],
  "objectives": [
   {
    "id": "o1",
    "order": 1,
-   "text": "Reach the dam (cross the swinging bridge)",
+   "text": "Steal the ground power cart from Hangar 2",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch04_bridge_crossed",
+     "flag": "ch04_cart_hooked",
      "eq": true
     }
-   ]
+   ],
+   "quest": "q_ground_power"
   },
   {
    "id": "o2",
    "order": 2,
-   "text": "Deal with the Lunds",
+   "text": "Get the cart off the ramp",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch04_lunds_resolved",
+     "flag": "ch04_ramp_clear",
      "eq": true
     }
-   ]
+   ],
+   "quest": "q_ground_power"
   },
   {
    "id": "o3",
    "order": 3,
-   "text": "Get a relay (kit or Hank's bypass)",
+   "text": "Tow it down the Steamboat road to Galena",
    "optional": false,
    "completeWhen": [
     {
-     "any": [
-      {
-       "item": "relay_kit",
-       "gte": 1
-      },
-      {
-       "flag": "ch04_bypass_built",
-       "eq": true
-      }
-     ]
+     "flag": "ch04_cart_towed",
+     "eq": true
     }
-   ]
+   ],
+   "quest": "q_black_start"
   },
   {
    "id": "o4",
    "order": 4,
-   "text": "Black start: headgate -> exciter -> sync -> breaker",
+   "text": "Deal with the people in the break room",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "dam_running",
+     "flag": "ch04_lunds_met",
      "eq": true
     }
    ]
@@ -1449,14 +2037,51 @@
   {
    "id": "o5",
    "order": 5,
-   "text": "Choose the first line",
+   "text": "Black start: close the main breaker",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "power_priority",
-     "ne": null
+     "flag": "ch04_breaker_closed",
+     "eq": true
     }
-   ]
+   ],
+   "quest": "q_black_start"
   }
- ]
+ ],
+ "companion": {
+  "id": "wraith",
+  "spawn": {
+   "x": 3.0,
+   "z": -129.0
+  },
+  "when": [
+   {
+    "flag": "wraith_alive",
+    "eq": true
+   }
+  ],
+  "follow": {
+   "leashM": 6.0,
+   "catchUpM": 14.0,
+   "nav": "grid_bfs_walkable",
+   "avoid": [
+    "door_clearance_cells",
+    "loot_cells"
+   ],
+   "note": "Follows Braith over walkable tiles; idles at heel inside buildings."
+  },
+  "verbs": [
+   "track",
+   "warn",
+   "guard",
+   "hold"
+  ],
+  "injuredWhen": [
+   {
+    "flag": "wraith_injured",
+    "eq": true
+   }
+  ]
+ },
+ "lootSource": "v2"
 }

@@ -1,10 +1,10 @@
 // Clean audio hook for Echoes' manager in /audio/. Never writes there.
 // If a usable module is present it is used; otherwise the built-in WebAudio synth (js/audio.js).
-import { AudioBus } from "./audio.js?v=r8";
-import { tryImport, listDir } from "./load.js?v=r8";
+import { AudioBus } from "./audio.js?v=r9";
+import { tryImport, listDir } from "./load.js?v=r9";
 
 const CANDIDATES = [
-  "./audio/audio.js",
+  "./audio/audio.js?v=r9",
 ];
 
 function isUsable(mod) {
@@ -21,6 +21,12 @@ function isUsable(mod) {
 }
 
 async function attach(mod, ctx) {
+  // Echoes: init with preload "essential" BEFORE attach (attach only inits when not yet listening),
+  // so the 1,368 VO files stream lazily instead of preloading on iPhone.
+  try {
+    const A = mod.GameAudio || (typeof window !== "undefined" ? window.GameAudio : null);
+    if (A && !A._listening && typeof A.init === "function") A.init({ preload: "essential" });
+  } catch (err) { console.warn("[audio] essential init", err); }
   if (typeof mod.attachAshfallAudio === "function") return await mod.attachAshfallAudio(ctx);
   if (typeof mod.AudioBusCompat === "function") return new mod.AudioBusCompat(mod.GameAudio);
   if (typeof mod.createAudioManager === "function") return await mod.createAudioManager(ctx);

@@ -1,211 +1,143 @@
 {
   "id": "ch04_black_start",
   "chapter": "ch04",
-  "location": "loc_thomson_dam",
-  "trigger": "Control room, after the black-start minigame succeeds.",
+  "location": "loc_galena_station",
+  "trigger": "After mg_black_start succeeds: the plant comes up.",
   "speakers": [
-    "hank",
-    "theo",
-    "dell",
-    "narrator"
+    "narrator",
+    "walt",
+    "braith",
+    "wraith"
   ],
   "start": "start",
-  "on_end": [
-    {
-      "quest": "q_black_start",
-      "state": "complete"
-    }
-  ],
   "nodes": [
     {
       "id": "start",
       "speaker": "narrator",
-      "text": "The turbine spins up. A deep, rising hum. Then the control room lights flicker on.",
-      "branches": [
+      "text": "The cart roars. The circulation pumps groan, catch, scream. The turbine starts to whine.",
+      "next": "b1"
+    },
+    {
+      "id": "b1",
+      "speaker": "walt",
+      "text": "Easy. Easy. Watch the pressure. Watch it. ...Now. Close it.",
+      "next": "b2"
+    },
+    {
+      "id": "b2",
+      "speaker": "narrator",
+      "text": "You close the breaker. Every light in Galena Station comes on at once.",
+      "effects": [
         {
-          "next": "hank_here",
-          "conditions": [
+          "set": "dam_running",
+          "value": true
+        },
+        {
+          "quest": "q_black_start",
+          "state": "complete"
+        }
+      ],
+      "next": "b3"
+    },
+    {
+      "id": "b3",
+      "speaker": "narrator",
+      "text": "Through the window, steam rises out of the dark like a city waking up. In the steam, a tall shape stands.",
+      "effects": [
+        {
+          "add": "tallman_glimpses",
+          "value": 1
+        }
+      ],
+      "next": "b3b"
+    },
+    {
+      "id": "b3b",
+      "speaker": "wraith",
+      "text": "[Wraith won't go near the window. She sits behind Walt's chair and won't come out.]",
+      "next": "b4"
+    },
+    {
+      "id": "b4",
+      "speaker": "walt",
+      "text": "Ha. Ha! You hear that? That's a turbine, son. That's the only good sound left in the world.",
+      "next": "b5"
+    },
+    {
+      "id": "b5",
+      "speaker": "walt",
+      "text": "One line out. One feeder. Where does the first power go?",
+      "choices": [
+        {
+          "text": "Meadows General. The hospital.",
+          "next": "hosp",
+          "effects": [
             {
-              "flag": "hank_alive",
-              "eq": true
+              "set": "power_priority",
+              "value": "hospital"
+            },
+            {
+              "trust": "ames",
+              "delta": 3
+            },
+            {
+              "add": "kindness",
+              "value": 1
             }
           ]
         },
         {
-          "next": "hank_gone"
-        }
-      ]
-    },
-    {
-      "id": "hank_here",
-      "speaker": "hank",
-      "text": "Listen to her. Hah. Listen to that.",
-      "effects": [
-        {
-          "set": "dam_running",
-          "value": true
-        }
-      ],
-      "next": "hank2"
-    },
-    {
-      "id": "hank2",
-      "speaker": "hank",
-      "text": "Okay, kid. One feeder's good. One. Where's it go?",
-      "next": "choice"
-    },
-    {
-      "id": "hank_gone",
-      "speaker": "theo",
-      "text": "ma. it worked. he... he'd have liked that sound.",
-      "effects": [
-        {
-          "set": "dam_running",
-          "value": true
-        }
-      ],
-      "next": "hank_gone2"
-    },
-    {
-      "id": "hank_gone2",
-      "speaker": "theo",
-      "text": "one line, right? that's what he said. where does it go?",
-      "next": "choice"
-    },
-    {
-      "id": "choice",
-      "speaker": "narrator",
-      "text": "Feeder 3 can reach: Lakehead Memorial, the ore docks, or the DECC and the rail signals.",
-      "choices": [
-        {
-          "text": "The hospital.",
-          "next": "hosp"
+          "text": "The Silver Spur. The Floor's kitchens.",
+          "next": "floor",
+          "effects": [
+            {
+              "set": "power_priority",
+              "value": "harbor"
+            },
+            {
+              "add": "rep_harbor",
+              "value": 2
+            }
+          ]
         },
         {
-          "text": "The Harbor. Docks and kitchens.",
-          "next": "harbor"
-        },
-        {
-          "text": "The Authority. DECC and comms.",
-          "next": "auth"
-        },
-        {
-          "text": "Who needs it most?",
-          "next": "who"
-        }
-      ]
-    },
-    {
-      "id": "who",
-      "speaker": "dell",
-      "text": "Hospital keeps maybe 80 people alive. Docks feed three thousand. DECC runs everything else.",
-      "next": "who2"
-    },
-    {
-      "id": "who2",
-      "speaker": "narrator",
-      "text": "Nobody answers. The hum fills the room.",
-      "choices": [
-        {
-          "text": "The hospital.",
-          "next": "hosp"
-        },
-        {
-          "text": "The Harbor. Docks and kitchens.",
-          "next": "harbor"
-        },
-        {
-          "text": "The Authority. DECC and comms.",
-          "next": "auth"
+          "text": "The Authority's command center.",
+          "next": "auth",
+          "effects": [
+            {
+              "set": "power_priority",
+              "value": "authority"
+            },
+            {
+              "add": "rep_authority",
+              "value": 2
+            }
+          ]
         }
       ]
     },
     {
       "id": "hosp",
-      "speaker": "narrator",
-      "text": "Twenty miles away, an ICU wakes up. Ames gets on the radio and says nothing for ten seconds.",
-      "effects": [
-        {
-          "set": "power_priority",
-          "value": "hospital"
-        },
-        {
-          "set": "ames_deal",
-          "value": true
-        },
-        {
-          "trust": "ames",
-          "delta": 5
-        }
-      ],
-      "next": "hosp2"
-    },
-    {
-      "id": "hosp2",
-      "speaker": "narrator",
-      "text": "'Fridges,' he says finally. 'Your son's insulin has a fridge. For as long as you keep this on.'",
+      "speaker": "walt",
+      "text": "Hospital. Good. Ames will cry. He won't admit it.",
       "next": "end"
     },
     {
-      "id": "harbor",
-      "speaker": "narrator",
-      "text": "The elevator lights come on over the docks. People cheer you can't hear.",
-      "effects": [
-        {
-          "set": "power_priority",
-          "value": "harbor"
-        },
-        {
-          "add": "rep_harbor",
-          "value": 2
-        },
-        {
-          "trust": "bea",
-          "delta": 3
-        }
-      ],
-      "next": "harbor2"
-    },
-    {
-      "id": "harbor2",
-      "speaker": "narrator",
-      "text": "Bea, on the radio: 'Show of hands, everybody who loves Dell. That's all of them.'",
+      "id": "floor",
+      "speaker": "walt",
+      "text": "Roz's kitchens. A thousand hot meals a day. Not bad, kid.",
       "next": "end"
     },
     {
       "id": "auth",
-      "speaker": "narrator",
-      "text": "The DECC lights up. Strand's comms come back. So does her link to Saint Paul. And beyond.",
-      "effects": [
-        {
-          "set": "power_priority",
-          "value": "authority"
-        },
-        {
-          "add": "rep_authority",
-          "value": 2
-        },
-        {
-          "trust": "strand",
-          "delta": 3
-        },
-        {
-          "trust": "hank",
-          "delta": -3
-        }
-      ],
-      "next": "auth2"
-    },
-    {
-      "id": "auth2",
-      "speaker": "narrator",
-      "text": "That night, for the first time, the Authority talks to Washington. Washington talks back.",
+      "speaker": "walt",
+      "text": "Avila. Okay. Lights in a room full of lists. Your call.",
       "next": "end"
     },
     {
       "id": "end",
       "speaker": "narrator",
-      "text": "The plant hums. For one night, nobody in the room is cold.",
+      "text": "Across the valley, one district flickers, then holds. Everyone who sees it knows exactly what it means.",
       "end": true
     }
   ]

@@ -1,0 +1,48 @@
+{
+  "id": "ch09_wraith_lead",
+  "chapter": "ch09",
+  "location": "loc_steamboat_creek",
+  "trigger": "If wraith_alive and NOT wraith_injured and trust.wraith>=5: trail lost in the whiteout; Wraith leads.",
+  "speakers": [
+    "narrator",
+    "wraith",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "The trail's gone. The creek's gone. Everything is white, every direction, and the light is failing.",
+      "next": "w1"
+    },
+    {
+      "id": "w1",
+      "speaker": "wraith",
+      "text": "[Nose up. Into the wind. A long sniff. Then she pulls. Hard. Left, uphill, away from where you'd have gone.]",
+      "next": "w2"
+    },
+    {
+      "id": "w2",
+      "speaker": "narrator",
+      "text": "Sulfur. Faint. Then stronger. Rotten eggs never smelled so good. Steam. Galena.",
+      "effects": [
+        {
+          "set": "wraith_led",
+          "value": true
+        },
+        {
+          "add": "column_size",
+          "value": 1
+        }
+      ],
+      "next": "w3"
+    },
+    {
+      "id": "w3",
+      "speaker": "braith",
+      "text": "Good girl. Good girl. Best girl in the whole Air Force.",
+      "end": true
+    }
+  ]
+}

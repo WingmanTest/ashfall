@@ -1,0 +1,237 @@
+{
+  "id": "ch07_annex_holds",
+  "chapter": "ch07",
+  "location": "loc_annex_holds",
+  "trigger": "Power the maglocks with the cart (annex_maglock_power). The torpor holds. The flooded lower wing.",
+  "speakers": [
+    "narrator",
+    "braith",
+    "reyne",
+    "wraith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "You cable the cart into the building's dead bus. The cart roars. One by one, the maglocks thunk open in the dark.",
+      "next": "h1"
+    },
+    {
+      "id": "h1",
+      "speaker": "narrator",
+      "text": "Wing A. A corridor of glass holds, each the size of a phone booth. Every one is open. Latches torn from the inside.",
+      "next": "h2"
+    },
+    {
+      "id": "h2",
+      "speaker": "reyne",
+      "text": "Holds A1 through A6. My wing. I knew each of them. I named them. Nobody was supposed to name them.",
+      "next": "h3"
+    },
+    {
+      "id": "h3",
+      "speaker": "narrator",
+      "text": "On the records room desk: the manifest. Half the pages are redacted. The rest are swollen with water.",
+      "effects": [
+        {
+          "set": "annex_known",
+          "value": true
+        }
+      ],
+      "next": "h4"
+    },
+    {
+      "id": "h4",
+      "speaker": "narrator",
+      "text": "SUBJECTS (WING A): 6. SUBJECTS (WING B): ███████. B-WING ACCESS: LEVEL 5 ONLY.",
+      "next": "h5"
+    },
+    {
+      "id": "h5",
+      "speaker": "reyne",
+      "text": "I was level three. I never saw B. Nobody had all the numbers. That was the point of how they built it.",
+      "choices": [
+        {
+          "text": "Where's B wing?",
+          "next": "b"
+        },
+        {
+          "text": "How many are out there?",
+          "next": "many"
+        }
+      ]
+    },
+    {
+      "id": "many",
+      "speaker": "reyne",
+      "text": "I don't know. I honestly don't know. Six from my wing. B wing... I don't know.",
+      "next": "many2"
+    },
+    {
+      "id": "many2",
+      "speaker": "reyne",
+      "text": "There was a page I never had clearance for. 'Integration.' I don't know what they do out there, starving.",
+      "next": "b"
+    },
+    {
+      "id": "b",
+      "speaker": "narrator",
+      "text": "Stairs down. Black water at the bottom. The stairwell door to B wing is bent outward. Forced.",
+      "next": "h6"
+    },
+    {
+      "id": "h6",
+      "speaker": "wraith",
+      "text": "[Won't go down the stairs. Sits at the top. Whines once. Then silence.]",
+      "next": "h7"
+    },
+    {
+      "id": "h7",
+      "speaker": "narrator",
+      "text": "Below, the lower wing is flooded to the ceiling. Collapsed. Whatever was in there either drowned or got out.",
+      "next": "h8"
+    },
+    {
+      "id": "h8",
+      "speaker": "reyne",
+      "text": "[Very quietly] The diesel ran out on day sixteen. The holds warmed. I heard them waking up. I opened the outer door.",
+      "effects": [
+        {
+          "set": "reyne_secret_known",
+          "value": true
+        }
+      ],
+      "next": "h9"
+    },
+    {
+      "id": "h9",
+      "speaker": "reyne",
+      "text": "I told myself it was to get out. It was. I also didn't close it. I couldn't watch them starve in glass.",
+      "choices": [
+        {
+          "text": "You let them loose on us.",
+          "next": "harsh",
+          "effects": [
+            {
+              "trust": "reyne",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "text": "You did what you could live with.",
+          "next": "soft",
+          "effects": [
+            {
+              "trust": "reyne",
+              "delta": 2
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "[Say nothing]",
+          "next": "quiet"
+        }
+      ]
+    },
+    {
+      "id": "harsh",
+      "speaker": "reyne",
+      "text": "Yes. I did. I'll carry that. I'll help you carry what it costs. That's all I can offer.",
+      "next": "tall"
+    },
+    {
+      "id": "soft",
+      "speaker": "reyne",
+      "text": "...Thank you. I don't deserve that. I'll take it anyway.",
+      "next": "tall"
+    },
+    {
+      "id": "quiet",
+      "speaker": "reyne",
+      "text": "Silence is fair.",
+      "next": "tall"
+    },
+    {
+      "id": "tall",
+      "speaker": "wraith",
+      "text": "[Suddenly on her feet. Barking. Backing away from the dark end of the A-wing corridor.]",
+      "next": "fight"
+    },
+    {
+      "id": "fight",
+      "speaker": "narrator",
+      "text": "Something unfolds from the last hold. It was sleeping in the cold dark. Now it's awake, and you're warm.",
+      "choices": [
+        {
+          "text": "[Flashlight in its eyes. Shoot]",
+          "next": "shoot",
+          "effects": [
+            {
+              "event": "encounter",
+              "id": "enc_ch07_holds_tallman"
+            }
+          ]
+        },
+        {
+          "text": "[Cart floods on. Back out]",
+          "next": "flood"
+        }
+      ]
+    },
+    {
+      "id": "shoot",
+      "speaker": "narrator",
+      "text": "It shrieks without sound and lunges. You fire into it. It breaks for the stairs, toward the black water.",
+      "choices": [
+        {
+          "text": "[Follow it down]",
+          "next": "follow",
+          "effects": [
+            {
+              "add": "tallmen_killed",
+              "value": 1
+            },
+            {
+              "stat": "health",
+              "delta": -20
+            }
+          ]
+        },
+        {
+          "text": "[Let it go]",
+          "next": "letgo"
+        }
+      ]
+    },
+    {
+      "id": "follow",
+      "speaker": "narrator",
+      "text": "Waist-deep in freezing water. It turns on you in the stairwell. You end it there. Your hands won't stop shaking.",
+      "next": "out"
+    },
+    {
+      "id": "letgo",
+      "speaker": "narrator",
+      "text": "It slides into the black water and is gone. Somewhere, maybe, it comes up again.",
+      "next": "out"
+    },
+    {
+      "id": "flood",
+      "speaker": "narrator",
+      "text": "The cart's floods blaze down the corridor. It recoils, folds itself back into the dark, and waits. You leave.",
+      "next": "out"
+    },
+    {
+      "id": "out",
+      "speaker": "reyne",
+      "text": "There's a hot spring three miles north. If any are still sleeping nearby, they'll be there. In the warm.",
+      "end": true
+    }
+  ]
+}

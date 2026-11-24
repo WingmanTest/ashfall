@@ -1,0 +1,110 @@
+{
+  "id": "ch08_ames_hand",
+  "chapter": "ch08",
+  "location": "loc_meadows_general",
+  "trigger": "Frostbite in Braith's right hand. Ames (if power_priority=hospital, he's ready).",
+  "speakers": [
+    "narrator",
+    "ames",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Your right hand. Two fingers white and hard since the last cold night. You can't feel a wrench.",
+      "next": "a1"
+    },
+    {
+      "id": "a1",
+      "speaker": "ames",
+      "text": "Mechanic. Your hands are your whole life. Let me see.",
+      "branches": [
+        {
+          "next": "saved",
+          "conditions": [
+            {
+              "flag": "power_priority",
+              "eq": "hospital"
+            }
+          ]
+        },
+        {
+          "next": "maybe"
+        }
+      ]
+    },
+    {
+      "id": "saved",
+      "speaker": "ames",
+      "text": "You gave me power when no one else did. Warm water bath, the good drugs, a heated room. You keep the fingers.",
+      "effects": [
+        {
+          "set": "ch08_hand_saved",
+          "value": true
+        },
+        {
+          "trust": "ames",
+          "delta": 1
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "maybe",
+      "speaker": "ames",
+      "text": "No heat, no warm bath, no time. I can save the hand. Maybe not both fingers.",
+      "choices": [
+        {
+          "text": "Do what you can.",
+          "next": "cut",
+          "effects": [
+            {
+              "stat": "health",
+              "delta": -10
+            }
+          ]
+        },
+        {
+          "text": "[Trade antibiotics for priority]",
+          "next": "trade",
+          "conditions": [
+            {
+              "item": "antibiotics",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "antibiotics",
+              "qty": 1
+            },
+            {
+              "set": "ch08_hand_saved",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cut",
+      "speaker": "narrator",
+      "text": "You lose the tip of your ring finger. You'll learn to hold a torque wrench a new way.",
+      "next": "end"
+    },
+    {
+      "id": "trade",
+      "speaker": "ames",
+      "text": "...Fine. Priority. I hate that this works. Lie down.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "ames",
+      "text": "Keep the hand warm. I need that hand. Everyone does.",
+      "end": true
+    }
+  ]
+}

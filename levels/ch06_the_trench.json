@@ -1,0 +1,2953 @@
+{
+ "$schema": "./schema.json",
+ "formatVersion": 1,
+ "storyVersion": 2,
+ "id": "ch06_the_trench",
+ "chapter": 6,
+ "storyChapter": "ch06",
+ "title": "The Trench",
+ "act": 2,
+ "storyFile": "story/chapters/ch06_the_trench.md",
+ "next": "ch07_dead_air",
+ "difficulty": 3,
+ "summary": "Overcast, Day 96, day into night. Ironwood's quarantine sweep of Sector 4 (three 4-man fireteams, two drones, a checkpoint), the informant list, Marsh in Room 9, Carly's Switchboard at the Silver Spur, Avila's break, then the alley glimpse and the rail trench: Ruiz pinned under the MRAP door, and the freight car on the siding (freight_car_drop blocks the trench, or the Bradley rolls through and the trench fight starts).",
+ "startInventory": {
+  "mech_tools": 1,
+  "flashlight": 1,
+  "hand_radio": 1
+ },
+ "startInventoryNote": "carried over from Ch1-5",
+ "units": "meters",
+ "grid": {
+  "cellSize": 2.0,
+  "cols": 52,
+  "rows": 112,
+  "origin": {
+   "x": -52.0,
+   "z": -216.0
+  },
+  "legend": {
+   "#": {
+    "name": "wall",
+    "walkable": false,
+    "solid": true,
+    "height": 4,
+    "wallTex": "red_brick",
+    "preview": "#5a3a32"
+   },
+   ",": {
+    "name": "interior_floor",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirty_concrete",
+    "roof": true,
+    "preview": "#b8ad98"
+   },
+   ".": {
+    "name": "mud",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirt",
+    "groundType": "mud_wet",
+    "preview": "#7a6852"
+   },
+   "=": {
+    "name": "asphalt_wet",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "road_damaged",
+    "groundType": "asphalt_wet",
+    "wet": true,
+    "preview": "#6e737a"
+   },
+   "B": {
+    "name": "building_mass",
+    "walkable": false,
+    "solid": true,
+    "height": 0,
+    "wallTex": "red_brick",
+    "massOnly": true,
+    "preview": "#4a4f57"
+   },
+   "D": {
+    "name": "door",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirty_concrete",
+    "door": true,
+    "preview": "#e0a040"
+   },
+   "H": {
+    "name": "high_wall",
+    "walkable": false,
+    "solid": true,
+    "height": 8,
+    "wallTex": "dirty_concrete",
+    "preview": "#3c3f44"
+   },
+   "k": {
+    "name": "rail_track",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "rusty_metal",
+    "preview": "#6a5a4e"
+   },
+   "r": {
+    "name": "road_wet_cracked",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "road_damaged",
+    "groundType": "asphalt_wet_cracked",
+    "wet": true,
+    "preview": "#62666a"
+   }
+  },
+  "tiles": [
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",
+   "H.................HHkkkkkkkkHH.....................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH...kk................H",
+   "H.................HHkkkkkkkkHH.....................H",
+   "H.................HHkkkkkkkkHH.....................H",
+   "H..................................................H",
+   "H.rrrrrrrrrrrrrr...................................H",
+   "H.rrrrrrrrrrrrrr...................................H",
+   "H.rrrrrrrrrrrrrr...................................H",
+   "H..................................................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H...###################.====...BBBBBBBBBBBBBBBB....H",
+   "H...#,,,,,,,,,,,,,,,,,#.====...BBBBBBBBBBBBBBBB....H",
+   "H...#,,,,,,,,,,,,,,,,,#.====...BBBBBBBBBBBBBBBB....H",
+   "H...#,,,,,,,,,,,,,,,,,#.====...BBBBBBBBBBBBBBBB....H",
+   "H...#,,,,,,,,,,,,,,,,,#.====...BBBBBBBBBBBBBBBB....H",
+   "H...#,,,,,,,,,,,,,,,,,#.====...BBBBBBBBBBBBBBBB....H",
+   "H...#,,,,,,,,,,,,,,,,,D.====...BBBBBBBBBBBBBBBB....H",
+   "H...#,,,,,,,,,,,,,,,,,#.====...BBBBBBBBBBBBBBBB....H",
+   "H...#,,,,,,,,,,,,,,,,,#.====...BBBBBBBBBBBBBBBB....H",
+   "H...#,,,,,,,,,,,,,,,,,#.====...BBBBBBBBBBBBBBBB....H",
+   "H...#########D#########.====...BBBBBBBBBBBBBBBB....H",
+   "H...#,,,,,,,,,,,,,,,,,#.====.......................H",
+   "H...#,,,,,,,,,,,,,,,,,#.====.......................H",
+   "H...#,,,,,,,,,,,,,,,,,#.====.......................H",
+   "H...#,,,,,,,,,,,,,,,,,#.====.......................H",
+   "H...#,,,,,,,,,,,,,,,,,#.====.......................H",
+   "H...#,,,,,,,,,,,,,,,,,#.====.......................H",
+   "H...#,,,,,,,,,,,,,,,,,#.====.......................H",
+   "H...#########D#########.====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H==================================================H",
+   "H==================================================H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H..#############........====...##################..H",
+   "H..#,,,,,#,,,,,#........====...#,,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,#,,,,,#........====...#,,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,#,,,,,#........====...#,,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,#,,,,,#........====...#,,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,#,,,,,D........====...#,,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,D,,,,,#........====...D,,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,#,,,,,#........====...#,,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,#,,,,,#........====...#,,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,#,,,,,#........====...#,,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,#,,,,,#........====...#,,,,,,,,,,,,,,,,#..H",
+   "H..#############........====...#,,,,,,,,,,,,,,,,#..H",
+   "H.......................====...#,,,,,,,,,,,,,,,,#..H",
+   "H.......................====...########D#########..H",
+   "H.......................====.......................H",
+   "H..BBBBBBBBBB...........====.......................H",
+   "H..BBBBBBBBBB...........====.......................H",
+   "H..BBBBBBBBBB...........====.......................H",
+   "H..BBBBBBBBBB...........====.......................H",
+   "H..BBBBBBBBBB...........====.......................H",
+   "H..BBBBBBBBBB...........====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H...BBBBBBBBBBB.........====.......................H",
+   "H...BBBBBBBBBBB.........====.......................H",
+   "H...BBBBBBBBBBB.........====.......................H",
+   "H...BBBBBBBBBBB.........====.....###########.......H",
+   "H.......................====.....#,,,,,,,,,#.......H",
+   "H.......................====.....#,,,,,,,,,#.......H",
+   "H.......................====.....D,,,,,,,,,#.......H",
+   "H...###########.........====.....#,,,,,,,,,#.......H",
+   "H...#,,,,,,,,,#.........====.....#,,,,,,,,,#.......H",
+   "H...#,,,,,,,,,#.........====.....#,,,,,,,,,#.......H",
+   "H...#,,,,,,,,,#.........====.....###########.......H",
+   "H...#,,,,,,,,,D.........====.......................H",
+   "H...#,,,,,,,,,#.........====.......................H",
+   "H...#,,,,,,,,,#.........====.......................H",
+   "H...#,,,,,,,,,#.........====.....BBBBBBBBBBBBBB....H",
+   "H...###########.........====.....BBBBBBBBBBBBBB....H",
+   "H.......................====.....BBBBBBBBBBBBBB....H",
+   "H.......................====.....BBBBBBBBBBBBBB....H",
+   "H...BBBBBBBBBBB.........====.....BBBBBBBBBBBBBB....H",
+   "H...BBBBBBBBBBB.........====.....BBBBBBBBBBBBBB....H",
+   "H...BBBBBBBBBBB.........====.....BBBBBBBBBBBBBB....H",
+   "H...BBBBBBBBBBB.........====.....BBBBBBBBBBBBBB....H",
+   "H...BBBBBBBBBBB.........====.....BBBBBBBBBBBBBB....H",
+   "H...BBBBBBBBBBB.........====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
+  ]
+ },
+ "environment": {
+  "seasonArc": "civil_war_late_autumn",
+  "season": "late_fall",
+  "actName": "Civil War",
+  "groundType": "mud_wet_asphalt",
+  "precipitation": "drizzle",
+  "particles": "rain",
+  "snowCover": 0.0,
+  "wetness": 0.8,
+  "fogColor": "#6a747d",
+  "skyColor": "#5c6872",
+  "sunColor": "#b8bcc2",
+  "ambientColor": "#7a8088",
+  "visibilityM": 48,
+  "fogNear": 4,
+  "fogFar": 48,
+  "windMs": 7,
+  "atmosphere": "Cold overcast late autumn: low cloud ceiling, drizzle and cold rain, mud and wet asphalt, smoke plumes over barricades and checkpoints.",
+  "environmentPreset": "late_fall",
+  "storySeason": "late_fall",
+  "storyPalette": "overcast slate grey, wet asphalt, sodium-orange dead lamps",
+  "storyWeather": "overcast",
+  "weather": "overcast",
+  "storyTempC": 1,
+  "tempC": 1,
+  "nightTempC": -3,
+  "survivalFocus": [
+   "warmth",
+   "wet_cold",
+   "curfew"
+  ],
+  "timeStart": 0.3,
+  "timeEnd": 0.9,
+  "timeLocked": false,
+  "blizzard": false,
+  "warmthDrainMul": 1.0,
+  "transitions": [
+   {
+    "trigger": "t_ch06_night",
+    "time": 0.9,
+    "light": "curfew_rain_night"
+   }
+  ],
+  "barricades": [
+   "Ironwood checkpoint (registry gate)",
+   "trench retaining walls"
+  ],
+  "smokePlumes": [
+   [
+    24,
+    -60
+   ],
+   [
+    -30,
+    -150
+   ]
+  ],
+  "seasonNote": "Day 96 (late November): overcast slate sky, cold drizzle, mud and wet asphalt; curfew at night.",
+  "hud": {
+   "hp": true,
+   "hydration": true,
+   "hunger": true,
+   "companion": true,
+   "warmth": true,
+   "temp": true,
+   "ammo_military": true
+  }
+ },
+ "locations": [
+  {
+   "id": "loc_rail_trench",
+   "x": 0.0,
+   "z": -185.0,
+   "rect": {
+    "type": "rect",
+    "x0": -50.0,
+    "z0": -214.0,
+    "x1": 50.0,
+    "z1": -156.0
+   },
+   "safe": false,
+   "name": "Rail trench"
+  },
+  {
+   "id": "loc_silver_spur",
+   "x": 0.0,
+   "z": -130.0,
+   "rect": {
+    "type": "rect",
+    "x0": -50.0,
+    "z0": -156.0,
+    "x1": 50.0,
+    "z1": -104.0
+   },
+   "safe": false,
+   "name": "Silver Spur"
+  },
+  {
+   "id": "loc_fourth_street",
+   "x": -23.0,
+   "z": -76.0,
+   "rect": {
+    "type": "rect",
+    "x0": -50.0,
+    "z0": -104.0,
+    "x1": 4.0,
+    "z1": -48.0
+   },
+   "safe": false,
+   "name": "Fourth Street"
+  },
+  {
+   "id": "loc_rscc_registry",
+   "x": 27.0,
+   "z": -76.0,
+   "rect": {
+    "type": "rect",
+    "x0": 4.0,
+    "z0": -104.0,
+    "x1": 50.0,
+    "z1": -48.0
+   },
+   "safe": false,
+   "name": "Convention center registry"
+  },
+  {
+   "id": "loc_sparks_block",
+   "x": 0.0,
+   "z": -21.0,
+   "rect": {
+    "type": "rect",
+    "x0": -50.0,
+    "z0": -48.0,
+    "x1": 50.0,
+    "z1": 6.0
+   },
+   "safe": true,
+   "name": "Sector 4 (home block)"
+  }
+ ],
+ "landmarks": [],
+ "buildings": [
+  {
+   "id": "b_ch06_spur",
+   "label": "Silver Spur casino",
+   "kind": "walled",
+   "cells": [
+    4,
+    34,
+    22,
+    52
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -44.0,
+    "z0": -148.0,
+    "x1": -6.0,
+    "z1": -110.0
+   },
+   "doors": [
+    [
+     -7.0,
+     -135.0
+    ],
+    [
+     -25.0,
+     -111.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_silver_spur",
+   "interior": "Switchboard (north floor), kitchens + commissary (south)"
+  },
+  {
+   "id": "m_ch06_garage",
+   "label": "Silver Spur parking garage",
+   "kind": "mass",
+   "cells": [
+    31,
+    34,
+    46,
+    44
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 10.0,
+    "z0": -148.0,
+    "x1": 42.0,
+    "z1": -126.0
+   },
+   "doors": [],
+   "location": "loc_silver_spur",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  },
+  {
+   "id": "b_ch06_motel",
+   "label": "4th Street motel",
+   "kind": "walled",
+   "cells": [
+    3,
+    61,
+    15,
+    72
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -46.0,
+    "z0": -94.0,
+    "x1": -20.0,
+    "z1": -70.0
+   },
+   "doors": [
+    [
+     -21.0,
+     -83.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_fourth_street",
+   "interior": "office (east), Room 9 (west)"
+  },
+  {
+   "id": "m_ch06_pawn",
+   "label": "Dutch's pawn shop",
+   "kind": "mass",
+   "cells": [
+    3,
+    76,
+    12,
+    81
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -46.0,
+    "z0": -64.0,
+    "x1": -26.0,
+    "z1": -52.0
+   },
+   "doors": [],
+   "location": "loc_fourth_street",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  },
+  {
+   "id": "b_ch06_rscc",
+   "label": "Convention center (Avila's command post)",
+   "kind": "walled",
+   "cells": [
+    31,
+    61,
+    48,
+    74
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 10.0,
+    "z0": -94.0,
+    "x1": 46.0,
+    "z1": -66.0
+   },
+   "doors": [
+    [
+     11.0,
+     -81.0
+    ],
+    [
+     27.0,
+     -67.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_rscc_registry"
+  },
+  {
+   "id": "b_ch06_home",
+   "label": "Braith and Carly's house",
+   "kind": "walled",
+   "cells": [
+    4,
+    92,
+    14,
+    100
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -44.0,
+    "z0": -32.0,
+    "x1": -22.0,
+    "z1": -14.0
+   },
+   "doors": [
+    [
+     -23.0,
+     -23.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_sparks_block"
+  },
+  {
+   "id": "b_ch06_lolo",
+   "label": "Lolo's house and clinic",
+   "kind": "walled",
+   "cells": [
+    33,
+    88,
+    43,
+    95
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 14.0,
+    "z0": -40.0,
+    "x1": 36.0,
+    "z1": -24.0
+   },
+   "doors": [
+    [
+     15.0,
+     -33.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_sparks_block"
+  },
+  {
+   "id": "m_ch06_sw",
+   "label": "Neighbor houses",
+   "kind": "mass",
+   "cells": [
+    4,
+    103,
+    14,
+    108
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -44.0,
+    "z0": -10.0,
+    "x1": -22.0,
+    "z1": 2.0
+   },
+   "doors": [],
+   "location": "loc_sparks_block",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  },
+  {
+   "id": "m_ch06_se",
+   "label": "Neighbor houses",
+   "kind": "mass",
+   "cells": [
+    33,
+    99,
+    46,
+    107
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 14.0,
+    "z0": -18.0,
+    "x1": 42.0,
+    "z1": 0.0
+   },
+   "doors": [],
+   "location": "loc_sparks_block",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  },
+  {
+   "id": "m_ch06_w",
+   "label": "Neighbor houses",
+   "kind": "mass",
+   "cells": [
+    4,
+    85,
+    14,
+    88
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -44.0,
+    "z0": -46.0,
+    "x1": -22.0,
+    "z1": -38.0
+   },
+   "doors": [],
+   "location": "loc_sparks_block",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  }
+ ],
+ "paths": {
+  "critical": [
+   [
+    -33.0,
+    -23.0
+   ],
+   [
+    -19.0,
+    -23.0
+   ],
+   [
+    -1.0,
+    -23.0
+   ],
+   [
+    -1.0,
+    -43.0
+   ],
+   [
+    -1.0,
+    -75.0
+   ],
+   [
+    -1.0,
+    -101.0
+   ],
+   [
+    -1.0,
+    -135.0
+   ],
+   [
+    -5.0,
+    -135.0
+   ],
+   [
+    -19.0,
+    -135.0
+   ],
+   [
+    -5.0,
+    -135.0
+   ],
+   [
+    -1.0,
+    -135.0
+   ],
+   [
+    -1.0,
+    -155.0
+   ],
+   [
+    -19.0,
+    -161.0
+   ],
+   [
+    -33.0,
+    -161.0
+   ],
+   [
+    -1.0,
+    -161.0
+   ],
+   [
+    -3.0,
+    -167.0
+   ],
+   [
+    -3.0,
+    -173.0
+   ],
+   [
+    -3.0,
+    -163.0
+   ],
+   [
+    13.0,
+    -161.0
+   ],
+   [
+    21.0,
+    -167.0
+   ],
+   [
+    21.0,
+    -187.0
+   ]
+  ],
+  "optional": [
+   {
+    "id": "b_ch06_registry",
+    "label": "Avila's command post",
+    "points": [
+     [
+      -1.0,
+      -81.0
+     ],
+     [
+      7.0,
+      -81.0
+     ],
+     [
+      19.0,
+      -81.0
+     ]
+    ]
+   },
+   {
+    "id": "b_ch06_motel",
+    "label": "Room 9",
+    "points": [
+     [
+      -1.0,
+      -83.0
+     ],
+     [
+      -17.0,
+      -83.0
+     ],
+     [
+      -29.0,
+      -83.0
+     ],
+     [
+      -37.0,
+      -81.0
+     ]
+    ]
+   }
+  ]
+ },
+ "spawns": {
+  "player": [
+   {
+    "id": "spawn_default",
+    "x": -33.0,
+    "z": -23.0,
+    "rotY": 1.571
+   }
+  ],
+  "npcs": [
+   {
+    "id": "npc_wraith",
+    "npc": "wraith",
+    "x": -31.0,
+    "z": -19.0,
+    "rotY": 0.0,
+    "behavior": "companion_follow",
+    "when": [
+     {
+      "flag": "wraith_alive",
+      "eq": true
+     }
+    ],
+    "label": "Wraith",
+    "companion": true
+   },
+   {
+    "id": "npc_lolo",
+    "npc": "lolo",
+    "x": 9.0,
+    "z": -33.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch06_sweep"
+   },
+   {
+    "id": "npc_gil",
+    "npc": "gil",
+    "x": -9.0,
+    "z": -31.0,
+    "rotY": 0.0,
+    "behavior": "idle"
+   },
+   {
+    "id": "npc_carly",
+    "npc": "carly",
+    "x": -31.0,
+    "z": -139.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch06_carly_side"
+   },
+   {
+    "id": "npc_augie",
+    "npc": "augie",
+    "x": -19.0,
+    "z": -139.0,
+    "rotY": 0.0,
+    "behavior": "idle"
+   },
+   {
+    "id": "npc_avila",
+    "npc": "avila",
+    "x": 29.0,
+    "z": -87.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch06_avila_break"
+   },
+   {
+    "id": "npc_ruiz",
+    "npc": "ruiz",
+    "x": -1.0,
+    "z": -173.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch06_ruiz_pinned",
+    "when": [
+     {
+      "flag": "ch06_night",
+      "eq": true
+     }
+    ],
+    "label": "Sgt. Ruiz (pinned)"
+   },
+   {
+    "id": "npc_roz",
+    "npc": "roz",
+    "x": 23.0,
+    "z": -183.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "ch06_night",
+      "eq": true
+     }
+    ],
+    "label": "Roz (on the siding)"
+   },
+   {
+    "id": "npc_amb_pvt_marsh",
+    "npc": "amb_pvt_marsh",
+    "x": -39.0,
+    "z": -83.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch06_marsh_motel",
+    "label": "Pvt. Marsh (Room 9)"
+   },
+   {
+    "id": "npc_trader_dutch",
+    "npc": "trader_dutch",
+    "x": -21.0,
+    "z": -57.0,
+    "rotY": 0.0,
+    "behavior": "trade",
+    "label": "Dutch's pawn counter (back door)",
+    "trader": {
+     "stall": "Dutch's pawn counter (back door)",
+     "repFlag": "trader_dutch_rep",
+     "stockFrom": "story/npcs.json traders[].stock_by_act"
+    }
+   },
+   {
+    "id": "npc_trader_floor",
+    "npc": "trader_floor",
+    "x": -35.0,
+    "z": -119.0,
+    "rotY": 0.0,
+    "behavior": "trade",
+    "label": "Floor's commissary counter (Spur kitchens)",
+    "trader": {
+     "stall": "Floor's commissary counter (Spur kitchens)",
+     "repFlag": "trader_floor_rep",
+     "stockFrom": "story/npcs.json traders[].stock_by_act"
+    }
+   },
+   {
+    "id": "npc_amb_deputy_lusk",
+    "npc": "amb_deputy_lusk",
+    "x": -9.0,
+    "z": -41.0,
+    "rotY": 0.0,
+    "behavior": "idle"
+   },
+   {
+    "id": "npc_amb_lonnie",
+    "npc": "amb_lonnie",
+    "x": -15.0,
+    "z": -97.0,
+    "rotY": 0.0,
+    "behavior": "idle"
+   },
+   {
+    "id": "npc_amb_brother_amos",
+    "npc": "amb_brother_amos",
+    "x": 17.0,
+    "z": -97.0,
+    "rotY": 0.0,
+    "behavior": "preach"
+   },
+   {
+    "id": "npc_amb_bike_kids",
+    "npc": "amb_bike_kids",
+    "x": 7.0,
+    "z": -15.0,
+    "rotY": 0.0,
+    "behavior": "ride_loop"
+   },
+   {
+    "id": "npc_amb_ruth",
+    "npc": "amb_ruth",
+    "x": 41.0,
+    "z": -87.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "label": "Ruth (registry steps)"
+   },
+   {
+    "id": "npc_extra_neighbor_01",
+    "npc": "extra_neighbor_01",
+    "x": -19.0,
+    "z": -15.0,
+    "rotY": 0.0,
+    "behavior": "hide_from_sweep",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_02",
+    "npc": "extra_neighbor_02",
+    "x": 5.0,
+    "z": -43.0,
+    "rotY": 0.0,
+    "behavior": "hide_from_sweep",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_03",
+    "npc": "extra_neighbor_03",
+    "x": 39.0,
+    "z": -21.0,
+    "rotY": 0.0,
+    "behavior": "hide_from_sweep",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_04",
+    "npc": "extra_neighbor_04",
+    "x": -43.0,
+    "z": -99.0,
+    "rotY": 0.0,
+    "behavior": "hide_from_sweep",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_05",
+    "npc": "extra_neighbor_05",
+    "x": 33.0,
+    "z": -111.0,
+    "rotY": 0.0,
+    "behavior": "hide_from_sweep",
+    "label": "neighbor",
+    "crowd": true
+   }
+  ],
+  "enemies": [
+   {
+    "id": "en_01",
+    "type": "ironwood_patrol",
+    "x": -11.0,
+    "z": -27.0,
+    "group": "g_ch06_sweep",
+    "tier": 1,
+    "behavior": "patrol",
+    "hostile": "conditional",
+    "activate": "load",
+    "patrol": [
+     [
+      -11.0,
+      -27.0
+     ],
+     [
+      -11.0,
+      -7.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
+    "hostileWhen": [
+     {
+      "flag": "ch06_spotted",
+      "eq": true
+     }
+    ],
+    "note": "Fireteam 1: Sector 4 quarantine sweep.",
+    "visionCone": {
+     "rangeM": 16,
+     "fovDeg": 70
+    }
+   },
+   {
+    "id": "en_02",
+    "type": "ironwood_patrol",
+    "x": 9.0,
+    "z": -23.0,
+    "group": "g_ch06_sweep",
+    "tier": 1,
+    "behavior": "patrol",
+    "hostile": "conditional",
+    "activate": "load",
+    "patrol": [
+     [
+      9.0,
+      -23.0
+     ],
+     [
+      41.0,
+      -23.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
+    "hostileWhen": [
+     {
+      "flag": "ch06_spotted",
+      "eq": true
+     }
+    ],
+    "note": "Fireteam 1: Sector 4 quarantine sweep.",
+    "visionCone": {
+     "rangeM": 16,
+     "fovDeg": 70
+    }
+   },
+   {
+    "id": "en_03",
+    "type": "ironwood_patrol",
+    "x": 5.0,
+    "z": 1.0,
+    "group": "g_ch06_sweep",
+    "tier": 1,
+    "behavior": "patrol",
+    "hostile": "conditional",
+    "activate": "load",
+    "patrol": [
+     [
+      5.0,
+      1.0
+     ],
+     [
+      41.0,
+      1.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
+    "hostileWhen": [
+     {
+      "flag": "ch06_spotted",
+      "eq": true
+     }
+    ],
+    "note": "Fireteam 1: Sector 4 quarantine sweep.",
+    "visionCone": {
+     "rangeM": 16,
+     "fovDeg": 70
+    }
+   },
+   {
+    "id": "en_04",
+    "type": "ironwood_patrol",
+    "x": -17.0,
+    "z": -43.0,
+    "group": "g_ch06_sweep",
+    "tier": 1,
+    "behavior": "patrol",
+    "hostile": "conditional",
+    "activate": "load",
+    "patrol": [
+     [
+      -17.0,
+      -43.0
+     ],
+     [
+      9.0,
+      -43.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
+    "hostileWhen": [
+     {
+      "flag": "ch06_spotted",
+      "eq": true
+     }
+    ],
+    "note": "Fireteam 1: Sector 4 quarantine sweep.",
+    "visionCone": {
+     "rangeM": 16,
+     "fovDeg": 70
+    }
+   },
+   {
+    "id": "en_05",
+    "type": "ironwood_patrol",
+    "x": -17.0,
+    "z": -89.0,
+    "group": "g_ch06_fourth",
+    "tier": 1,
+    "behavior": "patrol",
+    "hostile": "conditional",
+    "activate": "load",
+    "patrol": [
+     [
+      -17.0,
+      -89.0
+     ],
+     [
+      -17.0,
+      -67.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
+    "hostileWhen": [
+     {
+      "flag": "ch06_spotted",
+      "eq": true
+     }
+    ],
+    "note": "Fireteam 2: Fourth Street.",
+    "visionCone": {
+     "rangeM": 16,
+     "fovDeg": 70
+    }
+   },
+   {
+    "id": "en_06",
+    "type": "ironwood_patrol",
+    "x": -41.0,
+    "z": -67.0,
+    "group": "g_ch06_fourth",
+    "tier": 1,
+    "behavior": "patrol",
+    "hostile": "conditional",
+    "activate": "load",
+    "patrol": [
+     [
+      -41.0,
+      -67.0
+     ],
+     [
+      -11.0,
+      -67.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
+    "hostileWhen": [
+     {
+      "flag": "ch06_spotted",
+      "eq": true
+     }
+    ],
+    "note": "Fireteam 2: Fourth Street.",
+    "visionCone": {
+     "rangeM": 16,
+     "fovDeg": 70
+    }
+   },
+   {
+    "id": "en_07",
+    "type": "ironwood_patrol",
+    "x": -47.0,
+    "z": -99.0,
+    "group": "g_ch06_fourth",
+    "tier": 1,
+    "behavior": "patrol",
+    "hostile": "conditional",
+    "activate": "load",
+    "patrol": [
+     [
+      -47.0,
+      -99.0
+     ],
+     [
+      -7.0,
+      -99.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
+    "hostileWhen": [
+     {
+      "flag": "ch06_spotted",
+      "eq": true
+     }
+    ],
+    "note": "Fireteam 2: Fourth Street.",
+    "visionCone": {
+     "rangeM": 16,
+     "fovDeg": 70
+    }
+   },
+   {
+    "id": "en_08",
+    "type": "ironwood_patrol",
+    "x": -9.0,
+    "z": -51.0,
+    "group": "g_ch06_fourth",
+    "tier": 1,
+    "behavior": "patrol",
+    "hostile": "conditional",
+    "activate": "load",
+    "patrol": [
+     [
+      -9.0,
+      -51.0
+     ],
+     [
+      -47.0,
+      -51.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
+    "hostileWhen": [
+     {
+      "flag": "ch06_spotted",
+      "eq": true
+     }
+    ],
+    "note": "Fireteam 2: Fourth Street.",
+    "visionCone": {
+     "rangeM": 16,
+     "fovDeg": 70
+    }
+   },
+   {
+    "id": "en_09",
+    "type": "ironwood_patrol",
+    "x": 9.0,
+    "z": -121.0,
+    "group": "g_ch06_spur",
+    "tier": 1,
+    "behavior": "patrol",
+    "hostile": "conditional",
+    "activate": "load",
+    "patrol": [
+     [
+      9.0,
+      -121.0
+     ],
+     [
+      45.0,
+      -121.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
+    "hostileWhen": [
+     {
+      "flag": "ch06_spotted",
+      "eq": true
+     }
+    ],
+    "note": "Fireteam 3: Silver Spur garage ramp.",
+    "visionCone": {
+     "rangeM": 16,
+     "fovDeg": 70
+    }
+   },
+   {
+    "id": "en_10",
+    "type": "ironwood_patrol",
+    "x": 45.0,
+    "z": -115.0,
+    "group": "g_ch06_spur",
+    "tier": 1,
+    "behavior": "patrol",
+    "hostile": "conditional",
+    "activate": "load",
+    "patrol": [
+     [
+      45.0,
+      -115.0
+     ],
+     [
+      9.0,
+      -115.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
+    "hostileWhen": [
+     {
+      "flag": "ch06_spotted",
+      "eq": true
+     }
+    ],
+    "note": "Fireteam 3: Silver Spur garage ramp.",
+    "visionCone": {
+     "rangeM": 16,
+     "fovDeg": 70
+    }
+   },
+   {
+    "id": "en_11",
+    "type": "ironwood_patrol",
+    "x": 19.0,
+    "z": -107.0,
+    "group": "g_ch06_spur",
+    "tier": 1,
+    "behavior": "patrol",
+    "hostile": "conditional",
+    "activate": "load",
+    "patrol": [
+     [
+      19.0,
+      -107.0
+     ],
+     [
+      45.0,
+      -107.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
+    "hostileWhen": [
+     {
+      "flag": "ch06_spotted",
+      "eq": true
+     }
+    ],
+    "note": "Fireteam 3: Silver Spur garage ramp.",
+    "visionCone": {
+     "rangeM": 16,
+     "fovDeg": 70
+    }
+   },
+   {
+    "id": "en_12",
+    "type": "ironwood_patrol",
+    "x": 9.0,
+    "z": -109.0,
+    "group": "g_ch06_spur",
+    "tier": 1,
+    "behavior": "patrol",
+    "hostile": "conditional",
+    "activate": "load",
+    "patrol": [
+     [
+      9.0,
+      -109.0
+     ],
+     [
+      9.0,
+      -123.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
+    "hostileWhen": [
+     {
+      "flag": "ch06_spotted",
+      "eq": true
+     }
+    ],
+    "note": "Fireteam 3: Silver Spur garage ramp.",
+    "visionCone": {
+     "rangeM": 16,
+     "fovDeg": 70
+    }
+   },
+   {
+    "id": "en_13",
+    "type": "ironwood_checkpoint",
+    "x": 21.0,
+    "z": -55.0,
+    "group": "g_ch06_checkpoint",
+    "tier": 1,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "load",
+    "hostileWhen": [
+     {
+      "flag": "ch06_spotted",
+      "eq": true
+     }
+    ],
+    "note": "Ironwood checkpoint at the registry gate (ID check; ironwood_id lets you through)."
+   },
+   {
+    "id": "en_14",
+    "type": "compact_militia",
+    "x": -9.0,
+    "z": -207.0,
+    "group": "g_ch06_trench_w1",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch06_trench_fight",
+    "when": [
+     {
+      "flag": "bridge_choice",
+      "eq": "open"
+     }
+    ]
+   },
+   {
+    "id": "en_15",
+    "type": "compact_militia",
+    "x": 1.0,
+    "z": -207.0,
+    "group": "g_ch06_trench_w1",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch06_trench_fight",
+    "when": [
+     {
+      "flag": "bridge_choice",
+      "eq": "open"
+     }
+    ]
+   },
+   {
+    "id": "en_16",
+    "type": "compact_militia",
+    "x": -9.0,
+    "z": -199.0,
+    "group": "g_ch06_trench_w1",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch06_trench_fight",
+    "when": [
+     {
+      "flag": "bridge_choice",
+      "eq": "open"
+     }
+    ]
+   },
+   {
+    "id": "en_17",
+    "type": "compact_militia",
+    "x": 1.0,
+    "z": -199.0,
+    "group": "g_ch06_trench_w1",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch06_trench_fight",
+    "when": [
+     {
+      "flag": "bridge_choice",
+      "eq": "open"
+     }
+    ]
+   },
+   {
+    "id": "en_18",
+    "type": "harbor_militia",
+    "x": -7.0,
+    "z": -189.0,
+    "group": "g_ch06_trench_w1",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch06_trench_fight",
+    "when": [
+     {
+      "flag": "bridge_choice",
+      "eq": "open"
+     }
+    ]
+   },
+   {
+    "id": "en_19",
+    "type": "harbor_militia",
+    "x": -1.0,
+    "z": -189.0,
+    "group": "g_ch06_trench_w1",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch06_trench_fight",
+    "when": [
+     {
+      "flag": "bridge_choice",
+      "eq": "open"
+     }
+    ]
+   },
+   {
+    "id": "en_20",
+    "type": "harbor_militia",
+    "x": -9.0,
+    "z": -211.0,
+    "group": "g_ch06_trench_w2",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch06_trench_fight",
+    "when": [
+     {
+      "flag": "bridge_choice",
+      "eq": "open"
+     }
+    ]
+   },
+   {
+    "id": "en_21",
+    "type": "harbor_militia",
+    "x": 1.0,
+    "z": -211.0,
+    "group": "g_ch06_trench_w2",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch06_trench_fight",
+    "when": [
+     {
+      "flag": "bridge_choice",
+      "eq": "open"
+     }
+    ]
+   },
+   {
+    "id": "en_22",
+    "type": "harbor_militia",
+    "x": -7.0,
+    "z": -195.0,
+    "group": "g_ch06_trench_w2",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch06_trench_fight",
+    "when": [
+     {
+      "flag": "bridge_choice",
+      "eq": "open"
+     }
+    ]
+   },
+   {
+    "id": "en_23",
+    "type": "harbor_militia",
+    "x": -1.0,
+    "z": -195.0,
+    "group": "g_ch06_trench_w2",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch06_trench_fight",
+    "when": [
+     {
+      "flag": "bridge_choice",
+      "eq": "open"
+     }
+    ]
+   }
+  ],
+  "loot": [
+   {
+    "id": "loot_01",
+    "x": -7.0,
+    "z": -95.0,
+    "r": 3.1,
+    "label": "Ironwood-tagged car",
+    "container": "car_trunk",
+    "propRef": "prop_01",
+    "render": "prop",
+    "location": "loc_fourth_street"
+   },
+   {
+    "id": "loot_02",
+    "x": -17.0,
+    "z": -7.0,
+    "r": 3.1,
+    "label": "Neighbor's car",
+    "container": "car_trunk",
+    "propRef": "prop_02",
+    "render": "prop",
+    "location": "loc_sparks_block",
+    "guaranteed": [
+     {
+      "item": "bolt_cutters",
+      "n": 1
+     }
+    ]
+   },
+   {
+    "id": "loot_03",
+    "x": -11.0,
+    "z": -57.0,
+    "r": 2.2,
+    "label": "4th Street dumpster",
+    "container": "dumpster",
+    "propRef": "prop_03",
+    "render": "prop",
+    "location": "loc_fourth_street"
+   },
+   {
+    "id": "loot_04",
+    "x": 9.0,
+    "z": -55.0,
+    "r": 2.2,
+    "label": "Registry dumpster",
+    "container": "dumpster",
+    "propRef": "prop_04",
+    "render": "prop",
+    "location": "loc_rscc_registry"
+   },
+   {
+    "id": "loot_05",
+    "x": 27.0,
+    "z": -163.0,
+    "r": 3.1,
+    "label": "Abandoned car by the siding",
+    "container": "car_trunk",
+    "propRef": "prop_05",
+    "render": "prop",
+    "location": "loc_rail_trench",
+    "guaranteed": [
+     {
+      "item": "med_kit",
+      "n": 1
+     }
+    ]
+   },
+   {
+    "id": "loot_06",
+    "x": -39.0,
+    "z": -27.0,
+    "r": 1.6,
+    "label": "Home medicine cabinet",
+    "container": "medicine_cabinet",
+    "location": "loc_sparks_block",
+    "guaranteed": [
+     {
+      "item": "water_clean",
+      "n": 1
+     }
+    ]
+   },
+   {
+    "id": "loot_07",
+    "x": -27.0,
+    "z": -17.0,
+    "r": 1.6,
+    "label": "Home wardrobe",
+    "container": "wardrobe",
+    "location": "loc_sparks_block",
+    "guaranteed": [
+     {
+      "item": "vet_kit",
+      "n": 1
+     }
+    ]
+   },
+   {
+    "id": "loot_08",
+    "x": 31.0,
+    "z": -29.0,
+    "r": 1.6,
+    "label": "Lolo's cabinet",
+    "container": "medicine_cabinet",
+    "location": "loc_sparks_block"
+   },
+   {
+    "id": "loot_09",
+    "x": -13.0,
+    "z": -123.0,
+    "r": 1.6,
+    "label": "Spur kitchen shelves",
+    "container": "kitchen_cabinet",
+    "location": "loc_silver_spur"
+   },
+   {
+    "id": "loot_10",
+    "x": 41.0,
+    "z": -89.0,
+    "r": 1.6,
+    "label": "Command-post crate",
+    "container": "military_crate",
+    "location": "loc_rscc_registry"
+   },
+   {
+    "id": "loot_11",
+    "x": -3.0,
+    "z": -169.0,
+    "r": 1.6,
+    "label": "MRAP locker",
+    "container": "locker",
+    "when": [
+     {
+      "flag": "ch06_night",
+      "eq": true
+     }
+    ],
+    "location": "loc_rail_trench"
+   },
+   {
+    "id": "loot_12",
+    "x": 21.0,
+    "z": -37.0,
+    "r": 1.6,
+    "label": "Closet / wardrobe",
+    "container": "wardrobe",
+    "location": "loc_sparks_block",
+    "filler": true
+   },
+   {
+    "id": "loot_13",
+    "x": -49.0,
+    "z": 5.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture",
+    "container": "woodpile",
+    "location": "loc_sparks_block",
+    "filler": true
+   },
+   {
+    "id": "loot_14",
+    "x": 27.0,
+    "z": 5.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture",
+    "container": "woodpile",
+    "location": "loc_sparks_block",
+    "filler": true
+   },
+   {
+    "id": "loot_15",
+    "x": -25.0,
+    "z": -29.0,
+    "r": 1.6,
+    "label": "Gun safe / prepper locker",
+    "container": "gun_safe",
+    "location": "loc_sparks_block",
+    "filler": true
+   },
+   {
+    "id": "loot_16",
+    "x": -45.0,
+    "z": -103.0,
+    "r": 3.1,
+    "label": "Car trunk",
+    "container": "car_trunk",
+    "propRef": "prop_12",
+    "render": "prop",
+    "location": "loc_fourth_street",
+    "filler": true
+   },
+   {
+    "id": "loot_17",
+    "x": 3.0,
+    "z": -75.0,
+    "r": 2.2,
+    "label": "Dumpster",
+    "container": "dumpster",
+    "propRef": "prop_13",
+    "render": "prop",
+    "location": "loc_fourth_street",
+    "filler": true
+   },
+   {
+    "id": "loot_18",
+    "x": -23.0,
+    "z": -75.0,
+    "r": 1.6,
+    "label": "Locker",
+    "container": "locker",
+    "location": "loc_fourth_street",
+    "filler": true
+   },
+   {
+    "id": "loot_19",
+    "x": -23.0,
+    "z": -113.0,
+    "r": 1.6,
+    "label": "Kitchen cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_silver_spur",
+    "filler": true
+   },
+   {
+    "id": "loot_20",
+    "x": -41.0,
+    "z": -131.0,
+    "r": 1.6,
+    "label": "Kitchen cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_silver_spur",
+    "filler": true
+   },
+   {
+    "id": "loot_21",
+    "x": -41.0,
+    "z": -145.0,
+    "r": 1.6,
+    "label": "Locker",
+    "container": "locker",
+    "location": "loc_silver_spur",
+    "filler": true
+   },
+   {
+    "id": "loot_22",
+    "x": -9.0,
+    "z": -145.0,
+    "r": 1.6,
+    "label": "Dead fridge",
+    "container": "fridge",
+    "location": "loc_silver_spur",
+    "filler": true
+   },
+   {
+    "id": "loot_23",
+    "x": 23.0,
+    "z": -69.0,
+    "r": 1.6,
+    "label": "Locker",
+    "container": "locker",
+    "location": "loc_rscc_registry",
+    "filler": true
+   },
+   {
+    "id": "loot_24",
+    "x": -49.0,
+    "z": -213.0,
+    "r": 1.6,
+    "label": "Military crate",
+    "container": "military_crate",
+    "location": "loc_rail_trench",
+    "filler": true,
+    "guaranteed": [
+     {
+      "item": "bandage",
+      "n": 2
+     }
+    ]
+   },
+   {
+    "id": "loot_25",
+    "x": -45.0,
+    "z": -183.0,
+    "r": 3.1,
+    "label": "Car trunk",
+    "container": "car_trunk",
+    "propRef": "prop_14",
+    "render": "prop",
+    "location": "loc_rail_trench",
+    "filler": true
+   },
+   {
+    "id": "loot_26",
+    "x": -21.0,
+    "z": -201.0,
+    "r": 3.1,
+    "label": "Car trunk",
+    "container": "car_trunk",
+    "propRef": "prop_15",
+    "render": "prop",
+    "location": "loc_rail_trench",
+    "filler": true
+   }
+  ]
+ },
+ "props": [
+  {
+   "id": "prop_01",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -7.0,
+   "z": -95.0,
+   "rotY": 1.571,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
+  },
+  {
+   "id": "prop_02",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -17.0,
+   "z": -7.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
+  },
+  {
+   "id": "prop_03",
+   "asset": "assets/kenney/roads/dumpster.glb",
+   "x": -11.0,
+   "z": -57.0,
+   "rotY": 0.0,
+   "h": 1.4,
+   "collide": true,
+   "footprintR": 1.3,
+   "tag": "container"
+  },
+  {
+   "id": "prop_04",
+   "asset": "assets/kenney/roads/dumpster.glb",
+   "x": 9.0,
+   "z": -55.0,
+   "rotY": 0.0,
+   "h": 1.4,
+   "collide": true,
+   "footprintR": 1.3,
+   "tag": "container"
+  },
+  {
+   "id": "prop_05",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": 27.0,
+   "z": -163.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
+  },
+  {
+   "id": "prop_freight_car",
+   "asset": "assets/kenney/industrial/shipping-container-c.glb",
+   "x": 16.0,
+   "z": -191.0,
+   "rotY": 0.0,
+   "h": 2.8,
+   "collide": true,
+   "footprintR": 3.0,
+   "tag": "freight_car",
+   "note": "Loaded freight car on the siding (freight_car_drop)"
+  },
+  {
+   "id": "prop_06",
+   "asset": "assets/kenney/industrial/shipping-container-a.glb",
+   "x": -4.0,
+   "z": -177.0,
+   "rotY": 0.2,
+   "h": 2.4,
+   "collide": false,
+   "tag": "mrap_wreck",
+   "note": "Flipped MRAP (non-colliding; Ruiz pinned beside it)"
+  },
+  {
+   "id": "prop_07",
+   "asset": "assets/kenney/roads/light-square.glb",
+   "x": -7.0,
+   "z": -35.0,
+   "rotY": 0.0,
+   "h": 5,
+   "collide": false
+  },
+  {
+   "id": "prop_08",
+   "asset": "assets/kenney/roads/light-square.glb",
+   "x": 7.0,
+   "z": -99.0,
+   "rotY": 0.0,
+   "h": 5,
+   "collide": false
+  },
+  {
+   "id": "prop_09",
+   "asset": "assets/kenney/roads/light-square.glb",
+   "x": -7.0,
+   "z": -153.0,
+   "rotY": 0.0,
+   "h": 5,
+   "collide": false
+  },
+  {
+   "id": "prop_10",
+   "asset": "assets/kenney/roads/construction-barrier.glb",
+   "x": 1.0,
+   "z": -49.0,
+   "rotY": 0.0,
+   "h": 1.1,
+   "collide": false
+  },
+  {
+   "id": "prop_11",
+   "asset": "assets/kenney/roads/construction-fence.glb",
+   "x": 35.0,
+   "z": -55.0,
+   "rotY": 0.0,
+   "h": 1.6,
+   "collide": false,
+   "tag": "checkpoint"
+  },
+  {
+   "id": "prop_12",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -45.0,
+   "z": -103.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
+  },
+  {
+   "id": "prop_13",
+   "asset": "assets/kenney/roads/dumpster.glb",
+   "x": 3.0,
+   "z": -75.0,
+   "rotY": 0.0,
+   "h": 1.4,
+   "collide": true,
+   "footprintR": 1.3,
+   "tag": "container"
+  },
+  {
+   "id": "prop_14",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -45.0,
+   "z": -183.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
+  },
+  {
+   "id": "prop_15",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -21.0,
+   "z": -201.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
+  }
+ ],
+ "interactives": [
+  {
+   "id": "ch06_informant_list",
+   "type": "read",
+   "x": -7.0,
+   "z": -37.0,
+   "r": 1.8,
+   "label": "The informant list (taped to the lamppost)",
+   "setsFlag": "ch06_list_read"
+  },
+  {
+   "id": "ch06_freight_brake",
+   "type": "lever",
+   "x": 21.0,
+   "z": -191.0,
+   "r": 1.8,
+   "label": "Siding hand brake",
+   "setsFlag": "ch06_brake_reached",
+   "when": [
+    {
+     "flag": "ch06_night",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "ch06_mrap_door",
+   "type": "lever",
+   "x": -7.0,
+   "z": -171.0,
+   "r": 1.8,
+   "label": "Pry the MRAP door (Ruiz)",
+   "requiresItems": {
+    "mech_tools": 1
+   },
+   "setsFlag": "ch06_door_pried",
+   "when": [
+    {
+     "flag": "ch06_night",
+     "eq": true
+    }
+   ]
+  }
+ ],
+ "safeZones": [
+  {
+   "id": "safe_01",
+   "kind": "home",
+   "x": -33.0,
+   "z": -25.0,
+   "r": 4.0,
+   "label": "Home (stove)",
+   "warmth": true,
+   "save": true,
+   "sealed": false
+  },
+  {
+   "id": "safe_02",
+   "kind": "camp",
+   "x": -19.0,
+   "z": -141.0,
+   "r": 3.0,
+   "label": "Switchboard (Silver Spur)",
+   "warmth": true,
+   "save": true,
+   "sealed": false
+  }
+ ],
+ "setPieces": [
+  {
+   "id": "sp_ch06_drone_a",
+   "type": "ironwood_drone",
+   "path": [
+    [
+     -1.0,
+     5.0
+    ],
+    [
+     -1.0,
+     -43.0
+    ],
+    [
+     29.0,
+     -31.0
+    ]
+   ],
+   "note": "Sweep drone over Sector 4; stay under U/roofs."
+  },
+  {
+   "id": "sp_ch06_drone_b",
+   "type": "ironwood_drone",
+   "path": [
+    [
+     -27.0,
+     -101.0
+    ],
+    [
+     -7.0,
+     -75.0
+    ],
+    [
+     -27.0,
+     -51.0
+    ]
+   ],
+   "note": "Second drone over Fourth Street."
+  },
+  {
+   "id": "sp_ch06_bradley",
+   "type": "ironwood_bradley",
+   "path": [
+    [
+     -3.0,
+     -213.0
+    ],
+    [
+     -3.0,
+     -191.0
+    ],
+    [
+     -3.0,
+     -167.0
+    ]
+   ],
+   "when": [
+    {
+     "flag": "bridge_choice",
+     "eq": "open"
+    }
+   ],
+   "note": "The Bradley rolls south down the open trench."
+  },
+  {
+   "id": "sp_freight_car_drop",
+   "type": "freight_car_drop",
+   "path": [
+    [
+     16.0,
+     -191.0
+    ],
+    [
+     -4.0,
+     -191.0
+    ]
+   ],
+   "when": [
+    {
+     "flag": "bridge_choice",
+     "eq": "blocked"
+    }
+   ],
+   "note": "Release the brake: the freight car rolls off the siding and drops into the trench, sealing it (replaces the v1 bridge-lift set piece).",
+   "location": "loc_rail_trench",
+   "blocks": {
+    "type": "rect",
+    "x0": -12.0,
+    "z0": -196.0,
+    "x1": 4.0,
+    "z1": -186.0
+   },
+   "prop": "prop_freight_car"
+  },
+  {
+   "id": "sp_glimpse_ch06_alley",
+   "type": "tallman_glimpse",
+   "note": "Exception to the 80 m rule, scripted inside ch06_alley_glimpse; player input locked for 4 s.",
+   "glimpse": "glimpse_ch06_alley",
+   "kind": "silhouette_close",
+   "x": -8.0,
+   "z": -161.0,
+   "distanceM": 25,
+   "bearingDeg": 90,
+   "durationS": 4.0,
+   "interactable": false,
+   "collider": false,
+   "ai": false,
+   "hudCue": false,
+   "musicSting": false,
+   "despawn": "after duration OR player within 60 m OR LOS lost",
+   "onShow": [
+    {
+     "add": "tallman_glimpses",
+     "value": 1
+    }
+   ],
+   "companionReaction": "wraith_stare",
+   "where": "Far end of the alley under a dead sodium light, ~25 m (CLOSEST glimpse; still non-interactable): it looks at Braith, then leaves on all fours",
+   "offMap": false
+  }
+ ],
+ "encounters": [
+  {
+   "id": "z_ch06_sweep",
+   "area": {
+    "type": "rect",
+    "x0": -20.0,
+    "z0": -48.0,
+    "x1": 50.0,
+    "z1": 6.0
+   },
+   "groups": [
+    {
+     "group": "g_ch06_sweep",
+     "wave": 1
+    }
+   ],
+   "note": "Fireteam 1: Sector 4 quarantine sweep.",
+   "maxActive": 4
+  },
+  {
+   "id": "z_ch06_fourth",
+   "area": {
+    "type": "rect",
+    "x0": -50.0,
+    "z0": -100.0,
+    "x1": -6.0,
+    "z1": -48.0
+   },
+   "groups": [
+    {
+     "group": "g_ch06_fourth",
+     "wave": 1
+    }
+   ],
+   "note": "Fireteam 2: Fourth Street.",
+   "maxActive": 4
+  },
+  {
+   "id": "z_ch06_spur",
+   "area": {
+    "type": "rect",
+    "x0": 6.0,
+    "z0": -126.0,
+    "x1": 50.0,
+    "z1": -104.0
+   },
+   "groups": [
+    {
+     "group": "g_ch06_spur",
+     "wave": 1
+    }
+   ],
+   "note": "Fireteam 3: Silver Spur garage ramp.",
+   "maxActive": 4
+  },
+  {
+   "id": "z_ch06_checkpoint",
+   "area": {
+    "type": "rect",
+    "x0": 6.0,
+    "z0": -62.0,
+    "x1": 50.0,
+    "z1": -48.0
+   },
+   "groups": [
+    {
+     "group": "g_ch06_checkpoint",
+     "wave": 1
+    }
+   ]
+  },
+  {
+   "id": "z_ch06_trench",
+   "area": {
+    "type": "rect",
+    "x0": -12.0,
+    "z0": -214.0,
+    "x1": 4.0,
+    "z1": -184.0
+   },
+   "groups": [
+    {
+     "group": "g_ch06_trench_w1",
+     "wave": 1
+    },
+    {
+     "group": "g_ch06_trench_w2",
+     "wave": 2
+    }
+   ],
+   "storyEncounters": [
+    "enc_ch06_trench_fight"
+   ],
+   "note": "Only if bridge_choice=open: Compact 4 + Harbor 2, then Harbor 4. Peak 6."
+  }
+ ],
+ "triggers": [
+  {
+   "id": "t_glimpse_ch06_alley",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -48.0,
+    "z0": -164.0,
+    "x1": -20.0,
+    "z1": -158.0
+   },
+   "actions": [
+    {
+     "type": "spawn_setpiece",
+     "id": "sp_glimpse_ch06_alley"
+    },
+    {
+     "type": "dialogue",
+     "id": "ch06_alley_glimpse"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch06_night",
+     "eq": true
+    }
+   ],
+   "note": "Night route to the trench, alley behind the bowling stadium"
+  },
+  {
+   "id": "t_ch06_start",
+   "on": "load",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": -33.0,
+    "z": -23.0,
+    "r": 3
+   },
+   "actions": [
+    {
+     "type": "set_time",
+     "value": 0.3
+    },
+    {
+     "type": "dialogue",
+     "id": "ch06_sweep"
+    },
+    {
+     "type": "spawn_setpiece",
+     "id": "sp_ch06_drone_a"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch06_started",
+     "value": true
+    },
+    {
+     "type": "checkpoint"
+    }
+   ]
+  },
+  {
+   "id": "t_ch06_spotted_any",
+   "on": "flag",
+   "once": false,
+   "shape": {
+    "type": "rect",
+    "x0": -20.0,
+    "z0": -48.0,
+    "x1": 50.0,
+    "z1": 6.0
+   },
+   "actions": [
+    {
+     "type": "bark",
+     "speaker": "ironwood_soldier",
+     "text": "Hands where I can see them!"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch06_spotted",
+     "eq": true
+    }
+   ],
+   "note": "Engine sets ch06_spotted when a vision cone holds Braith for 1.5 s."
+  },
+  {
+   "id": "t_ch06_informant_list",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": -7.0,
+    "z": -37.0,
+    "r": 3
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch06_informant_list"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch06_list_read",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch06_drone_b",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -50.0,
+    "z0": -100.0,
+    "x1": -6.0,
+    "z1": -94.0
+   },
+   "actions": [
+    {
+     "type": "spawn_setpiece",
+     "id": "sp_ch06_drone_b"
+    }
+   ]
+  },
+  {
+   "id": "t_ch06_marsh_motel",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -44.0,
+    "z0": -92.0,
+    "x1": -34.0,
+    "z1": -72.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch06_marsh_motel"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch06_marsh_found",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch06_carly_side",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -42.0,
+    "z0": -146.0,
+    "x1": -8.0,
+    "z1": -128.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch06_carly_side"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch06_carly_found",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch06_floor_commissary",
+   "on": "interact",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": -35.0,
+    "z": -119.0,
+    "r": 3
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch06_floor_commissary"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch06_floor_met",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch06_avila_break",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": 12.0,
+    "z0": -92.0,
+    "x1": 44.0,
+    "z1": -68.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch06_avila_break"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch06_avila_met",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch06_night",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -50.0,
+    "z0": -156.0,
+    "x1": 50.0,
+    "z1": -152.0
+   },
+   "actions": [
+    {
+     "type": "set_time",
+     "value": 0.9
+    },
+    {
+     "type": "cutscene",
+     "id": "cs_ch06_night",
+     "text": "Curfew. Rain on the casino glass."
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch06_night",
+     "value": true
+    },
+    {
+     "type": "checkpoint"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch06_carly_found",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch06_ruiz_pinned",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -12.0,
+    "z0": -180.0,
+    "x1": 4.0,
+    "z1": -166.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch06_ruiz_pinned"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch06_ruiz_found",
+     "value": true
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch06_night",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch06_trench",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": 10.0,
+    "z0": -200.0,
+    "x1": 26.0,
+    "z1": -182.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch06_trench"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch06_trench_decided",
+     "value": true
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch06_brake_reached",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch06_drop",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": 10.0,
+    "z0": -200.0,
+    "x1": 26.0,
+    "z1": -182.0
+   },
+   "actions": [
+    {
+     "type": "spawn_setpiece",
+     "id": "sp_freight_car_drop"
+    },
+    {
+     "type": "checkpoint"
+    }
+   ],
+   "when": [
+    {
+     "flag": "bridge_choice",
+     "eq": "blocked"
+    }
+   ]
+  },
+  {
+   "id": "t_ch06_open",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": 10.0,
+    "z0": -200.0,
+    "x1": 26.0,
+    "z1": -182.0
+   },
+   "actions": [
+    {
+     "type": "spawn_setpiece",
+     "id": "sp_ch06_bradley"
+    },
+    {
+     "type": "activate_group",
+     "group": "g_ch06_trench_w1"
+    },
+    {
+     "type": "activate_group",
+     "group": "g_ch06_trench_w2"
+    },
+    {
+     "type": "checkpoint"
+    }
+   ],
+   "when": [
+    {
+     "flag": "bridge_choice",
+     "eq": "open"
+    }
+   ]
+  },
+  {
+   "id": "t_ch06_end",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -12.0,
+    "z0": -166.0,
+    "x1": 4.0,
+    "z1": -156.0
+   },
+   "actions": [
+    {
+     "type": "chapter_end",
+     "next": "ch07_dead_air"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch06_trench_decided",
+     "eq": true
+    }
+   ]
+  }
+ ],
+ "objectives": [
+  {
+   "id": "o1",
+   "order": 1,
+   "text": "Get through the sweep without being taken",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch06_started",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o2",
+   "order": 2,
+   "text": "Read the informant list",
+   "optional": true,
+   "completeWhen": [
+    {
+     "flag": "ch06_list_read",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o3",
+   "order": 3,
+   "text": "Find Carly at the Silver Spur",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch06_carly_found",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o4",
+   "order": 4,
+   "text": "Avila's command post",
+   "optional": true,
+   "completeWhen": [
+    {
+     "flag": "ch06_avila_met",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o5",
+   "order": 5,
+   "text": "The rail trench: Ruiz",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch06_ruiz_found",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o6",
+   "order": 6,
+   "text": "The freight car: block the trench or let the Bradley through",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "bridge_choice"
+    }
+   ]
+  }
+ ],
+ "stealth": {
+  "routes": [
+   {
+    "id": "r_ch06_backyards",
+    "label": "Backyard fences (Sector 4 -> Fourth Street)",
+    "points": [
+     [
+      -47.0,
+      -23.0
+     ],
+     [
+      -47.0,
+      -47.0
+     ],
+     [
+      -47.0,
+      -65.0
+     ],
+     [
+      -19.0,
+      -83.0
+     ]
+    ],
+    "note": "West edge behind the houses; fireteam 1 cone misses it."
+   },
+   {
+    "id": "r_ch06_spur_kitchens",
+    "label": "Through the Spur kitchens",
+    "points": [
+     [
+      -25.0,
+      -109.0
+     ],
+     [
+      -25.0,
+      -119.0
+     ],
+     [
+      -25.0,
+      -133.0
+     ],
+     [
+      -5.0,
+      -135.0
+     ]
+    ],
+    "note": "Indoors under roof: drones can't see you."
+   },
+   {
+    "id": "r_ch06_alley",
+    "label": "The alley to the siding",
+    "points": [
+     [
+      -45.0,
+      -157.0
+     ],
+     [
+      -21.0,
+      -161.0
+     ],
+     [
+      13.0,
+      -161.0
+     ],
+     [
+      21.0,
+      -167.0
+     ]
+    ],
+    "note": "Unlit alley; leads to the siding above the trench."
+   }
+  ],
+  "blindSpots": [
+   {
+    "id": "bs_ch06_lolo_side",
+    "shape": {
+     "type": "rect",
+     "x0": 36.0,
+     "z0": -40.0,
+     "x1": 42.0,
+     "z1": -24.0
+    },
+    "note": "Behind Lolo's clinic: sweep cones pass on the street side."
+   },
+   {
+    "id": "bs_ch06_motel_back",
+    "shape": {
+     "type": "rect",
+     "x0": -50.0,
+     "z0": -94.0,
+     "x1": -46.0,
+     "z1": -70.0
+    },
+    "note": "Motel back wall."
+   },
+   {
+    "id": "bs_ch06_garage_shadow",
+    "shape": {
+     "type": "rect",
+     "x0": 42.0,
+     "z0": -148.0,
+     "x1": 48.0,
+     "z1": -126.0
+    },
+    "note": "Parking-garage shadow (drone LOS blocked)."
+   }
+  ]
+ },
+ "companion": {
+  "id": "wraith",
+  "spawn": {
+   "x": -31.0,
+   "z": -19.0
+  },
+  "when": [
+   {
+    "flag": "wraith_alive",
+    "eq": true
+   }
+  ],
+  "follow": {
+   "leashM": 6.0,
+   "catchUpM": 14.0,
+   "nav": "grid_bfs_walkable",
+   "avoid": [
+    "door_clearance_cells",
+    "loot_cells"
+   ],
+   "note": "Follows Braith over walkable tiles; idles at heel inside buildings."
+  },
+  "verbs": [
+   "track",
+   "warn",
+   "guard",
+   "hold"
+  ],
+  "injuredWhen": [
+   {
+    "flag": "wraith_injured",
+    "eq": true
+   }
+  ]
+ },
+ "stealth_note": "Max 6 hostiles active at once (zones capped at 4 per fireteam; engine global cap 6).",
+ "lootSource": "v2"
+}

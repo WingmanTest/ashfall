@@ -1,102 +1,116 @@
 {
  "mode": "whiteout",
+ "revision": 2,
  "chapters": {
   "ch01": {
    "act": "blackout",
+   "season": "late_summer",
    "minutes": 25,
    "food": {
-    "satiety_needed": 106.99,
-    "satiety_found": 89.7,
+    "satiety_needed": 163.4,
+    "wraith_share": 60,
+    "satiety_found": 136.64,
     "ratio": 0.84
    },
    "water_clean": {
-    "hydration_needed": 140.62,
-    "hydration_found": 29.87,
-    "ratio": 0.21,
-    "gap_filled_by": "snow/lake water (boil = firewood) or tablets"
+    "thirst_mult_effective": 1.35,
+    "heat_stress_mult": 1.0,
+    "hydration_needed": 189.56,
+    "hydration_found": 79.72,
+    "ratio": 0.42,
+    "gap_filled_by": "boiled river/marina/ditch water (firewood), tablets, raw water (sick risk); snow in nuclear winter"
    },
    "firewood": {
-    "needed": 4.43,
-    "found": 3.04,
-    "ratio": 0.69,
-    "campfires_needed": 1.14
+    "cold_mult_effective": 0.03,
+    "needed": 1.29,
+    "found": 3.64,
+    "ratio": 2.82,
+    "campfires_needed": 0.1
    },
    "healing": {
-    "damage_expected": 15.31,
-    "heal_found": 48.28,
+    "damage_expected": 25.52,
+    "heal_found": 49.14,
     "soft_regen": 30,
-    "ratio": 5.11
+    "ratio": 3.1
    },
    "ammo_damage": {
-    "gun_damage_needed": 14.18,
-    "gun_damage_found": 16.43,
-    "ratio": 1.16,
+    "gun_damage_needed": 22.05,
+    "gun_damage_found": 23.9,
+    "ratio": 1.08,
     "rounds_found": {
-     "ammo_9mm": 0.56,
-     "ammo_shell": 0.22,
-     "rifle_ammo": 0.22,
+     "ammo_9mm": 0.69,
+     "ammo_shell": 0.31,
+     "rifle_ammo": 0.36,
      "ammo_556": 0.0
     }
    },
-   "threat": 2.52,
+   "threat": 4.2,
    "weapons_found": {
     "baseball_bat": 0.01,
+    "knife": 1,
     "pistol": 0.01
    },
    "notable_found": {
-    "bandage": 2.02,
-    "canned_food": 2.47,
-    "cloth": 1.99,
-    "crackers": 0.86,
-    "firewood": 3.04,
-    "fuel": 0.35,
-    "painkillers": 0.65,
+    "bandage": 2.07,
+    "candy_bar": 0.51,
+    "canned_food": 3.59,
+    "cloth": 4.17,
+    "crackers": 1.07,
+    "firewood": 3.64,
+    "fuel": 0.6,
+    "jerky": 0.32,
+    "painkillers": 0.64,
     "purification_tablets": 0.37,
-    "scrap": 1.66,
-    "water_clean": 0.48,
-    "wire": 0.88
+    "scrap": 2.07,
+    "water_clean": 1.91,
+    "wire": 1.09
    },
    "cumulative_ratio": {
     "food": 0.84,
-    "healing": 5.11,
-    "ammo_damage": 1.16,
-    "water_clean": 0.21
+    "healing": 3.1,
+    "ammo_damage": 1.08,
+    "water_clean": 0.42
    }
   },
   "ch02": {
    "act": "blackout",
+   "season": "late_summer",
    "minutes": 25,
    "food": {
-    "satiety_needed": 108.54,
-    "satiety_found": 96.1,
-    "ratio": 0.89
+    "satiety_needed": 163.74,
+    "wraith_share": 60,
+    "satiety_found": 111.93,
+    "ratio": 0.68
    },
    "water_clean": {
-    "hydration_needed": 140.62,
-    "hydration_found": 49.76,
-    "ratio": 0.35,
-    "gap_filled_by": "snow/lake water (boil = firewood) or tablets"
+    "thirst_mult_effective": 1.25,
+    "heat_stress_mult": 1.0,
+    "hydration_needed": 175.78,
+    "hydration_found": 55.26,
+    "ratio": 0.31,
+    "gap_filled_by": "boiled river/marina/ditch water (firewood), tablets, raw water (sick risk); snow in nuclear winter"
    },
    "firewood": {
-    "needed": 5.96,
-    "found": 2.81,
-    "ratio": 0.47,
-    "campfires_needed": 1.65
+    "cold_mult_effective": 0.08,
+    "needed": 1.63,
+    "found": 0.16,
+    "ratio": 0.1,
+    "campfires_needed": 0.21
    },
    "healing": {
     "damage_expected": 76.54,
-    "heal_found": 29.03,
+    "heal_found": 29.52,
     "soft_regen": 30,
-    "ratio": 0.77
+    "ratio": 0.78
    },
    "ammo_damage": {
     "gun_damage_needed": 84.0,
-    "gun_damage_found": 27.76,
-    "ratio": 0.33,
+    "gun_damage_found": 29.17,
+    "ratio": 0.35,
     "rounds_found": {
-     "ammo_9mm": 1.41,
-     "ammo_shell": 0.51,
-     "rifle_ammo": 0.17,
+     "ammo_9mm": 1.51,
+     "ammo_shell": 0.57,
+     "rifle_ammo": 0.15,
      "ammo_556": 0.0
     }
    },
@@ -106,557 +120,629 @@
     "pistol": 0.01
    },
    "notable_found": {
-    "bandage": 1.17,
-    "canned_food": 0.82,
-    "cloth": 1.0,
-    "crackers": 1.78,
-    "firewood": 2.81,
-    "fuel": 0.64,
+    "bandage": 1.2,
+    "candy_bar": 0.51,
+    "canned_food": 0.9,
+    "cloth": 1.9,
+    "crackers": 2.12,
+    "fuel": 0.89,
     "painkillers": 0.49,
-    "ration": 1.36,
-    "scrap": 1.18,
-    "water_clean": 1.18,
-    "wire": 0.47
+    "ration": 1.33,
+    "scrap": 1.8,
+    "water_clean": 1.32,
+    "wire": 0.71
    },
    "cumulative_ratio": {
-    "food": 0.86,
-    "healing": 1.49,
-    "ammo_damage": 0.45,
-    "water_clean": 0.28
+    "food": 0.76,
+    "healing": 1.36,
+    "ammo_damage": 0.5,
+    "water_clean": 0.37
    }
   },
   "ch03": {
    "act": "collapse",
+   "season": "autumn",
    "minutes": 30,
    "food": {
-    "satiety_needed": 138.83,
-    "satiety_found": 109.11,
-    "ratio": 0.79
+    "satiety_needed": 188.21,
+    "wraith_share": 60,
+    "satiety_found": 130.21,
+    "ratio": 0.69
    },
    "water_clean": {
-    "hydration_needed": 168.75,
-    "hydration_found": 64.84,
+    "thirst_mult_effective": 1.04,
+    "heat_stress_mult": 1.0,
+    "hydration_needed": 174.83,
+    "hydration_found": 66.37,
     "ratio": 0.38,
-    "gap_filled_by": "snow/lake water (boil = firewood) or tablets"
+    "gap_filled_by": "boiled river/marina/ditch water (firewood), tablets, raw water (sick risk); snow in nuclear winter"
    },
    "firewood": {
-    "needed": 14.84,
-    "found": 6.79,
-    "ratio": 0.46,
-    "campfires_needed": 4.61
+    "cold_mult_effective": 0.4,
+    "needed": 4.4,
+    "found": 6.72,
+    "ratio": 1.53,
+    "campfires_needed": 1.13
    },
    "healing": {
-    "damage_expected": 193.91,
-    "heal_found": 45.03,
+    "damage_expected": 183.71,
+    "heal_found": 44.98,
     "soft_regen": 30,
-    "ratio": 0.39
+    "ratio": 0.41
    },
    "ammo_damage": {
-    "gun_damage_needed": 294.0,
-    "gun_damage_found": 109.63,
-    "ratio": 0.37,
+    "gun_damage_needed": 280.22,
+    "gun_damage_found": 75.06,
+    "ratio": 0.27,
     "rounds_found": {
-     "ammo_9mm": 2.26,
-     "ammo_shell": 0.94,
-     "rifle_ammo": 2.13,
-     "ammo_556": 0.12
+     "ammo_9mm": 1.36,
+     "ammo_shell": 0.55,
+     "rifle_ammo": 1.56,
+     "ammo_556": 0.07
     }
    },
-   "threat": 31.92,
+   "threat": 30.24,
    "weapons_found": {
-    "ar15": 0.07,
+    "ar15": 0.08,
     "crowbar": 0.05,
-    "deer_rifle": 0.1,
-    "pistol": 0.05
+    "deer_rifle": 0.11,
+    "pistol": 0.07
    },
    "notable_found": {
-    "bandage": 2.14,
-    "boots_insulated": 1.09,
-    "canned_food": 1.75,
-    "cloth": 3.82,
-    "crackers": 0.52,
-    "dried_fish": 1,
-    "firewood": 6.79,
-    "fuel": 0.58,
-    "knit_gloves": 0.33,
-    "ration": 0.61,
-    "scrap": 2.34,
-    "water_clean": 1.72,
-    "wire": 1.43,
-    "wool_blanket": 1.3,
-    "wool_hat": 0.33
+    "bandage": 2.13,
+    "boots_insulated": 1.04,
+    "candy_bar": 0.31,
+    "canned_food": 2.46,
+    "cloth": 3.8,
+    "crackers": 0.9,
+    "firewood": 6.72,
+    "fuel": 0.56,
+    "jerky": 0.53,
+    "ration": 0.72,
+    "scrap": 2.33,
+    "water_clean": 1.74,
+    "wire": 1.42,
+    "wool_blanket": 1.22
    },
    "cumulative_ratio": {
-    "food": 0.83,
-    "healing": 0.74,
-    "ammo_damage": 0.39,
-    "water_clean": 0.32
+    "food": 0.73,
+    "healing": 0.75,
+    "ammo_damage": 0.33,
+    "water_clean": 0.37
    }
   },
   "ch04": {
    "act": "collapse",
+   "season": "autumn",
    "minutes": 30,
    "food": {
-    "satiety_needed": 136.56,
-    "satiety_found": 85.66,
-    "ratio": 0.63
+    "satiety_needed": 188.56,
+    "wraith_share": 60,
+    "satiety_found": 149.47,
+    "ratio": 0.79
    },
    "water_clean": {
-    "hydration_needed": 168.75,
-    "hydration_found": 88.22,
-    "ratio": 0.52,
-    "gap_filled_by": "snow/lake water (boil = firewood) or tablets"
+    "thirst_mult_effective": 0.97,
+    "heat_stress_mult": 1.0,
+    "hydration_needed": 163.35,
+    "hydration_found": 67.46,
+    "ratio": 0.41,
+    "gap_filled_by": "boiled river/marina/ditch water (firewood), tablets, raw water (sick risk); snow in nuclear winter"
    },
    "firewood": {
-    "needed": 10.82,
-    "found": 6.54,
-    "ratio": 0.6,
-    "campfires_needed": 3.27
+    "cold_mult_effective": 0.43,
+    "needed": 4.36,
+    "found": 3.27,
+    "ratio": 0.75,
+    "campfires_needed": 1.12
    },
    "healing": {
-    "damage_expected": 109.71,
-    "heal_found": 18.33,
+    "damage_expected": 90.58,
+    "heal_found": 18.31,
     "soft_regen": 30,
-    "ratio": 0.44
+    "ratio": 0.53
    },
    "ammo_damage": {
-    "gun_damage_needed": 164.15,
-    "gun_damage_found": 45.1,
-    "ratio": 0.27,
+    "gun_damage_needed": 134.29,
+    "gun_damage_found": 33.2,
+    "ratio": 0.25,
     "rounds_found": {
-     "ammo_9mm": 2.07,
-     "ammo_shell": 0.61,
-     "rifle_ammo": 0.3,
-     "ammo_556": 0.34
+     "ammo_9mm": 1.43,
+     "ammo_shell": 0.47,
+     "rifle_ammo": 0.26,
+     "ammo_556": 0.2
     }
    },
-   "threat": 18.06,
+   "threat": 14.91,
    "weapons_found": {
-    "ar15": 0.04,
-    "baseball_bat": 0.01,
-    "crowbar": 0.04,
-    "deer_rifle": 0.06,
+    "ar15": 0.05,
+    "baseball_bat": 0.03,
+    "crowbar": 0.07,
+    "deer_rifle": 0.08,
     "fire_axe": 0.01,
-    "pistol": 0.06
+    "pistol": 0.09
    },
    "notable_found": {
-    "bandage": 0.76,
-    "canned_food": 1.72,
-    "cloth": 1.89,
-    "crackers": 0.66,
-    "firewood": 6.54,
-    "fuel": 0.38,
-    "ration": 0.56,
-    "scrap": 1.28,
-    "water_clean": 2.37,
-    "wire": 0.94
+    "bandage": 0.77,
+    "candy_bar": 0.39,
+    "canned_food": 2.99,
+    "cloth": 1.55,
+    "crackers": 1.21,
+    "firewood": 3.27,
+    "fuel": 0.7,
+    "jerky": 0.44,
+    "ration": 0.71,
+    "scrap": 2.2,
+    "water_clean": 1.75,
+    "wire": 1.61
    },
    "cumulative_ratio": {
-    "food": 0.78,
-    "healing": 0.66,
-    "ammo_damage": 0.36,
+    "food": 0.75,
+    "healing": 0.7,
+    "ammo_damage": 0.31,
     "water_clean": 0.38
    }
   },
   "ch05": {
    "act": "civil_war",
+   "season": "late_fall",
    "minutes": 30,
    "food": {
-    "satiety_needed": 135.58,
-    "satiety_found": 103.94,
-    "ratio": 0.77
+    "satiety_needed": 194.89,
+    "wraith_share": 60,
+    "satiety_found": 130.78,
+    "ratio": 0.67
    },
    "water_clean": {
-    "hydration_needed": 168.75,
-    "hydration_found": 96.23,
-    "ratio": 0.57,
-    "gap_filled_by": "snow/lake water (boil = firewood) or tablets"
+    "thirst_mult_effective": 0.94,
+    "heat_stress_mult": 1.0,
+    "hydration_needed": 159.47,
+    "hydration_found": 75.73,
+    "ratio": 0.47,
+    "gap_filled_by": "boiled river/marina/ditch water (firewood), tablets, raw water (sick risk); snow in nuclear winter"
    },
    "firewood": {
-    "needed": 9.28,
+    "cold_mult_effective": 0.8,
+    "needed": 7.68,
     "found": 3.51,
-    "ratio": 0.38,
-    "campfires_needed": 2.76
+    "ratio": 0.46,
+    "campfires_needed": 2.23
    },
    "healing": {
     "damage_expected": 258.55,
-    "heal_found": 93.15,
+    "heal_found": 100.08,
     "soft_regen": 30,
-    "ratio": 0.48
+    "ratio": 0.5
    },
    "ammo_damage": {
     "gun_damage_needed": 643.2,
-    "gun_damage_found": 278.48,
-    "ratio": 0.43,
+    "gun_damage_found": 267.9,
+    "ratio": 0.42,
     "rounds_found": {
-     "ammo_9mm": 3.38,
-     "ammo_shell": 1.12,
-     "rifle_ammo": 3.31,
-     "ammo_556": 8.89
+     "ammo_9mm": 3.91,
+     "ammo_shell": 1.4,
+     "rifle_ammo": 3.08,
+     "ammo_556": 7.92
     }
    },
    "threat": 42.56,
    "weapons_found": {
-    "ar15": 0.16,
-    "baseball_bat": 0.05,
+    "ar15": 0.17,
+    "baseball_bat": 0.06,
     "crowbar": 0.05,
-    "fire_axe": 0.02,
-    "pistol": 0.04,
-    "service_rifle": 0.06
+    "fire_axe": 0.03,
+    "pistol": 0.05,
+    "service_rifle": 0.05
    },
    "notable_found": {
-    "bandage": 1.2,
-    "canned_food": 2.06,
-    "crackers": 0.57,
+    "bandage": 1.47,
+    "canned_food": 2.39,
+    "cloth": 0.31,
+    "crackers": 1.0,
     "firewood": 3.51,
-    "fuel": 0.55,
-    "med_kit": 1.12,
-    "mre": 0.49,
-    "scrap": 1.06,
-    "water_clean": 2.48,
-    "wire": 0.75
+    "fuel": 0.8,
+    "jerky": 0.61,
+    "med_kit": 1.14,
+    "mre": 0.53,
+    "purification_tablets": 0.36,
+    "scrap": 1.31,
+    "water_clean": 1.81,
+    "wire": 0.92,
+    "wool_hat": 0.33
    },
    "cumulative_ratio": {
-    "food": 0.77,
-    "healing": 0.59,
-    "ammo_damage": 0.4,
-    "water_clean": 0.42
+    "food": 0.73,
+    "healing": 0.62,
+    "ammo_damage": 0.37,
+    "water_clean": 0.4
    }
   },
   "ch06": {
    "act": "civil_war",
+   "season": "late_fall",
    "minutes": 35,
    "food": {
-    "satiety_needed": 149.57,
-    "satiety_found": 129.57,
-    "ratio": 0.87
+    "satiety_needed": 215.08,
+    "wraith_share": 60,
+    "satiety_found": 159.18,
+    "ratio": 0.74
    },
    "water_clean": {
-    "hydration_needed": 196.88,
-    "hydration_found": 70.43,
-    "ratio": 0.36,
-    "gap_filled_by": "snow/lake water (boil = firewood) or tablets"
+    "thirst_mult_effective": 0.94,
+    "heat_stress_mult": 1.0,
+    "hydration_needed": 184.27,
+    "hydration_found": 83.35,
+    "ratio": 0.45,
+    "gap_filled_by": "boiled river/marina/ditch water (firewood), tablets, raw water (sick risk); snow in nuclear winter"
    },
    "firewood": {
-    "needed": 4.29,
-    "found": 1.17,
-    "ratio": 0.27,
-    "campfires_needed": 1.1
+    "cold_mult_effective": 0.82,
+    "needed": 7.07,
+    "found": 2.47,
+    "ratio": 0.35,
+    "campfires_needed": 2.02
    },
    "healing": {
     "damage_expected": 719.52,
-    "heal_found": 241.04,
+    "heal_found": 264.52,
     "soft_regen": 30,
-    "ratio": 0.38
+    "ratio": 0.41
    },
    "ammo_damage": {
     "gun_damage_needed": 1740.6,
-    "gun_damage_found": 555.54,
-    "ratio": 0.32,
+    "gun_damage_found": 502.51,
+    "ratio": 0.29,
     "rounds_found": {
-     "ammo_9mm": 3.76,
-     "ammo_shell": 1.92,
-     "rifle_ammo": 1.15,
-     "ammo_556": 34.0
+     "ammo_9mm": 4.14,
+     "ammo_shell": 1.88,
+     "rifle_ammo": 1.26,
+     "ammo_556": 29.47
     }
    },
    "threat": 118.44,
    "weapons_found": {
-    "ar15": 0.12,
-    "baseball_bat": 0.03,
-    "deer_rifle": 0.04,
-    "fire_axe": 0.02,
-    "pistol": 0.06,
+    "ar15": 0.11,
+    "baseball_bat": 0.06,
+    "deer_rifle": 0.05,
+    "fire_axe": 0.03,
+    "pistol": 0.09,
     "pump_shotgun": 0.03,
-    "service_rifle": 0.28
+    "service_rifle": 0.27
    },
    "notable_found": {
-    "bandage": 6.61,
-    "cloth": 1.01,
-    "dried_fish": 0.85,
-    "firewood": 1.17,
-    "fuel": 0.57,
-    "iodide_tablets": 0.79,
-    "med_kit": 1.59,
-    "mre": 1.97,
-    "painkillers": 1.69,
-    "purification_tablets": 0.59,
-    "scrap": 0.57,
-    "water_clean": 1.42,
-    "wire": 0.38
+    "bandage": 7.41,
+    "canned_food": 1.02,
+    "cloth": 1.17,
+    "crackers": 0.7,
+    "firewood": 2.47,
+    "fuel": 0.45,
+    "iodide_tablets": 0.91,
+    "jerky": 0.31,
+    "med_kit": 1.68,
+    "mre": 2.13,
+    "painkillers": 1.91,
+    "purification_tablets": 0.74,
+    "scrap": 0.71,
+    "vet_kit": 1.01,
+    "water_clean": 1.64,
+    "wire": 0.36
    },
    "cumulative_ratio": {
-    "food": 0.79,
-    "healing": 0.48,
-    "ammo_damage": 0.35,
+    "food": 0.73,
+    "healing": 0.51,
+    "ammo_damage": 0.32,
     "water_clean": 0.41
    }
   },
   "ch07": {
    "act": "civil_war",
+   "season": "late_fall",
    "minutes": 25,
    "food": {
-    "satiety_needed": 107.77,
-    "satiety_found": 64.82,
-    "ratio": 0.6
+    "satiety_needed": 171.22,
+    "wraith_share": 60,
+    "satiety_found": 106.54,
+    "ratio": 0.62
    },
    "water_clean": {
-    "hydration_needed": 140.62,
-    "hydration_found": 36.46,
-    "ratio": 0.26,
-    "gap_filled_by": "snow/lake water (boil = firewood) or tablets"
+    "thirst_mult_effective": 0.94,
+    "heat_stress_mult": 1.0,
+    "hydration_needed": 131.62,
+    "hydration_found": 54.8,
+    "ratio": 0.42,
+    "gap_filled_by": "boiled river/marina/ditch water (firewood), tablets, raw water (sick risk); snow in nuclear winter"
    },
    "firewood": {
-    "needed": 3.82,
-    "found": 1.69,
-    "ratio": 0.44,
-    "campfires_needed": 0.94
+    "cold_mult_effective": 0.87,
+    "needed": 5.35,
+    "found": 2.85,
+    "ratio": 0.53,
+    "campfires_needed": 1.45
    },
    "healing": {
-    "damage_expected": 134.38,
-    "heal_found": 17.87,
+    "damage_expected": 461.82,
+    "heal_found": 168.62,
     "soft_regen": 30,
-    "ratio": 0.36
+    "ratio": 0.43
    },
    "ammo_damage": {
-    "gun_damage_needed": 303.8,
-    "gun_damage_found": 92.07,
-    "ratio": 0.3,
+    "gun_damage_needed": 850.93,
+    "gun_damage_found": 243.54,
+    "ratio": 0.29,
     "rounds_found": {
-     "ammo_9mm": 1.17,
-     "ammo_shell": 0.79,
-     "rifle_ammo": 0.41,
-     "ammo_556": 4.08
+     "ammo_9mm": 4.14,
+     "ammo_shell": 1.47,
+     "rifle_ammo": 0.85,
+     "ammo_556": 11.39
     }
    },
-   "threat": 22.12,
+   "threat": 76.02,
    "weapons_found": {
-    "ar15": 0.02,
-    "baseball_bat": 0.02,
+    "ar15": 0.06,
+    "baseball_bat": 0.06,
     "crowbar": 0.08,
-    "fire_axe": 0.01,
-    "pistol": 0.01,
-    "service_rifle": 0.05
+    "deer_rifle": 0.05,
+    "fire_axe": 0.03,
+    "pistol": 0.09,
+    "pump_shotgun": 0.03,
+    "service_rifle": 0.17
    },
    "notable_found": {
-    "bandage": 0.8,
-    "canned_food": 0.7,
-    "cloth": 0.8,
-    "crackers": 0.66,
-    "firewood": 1.69,
-    "fuel": 0.48,
-    "mask_filter": 1.06,
-    "ration": 0.46,
-    "scrap": 1.16,
-    "water_clean": 0.87,
-    "wire": 0.85
+    "bandage": 4.81,
+    "canned_food": 0.62,
+    "cloth": 0.85,
+    "crackers": 0.78,
+    "firewood": 2.85,
+    "fuel": 0.65,
+    "iodide_tablets": 1.49,
+    "jerky": 0.41,
+    "mask_filter": 1.23,
+    "med_kit": 1.14,
+    "mre": 0.94,
+    "painkillers": 0.47,
+    "purification_tablets": 0.82,
+    "ration": 0.5,
+    "scrap": 1.33,
+    "water_clean": 0.75,
+    "wire": 0.96
    },
    "cumulative_ratio": {
-    "food": 0.77,
-    "healing": 0.47,
-    "ammo_damage": 0.35,
-    "water_clean": 0.39
+    "food": 0.72,
+    "healing": 0.49,
+    "ammo_damage": 0.31,
+    "water_clean": 0.41
    }
   },
   "ch08": {
    "act": "nuclear_winter",
+   "season": "nuclear_winter",
    "minutes": 35,
    "food": {
-    "satiety_needed": 169.53,
-    "satiety_found": 109.81,
-    "ratio": 0.65
+    "satiety_needed": 234.63,
+    "wraith_share": 60,
+    "satiety_found": 173.25,
+    "ratio": 0.74
    },
    "water_clean": {
-    "hydration_needed": 196.88,
-    "hydration_found": 46.64,
-    "ratio": 0.24,
-    "gap_filled_by": "snow/lake water (boil = firewood) or tablets"
+    "thirst_mult_effective": 0.92,
+    "heat_stress_mult": 1.0,
+    "hydration_needed": 180.44,
+    "hydration_found": 58.78,
+    "ratio": 0.33,
+    "gap_filled_by": "boiled river/marina/ditch water (firewood), tablets, raw water (sick risk); snow in nuclear winter"
    },
    "firewood": {
-    "needed": 8.08,
-    "found": 3.46,
-    "ratio": 0.43,
-    "campfires_needed": 2.36
+    "cold_mult_effective": 1.33,
+    "needed": 9.4,
+    "found": 4.13,
+    "ratio": 0.44,
+    "campfires_needed": 2.8
    },
    "healing": {
-    "damage_expected": 266.21,
-    "heal_found": 50.01,
+    "damage_expected": 494.14,
+    "heal_found": 175.16,
     "soft_regen": 30,
-    "ratio": 0.3
+    "ratio": 0.42
    },
    "ammo_damage": {
-    "gun_damage_needed": 612.21,
-    "gun_damage_found": 106.28,
+    "gun_damage_needed": 941.25,
+    "gun_damage_found": 162.7,
     "ratio": 0.17,
     "rounds_found": {
-     "ammo_9mm": 2.2,
-     "ammo_shell": 0.81,
-     "rifle_ammo": 0.65,
-     "ammo_556": 3.77
+     "ammo_9mm": 4.25,
+     "ammo_shell": 1.21,
+     "rifle_ammo": 0.86,
+     "ammo_556": 5.48
     }
    },
-   "threat": 43.82,
+   "threat": 81.34,
    "weapons_found": {
-    "ar15": 0.03,
-    "baseball_bat": 0.04,
+    "ar15": 0.02,
+    "baseball_bat": 0.06,
     "deer_rifle": 0.03,
-    "fire_axe": 0.02,
-    "pistol": 0.06,
+    "fire_axe": 0.03,
+    "pistol": 0.07,
     "pump_shotgun": 0.02,
     "service_rifle": 0.03
    },
    "notable_found": {
-    "antibiotics": 1.14,
-    "bandage": 1.95,
-    "canned_food": 0.85,
-    "cloth": 2.06,
-    "crackers": 1.13,
-    "dried_fish": 1,
-    "firewood": 3.46,
-    "iodide_tablets": 5.38,
-    "mask_filter": 8.73,
-    "mre": 0.52,
-    "painkillers": 0.68,
-    "purification_tablets": 0.62,
-    "ration": 0.41,
-    "scrap": 0.31,
-    "water_clean": 0.71,
+    "antibiotics": 1.2,
+    "bandage": 4.85,
+    "candy_bar": 0.37,
+    "canned_food": 3.04,
+    "cloth": 2.2,
+    "crackers": 1.62,
+    "firewood": 4.13,
+    "iodide_tablets": 4.59,
+    "jerky": 0.49,
+    "mask_filter": 8.84,
+    "med_kit": 1.17,
+    "mre": 0.83,
+    "painkillers": 1.0,
+    "purification_tablets": 1.1,
+    "water_clean": 0.58,
     "wool_blanket": 1.08
    },
    "cumulative_ratio": {
-    "food": 0.75,
-    "healing": 0.44,
-    "ammo_damage": 0.32,
-    "water_clean": 0.36
+    "food": 0.72,
+    "healing": 0.47,
+    "ammo_damage": 0.28,
+    "water_clean": 0.4
    }
   },
   "ch09": {
    "act": "nuclear_winter",
+   "season": "nuclear_winter",
    "minutes": 40,
    "food": {
-    "satiety_needed": 219.37,
-    "satiety_found": 144.6,
-    "ratio": 0.66
+    "satiety_needed": 282.75,
+    "wraith_share": 60,
+    "satiety_found": 164.66,
+    "ratio": 0.58
    },
    "water_clean": {
-    "hydration_needed": 225.0,
-    "hydration_found": 107.27,
-    "ratio": 0.48,
-    "gap_filled_by": "snow/lake water (boil = firewood) or tablets"
+    "thirst_mult_effective": 0.93,
+    "heat_stress_mult": 1.0,
+    "hydration_needed": 208.24,
+    "hydration_found": 80.21,
+    "ratio": 0.39,
+    "gap_filled_by": "boiled river/marina/ditch water (firewood), tablets, raw water (sick risk); snow in nuclear winter"
    },
    "firewood": {
-    "needed": 27.42,
-    "found": 11.36,
-    "ratio": 0.41,
-    "campfires_needed": 8.81
+    "cold_mult_effective": 2.48,
+    "needed": 30.73,
+    "found": 9.86,
+    "ratio": 0.32,
+    "campfires_needed": 9.91
    },
    "healing": {
-    "damage_expected": 589.4,
-    "heal_found": 194.55,
+    "damage_expected": 852.2,
+    "heal_found": 266.01,
     "soft_regen": 30,
-    "ratio": 0.38
+    "ratio": 0.35
    },
    "ammo_damage": {
-    "gun_damage_needed": 1106.29,
-    "gun_damage_found": 239.56,
-    "ratio": 0.22,
+    "gun_damage_needed": 1448.84,
+    "gun_damage_found": 407.62,
+    "ratio": 0.28,
     "rounds_found": {
-     "ammo_9mm": 1.94,
-     "ammo_shell": 0.49,
-     "rifle_ammo": 0.31,
-     "ammo_556": 15.31
+     "ammo_9mm": 2.23,
+     "ammo_shell": 0.58,
+     "rifle_ammo": 0.36,
+     "ammo_556": 27.58
     }
    },
-   "threat": 97.02,
+   "threat": 140.28,
    "weapons_found": {
     "ar15": 0.01,
     "baseball_bat": 0.02,
     "fire_axe": 0.01,
     "pistol": 0.01,
-    "service_rifle": 0.11
+    "service_rifle": 0.08
    },
    "notable_found": {
-    "bandage": 6.19,
-    "canned_food": 0.41,
-    "cloth": 1.2,
-    "crackers": 0.64,
-    "firewood": 11.36,
-    "iodide_tablets": 0.66,
-    "mask_filter": 3.33,
-    "med_kit": 1.18,
-    "military_parka": 0.36,
-    "mre": 2.15,
-    "purification_tablets": 1.54,
-    "ration": 0.41,
-    "water_clean": 1.53,
-    "wool_blanket": 1.07
+    "bandage": 6.59,
+    "canned_food": 0.62,
+    "cloth": 1.71,
+    "crackers": 0.91,
+    "firewood": 9.86,
+    "iodide_tablets": 0.74,
+    "jerky": 0.49,
+    "mask_filter": 2.82,
+    "med_kit": 2.22,
+    "military_parka": 0.39,
+    "mre": 2.08,
+    "purification_tablets": 1.72,
+    "ration": 0.45,
+    "water_clean": 0.57,
+    "wool_blanket": 1.12,
+    "wool_hat": 0.33
    },
    "cumulative_ratio": {
-    "food": 0.73,
-    "healing": 0.43,
-    "ammo_damage": 0.3,
-    "water_clean": 0.38
+    "food": 0.7,
+    "healing": 0.44,
+    "ammo_damage": 0.28,
+    "water_clean": 0.4
    }
   },
   "ch10": {
    "act": "nuclear_winter",
+   "season": "nuclear_winter",
    "minutes": 20,
    "food": {
-    "satiety_needed": 97.25,
-    "satiety_found": 87.41,
-    "ratio": 0.9
+    "satiety_needed": 160.87,
+    "wraith_share": 60,
+    "satiety_found": 107.57,
+    "ratio": 0.67
    },
    "water_clean": {
-    "hydration_needed": 112.5,
-    "hydration_found": 45.13,
-    "ratio": 0.4,
-    "gap_filled_by": "snow/lake water (boil = firewood) or tablets"
+    "thirst_mult_effective": 0.91,
+    "heat_stress_mult": 1.0,
+    "hydration_needed": 102.43,
+    "hydration_found": 24.17,
+    "ratio": 0.24,
+    "gap_filled_by": "boiled river/marina/ditch water (firewood), tablets, raw water (sick risk); snow in nuclear winter"
    },
    "firewood": {
-    "needed": 4.95,
-    "found": 0.98,
-    "ratio": 0.2,
-    "campfires_needed": 1.32
+    "cold_mult_effective": 2.34,
+    "needed": 5.82,
+    "found": 3.1,
+    "ratio": 0.53,
+    "campfires_needed": 1.61
    },
    "healing": {
-    "damage_expected": 238.14,
-    "heal_found": 48.04,
+    "damage_expected": 547.72,
+    "heal_found": 221.31,
     "soft_regen": 30,
-    "ratio": 0.33
+    "ratio": 0.46
    },
    "ammo_damage": {
-    "gun_damage_needed": 443.33,
-    "gun_damage_found": 113.24,
-    "ratio": 0.26,
+    "gun_damage_needed": 870.35,
+    "gun_damage_found": 343.53,
+    "ratio": 0.39,
     "rounds_found": {
-     "ammo_9mm": 1.07,
-     "ammo_shell": 0.24,
-     "rifle_ammo": 0.16,
-     "ammo_556": 7.08
+     "ammo_9mm": 1.63,
+     "ammo_shell": 0.29,
+     "rifle_ammo": 4.18,
+     "ammo_556": 13.99
     }
    },
-   "threat": 39.2,
+   "threat": 90.16,
    "weapons_found": {
     "baseball_bat": 0.02,
     "fire_axe": 0.01,
     "pistol": 0.01,
-    "service_rifle": 0.07
+    "service_rifle": 0.05
    },
    "notable_found": {
-    "bandage": 2.22,
-    "firewood": 0.98,
-    "iodide_tablets": 0.38,
-    "mask_filter": 1.32,
-    "mre": 0.95,
-    "ration": 1,
-    "water_clean": 1.05
+    "bandage": 4.65,
+    "firewood": 3.1,
+    "iodide_tablets": 0.51,
+    "mask_filter": 1.14,
+    "med_kit": 2.11,
+    "mre": 1.14,
+    "purification_tablets": 0.57,
+    "ration": 1
    },
    "cumulative_ratio": {
-    "food": 0.75,
-    "healing": 0.42,
-    "ammo_damage": 0.29,
-    "water_clean": 0.38
+    "food": 0.7,
+    "healing": 0.44,
+    "ammo_damage": 0.3,
+    "water_clean": 0.39
    }
   }
+ },
+ "seasonal_check": {
+  "late_summer_thirst": 1.68,
+  "nuclear_winter_thirst": 0.95,
+  "late_summer_cold": 0.056,
+  "autumn_cold": 0.416,
+  "late_fall_cold": 0.832,
+  "nuclear_winter_cold": 2.048
+ },
+ "summary": {
+  "errors": 0,
+  "warnings": 0,
+  "story_crossref": "story cross-ref: 45 item ids, 21 enemy ids, 6 traders, 23 locations, 14 weather types, 13 flags checked; 0 mismatches"
  }
 }

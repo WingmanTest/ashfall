@@ -1,0 +1,164 @@
+{
+  "id": "ch09_wraith_hold",
+  "chapter": "ch09",
+  "location": "river_ice",
+  "trigger": "If wraith_injured: Tallmen corner the column on the ice. The ONE signposted choice that can kill Wraith.",
+  "speakers": [
+    "narrator",
+    "braith",
+    "wraith",
+    "carly"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Whiteout. Then shapes in it. Two. Then three. Tall. Circling the column at the edge of the flares.",
+      "next": "w1"
+    },
+    {
+      "id": "w1",
+      "speaker": "wraith",
+      "text": "[Limping. Hurt since the sweep. She puts herself between the column and the dark anyway.]",
+      "next": "w2"
+    },
+    {
+      "id": "w2",
+      "speaker": "carly",
+      "text": "Flares are almost gone. Braith. They're testing us. They're going to come in.",
+      "choices": [
+        {
+          "text": "[Order Wraith to hold the line]",
+          "next": "confirm"
+        },
+        {
+          "text": "[Carry Wraith. Everyone run]",
+          "next": "carry"
+        },
+        {
+          "text": "[Last flares. Fight]",
+          "next": "fight"
+        }
+      ]
+    },
+    {
+      "id": "confirm",
+      "speaker": "narrator",
+      "text": "SHE'S HURT. IF YOU GIVE THIS ORDER, WRAITH WILL NOT COME BACK. The column escapes. She doesn't.",
+      "choices": [
+        {
+          "text": "[Give the order]",
+          "next": "order"
+        },
+        {
+          "text": "[No. Not her]",
+          "next": "w2b"
+        }
+      ]
+    },
+    {
+      "id": "w2b",
+      "speaker": "narrator",
+      "text": "You take your hand off her collar. She looks up at you. She was ready either way.",
+      "choices": [
+        {
+          "text": "[Carry Wraith. Everyone run]",
+          "next": "carry"
+        },
+        {
+          "text": "[Last flares. Fight]",
+          "next": "fight"
+        }
+      ]
+    },
+    {
+      "id": "order",
+      "speaker": "braith",
+      "text": "...Wraith. Hold.",
+      "next": "order2"
+    },
+    {
+      "id": "order2",
+      "speaker": "wraith",
+      "text": "[She stands. She doesn't limp. For ten seconds she's the dog they trained, and better.]",
+      "effects": [
+        {
+          "set": "ch09_wraith_hold",
+          "value": true
+        },
+        {
+          "set": "wraith_alive",
+          "value": false
+        }
+      ],
+      "next": "order3"
+    },
+    {
+      "id": "order3",
+      "speaker": "narrator",
+      "text": "The column runs. Behind you, in the whiteout, a long silence. Then nothing at all.",
+      "next": "order4"
+    },
+    {
+      "id": "order4",
+      "speaker": "carly",
+      "text": "[Her hand in yours. She doesn't say anything. She doesn't let go for a mile.]",
+      "end": true
+    },
+    {
+      "id": "carry",
+      "speaker": "narrator",
+      "text": "Forty pounds of dog over your shoulders. The column runs. Something hits the back of the line. Two people don't make it.",
+      "effects": [
+        {
+          "add": "column_size",
+          "value": -2
+        },
+        {
+          "stat": "health",
+          "delta": -20
+        },
+        {
+          "stat": "stamina",
+          "delta": -40
+        }
+      ],
+      "next": "carry2"
+    },
+    {
+      "id": "carry2",
+      "speaker": "wraith",
+      "text": "[Her nose in your collar the whole way. Breathing. Breathing.]",
+      "end": true
+    },
+    {
+      "id": "fight",
+      "speaker": "narrator",
+      "text": "The last flares go up red. They come in one at a time, testing. You fire until the rifle's empty.",
+      "effects": [
+        {
+          "event": "encounter",
+          "id": "enc_ch09_ice_tallmen"
+        },
+        {
+          "stat": "health",
+          "delta": -25
+        }
+      ],
+      "next": "fight2"
+    },
+    {
+      "id": "fight2",
+      "speaker": "narrator",
+      "text": "They pull back into the white. One of them stays down. The column limps on. Wraith limps with it.",
+      "effects": [
+        {
+          "add": "tallmen_killed",
+          "value": 1
+        }
+      ],
+      "end": true
+    }
+  ]
+}

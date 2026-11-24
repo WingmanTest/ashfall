@@ -4,12 +4,13 @@ import * as THREE from 'three';
 import {
   HEADER, FULLSCREEN_VERT, VOLUME_FRAG, BLOOM_PREFILTER_FRAG, BLOOM_DOWN_FRAG,
   BLOOM_UP_FRAG, COMPOSITE_FRAG, BLIT_FRAG,
-} from './shaders.js?v=r8';
-import { TIERS, TIER_ORDER, detectTier, AdaptiveQuality, CRT_PRESETS, LOOKS, getTierConfig, applyMobileQuality, isMobileDevice, isIOS } from './quality.js?v=r8';
-import { GRADE_ASHFALL, PALETTES, buildPaletteLUTGPU, releasePaletteLUTs, lutStats, resolvePalette } from './palette.js?v=r8';
-import { getBlueNoiseTexture } from './bluenoise.js?v=r8';
-import { fitSunShadow, setShadowMapSize, createFlashlight, createCampfire } from './lighting.js?v=r8';
-import { createParticles } from './particles.js?v=r8';
+} from './shaders.js?v=r9';
+import { TIERS, TIER_ORDER, detectTier, AdaptiveQuality, CRT_PRESETS, LOOKS, getTierConfig, applyMobileQuality, isMobileDevice, isIOS } from './quality.js?v=r9';
+import { GRADE_ASHFALL, PALETTES, buildPaletteLUTGPU, releasePaletteLUTs, lutStats, resolvePalette } from './palette.js?v=r9';
+import { ENVIRONMENTS, ENVIRONMENT_ORDER, resolveEnvironment, environmentForChapter, getEnvironmentConfig } from './environments.js?v=r9';
+import { getBlueNoiseTexture } from './bluenoise.js?v=r9';
+import { fitSunShadow, setShadowMapSize, createFlashlight, createCampfire } from './lighting.js?v=r9';
+import { createParticles } from './particles.js?v=r9';
 
 const MAX_POINTS = 4;
 const POINT_POOL = 2; // fixed number of scene PointLights for campfires (constant => no shader recompiles)
@@ -51,6 +52,13 @@ export function createRenderPipeline(o) {
 
   // ---- host state we touch (restored by dispose) -------------------------------
   const hostShadow = { enabled: renderer.shadowMap.enabled, type: renderer.shadowMap.type, autoUpdate: renderer.shadowMap.autoUpdate };
+  const hostClearColor = renderer.getClearColor(new THREE.Color());
+  const hostClearAlpha = renderer.getClearAlpha();
+  const hostSceneBg = scene.background && scene.background.isColor ? scene.background.clone() : null;
+  let envTouchedSky = false;
+  let hemiLight = opts.hemiLight || null;
+  let ambientLight = opts.ambientLight || null;
+  let hostHemi = null, hostAmb = null;
 
   // ---- capabilities (half-float verified later, after the quad helpers exist) ----
   const ext = renderer.extensions;
@@ -70,7 +78,7 @@ export function createRenderPipeline(o) {
     scene.add(sun); ownSun = true;
   }
   if (!sun.target.parent) scene.add(sun.target);
-  const hostSun = { castShadow: sun.castShadow, mapSize: sun.shadow.mapSize.x, ownTarget: false };
+  const hostSun = { castShadow: sun.castShadow, mapSize: sun.shadow.mapSize.x, ownTarget: false, color: sun.color.clone(), intensity: sun.intensity };
   // (castShadow is set per tier; never force it on here: the mobile tier has no shadow pass at all)
   const sunDir = new THREE.Vector3().subVectors(sun.position, sun.target.position).normalize();
   const sunState = { scatter: 0.05 };
@@ -92,8 +100,15 @@ export function createRenderPipeline(o) {
   const grade = { ...GRADE_ASHFALL, dither: LOOKS[look].dither.amount, grain: LOOKS[look].grain, toe: LOOKS[look].toe, warmKeep: 1.0, bloom: 0.55, bloomThreshold: halfFloat ? 1.1 : 0.82, paletteMix: 1.0, ...(opts.grade || {}) };
   const DITHER_MODES = { bayer4: 0, bayer8: 1, blue: 2 };
   const dither = { ...LOOKS[look].dither };
-  let paletteName = opts.palette === undefined ? LOOKS[look].palette : (typeof opts.palette === 'string' ? opts.palette : 'custom');
-  let paletteHex = resolvePalette(opts.palette === undefined ? LOOKS[look].palette : opts.palette);
+  const initialEnvKey = opts.environment != null ? resolveEnvironment(opts.environment)
+    : (opts.chapter != null ? environmentForChapter(opts.chapter) : null);
+  let envName = null;
+  let particleCountScale = 1.0;
+  let blizzardActive = false;
+  const initPalName = opts.palette !== undefined ? opts.palette
+    : (initialEnvKey ? ENVIRONMENTS[initialEnvKey].palette[look] : LOOKS[look].palette);
+  let paletteName = typeof initPalName === 'string' ? initPalName : (initPalName === false ? 'off' : 'custom');
+  let paletteHex = resolvePalette(initPalName);
   if (userGrade.dither !== undefined) dither.amount = userGrade.dither;
   const crt = { ...CRT_PRESETS.low };
   let crtName = 'low';
@@ -188,9 +203,10 @@ export function createRenderPipeline(o) {
     uPointPos: volU.uPointPos, uPointColor: volU.uPointColor, uPointCount: volU.uPointCount,
   });
   const compMat = raw(COMPOSITE_FRAG, compU, { MAX_POINTS });
+  const lutCacheLimit = mobile ? 2 : 4;
   function bindLUT(hex) {
     if (!hex) { compU.tLUT.value = white; compU.tPal.value = white; return; }
-    const t = buildPaletteLUTGPU(renderer, hex);
+    const t = buildPaletteLUTGPU(renderer, hex, lutCacheLimit);
     compU.tLUT.value = t; compU.tPal.value = t.userData.palette;
   }
 
@@ -388,7 +404,7 @@ export function createRenderPipeline(o) {
     }
     setDefine(compMat, 'CHEAP_VOL', T.volume.enabled && T.volume.mode === 'analytic');
     compU.uVolOn.value = T.volume.enabled ? 1 : 0;
-    if (parts) parts.setCount(T.particles);
+    if (parts) parts.setCount(Math.round(T.particles * particleCountScale));
     if (prevType !== renderer.shadowMap.type && prevEnabled && T.shadow.enabled) markMaterialsDirty();
     adaptive.reset();
     resize(size.w > 1 ? size.w : undefined, size.h > 1 ? size.h : undefined);
@@ -416,7 +432,7 @@ export function createRenderPipeline(o) {
 
   // ---- per-frame -------------------------------------------------------------------
   let time = 0, frame = 0;
-  const stats = { tier: 'medium', frameMs: 0, gpuish: 0, calls: 0, triangles: 0, internal: [0, 0], halfFloat, passes: {} };
+  const stats = { tier: 'medium', environment: null, frameMs: 0, gpuish: 0, calls: 0, triangles: 0, internal: [0, 0], halfFloat, passes: {} };
 
   function updateUniforms() {
     camera.updateMatrixWorld();
@@ -625,7 +641,7 @@ export function createRenderPipeline(o) {
 
     stats.gpuish = performance.now() - t0;
     stats.frameMs += (dt * 1000 - stats.frameMs) * 0.1;
-    stats.tier = tierName; stats.look = look; stats.palette = paletteName;
+    stats.tier = tierName; stats.look = look; stats.palette = paletteName; stats.environment = envName;
     stats.internal = [size.iw, size.ih];
     stats.passCount = passes; stats.shadowPasses = shadowPasses;
   }
@@ -710,8 +726,17 @@ export function createRenderPipeline(o) {
       if (!T.shadow.enabled) { sun.position.copy(sun.target.position).addScaledVector(sunDir, 30); }
     },
     setFog(v) {
-      Object.assign(fog, v);
-      if (v.color !== undefined && !(v.color instanceof THREE.Color)) fog.color = new THREE.Color(v.color);
+      if (!v) return;
+      const { wind, color, ...rest } = v;
+      Object.assign(fog, rest);
+      if (color !== undefined) {
+        if (color instanceof THREE.Color) fog.color.copy(color);
+        else fog.color.set(color);
+      }
+      if (wind !== undefined) {
+        if (Array.isArray(wind)) fog.wind.set(wind[0], wind[1], wind[2]);
+        else if (wind.isVector3) fog.wind.copy(wind);
+      }
     },
     setGrade(v) { Object.assign(grade, v); },
     /** 'classic32' | 'refined64' | hex[] | [[r,g,b]...] | false (no quantisation) */
@@ -734,14 +759,127 @@ export function createRenderPipeline(o) {
       if (!LOOKS[name]) throw new Error('unknown look ' + name);
       look = name;
       const L = LOOKS[name];
+      const envCfg = envName ? ENVIRONMENTS[envName] : null;
       Object.assign(dither, L.dither);
       grade.dither = userGrade.dither ?? L.dither.amount;
-      grade.grain = userGrade.grain ?? L.grain;
+      grade.grain = userGrade.grain ?? (L.grain * (envCfg ? (envCfg.grade.grainScale ?? 1) : 1));
       grade.toe = userGrade.toe ?? L.toe;
-      api.setPalette(L.palette);
+      api.setPalette(envCfg ? envCfg.palette[name] : L.palette);
       setTier(tierName);
     },
     getLook: () => look,
+    /**
+     * Switch Nevada Revision 2 seasonal atmosphere preset ('summer' | 'autumn' | 'late_fall' | 'fallout_winter',
+     * or chapter number 1..10 / 'ch01'..'ch10'). Zero target rebuilds, zero shader recompiles, mobile-safe.
+     * Returns the resolved preset config (including recommended sky, hemi, ambient, sun, fog, particles).
+     */
+    setEnvironment(id, overrides = {}) {
+      if (disposed) return null;
+      const key = resolveEnvironment(id);
+      const cfg = getEnvironmentConfig(key);
+      envName = key;
+      blizzardActive = false;
+
+      // 1. sun & fog
+      api.setSun({ ...cfg.sun, ...(overrides.sun || {}) });
+      api.setFog({ ...cfg.fog, ...(overrides.fog || {}) });
+
+      // 2. grade (keep active look's dither, toe, and grain scaling)
+      const L = LOOKS[look] || LOOKS.refined;
+      const g = cfg.grade;
+      const { grainScale = 1, ...gradeFields } = g;
+      Object.assign(grade, {
+        ...GRADE_ASHFALL,
+        ...gradeFields,
+        tint: g.tint.slice(),
+        lift: g.lift.slice(),
+        dither: dither.amount,
+        grain: userGrade.grain ?? (L.grain * grainScale),
+        toe: userGrade.toe ?? L.toe,
+        bloomThreshold: userGrade.bloomThreshold ?? (halfFloat ? 1.1 : 0.82),
+        paletteMix: 1.0,
+        ...(overrides.grade || {}),
+      });
+
+      // 3. palette (GPU-built LUT, cached; 0 target rebuilds)
+      const pal = overrides.palette !== undefined ? overrides.palette : cfg.palette[look];
+      api.setPalette(pal);
+
+      // 4. particles (same single BufferGeometry + ShaderMaterial; uniform update only)
+      const pCfg = { ...cfg.particles, ...(overrides.particles || {}) };
+      particleCountScale = pCfg.countScale ?? 1.0;
+      if (parts) {
+        parts.setConfig(pCfg);
+        parts.setCount(Math.round(T.particles * particleCountScale));
+      }
+
+      // 5. flashlight scatter
+      if (overrides.flashlight && typeof overrides.flashlight === 'object') {
+        api.setFlashlight({ scatter: cfg.flashlight.scatter, ...overrides.flashlight });
+      } else {
+        flashState.scatter = cfg.flashlight.scatter;
+      }
+
+      // 6. optional sky & scene hemisphere/ambient light sync (restored on dispose)
+      if (opts.syncSky !== false && overrides.syncSky !== false) {
+        const skyCol = (overrides.sky && overrides.sky.color !== undefined) ? overrides.sky.color : cfg.sky.color;
+        renderer.setClearColor(skyCol, 1);
+        if (scene.background && scene.background.isColor) scene.background.set(skyCol);
+        envTouchedSky = true;
+      }
+      if (opts.syncLights !== false && overrides.syncLights !== false) {
+        if (!hemiLight || !ambientLight) {
+          scene.traverse((c) => {
+            if (!hemiLight && c.isHemisphereLight) hemiLight = c;
+            if (!ambientLight && c.isAmbientLight) ambientLight = c;
+          });
+        }
+        if (hemiLight) {
+          if (!hostHemi) hostHemi = { sky: hemiLight.color.clone(), ground: hemiLight.groundColor.clone(), intensity: hemiLight.intensity };
+          const h = { ...cfg.hemi, ...(overrides.hemi || {}) };
+          hemiLight.color.set(h.sky);
+          hemiLight.groundColor.set(h.ground);
+          hemiLight.intensity = h.intensity;
+        }
+        if (ambientLight) {
+          if (!hostAmb) hostAmb = { color: ambientLight.color.clone(), intensity: ambientLight.intensity };
+          const a = { ...cfg.ambient, ...(overrides.ambient || {}) };
+          ambientLight.color.set(a.color);
+          ambientLight.intensity = a.intensity;
+        }
+      }
+
+      stats.environment = envName;
+      return cfg;
+    },
+    getEnvironment: () => envName,
+    getEnvironmentConfig: (id) => getEnvironmentConfig(id ?? envName ?? 'fallout_winter'),
+    /**
+     * Convenience wrapper compatible with both preset strings/chapters ('summer' | 'autumn' | 'late_fall' | 'fallout_winter' | 1..10)
+     * and Prime's per-frame object call setWeather({ blizzard, timeOfDay, flashlight, environment?, chapter? }).
+     */
+    setWeather(arg, overrides) {
+      if (disposed || arg == null) return envName;
+      if (typeof arg === 'string' || typeof arg === 'number') return api.setEnvironment(arg, overrides);
+      if (typeof arg === 'object') {
+        const target = arg.environment ?? arg.preset ?? arg.act ?? arg.chapter;
+        if (target != null) api.setEnvironment(target, arg);
+        if (arg.blizzard !== undefined && arg.blizzard !== blizzardActive) {
+          blizzardActive = !!arg.blizzard;
+          if (parts && (envName === null || envName === 'fallout_winter')) {
+            const baseP = envName ? ENVIRONMENTS[envName].particles : { wind: [0.6, 0, -0.2], fall: 1.1, countScale: 1.0 };
+            if (blizzardActive) {
+              parts.setConfig({ wind: [baseP.wind[0] * 2.6, 0, baseP.wind[2] * 2.2], fall: baseP.fall * 1.7 });
+              parts.setCount(Math.round(T.particles * Math.min(1.25, (baseP.countScale ?? 1) * 1.25)));
+            } else {
+              parts.setConfig({ wind: baseP.wind, fall: baseP.fall });
+              parts.setCount(Math.round(T.particles * particleCountScale));
+            }
+          }
+        }
+      }
+      return envName;
+    },
     /** Host-owned light (already in the scene): adds only its volumetric glow. */
     addPointLight(light, { glow = 1 } = {}) {
       if (!pointLights.some((p) => p.light === light)) pointLights.push({ light, glow, pos: new THREE.Vector3(), d2: 0 });
@@ -797,7 +935,17 @@ export function createRenderPipeline(o) {
       pointLights.length = 0; sorted.length = 0;
       if (sun.shadow.map) { sun.shadow.map.dispose(); sun.shadow.map = null; }
       if (ownSun) { sun.removeFromParent(); sun.target.removeFromParent(); sun.dispose(); }
-      else { sun.castShadow = hostSun.castShadow; sun.shadow.mapSize.set(hostSun.mapSize, hostSun.mapSize); }
+      else {
+        sun.castShadow = hostSun.castShadow;
+        sun.shadow.mapSize.set(hostSun.mapSize, hostSun.mapSize);
+        if (envName) { sun.color.copy(hostSun.color); sun.intensity = hostSun.intensity; }
+      }
+      if (envTouchedSky) {
+        renderer.setClearColor(hostClearColor, hostClearAlpha);
+        if (hostSceneBg && scene.background && scene.background.isColor) scene.background.copy(hostSceneBg);
+      }
+      if (hostHemi && hemiLight) { hemiLight.color.copy(hostHemi.sky); hemiLight.groundColor.copy(hostHemi.ground); hemiLight.intensity = hostHemi.intensity; }
+      if (hostAmb && ambientLight) { ambientLight.color.copy(hostAmb.color); ambientLight.intensity = hostAmb.intensity; }
       renderer.shadowMap.enabled = hostShadow.enabled;
       renderer.shadowMap.type = hostShadow.type;
       renderer.shadowMap.autoUpdate = hostShadow.autoUpdate;
@@ -829,7 +977,8 @@ export function createRenderPipeline(o) {
 
   setCRT(opts.crt);
   setTier(opts.tier);
+  if (initialEnvKey) api.setEnvironment(initialEnvKey);
   return api;
 }
 
-export { TIERS, TIER_ORDER, detectTier, isMobileDevice, CRT_PRESETS, LOOKS, getTierConfig, applyMobileQuality, PALETTES };
+export { TIERS, TIER_ORDER, detectTier, isMobileDevice, CRT_PRESETS, LOOKS, getTierConfig, applyMobileQuality, PALETTES, ENVIRONMENTS, ENVIRONMENT_ORDER, resolveEnvironment, environmentForChapter, getEnvironmentConfig };

@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "units": {
     "weight_kg": "kilograms",
     "value": "barter value; 1 ration tin = 10",
@@ -40,14 +40,16 @@
   "starting_loadout": {
     "by_chapter_from_story": {
       "ch01": {
-        "insulin_vial": 3,
         "gas_can": 1,
-        "lineman_tools": 1,
-        "canned_food": 2,
-        "candles": 2
+        "mech_tools": 1,
+        "canned_food": 3,
+        "candles": 2,
+        "bucket": 1,
+        "flashlight": 1
       },
       "ch05": {
-        "med_kit": 1
+        "med_kit": 1,
+        "signal_fuse": 1
       },
       "ch08": {
         "mask_filter": 6,
@@ -59,22 +61,23 @@
       "cloth": 2,
       "firewood": 2,
       "water_clean": 1,
-      "bucket": 1,
-      "flashlight": 1,
+      "empty_bottle": 1,
       "batteries": 1
     },
     "equipped_ch01": [
-      "work_jacket",
+      "cotton_tee",
       "jeans",
       "sneakers",
-      "knit_gloves"
+      "ball_cap"
     ],
-    "note": "Story start_inventory (gameplay_hooks.json) is authoritative and is merged with systems_additions_ch01 (survival basics). config.js emptyInv() = {knife, cloth 2, wood 2, ration 1}."
+    "equipped_ch01_insulation": 0.078,
+    "note": "by_chapter_from_story is copied verbatim from story/gameplay_hooks.json chapters[].start_inventory (authoritative; validator enforces equality). systems_additions_ch01 are survival basics merged on top at Ch1 start. equipped_ch01 is late-summer clothing (Ch1 = late-summer blackout): no coat. Braith's Air Force gas mask is NOT an item: it appears via flag has_gas_mask (Ch8) -> paperdoll.flag_layers face_gas_mask.",
+    "equipped_ch01_heat_load": 0.02
   },
   "legacy_aliases": {
-    "insulin": "insulin_vial",
     "wood": "firewood",
-    "filter": "mask_filter"
+    "filter": "mask_filter",
+    "dried_fish": "canned_food"
   },
   "items": [
     {
@@ -90,7 +93,7 @@
         "warmth": 4,
         "hydration": -4
       },
-      "desc": "Authority ration tin. The barter unit: value 10."
+      "desc": "Truckee Meadows Recovery Authority ration tin (RSCC ration hall). The barter unit: value 10."
     },
     {
       "id": "canned_food",
@@ -102,7 +105,8 @@
       "value": 9,
       "effects": {
         "satiety": 30
-      }
+      },
+      "desc": "Food. Restores satiety. Feeds Wraith. Peace offering (Lunds, recovery detail, Salt, Viaduct Crew)."
     },
     {
       "id": "crackers",
@@ -142,20 +146,6 @@
       }
     },
     {
-      "id": "dried_fish",
-      "name": "Dried herring",
-      "category": "food",
-      "kind": "use",
-      "weight_kg": 0.2,
-      "stack": 8,
-      "value": 8,
-      "effects": {
-        "satiety": 25,
-        "hydration": -6
-      },
-      "desc": "Harbor smokehouse stock."
-    },
-    {
       "id": "mre",
       "name": "MRE",
       "category": "food",
@@ -168,11 +158,25 @@
         "warmth": 8,
         "hydration": -4
       },
-      "desc": "Ironwood field ration with flameless heater."
+      "desc": "Task Force Ironwood field ration with flameless heater (Boone's back door sells them as 'canned_food (MREs)')."
+    },
+    {
+      "id": "jerky",
+      "name": "Beef jerky",
+      "category": "food",
+      "kind": "use",
+      "weight_kg": 0.15,
+      "stack": 10,
+      "value": 8,
+      "effects": {
+        "satiety": 22,
+        "hydration": -6
+      },
+      "desc": "Gas-station jerky. Light, salty (costs water — careful in late summer). Systems loot food; replaces v1 dried_fish (story v2 maps dried_fish -> canned_food, see legacy_aliases)."
     },
     {
       "id": "water_clean",
-      "name": "Bottled water",
+      "name": "Clean water",
       "category": "water",
       "kind": "use",
       "weight_kg": 1.0,
@@ -180,11 +184,12 @@
       "value": 7,
       "effects": {
         "hydration": 35
-      }
+      },
+      "desc": "Bottled, boiled-at-a-station, cistern or tablet-treated water. No sickness, no RAD."
     },
     {
       "id": "water_dirty",
-      "name": "Melt / lake water",
+      "name": "Untreated water",
       "category": "water",
       "kind": "use",
       "weight_kg": 1.0,
@@ -199,7 +204,7 @@
           "nuclear_winter": 6
         }
       },
-      "desc": "Free from snow/lake via a bucket or bottle. Boil at a fire or treat with a tablet."
+      "desc": "Truckee River, Sparks Marina, irrigation-ditch or (winter) melted-snow water. Fill with a bucket (4) or bottle (1). Boil at a fire / ch01_water_station, or use a purification tablet. Drinking raw risks 'sick'; in nuclear winter it also carries fallout."
     },
     {
       "id": "water_boiled",
@@ -216,7 +221,7 @@
           "nuclear_winter": 6
         }
       },
-      "desc": "Safe from sickness; boiling doesn't remove fallout."
+      "desc": "Campfire-boiled water. Safe from sickness; boiling does not remove fallout (nuclear winter)."
     },
     {
       "id": "purification_tablets",
@@ -292,7 +297,8 @@
         "cures": [
           "sick"
         ]
-      }
+      },
+      "desc": "Cures 'sick'. Annie's seed library; Dr. Ames."
     },
     {
       "id": "iodide_tablets",
@@ -307,7 +313,7 @@
           "iodide_active": 600
         }
       },
-      "desc": "Halves radiation gain for 600 s. Also used in Ch8 husk talk-down."
+      "desc": "Potassium iodide. Halves radiation gain for 600 s. Also needed to talk down a husk."
     },
     {
       "id": "splint",
@@ -322,6 +328,21 @@
           "fracture"
         ]
       }
+    },
+    {
+      "id": "vet_kit",
+      "name": "Vet kit",
+      "category": "med",
+      "kind": "use",
+      "weight_kg": 0.5,
+      "stack": 2,
+      "value": 30,
+      "effects": {
+        "companion": "wraith",
+        "clears_flag": "wraith_injured",
+        "companion_health": 60
+      },
+      "desc": "Treats Wraith: clears wraith_injured, restores her HP. Annie, Ames or Lolo can supply one. Does nothing for Braith."
     },
     {
       "id": "cloth",
@@ -341,7 +362,8 @@
       "weight_kg": 1.0,
       "stack": 10,
       "value": 3,
-      "legacy_id": "wood"
+      "legacy_id": "wood",
+      "desc": "Fuel for fires and boiling. Heat draws Tallmen and assimilated animals in Act III."
     },
     {
       "id": "fuel",
@@ -386,7 +408,9 @@
       "insulation": 0.22,
       "wet_resist": 0.2,
       "durability": 100,
-      "paperdoll_layer": "torso_canvas_jacket"
+      "paperdoll_layer": "torso_canvas_jacket",
+      "heat_penalty": 0.12,
+      "breathability": 0.5
     },
     {
       "id": "coat",
@@ -401,8 +425,9 @@
       "wet_resist": 0.2,
       "durability": 100,
       "legacy_id": "coat",
-      "code_note": "config warmthResist 0.42 -> insulation 0.38 (stacks with other slots now)",
-      "paperdoll_layer": "torso_wool_coat"
+      "paperdoll_layer": "torso_wool_coat",
+      "heat_penalty": 0.3,
+      "breathability": 0.3
     },
     {
       "id": "military_parka",
@@ -417,7 +442,10 @@
       "wet_resist": 0.6,
       "durability": 100,
       "paperdoll_layer": "torso_parka",
-      "tint": "#5b6142"
+      "tint": "#5b6142",
+      "heat_penalty": 0.4,
+      "breathability": 0.2,
+      "desc": "Army surplus parka. Overkill (heat stress) in late summer; vital in nuclear winter."
     },
     {
       "id": "arctic_parka",
@@ -432,7 +460,10 @@
       "wet_resist": 0.7,
       "durability": 100,
       "paperdoll_layer": "torso_parka",
-      "tint": "#c4532e"
+      "tint": "#c4532e",
+      "heat_penalty": 0.5,
+      "breathability": 0.1,
+      "desc": "Expedition parka. Rare. Heavy heat stress before autumn nights."
     },
     {
       "id": "thermal_underlayer",
@@ -446,7 +477,9 @@
       "insulation": 0.12,
       "wet_resist": 0.0,
       "durability": 100,
-      "paperdoll_layer": "base_thermal_longjohns"
+      "paperdoll_layer": "base_thermal_longjohns",
+      "heat_penalty": 0.12,
+      "breathability": 0.4
     },
     {
       "id": "wool_hat",
@@ -461,7 +494,9 @@
       "wet_resist": 0.2,
       "durability": 100,
       "paperdoll_layer": "head_knit_cap",
-      "tint": "#8a2f2f"
+      "tint": "#8a2f2f",
+      "heat_penalty": 0.06,
+      "breathability": 0.5
     },
     {
       "id": "balaclava",
@@ -475,7 +510,9 @@
       "insulation": 0.12,
       "wet_resist": 0.2,
       "durability": 100,
-      "paperdoll_layer": "head_balaclava"
+      "paperdoll_layer": "head_balaclava",
+      "heat_penalty": 0.1,
+      "breathability": 0.3
     },
     {
       "id": "knit_gloves",
@@ -489,7 +526,9 @@
       "insulation": 0.05,
       "wet_resist": 0.1,
       "durability": 100,
-      "paperdoll_layer": "hands_knit_gloves"
+      "paperdoll_layer": "hands_knit_gloves",
+      "heat_penalty": 0.03,
+      "breathability": 0.7
     },
     {
       "id": "insulated_gloves",
@@ -503,7 +542,9 @@
       "insulation": 0.1,
       "wet_resist": 0.5,
       "durability": 100,
-      "paperdoll_layer": "hands_work_gloves"
+      "paperdoll_layer": "hands_work_gloves",
+      "heat_penalty": 0.07,
+      "breathability": 0.4
     },
     {
       "id": "jeans",
@@ -517,7 +558,9 @@
       "insulation": 0.04,
       "wet_resist": 0.0,
       "durability": 100,
-      "paperdoll_layer": "legs_jeans"
+      "paperdoll_layer": "legs_jeans",
+      "heat_penalty": 0.02,
+      "breathability": 0.8
     },
     {
       "id": "snow_pants",
@@ -531,7 +574,10 @@
       "insulation": 0.14,
       "wet_resist": 0.6,
       "durability": 100,
-      "paperdoll_layer": "legs_insulated_bibs"
+      "paperdoll_layer": "legs_insulated_bibs",
+      "heat_penalty": 0.16,
+      "breathability": 0.2,
+      "desc": "Insulated bibs. Unneeded until late fall; vital in nuclear winter."
     },
     {
       "id": "sneakers",
@@ -545,7 +591,9 @@
       "insulation": 0.02,
       "wet_resist": 0.0,
       "durability": 100,
-      "paperdoll_layer": "feet_sneakers"
+      "paperdoll_layer": "feet_sneakers",
+      "heat_penalty": 0.0,
+      "breathability": 1.0
     },
     {
       "id": "boots_insulated",
@@ -559,7 +607,10 @@
       "insulation": 0.15,
       "wet_resist": 0.6,
       "durability": 100,
-      "paperdoll_layer": "feet_pac_boots"
+      "paperdoll_layer": "feet_pac_boots",
+      "desc": "Pac boots. Reduces warmth drain. Sweaty in late summer.",
+      "heat_penalty": 0.12,
+      "breathability": 0.2
     },
     {
       "id": "wool_blanket",
@@ -573,8 +624,10 @@
       "insulation": 0.15,
       "wet_resist": 0.1,
       "durability": 100,
-      "desc": "Wrap slot; also a gift in Ch8 husk talk-down.",
-      "paperdoll_layer": "wrap_wool_blanket"
+      "desc": "Wrap slot; also required (with iodide_tablets) to talk down a husk in Ch8+.",
+      "paperdoll_layer": "wrap_wool_blanket",
+      "heat_penalty": 0.15,
+      "breathability": 0.3
     },
     {
       "id": "rain_poncho",
@@ -588,11 +641,84 @@
       "insulation": 0.0,
       "wet_resist": 1.0,
       "durability": 100,
-      "desc": "Blocks 'wet' from fallout rain and halves fallout_rain radiation gain.",
+      "desc": "Blocks 'wet' from freezing rain/fallout rain and halves fallout_rain radiation gain. Late-fall essential.",
       "effects": {
         "fallout_rain_rad_mult": 0.5
       },
-      "paperdoll_layer": "wrap_rain_poncho"
+      "paperdoll_layer": "wrap_rain_poncho",
+      "heat_penalty": 0.08,
+      "breathability": 0.1
+    },
+    {
+      "id": "cotton_tee",
+      "name": "Cotton T-shirt",
+      "category": "clothing",
+      "kind": "wear",
+      "weight_kg": 0.2,
+      "stack": 1,
+      "value": 1,
+      "slot": "base",
+      "insulation": 0.02,
+      "wet_resist": 0.0,
+      "heat_penalty": 0.0,
+      "breathability": 1.0,
+      "durability": 60,
+      "paperdoll_layer": "base_cotton_tee",
+      "desc": "Late-summer base layer. Zero heat penalty; nearly useless once nights freeze."
+    },
+    {
+      "id": "flannel_shirt",
+      "name": "Flannel shirt",
+      "category": "clothing",
+      "kind": "wear",
+      "weight_kg": 0.45,
+      "stack": 1,
+      "value": 4,
+      "slot": "torso",
+      "insulation": 0.1,
+      "wet_resist": 0.05,
+      "heat_penalty": 0.04,
+      "breathability": 0.8,
+      "durability": 80,
+      "paperdoll_layer": "torso_flannel_shirt",
+      "desc": "Autumn layering piece; fine in late summer with sleeves rolled."
+    },
+    {
+      "id": "ball_cap",
+      "name": "Ball cap",
+      "category": "clothing",
+      "kind": "wear",
+      "weight_kg": 0.1,
+      "stack": 1,
+      "value": 1,
+      "slot": "head",
+      "insulation": 0.0,
+      "wet_resist": 0.1,
+      "heat_penalty": 0.0,
+      "breathability": 1.0,
+      "durability": 80,
+      "effects": {
+        "sun_thirst_mult": 0.9
+      },
+      "paperdoll_layer": "head_ball_cap",
+      "desc": "Shade. Daytime outdoor thirst x0.9 in late_summer/autumn sun (clear weather)."
+    },
+    {
+      "id": "work_boots",
+      "name": "Work boots",
+      "category": "clothing",
+      "kind": "wear",
+      "weight_kg": 1.1,
+      "stack": 1,
+      "value": 8,
+      "slot": "feet",
+      "insulation": 0.06,
+      "wet_resist": 0.35,
+      "heat_penalty": 0.03,
+      "breathability": 0.6,
+      "durability": 110,
+      "paperdoll_layer": "feet_work_boots",
+      "desc": "Steel-toe flight-line boots. All-season middle ground."
     },
     {
       "id": "mask_filter",
@@ -606,7 +732,7 @@
         "filter_seconds": 240
       },
       "legacy_id": "filter",
-      "desc": "Gas-mask filter (Dell's mask is assumed from Ch8). Equip: radiation gain x0.2 for 240 s of exposure, then the next filter loads. HUD 'FILTER' %. Story: Theo needs ~2/week in Act III.",
+      "desc": "Gas-mask filter cartridge. Loads into Braith's Air Force gas mask (story flag has_gas_mask, set at Ch8 start; mask drawn via paperdoll.flag_layers). Radiation gain x0.2 for 240 s of exposure, then the next filter loads. HUD 'FILTER' %. Shared, contested Act III resource. Some of trader_boone's Ch8 stock is expired (progression.json traders.trader_boone.expired_filter_risk).",
       "slot": "face",
       "paperdoll_note": "No layer: a cartridge inside the gas mask. The mask itself is drawn from paperdoll.flag_layers (has_gas_mask)."
     },
@@ -620,10 +746,19 @@
       "value": 10,
       "effects": {
         "light_m": 14,
-        "battery_drain_per_real_second": 0.004
+        "battery_drain_per_real_second": 0.004,
+        "repels": {
+          "tallman": {
+            "sustain_seconds": 2.0
+          },
+          "assimilated_human": {
+            "sustain_seconds": 1.0
+          }
+        }
       },
       "paperdoll_layer": "off_hand_flashlight",
-      "real_world_reference": "Maglite-style 2D-cell aluminium flashlight in yellow (or a yellow Rayovac work light), held in the off hand"
+      "real_world_reference": "Maglite-style 2D-cell aluminium flashlight in yellow (or a yellow Rayovac work light), held in the off hand",
+      "desc": "Light. A sustained beam (2 s in the cone) pushes a Tallman back and breaks an assimilated_human's mimicry. Can be left with Salt (Ch4)."
     },
     {
       "id": "batteries",
@@ -636,7 +771,7 @@
       "effects": {
         "battery_charge": 1.0
       },
-      "desc": "Flashlight / hand radio charge. Trade staple."
+      "desc": "Flashlight / hand radio charge. Annie and Dutch want them."
     },
     {
       "id": "candles",
@@ -650,7 +785,7 @@
         "place": "candle_cluster",
         "burn_real_seconds": 300
       },
-      "desc": "Place 1 indoors: warmth drain x0.5 within 1.5 m for 300 s."
+      "desc": "Place 1 indoors: warmth drain x0.5 within 1.5 m for 300 s. Rourke trades them for stories."
     },
     {
       "id": "bucket",
@@ -660,7 +795,7 @@
       "weight_kg": 0.6,
       "stack": 1,
       "value": 4,
-      "desc": "Collect water_dirty (4 per fill) from snow/lake. Ch1 lake_cooler."
+      "desc": "Collect water_dirty (4 per fill) at the Sparks Marina (ch01_lake_edge), the Truckee, ditches, rain barrels or snow."
     },
     {
       "id": "empty_bottle",
@@ -670,17 +805,17 @@
       "weight_kg": 0.2,
       "stack": 6,
       "value": 1,
-      "desc": "Fill with snow/lake water -> water_dirty (1 per bottle)."
+      "desc": "Fill at a river/ditch/rain barrel (or snow in winter) -> water_dirty (1 per bottle)."
     },
     {
-      "id": "lineman_tools",
-      "name": "Lineman's tools",
+      "id": "mech_tools",
+      "name": "Flight-line tool roll",
       "category": "tool",
       "kind": "tool",
       "weight_kg": 2.0,
       "stack": 1,
       "value": 25,
-      "desc": "Story tool (Ray). Opens electrical panels, relay cabinets, locked service doors."
+      "desc": "Braith's Snap-on flight-line tool roll (Air Force crew chief kit). Opens electrical panels, relay cabinets, service doors; speeds the Ch4 black start. Tradeable to Gil in Ch1 (returned in Ch3 if you helped). Also lets you inspect mask_filter lot dates (Boone, Ch8)."
     },
     {
       "id": "bolt_cutters",
@@ -699,7 +834,8 @@
       "kind": "tool",
       "weight_kg": 0.5,
       "stack": 1,
-      "value": 20
+      "value": 20,
+      "desc": "Receives Augie, the Night Owl and the Switchboard."
     },
     {
       "id": "dosimeter",
@@ -709,7 +845,7 @@
       "weight_kg": 0.3,
       "stack": 1,
       "value": 40,
-      "desc": "Unlocks RAD on the HUD (Ch7, Lou)."
+      "desc": "Unlocks RAD on the HUD (Ch7, Augie / Boone)."
     },
     {
       "id": "sled",
@@ -722,7 +858,7 @@
       "effects": {
         "carry_bonus_kg": 15
       },
-      "desc": "Ch7+. +15 kg carry while pulled; slows sprint 10%."
+      "desc": "Ch9 (Kit's sled / column). +15 kg carry while pulled; slows sprint 10%."
     },
     {
       "id": "tent_tarp",
@@ -736,7 +872,7 @@
         "place": "shelter",
         "shelter_real_seconds": 600
       },
-      "desc": "Place outdoors: 'sheltered' modifier (warmth drain x0.6, blocks blizzard mult) for 600 s."
+      "desc": "Place outdoors: 'sheltered' (warmth drain x0.6, blocks blizzard mult) for 600 s. Ch9 camp stop."
     },
     {
       "id": "repair_kit",
@@ -773,9 +909,16 @@
       "effects": {
         "light_m": 20,
         "burn_real_seconds": 30,
-        "scare_radius_m": 6
+        "scare_radius_m": 6,
+        "repels": [
+          "feral_dog",
+          "coyote",
+          "tallman",
+          "assimilated_animal",
+          "assimilated_human"
+        ]
       },
-      "desc": "Dogs/wolves flee its radius; husks are drawn to it.",
+      "desc": "Road flare. Dogs, coyotes and assimilated animals flee its radius; drives Tallmen back; husks are drawn to it. Siege essential.",
       "paperdoll_layer": "main_hand_flare"
     },
     {
@@ -974,7 +1117,7 @@
       "weight_kg": 0.05,
       "stack": 20,
       "value": 6,
-      "desc": "Bribe currency (Haas checkpoint Ch2)."
+      "desc": "Currency. Bribes Cpl. Haas (Ch2); Dutch and Boone want them."
     },
     {
       "id": "whiskey",
@@ -989,7 +1132,7 @@
         "hydration": -8,
         "aim_sway_seconds": 30
       },
-      "desc": "Feels warm. Isn't. Mostly trade."
+      "desc": "Feels warm. Isn't. Barter: Boone and Rourke want it."
     },
     {
       "id": "coffee",
@@ -1005,52 +1148,60 @@
       }
     },
     {
-      "id": "insulin_vial",
-      "name": "Insulin vial",
-      "category": "quest",
-      "kind": "quest",
-      "weight_kg": 0.2,
-      "stack": 6,
-      "value": 0,
-      "desc": "Theo's insulin. Story flag insulin_vial counts these.",
-      "quest": true,
-      "no_drop": true,
-      "legacy_id": "insulin"
-    },
-    {
-      "id": "cool_pack",
-      "name": "Cool pack",
-      "category": "quest",
-      "kind": "quest",
-      "weight_kg": 0.2,
-      "stack": 2,
-      "value": 0,
-      "desc": "Keeps insulin cool in transit.",
-      "quest": true,
-      "no_drop": true,
-      "legacy_id": "cool_pack"
-    },
-    {
-      "id": "lake_cooler",
-      "name": "Lake cooler",
-      "category": "quest",
-      "kind": "quest",
-      "weight_kg": 0.2,
+      "id": "diesel_jug",
+      "name": "Diesel jug (5 gal)",
+      "category": "trade",
+      "kind": "trade",
+      "weight_kg": 14.0,
       "stack": 1,
-      "value": 0,
-      "desc": "Ch1 craft (bucket + wire). Keeps insulin cool. Sets ch01_cooler_built.",
+      "value": 40,
+      "desc": "5 gal diesel. Generator fuel; barter staple (Mo, Boone). Act III currency.",
+      "quest": false,
+      "no_drop": false
+    },
+    {
+      "id": "grain_sack",
+      "name": "Ration pallet",
+      "category": "trade",
+      "kind": "trade",
+      "weight_kg": 20.0,
+      "stack": 4,
+      "value": 30,
+      "desc": "Display 'ration pallet'. Bulk warehouse food from the TRIC convoy staging (Ch5), 20 kg; tradeable.",
       "quest": true,
-      "no_drop": true
+      "no_drop": false
+    },
+    {
+      "id": "rumor",
+      "name": "Rumor",
+      "category": "trade",
+      "kind": "token",
+      "weight_kg": 0.0,
+      "stack": 20,
+      "value": 12,
+      "desc": "Info token (weightless). Currency with Rourke and Dutch. Earned from Augie, the Night Owl, travelers.",
+      "info_token": true
+    },
+    {
+      "id": "spur_chip",
+      "name": "Silver Spur chip",
+      "category": "trade",
+      "kind": "scrip",
+      "weight_kg": 0.01,
+      "stack": 99,
+      "value": 5,
+      "desc": "Silver Spur casino chip: the Floor's scrip in Act II. Only trader_floor honors it at face value (5).",
+      "scrip": true
     },
     {
       "id": "pharmacy_bag",
-      "name": "Pharmacy bag",
+      "name": "Clinic supplies",
       "category": "quest",
       "kind": "quest",
       "weight_kg": 0.2,
       "stack": 1,
       "value": 0,
-      "desc": "Ch1 Wren / Ch2 Haas.",
+      "desc": "Clinic supplies for Lolo (gauze, amoxicillin). Searched at the Ch2 Virginia Street checkpoint unless Haas is bribed or trusts you.",
       "quest": true,
       "no_drop": true
     },
@@ -1061,20 +1212,8 @@
       "kind": "quest",
       "weight_kg": 14.0,
       "stack": 1,
-      "value": 0,
-      "desc": "Ch1 choice: give to Marguerite for Pruitt's oxygen.",
-      "quest": true,
-      "no_drop": true
-    },
-    {
-      "id": "diesel_jug",
-      "name": "Diesel jug",
-      "category": "quest",
-      "kind": "quest",
-      "weight_kg": 14.0,
-      "stack": 1,
-      "value": 0,
-      "desc": "Ch1 Ray trade.",
+      "value": 35,
+      "desc": "5 gal gasoline. Ch1 choice (ch01_gas_choice): Pruitt's oxygen concentrator, the house generator, or the drive to Yerington.",
       "quest": true,
       "no_drop": true
     },
@@ -1086,7 +1225,7 @@
       "weight_kg": 8.0,
       "stack": 1,
       "value": 0,
-      "desc": "Ch2 Ames side task.",
+      "desc": "Quest item for Dr. Ames (q_hospital_diesel, Meadows General parking ramp level 3).",
       "quest": true,
       "no_drop": true
     },
@@ -1098,19 +1237,20 @@
       "weight_kg": 0.2,
       "stack": 1,
       "value": 0,
-      "desc": "Ch2 Authority registry.",
+      "desc": "Truckee Meadows Recovery Authority ration card. Weekly food at the RSCC ration hall; talks past watch patrols. Scrip in Act I–II (progression.economy.scrip).",
       "quest": true,
-      "no_drop": true
+      "no_drop": true,
+      "scrip": true
     },
     {
       "id": "priority_card",
-      "name": "Priority card",
+      "name": "Essential-worker card",
       "category": "quest",
       "kind": "quest",
       "weight_kg": 0.2,
       "stack": 1,
       "value": 0,
-      "desc": "Ch2 insulin priority.",
+      "desc": "Essential-worker card: double rations + Authority travel pass. Earned in Ch2 (registry, Ames's letter, or a report). Sets ch02_card_secured.",
       "quest": true,
       "no_drop": true
     },
@@ -1122,7 +1262,7 @@
       "weight_kg": 0.2,
       "stack": 1,
       "value": 0,
-      "desc": "Lou's radio part.",
+      "desc": "Legacy js world.js spot item (Augie's radio part). Not referenced by story v2; harmless filler.",
       "quest": true,
       "no_drop": true,
       "legacy_id": "radio_crystal"
@@ -1135,7 +1275,7 @@
       "weight_kg": 0.2,
       "stack": 1,
       "value": 0,
-      "desc": "Black-start battery.",
+      "desc": "Legacy js world.js spot item. Story v2 black start uses gpu_cart instead; harmless filler.",
       "quest": true,
       "no_drop": true,
       "legacy_id": "start_battery"
@@ -1148,19 +1288,19 @@
       "weight_kg": 0.2,
       "stack": 1,
       "value": 0,
-      "desc": "Ch4 black start.",
+      "desc": "Protective relay for Galena Unit 1. From the Authority, the Floor, or the Compact (relay_source); otherwise bypass (riskier).",
       "quest": true,
       "no_drop": true
     },
     {
-      "id": "hank_keys",
-      "name": "Hank's keys",
+      "id": "walt_keys",
+      "name": "Walt's keys",
       "category": "quest",
       "kind": "quest",
       "weight_kg": 0.2,
       "stack": 1,
       "value": 0,
-      "desc": "Ch4 dam access.",
+      "desc": "Galena Station keys and lockout tags (Walt Okada). Ch4+.",
       "quest": true,
       "no_drop": true
     },
@@ -1172,21 +1312,9 @@
       "weight_kg": 0.2,
       "stack": 1,
       "value": 0,
-      "desc": "Ch5 signal cabinet repair.",
+      "desc": "Rail signal cabinet part (Ch5 canyon crossing, cabinet_choice).",
       "quest": true,
       "no_drop": true
-    },
-    {
-      "id": "grain_sack",
-      "name": "Grain sack",
-      "category": "trade",
-      "kind": "trade",
-      "weight_kg": 20.0,
-      "stack": 4,
-      "value": 30,
-      "desc": "Ch5 convoy grain, 20 kg. Food bulk; tradeable (story/items.json).",
-      "quest": true,
-      "no_drop": false
     },
     {
       "id": "ironwood_id",
@@ -1196,7 +1324,7 @@
       "weight_kg": 0.2,
       "stack": 1,
       "value": 0,
-      "desc": "Ch6 from Ruiz if spared.",
+      "desc": "Ruiz's ID. One free pass through an Ironwood checkpoint or talk-down (Ch7 recovery detail, Ch9 picket).",
       "quest": true,
       "no_drop": true
     },
@@ -1208,10 +1336,84 @@
       "weight_kg": 0.2,
       "stack": 20,
       "value": 0,
-      "desc": "Readable lore.",
+      "desc": "Readable lore scrap.",
       "quest": true,
       "no_drop": true,
       "legacy_id": "note"
+    },
+    {
+      "id": "pruitt_scarf",
+      "name": "Mr. Pruitt's scarf",
+      "weight_kg": 0.1,
+      "value": 0,
+      "desc": "Scent item. Wraith TRACKs Mr. Pruitt from it (Ch1 companion tutorial, from Lolo).",
+      "category": "quest",
+      "kind": "quest",
+      "stack": 1,
+      "quest": true,
+      "no_drop": true
+    },
+    {
+      "id": "ross_letter",
+      "name": "Ross's letter",
+      "weight_kg": 0.0,
+      "value": 0,
+      "kind_note": "journal",
+      "desc": "Ross Pearce's letter on a feed receipt (Ch3). Journal item.",
+      "category": "quest",
+      "kind": "quest",
+      "stack": 1,
+      "quest": true,
+      "no_drop": true
+    },
+    {
+      "id": "gpu_cart",
+      "name": "Ground power cart (-86)",
+      "weight_kg": 0.0,
+      "value": 0,
+      "towed": true,
+      "desc": "-86 aircraft ground power cart, 90 kW, from the Air Guard ramp (Ch4). Towed, not carried (0 kg in pack; tow speed x0.6). Black-starts Galena; powers the Annex maglocks (Ch7).",
+      "category": "quest",
+      "kind": "quest",
+      "stack": 1,
+      "quest": true,
+      "no_drop": true
+    },
+    {
+      "id": "control_cards",
+      "name": "Hardened control cards",
+      "weight_kg": 1.5,
+      "value": 0,
+      "desc": "Hardened PLC/control modules from Annex hangar cage four (Ch7). Restart Galena after the July bursts (cards_installed).",
+      "category": "quest",
+      "kind": "quest",
+      "stack": 1,
+      "quest": true,
+      "no_drop": true
+    },
+    {
+      "id": "lamp_kit",
+      "name": "Floodlight lamp kit",
+      "weight_kg": 6.0,
+      "value": 0,
+      "desc": "Hardened floodlight heads from the Annex. Builds the Ch10 lamp line (lamp_line_built): 12 poles that keep Tallmen at bay.",
+      "category": "quest",
+      "kind": "quest",
+      "stack": 1,
+      "quest": true,
+      "no_drop": true
+    },
+    {
+      "id": "annex_log",
+      "name": "Annex guard log",
+      "weight_kg": 0.3,
+      "value": 0,
+      "desc": "Tolliver's 271-day guard log + partial Annex manifest (wing B redacted/flooded). Lore.",
+      "category": "quest",
+      "kind": "quest",
+      "stack": 1,
+      "quest": true,
+      "no_drop": true
     }
   ],
   "paperdoll": {
@@ -1238,7 +1440,7 @@
         "flag": "has_gas_mask",
         "layer": "face_gas_mask",
         "slot": "face",
-        "note": "Story flag (flags.json, set in Ch8 hooks). Not a lootable item. Drawn whenever the flag is true; it occupies the face slot visually."
+        "note": "Braith's Air Force gas mask (MCU-2/P-style full-face respirator, single side canister) from his deployment bag. Story flag (flags.json, set by gameplay_hooks ch08 chapter_start_effects). Not a lootable item. Drawn whenever the flag is true; occupies the face slot visually; mask_filter cartridges load into it."
       }
     ],
     "rules": {
@@ -1246,6 +1448,16 @@
       "tint": "optional #rrggbb multiply-tint applied to the shared layer for colour variants",
       "two_handed": "if the main-hand item has two_handed: true, hide the off-hand layer",
       "weapons": "main_hand_ = currently equipped weapon (player.equipped); off_hand_ = flashlight when on, or a held torch"
-    }
+    },
+    "base_body_note": "Braith Pearce (25, Air Force crew chief) base body, 48x96, transparent background."
+  },
+  "revision": "Nevada Revision 2 (Sparks/Reno, Truckee Meadows, Lahontan Valley; player Braith Pearce)",
+  "legacy_aliases_note": "js/config.js short ids + story v1->v2 maps that still point at live items. Retired v1 ids are NOT aliased: replace them in js/ and levels/ using README 'Revision 2 migration' (validator fails if any appear in systems JSON).",
+  "clothing_fields": {
+    "insulation": "0..1 warmth resistance; combined 1-prod(1-r), cap 0.75 (survival.json)",
+    "wet_resist": "0..1 share of wetness blocked",
+    "heat_penalty": "0..1 contribution to heat_load (sum over equipped). Compared against the chapter's heat_stress_insulation_threshold (survival.json heat_stress)",
+    "breathability": "0..1 descriptive (1 = breathes freely); heat_penalty already accounts for it",
+    "durability": "max durability; below 25% insulation halves"
   }
 }

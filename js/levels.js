@@ -1,7 +1,7 @@
 // Per-chapter level JSON from Cartographer (/levels/). Fallback built-in layouts.
 // Never writes into /levels/.
-import { LOCATIONS } from "./config.js?v=r8";
-import { tryFetch, listDir } from "./load.js?v=r8";
+import { LOCATIONS } from "./config.js?v=r9";
+import { tryFetch, listDir } from "./load.js?v=r9";
 
 const FALLBACK_CHAPTERS = [
   { id: "ch01", title: "Day Three", act: "I" },
@@ -9,7 +9,7 @@ const FALLBACK_CHAPTERS = [
   { id: "ch03", title: "The Long Cold", act: "II" },
   { id: "ch04", title: "Black Start", act: "II" },
   { id: "ch05", title: "Route 9", act: "II" },
-  { id: "ch06", title: "The Lift Bridge", act: "II" },
+  { id: "ch06", title: "The Trench", act: "II" },
   { id: "ch07", title: "Dead Air", act: "III" },
   { id: "ch08", title: "Ashfall", act: "III" },
   { id: "ch09", title: "The Long Night", act: "III" },
@@ -109,6 +109,7 @@ export async function loadLevels() {
     if (data != null) { files[n] = data; found.push("levels/" + n); }
   }
   const index = files["index.json"] || files["levels.json"] || {};
+  const indexFiles = Array.isArray(index.files) ? index.files : [];
   const chapters = index.chapters || FALLBACK_CHAPTERS;
   const world = files["world.json"] || files["sector4.json"] || files["map.json"] || index.world || index.level || FALLBACK_LEVEL;
   const perChapter = {};
@@ -118,7 +119,7 @@ export async function loadLevels() {
     if (fname) perChapter[id] = files[fname];
   }
   const locations = buildLocationCatalog(LOCATIONS, world, perChapter, files);
-  return { world, chapters, perChapter, locations, loadedFiles: found, source: found.length ? "levels+fallback" : "fallback" };
+  return { world, chapters, perChapter, locations, indexFiles, storyVersion: index.storyVersion || 1, loadedFiles: found, source: found.length ? "levels+fallback" : "fallback" };
 }
 
 /** Map a story location id to Cartographer data: locations[], then grid terrain of the same name (e.g. river_ice). */
@@ -214,7 +215,10 @@ function buildLocationCatalog(base, world, perChapter, files) {
   return out;
 }
 
-export function advanceChapter(current, flags, chapters) {
+export function advanceChapter(current, flags, chapters, storyVersion = 1) {
+  // Rev 2 levels end chapters through their own chapter_end triggers; the v1 flag
+  // gates below reference retired ids and must not fire.
+  if (storyVersion >= 2) return current || "ch01";
   const order = (chapters || FALLBACK_CHAPTERS).map((c) => c.id || c);
   const i = Math.max(0, order.indexOf(current));
   const f = flags || {};
@@ -238,22 +242,34 @@ export function advanceChapter(current, flags, chapters) {
 }
 
 
-/** Lazy-load a chapter level JSON the first time the player enters it. */
+/** Lazy-load a chapter level JSON the first time the player enters it.
+ * Rev 2: file names come from levels/index.json (ch06 -> ch06_the_trench.json,
+ * ch07b -> ch07b_dixie_valley.json via chapters[].levels), with a static fallback. */
+const LEVEL_FILES = {
+  ch01: "ch01_day_three.json", ch02: "ch02_the_registry.json", ch03: "ch03_the_long_cold.json",
+  ch04: "ch04_black_start.json", ch05: "ch05_route_9.json", ch06: "ch06_the_trench.json",
+  ch07: "ch07_dead_air.json", ch07b: "ch07b_dixie_valley.json", ch08: "ch08_ashfall.json",
+  ch09: "ch09_the_long_night.json", ch10: "ch10_the_warm_room.json",
+};
+export function levelFileFor(pack, id) {
+  const chapters = (pack && pack.chapters) || [];
+  const files = (pack && pack.indexFiles) || [];
+  for (const c of chapters) {
+    if ((c.id || c) === id && c.file) return c.file;
+    for (const lv of (c.levels || [])) if (String(lv).startsWith(id + "_")) return lv + ".json";
+  }
+  const hit = files.find((n) => String(n).startsWith(id + "_"));
+  return hit || LEVEL_FILES[id] || null;
+}
+
 export async function ensureChapterLevel(pack, id) {
   if (!pack || !id) return null;
   pack.perChapter = pack.perChapter || {};
   if (pack.perChapter[id]) return pack.perChapter[id];
-  const cands = [id + ".json", id + "_day_three.json"];
-  const pretty = {
-    ch01: "ch01_day_three.json", ch02: "ch02_the_registry.json", ch03: "ch03_the_long_cold.json",
-    ch04: "ch04_black_start.json", ch05: "ch05_route_9.json", ch06: "ch06_the_lift_bridge.json",
-    ch07: "ch07_dead_air.json", ch08: "ch08_ashfall.json", ch09: "ch09_the_long_night.json",
-    ch10: "ch10_the_warm_room.json",
-  };
-  if (pretty[id]) cands.unshift(pretty[id]);
-  for (const n of cands) {
+  const cands = [levelFileFor(pack, id), LEVEL_FILES[id], id + ".json"].filter(Boolean);
+  for (const n of [...new Set(cands)]) {
     const data = await tryFetch("./levels/" + n);
-    if (data) {
+    if (data && data.grid) {
       pack.perChapter[id] = data;
       pack.loadedFiles = pack.loadedFiles || [];
       pack.loadedFiles.push("levels/" + n);

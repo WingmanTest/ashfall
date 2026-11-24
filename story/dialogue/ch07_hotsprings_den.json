@@ -1,0 +1,92 @@
+{
+  "id": "ch07_hotsprings_den",
+  "chapter": "ch07",
+  "location": "loc_dixie_hotsprings",
+  "trigger": "Optional: the hot-springs den. Two Tallmen in torpor (dixie_hotsprings_den).",
+  "speakers": [
+    "narrator",
+    "braith",
+    "reyne",
+    "wraith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Steam over a cracked white basin. Bones in the shallows: sheep, mostly. At the edge of the water, two shapes, curled.",
+      "next": "d1"
+    },
+    {
+      "id": "d1",
+      "speaker": "narrator",
+      "text": "They're asleep. Breathing slow. Long hands folded under long heads. They look almost peaceful.",
+      "next": "d2"
+    },
+    {
+      "id": "d2",
+      "speaker": "reyne",
+      "text": "Please. They're asleep. They're animals. We made them. Please don't do this.",
+      "next": "d3"
+    },
+    {
+      "id": "d3",
+      "speaker": "narrator",
+      "text": "Every one that wakes this winter will come for the warmth. Your warmth. You don't know how many there are.",
+      "choices": [
+        {
+          "text": "[Kill them both while they sleep]",
+          "next": "kill",
+          "effects": [
+            {
+              "set": "den_killed",
+              "value": true
+            },
+            {
+              "add": "tallmen_killed",
+              "value": 2
+            },
+            {
+              "trust": "reyne",
+              "delta": -3
+            }
+          ]
+        },
+        {
+          "text": "[Walk away]",
+          "next": "walk",
+          "effects": [
+            {
+              "trust": "reyne",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "kill",
+      "speaker": "narrator",
+      "text": "It's quick. It's not clean. Wraith won't come near you for an hour afterward.",
+      "next": "kill2"
+    },
+    {
+      "id": "kill2",
+      "speaker": "reyne",
+      "text": "...Okay. Okay. That's two fewer. I hope it's enough. I hope you never find out if it was.",
+      "end": true
+    },
+    {
+      "id": "walk",
+      "speaker": "narrator",
+      "text": "You leave them sleeping in the steam. Wraith walks fast and doesn't look back.",
+      "next": "walk2"
+    },
+    {
+      "id": "walk2",
+      "speaker": "reyne",
+      "text": "Thank you. I know what it might cost. I'm sorry that it might.",
+      "end": true
+    }
+  ]
+}

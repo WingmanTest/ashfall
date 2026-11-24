@@ -1,74 +1,36 @@
 {
   "id": "ch06_sweep",
   "chapter": "ch06",
-  "location": "loc_east_end",
-  "trigger": "Sector 4 quarantine sweep. Ruiz's squad reaches your block.",
+  "location": "loc_sparks_block",
+  "trigger": "Morning. Loudspeakers. Ironwood quarantine sweep in Sector 4.",
   "speakers": [
-    "ruiz",
-    "dell",
     "narrator",
-    "kessler",
-    "deshawn"
+    "braith",
+    "ironwood_soldier",
+    "lolo",
+    "wraith"
   ],
   "start": "start",
   "nodes": [
     {
       "id": "start",
-      "speaker": "kessler",
-      "text": "[Loudspeaker] Sector 4 is under quarantine. Remain indoors. Declare weapons and stores over fourteen days.",
+      "speaker": "narrator",
+      "text": "Late November. Sleet. A loudspeaker: TYPHOID QUARANTINE, SECTOR FOUR. REMAIN INDOORS. PREPARE FOR INSPECTION.",
       "next": "s1"
     },
     {
       "id": "s1",
-      "speaker": "narrator",
-      "text": "Typhoid is real here. Six dead this week. So are the trucks loading confiscated food.",
-      "branches": [
-        {
-          "next": "pruitt",
-          "conditions": [
-            {
-              "flag": "pruitt_alive",
-              "eq": true
-            }
-          ]
-        },
-        {
-          "next": "marg"
-        }
-      ]
+      "speaker": "lolo",
+      "text": "Typhoid. Ha. There are two cases and both are mine. They're looking for guns, maitia.",
+      "next": "s2"
     },
     {
-      "id": "pruitt",
-      "speaker": "deshawn",
-      "text": "Ms. Dell. Grandpa's got three months of soup cans. They'll take it. Can we hide it at yours?",
+      "id": "s2",
+      "speaker": "lolo",
+      "text": "I have morphine in the clinic. The Pruitts have six months of food in the crawlspace. They'll take it all.",
       "choices": [
         {
-          "text": "[Hide it under your floor]",
-          "next": "hide",
-          "effects": [
-            {
-              "set": "ch06_hid_neighbors",
-              "value": true
-            },
-            {
-              "add": "kindness",
-              "value": 1
-            }
-          ]
-        },
-        {
-          "text": "Declare it. It's not worth getting shot.",
-          "next": "declare"
-        }
-      ]
-    },
-    {
-      "id": "marg",
-      "speaker": "narrator",
-      "text": "Marguerite hands you a cigar box over the fence: the clinic's morphine. 'Under your floor. Please.'",
-      "choices": [
-        {
-          "text": "[Hide it under your floor]",
+          "text": "[Hide their food and her morphine]",
           "next": "hide",
           "effects": [
             {
@@ -80,189 +42,102 @@
               "value": 1
             },
             {
-              "trust": "marguerite",
-              "delta": 1
+              "trust": "lolo",
+              "delta": 2
+            },
+            {
+              "add": "ironwood_hostility",
+              "value": 1
             }
           ]
         },
         {
-          "text": "I can't risk Theo for this.",
+          "text": "[Hide only our own things]",
+          "next": "own"
+        },
+        {
+          "text": "Declare it. Don't give them a reason.",
           "next": "declare",
           "effects": [
             {
-              "trust": "marguerite",
-              "delta": -1
+              "add": "rep_authority",
+              "value": 1
             }
           ]
         }
       ]
-    },
-    {
-      "id": "declare",
-      "speaker": "narrator",
-      "text": "It goes on a truck. Somewhere, a quartermaster counts it.",
-      "next": "door"
     },
     {
       "id": "hide",
       "speaker": "narrator",
-      "text": "Floorboards up, cans in, rug down. Your hands are shaking. Boots on the porch.",
+      "text": "Ten minutes, two trips, Wraith on lookout at the corner. The crawlspace in your house is now very full.",
+      "next": "door"
+    },
+    {
+      "id": "own",
+      "speaker": "narrator",
+      "text": "You hide your own rifle and filters. Through the window, soldiers carry boxes out of the Pruitts'.",
+      "next": "door"
+    },
+    {
+      "id": "declare",
+      "speaker": "lolo",
+      "text": "Declare it. Yes. And then they declare it theirs. You'll see.",
+      "effects": [
+        {
+          "trust": "lolo",
+          "delta": -1
+        }
+      ],
       "next": "door"
     },
     {
       "id": "door",
-      "speaker": "ruiz",
-      "text": "Kowalczyk. Small world. Weapons, stores, sympathizers. Any of the three.",
-      "branches": [
+      "speaker": "ironwood_soldier",
+      "text": "Open up! Sector four inspection! Restrain the dog!",
+      "choices": [
         {
-          "next": "door_unreg",
-          "conditions": [
-            {
-              "flag": "ch02_registered",
-              "ne": true
-            }
-          ]
+          "text": "[Hold Wraith. Let them in]",
+          "next": "calm"
         },
         {
-          "next": "door_hostile",
-          "conditions": [
+          "text": "[Wraith, GUARD]",
+          "next": "guard",
+          "effects": [
             {
-              "flag": "ironwood_hostility",
-              "gte": 3
-            }
-          ]
-        },
-        {
-          "next": "door2"
-        }
-      ]
-    },
-    {
-      "id": "door_unreg",
-      "speaker": "ruiz",
-      "text": "You're not even in the registry. Unregistered household, Sector 4. That's a full search.",
-      "effects": [
-        {
-          "add": "ironwood_hostility",
-          "value": 1
-        }
-      ],
-      "next": "door2"
-    },
-    {
-      "id": "door_hostile",
-      "speaker": "ruiz",
-      "text": "You shorted my cabinet. Lieutenant wants you processed. I'm the one who decides if you're home.",
-      "next": "door2"
-    },
-    {
-      "id": "door2",
-      "speaker": "narrator",
-      "text": "She looks at the rug. At the scuffed boards. At Theo in the doorway.",
-      "branches": [
-        {
-          "next": "clear",
-          "conditions": [
-            {
-              "flag": "ch06_hid_neighbors",
-              "eq": true
-            }
-          ]
-        },
-        {
-          "next": "clear_plain"
-        }
-      ]
-    },
-    {
-      "id": "clear",
-      "speaker": "ruiz",
-      "text": "...House is clear. ¡Vámonos!",
-      "effects": [
-        {
-          "trust": "ruiz",
-          "delta": 2
-        }
-      ],
-      "next": "clear2"
-    },
-    {
-      "id": "clear2",
-      "speaker": "narrator",
-      "text": "On the way out she taps the list on her clipboard. Kids' houses have a pencil mark. Skipped.",
-      "effects": [
-        {
-          "set": "ruiz_list_seen",
-          "value": true
-        }
-      ],
-      "next": "list"
-    },
-    {
-      "id": "clear_plain",
-      "speaker": "ruiz",
-      "text": "Clear. Stay inside. Boil your water. I mean it.",
-      "next": "list"
-    },
-    {
-      "id": "list",
-      "speaker": "narrator",
-      "text": "At the checkpoint, a list goes up on plywood: INFORMANT-VERIFIED HOUSEHOLDS. With sources.",
-      "branches": [
-        {
-          "next": "ray_reads",
-          "conditions": [
-            {
-              "flag": "ch02_reported_ray",
-              "eq": true
+              "add": "ironwood_hostility",
+              "value": 1
             },
             {
-              "flag": "ray_alive",
-              "eq": true
+              "set": "wraith_injured",
+              "value": true
             }
           ]
-        },
-        {
-          "next": "end"
         }
       ]
     },
     {
-      "id": "ray_reads",
+      "id": "calm",
       "speaker": "narrator",
-      "text": "Ray stands in front of it a long time. BREKKE, R. SOURCE: KOWALCZYK, A.",
-      "effects": [
-        {
-          "set": "ray_knows_report",
-          "value": true
-        },
-        {
-          "trust": "ray",
-          "delta": -6
-        },
-        {
-          "trust": "cody",
-          "delta": -4
-        }
-      ],
-      "next": "ray_reads2"
+      "text": "They turn the house over. They miss the crawlspace. One of them pets Wraith on the way out.",
+      "next": "end"
     },
     {
-      "id": "ray_reads2",
+      "id": "guard",
       "speaker": "narrator",
-      "text": "He doesn't come to your door. He doesn't have to.",
+      "text": "A soldier panics. A rifle butt. Wraith yelps and goes down limping. They leave faster than they came.",
+      "next": "guard2"
+    },
+    {
+      "id": "guard2",
+      "speaker": "narrator",
+      "text": "WRAITH IS INJURED. She can't track until treated (vet_kit or rest). She still tries to stand guard.",
       "next": "end"
     },
     {
       "id": "end",
       "speaker": "narrator",
-      "text": "By evening, Theo is gone. His note: 'don't be mad. i can help. — T'",
-      "effects": [
-        {
-          "quest": "q_find_theo",
-          "state": "start"
-        }
-      ],
+      "text": "Down the street, a list is taped to a lamppost. Names. Your street. Informants, it says.",
       "end": true
     }
   ]

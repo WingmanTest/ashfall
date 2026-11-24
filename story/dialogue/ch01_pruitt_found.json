@@ -1,0 +1,112 @@
+{
+  "id": "ch01_pruitt_found",
+  "chapter": "ch01",
+  "location": "loc_sparks_block",
+  "trigger": "Wraith's scent trail ends at the irrigation canal behind the block.",
+  "speakers": [
+    "narrator",
+    "wraith",
+    "braith",
+    "pruitt",
+    "deshawn"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "wraith",
+      "text": "[Nose down. Fast. Then she stops dead and sits, staring at the canal bank.]",
+      "next": "p1"
+    },
+    {
+      "id": "p1",
+      "speaker": "narrator",
+      "text": "Mr. Pruitt is sitting on the bank in his slippers, throwing bread to ducks that aren't there.",
+      "next": "p2"
+    },
+    {
+      "id": "p2",
+      "speaker": "pruitt",
+      "text": "There you are. Thought the Air Force forgot about me.",
+      "choices": [
+        {
+          "text": "Let's get you home, Mr. Pruitt.",
+          "next": "home"
+        },
+        {
+          "text": "What are you doing out here?",
+          "next": "what"
+        }
+      ]
+    },
+    {
+      "id": "what",
+      "speaker": "pruitt",
+      "text": "Ducks. The power's out. Somebody has to feed the ducks.",
+      "next": "home"
+    },
+    {
+      "id": "home",
+      "speaker": "narrator",
+      "text": "He leans on you all the way back. He weighs nothing. Deshawn runs the last half block.",
+      "effects": [
+        {
+          "set": "ch01_scarf_found",
+          "value": true
+        },
+        {
+          "trust": "wraith",
+          "delta": 1
+        },
+        {
+          "quest": "q_find_pruitt",
+          "state": "complete"
+        }
+      ],
+      "next": "p3"
+    },
+    {
+      "id": "p3",
+      "speaker": "deshawn",
+      "text": "Grandpa! You can't do that. You can't just—",
+      "branches": [
+        {
+          "next": "p4g",
+          "conditions": [
+            {
+              "flag": "ch01_fuel_to_pruitt",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "p4"
+        }
+      ]
+    },
+    {
+      "id": "p4g",
+      "speaker": "deshawn",
+      "text": "Ms. Lolo says you gave the gas. I... thanks. For real. I owe you one.",
+      "effects": [
+        {
+          "trust": "lolo",
+          "delta": 1
+        }
+      ],
+      "next": "p5"
+    },
+    {
+      "id": "p4",
+      "speaker": "deshawn",
+      "text": "Thanks, man. Your dog's a genius. Grandpa, inside. Now.",
+      "next": "p5"
+    },
+    {
+      "id": "p5",
+      "speaker": "wraith",
+      "text": "[Accepts one pat from Deshawn. Then comes straight back to your heel.]",
+      "end": true
+    }
+  ]
+}

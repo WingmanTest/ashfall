@@ -1,0 +1,188 @@
+{
+  "id": "ch01_carly_home",
+  "chapter": "ch01",
+  "location": "loc_sparks_block",
+  "trigger": "Game start. Kitchen, morning. Carly comes in the back door.",
+  "speakers": [
+    "narrator",
+    "carly",
+    "braith",
+    "wraith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Day three. Ninety-five by noon. The fridge quit Monday. The faucet coughs, then nothing. Wraith hears the gate first.",
+      "next": "c0"
+    },
+    {
+      "id": "c0",
+      "speaker": "wraith",
+      "text": "[Ears up. One sharp bark. Tail going like a prop.]",
+      "next": "c1"
+    },
+    {
+      "id": "c1",
+      "speaker": "carly",
+      "text": "Hi. Hi, baby. Yes. I know. I smell like a server room.",
+      "next": "c2"
+    },
+    {
+      "id": "c2",
+      "speaker": "narrator",
+      "text": "Carly drops her headset bag on the counter. Seventy hours on the dispatch floor. She looks ten years older and very awake.",
+      "next": "c3"
+    },
+    {
+      "id": "c3",
+      "speaker": "carly",
+      "text": "They sent the day shift home. Generator's got maybe a week. The phones died Tuesday. We kept talking anyway.",
+      "choices": [
+        {
+          "text": "Sit. I'll get you some water.",
+          "next": "coffee",
+          "effects": [
+            {
+              "trust": "carly",
+              "delta": 1
+            },
+            {
+              "stat": "hydration",
+              "delta": 5
+            }
+          ]
+        },
+        {
+          "text": "What was it like in there?",
+          "next": "like"
+        },
+        {
+          "text": "We should leave. Dad's ranch.",
+          "next": "leave"
+        }
+      ]
+    },
+    {
+      "id": "coffee",
+      "speaker": "carly",
+      "text": "It's warm as bathwater, isn't it. I don't care. Give it here.",
+      "next": "like"
+    },
+    {
+      "id": "like",
+      "speaker": "carly",
+      "text": "Radio only. Calls from patrol cars. People walking in off the street to report things.",
+      "next": "like2"
+    },
+    {
+      "id": "like2",
+      "speaker": "carly",
+      "text": "A man walked six miles to tell us his wife died. He just wanted someone to write it down.",
+      "choices": [
+        {
+          "text": "Did you?",
+          "next": "wrote"
+        },
+        {
+          "text": "[Take her hand]",
+          "next": "hand",
+          "effects": [
+            {
+              "trust": "carly",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wrote",
+      "speaker": "carly",
+      "text": "Address, time, name. Yeah. That's the job. You write it down so it happened.",
+      "next": "plan"
+    },
+    {
+      "id": "hand",
+      "speaker": "narrator",
+      "text": "Her hand is hot and steady. The shaking is somewhere else.",
+      "next": "plan"
+    },
+    {
+      "id": "leave",
+      "speaker": "carly",
+      "text": "Yerington's seventy miles of nothing. And I'm back on shift Thursday.",
+      "next": "leave2"
+    },
+    {
+      "id": "leave2",
+      "speaker": "carly",
+      "text": "Braith. Somebody has to answer. Even if it's just a guy on a bike.",
+      "effects": [
+        {
+          "trust": "carly",
+          "delta": -1
+        }
+      ],
+      "next": "plan"
+    },
+    {
+      "id": "plan",
+      "speaker": "braith",
+      "text": "Water's out. Pressure dropped overnight. I'll haul from the marina and boil it.",
+      "next": "plan2"
+    },
+    {
+      "id": "plan2",
+      "speaker": "carly",
+      "text": "Lolo came by. She's worried about Mr. Pruitt. His oxygen machine needs a plug.",
+      "next": "plan3"
+    },
+    {
+      "id": "plan3",
+      "speaker": "carly",
+      "text": "And Gil's running a generator like it's the Fourth of July. Somebody should ask him nicely.",
+      "next": "plan4"
+    },
+    {
+      "id": "plan4",
+      "speaker": "carly",
+      "text": "I'm going to sleep for four hours. Wake me if the world ends again.",
+      "choices": [
+        {
+          "text": "Copy, Dispatch. Four hours.",
+          "next": "end_a",
+          "effects": [
+            {
+              "trust": "carly",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "text": "Take Wraith. She'll guard you.",
+          "next": "end_b"
+        }
+      ]
+    },
+    {
+      "id": "end_a",
+      "speaker": "narrator",
+      "text": "She laughs once, into your shoulder, and goes upstairs. Wraith stays with you. She always does.",
+      "effects": [
+        {
+          "quest": "q_water",
+          "state": "start"
+        }
+      ],
+      "end": true
+    },
+    {
+      "id": "end_b",
+      "speaker": "wraith",
+      "text": "[Looks at Carly. Looks at you. Sits on your boot. Decision made.]",
+      "next": "end_a"
+    }
+  ]
+}

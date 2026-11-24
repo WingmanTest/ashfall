@@ -1,55 +1,54 @@
 {
   "id": "ch08_door",
   "chapter": "ch08",
-  "location": "loc_east_end",
-  "trigger": "Night. Strangers knock. Filters and iodide on the table.",
+  "location": "loc_sparks_block",
+  "trigger": "Strangers at the sealed door (real). Then, past midnight, a mimic knocks (enc_ch08_door_mimic).",
   "speakers": [
-    "rosa",
-    "dell",
-    "theo",
-    "narrator"
+    "narrator",
+    "carly",
+    "braith",
+    "stranger_mother",
+    "wraith",
+    "hollow"
   ],
   "start": "start",
   "nodes": [
     {
       "id": "start",
       "speaker": "narrator",
-      "text": "Knocking. Three people in the ash: a woman, a boy, an old man with a cough like gravel.",
-      "branches": [
+      "text": "A knock. Five people on the step: a mother, two kids, an old man, a teenager with a broken arm. All grey with ash.",
+      "next": "d0"
+    },
+    {
+      "id": "d0",
+      "speaker": "wraith",
+      "text": "[Nose to the door crack. Tail low. A soft whine. Their breath fogs the glass. Sick, scared, real.]",
+      "next": "d1"
+    },
+    {
+      "id": "d1",
+      "speaker": "stranger_mother",
+      "text": "Please. We walked from Sun Valley. They said there's a house that seals. Please.",
+      "next": "d2"
+    },
+    {
+      "id": "d2",
+      "speaker": "carly",
+      "text": "Address? ...Okay, doesn't matter. Breathing? Okay. Injuries? One arm. Okay. Braith. Your call or mine?",
+      "choices": [
         {
-          "next": "rosa",
-          "conditions": [
+          "text": "Yours. You do intake.",
+          "next": "carly",
+          "effects": [
             {
-              "flag": "ch02_crush_helped",
-              "eq": true
+              "trust": "carly",
+              "delta": 2
             }
           ]
         },
         {
-          "next": "strangers"
-        }
-      ]
-    },
-    {
-      "id": "rosa",
-      "speaker": "rosa",
-      "text": "It's Rosa. From the line, the flour. You pulled my Mateo out. Please. One night.",
-      "next": "choice"
-    },
-    {
-      "id": "strangers",
-      "speaker": "narrator",
-      "text": "'Please,' the woman says. 'We have nothing. We know that's not a reason.'",
-      "next": "choice"
-    },
-    {
-      "id": "choice",
-      "speaker": "theo",
-      "text": "ma. we have six filters. i need two a week. do the math. i'm not saying no. i'm saying math.",
-      "choices": [
-        {
-          "text": "[Let them in. Share filters and iodide.]",
-          "next": "share",
+          "text": "[Let them in. Share filters]",
+          "next": "in",
           "effects": [
             {
               "set": "filters_shared",
@@ -60,98 +59,204 @@
               "value": 2
             },
             {
-              "trust": "marguerite",
-              "delta": 2
-            },
-            {
               "take": "mask_filter",
-              "qty": 3
+              "qty": 2
             }
           ]
         },
         {
-          "text": "[Let them in. Keep the filters.]",
-          "next": "shelter",
-          "effects": [
-            {
-              "add": "kindness",
-              "value": 1
-            },
-            {
-              "set": "filters_shared",
-              "value": false
-            }
-          ]
-        },
-        {
-          "text": "[Keep the door shut]",
-          "next": "shut",
-          "effects": [
-            {
-              "set": "filters_shared",
-              "value": false
-            }
-          ]
+          "text": "We can't. I'm sorry.",
+          "next": "no"
         }
       ]
     },
     {
-      "id": "share",
-      "speaker": "narrator",
-      "text": "They sleep by your stove. In the morning the old man is gone. The others are still breathing.",
-      "branches": [
-        {
-          "next": "rosa_gift",
-          "conditions": [
-            {
-              "flag": "ch02_crush_helped",
-              "eq": true
-            }
-          ]
-        },
-        {
-          "next": "end"
-        }
-      ]
-    },
-    {
-      "id": "rosa_gift",
-      "speaker": "rosa",
-      "text": "Harbor stores. Back room. Tell them Rosa. There's a case of filters. Go.",
+      "id": "carly",
+      "speaker": "carly",
+      "text": "Then they're in. Decontaminate in the garage. Strip, wipe, bag the clothes. Then soup.",
       "effects": [
         {
-          "give": "mask_filter",
-          "qty": 6
-        },
-        {
-          "set": "rosa_filters",
+          "set": "filters_shared",
           "value": true
+        },
+        {
+          "add": "kindness",
+          "value": 2
+        },
+        {
+          "take": "mask_filter",
+          "qty": 2
         }
       ],
+      "next": "in2"
+    },
+    {
+      "id": "in",
+      "speaker": "narrator",
+      "text": "They come in shaking. The SEAL drops to 92% while the door's open. Worth it. Probably.",
+      "next": "in2"
+    },
+    {
+      "id": "in2",
+      "speaker": "carly",
+      "text": "I'm writing their names down. Not on a list. In a book. There's a difference and I'll fight you on it.",
       "next": "end"
     },
     {
-      "id": "shelter",
-      "speaker": "narrator",
-      "text": "They sleep by your stove with wet rags over their faces. The boy coughs all night.",
-      "next": "end"
-    },
-    {
-      "id": "shut",
-      "speaker": "narrator",
-      "text": "The knocking stops eventually. In the morning there are footprints going away. Some come back.",
+      "id": "no",
+      "speaker": "stranger_mother",
+      "text": "...Okay. Okay. Come on, babies. We'll find another one.",
       "effects": [
         {
-          "trust": "theo",
-          "delta": -1
+          "trust": "carly",
+          "delta": -3
         }
       ],
+      "next": "no2"
+    },
+    {
+      "id": "no2",
+      "speaker": "carly",
+      "text": "[She doesn't speak to you for the rest of the day. At night she writes their names down anyway.]",
       "next": "end"
     },
     {
       "id": "end",
       "speaker": "narrator",
-      "text": "Grey morning. Grey noon. Grey.",
+      "text": "Past midnight. Another knock. Three slow raps. Then the same three. Then again, exactly the same.",
+      "next": "k1"
+    },
+    {
+      "id": "k1",
+      "speaker": "hollow",
+      "text": "Let me in. I have filters. Let me in, I have filters. ...Braith?",
+      "branches": [
+        {
+          "next": "k2w",
+          "conditions": [
+            {
+              "flag": "wraith_alive",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "k3"
+        }
+      ]
+    },
+    {
+      "id": "k2w",
+      "speaker": "wraith",
+      "text": "[Backing away from the door. Hackles up. Not barking. A growl so low it's almost silence.]",
+      "effects": [
+        {
+          "set": "wraith_mimic_warned",
+          "value": true
+        }
+      ],
+      "next": "k3"
+    },
+    {
+      "id": "k3",
+      "speaker": "carly",
+      "text": "[Whispering] That's the Sun Valley mom's voice. She's asleep in the garage. I just checked her.",
+      "choices": [
+        {
+          "text": "[Open the door]",
+          "next": "open",
+          "effects": [
+            {
+              "set": "mimic_let_in",
+              "value": true
+            },
+            {
+              "set": "assimilation_discovered",
+              "value": true
+            },
+            {
+              "event": "encounter",
+              "id": "enc_ch08_door_mimic"
+            },
+            {
+              "stat": "health",
+              "delta": -20
+            },
+            {
+              "trust": "carly",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "text": "[Flashlight through the mail slot]",
+          "next": "slot"
+        },
+        {
+          "text": "[Keep it shut. Wait for dawn]",
+          "next": "wait"
+        }
+      ]
+    },
+    {
+      "id": "slot",
+      "speaker": "narrator",
+      "text": "A woman's shape on the step. Minus fourteen out there and no breath. Her eyes take the light and give it back.",
+      "choices": [
+        {
+          "text": "[Shoot through the door]",
+          "next": "shoot",
+          "effects": [
+            {
+              "add": "assimilated_killed",
+              "value": 1
+            },
+            {
+              "set": "assimilation_discovered",
+              "value": true
+            }
+          ]
+        },
+        {
+          "text": "[Keep it shut. Wait for dawn]",
+          "next": "wait"
+        }
+      ]
+    },
+    {
+      "id": "open",
+      "speaker": "narrator",
+      "text": "The door opens six inches. Something long comes through at the height of a face. The SEAL alarm screams.",
+      "next": "open2"
+    },
+    {
+      "id": "open2",
+      "speaker": "narrator",
+      "text": "When it's over, the boy with the broken arm is hurt badly, and the hall smells like cold metal.",
+      "next": "dawn"
+    },
+    {
+      "id": "shoot",
+      "speaker": "narrator",
+      "text": "Two rounds through the plywood. A sound like a recording slowing down. Then only wind.",
+      "next": "dawn"
+    },
+    {
+      "id": "wait",
+      "speaker": "narrator",
+      "text": "It knocks until four. It says your name nineteen times. At dawn: long prints on the step. And small ones.",
+      "effects": [
+        {
+          "set": "assimilation_discovered",
+          "value": true
+        }
+      ],
+      "next": "dawn"
+    },
+    {
+      "id": "dawn",
+      "speaker": "narrator",
+      "text": "The rain keeps falling, grey with ash. It's January. It'll be January for a long time.",
       "end": true
     }
   ]

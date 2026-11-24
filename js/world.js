@@ -2,9 +2,9 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { KTX2Loader } from "three/addons/loaders/KTX2Loader.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
-import { LOCATIONS } from "./config.js?v=r8";
-import { isMobileClient } from "./device.js?v=r8";
-import { tickActor } from "./actors.js?v=r8";
+import { LOCATIONS } from "./config.js?v=r9";
+import { isMobileClient } from "./device.js?v=r9";
+import { tickActor } from "./actors.js?v=r9";
 
 export function makeLoader(renderer) {
   const loader = new GLTFLoader();
@@ -42,7 +42,7 @@ export function fitHeight(obj, height, alignBottom = true) {
   return obj;
 }
 
-export { makePerson, tickActor } from "./actors.js?v=r8";
+export { makePerson, tickActor } from "./actors.js?v=r9";
 
 export function makeDog(color = 0x3b322c) {
   const g = new THREE.Group();
@@ -155,7 +155,7 @@ export class World {
       try { return await loadGLB(gltf, url); } catch (e) { console.warn("glb fail", url, e); return null; }
     };
 
-    const [snow, road, brick, rust, concrete, corr, rustc, dirt, sedanG] = await Promise.all([
+    const [snow, road, brick, rust, concrete, corr, rustc, dirt, sedanG, roadDry] = await Promise.all([
       pbr("snow_02"),
       pbr("asphalt_snow"),
       pbr("red_brick"),
@@ -165,6 +165,7 @@ export class World {
       pbr("rust_coarse_01"),
       pbr("dirt"),
       tryGLB("./assets/tevy/wrecked-sedan-lod1.glb"),
+      pbr("road_damaged").catch(() => null),
     ]);
     this.mats = { snow, road, brick, rust, concrete, corr, rustc, dirt };
     this.zombieGltf = null;
@@ -187,7 +188,11 @@ export class World {
     if (snow.nor) snow.nor.repeat.set(18, 30);
     if (snow.rough) snow.rough.repeat.set(18, 30);
     ground.receiveShadow = true;
+    // Sits just under the level floor tiles (no z-fight); only the horizon beyond the level shows it.
+    ground.position.y = -0.05;
+    ground.scale.set(3, 2.2, 1);
     scene.add(ground);
+    this._ground = ground;
 
     const roadMesh = new THREE.Mesh(
       new THREE.PlaneGeometry(9.2, 120),
@@ -202,6 +207,15 @@ export class World {
     roadMesh.position.set(0, 0.02, -40);
     roadMesh.receiveShadow = true;
     scene.add(roadMesh);
+    this._roadMesh = roadMesh;
+    // Seasonal ground sets (Rev 2): dry dirt / asphalt for Ch1–7, snow only where snowCover > 0.
+    const rep = (t, x, y) => { if (!t) return null; const c = t.clone(); c.repeat.set(x, y); c.needsUpdate = true; return c; };
+    this._groundSets = {
+      snow: { map: snow.diff, normalMap: snow.nor || null, roughnessMap: snow.rough || null, color: 0xd8e2ec },
+      dry: { map: rep(dirt.diff, 54, 66), normalMap: rep(dirt.nor, 54, 66), roughnessMap: rep(dirt.rough, 54, 66), color: 0xc9a87c },
+      roadSnow: { map: road.diff, normalMap: road.nor || null, roughnessMap: road.rough || null, color: 0xc5cdd4 },
+      roadDry: roadDry ? { map: rep(roadDry.diff, 2, 22), normalMap: rep(roadDry.nor, 2, 22), roughnessMap: rep(roadDry.rough, 2, 22), color: 0xb8ada0 } : null,
+    };
 
     // Lighting
     const amb = new THREE.AmbientLight(0xb8c4d4, 0.35);
@@ -230,7 +244,7 @@ export class World {
     this.tryGLB = tryGLB;
     this.gltf = gltf;
     this.prefabs = {};
-    this.pbrCache = { snow_02: snow, asphalt_snow: road, red_brick: brick, rusty_metal: rust, dirty_concrete: concrete, rusty_corrugated_iron: corr, rust_coarse_01: rustc, dirt, road_damaged: road };
+    this.pbrCache = { snow_02: snow, asphalt_snow: road, red_brick: brick, rusty_metal: rust, dirty_concrete: concrete, rusty_corrugated_iron: corr, rust_coarse_01: rustc, dirt, road_damaged: roadDry || road };
     this.levelGroup = new THREE.Group();
     this.levelGroup.name = "level";
     scene.add(this.levelGroup);
@@ -567,7 +581,38 @@ export class World {
     }
   }
 
+  /** Rev 2: bind Lumen's active preset + the level environment (season, snowCover). */
+  setEnvironment(cfg, levelEnv = {}) {
+    this.envCfg = cfg || null;
+    this.levelEnv = levelEnv || {};
+    const hints = (cfg && cfg.sceneHints) || {};
+    const cover = Number(levelEnv.snowCover);
+    this.snowy = Number.isFinite(cover) ? cover > 0 : !!hints.snow;
+    this.season = (cfg && cfg.id) || levelEnv.season || null;
+    const G = this._groundSets;
+    const apply = (mesh, set, tint) => {
+      if (!mesh || !set) return;
+      const m = mesh.material;
+      m.map = set.map || null; m.normalMap = set.normalMap || null; m.roughnessMap = set.roughnessMap || null;
+      m.color.set(tint != null ? tint : set.color);
+      m.needsUpdate = true;
+    };
+    if (G) {
+      apply(this._ground, this.snowy ? G.snow : G.dry, this.snowy ? null : (hints.ground ?? null));
+      apply(this._roadMesh, this.snowy ? G.roadSnow : (G.roadDry || G.roadSnow), this.snowy ? null : 0xb8ada0);
+    }
+    // Cartographer: falling snow only where snowCover > 0 (Ch1–2 dry, zero snow).
+    if (this.particles) this.particles.visible = this.snowy;
+    // Level grids bring their own roads; the boot strip would z-fight them.
+    if (this._roadMesh) this._roadMesh.visible = !this._levelLoaded;
+    this._c1 = this._c1 || new THREE.Color();
+    this._c2 = this._c2 || new THREE.Color();
+    this._c3 = this._c3 || new THREE.Color();
+    return this.snowy;
+  }
+
   setSky(timeOfDay, blizzard) {
+    if (this.envCfg) return this._setSkyEnv(timeOfDay, blizzard);
     // 0 night, 0.25 dawn, 0.5 noon, 0.75 dusk, 1 night
     const t = timeOfDay;
     const day = Math.max(0, Math.cos((t - 0.5) * Math.PI * 2) * 0.5 + 0.5);
@@ -599,8 +644,42 @@ export class World {
     return { day, night, blizzard };
   }
 
+  _setSkyEnv(t, blizzard) {
+    const E = this.envCfg;
+    const winter = E.id === "fallout_winter";
+    const bz = !!blizzard && winter; // blizzards only exist in nuclear winter
+    const day = Math.max(0, Math.cos((t - 0.5) * Math.PI * 2) * 0.5 + 0.5);
+    const night = 1 - day;
+    const sun = this.lights.sun, amb = this.lights.amb, hemi = this.lights.hemi;
+    const ang = (t - 0.25) * Math.PI * 2;
+    sun.position.set(Math.cos(ang) * 28, Math.max(2.5, Math.sin(ang) * 30), 10);
+    sun.intensity = (E.sun?.intensity ?? 1.2) * (0.1 + day * 0.9) * (bz ? 0.45 : 1);
+    sun.color.set(E.sun?.color ?? 0xe8eef6);
+    if (night > 0.7) sun.color.lerp(this._c1.set(0x8899bb), 0.7);
+    amb.color.set(E.ambient?.color ?? 0xb8c4d4);
+    amb.intensity = (E.ambient?.intensity ?? 0.35) * (0.28 + day * 0.72);
+    hemi.color.set(E.hemi?.sky ?? 0xc9d6e6);
+    if (hemi.groundColor) hemi.groundColor.set(E.hemi?.ground ?? 0x3a4038);
+    hemi.intensity = (E.hemi?.intensity ?? 0.45) * (0.3 + day * 0.7);
+    const fog = this._c2.set(E.fog?.color ?? 0x9aa8b8);
+    const sky = this._c3.set(E.sky?.color ?? 0x9aa8b8).lerp(fog, 0.45);
+    if (bz) sky.lerp(this._c1.set(0x8a9098), 0.6);
+    sky.lerp(this._c1.set(0x070a10), night * 0.88);
+    fog.lerp(this._c1.set(0x070a10), night * 0.85);
+    if (!this.scene.background || !this.scene.background.isColor) this.scene.background = new THREE.Color();
+    this.scene.background.copy(sky);
+    if (this.scene.fog) {
+      this.scene.fog.color.copy(fog);
+      const far = E.fog?.maxDist ?? 55;
+      this.scene.fog.near = bz ? 3 : (E.fog?.start ?? 8) * (night > 0.6 ? 0.6 : 1);
+      this.scene.fog.far = bz ? 18 : far * (night > 0.6 ? 0.6 : 1);
+    }
+    return { day, night, blizzard: bz };
+  }
+
   updateParticles(dt, cam, blizzard) {
     if (!this.particles) return;
+    if (this.particles.visible === false) { this._tickFires(); return; }
     const pos = this.particles.geometry.attributes.position;
     const arr = pos.array;
     const speed = blizzard ? 9 : 2.8;
@@ -616,6 +695,10 @@ export class World {
       }
     }
     pos.needsUpdate = true;
+    this._tickFires();
+  }
+
+  _tickFires() {
     for (const f of this.fires) {
       if (!f.on) {
         if (f.light) f.light.intensity = 0;
@@ -755,9 +838,12 @@ export class World {
 
   nearestInteract(x, z, maxR = 2.2) {
     let best = null, bestD = maxR;
+    let pet = null;
     for (const n of this.npcs) {
       if (!n.alive) continue;
       const d = Math.hypot(x - n.x, z - n.z);
+      // Wraith trots at heel: she is only the target when nothing else is in reach.
+      if (n.companion) { if (d < maxR && (!pet || d < pet.d)) pet = { type: "npc", obj: n, d }; continue; }
       if (d < bestD) { bestD = d; best = { type: "npc", obj: n, d }; }
     }
     for (const L of this.loot) {
@@ -769,7 +855,7 @@ export class World {
       const d = Math.hypot(x - I.x, z - I.z);
       if (d < Math.min(bestD, I.r)) { bestD = d; best = { type: I.type, obj: I, d }; }
     }
-    return best;
+    return best || pet;
   }
 
   locationAt(x, z) {
@@ -827,6 +913,8 @@ function isCachedTexture(tex, cache) {
 
 function disposeMesh(o, pbrCache) {
   if (!o) return;
+  // GLB clones share geometry/materials with the cached registry template.
+  if (o.userData && o.userData.sharedAsset) return;
   try { o.geometry?.dispose?.(); } catch {}
   const mats = o.material ? (Array.isArray(o.material) ? o.material : [o.material]) : [];
   for (const m of mats) {

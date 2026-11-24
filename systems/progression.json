@@ -1,44 +1,48 @@
 {
-  "version": 1,
+  "version": 2,
   "model": "Gear-gated progression plus a few small perks. No XP, no levels, no skill trees: what you carry and wear is your power curve. Perks are picked at 4 chapter ends (1 of 3 random offers).",
   "acts": {
     "blackout": {
       "name": "Blackout",
-      "story_act": "I: The Dark",
+      "story_act": "I",
       "chapters": [
         "ch01",
         "ch02"
       ],
-      "feel": "Canned food in cupboards, few guns, mild cold. People are the threat."
+      "feel": "Late-summer blackout in Sparks/Reno: heat, thirst and clean water are the pressure. Canned food in cupboards, few guns. People are the threat.",
+      "season": "late_summer"
     },
     "collapse": {
       "name": "Collapse",
-      "story_act": "I-II: The Dark / The Split",
+      "story_act": "I (ch03) / II (ch04)",
       "chapters": [
         "ch03",
         "ch04"
       ],
-      "feel": "Deep cold arrives; firewood & clothing matter most. Shotguns appear."
+      "feel": "Autumn: cold nights arrive, layering starts to matter, the Viaduct Crew raids. Shotguns and the first gun safes.",
+      "season": "autumn"
     },
     "civil_war": {
       "name": "Civil War",
-      "story_act": "II: The Split",
+      "story_act": "II",
       "chapters": [
         "ch05",
         "ch06",
         "ch07"
       ],
-      "feel": "Warmer months, guns and ammo flow, soldiers and militias. Ch7 = first dogs, dosimeter."
+      "feel": "Late fall civil war: freezing rain and wind, soldiers and militias, ammo flows. Ch7 = first dogs/coyotes, the first Tallman, dosimeter.",
+      "season": "late_fall"
     },
     "nuclear_winter": {
       "name": "Nuclear Winter",
-      "story_act": "III: Ashfall",
+      "story_act": "III",
       "chapters": [
         "ch08",
         "ch09",
         "ch10"
       ],
-      "feel": "Extreme cold, fallout, husks and ferals, everything scarce."
+      "feel": "Nuclear fallout winter: lethal cold, fallout, mask filters, husks, the Remnant, Tallmen and the assimilated; everything scarce.",
+      "season": "nuclear_winter"
     }
   },
   "chapters": [
@@ -48,8 +52,13 @@
       "act": "blackout",
       "story_act": 1,
       "est_play_minutes": 25,
-      "expected_insulation": 0.3,
-      "gun_share_of_kills": 0.2
+      "expected_insulation": 0.03,
+      "gun_share_of_kills": 0.2,
+      "season": "late_summer",
+      "levels": [
+        "ch01_day_three"
+      ],
+      "expected_heat_load": 0.03
     },
     {
       "id": "ch02",
@@ -57,8 +66,13 @@
       "act": "blackout",
       "story_act": 1,
       "est_play_minutes": 25,
-      "expected_insulation": 0.33,
-      "gun_share_of_kills": 0.2
+      "expected_insulation": 0.06,
+      "gun_share_of_kills": 0.2,
+      "season": "late_summer",
+      "levels": [
+        "ch02_the_registry"
+      ],
+      "expected_heat_load": 0.08
     },
     {
       "id": "ch03",
@@ -66,8 +80,13 @@
       "act": "collapse",
       "story_act": 1,
       "est_play_minutes": 30,
-      "expected_insulation": 0.45,
-      "gun_share_of_kills": 0.35
+      "expected_insulation": 0.3,
+      "gun_share_of_kills": 0.35,
+      "season": "autumn",
+      "levels": [
+        "ch03_the_long_cold"
+      ],
+      "expected_heat_load": 0.3
     },
     {
       "id": "ch04",
@@ -75,8 +94,13 @@
       "act": "collapse",
       "story_act": 2,
       "est_play_minutes": 30,
-      "expected_insulation": 0.5,
-      "gun_share_of_kills": 0.35
+      "expected_insulation": 0.36,
+      "gun_share_of_kills": 0.35,
+      "season": "autumn",
+      "levels": [
+        "ch04_black_start"
+      ],
+      "expected_heat_load": 0.35
     },
     {
       "id": "ch05",
@@ -84,17 +108,27 @@
       "act": "civil_war",
       "story_act": 2,
       "est_play_minutes": 30,
-      "expected_insulation": 0.5,
-      "gun_share_of_kills": 0.6
+      "expected_insulation": 0.45,
+      "gun_share_of_kills": 0.6,
+      "season": "late_fall",
+      "levels": [
+        "ch05_route_9"
+      ],
+      "expected_heat_load": null
     },
     {
       "id": "ch06",
-      "title": "The Lift Bridge",
+      "title": "The Trench",
       "act": "civil_war",
       "story_act": 2,
       "est_play_minutes": 35,
-      "expected_insulation": 0.5,
-      "gun_share_of_kills": 0.6
+      "expected_insulation": 0.48,
+      "gun_share_of_kills": 0.6,
+      "season": "late_fall",
+      "levels": [
+        "ch06_the_trench"
+      ],
+      "expected_heat_load": null
     },
     {
       "id": "ch07",
@@ -103,7 +137,24 @@
       "story_act": 2,
       "est_play_minutes": 25,
       "expected_insulation": 0.52,
-      "gun_share_of_kills": 0.6
+      "gun_share_of_kills": 0.6,
+      "season": "late_fall",
+      "levels": [
+        "ch07_dead_air",
+        "ch07b_dixie_valley"
+      ],
+      "level_split": {
+        "ch07_dead_air": [
+          "loc_peavine_shack",
+          "loc_us50_fallon"
+        ],
+        "ch07b_dixie_valley": [
+          "loc_dixie_annex",
+          "loc_annex_holds",
+          "loc_dixie_hotsprings"
+        ]
+      },
+      "expected_heat_load": null
     },
     {
       "id": "ch08",
@@ -111,8 +162,13 @@
       "act": "nuclear_winter",
       "story_act": 3,
       "est_play_minutes": 35,
-      "expected_insulation": 0.55,
-      "gun_share_of_kills": 0.5
+      "expected_insulation": 0.58,
+      "gun_share_of_kills": 0.5,
+      "season": "nuclear_winter",
+      "levels": [
+        "ch08_ashfall"
+      ],
+      "expected_heat_load": null
     },
     {
       "id": "ch09",
@@ -120,8 +176,13 @@
       "act": "nuclear_winter",
       "story_act": 3,
       "est_play_minutes": 40,
-      "expected_insulation": 0.62,
-      "gun_share_of_kills": 0.5
+      "expected_insulation": 0.64,
+      "gun_share_of_kills": 0.5,
+      "season": "nuclear_winter",
+      "levels": [
+        "ch09_the_long_night"
+      ],
+      "expected_heat_load": null
     },
     {
       "id": "ch10",
@@ -129,20 +190,30 @@
       "act": "nuclear_winter",
       "story_act": 3,
       "est_play_minutes": 20,
-      "expected_insulation": 0.62,
-      "gun_share_of_kills": 0.5
+      "expected_insulation": 0.64,
+      "gun_share_of_kills": 0.5,
+      "season": "nuclear_winter",
+      "levels": [
+        "ch10_the_warm_room"
+      ],
+      "expected_heat_load": null
     }
   ],
   "gear_gates": [
     {
-      "item": "lineman_tools",
-      "unlocks": "electrical panels, relay cabinets, service doors",
+      "item": "mech_tools",
+      "unlocks": "electrical panels, relay cabinets, service doors; faster Ch4 black start; inspect mask_filter lot dates (Boone)",
       "chapter": "ch01"
     },
     {
       "item": "crowbar",
-      "unlocks": "'pry' containers (crates, car trunks open 2x faster)",
+      "unlocks": "'pry' containers (crates, gun safes; car trunks open 2x faster)",
       "chapter": "ch03"
+    },
+    {
+      "item": "gpu_cart",
+      "unlocks": "Galena black start (Ch4); Annex maglocks (Ch7)",
+      "chapter": "ch04"
     },
     {
       "item": "bolt_cutters",
@@ -155,9 +226,14 @@
       "chapter": "ch07"
     },
     {
-      "item": "sled",
-      "unlocks": "+15 kg carry",
+      "item": "lamp_kit",
+      "unlocks": "Ch10 lamp line (lamp_line_built)",
       "chapter": "ch07"
+    },
+    {
+      "item": "sled",
+      "unlocks": "+15 kg carry (Ch9 column)",
+      "chapter": "ch09"
     },
     {
       "item": "arctic_parka",
@@ -166,7 +242,7 @@
     },
     {
       "item": "mask_filter",
-      "unlocks": "rad_med / rad_high areas survivable (gas mask assumed from Ch8; story start_inventory gives 6)",
+      "unlocks": "rad_med / rad_high areas survivable with Braith's Air Force gas mask (has_gas_mask, Ch8 start; story gives 6 filters)",
       "chapter": "ch08"
     }
   ],
@@ -182,9 +258,10 @@
       {
         "id": "thick_skin",
         "name": "Thick Skin",
-        "desc": "Warmth drain -12%.",
+        "desc": "Warmth drain -12% (and heat stress -12% in late summer).",
         "effects": {
-          "warmth_drain_mult": 0.88
+          "warmth_drain_mult": 0.88,
+          "heat_stress_mult": 0.88
         }
       },
       {
@@ -247,9 +324,9 @@
         }
       },
       {
-        "id": "lineworker",
-        "name": "Lineworker",
-        "desc": "Open electrical panels and relay boxes 2x faster; electrical panels give +1 roll.",
+        "id": "crew_chief",
+        "name": "Crew Chief",
+        "desc": "Open electrical panels and relay boxes 2x faster; panels give +1 roll; gun repair_kit +25%.",
         "effects": {
           "panel_speed_mult": 2.0
         }
@@ -266,17 +343,456 @@
   },
   "economy": {
     "unit": "value; 1 ration tin = 10",
-    "buy_price": "item.value * act_price_mult[act][category] * trader.markup * difficulty.barter_buy_mult * (trust>=3 ? 0.85 : 1)",
-    "sell_price": "item.value * 0.5 * act_price_mult * difficulty.barter_sell_mult",
+    "buy_price": "item.value * trader.price_mult_by_act[story_act] * category_season_mult[systems_act][item.category] * item_season_price_mult[item][season] * (paying with a wanted good ? barter.wanted_good_mult : 1) * (trader rep >= 3 ? 0.85 : 1) * difficulty.barter_buy_mult. price_mult_by_act null = trader closed/absent.",
+    "sell_price": "item.value * 0.5 * category_season_mult * difficulty.barter_sell_mult (traders only buy what is in their wants or stock categories)",
     "barter_only": "No money. Trades are item-for-item; the UI balances by value.",
-    "act_price_mult": {
+    "traders": [
+      {
+        "id": "trader_dutch",
+        "npc": "trader_dutch",
+        "name": "Dutch Albertson",
+        "chapters": [
+          "ch02",
+          "ch06"
+        ],
+        "location_by_chapter": {
+          "ch02": "loc_fourth_street",
+          "ch06": "loc_fourth_street"
+        },
+        "story_act_by_chapter": {
+          "ch02": 1,
+          "ch06": 2
+        },
+        "stock_by_act": {
+          "1": {
+            "ammo_9mm": 24,
+            "cigarettes": 10,
+            "med_kit": 1,
+            "bolt_cutters": 1
+          },
+          "2": {
+            "rifle_ammo": 20,
+            "ironwood_id": 0,
+            "flare": 3
+          }
+        },
+        "stock_note": "Copied verbatim from story/npcs.json traders[].stock_by_act (keys = story acts 1/2/3). Validator enforces equality and that every id exists in items.json. qty 0 = only after a story condition.",
+        "price_mult_by_act": {
+          "1": 1.0,
+          "2": 1.5,
+          "3": null
+        },
+        "wants": {
+          "batteries": 0.7,
+          "ammo_9mm": 0.7,
+          "ammo_shell": 0.7,
+          "rifle_ammo": 0.7,
+          "ammo_556": 0.7,
+          "rumor": 0.7
+        },
+        "wants_services": [
+          "jewelry"
+        ],
+        "currencies_by_act": {
+          "1": [
+            "cigarettes",
+            "rumor",
+            "ration_card draw",
+            "cash (week 1 only)"
+          ],
+          "2": [
+            "cigarettes",
+            "rumor",
+            "spur_chip (x0.5)",
+            "ammo"
+          ]
+        },
+        "rep_flag": "trader_dutch_rep",
+        "hook": {
+          "type": "betrayal",
+          "detail": "If trader_dutch_rep<=-1 he sells your Galena route to the Viaduct Crew (ch04_dutch_ambush).",
+          "flag": "dutch_betrayed"
+        },
+        "act_shift": {
+          "1": "Takes cash for a week, then barter only.",
+          "2": "Fences Ironwood gear; prices x1.5.",
+          "3": "Gone (shop burned)."
+        },
+        "betrayal": {
+          "if": "trader_dutch_rep <= -1",
+          "sets": "dutch_betrayed",
+          "triggers": "enc_ch04_dutch_ambush (5 bridge_boy)"
+        }
+      },
+      {
+        "id": "trader_mo",
+        "npc": "trader_mo",
+        "name": "Maureen 'Mo' Kessinger",
+        "chapters": [
+          "ch05",
+          "ch08"
+        ],
+        "location_by_chapter": {
+          "ch05": "loc_mustang_truckstop",
+          "ch08": "loc_mustang_truckstop"
+        },
+        "story_act_by_chapter": {
+          "ch05": 2,
+          "ch08": 3
+        },
+        "stock_by_act": {
+          "2": {
+            "diesel_jug": 6,
+            "gas_can": 2
+          },
+          "3": {
+            "diesel_jug": 2
+          }
+        },
+        "stock_note": "Copied verbatim from story/npcs.json traders[].stock_by_act (keys = story acts 1/2/3). Validator enforces equality and that every id exists in items.json. qty 0 = only after a story condition.",
+        "price_mult_by_act": {
+          "1": null,
+          "2": 2.0,
+          "3": 3.0
+        },
+        "wants": {
+          "scrap": 0.7,
+          "wire": 0.7,
+          "canned_food": 0.7
+        },
+        "wants_services": [
+          "mechanic labor"
+        ],
+        "currencies_by_act": {
+          "2": [
+            "canned_food",
+            "labor credit (q_mo_pump)",
+            "ammo"
+          ],
+          "3": [
+            "warm_bunk_night",
+            "diesel_jug",
+            "canned_food"
+          ]
+        },
+        "rep_flag": "trader_mo_rep",
+        "hook": {
+          "type": "quest",
+          "quest": "q_mo_pump",
+          "detail": "Fix her transfer pump for standing credit (+3 rep, free diesel). With Darlene (darlene_with_mo) she survives Act III."
+        },
+        "act_shift": {
+          "1": "(Not met.)",
+          "2": "Taxed by Compact and Ironwood; prices x2.",
+          "3": "Last fuel in the valley; sold for warm bunks at Galena."
+        }
+      },
+      {
+        "id": "trader_rourke",
+        "npc": "trader_rourke",
+        "name": "Wendell Rourke",
+        "chapters": [
+          "ch03",
+          "ch05",
+          "ch07",
+          "ch09"
+        ],
+        "location_by_chapter": {
+          "ch03": "loc_peavine_shack",
+          "ch05": "loc_i80_blockade",
+          "ch07": "loc_us50_fallon",
+          "ch09": "river_ice"
+        },
+        "story_act_by_chapter": {
+          "ch03": 1,
+          "ch05": 2,
+          "ch07": 2,
+          "ch09": 3
+        },
+        "stock_by_act": {
+          "1": {
+            "candles": 4,
+            "whiskey": 1
+          },
+          "2": {
+            "rumor": 2,
+            "flare": 2
+          },
+          "3": {
+            "tent_tarp": 1,
+            "candles": 6
+          }
+        },
+        "stock_note": "Copied verbatim from story/npcs.json traders[].stock_by_act (keys = story acts 1/2/3). Validator enforces equality and that every id exists in items.json. qty 0 = only after a story condition.",
+        "price_mult_by_act": {
+          "1": 1.0,
+          "2": 1.0,
+          "3": 1.0
+        },
+        "wants": {
+          "rumor": 0.7
+        },
+        "wants_services": [
+          "stories",
+          "salt"
+        ],
+        "currencies_by_act": {
+          "1": [
+            "rumor",
+            "stories"
+          ],
+          "2": [
+            "rumor",
+            "stories"
+          ],
+          "3": [
+            "rumor",
+            "stories"
+          ]
+        },
+        "rep_flag": "trader_rourke_rep",
+        "hook": {
+          "type": "quest",
+          "quest": "q_rourke_escort",
+          "detail": "Get his burros through the Ch5 canyon; reward: the Annex rumor (annex_known)."
+        },
+        "act_shift": {
+          "1": "Peavine road; trades candles for stories.",
+          "2": "Canyon; needs an escort; first to sell an Annex rumor.",
+          "3": "River camp; strangest stock, same prices."
+        }
+      },
+      {
+        "id": "trader_annie",
+        "npc": "trader_annie",
+        "name": "Annie Tran",
+        "chapters": [
+          "ch02",
+          "ch03",
+          "ch08",
+          "ch10"
+        ],
+        "location_by_chapter": {
+          "ch02": "loc_rscc_registry",
+          "ch03": "loc_sparks_library",
+          "ch08": "loc_sparks_library",
+          "ch10": "loc_galena_station"
+        },
+        "story_act_by_chapter": {
+          "ch02": 1,
+          "ch03": 1,
+          "ch08": 3,
+          "ch10": 3
+        },
+        "stock_by_act": {
+          "1": {
+            "antibiotics": 2,
+            "vet_kit": 1
+          },
+          "2": {
+            "antibiotics": 1,
+            "iodide_tablets": 2
+          },
+          "3": {
+            "iodide_tablets": 2,
+            "vet_kit": 1
+          }
+        },
+        "stock_note": "Copied verbatim from story/npcs.json traders[].stock_by_act (keys = story acts 1/2/3). Validator enforces equality and that every id exists in items.json. qty 0 = only after a story condition.",
+        "price_mult_by_act": {
+          "1": 0.8,
+          "2": 1.2,
+          "3": 1.5
+        },
+        "wants": {
+          "batteries": 0.7,
+          "wire": 0.7
+        },
+        "wants_services": [
+          "glass",
+          "labor",
+          "stories"
+        ],
+        "currencies_by_act": {
+          "1": [
+            "batteries",
+            "labor",
+            "ration_card draw"
+          ],
+          "2": [
+            "batteries",
+            "labor"
+          ],
+          "3": [
+            "batteries",
+            "warm_bunk_night",
+            "labor"
+          ]
+        },
+        "rep_flag": "trader_annie_rep",
+        "hook": {
+          "type": "quest",
+          "quest": "q_annie_greenhouse",
+          "detail": "Promise a heat line to the library atrium (Ch8). Pays off in the Warm Room epilogue."
+        },
+        "act_shift": {
+          "1": "Generous.",
+          "2": "Rations antibiotics.",
+          "3": "Her atrium needs Galena heat; becomes a council member in the Warm Room."
+        }
+      },
+      {
+        "id": "trader_boone",
+        "npc": "trader_boone",
+        "name": "SSgt. Tyrell Boone",
+        "chapters": [
+          "ch05",
+          "ch08"
+        ],
+        "location_by_chapter": {
+          "ch05": "loc_sparks_yard",
+          "ch08": "loc_sparks_yard"
+        },
+        "story_act_by_chapter": {
+          "ch05": 2,
+          "ch08": 3
+        },
+        "stock_by_act": {
+          "2": {
+            "mask_filter": 4,
+            "canned_food": 6,
+            "rifle_ammo": 30
+          },
+          "3": {
+            "mask_filter": 6,
+            "dosimeter": 1
+          }
+        },
+        "stock_note": "Copied verbatim from story/npcs.json traders[].stock_by_act (keys = story acts 1/2/3). Validator enforces equality and that every id exists in items.json. qty 0 = only after a story condition.",
+        "price_mult_by_act": {
+          "1": null,
+          "2": 1.5,
+          "3": 3.0
+        },
+        "wants": {
+          "cigarettes": 0.7,
+          "whiskey": 0.7,
+          "diesel_jug": 0.7
+        },
+        "wants_services": [
+          "silence"
+        ],
+        "currencies_by_act": {
+          "2": [
+            "cigarettes",
+            "whiskey",
+            "diesel_jug"
+          ],
+          "3": [
+            "cigarettes",
+            "whiskey",
+            "diesel_jug",
+            "rifle_ammo"
+          ]
+        },
+        "rep_flag": "trader_boone_rep",
+        "hook": {
+          "type": "betrayal",
+          "detail": "About half his Act III filters are expired (boone_filters_tested reveals it). Expose him to Ruiz (boone_exposed) and Kessler shoots him; his stock drops as loot."
+        },
+        "act_shift": {
+          "1": "(Not met.)",
+          "2": "Needs ironwood_id or a bribe.",
+          "3": "Remnant prices x3; half his filters are expired."
+        },
+        "expired_filter_risk": {
+          "item": "mask_filter",
+          "chapters": [
+            "ch08"
+          ],
+          "story_act": 3,
+          "expired_chance": 0.333,
+          "applies_to": "each mask_filter bought from trader_boone in Ch8 without inspection (shop UI, or dialogue ch08_boone_filters node 'trade')",
+          "on_expired": {
+            "roll": "per filter when it loads into the mask",
+            "fail_immediately_chance": 0.5,
+            "else": "drains 3x faster (filter_seconds 240 -> 80)",
+            "hud": "FILTER % drops in steps; hissing sound"
+          },
+          "inspect": {
+            "ways": [
+              "flag boone_filters_tested == true (dialogue 'Check the dates first')",
+              "mech_tools in inventory: 'Inspect lot dates' prompt (2 s) before buying"
+            ],
+            "result": "expired filters are sorted out; only good ones are sold (expired_chance 0)"
+          },
+          "if_boone_exposed": "his stock drops as loot (dialogue gives mask_filter x4, canned_food x3), already sorted: expired_chance 0",
+          "story_note": "story dialogue text says 'half the box' is expired; systems uses 1 in 3 per Loremaster/Prime direction. Flagged for Loremaster to align wording."
+        }
+      },
+      {
+        "id": "trader_floor",
+        "npc": "trader_floor",
+        "name": "Floor commissary",
+        "chapters": [
+          "ch06"
+        ],
+        "location_by_chapter": {
+          "ch06": "loc_silver_spur"
+        },
+        "story_act_by_chapter": {
+          "ch06": 2
+        },
+        "stock_by_act": {
+          "2": {
+            "canned_food": 10,
+            "firewood": 8,
+            "wool_blanket": 2
+          }
+        },
+        "stock_note": "Copied verbatim from story/npcs.json traders[].stock_by_act (keys = story acts 1/2/3). Validator enforces equality and that every id exists in items.json. qty 0 = only after a story condition.",
+        "price_mult_by_act": {
+          "2": 1.0,
+          "3": null
+        },
+        "wants": {
+          "spur_chip": 0.7
+        },
+        "wants_services": [
+          "labor"
+        ],
+        "currencies_by_act": {
+          "2": [
+            "spur_chip"
+          ]
+        },
+        "rep_flag": "trader_floor_rep",
+        "hook": {
+          "type": "none",
+          "detail": "Spend spur_chip earned from Floor jobs."
+        },
+        "act_shift": {
+          "2": "Silver Spur chips honored; prices fall with rep_harbor.",
+          "3": "Closed unless the Floor holds the city."
+        },
+        "accepts_only": [
+          "spur_chip"
+        ]
+      }
+    ],
+    "bribes": {
+      "cigarettes": "Cpl. Haas, Virginia Street checkpoint (Ch2): 1 pack (haas_rep +1)",
+      "whiskey": "generic guard/militia talk-past: 1 bottle",
+      "canned_food": "recovery_detail talk-down (Ch7): 3 cans; Viaduct Crew ambush peace offering"
+    },
+    "category_season_mult": {
       "blackout": {
         "food": 1.0,
-        "water": 1.0,
+        "water": 1.5,
         "med": 1.2,
         "ammo": 1.3,
         "weapon": 1.3,
-        "clothing": 1.0,
+        "clothing": 0.9,
         "trade": 1.0,
         "material": 1.0,
         "rad": 1.0,
@@ -285,7 +801,7 @@
       },
       "collapse": {
         "food": 1.3,
-        "water": 1.0,
+        "water": 1.1,
         "med": 1.4,
         "ammo": 1.2,
         "weapon": 1.2,
@@ -321,116 +837,178 @@
         "rad": 2.5,
         "tool": 1.2,
         "throwable": 1.2
+      },
+      "_note": "Seasonal scarcity flavour, keyed by systems act (season_of_act). Trader-level act markups come from story npcs.json price_mult_by_act."
+    },
+    "item_season_price_mult": {
+      "_note": "winter gear cheap in late summer (nobody wants it), dear in nuclear winter; summer gear the reverse",
+      "arctic_parka": {
+        "late_summer": 0.6,
+        "autumn": 0.9,
+        "nuclear_winter": 1.8
+      },
+      "military_parka": {
+        "late_summer": 0.6,
+        "nuclear_winter": 1.7
+      },
+      "snow_pants": {
+        "late_summer": 0.6,
+        "nuclear_winter": 1.6
+      },
+      "boots_insulated": {
+        "late_summer": 0.7,
+        "nuclear_winter": 1.6
+      },
+      "cotton_tee": {
+        "nuclear_winter": 0.3
+      },
+      "ball_cap": {
+        "nuclear_winter": 0.3
+      },
+      "water_clean": {
+        "late_summer": 1.3
       }
     },
-    "traders": [
-      {
-        "npc": "ray",
-        "location": "loc_east_end",
-        "chapters": [
-          "ch01"
-        ],
-        "markup": 1.1,
-        "stock": {
-          "scrap": 4,
-          "wire": 3,
-          "ammo_shell": 4,
-          "firewood": 4,
-          "candles": 3
-        },
-        "wants": [
-          "fuel",
-          "batteries",
-          "whiskey"
-        ]
-      },
-      {
-        "npc": "wren",
-        "location": "loc_belknap_pharmacy",
-        "chapters": [
-          "ch01",
-          "ch02",
-          "ch03"
-        ],
-        "markup": 1.3,
-        "stock": {
-          "painkillers": 3,
-          "bandage": 3,
-          "ammo_9mm": 12,
-          "cigarettes": 5,
-          "antibiotics": 1
-        },
-        "wants": [
+    "story_act_of_chapter": {
+      "ch01": 1,
+      "ch02": 1,
+      "ch03": 1,
+      "ch04": 2,
+      "ch05": 2,
+      "ch06": 2,
+      "ch07": 2,
+      "ch08": 3,
+      "ch09": 3,
+      "ch10": 3
+    },
+    "barter": {
+      "source": "story/gameplay_hooks.json barter (authoritative)",
+      "currencies_by_story_act": {
+        "act1": [
+          "ration_card (scrip)",
+          "cigarettes",
           "canned_food",
-          "ration",
-          "cigarettes"
+          "batteries",
+          "ammo"
+        ],
+        "act2": [
+          "spur_chip (Floor scrip)",
+          "diesel_jug",
+          "ammo",
+          "rumor",
+          "whiskey"
+        ],
+        "act3": [
+          "mask_filter",
+          "diesel_jug",
+          "batteries",
+          "ammo",
+          "warm-bunk nights at Galena"
         ]
       },
-      {
-        "npc": "bea",
-        "location": "loc_ore_docks",
-        "chapters": [
-          "ch03",
-          "ch05",
-          "ch08"
+      "price_mult_by_story_act": {
+        "1": 1.0,
+        "2": 1.5,
+        "3": 2.5
+      },
+      "wanted_good_mult": 0.7,
+      "rep_discount": {
+        "rep_min": 3,
+        "mult": 0.85
+      },
+      "rep_gain": "trader_<id>_rep +1 per fair trade or trader quest",
+      "rep_loss": "-1 per cheat/threat/theft; trader_dutch_rep <= -1 triggers dutch_betrayed (enc_ch04_dutch_ambush)"
+    },
+    "scrip": {
+      "ration_card": {
+        "acts_story": [
+          1,
+          2
         ],
-        "markup": 1.0,
-        "stock": {
-          "dried_fish": 6,
-          "water_clean": 4,
-          "cloth": 6,
-          "ammo_shell": 6
+        "chapters": [
+          "ch02",
+          "ch03",
+          "ch04",
+          "ch05",
+          "ch06"
+        ],
+        "type": "Authority scrip (item ration_card)",
+        "effects": {
+          "weekly_ration": "2 x ration per chapter at loc_rscc_registry while rep_authority >= 0 (priority_card: 4)",
+          "trade": "Annie (RSCC table) and Dutch accept a ration-card draw as 10 value/week",
+          "patrols": "talks past watch_militia patrols"
         },
-        "wants": [
+        "void_from": "ch07 (Authority collapses / Avila's break)"
+      },
+      "spur_chip": {
+        "acts_story": [
+          2
+        ],
+        "chapters": [
+          "ch06"
+        ],
+        "type": "Floor scrip (item spur_chip, value 5)",
+        "earned": "Floor jobs (dialogue ch06_floor_commissary), harbor_militia drops",
+        "accepted_by": {
+          "trader_floor": 1.0,
+          "trader_dutch": 0.5
+        },
+        "price_shift": "trader_floor prices x(1 - 0.05*rep_harbor), floor 0.75"
+      },
+      "act3_barter": {
+        "acts_story": [
+          3
+        ],
+        "chapters": [
+          "ch08",
+          "ch09",
+          "ch10"
+        ],
+        "goods": [
+          "mask_filter",
+          "diesel_jug",
+          "batteries",
           "ammo_9mm",
           "rifle_ammo",
-          "fuel",
-          "med_kit"
-        ]
-      },
-      {
-        "npc": "lou",
-        "location": "loc_lou_shack",
-        "chapters": [
-          "ch03",
-          "ch07"
+          "ammo_556",
+          "ammo_shell",
+          "warm_bunk_night"
         ],
-        "markup": 1.0,
-        "stock": {
-          "batteries": 6,
-          "flare": 3,
-          "coffee": 3,
-          "purification_tablets": 4
-        },
-        "wants": [
-          "batteries",
-          "canned_food",
-          "whiskey"
-        ]
+        "warm_bunk_night": {
+          "value": 30,
+          "issued_by": "loc_galena_station once dam_running",
+          "note": "abstract currency: a night in the warm turbine hall; Mo and Annie accept it"
+        }
       },
-      {
-        "npc": "ames",
-        "location": "loc_lakehead_memorial",
-        "chapters": [
-          "ch02",
-          "ch08"
-        ],
-        "markup": 1.2,
-        "stock": {
-          "antibiotics": 2,
-          "bandage": 4,
-          "iodide_tablets": 3,
-          "med_kit": 1
+      "rumor": {
+        "type": "info token (item rumor, value 12, weightless)",
+        "accepted_by": {
+          "trader_rourke": 1.0,
+          "trader_dutch": 1.0
         },
-        "wants": [
-          "fuel",
-          "hospital_diesel"
-        ]
+        "earned": "Augie, the Night Owl, travelers, Rourke's escort quest"
       }
-    ],
-    "bribes": {
-      "cigarettes": "Haas checkpoint (Ch2): 1 pack",
-      "whiskey": "generic guard/militia talk-past: 1 bottle"
+    },
+    "flags_and_factions": {
+      "flags_used": {
+        "avila_stance": "enum governor|directive (Revision 2 name; see README migration table)",
+        "kit_dealt": "level-owned loot flag (loot_tables ch01 pharmacy)",
+        "tallmen_killed": "int, default 0 (+ den_killed bool). No remaining-count flag exists.",
+        "assimilated_killed": "int, default 0; separate from tallmen_killed. No Hollow total exists.",
+        "has_gas_mask": "Ch8 start -> face_gas_mask paperdoll layer",
+        "shelter_sealed": "HUD SEAL",
+        "boone_filters_tested": "Boone expired-filter inspection",
+        "wraith_mimic_warned": "Wraith growled at a Hollow"
+      },
+      "factions": {
+        "authority": "Truckee Meadows Recovery Authority",
+        "harbor": "The Floor",
+        "compact": "Lahontan Compact",
+        "ironwood": "Task Force Ironwood",
+        "bridge_boys": "The Viaduct Crew",
+        "annex": "Tallmen (Dixie Valley Annex) — enemy family, no rep",
+        "none": "Unaligned"
+      }
     }
   },
   "resource_budget": {
@@ -457,7 +1035,7 @@
         1.0
       ]
     },
-    "why": "Food ~1.0 so a careless player runs short. Clean water deliberately <1: the gap is filled by snow/lake water (boil = firewood, or tablets), never a hard lock. Ammo <1: melee, stealth, talking, and avoiding fights are supposed to carry the rest.",
+    "why": "Food ~1.0 so a careless player runs short. Clean water deliberately <1 — lowest in late summer (heat) — the gap is filled by boiling river/marina/ditch water (firewood) or tablets, or drinking raw and risking 'sick'; never a hard lock. Ammo <1: melee, stealth, talking, light (vs Tallmen) and avoiding fights carry the rest.",
     "ammo_target_by_act": {
       "blackout": [
         0.3,
@@ -480,6 +1058,25 @@
       "healing_damage": 60,
       "ammo_gun_damage": 60,
       "firewood": 4
+    },
+    "water_target_by_season": {
+      "late_summer": [
+        0.5,
+        0.8
+      ],
+      "autumn": [
+        0.55,
+        0.95
+      ],
+      "late_fall": [
+        0.55,
+        0.95
+      ],
+      "nuclear_winter": [
+        0.45,
+        0.9
+      ]
     }
-  }
+  },
+  "revision": "Nevada Revision 2"
 }

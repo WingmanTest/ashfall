@@ -1,0 +1,100 @@
+{
+  "id": "ch06_marsh_motel",
+  "chapter": "ch06",
+  "location": "loc_fourth_street",
+  "trigger": "4th Street motel: a young deserter hiding in Room 9.",
+  "speakers": [
+    "narrator",
+    "amb_pvt_marsh",
+    "braith",
+    "wraith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "wraith",
+      "text": "[Nose at the crack of a motel door. Tail wagging. Not a warning.]",
+      "next": "m1"
+    },
+    {
+      "id": "m1",
+      "speaker": "amb_pvt_marsh",
+      "text": "Don't— Please. I'm not armed. I left it. I left it in the river.",
+      "next": "m2"
+    },
+    {
+      "id": "m2",
+      "speaker": "narrator",
+      "text": "A soldier, nineteen at most, in a motel bedspread. Ironwood patch torn off his sleeve. Shaking.",
+      "next": "m3"
+    },
+    {
+      "id": "m3",
+      "speaker": "amb_pvt_marsh",
+      "text": "Danny Marsh. Private. They told us to clear a house on Wells. There were kids in the house. I just walked.",
+      "choices": [
+        {
+          "text": "[Hide him. Bring food tomorrow]",
+          "next": "hide",
+          "effects": [
+            {
+              "set": "ch06_marsh_hidden",
+              "value": true
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            },
+            {
+              "add": "ironwood_hostility",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "[Turn him in at the checkpoint]",
+          "next": "turn",
+          "effects": [
+            {
+              "add": "rep_authority",
+              "value": 1
+            },
+            {
+              "add": "kindness",
+              "value": -1
+            }
+          ]
+        },
+        {
+          "text": "Go east. Find the Compact.",
+          "next": "east"
+        }
+      ]
+    },
+    {
+      "id": "hide",
+      "speaker": "amb_pvt_marsh",
+      "text": "Thank you. Thank you. I'll— I don't know what I'll do. Thank you.",
+      "next": "end"
+    },
+    {
+      "id": "turn",
+      "speaker": "narrator",
+      "text": "He doesn't fight. He just nods, like he expected it. The MPs are not gentle.",
+      "next": "end"
+    },
+    {
+      "id": "east",
+      "speaker": "amb_pvt_marsh",
+      "text": "East. Okay. The farmers. They'll shoot me. ...Better them than us.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "Outside, the loudspeaker again. Curfew in thirty minutes.",
+      "end": true
+    }
+  ]
+}

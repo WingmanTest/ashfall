@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "units": {
     "hp": "hit points",
     "speed_mps": "m/s (player walk 3.15, sprint 4.85)",
@@ -11,13 +11,15 @@
     "threat_cost": "spawn-budget points"
   },
   "families": {
-    "raider": "Hostile civilians & militias (looter, bridge_boy, watch_militia, desperate_family, authority_guard, compact_militia, harbor_militia). Human, talkable, flee. Ch1+.",
-    "soldier": "Federal Army: Task Force Ironwood (ironwood_patrol, ironwood_checkpoint) Ch5+, Remnant (remnant_patrol) Ch7+. Human, armored, sparable.",
-    "dog": "Animals: feral_dog Ch7+, wolf Ch9+. Flee fire/flares.",
-    "husk": "Sick/freezing humans, Ch8+. NOT mutants, ghouls or zombies; radiation is an environmental hazard, never a monster source.",
-    "set_piece": "Invulnerable scripted threats (ironwood_drone, ironwood_mrap, ironwood_bradley)."
+    "raider": "Hostile civilians & militias (looter, bridge_boy = Viaduct Crew, watch_militia, desperate_family, authority_guard = Recovery Authority, compact_militia = Lahontan Compact, harbor_militia = the Floor). Human, talkable, flee. Ch1+.",
+    "soldier": "Federal Army: Task Force Ironwood (ironwood_patrol, ironwood_checkpoint) Ch5+, Remnant (remnant_patrol) and the stranded recovery_detail Ch7+. Human, armored, sparable.",
+    "dog": "Animals: feral_dog and coyote, Ch7+. Flee fire/flares.",
+    "husk": "Radiation-sick, hypothermic, starving PEOPLE, Ch8+. Not infected and not monsters. Talk-down possible.",
+    "stalker": "Tallmen (faction annex): escaped LONG SLEEP subjects from the Dixie Valley Annex. Ch7+. Heat-seeking, light-averse, hit-and-retreat, max 3 active. Count unknown (tallmen_killed / den_killed only).",
+    "assimilated": "Hollows (story assimilation{}), Ch8-10: people and animals a Tallman fed on and kept. They mimic, stalk and ambush. Not contagious: the player and companions can never become assimilated. Light/fire break their disguise.",
+    "set_piece": "Invulnerable or non-interactable scripted threats (ironwood_drone, ironwood_mrap, ironwood_bradley, tallman_glimpse)."
   },
-  "code_kind_note": "code_kind maps to existing js/enemies.js KINDS meshes/AI. Legacy KINDS ids: 'raider' -> use bridge_boy/looter data, 'dog' -> feral_dog, 'husk' -> husk.",
+  "code_kind_note": "code_kind maps to js/enemies.js KINDS meshes/AI. Existing: 'raider', 'dog', 'husk'. New kinds: 'stalker' (tallman; fallback 'dog' AI on a tall mesh), 'mimic' (assimilated_human; engine_fallback_code_kind 'husk'), 'mimic_beast' (assimilated_animal; engine_fallback_code_kind 'dog'). If a kind isn't implemented, use engine_fallback_code_kind and still apply the 'behavior' block flags you can.",
   "enemies": [
     {
       "id": "looter",
@@ -119,7 +121,7 @@
     },
     {
       "id": "bridge_boy",
-      "name": "Bridge Boy",
+      "name": "Viaduct Crew",
       "family": "raider",
       "code_kind": "raider",
       "hp": 65,
@@ -235,11 +237,12 @@
       "story_acts": [
         1,
         2
-      ]
+      ],
+      "desc": "Laid-off warehouse kids and 4th Street motel residents from under the I-80 viaduct. Pipes, pistols, molotovs. Break and run at 50% losses."
     },
     {
       "id": "watch_militia",
-      "name": "Block watch",
+      "name": "Block watch (Deputy Lusk's crew)",
       "family": "raider",
       "code_kind": "raider",
       "hp": 75,
@@ -399,7 +402,7 @@
     },
     {
       "id": "authority_guard",
-      "name": "Authority guard",
+      "name": "Recovery Authority guard",
       "family": "raider",
       "code_kind": "raider",
       "hp": 85,
@@ -483,7 +486,7 @@
     },
     {
       "id": "compact_militia",
-      "name": "Compact militia",
+      "name": "Lahontan Compact rider",
       "family": "raider",
       "code_kind": "raider",
       "hp": 80,
@@ -535,7 +538,7 @@
             ]
           },
           {
-            "item": "dried_fish",
+            "item": "jerky",
             "weight": 1,
             "qty": [
               1,
@@ -585,7 +588,7 @@
     },
     {
       "id": "harbor_militia",
-      "name": "Harbor longshoreman",
+      "name": "Floor militia",
       "family": "raider",
       "code_kind": "raider",
       "hp": 80,
@@ -597,7 +600,7 @@
         "damage": 16,
         "interval_s": 1.2,
         "range_m": 1.9,
-        "weapon": "cargo hook"
+        "weapon": "kitchen cleaver / bar tool"
       },
       "resistances": {
         "bullet": 0,
@@ -625,11 +628,19 @@
         "empty_chance": 0.15,
         "entries": [
           {
-            "item": "dried_fish",
-            "weight": 4,
+            "item": "canned_food",
+            "weight": 3,
             "qty": [
               1,
-              2
+              1
+            ]
+          },
+          {
+            "item": "spur_chip",
+            "weight": 2,
+            "qty": [
+              2,
+              5
             ]
           },
           {
@@ -670,7 +681,8 @@
       "story_kind": "human",
       "story_acts": [
         2
-      ]
+      ],
+      "desc": "Silver Spur casino workers with rifles and shotguns. Hostile only if bridge_choice=open."
     },
     {
       "id": "ironwood_patrol",
@@ -876,6 +888,101 @@
       ]
     },
     {
+      "id": "recovery_detail",
+      "name": "Ironwood recovery detail",
+      "family": "soldier",
+      "code_kind": "raider",
+      "hp": 57,
+      "threat_cost": 5,
+      "speed_mps": 2.3,
+      "detect_m": 24,
+      "attack": {
+        "type": "ranged",
+        "damage": 14,
+        "interval_s": 0.8,
+        "range_m": 45,
+        "accuracy": 0.32,
+        "weapon": "service_rifle",
+        "burst": 3
+      },
+      "resistances": {
+        "bullet": 0.25,
+        "melee": 0,
+        "fire": 0,
+        "cold": 0.6
+      },
+      "behavior": {
+        "fireteam_size": 4,
+        "uses_cover": true,
+        "surrender_hp_pct": 35,
+        "sparable": true,
+        "talk_down": {
+          "any_of": [
+            "ruiz present (ruiz_defected)",
+            "ironwood_id",
+            "canned_food x3"
+          ]
+        },
+        "low_ammo": true
+      },
+      "drops": {
+        "rolls": [
+          1,
+          2
+        ],
+        "empty_chance": 0.15,
+        "entries": [
+          {
+            "item": "ammo_556",
+            "weight": 3,
+            "qty": [
+              2,
+              5
+            ]
+          },
+          {
+            "item": "bandage",
+            "weight": 2,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "mask_filter",
+            "weight": 1,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "military_parka",
+            "weight": 0.3,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "service_rifle",
+            "weight": 0.2,
+            "qty": [
+              1,
+              1
+            ]
+          }
+        ]
+      },
+      "first_chapter": "ch07",
+      "story_kind": "human_military",
+      "story_acts": [
+        2
+      ],
+      "variant_of": "remnant_patrol",
+      "desc": "Stranded, starving Ironwood squad (6) at the Dixie Valley Annex hangar under SFC Brandt. Variant of remnant_patrol at 60% HP; low ammo. Hostile by default; talked down by Ruiz, ironwood_id or food (canned_food). Outcome -> recovery_detail_outcome."
+    },
+    {
       "id": "feral_dog",
       "name": "Feral dog",
       "family": "dog",
@@ -920,32 +1027,38 @@
       ]
     },
     {
-      "id": "wolf",
-      "name": "Wolf",
+      "id": "coyote",
+      "name": "Coyote",
       "family": "dog",
       "code_kind": "dog",
-      "hp": 45,
-      "threat_cost": 2.5,
-      "speed_mps": 4.2,
-      "detect_m": 20,
+      "hp": 32,
+      "threat_cost": 2,
+      "speed_mps": 4.4,
+      "detect_m": 18,
       "attack": {
         "type": "melee",
-        "damage": 14,
-        "interval_s": 1.0,
-        "range_m": 1.3,
-        "bleed_chance": 0.3
+        "damage": 10,
+        "interval_s": 0.85,
+        "range_m": 1.2,
+        "bleed_chance": 0.25
       },
       "resistances": {
         "bullet": 0,
         "melee": 0,
         "fire": -0.5,
-        "cold": 1.0
+        "cold": 0.6
       },
       "behavior": {
         "pack": true,
+        "pack_size": [
+          3,
+          5
+        ],
         "flanks": true,
+        "hit_and_run": true,
         "flees_fire_and_flares": true,
-        "pack_flee_at_losses_pct": 50
+        "pack_flee_at_losses_pct": 40,
+        "yip_howl_before_attack_s": 1.5
       },
       "drops": {
         "rolls": [
@@ -955,11 +1068,13 @@
         "empty_chance": 1.0,
         "entries": []
       },
-      "first_chapter": "ch09",
+      "first_chapter": "ch07",
       "story_kind": "animal",
       "story_acts": [
+        2,
         3
-      ]
+      ],
+      "desc": "High-desert coyote (Revision 2 replacement for the v1 pack animal; same 'dog' AI). Smaller and faster than feral dogs; packs of 3-5 on the Lahontan flats, Dixie Valley and Steamboat Creek. Flee flares. No butchering by design."
     },
     {
       "id": "husk",
@@ -1043,11 +1158,398 @@
         ]
       },
       "first_chapter": "ch08",
-      "desc": "Radiation-sick, hypothermic, starving PEOPLE. Not monsters, not supernatural. Erratic; rush heat/food. Re-dress the zombie/mutant mockup models as under-dressed humans (story README).",
+      "desc": "Radiation-sick, hypothermic, starving PEOPLE. Not infected, not monsters, not supernatural. Erratic; rush heat/food. Talk-down: iodide_tablets + wool_blanket + kindness>=4. Tallmen follow husks. Re-dress old mockup models as under-dressed humans.",
       "story_kind": "human_sick",
       "story_acts": [
         3
       ]
+    },
+    {
+      "id": "tallman",
+      "name": "Tallman",
+      "family": "stalker",
+      "code_kind": "stalker",
+      "engine_fallback_code_kind": "dog",
+      "fallback_code_kind": "dog",
+      "faction": "annex",
+      "hp": 220,
+      "threat_cost": 10,
+      "speed_mps": 3.0,
+      "lunge_speed_mps": 6.0,
+      "detect_m": 22,
+      "heat_detect_m": 45,
+      "attack": {
+        "type": "melee",
+        "damage": 28,
+        "interval_s": 1.6,
+        "range_m": 2.2,
+        "bleed_chance": 0.4,
+        "knockdown_chance": 0.25
+      },
+      "resistances": {
+        "bullet": 0.35,
+        "melee": 0.2,
+        "fire": -0.25,
+        "cold": 1.0
+      },
+      "behavior": {
+        "heat_seek": {
+          "targets_priority": [
+            "campfire",
+            "burn_barrel",
+            "torch",
+            "husk",
+            "player_or_companion_out_of_light"
+          ],
+          "heat_detect_m": 45,
+          "note": "Sealed shelters (shelter_sealed, SEAL%) hide heat: detect x(1-seal/100)."
+        },
+        "light_aversion": {
+          "flashlight_cone_sustain_s": 2.0,
+          "flare_radius_m": 6,
+          "floodlight": true,
+          "campfire_radius_m": 2.5,
+          "on_repel": "retreat 25 m for 6 s, then circle",
+          "note": "Sustained light pushes it back; it never charges through a lit floodlight (lamp line)."
+        },
+        "hit_and_retreat": {
+          "strikes_before_retreat": 1,
+          "retreat_m": 25,
+          "re_engage_s": [
+            6,
+            12
+          ]
+        },
+        "max_active": 3,
+        "never_horde": true,
+        "disengage": {
+          "after_group_losses": 2,
+          "at_dawn": true
+        },
+        "wraith": "Wraith WARNs first (points at Tallmen), refuses HOLD.",
+        "on_kill": [
+          {
+            "add": "tallmen_killed",
+            "value": 1
+          }
+        ],
+        "count_rule": "Total number at large is UNKNOWN. Track only tallmen_killed (int, default 0) and den_killed (bool). Never store or show a remaining count.",
+        "den_torpid": {
+          "location": "loc_dixie_hotsprings",
+          "count": 2,
+          "hostile": false,
+          "note": "Torpid in the den; non-hostile unless shot. Killing both sets den_killed (dialogue ch07_hotsprings_den)."
+        }
+      },
+      "telegraphs": {
+        "visual": [
+          "7-8 ft ash-grey silhouette",
+          "flat reflective eyes catch the flashlight",
+          "moves on all fours at distance, upright to strike"
+        ],
+        "audio": [
+          "long exhale like a bellows",
+          "joints cracking",
+          "sudden silence of all ambient fauna"
+        ]
+      },
+      "drops": {
+        "rolls": [
+          0,
+          0
+        ],
+        "empty_chance": 1.0,
+        "entries": []
+      },
+      "first_chapter": "ch07",
+      "story_kind": "creature",
+      "story_acts": [
+        2,
+        3
+      ],
+      "budget_kill_share": 0.35,
+      "desc": "Escaped LONG SLEEP subject from the Dixie Valley Annex. Seeks heat; retreats from sustained light; hit-and-retreat; max 3 active anywhere; disengages after losing 2 or at dawn. Never a horde. Engine: on each kill add tallmen_killed +1.",
+      "threat_note": "threat_cost reflects hit-and-retreat: most engagements end with light, not a kill"
+    },
+    {
+      "id": "assimilated_human",
+      "name": "Hollow",
+      "display_name": "Hollow",
+      "in_world_term": "Hollows",
+      "family": "assimilated",
+      "code_kind": "mimic",
+      "engine_fallback_code_kind": "husk",
+      "story_code_kind": "mimic",
+      "faction": "annex",
+      "systems_horror_addition": false,
+      "design_origin": "user direction via Prime; story now lists it (gameplay_hooks enemy_types + assimilation{})",
+      "hp": 90,
+      "threat_cost": 6,
+      "speed_mps": 1.4,
+      "lunge_speed_mps": 5.5,
+      "detect_m": 16,
+      "heat_detect_m": 25,
+      "attack": {
+        "type": "melee",
+        "damage": 24,
+        "interval_s": 1.3,
+        "range_m": 1.8,
+        "bleed_chance": 0.35,
+        "ambush_first_hit_mult": 1.5
+      },
+      "resistances": {
+        "bullet": 0.15,
+        "melee": 0.1,
+        "fire": -0.4,
+        "cold": 1.0
+      },
+      "stagger_resist": 0.6,
+      "behavior": {
+        "mimicry": {
+          "vocal_lures": "story/gameplay_hooks.json enemy_types.assimilated_human.voice_lines (e.g. 'Let me in. I have filters.', 'Braith?', 'Morning, neighbor.', 'Open the gate, Pearce.') — copied phrases, off-cadence, repeated; may use the voice of someone provably elsewhere",
+          "knocks_at_doors": true,
+          "lure_spots": [
+            "doorways",
+            "shelter windows",
+            "fog / whiteout edges",
+            "just outside a light radius"
+          ],
+          "voice_wrong_cadence": true,
+          "silhouette_mimic": "stands like a waiting survivor, back turned or arms at sides"
+        },
+        "stillness": {
+          "stands_unnaturally_still": true,
+          "breaks_when_player_within_m": 6,
+          "or_when_lit_s": 1.0
+        },
+        "ambush": {
+          "lunge_range_m": 6,
+          "lunge_windup_s": 0.45,
+          "prefers_flank_or_behind": true
+        },
+        "light_reaction": {
+          "bright_light_breaks_disguise": true,
+          "flashlight_sustain_s": 1.0,
+          "flare_or_floodlight": "instant",
+          "on_break": {
+            "lunge_chance": 0.35,
+            "retreat_chance": 0.65,
+            "retreat_m": 15
+          },
+          "sustained_light_s": 2.0,
+          "on_sustained": "always retreats like a Tallman (flees sustained light)",
+          "recoil": "flinches and shields eyes for 0.6 s (free hit window)"
+        },
+        "stalks": {
+          "follows_out_of_sight": true,
+          "max_active": 2,
+          "pairs_with": [
+            "tallman"
+          ]
+        },
+        "door_mimic": "enc_ch08_door_mimic: lunges when a door opens or the player turns away; SEAL drops while the door is open",
+        "talk_down": null,
+        "never_flee_hp_pct": 0,
+        "husk_tell": "Unlike husks: no talk-down, does not rush food, lower stagger, higher damage."
+      },
+      "story_tells": [
+        "no_breath_plume",
+        "off_cadence_voice",
+        "wrong_gait",
+        "eyes_reflect_flat",
+        "wraith_growl_hackles"
+      ],
+      "telegraphs": {
+        "visual": [
+          "NO breath plume in sub-zero air (every living NPC shows one in Act III)",
+          "too-still posture; neck keeps turning after the shoulders stop",
+          "pale ash-veined skin, victim's own clothes",
+          "eyes reflect flat in a flashlight, like a Tallman's"
+        ],
+        "companion": "Wraith: low growl, hackles up, refuses to approach (sets wraith_mimic_warned); vs soft whine at a real husk",
+        "audio": [
+          "voice with wrong cadence / pauses in the wrong places",
+          "faint static-like clicking breath",
+          "footsteps that stop exactly when yours do"
+        ]
+      },
+      "drops": {
+        "rolls": [
+          1,
+          1
+        ],
+        "empty_chance": 0.45,
+        "entries": [
+          {
+            "item": "cloth",
+            "weight": 3,
+            "qty": [
+              1,
+              2
+            ]
+          },
+          {
+            "item": "canned_food",
+            "weight": 1.5,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "batteries",
+            "weight": 1.5,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "note",
+            "weight": 2,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "bandage",
+            "weight": 1,
+            "qty": [
+              1,
+              1
+            ]
+          },
+          {
+            "item": "mask_filter",
+            "weight": 0.4,
+            "qty": [
+              1,
+              1
+            ]
+          }
+        ],
+        "note": "Modest scavenged-victim pockets: what the person carried before."
+      },
+      "first_chapter": "ch08",
+      "last_chapter": "ch10",
+      "story_kind": "creature",
+      "story_acts": [
+        3
+      ],
+      "budget_kill_share": 0.9,
+      "on_kill": [
+        {
+          "add": "assimilated_killed",
+          "value": 1
+        }
+      ],
+      "count_rule": "No Hollow total exists; assimilated_killed is separate from tallmen_killed.",
+      "desc": "A person a Tallman fed on and kept (in-world: a Hollow). Wears the victim's clothes and voice. Calls for help in a voice that is almost right, waits motionless at doorways and fog edges, then lunges. Bright light breaks the disguise and forces an ambush or a retreat. Not contagious; cannot be talked down."
+    },
+    {
+      "id": "assimilated_animal",
+      "name": "Hollow (animal)",
+      "display_name": "Hollow (animal)",
+      "in_world_term": "Hollows",
+      "family": "assimilated",
+      "code_kind": "mimic_beast",
+      "engine_fallback_code_kind": "dog",
+      "story_code_kind": "dog",
+      "faction": "annex",
+      "systems_horror_addition": false,
+      "design_origin": "user direction via Prime; story now lists it (gameplay_hooks enemy_types + assimilation{})",
+      "hp": 50,
+      "threat_cost": 3,
+      "speed_mps": 4.6,
+      "detect_m": 20,
+      "heat_detect_m": 35,
+      "attack": {
+        "type": "melee",
+        "damage": 15,
+        "interval_s": 1.0,
+        "range_m": 1.4,
+        "bleed_chance": 0.3,
+        "pounce_range_m": 5
+      },
+      "resistances": {
+        "bullet": 0.0,
+        "melee": 0.0,
+        "fire": -0.6,
+        "cold": 1.0
+      },
+      "behavior": {
+        "shadows_heat": {
+          "holds_at": "light_radius + 2 m around campfires, flares, burn barrels",
+          "circles_s": [
+            4,
+            10
+          ]
+        },
+        "lure": {
+          "whimpering_dog": true,
+          "note": "sounds like an injured dog (Wraith goes rigid and growls; she never answers it)"
+        },
+        "pack": {
+          "size": [
+            3,
+            5
+          ],
+          "synchronized_silence": true,
+          "waits_instead_of_circling": true,
+          "pounce_together": true,
+          "break_off_after_losses": 2
+        },
+        "fire_sensitivity": {
+          "flees_flare_s": 8,
+          "flees_torch_radius_m": 3,
+          "campfire": "won't enter radius",
+          "flashlight": "ignored unless combined with fire"
+        },
+        "max_active": 3
+      },
+      "story_tells": [
+        "silent_pack",
+        "no_breath_plume",
+        "synchronized_gait"
+      ],
+      "telegraphs": {
+        "visual": [
+          "move in step like one animal with too many legs",
+          "elongated joints, wrong gait",
+          "no breath plume; flat reflective eyes",
+          "silent footsteps in snow and ash"
+        ],
+        "companion": "Wraith goes silent and puts herself between them and Braith",
+        "audio": [
+          "hollow rattle in the chest",
+          "silence where a pack should yip"
+        ]
+      },
+      "drops": {
+        "rolls": [
+          0,
+          0
+        ],
+        "empty_chance": 1.0,
+        "entries": []
+      },
+      "carcass": "tainted — not harvestable, no safe meat",
+      "first_chapter": "ch08",
+      "last_chapter": "ch10",
+      "story_kind": "creature",
+      "story_acts": [
+        3
+      ],
+      "budget_kill_share": 1.0,
+      "on_kill": [
+        {
+          "add": "assimilated_killed",
+          "value": 1
+        }
+      ],
+      "count_rule": "No Hollow total exists; assimilated_killed is separate from tallmen_killed.",
+      "desc": "Assimilated coyotes, dogs and livestock (Hollows). Silent ambush predators that shadow the edge of your firelight, whimper like a hurt dog, then pounce in eerie unison. Fire and flares scatter them. Nothing to harvest."
     },
     {
       "id": "ironwood_checkpoint",
@@ -1152,7 +1654,7 @@
         ]
       },
       "first_chapter": "ch05",
-      "desc": "Federal Army checkpoint (Ch5-6, and the Ch9 Remnant picket)."
+      "desc": "Federal Army checkpoint (Ch5-6, and the Ch9 Remnant picket on the Glendale bridge over river_ice)."
     }
   ],
   "set_pieces": [
@@ -1182,8 +1684,35 @@
       "invulnerable": true,
       "behavior": {
         "never_fought_directly": true,
-        "blocked_by": "pier crane"
-      }
+        "blocked_by": "freight_car_drop (stalled grain hopper dropped into loc_rail_trench)"
+      },
+      "first_chapter": "ch06"
+    },
+    {
+      "id": "tallman_glimpse",
+      "family": "set_piece",
+      "invulnerable": true,
+      "interactable": false,
+      "collider": false,
+      "ai": false,
+      "first_chapter": "ch02",
+      "last_chapter": "ch06",
+      "behavior": {
+        "min_range_m": 80,
+        "requires_los": true,
+        "despawn": "after duration OR player within 60 m OR LOS lost",
+        "hud_cue": false,
+        "music_sting": false,
+        "companion_reaction": "wraith_stare",
+        "on_show": [
+          {
+            "add": "tallman_glimpses",
+            "value": 1
+          }
+        ]
+      },
+      "placements": "story/gameplay_hooks.json chapters[].tallman_glimpses (ids, triggers, durations)",
+      "desc": "Non-interactable silhouette billboard at long range. No collider, no AI, no HUD cue, no music sting."
     }
   ],
   "encounter_groups": {
@@ -1196,22 +1725,14 @@
       "threat_cost": 6,
       "first_chapter": "ch07"
     },
-    "wolves": {
-      "enemy": "wolf",
-      "count": [
-        4,
-        6
-      ],
-      "threat_cost": 12,
-      "first_chapter": "ch09"
-    },
     "bridge_boy_raid": {
       "enemy": "bridge_boy",
       "count": [
         4,
         6
       ],
-      "threat_cost": 15
+      "threat_cost": 15,
+      "display": "Viaduct Crew raid"
     },
     "ironwood_fireteam": {
       "enemy": "ironwood_patrol",
@@ -1228,42 +1749,95 @@
         4
       ],
       "threat_cost": 28
+    },
+    "coyote_pack": {
+      "enemy": "coyote",
+      "count": [
+        3,
+        5
+      ],
+      "threat_cost": 8,
+      "first_chapter": "ch07"
+    },
+    "tallman_probe": {
+      "enemy": "tallman",
+      "count": [
+        1,
+        3
+      ],
+      "max_active": 3,
+      "threat_cost": 14,
+      "first_chapter": "ch07",
+      "note": "never more than 3 visible; disengage after losing 2 or at dawn"
+    },
+    "hollow_lure": {
+      "enemy": "assimilated_human",
+      "count": [
+        1,
+        2
+      ],
+      "threat_cost": 9,
+      "first_chapter": "ch08",
+      "last_chapter": "ch10"
+    },
+    "hollow_pack": {
+      "enemy": "assimilated_animal",
+      "count": [
+        3,
+        5
+      ],
+      "threat_cost": 12,
+      "first_chapter": "ch08",
+      "last_chapter": "ch10"
     }
   },
   "act_family_mix": {
     "blackout": {
+      "season": "late_summer",
       "families": {
         "raider": 1.0
       },
-      "note": "people only; few armed"
+      "note": "people only; few armed; heat and thirst are the threat"
     },
     "collapse": {
+      "season": "autumn",
       "families": {
         "raider": 1.0
       },
-      "note": "people only; deer rifles and pipe shotguns; the cold kills more than people"
+      "note": "people only; deer rifles and pipe shotguns; Tallman glimpses only (set piece)"
     },
     "civil_war": {
+      "season": "late_fall",
       "families": {
-        "raider": 0.4,
-        "soldier": 0.5,
-        "dog": 0.1
+        "raider": 0.38,
+        "soldier": 0.47,
+        "dog": 0.1,
+        "stalker": 0.05
       },
-      "note": "federal Army from Ch5; dogs only in Ch7"
+      "note": "federal Army from Ch5; dogs/coyotes and the first Tallman in Ch7"
     },
     "nuclear_winter": {
+      "season": "nuclear_winter",
       "families": {
-        "husk": 0.3,
-        "dog": 0.3,
-        "soldier": 0.35,
+        "husk": 0.2,
+        "dog": 0.12,
+        "soldier": 0.25,
+        "stalker": 0.18,
+        "assimilated": 0.2,
         "raider": 0.05
       },
-      "note": "few healthy people left: husks, ferals, the Remnant"
+      "note": "few healthy people left: husks, the Remnant, Tallmen and the assimilated"
     }
   },
   "chapter_curve": {
+    "_note": "spawns mirror story/gameplay_hooks.json chapters[].enemies exactly (same order, counts and notes; validator enforces) — including the story-mandated Hollows (assimilated_human / assimilated_animal) in Ch8-10. Any entry flagged systems_horror_addition: true is a Quartermaster extra the story does not list (none needed now that story lists the Hollows); extras never replace a story spawn. hostile_chance is the systems estimate used for budgets.",
     "ch01": {
       "act": "blackout",
+      "season": "late_summer",
+      "story_act": 1,
+      "levels": [
+        "ch01_day_three"
+      ],
       "threat_budget": 4,
       "intensity": 0.3,
       "max_concurrent": 5,
@@ -1272,42 +1846,51 @@
           "enemy": "looter",
           "count": 1,
           "hostile_chance": 0.3,
-          "note": "Wren; non-hostile unless attacked"
+          "note": "Kit; non-hostile unless attacked"
         },
         {
           "enemy": "watch_militia",
-          "count": 1,
+          "count": 2,
           "hostile_chance": 0.3,
-          "note": "hostile if you run with drugs or draw"
+          "note": "Deputy Lusk + 1; hostile only if you run with drugs or draw"
         }
       ],
-      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom for ambient/filler spawns of chapter-allowed families"
+      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom"
     },
     "ch02": {
       "act": "blackout",
-      "threat_budget": 12,
+      "season": "late_summer",
+      "story_act": 1,
+      "levels": [
+        "ch02_the_registry"
+      ],
+      "threat_budget": 11,
       "intensity": 0.35,
       "max_concurrent": 5,
-      "note": "authority_guard hostile only if you steal; budget assumes 3 looters in the parking garage (Ames diesel job)",
       "spawns": [
         {
           "enemy": "authority_guard",
           "count": 6,
           "hostile_chance": 0.1,
-          "note": "neutral unless you steal/fight"
+          "note": "Neutral"
         },
         {
           "enemy": "looter",
           "count": 3,
           "hostile_chance": 1.0,
-          "note": "parking garage (Ames diesel job)"
+          "note": "Parking ramp squatters (q_hospital_diesel); can be talked off"
         }
       ],
-      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom for ambient/filler spawns of chapter-allowed families"
+      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom"
     },
     "ch03": {
       "act": "collapse",
-      "threat_budget": 28,
+      "season": "autumn",
+      "story_act": 1,
+      "levels": [
+        "ch03_the_long_cold"
+      ],
+      "threat_budget": 25,
       "intensity": 0.5,
       "max_concurrent": 5,
       "spawns": [
@@ -1315,20 +1898,25 @@
           "enemy": "bridge_boy",
           "count": 6,
           "hostile_chance": 1.0,
-          "note": "fire raid; break at 50% losses"
+          "note": "Viaduct Crew; flee at 50% losses; warning shots work"
         },
         {
           "enemy": "watch_militia",
           "count": 3,
-          "hostile_chance": 0.4,
-          "note": "Proctor patrol; ration card talks past"
+          "hostile_chance": 0.3,
+          "note": "Peavine road patrol; talk past with ration_card"
         }
       ],
-      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom for ambient/filler spawns of chapter-allowed families"
+      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom"
     },
     "ch04": {
       "act": "collapse",
-      "threat_budget": 17,
+      "season": "autumn",
+      "story_act": 2,
+      "levels": [
+        "ch04_black_start"
+      ],
+      "threat_budget": 13,
       "intensity": 0.45,
       "max_concurrent": 5,
       "spawns": [
@@ -1336,135 +1924,215 @@
           "enemy": "desperate_family",
           "count": 1,
           "hostile_chance": 0.3,
-          "note": "Lunds; only if threatened"
+          "note": "Pete Lund"
         },
         {
           "enemy": "bridge_boy",
-          "count": 2,
-          "hostile_chance": 1.0,
-          "note": "river ice, optional"
+          "count": 5,
+          "hostile_chance": 0.25,
+          "note": "Only if trader_dutch_rep<=-1 (Dutch's ambush)"
         },
         {
           "enemy": "authority_guard",
           "count": 8,
           "hostile_chance": 0.15,
-          "note": "story standoff"
+          "note": "Ramp sentry (1) + standoff only if dam_secret_told=authority"
         }
       ],
-      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom for ambient/filler spawns of chapter-allowed families"
+      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom"
     },
     "ch05": {
       "act": "civil_war",
-      "threat_budget": 37,
+      "season": "late_fall",
+      "story_act": 2,
+      "levels": [
+        "ch05_route_9"
+      ],
+      "threat_budget": 35,
       "intensity": 0.65,
       "max_concurrent": 5,
-      "note": "If convoy_choice=sabotage, swap compact_militia for 4 ironwood_patrol (threat 28).",
       "spawns": [
         {
           "enemy": "compact_militia",
           "count": 8,
           "hostile_chance": 0.6,
-          "note": "escort branch"
+          "note": "If escort/divert"
         },
         {
           "enemy": "ironwood_patrol",
           "count": 4,
           "hostile_chance": 0.4,
-          "note": "sabotage branch"
+          "note": "If sabotage"
         },
         {
           "enemy": "ironwood_drone",
           "count": 1,
           "hostile_chance": 1.0,
-          "note": "set piece"
+          "note": "Spotter; break LOS under overpass"
         },
         {
           "enemy": "ironwood_mrap",
           "count": 1,
           "hostile_chance": 1.0,
-          "note": "set piece"
+          "note": "Escort or threat"
         }
       ],
-      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom for ambient/filler spawns of chapter-allowed families"
+      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom",
+      "note": "If convoy_choice=sabotage, compact_militia mostly passive and ironwood_patrol hostile (enc_ch05_ironwood_turn)."
     },
     "ch06": {
       "act": "civil_war",
-      "threat_budget": 99,
+      "season": "late_fall",
+      "story_act": 2,
+      "levels": [
+        "ch06_the_trench"
+      ],
+      "threat_budget": 98,
       "intensity": 0.7,
       "max_concurrent": 6,
-      "note": "If bridge_choice=held, enemies become compact_militia + harbor_militia (same budget).",
       "spawns": [
         {
           "enemy": "ironwood_patrol",
           "count": 12,
           "hostile_chance": 0.75,
-          "note": "sweep + night battle"
+          "note": "Fireteams of 4"
         },
         {
           "enemy": "ironwood_checkpoint",
           "count": 1,
           "hostile_chance": 0.6,
-          "note": "Blatnik: sneak/bribe/assault"
+          "note": ""
         },
         {
           "enemy": "ironwood_drone",
           "count": 2,
           "hostile_chance": 1.0,
-          "note": "set piece"
+          "note": "Rain reduces detection"
         },
         {
           "enemy": "ironwood_bradley",
           "count": 1,
           "hostile_chance": 1.0,
-          "note": "set piece"
+          "note": "Setpiece; freight_car_drop blocks it"
         },
         {
           "enemy": "compact_militia",
           "count": 4,
           "hostile_chance": 0.3,
-          "note": "bridge_choice=held"
+          "note": "Only if bridge_choice=open (last fight)"
         },
         {
           "enemy": "harbor_militia",
           "count": 6,
           "hostile_chance": 0.3,
-          "note": "bridge_choice=held"
+          "note": "Only if bridge_choice=open (last fight)"
         }
       ],
-      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom for ambient/filler spawns of chapter-allowed families"
+      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom",
+      "note": "If bridge_choice=open, enc_ch06_trench_fight: compact_militia + harbor_militia become hostile (same budget)."
     },
     "ch07": {
       "act": "civil_war",
-      "threat_budget": 20,
+      "season": "late_fall",
+      "story_act": 2,
+      "levels": [
+        "ch07_dead_air",
+        "ch07b_dixie_valley"
+      ],
+      "threat_budget": 63,
       "intensity": 0.55,
       "max_concurrent": 5,
       "spawns": [
         {
           "enemy": "feral_dog",
-          "count": 4,
+          "count": 3,
           "hostile_chance": 1.0,
-          "note": "first dogs"
+          "note": "Peavine road",
+          "location": "loc_peavine_shack",
+          "level": "ch07_dead_air"
         },
         {
           "enemy": "remnant_patrol",
           "count": 4,
           "hostile_chance": 0.35,
-          "note": "hostile if ironwood_hostility>=3"
+          "note": "Peavine, hostile if ironwood_hostility>=3",
+          "location": "loc_peavine_shack",
+          "level": "ch07_dead_air"
+        },
+        {
+          "enemy": "coyote",
+          "count": 3,
+          "hostile_chance": 1.0,
+          "note": "Dixie flats",
+          "location": "loc_dixie_annex",
+          "level": "ch07b_dixie_valley"
+        },
+        {
+          "enemy": "recovery_detail",
+          "count": 6,
+          "hostile_chance": 0.5,
+          "note": "Hangar; talkable",
+          "location": "loc_dixie_annex",
+          "level": "ch07b_dixie_valley"
+        },
+        {
+          "enemy": "tallman",
+          "count": 1,
+          "hostile_chance": 0.8,
+          "note": "FIRST FIGHT: enc_ch07_road_tallman (truck stalled)",
+          "encounter": "enc_ch07_road_tallman",
+          "level": "ch07_dead_air",
+          "location": "loc_us50_fallon"
+        },
+        {
+          "enemy": "tallman",
+          "count": 1,
+          "hostile_chance": 0.8,
+          "note": "enc_ch07_holds_tallman (Wing A last hold)",
+          "encounter": "enc_ch07_holds_tallman",
+          "level": "ch07b_dixie_valley",
+          "location": "loc_annex_holds"
+        },
+        {
+          "enemy": "tallman",
+          "count": 2,
+          "hostile_chance": 0.15,
+          "note": "Optional den: torpid, non-hostile unless shot",
+          "encounter": "den (torpid, loc_dixie_hotsprings; hostile only if shot)",
+          "level": "ch07b_dixie_valley",
+          "location": "loc_dixie_hotsprings"
         }
       ],
-      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom for ambient/filler spawns of chapter-allowed families"
+      "level_split": {
+        "ch07_dead_air": [
+          "loc_peavine_shack",
+          "loc_us50_fallon"
+        ],
+        "ch07b_dixie_valley": [
+          "loc_dixie_annex",
+          "loc_annex_holds",
+          "loc_dixie_hotsprings"
+        ]
+      },
+      "tallman_rule": "max 3 tallman active at once (any mix of spawns); assimilated max 2 humans + 3 animals active",
+      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom"
     },
     "ch08": {
       "act": "nuclear_winter",
-      "threat_budget": 38,
+      "season": "nuclear_winter",
+      "story_act": 3,
+      "levels": [
+        "ch08_ashfall"
+      ],
+      "threat_budget": 67,
       "intensity": 0.6,
       "max_concurrent": 5,
       "spawns": [
         {
           "enemy": "husk",
           "count": 6,
-          "hostile_chance": 0.7,
-          "note": "talk-down possible"
+          "hostile_chance": 0.6,
+          "note": ""
         },
         {
           "enemy": "feral_dog",
@@ -1476,79 +2144,145 @@
           "enemy": "looter",
           "count": 3,
           "hostile_chance": 0.7,
-          "note": "hospital"
+          "note": "Hospital"
         },
         {
           "enemy": "remnant_patrol",
           "count": 4,
           "hostile_chance": 0.4,
-          "note": "elevators if bridge_choice=held"
+          "note": "Sparks yard, if bridge_choice=open"
+        },
+        {
+          "enemy": "assimilated_human",
+          "count": 2,
+          "hostile_chance": 1.0,
+          "note": "Hollows: the Henley house, the midnight door; knock and call from the ash"
+        },
+        {
+          "enemy": "assimilated_animal",
+          "count": 2,
+          "hostile_chance": 1.0,
+          "note": "Assimilated dogs in the ash; silent"
+        },
+        {
+          "enemy": "tallman",
+          "count": 2,
+          "hostile_chance": 0.5,
+          "note": "Pairs following husks; visit unsealed houses at night"
         }
       ],
-      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom for ambient/filler spawns of chapter-allowed families"
+      "tallman_rule": "max 3 tallman active at once (any mix of spawns); assimilated max 2 humans + 3 animals active",
+      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom"
     },
     "ch09": {
       "act": "nuclear_winter",
-      "threat_budget": 82,
+      "season": "nuclear_winter",
+      "story_act": 3,
+      "levels": [
+        "ch09_the_long_night"
+      ],
+      "threat_budget": 116,
       "intensity": 0.75,
       "max_concurrent": 6,
       "spawns": [
         {
           "enemy": "remnant_patrol",
           "count": 8,
-          "hostile_chance": 0.7,
-          "note": "Ruiz gap reduces"
+          "hostile_chance": 0.6,
+          "note": ""
         },
         {
           "enemy": "ironwood_checkpoint",
           "count": 1,
           "hostile_chance": 0.7,
-          "note": "bridge picket"
+          "note": ""
         },
         {
           "enemy": "ironwood_drone",
           "count": 1,
           "hostile_chance": 1.0,
-          "note": "grounded by blizzard"
+          "note": "Grounded by blizzard; visual only"
         },
         {
-          "enemy": "wolf",
+          "enemy": "coyote",
+          "count": 2,
+          "hostile_chance": 1.0,
+          "note": ""
+        },
+        {
+          "enemy": "assimilated_animal",
           "count": 5,
           "hostile_chance": 1.0,
-          "note": "Jay Cooke pack"
+          "note": "Silent pack on river_ice (enc_ch09_animal_pack)"
+        },
+        {
+          "enemy": "assimilated_human",
+          "count": 2,
+          "hostile_chance": 1.0,
+          "note": "Voice ambush in the whiteout (enc_ch09_hollow_ambush)"
         },
         {
           "enemy": "husk",
           "count": 4,
           "hostile_chance": 0.8,
-          "note": "drawn to column heat"
+          "note": ""
+        },
+        {
+          "enemy": "tallman",
+          "count": 3,
+          "hostile_chance": 0.6,
+          "note": "Max 3 active; shadow the column in the whiteout; probe stragglers"
         }
       ],
-      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom for ambient/filler spawns of chapter-allowed families"
+      "tallman_rule": "max 3 tallman active at once (any mix of spawns); assimilated max 2 humans + 3 animals active",
+      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom"
     },
     "ch10": {
       "act": "nuclear_winter",
-      "threat_budget": 34,
+      "season": "nuclear_winter",
+      "story_act": 3,
+      "levels": [
+        "ch10_the_warm_room"
+      ],
+      "threat_budget": 75,
       "intensity": 0.8,
       "max_concurrent": 6,
-      "note": "Only if no stand-down (ruiz_defected or strand_stance=governor => 0).",
       "spawns": [
+        {
+          "enemy": "tallman",
+          "count": 3,
+          "hostile_chance": 0.7,
+          "note": "Night 1 (one lamp test), night 2 (probe), night 3 (push). Never more than 3 visible."
+        },
+        {
+          "enemy": "assimilated_human",
+          "count": 2,
+          "hostile_chance": 1.0,
+          "note": "Call names from past the lamp line (enc_ch10_hollow_prowlers)"
+        },
+        {
+          "enemy": "assimilated_animal",
+          "count": 3,
+          "hostile_chance": 1.0,
+          "note": "Test the dark edge of each pole"
+        },
         {
           "enemy": "remnant_patrol",
           "count": 8,
-          "hostile_chance": 0.5,
-          "note": "0 if stand-down"
+          "hostile_chance": 0.4,
+          "note": "Only if no stand-down (enc_ch10_gate_battle)"
         },
         {
           "enemy": "ironwood_mrap",
           "count": 1,
           "hostile_chance": 1.0,
-          "note": "set piece"
+          "note": "Same"
         }
       ],
-      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom for ambient/filler spawns of chapter-allowed families"
-    },
-    "_note": "spawns mirror story/gameplay_hooks.json chapters[].enemies (counts are the story's); hostile_chance is the systems estimate used for budgets."
+      "tallman_rule": "max 3 tallman active at once (any mix of spawns); assimilated max 2 humans + 3 animals active",
+      "note_budget": "threat_budget = expected hostile threat (count x hostile_chance x threat_cost) +15% headroom",
+      "note": "remnant_patrol + ironwood_mrap only if no stand-down (ruiz_defected or avila_stance=governor => remnant_stood_down). Siege: Tallmen nights 1-3 (enc_ch10_siege_n1..n3)."
+    }
   },
   "drop_rules": {
     "rolls": "[min,max] entries rolled from weighted entries",
@@ -1562,13 +2296,301 @@
       0,
       0.5
     ],
-    "act_gating": "drops obey loot_tables.item_act_gate and item_act_weight_mult exactly like containers (e.g. authority_guard 5.56 drops are weight 0 in blackout)"
+    "act_gating": "drops obey loot_tables.item_act_gate and item_act_weight_mult exactly like containers"
   },
   "chapter_gating": {
     "human_only_until": "ch04",
     "soldier_from": "ch05",
     "dog_from": "ch07",
+    "stalker_from": "ch07",
     "husk_from": "ch08",
+    "assimilated_from": "ch08",
+    "assimilated_until": "ch10",
+    "set_piece_rule": "set pieces (incl. tallman_glimpse ch02-ch06) are exempt",
     "rule": "validated by tools/validate.py"
+  },
+  "revision": "Nevada Revision 2 + nuclear-winter survival-horror additions",
+  "story_encounters": {
+    "_note": "Copied from story/gameplay_hooks.json encounters (authoritative). Validator checks every enemy id exists here.",
+    "encounters": {
+      "enc_ch01_watch_standoff": {
+        "chapter": "ch01",
+        "enemies": [
+          {
+            "type": "watch_militia",
+            "count": 2
+          }
+        ],
+        "note": "Wraith steps in front; ends if you holster or run."
+      },
+      "enc_ch02_crush": {
+        "chapter": "ch02",
+        "enemies": [],
+        "note": "Crowd crush hazard; timed escape."
+      },
+      "enc_ch03_fire_defend": {
+        "chapter": "ch03",
+        "enemies": [
+          {
+            "type": "bridge_boy",
+            "count": 6
+          }
+        ],
+        "note": "Two waves (4+2); flee at 50% losses."
+      },
+      "enc_ch03_fire_rescue": {
+        "chapter": "ch03",
+        "enemies": [],
+        "note": "house_fire heat hazard; carry Gil out."
+      },
+      "enc_ch04_ramp_chase": {
+        "chapter": "ch04",
+        "enemies": [
+          {
+            "type": "authority_guard",
+            "count": 3
+          }
+        ],
+        "note": "Tug chase off the ramp; no kills required."
+      },
+      "enc_ch04_dutch_ambush": {
+        "chapter": "ch04",
+        "enemies": [
+          {
+            "type": "bridge_boy",
+            "count": 5
+          }
+        ],
+        "note": "Only if trader_dutch_rep<=-1."
+      },
+      "enc_ch04_lund_fight": {
+        "chapter": "ch04",
+        "enemies": [
+          {
+            "type": "desperate_family",
+            "count": 1
+          }
+        ],
+        "note": "Avoidable."
+      },
+      "enc_ch05_compact_attack": {
+        "chapter": "ch05",
+        "enemies": [
+          {
+            "type": "compact_militia",
+            "count": 8
+          }
+        ],
+        "note": "Escort path. Sets fired_on_blockade via dialogue."
+      },
+      "enc_ch05_ironwood_turn": {
+        "chapter": "ch05",
+        "enemies": [
+          {
+            "type": "ironwood_patrol",
+            "count": 4
+          },
+          {
+            "type": "ironwood_drone",
+            "count": 1
+          }
+        ],
+        "note": "Sabotage path."
+      },
+      "enc_ch05_crossfire": {
+        "chapter": "ch05",
+        "enemies": [
+          {
+            "type": "compact_militia",
+            "count": 4
+          },
+          {
+            "type": "ironwood_patrol",
+            "count": 4
+          }
+        ],
+        "note": "Divert path."
+      },
+      "enc_ch06_trench_fight": {
+        "chapter": "ch06",
+        "enemies": [
+          {
+            "type": "compact_militia",
+            "count": 4
+          },
+          {
+            "type": "harbor_militia",
+            "count": 6
+          }
+        ],
+        "note": "Engine-triggered after ch06_trench if bridge_choice=open."
+      },
+      "enc_ch07_road_tallman": {
+        "chapter": "ch07",
+        "enemies": [
+          {
+            "type": "tallman",
+            "count": 1
+          }
+        ],
+        "note": "FIRST Tallman fight. Light pushes it back; it retreats wounded."
+      },
+      "enc_ch07_tolliver": {
+        "chapter": "ch07",
+        "enemies": [],
+        "note": "Single armed guard (use authority_guard stats). Only if you fire."
+      },
+      "enc_ch07_recovery_detail": {
+        "chapter": "ch07",
+        "enemies": [
+          {
+            "type": "recovery_detail",
+            "count": 6
+          }
+        ],
+        "note": "Only if fought."
+      },
+      "enc_ch07_holds_tallman": {
+        "chapter": "ch07",
+        "enemies": [
+          {
+            "type": "tallman",
+            "count": 1
+          }
+        ],
+        "note": "Wing A corridor; flees to the flooded stair."
+      },
+      "enc_ch08_husk": {
+        "chapter": "ch08",
+        "enemies": [
+          {
+            "type": "husk",
+            "count": 1
+          }
+        ],
+        "note": "A sick man. Not a monster."
+      },
+      "enc_ch08_hollow_first": {
+        "chapter": "ch08",
+        "enemies": [
+          {
+            "type": "assimilated_human",
+            "count": 1
+          }
+        ],
+        "note": "FIRST Hollow: Dale Henley in his kitchen (ch08_henley_house). Interior, flashlight only. Sets up the paranoia."
+      },
+      "enc_ch08_door_mimic": {
+        "chapter": "ch08",
+        "enemies": [
+          {
+            "type": "assimilated_human",
+            "count": 1
+          }
+        ],
+        "note": "Only if the player opens the door to the midnight knock (ch08_door). Close quarters in the hallway; SEAL drops while open."
+      },
+      "enc_ch09_picket_assault": {
+        "chapter": "ch09",
+        "enemies": [
+          {
+            "type": "remnant_patrol",
+            "count": 6
+          },
+          {
+            "type": "ironwood_checkpoint",
+            "count": 1
+          }
+        ]
+      },
+      "enc_ch09_hollow_ambush": {
+        "chapter": "ch09",
+        "enemies": [
+          {
+            "type": "assimilated_human",
+            "count": 2
+          }
+        ],
+        "note": "Whiteout voice ambush (ch09_voices): a Hollow calls in Walt's voice off the rope line. Following it costs one column member."
+      },
+      "enc_ch09_animal_pack": {
+        "chapter": "ch09",
+        "enemies": [
+          {
+            "type": "assimilated_animal",
+            "count": 5
+          }
+        ],
+        "note": "Assimilated coyote pack on river_ice (ch09_voices). Silent; flee flares; break off after losing 2."
+      },
+      "enc_ch09_ice_tallmen": {
+        "chapter": "ch09",
+        "enemies": [
+          {
+            "type": "tallman",
+            "count": 3
+          }
+        ],
+        "note": "Max 3; they test, then break off after losing 1."
+      },
+      "enc_ch10_siege_n1": {
+        "chapter": "ch10",
+        "enemies": [
+          {
+            "type": "tallman",
+            "count": 1
+          }
+        ],
+        "note": "Repair a cut lamp cable while watched. Usually no attack."
+      },
+      "enc_ch10_siege_n2": {
+        "chapter": "ch10",
+        "enemies": [
+          {
+            "type": "tallman",
+            "count": 2
+          }
+        ],
+        "note": "Clamp the cooling-water line under the lights."
+      },
+      "enc_ch10_hollow_prowlers": {
+        "chapter": "ch10",
+        "enemies": [
+          {
+            "type": "assimilated_human",
+            "count": 2
+          },
+          {
+            "type": "assimilated_animal",
+            "count": 3
+          }
+        ],
+        "note": "Siege night 2 (ch10_siege_night2): Hollows call names from past the lamp line; animal prowlers test each pole's dark edge. Night 3 reuses their voice barks between lamps."
+      },
+      "enc_ch10_siege_n3": {
+        "chapter": "ch10",
+        "enemies": [
+          {
+            "type": "tallman",
+            "count": 3
+          }
+        ],
+        "note": "Push on one side (if den_killed and tallmen_killed>=3) or two. Disengage after losing 2 or at dawn."
+      },
+      "enc_ch10_gate_battle": {
+        "chapter": "ch10",
+        "enemies": [
+          {
+            "type": "remnant_patrol",
+            "count": 8
+          },
+          {
+            "type": "ironwood_mrap",
+            "count": 1
+          }
+        ],
+        "note": "Only if the Remnant doesn't stand down."
+      }
+    }
   }
 }

@@ -1,0 +1,170 @@
+{
+  "id": "ch05_wes_wounded",
+  "chapter": "ch05",
+  "location": "loc_i80_blockade",
+  "trigger": "Under the overpass: Wes is hit.",
+  "speakers": [
+    "narrator",
+    "wes",
+    "braith",
+    "ruiz",
+    "wraith",
+    "ross"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Wes is under the overpass in a puddle of slush, holding his thigh. There's a lot of blood. Too much.",
+      "next": "w1"
+    },
+    {
+      "id": "w1",
+      "speaker": "wes",
+      "text": "Hey. Hey, big brother. I'm fine. This is fine. I'm so fine.",
+      "next": "w2"
+    },
+    {
+      "id": "w2",
+      "speaker": "wraith",
+      "text": "[Lying against Wes's side. Keeping him warm. Not moving.]",
+      "next": "w3"
+    },
+    {
+      "id": "w3",
+      "speaker": "ruiz",
+      "text": "He's Compact. If my people find him, he's a detainee. If he's a detainee, he's a number.",
+      "choices": [
+        {
+          "text": "[Med kit. Treat him. He comes with me]",
+          "next": "treat",
+          "conditions": [
+            {
+              "item": "med_kit",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "med_kit",
+              "qty": 1
+            },
+            {
+              "set": "wes_spared",
+              "value": true
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            },
+            {
+              "trust": "wes",
+              "delta": 3
+            },
+            {
+              "add": "ironwood_hostility",
+              "value": 1
+            },
+            {
+              "quest": "q_find_wes",
+              "state": "complete"
+            }
+          ]
+        },
+        {
+          "text": "[Carry him to the Compact medics]",
+          "next": "compact",
+          "effects": [
+            {
+              "add": "rep_compact",
+              "value": 2
+            },
+            {
+              "trust": "ross",
+              "delta": 2
+            },
+            {
+              "trust": "wes",
+              "delta": 1
+            },
+            {
+              "quest": "q_find_wes",
+              "state": "complete"
+            }
+          ]
+        },
+        {
+          "text": "Ruiz, medevac him. Please.",
+          "next": "army",
+          "effects": [
+            {
+              "set": "wes_prisoner",
+              "value": true
+            },
+            {
+              "trust": "wes",
+              "delta": -2
+            },
+            {
+              "trust": "ruiz",
+              "delta": 1
+            },
+            {
+              "quest": "q_find_wes",
+              "state": "complete"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "treat",
+      "speaker": "ruiz",
+      "text": "...I didn't see a Compact fighter. I saw a mechanic's brother. Go. Before I see him.",
+      "effects": [
+        {
+          "trust": "ruiz",
+          "delta": 2
+        }
+      ],
+      "next": "treat2"
+    },
+    {
+      "id": "treat2",
+      "speaker": "wes",
+      "text": "Dad's gonna kill you for this. Then hug you. Then kill you again.",
+      "next": "end"
+    },
+    {
+      "id": "compact",
+      "speaker": "narrator",
+      "text": "You carry him across no man's land with your hands up. The Compact lets you through. Ross takes him from you.",
+      "next": "ross"
+    },
+    {
+      "id": "ross",
+      "speaker": "ross",
+      "text": "...Thank you, son. Go back. Before someone shoots you for walking both ways.",
+      "effects": [
+        {
+          "trust": "ross",
+          "delta": 1
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "army",
+      "speaker": "ruiz",
+      "text": "I'll get him a medic. I'll try to get him a good one. That's all I can promise.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "The convoy's lights move west. The canyon goes back to the dark.",
+      "end": true
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "id": "ch10_siege_night3",
+  "chapter": "ch10",
+  "location": "loc_galena_station",
+  "trigger": "Siege night 3 (the push). Never more than 3 visible. They break off at dawn or after losing 2.",
+  "speakers": [
+    "narrator",
+    "braith",
+    "wraith",
+    "carly"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Night three. No moon. Snow falling straight down. The lamp line hums.",
+      "branches": [
+        {
+          "next": "one",
+          "conditions": [
+            {
+              "flag": "den_killed",
+              "eq": true
+            },
+            {
+              "flag": "tallmen_killed",
+              "gte": 3
+            }
+          ]
+        },
+        {
+          "next": "two"
+        }
+      ]
+    },
+    {
+      "id": "one",
+      "speaker": "narrator",
+      "text": "They come at one side only, the dark side behind the cooling towers. Fewer than you feared. More than you'd like.",
+      "next": "n0"
+    },
+    {
+      "id": "two",
+      "speaker": "narrator",
+      "text": "They come at two sides at once, testing which one breaks first. They're not a horde. They don't need to be.",
+      "next": "n0"
+    },
+    {
+      "id": "n0",
+      "speaker": "narrator",
+      "text": "...",
+      "branches": [
+        {
+          "next": "n1",
+          "conditions": [
+            {
+              "flag": "wraith_alive",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "n1x"
+        }
+      ]
+    },
+    {
+      "id": "n1x",
+      "speaker": "narrator",
+      "text": "No dog to tell you where. You watch the lights instead: whichever one flickers first.",
+      "next": "n1v"
+    },
+    {
+      "id": "n1",
+      "speaker": "wraith",
+      "text": "[Barking at the east fence. Then the north. Showing you where. Over and over.]",
+      "next": "n1v"
+    },
+    {
+      "id": "n1v",
+      "speaker": "narrator",
+      "text": "Between the lamps, voices. Halvorsen's. Lolo's. Yours, calling for Wraith. Nobody answers. That's the rule.",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "speaker": "carly",
+      "text": "[On the radio] North pole four's dark! East three flickering! Braith, which one?",
+      "choices": [
+        {
+          "text": "[North. Lights first]",
+          "next": "north",
+          "effects": [
+            {
+              "event": "encounter",
+              "id": "enc_ch10_siege_n3"
+            }
+          ]
+        },
+        {
+          "text": "[East. Guns first]",
+          "next": "east",
+          "effects": [
+            {
+              "event": "encounter",
+              "id": "enc_ch10_siege_n3"
+            },
+            {
+              "add": "siege_breaches",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "north",
+      "speaker": "narrator",
+      "text": "You get the light back on as a long shape steps into it. It flinches. It stops. It turns its flat eyes on you.",
+      "next": "n3"
+    },
+    {
+      "id": "east",
+      "speaker": "narrator",
+      "text": "You hold the east with rifles. The north goes dark for ninety seconds. Long enough. Someone screams in the yard.",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "speaker": "narrator",
+      "text": "By dawn, two of them are dead in the snow outside the fence. The rest are gone. You don't know how many the rest is.",
+      "effects": [
+        {
+          "add": "tallmen_killed",
+          "value": 2
+        }
+      ],
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "speaker": "narrator",
+      "text": "You stand at the fence with the sun coming up brown. The lamp line holds. For tonight. That's what holding means now.",
+      "end": true
+    }
+  ]
+}

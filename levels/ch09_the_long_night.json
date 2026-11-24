@@ -1,22 +1,30 @@
 {
  "$schema": "./schema.json",
  "formatVersion": 1,
+ "storyVersion": 2,
  "id": "ch09_the_long_night",
  "chapter": 9,
+ "storyChapter": "ch09",
  "title": "The Long Night",
- "act": "III",
+ "act": 3,
  "storyFile": "story/chapters/ch09_the_long_night.md",
  "next": "ch10_the_warm_room",
- "summary": "Blizzard march up the frozen St. Louis River: warming stops, the Hwy 210 picket (Ruiz's gap / thin ice / fight), Hank's hut, the ice break, wolves at the swinging bridge, the dam's lights.",
  "difficulty": 5,
+ "summary": "Early February, -40 C, blizzard. Kit's sled, the column leaves Sector 4 on a rope line down the frozen Truckee; the Remnant picket at the Glendale bridge; whiteout voices (a Hollow in Walt's voice) and a silent assimilated pack; the ice breaks; Tallmen test the column (Wraith's hold); Salt's culvert and Walt on the sled at Steamboat Creek; Wraith leads through the whiteout to Galena's gate.",
+ "startInventory": {
+  "flashlight": 1,
+  "hand_radio": 1,
+  "mech_tools": 1
+ },
+ "startInventoryNote": "carried over; sled from Kit (ch09_kit_sled)",
  "units": "meters",
  "grid": {
   "cellSize": 2.0,
-  "cols": 22,
-  "rows": 96,
+  "cols": 48,
+  "rows": 120,
   "origin": {
-   "x": -22.0,
-   "z": -184.0
+   "x": -48.0,
+   "z": -232.0
   },
   "legend": {
    "#": {
@@ -36,21 +44,14 @@
     "roof": true,
     "preview": "#b8ad98"
    },
-   ".": {
-    "name": "snow_ground",
-    "walkable": true,
-    "solid": false,
-    "height": 0,
-    "floorTex": "snow_02",
-    "preview": "#d9e1e8"
-   },
    "=": {
-    "name": "road",
+    "name": "road_ash_snow",
     "walkable": true,
     "solid": false,
     "height": 0,
     "floorTex": "asphalt_snow",
-    "preview": "#8d969e"
+    "groundType": "asphalt_ash_snow",
+    "preview": "#8e908e"
    },
    "B": {
     "name": "building_mass",
@@ -87,33 +88,6 @@
     "ice": true,
     "preview": "#b9d3e3"
    },
-   "T": {
-    "name": "tree",
-    "walkable": false,
-    "solid": true,
-    "height": 6,
-    "tree": true,
-    "preview": "#2e4a34"
-   },
-   "U": {
-    "name": "covered_floor",
-    "walkable": true,
-    "solid": false,
-    "height": 0,
-    "floorTex": "road_damaged",
-    "roof": true,
-    "roofHeight": 5,
-    "blocksAirLOS": true,
-    "preview": "#5f6a72"
-   },
-   "_": {
-    "name": "chasm",
-    "walkable": false,
-    "solid": false,
-    "height": -8,
-    "void": true,
-    "preview": "#14181c"
-   },
    "b": {
     "name": "bridge_deck",
     "walkable": true,
@@ -121,23 +95,6 @@
     "height": 0,
     "floorTex": "rusty_metal",
     "preview": "#7a6a5a"
-   },
-   "c": {
-    "name": "cover_low",
-    "walkable": false,
-    "solid": true,
-    "height": 1.0,
-    "wallTex": "dirt",
-    "cover": true,
-    "preview": "#a08850"
-   },
-   "g": {
-    "name": "dirt_gravel",
-    "walkable": true,
-    "solid": false,
-    "height": 0,
-    "floorTex": "dirt",
-    "preview": "#9c8f7a"
    },
    "i": {
     "name": "thin_ice",
@@ -149,358 +106,470 @@
     "hazard": "thin_ice",
     "preview": "#8fb7cf"
    },
-   "~": {
-    "name": "open_water",
-    "walkable": false,
+   "y": {
+    "name": "ash_drift",
+    "walkable": true,
     "solid": false,
-    "height": -0.6,
-    "floorTex": "dirty_concrete",
-    "water": true,
-    "preview": "#2f4a63"
+    "height": 0,
+    "floorTex": "snow_02",
+    "groundType": "ash_drift",
+    "scatter": "ash_drift",
+    "preview": "#9a9b96"
    }
   },
   "tiles": [
-   "TTTTTTBBBBBBBBBBTTTTTT",
-   "T.....BBBBBBBBBB.....T",
-   "T.....BBBBDDBBBB.....T",
-   "T........====........T",
-   "T..gggggggggggggggg..T",
-   "T..gggggggggggggggg..T",
-   "THHHHHHIIIIIIII.ggg..T",
-   "THHHHHHIIIIIIII.gggTTT",
-   "THHHHHH~~~~~~~~_ggg..T",
-   "THHHHHH~~~~~~~~_ggg..T",
-   "THHHHHH~~~~~~~~_gggT.T",
-   "THHHHHH~~~~~~~~_ggg..T",
-   "THHHHHH~~~~~~~~_ggg..T",
-   "T.Tbbbbbbbbbbbbbbbb.TT",
-   "T..gg._~~~~~~~~_...T.T",
-   "T..gg._~~~~~~~~_..T..T",
-   "T.Tgg._~~~~~~~~_...TTT",
-   "TTTgg._~~~~~~~~_T.T..T",
-   "T.Tgg._~~~~~~~~_.T...T",
-   "T.gggggIIIIIIII...TT.T",
-   "T.gggggIIIIIIII.TTTTTT",
-   "TTgggggIIIIIIII...T.TT",
-   "T.gggggIIIIIIII..TTTTT",
-   "T...T..IIIIIIII.T..T.T",
-   "TT.T...IIIIIIII...TT.T",
-   "T.TT...IIIIIIII.TTT..T",
-   "T...T.TIIiiiiII....T.T",
-   "T.T...TIIiiiiII.T..T.T",
-   "T..T..TIIiiiiII....TTT",
-   "T.T...TIIiiiiIIT..T..T",
-   "TTTTTTTIIIIIIII..TT..T",
-   "TTT....IIIIIIII....T.T",
-   "TT.TT.TIIIIIIII.T....T",
-   "T......IIIIIIII.T....T",
-   "T.T.TT.IIIIIIIITTT...T",
-   "T#####TIIIIIIII...TT.T",
-   "T#,,,#.IIIIIIIITT....T",
-   "T#,,,#.IIIIIIIITTTT..T",
-   "T#,,,D.IIIIIIII..T...T",
-   "T#,,,#TIIIIIIIIT.TT..T",
-   "T#####TIIIIIIII...T..T",
-   "T...TT.IIIIIIIIT.....T",
-   "TTTTTT.IIIIIIIITTTT..T",
-   "T..TT..IIIIIIIIT...TTT",
-   "T...TggIIIIIIIIiii...T",
-   "T...TggIIIIIIIIiii..TT",
-   "T.TTTggIIIcIIIIiiiT.TT",
-   "TT...ggIIIIIIIIiiiT..T",
-   "THHHHggUUUUUUUUiiiHHHT",
-   "THHHHUUUUUUUUUUUUUHHHT",
-   "THHHHUUUUUUUUUUUUUHHHT",
-   "THHHHUUUUUUUUUUUUUHHHT",
-   "THHHHggUUUUUUUUiiiHHHT",
-   "T.T.TggIIIIIIIIiiiT..T",
-   "T..T.ggIcIIIIIIiiiT..T",
-   "T.T..ggIIIIIcIIiii...T",
-   "T....ggIIIIIIIIiii.T.T",
-   "T....ggIIIIIIIIiii...T",
-   "T..TTggIIIIIIIIiiiT..T",
-   "TT.....IIIIIIII.T..T.T",
-   "T..T.T.IIIIIIII......T",
-   "T..T..TIIIIIIIIT...TTT",
-   "T..TT.TIIIIIIII...T..T",
-   "T..T...IIIIIIII..TTTTT",
-   "TT..T..IIIIIIII......T",
-   "T.TT...IIIIIIIIT...T.T",
-   "TT...T.IIIIIIII..TT.TT",
-   "T...T.TIIIIIIII..T.T.T",
-   "T.TT...IIIIIIII.T....T",
-   "TT.T...IIIIIIII....T.T",
-   "T....T.IIIIIIII....TTT",
-   "T.T.TT.IIIIIIIIT...TTT",
-   "TT.T.T.IIIIIIII.....TT",
-   "T..TT..IIIIIIII......T",
-   "TT.TTTTIIIIIIII..T.T.T",
-   "T..TT..IIIIIIIIT.T...T",
-   "T.T.T..IIIIIIIITT....T",
-   "TT.T...IIIIIIII.....TT",
-   "T.TT...IIIIIIII....TTT",
-   "TT.T..TIIIIIIII..T.T.T",
-   "T....TTIIIIIIII..TTTTT",
-   "TT.....IIIIIIII..T.TTT",
-   "TT..T.TIIIIIIII...T.TT",
-   "TT.T...IIIIIIIIT.T...T",
-   "TTT.T..IIIIIIII..T...T",
-   "T..T...IIIIIIII......T",
-   "T.T...TIIIIIIII.TTT..T",
-   "TTT.T..IIIIIIII......T",
-   "T....................T",
-   "T.BBBB..........BBBB.T",
-   "T.BBBB..........BBBB.T",
-   "T.BBBB..........BBBB.T",
-   "T.BBBB..........BBBB.T",
-   "T.BBBB..........BBBB.T",
-   "T....................T",
-   "TTTTTTTTTTTTTTTTTTTTTT"
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyBBBBBBBBBBBBBBByyH",
+   "Hyyy###########yyyyyyyyyyyyyyyBBBBBBBBBBBBBBByyH",
+   "Hyyy#,,,,,,,,,#yyyyyyyyyyyyyyyBBBBBBBBBBBBBBByyH",
+   "Hyyy#,,,,,,,,,#yyyyyyyyyyyyyyyBBBBBBBBBBBBBBByyH",
+   "Hyyy#,,,,,,,,,DyyyyyyyyyyyyyyyBBBBBBBBBBBBBBByyH",
+   "Hyyy#,,,,,,,,,#yyyyyyyyyyyyyyyBBBBBBBBBBBBBBByyH",
+   "Hyyy#,,,,,,,,,#yyyyyyyyyyyyyyyBBBBBBBBBBBBBBByyH",
+   "Hyyy#,,,,,,,,,#yyyyyyyyyyyyyyyBBBBBBBBBBBBBBByyH",
+   "Hyyy###########yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "HHHHHHHHHHHHHHHHHHHHHHyyyyHHHHHHHHHHHHHHHHHHHHHH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyBBBBByyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyBBBBByyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyBBBBByyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyBBBBByyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyBBBBByyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyIIIyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIiiiiiIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIiiiiiIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIiiiiiIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIiiiiiIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIiiiiiiIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIiiiiiiIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIiiiiiiIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIiiiiiiIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIiiiiiiIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIiiiiiiIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIiiiiiiIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIiiiiiiIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIiiiiiiIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbH",
+   "HbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIy#######yH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIy#,,,,,#yH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIy#,,,,,#yH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyD,,,,,#yH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIy#,,,,,#yH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIy#,,,,,#yH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIy#######yH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "HyyyyyyyyyIIIIIIIIIIIIIIIIIIIIIIIIIIIIyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "H==============================================H",
+   "H==============================================H",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyy#############yyyyy====yyyyBBBBBBBBBBBBBBByyH",
+   "Hyyy#,,,,,,,,,,,#yyyyy====yyyyBBBBBBBBBBBBBBByyH",
+   "Hyyy#,,,,,,,,,,,#yyyyy====yyyyBBBBBBBBBBBBBBByyH",
+   "Hyyy#,,,,,,,,,,,#yyyyy====yyyyBBBBBBBBBBBBBBByyH",
+   "Hyyy#,,,,,,,,,,,Dyyyyy====yyyyBBBBBBBBBBBBBBByyH",
+   "Hyyy#,,,,,,,,,,,#yyyyy====yyyyBBBBBBBBBBBBBBByyH",
+   "Hyyy#,,,,,,,,,,,#yyyyy====yyyyBBBBBBBBBBBBBBByyH",
+   "Hyyy#,,,,,,,,,,,#yyyyy====yyyyBBBBBBBBBBBBBBByyH",
+   "Hyyy#############yyyyy====yyyyBBBBBBBBBBBBBBByyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
   ]
  },
  "environment": {
-  "timeStart": 0.47,
-  "timeEnd": 0.5,
-  "timeLocked": true,
-  "weather": "blizzard",
-  "tempC": -45,
-  "blizzard": true,
+  "seasonArc": "fallout_nuclear_winter",
+  "season": "fallout_winter",
+  "actName": "Nuclear Fallout Winter",
+  "groundType": "ash_snow",
+  "precipitation": "ash_snow",
+  "particles": "fallout",
   "snowCover": 1.0,
-  "particles": "snow_heavy",
-  "fogNear": 3,
-  "fogFar": 16,
-  "palette": "assets/palettes/slso8.json",
-  "ambientTint": "#9aa8b8",
+  "wetness": 0.1,
+  "fogColor": "#27303c",
+  "skyColor": "#222933",
+  "sunColor": "#8f8e7c",
+  "ambientColor": "#55574f",
+  "visibilityM": 15,
+  "fogNear": 2,
+  "fogFar": 15,
+  "windMs": 18,
+  "atmosphere": "Ash-choked nuclear winter: grey ash falling with snow, sickly dim light, tight fog, short oppressive sightlines.",
+  "environmentPreset": "fallout_winter",
+  "storySeason": "nuclear_winter",
+  "storyPalette": "ashfall blue-grey, near-monochrome; floodlight cones and flare red are the only warm colors",
+  "storyWeather": "blizzard",
+  "weather": "blizzard",
+  "storyTempC": -40,
+  "tempC": -40,
+  "nightTempC": -45,
+  "survivalFocus": [
+   "warmth",
+   "exposure",
+   "column",
+   "dread"
+  ],
+  "timeStart": 0.5,
+  "timeEnd": 0.9,
+  "timeLocked": false,
+  "blizzard": true,
+  "warmthDrainMul": 2.4,
+  "mechanics": {
+   "ropeLine": true,
+   "column": true,
+   "thinIce": true,
+   "breathPlumes": "living NPCs only"
+  },
+  "seasonNote": "Early February, -40 C: whiteout blizzard over the frozen Truckee; ash-grey snow; visibility 15 m.",
   "hud": {
-   "temp": true,
+   "hp": true,
+   "hydration": true,
    "hunger": true,
+   "companion": true,
+   "warmth": true,
+   "temp": true,
+   "ammo_military": true,
    "rad": true,
    "filter": true,
-   "seal": false
-  },
-  "warmthDrainMul": 3.0,
-  "maxAliveEnemies": 5,
-  "mechanics": {
-   "columnEscort": true,
-   "columnFreezeIfPushedFast": true
+   "seal": true
   }
  },
  "locations": [
   {
-   "id": "loc_east_end",
+   "id": "loc_galena_station",
    "x": 0.0,
-   "z": -3.0,
+   "z": -218.0,
    "rect": {
     "type": "rect",
-    "x0": -20.0,
-    "z0": -12.0,
-    "x1": 20.0,
-    "z1": 6.0
+    "x0": -46.0,
+    "z0": -230.0,
+    "x1": 46.0,
+    "z1": -206.0
    },
-   "safe": false
+   "safe": false,
+   "name": "Galena Station gate"
+  },
+  {
+   "id": "loc_steamboat_creek",
+   "x": 0.0,
+   "z": -182.0,
+   "rect": {
+    "type": "rect",
+    "x0": -46.0,
+    "z0": -204.0,
+    "x1": 46.0,
+    "z1": -160.0
+   },
+   "safe": false,
+   "name": "Steamboat Creek"
   },
   {
    "id": "river_ice",
    "x": 0.0,
-   "z": -67.0,
+   "z": -95.0,
    "rect": {
     "type": "rect",
-    "x0": -20.0,
-    "z0": -122.0,
-    "x1": 20.0,
-    "z1": -12.0
+    "x0": -46.0,
+    "z0": -160.0,
+    "x1": 46.0,
+    "z1": -30.0
    },
-   "safe": false
+   "safe": false,
+   "name": "The frozen Truckee"
   },
   {
-   "id": "loc_jay_cooke",
+   "id": "loc_sparks_block",
    "x": 0.0,
-   "z": -147.0,
+   "z": -12.0,
    "rect": {
     "type": "rect",
-    "x0": -20.0,
-    "z0": -172.0,
-    "x1": 20.0,
-    "z1": -122.0
+    "x0": -46.0,
+    "z0": -30.0,
+    "x1": 46.0,
+    "z1": 6.0
    },
-   "safe": false
-  },
-  {
-   "id": "loc_thomson_dam",
-   "x": 0.0,
-   "z": -178.0,
-   "rect": {
-    "type": "rect",
-    "x0": -20.0,
-    "z0": -184.0,
-    "x1": 20.0,
-    "z1": -172.0
-   },
-   "safe": true
+   "safe": true,
+   "name": "Sector 4 (column muster)"
   }
  ],
- "landmarks": [
+ "landmarks": [],
+ "buildings": [
   {
-   "label": "Stop 1: burn barrel",
-   "x": -1.0,
-   "z": -19.0
+   "id": "b_ch09_shelter",
+   "label": "Shelter (column muster)",
+   "kind": "walled",
+   "cells": [
+    4,
+    108,
+    16,
+    116
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -40.0,
+    "z0": -16.0,
+    "x1": -14.0,
+    "z1": 2.0
+   },
+   "doors": [
+    [
+     -15.0,
+     -7.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_sparks_block"
   },
   {
-   "label": "Stop 2: windbreak",
-   "x": 1.0,
-   "z": -51.0
+   "id": "m_ch09_e_houses",
+   "label": "Snowed-in houses",
+   "kind": "mass",
+   "cells": [
+    30,
+    108,
+    44,
+    116
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 12.0,
+    "z0": -16.0,
+    "x1": 42.0,
+    "z1": 2.0
+   },
+   "doors": [],
+   "location": "loc_sparks_block",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
   },
   {
-   "label": "Hwy 210 picket",
-   "x": 0.0,
-   "z": -83.0
+   "id": "b_ch09_picket_hut",
+   "label": "Remnant picket hut",
+   "kind": "walled",
+   "cells": [
+    39,
+    92,
+    45,
+    98
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 30.0,
+    "z0": -48.0,
+    "x1": 44.0,
+    "z1": -34.0
+   },
+   "doors": [
+    [
+     31.0,
+     -41.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "river_ice"
   },
   {
-   "label": "Warming hut",
-   "x": -15.0,
-   "z": -108.0
+   "id": "m_ch09_culvert",
+   "label": "Steamboat culvert headwall",
+   "kind": "mass",
+   "cells": [
+    34,
+    20,
+    38,
+    24
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 20.0,
+    "z0": -192.0,
+    "x1": 30.0,
+    "z1": -182.0
+   },
+   "doors": [],
+   "location": "loc_steamboat_creek",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
   },
   {
-   "label": "Ice break",
-   "x": 0.0,
-   "z": -128.0
+   "id": "b_ch09_gatehouse",
+   "label": "Galena gatehouse",
+   "kind": "walled",
+   "cells": [
+    4,
+    3,
+    14,
+    10
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -40.0,
+    "z0": -226.0,
+    "x1": -18.0,
+    "z1": -210.0
+   },
+   "doors": [
+    [
+     -19.0,
+     -219.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_galena_station"
   },
   {
-   "label": "Swinging bridge",
-   "x": 0.0,
-   "z": -157.0
-  },
-  {
-   "label": "Dam gate",
-   "x": 0.0,
-   "z": -179.0
+   "id": "m_ch09_plant",
+   "label": "Galena plant (beyond the gate)",
+   "kind": "mass",
+   "cells": [
+    30,
+    2,
+    44,
+    9
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 12.0,
+    "z0": -228.0,
+    "x1": 42.0,
+    "z1": -212.0
+   },
+   "doors": [],
+   "location": "loc_galena_station",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
   }
  ],
  "paths": {
   "critical": [
    [
-    0.0,
-    1.0
-   ],
-   [
-    -1.0,
-    -19.0
-   ],
-   [
-    1.0,
-    -51.0
-   ],
-   [
-    0.0,
-    -67.0
-   ],
-   [
-    0.0,
-    -83.0
-   ],
-   [
-    0.0,
-    -97.0
-   ],
-   [
-    -9.0,
-    -107.0
-   ],
-   [
-    -11.0,
-    -107.0
+    -27.0,
+    -11.0
    ],
    [
     -15.0,
-    -108.0
+    -7.0
    ],
    [
-    -11.0,
-    -107.0
+    -1.0,
+    -23.0
    ],
    [
-    0.0,
-    -119.0
+    -1.0,
+    -51.0
    ],
    [
-    0.0,
-    -129.0
+    -1.0,
+    -67.0
    ],
    [
-    0.0,
-    -139.0
+    -1.0,
+    -79.0
    ],
    [
-    -13.0,
-    -141.0
+    -1.0,
+    -99.0
    ],
    [
-    -14.0,
-    -155.0
+    -1.0,
+    -131.0
    ],
    [
-    -14.0,
-    -157.0
+    -1.0,
+    -151.0
    ],
    [
-    13.0,
-    -157.0
+    -1.0,
+    -163.0
    ],
    [
-    13.0,
-    -173.0
-   ],
-   [
-    0.0,
-    -174.0
-   ],
-   [
-    0.0,
+    -1.0,
     -175.0
+   ],
+   [
+    -1.0,
+    -195.0
+   ],
+   [
+    -1.0,
+    -213.0
    ]
   ],
   "optional": [
    {
-    "id": "b_gap",
-    "label": "Ruiz's gap (west pylons)",
+    "id": "b_ch09_salt",
+    "label": "Salt's culvert",
     "points": [
      [
-      -5.0,
-      -65.0
-     ],
-     [
-      -10.0,
-      -67.0
-     ],
-     [
-      -10.0,
-      -95.0
-     ],
-     [
-      -5.0,
-      -97.0
-     ]
-    ]
-   },
-   {
-    "id": "b_thin",
-    "label": "Thin-ice detour (east)",
-    "points": [
-     [
-      5.0,
-      -65.0
+      -1.0,
+      -179.0
      ],
      [
       11.0,
-      -67.0
+      -179.0
      ],
      [
-      11.0,
-      -95.0
-     ],
-     [
-      5.0,
-      -97.0
+      19.0,
+      -179.0
      ]
     ]
    }
@@ -510,79 +579,94 @@
   "player": [
    {
     "id": "spawn_default",
-    "x": 0.0,
-    "z": 1.0,
-    "rotY": 3.142,
-    "when": [
-     {
-      "flag": "ch07_location",
-      "ne": "dam"
-     }
-    ]
-   },
-   {
-    "id": "spawn_dam_variant",
-    "x": 0.0,
-    "z": 1.0,
-    "rotY": 3.142,
-    "when": [
-     {
-      "flag": "ch07_location",
-      "eq": "dam"
-     }
-    ]
+    "x": -27.0,
+    "z": -11.0,
+    "rotY": 1.571
    }
   ],
   "npcs": [
    {
-    "id": "npc_theo",
-    "npc": "theo",
-    "x": -2.0,
-    "z": 1.0,
+    "id": "npc_wraith",
+    "npc": "wraith",
+    "x": -23.0,
+    "z": -7.0,
     "rotY": 0.0,
-    "behavior": "column",
+    "behavior": "companion_follow",
     "when": [
      {
-      "flag": "theo_alive",
-      "ne": false
+      "flag": "wraith_alive",
+      "eq": true
+     }
+    ],
+    "label": "Wraith",
+    "companion": true
+   },
+   {
+    "id": "npc_carly",
+    "npc": "carly",
+    "x": -33.0,
+    "z": -11.0,
+    "rotY": 0.0,
+    "behavior": "idle"
+   },
+   {
+    "id": "npc_walt",
+    "npc": "walt",
+    "x": -21.0,
+    "z": -11.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "label": "Walt (on the sled)"
+   },
+   {
+    "id": "npc_kit",
+    "npc": "kit",
+    "x": -9.0,
+    "z": -11.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch09_kit_sled",
+    "when": [
+     {
+      "flag": "kit_alive",
+      "eq": true
+     },
+     {
+      "trust": "kit",
+      "gte": 5
      }
     ]
    },
    {
-    "id": "npc_hank",
-    "npc": "hank",
-    "x": 2.0,
-    "z": 3.0,
+    "id": "npc_wes",
+    "npc": "wes",
+    "x": -29.0,
+    "z": -3.0,
     "rotY": 0.0,
-    "behavior": "column",
+    "behavior": "idle",
     "when": [
      {
-      "flag": "hank_alive",
-      "ne": false
+      "flag": "wes_alive",
+      "eq": true
      }
     ]
    },
    {
-    "id": "npc_cody",
-    "npc": "cody",
-    "x": 3.0,
-    "z": 2.0,
+    "id": "npc_lund_kid",
+    "npc": "lund_kid",
+    "x": -35.0,
+    "z": -5.0,
     "rotY": 0.0,
-    "behavior": "column",
-    "when": [
-     {
-      "flag": "cody_alive",
-      "ne": false
-     }
-    ]
+    "behavior": "idle"
    },
    {
     "id": "npc_ruiz",
     "npc": "ruiz",
-    "x": -3.0,
-    "z": 3.0,
+    "x": 21.0,
+    "z": -51.0,
     "rotY": 0.0,
-    "behavior": "column",
+    "behavior": "idle",
+    "dialogue": "ch09_picket",
     "when": [
      {
       "flag": "ruiz_defected",
@@ -591,463 +675,588 @@
     ]
    },
    {
-    "id": "npc_ray",
-    "npc": "ray",
-    "x": -5.0,
-    "z": 2.0,
-    "rotY": 0.0,
-    "behavior": "column",
-    "when": [
-     {
-      "flag": "ray_alive",
-      "ne": false
-     }
-    ]
-   },
-   {
-    "id": "npc_column",
-    "npc": "column",
-    "x": 0.0,
-    "z": 4.0,
-    "rotY": 0.0,
-    "behavior": "column",
-    "label": "Column (size = column_size)"
-   },
-   {
-    "id": "npc_wren",
-    "npc": "wren",
-    "x": 5.0,
-    "z": -55.0,
-    "rotY": 0.0,
-    "behavior": "idle",
-    "dialogue": "ch09_wren_sled",
-    "when": [
-     {
-      "flag": "trust.wren",
-      "gte": 5
-     },
-     {
-      "flag": "wren_alive",
-      "ne": false
-     }
-    ],
-    "label": "Wren + stolen sled"
-   },
-   {
-    "id": "npc_hank_hut",
-    "npc": "hank",
-    "x": -15.0,
-    "z": -109.0,
-    "rotY": 0.0,
-    "behavior": "idle",
-    "dialogue": "ch09_hank",
-    "when": [
-     {
-      "flag": "hank_alive",
-      "ne": false
-     }
-    ]
-   },
-   {
     "id": "npc_pete_lund",
     "npc": "pete_lund",
-    "x": -13.0,
-    "z": -143.0,
+    "x": -5.0,
+    "z": -219.0,
     "rotY": 0.0,
-    "behavior": "guide",
-    "when": [
-     {
-      "flag": "husks_talked_down",
-      "gte": 1
-     }
-    ],
-    "label": "Pete Lund (recovered husk guide)"
+    "behavior": "idle"
    },
    {
-    "id": "npc_jory",
-    "npc": "jory",
-    "x": 0.0,
-    "z": -175.0,
+    "id": "npc_amb_tolliver",
+    "npc": "amb_tolliver",
+    "x": 5.0,
+    "z": -217.0,
     "rotY": 0.0,
     "behavior": "idle",
-    "label": "Jory (dam gate)"
+    "when": [
+     {
+      "flag": "tolliver_fate",
+      "eq": "joined"
+     }
+    ],
+    "label": "Tolliver (gate)"
    },
    {
-    "id": "npc_kessler",
-    "npc": "kessler",
-    "x": 0.0,
-    "z": -85.0,
+    "id": "npc_amb_salt",
+    "npc": "amb_salt",
+    "x": 19.0,
+    "z": -179.0,
     "rotY": 0.0,
-    "behavior": "voice",
-    "label": "Kessler (radio)"
+    "behavior": "idle",
+    "dialogue": "ch09_salt"
+   },
+   {
+    "id": "npc_amb_pvt_marsh",
+    "npc": "amb_pvt_marsh",
+    "x": 39.0,
+    "z": -57.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "label": "Marsh (deserting the picket)"
+   },
+   {
+    "id": "npc_trader_rourke",
+    "npc": "trader_rourke",
+    "x": -37.0,
+    "z": -71.0,
+    "rotY": 0.0,
+    "behavior": "trade",
+    "label": "Rourke's ice camp (west bank)",
+    "trader": {
+     "stall": "Rourke's ice camp (west bank)",
+     "repFlag": "trader_rourke_rep",
+     "stockFrom": "story/npcs.json traders[].stock_by_act"
+    }
+   },
+   {
+    "id": "npc_extra_column_01",
+    "npc": "extra_column_01",
+    "x": -41.0,
+    "z": -19.0,
+    "rotY": 0.0,
+    "behavior": "column_follow",
+    "label": "column",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_column_02",
+    "npc": "extra_column_02",
+    "x": -27.0,
+    "z": -17.0,
+    "rotY": 0.0,
+    "behavior": "column_follow",
+    "label": "column",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_column_03",
+    "npc": "extra_column_03",
+    "x": -17.0,
+    "z": -3.0,
+    "rotY": 0.0,
+    "behavior": "column_follow",
+    "label": "column",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_column_04",
+    "npc": "extra_column_04",
+    "x": -11.0,
+    "z": -19.0,
+    "rotY": 0.0,
+    "behavior": "column_follow",
+    "label": "column",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_column_05",
+    "npc": "extra_column_05",
+    "x": 3.0,
+    "z": -11.0,
+    "rotY": 0.0,
+    "behavior": "column_follow",
+    "label": "column",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_column_06",
+    "npc": "extra_column_06",
+    "x": 3.0,
+    "z": -3.0,
+    "rotY": 0.0,
+    "behavior": "column_follow",
+    "label": "column",
+    "crowd": true
    }
   ],
   "enemies": [
    {
     "id": "en_01",
     "type": "remnant_patrol",
-    "x": -3.0,
-    "z": -90.0,
-    "group": "g_picket",
-    "tier": 5,
-    "behavior": "guard",
+    "x": -19.0,
+    "z": -59.0,
+    "group": "g_ch09_picket_w1",
+    "tier": 1,
+    "behavior": "hold_cover",
     "hostile": "conditional",
-    "activate": "load",
-    "rotY": 0.0,
+    "activate": "trigger",
+    "storyEncounter": "enc_ch09_picket_assault",
     "hostileWhen": [
      {
-      "flag": "ch09_ruiz_gap",
-      "ne": true
+      "flag": "ch09_picket_fight",
+      "eq": true
      }
     ]
    },
    {
     "id": "en_02",
     "type": "remnant_patrol",
-    "x": 3.0,
-    "z": -90.0,
-    "group": "g_picket",
-    "tier": 5,
-    "behavior": "guard",
+    "x": -7.0,
+    "z": -59.0,
+    "group": "g_ch09_picket_w1",
+    "tier": 1,
+    "behavior": "hold_cover",
     "hostile": "conditional",
-    "activate": "load",
-    "rotY": 0.0,
+    "activate": "trigger",
+    "storyEncounter": "enc_ch09_picket_assault",
     "hostileWhen": [
      {
-      "flag": "ch09_ruiz_gap",
-      "ne": true
+      "flag": "ch09_picket_fight",
+      "eq": true
      }
     ]
    },
    {
     "id": "en_03",
     "type": "remnant_patrol",
-    "x": -5.0,
-    "z": -74.0,
-    "group": "g_picket",
-    "tier": 5,
-    "behavior": "guard",
+    "x": 9.0,
+    "z": -59.0,
+    "group": "g_ch09_picket_w1",
+    "tier": 1,
+    "behavior": "hold_cover",
     "hostile": "conditional",
-    "activate": "load",
-    "rotY": 0.0,
+    "activate": "trigger",
+    "storyEncounter": "enc_ch09_picket_assault",
     "hostileWhen": [
      {
-      "flag": "ch09_ruiz_gap",
-      "ne": true
+      "flag": "ch09_picket_fight",
+      "eq": true
      }
     ]
    },
    {
     "id": "en_04",
     "type": "remnant_patrol",
-    "x": 5.0,
-    "z": -74.0,
-    "group": "g_picket",
-    "tier": 5,
-    "behavior": "guard",
+    "x": 21.0,
+    "z": -59.0,
+    "group": "g_ch09_picket_w1",
+    "tier": 1,
+    "behavior": "hold_cover",
     "hostile": "conditional",
-    "activate": "load",
-    "rotY": 0.0,
+    "activate": "trigger",
+    "storyEncounter": "enc_ch09_picket_assault",
     "hostileWhen": [
      {
-      "flag": "ch09_ruiz_gap",
-      "ne": true
+      "flag": "ch09_picket_fight",
+      "eq": true
      }
     ]
    },
    {
     "id": "en_05",
-    "type": "remnant_patrol",
-    "x": -1.0,
-    "z": -93.0,
-    "group": "g_picket_reinf",
-    "tier": 5,
-    "behavior": "assault",
-    "hostile": "always",
+    "type": "ironwood_checkpoint",
+    "x": 1.0,
+    "z": -49.0,
+    "group": "g_ch09_picket_w1",
+    "tier": 1,
+    "behavior": "guard",
+    "hostile": "conditional",
     "activate": "trigger",
-    "note": "Come down off the deck if the alarm is raised."
+    "storyEncounter": "enc_ch09_picket_assault",
+    "hostileWhen": [
+     {
+      "flag": "ch09_picket_fight",
+      "eq": true
+     }
+    ]
    },
    {
     "id": "en_06",
     "type": "remnant_patrol",
-    "x": 1.0,
-    "z": -93.0,
-    "group": "g_picket_reinf",
-    "tier": 5,
+    "x": -15.0,
+    "z": -47.0,
+    "group": "g_ch09_picket_w2",
+    "tier": 1,
     "behavior": "assault",
-    "hostile": "always",
+    "hostile": "conditional",
     "activate": "trigger",
-    "note": "Come down off the deck if the alarm is raised."
+    "storyEncounter": "enc_ch09_picket_assault",
+    "hostileWhen": [
+     {
+      "flag": "ch09_picket_fight",
+      "eq": true
+     }
+    ]
    },
    {
     "id": "en_07",
     "type": "remnant_patrol",
-    "x": -3.0,
-    "z": -33.0,
-    "group": "g_scouts",
-    "tier": 4,
-    "behavior": "patrol",
-    "hostile": "always",
-    "activate": "load",
-    "patrolWaitSec": 6,
-    "patrol": [
-     [
-      -3.0,
-      -33.0
-     ],
-     [
-      -3.0,
-      -15.0
-     ],
-     [
-      -3.0,
-      -33.0
-     ]
+    "x": 17.0,
+    "z": -45.0,
+    "group": "g_ch09_picket_w2",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "conditional",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch09_picket_assault",
+    "hostileWhen": [
+     {
+      "flag": "ch09_picket_fight",
+      "eq": true
+     }
     ]
    },
    {
     "id": "en_08",
     "type": "remnant_patrol",
-    "x": 3.0,
-    "z": -25.0,
-    "group": "g_scouts",
-    "tier": 4,
+    "x": 35.0,
+    "z": -87.0,
+    "group": "g_ch09_relief",
+    "tier": 1,
     "behavior": "patrol",
-    "hostile": "always",
+    "hostile": "conditional",
     "activate": "load",
-    "patrolWaitSec": 6,
     "patrol": [
      [
-      3.0,
-      -25.0
+      35.0,
+      -87.0
      ],
      [
-      3.0,
-      -43.0
-     ],
-     [
-      3.0,
-      -25.0
+      35.0,
+      -95.0
      ]
-    ]
+    ],
+    "patrolWaitSec": 1.2,
+    "hostileWhen": [
+     {
+      "flag": "ch09_picket_fight",
+      "eq": true
+     }
+    ],
+    "note": "Picket relief walking the east bank."
    },
    {
     "id": "en_09",
-    "type": "ironwood_checkpoint",
-    "x": 0.0,
-    "z": -76.0,
-    "group": "g_picket",
-    "tier": 5,
-    "behavior": "static",
-    "hostile": "always",
+    "type": "remnant_patrol",
+    "x": 41.0,
+    "z": -79.0,
+    "group": "g_ch09_relief",
+    "tier": 1,
+    "behavior": "patrol",
+    "hostile": "conditional",
     "activate": "load",
-    "note": "Searchlight sweeps the ice r52-56."
+    "patrol": [
+     [
+      41.0,
+      -79.0
+     ],
+     [
+      41.0,
+      -87.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
+    "hostileWhen": [
+     {
+      "flag": "ch09_picket_fight",
+      "eq": true
+     }
+    ],
+    "note": "Picket relief walking the east bank."
    },
    {
     "id": "en_10",
-    "type": "wolf",
-    "x": -13.0,
-    "z": -151.0,
-    "group": "g_wolves",
-    "tier": 5,
-    "behavior": "pack",
+    "type": "assimilated_human",
+    "x": -41.0,
+    "z": -105.0,
+    "group": "g_ch09_voices",
+    "tier": 1,
+    "behavior": "dormant_ambush",
     "hostile": "always",
-    "activate": "trigger"
+    "activate": "trigger",
+    "storyEncounter": "enc_ch09_hollow_ambush",
+    "note": "Calls in Walt's voice off the rope line; following it costs one column member.",
+    "ambush": true,
+    "lowVisibilityTrigger": true,
+    "voiceLine": "Over here. I found the trail.",
+    "voiceOf": "walt",
+    "noBreathPlume": true
    },
    {
     "id": "en_11",
-    "type": "wolf",
-    "x": -15.0,
-    "z": -147.0,
-    "group": "g_wolves",
-    "tier": 5,
-    "behavior": "pack",
+    "type": "assimilated_human",
+    "x": -35.0,
+    "z": -93.0,
+    "group": "g_ch09_voices",
+    "tier": 1,
+    "behavior": "dormant_ambush",
     "hostile": "always",
-    "activate": "trigger"
+    "activate": "trigger",
+    "storyEncounter": "enc_ch09_hollow_ambush",
+    "note": "Calls in Walt's voice off the rope line; following it costs one column member.",
+    "ambush": true,
+    "lowVisibilityTrigger": true,
+    "voiceLine": "Over here. I found the trail.",
+    "voiceOf": "walt",
+    "noBreathPlume": true
    },
    {
     "id": "en_12",
-    "type": "wolf",
-    "x": 13.0,
-    "z": -163.0,
-    "group": "g_wolves",
-    "tier": 5,
-    "behavior": "pack",
+    "type": "assimilated_animal",
+    "x": -23.0,
+    "z": -131.0,
+    "group": "g_ch09_pack",
+    "tier": 1,
+    "behavior": "dormant_ambush",
     "hostile": "always",
-    "activate": "trigger"
+    "activate": "trigger",
+    "storyEncounter": "enc_ch09_animal_pack",
+    "ambush": true,
+    "lowVisibilityTrigger": true,
+    "silent": true,
+    "noBreathPlume": true,
+    "fleeFrom": "flare",
+    "breakOffAfterLosses": 2
    },
    {
     "id": "en_13",
-    "type": "wolf",
-    "x": 11.0,
-    "z": -167.0,
-    "group": "g_wolves",
-    "tier": 5,
-    "behavior": "pack",
+    "type": "assimilated_animal",
+    "x": -11.0,
+    "z": -123.0,
+    "group": "g_ch09_pack",
+    "tier": 1,
+    "behavior": "dormant_ambush",
     "hostile": "always",
-    "activate": "trigger"
+    "activate": "trigger",
+    "storyEncounter": "enc_ch09_animal_pack",
+    "ambush": true,
+    "lowVisibilityTrigger": true,
+    "silent": true,
+    "noBreathPlume": true,
+    "fleeFrom": "flare",
+    "breakOffAfterLosses": 2
    },
    {
     "id": "en_14",
-    "type": "wolf",
-    "x": 15.0,
-    "z": -161.0,
-    "group": "g_wolves",
-    "tier": 5,
-    "behavior": "pack",
+    "type": "assimilated_animal",
+    "x": 1.0,
+    "z": -133.0,
+    "group": "g_ch09_pack",
+    "tier": 1,
+    "behavior": "dormant_ambush",
     "hostile": "always",
-    "activate": "trigger"
+    "activate": "trigger",
+    "storyEncounter": "enc_ch09_animal_pack",
+    "ambush": true,
+    "lowVisibilityTrigger": true,
+    "silent": true,
+    "noBreathPlume": true,
+    "fleeFrom": "flare",
+    "breakOffAfterLosses": 2
    },
    {
     "id": "en_15",
-    "type": "husk",
-    "x": 7.0,
-    "z": -31.0,
-    "group": "g_husks_south",
-    "tier": 4,
-    "behavior": "rush_heat",
+    "type": "assimilated_animal",
+    "x": 13.0,
+    "z": -121.0,
+    "group": "g_ch09_pack",
+    "tier": 1,
+    "behavior": "dormant_ambush",
     "hostile": "always",
-    "activate": "load",
-    "note": "Drawn to the column's heat."
+    "activate": "trigger",
+    "storyEncounter": "enc_ch09_animal_pack",
+    "ambush": true,
+    "lowVisibilityTrigger": true,
+    "silent": true,
+    "noBreathPlume": true,
+    "fleeFrom": "flare",
+    "breakOffAfterLosses": 2
    },
    {
     "id": "en_16",
-    "type": "husk",
-    "x": -5.0,
-    "z": -43.0,
-    "group": "g_husks_south",
-    "tier": 4,
-    "behavior": "rush_heat",
+    "type": "assimilated_animal",
+    "x": 23.0,
+    "z": -129.0,
+    "group": "g_ch09_pack",
+    "tier": 1,
+    "behavior": "dormant_ambush",
     "hostile": "always",
-    "activate": "load",
-    "note": "Drawn to the column's heat."
+    "activate": "trigger",
+    "storyEncounter": "enc_ch09_animal_pack",
+    "ambush": true,
+    "lowVisibilityTrigger": true,
+    "silent": true,
+    "noBreathPlume": true,
+    "fleeFrom": "flare",
+    "breakOffAfterLosses": 2
    },
    {
     "id": "en_17",
-    "type": "husk",
-    "x": -7.0,
-    "z": -61.0,
-    "group": "g_husks_mid",
-    "tier": 4,
-    "behavior": "rush_heat",
+    "type": "tallman",
+    "x": -23.0,
+    "z": -153.0,
+    "group": "g_ch09_ice_tallmen",
+    "tier": 1,
+    "behavior": "probe_stragglers",
     "hostile": "always",
-    "activate": "load",
-    "note": "Drawn to the column's heat."
+    "activate": "trigger",
+    "storyEncounter": "enc_ch09_ice_tallmen",
+    "lowVisibilityTrigger": true,
+    "breakOffAfterLosses": 1
    },
    {
     "id": "en_18",
-    "type": "husk",
-    "x": 5.0,
-    "z": -117.0,
-    "group": "g_husks_hut",
-    "tier": 4,
-    "behavior": "rush_heat",
+    "type": "tallman",
+    "x": 1.0,
+    "z": -157.0,
+    "group": "g_ch09_ice_tallmen",
+    "tier": 1,
+    "behavior": "probe_stragglers",
     "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch09_ice_tallmen",
+    "lowVisibilityTrigger": true,
+    "breakOffAfterLosses": 1
+   },
+   {
+    "id": "en_19",
+    "type": "tallman",
+    "x": 23.0,
+    "z": -149.0,
+    "group": "g_ch09_ice_tallmen",
+    "tier": 1,
+    "behavior": "probe_stragglers",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch09_ice_tallmen",
+    "lowVisibilityTrigger": true,
+    "breakOffAfterLosses": 1
+   },
+   {
+    "id": "en_20",
+    "type": "coyote",
+    "x": 33.0,
+    "z": -199.0,
+    "group": "g_ch09_coyotes",
+    "tier": 1,
+    "behavior": "pack",
+    "hostile": "always",
+    "activate": "load"
+   },
+   {
+    "id": "en_21",
+    "type": "coyote",
+    "x": 41.0,
+    "z": -187.0,
+    "group": "g_ch09_coyotes",
+    "tier": 1,
+    "behavior": "pack",
+    "hostile": "always",
+    "activate": "load"
+   },
+   {
+    "id": "en_22",
+    "type": "husk",
+    "x": -37.0,
+    "z": -175.0,
+    "group": "g_ch09_culvert_husks",
+    "tier": 1,
+    "behavior": "drawn_to_heat",
+    "hostile": "on_provoke",
     "activate": "load",
-    "note": "Drawn to the column's heat."
+    "ambush": true,
+    "lowVisibilityTrigger": true
+   },
+   {
+    "id": "en_23",
+    "type": "husk",
+    "x": -19.0,
+    "z": -167.0,
+    "group": "g_ch09_culvert_husks",
+    "tier": 1,
+    "behavior": "drawn_to_heat",
+    "hostile": "on_provoke",
+    "activate": "load",
+    "ambush": true,
+    "lowVisibilityTrigger": true
+   },
+   {
+    "id": "en_24",
+    "type": "husk",
+    "x": 11.0,
+    "z": -27.0,
+    "group": "g_ch09_block_husks",
+    "tier": 1,
+    "behavior": "drawn_to_heat",
+    "hostile": "on_provoke",
+    "activate": "load",
+    "ambush": true,
+    "lowVisibilityTrigger": true
+   },
+   {
+    "id": "en_25",
+    "type": "husk",
+    "x": 37.0,
+    "z": 5.0,
+    "group": "g_ch09_block_husks",
+    "tier": 1,
+    "behavior": "drawn_to_heat",
+    "hostile": "on_provoke",
+    "activate": "load",
+    "ambush": true,
+    "lowVisibilityTrigger": true
    }
   ],
   "loot": [
    {
     "id": "loot_01",
-    "x": -3.0,
-    "z": -15.0,
-    "r": 1.6,
-    "label": "Frozen pack",
-    "container": "corpse",
+    "x": -35.0,
+    "z": -29.0,
+    "r": 3.1,
+    "label": "Snowed-in car",
+    "container": "car_trunk",
+    "propRef": "prop_01",
+    "render": "prop",
+    "location": "loc_sparks_block"
+   },
+   {
+    "id": "loot_02",
+    "x": 35.0,
+    "z": -67.0,
+    "r": 3.1,
+    "label": "Car abandoned on the bank",
+    "container": "car_trunk",
+    "propRef": "prop_02",
+    "render": "prop",
+    "location": "river_ice",
     "guaranteed": [
-     {
-      "item": "firewood",
-      "n": 2
-     },
      {
       "item": "flare",
       "n": 2
      }
-    ],
-    "location": "river_ice"
-   },
-   {
-    "id": "loot_02",
-    "x": 5.0,
-    "z": -42.0,
-    "r": 1.6,
-    "label": "Car on the ice",
-    "container": "car_trunk",
-    "location": "river_ice"
+    ]
    },
    {
     "id": "loot_03",
-    "x": -15.0,
-    "z": -105.0,
-    "r": 1.6,
-    "label": "Hut stove box",
-    "container": "woodpile",
-    "guaranteed": [
-     {
-      "item": "firewood",
-      "n": 2
-     }
-    ],
-    "location": "river_ice"
-   },
-   {
-    "id": "loot_04",
-    "x": 3.0,
-    "z": -72.0,
-    "r": 1.6,
-    "label": "Picket ammo box",
-    "container": "military_crate",
-    "location": "river_ice"
-   },
-   {
-    "id": "loot_05",
-    "x": 11.0,
-    "z": -71.0,
-    "r": 1.6,
-    "label": "Ice-fisher's shack",
-    "container": "woodpile",
-    "location": "river_ice"
-   },
-   {
-    "id": "loot_06",
-    "x": -13.0,
-    "z": -141.0,
-    "r": 1.6,
-    "label": "Trail cache",
-    "container": "supply_cache",
-    "guaranteed": [
-     {
-      "item": "tent_tarp",
-      "n": 1
-     }
-    ],
-    "location": "loc_jay_cooke"
-   },
-   {
-    "id": "loot_07",
-    "x": 13.0,
-    "z": -171.0,
-    "r": 1.6,
-    "label": "Ranger box",
-    "container": "woodpile",
-    "guaranteed": [
-     {
-      "item": "mask_filter",
-      "n": 1
-     }
-    ],
-    "location": "loc_jay_cooke"
-   },
-   {
-    "id": "loot_08",
-    "x": 19.0,
-    "z": -121.0,
-    "r": 1.6,
-    "label": "Frozen body (filler)",
-    "container": "corpse",
+    "x": -37.0,
+    "z": -87.0,
+    "r": 3.1,
+    "label": "Pickup on the west bank",
+    "container": "car_trunk",
+    "propRef": "prop_03",
+    "render": "prop",
     "location": "river_ice",
-    "filler": true,
     "guaranteed": [
      {
       "item": "bandage",
@@ -1056,53 +1265,181 @@
     ]
    },
    {
-    "id": "loot_09",
-    "x": -19.0,
-    "z": -63.0,
+    "id": "loot_04",
+    "x": -35.0,
+    "z": -3.0,
     "r": 1.6,
-    "label": "Frozen body (filler)",
+    "label": "Shelter wardrobe",
+    "container": "wardrobe",
+    "location": "loc_sparks_block"
+   },
+   {
+    "id": "loot_05",
+    "x": -21.0,
+    "z": -3.0,
+    "r": 1.6,
+    "label": "Shelter kitchen",
+    "container": "kitchen_cabinet",
+    "location": "loc_sparks_block"
+   },
+   {
+    "id": "loot_06",
+    "x": 35.0,
+    "z": -37.0,
+    "r": 1.6,
+    "label": "Picket-hut crate",
+    "container": "military_crate",
+    "location": "river_ice"
+   },
+   {
+    "id": "loot_07",
+    "x": -35.0,
+    "z": -221.0,
+    "r": 1.6,
+    "label": "Gatehouse locker",
+    "container": "locker",
+    "location": "loc_galena_station",
+    "guaranteed": [
+     {
+      "item": "med_kit",
+      "n": 1
+     }
+    ]
+   },
+   {
+    "id": "loot_08",
+    "x": 45.0,
+    "z": 5.0,
+    "r": 1.6,
+    "label": "Frozen body",
     "container": "corpse",
-    "location": "river_ice",
+    "location": "loc_sparks_block",
+    "filler": true
+   },
+   {
+    "id": "loot_09",
+    "x": 25.0,
+    "z": -17.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture",
+    "container": "woodpile",
+    "location": "loc_sparks_block",
     "filler": true
    },
    {
     "id": "loot_10",
-    "x": 17.0,
-    "z": -99.0,
+    "x": -27.0,
+    "z": -11.0,
     "r": 1.6,
-    "label": "Frozen body (filler)",
-    "container": "corpse",
-    "location": "river_ice",
+    "label": "Medicine cabinet",
+    "container": "medicine_cabinet",
+    "location": "loc_sparks_block",
     "filler": true
    },
    {
     "id": "loot_11",
-    "x": -19.0,
-    "z": -41.0,
+    "x": -45.0,
+    "z": -153.0,
     "r": 1.6,
-    "label": "Car trunk (filler)",
-    "container": "car_trunk",
+    "label": "Frozen body",
+    "container": "corpse",
     "location": "river_ice",
     "filler": true
    },
    {
     "id": "loot_12",
-    "x": 19.0,
-    "z": -13.0,
+    "x": 45.0,
+    "z": -125.0,
     "r": 1.6,
-    "label": "Woodpile / pallets / broken furniture (filler)",
-    "container": "woodpile",
+    "label": "Frozen body",
+    "container": "corpse",
     "location": "river_ice",
     "filler": true
    },
    {
     "id": "loot_13",
-    "x": 13.0,
-    "z": -141.0,
+    "x": -5.0,
+    "z": -125.0,
     "r": 1.6,
-    "label": "Woodpile / pallets / broken furniture (filler)",
+    "label": "Frozen body",
+    "container": "corpse",
+    "location": "river_ice",
+    "filler": true
+   },
+   {
+    "id": "loot_14",
+    "x": 1.0,
+    "z": -85.0,
+    "r": 1.6,
+    "label": "Frozen body",
+    "container": "corpse",
+    "location": "river_ice",
+    "filler": true
+   },
+   {
+    "id": "loot_15",
+    "x": -11.0,
+    "z": -159.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture",
     "container": "woodpile",
-    "location": "loc_jay_cooke",
+    "location": "river_ice",
+    "filler": true
+   },
+   {
+    "id": "loot_16",
+    "x": -45.0,
+    "z": -119.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture",
+    "container": "woodpile",
+    "location": "river_ice",
+    "filler": true
+   },
+   {
+    "id": "loot_17",
+    "x": 45.0,
+    "z": -159.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture",
+    "container": "woodpile",
+    "location": "river_ice",
+    "filler": true
+   },
+   {
+    "id": "loot_18",
+    "x": 29.0,
+    "z": -99.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture",
+    "container": "woodpile",
+    "location": "river_ice",
+    "filler": true
+   },
+   {
+    "id": "loot_19",
+    "x": 45.0,
+    "z": -203.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture",
+    "container": "woodpile",
+    "location": "loc_steamboat_creek",
+    "filler": true,
+    "guaranteed": [
+     {
+      "item": "tent_tarp",
+      "n": 1
+     }
+    ]
+   },
+   {
+    "id": "loot_20",
+    "x": -43.0,
+    "z": -187.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture",
+    "container": "woodpile",
+    "location": "loc_steamboat_creek",
     "filler": true,
     "guaranteed": [
      {
@@ -1112,13 +1449,29 @@
     ]
    },
    {
-    "id": "loot_14",
-    "x": -19.0,
-    "z": -125.0,
+    "id": "loot_21",
+    "x": -13.0,
+    "z": -189.0,
     "r": 1.6,
-    "label": "Woodpile / pallets / broken furniture (filler)",
+    "label": "Woodpile / pallets / broken furniture",
     "container": "woodpile",
-    "location": "loc_jay_cooke",
+    "location": "loc_steamboat_creek",
+    "filler": true,
+    "guaranteed": [
+     {
+      "item": "mask_filter",
+      "n": 1
+     }
+    ]
+   },
+   {
+    "id": "loot_22",
+    "x": 21.0,
+    "z": -201.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture",
+    "container": "woodpile",
+    "location": "loc_steamboat_creek",
     "filler": true,
     "guaranteed": [
      {
@@ -1128,13 +1481,13 @@
     ]
    },
    {
-    "id": "loot_15",
-    "x": -19.0,
-    "z": -157.0,
+    "id": "loot_23",
+    "x": 41.0,
+    "z": -181.0,
     "r": 1.6,
-    "label": "Woodpile / pallets / broken furniture (filler)",
-    "container": "woodpile",
-    "location": "loc_jay_cooke",
+    "label": "Frozen body",
+    "container": "corpse",
+    "location": "loc_steamboat_creek",
     "filler": true,
     "guaranteed": [
      {
@@ -1144,13 +1497,13 @@
     ]
    },
    {
-    "id": "loot_16",
-    "x": 17.0,
-    "z": -157.0,
+    "id": "loot_24",
+    "x": -27.0,
+    "z": -173.0,
     "r": 1.6,
-    "label": "Frozen body (filler)",
+    "label": "Frozen body",
     "container": "corpse",
-    "location": "loc_jay_cooke",
+    "location": "loc_steamboat_creek",
     "filler": true,
     "guaranteed": [
      {
@@ -1160,99 +1513,89 @@
     ]
    },
    {
-    "id": "loot_17",
+    "id": "loot_25",
     "x": 9.0,
-    "z": -129.0,
+    "z": -161.0,
     "r": 1.6,
-    "label": "Frozen body (filler)",
+    "label": "Frozen body",
     "container": "corpse",
-    "location": "loc_jay_cooke",
+    "location": "loc_steamboat_creek",
     "filler": true
    },
    {
-    "id": "loot_18",
-    "x": -11.0,
-    "z": -131.0,
+    "id": "loot_26",
+    "x": -29.0,
+    "z": -199.0,
     "r": 1.6,
-    "label": "Frozen body (filler)",
-    "container": "corpse",
-    "location": "loc_jay_cooke",
+    "label": "Hidden stash / supply cache",
+    "container": "supply_cache",
+    "location": "loc_steamboat_creek",
     "filler": true
    },
    {
-    "id": "loot_19",
-    "x": -9.0,
-    "z": -157.0,
+    "id": "loot_27",
+    "x": 3.0,
+    "z": -199.0,
     "r": 1.6,
-    "label": "Military crate (filler)",
+    "label": "Military crate",
     "container": "military_crate",
-    "location": "loc_jay_cooke",
+    "location": "loc_steamboat_creek",
     "filler": true
    },
    {
-    "id": "loot_20",
-    "x": -19.0,
-    "z": -181.0,
+    "id": "loot_28",
+    "x": 31.0,
+    "z": -229.0,
     "r": 1.6,
-    "label": "Military crate (filler)",
+    "label": "Military crate",
     "container": "military_crate",
-    "location": "loc_thomson_dam",
+    "location": "loc_galena_station",
     "filler": true,
     "guaranteed": [
      {
-      "item": "water_clean",
-      "n": 1
+      "item": "ammo_556",
+      "n": 12
      }
     ]
    },
    {
-    "id": "loot_21",
-    "x": 19.0,
-    "z": -181.0,
+    "id": "loot_29",
+    "x": -45.0,
+    "z": -207.0,
     "r": 1.6,
-    "label": "Military crate (filler)",
+    "label": "Military crate",
     "container": "military_crate",
-    "location": "loc_thomson_dam",
+    "location": "loc_galena_station",
     "filler": true
    },
    {
-    "id": "loot_22",
-    "x": -11.0,
-    "z": -173.0,
+    "id": "loot_30",
+    "x": -37.0,
+    "z": -213.0,
     "r": 1.6,
-    "label": "Locker (filler)",
+    "label": "Locker",
     "container": "locker",
-    "location": "loc_thomson_dam",
+    "location": "loc_galena_station",
     "filler": true
    },
    {
-    "id": "loot_23",
-    "x": 11.0,
-    "z": -179.0,
+    "id": "loot_31",
+    "x": -21.0,
+    "z": -223.0,
     "r": 1.6,
-    "label": "Locker (filler)",
-    "container": "locker",
-    "location": "loc_thomson_dam",
-    "filler": true
-   },
-   {
-    "id": "loot_24",
-    "x": -11.0,
-    "z": -181.0,
-    "r": 1.6,
-    "label": "Kitchen cabinet (filler)",
+    "label": "Kitchen cabinet",
     "container": "kitchen_cabinet",
-    "location": "loc_thomson_dam",
+    "location": "loc_galena_station",
     "filler": true
    },
    {
-    "id": "loot_25",
-    "x": -19.0,
-    "z": -173.0,
+    "id": "loot_32",
+    "x": -29.0,
+    "z": -223.0,
     "r": 1.6,
-    "label": "Kitchen cabinet (filler)",
+    "label": "Kitchen cabinet",
     "container": "kitchen_cabinet",
-    "location": "loc_thomson_dam",
+    "location": "loc_galena_station",
     "filler": true
    }
   ]
@@ -1260,216 +1603,147 @@
  "props": [
   {
    "id": "prop_01",
-   "asset": "assets/kenney/industrial/building-d.glb",
-   "x": -14.0,
-   "z": -1.0,
-   "rotY": -1.571,
-   "h": 7,
-   "collide": false
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -35.0,
+   "z": -29.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_02",
-   "asset": "assets/kenney/industrial/building-s.glb",
-   "x": 14.0,
-   "z": -1.0,
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": 35.0,
+   "z": -67.0,
    "rotY": 1.571,
-   "h": 6,
-   "collide": false
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_03",
-   "asset": "assets/kenney/roads/light-square-double.glb",
-   "x": 0.0,
-   "z": -78.0,
-   "rotY": 0,
-   "h": 7,
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -37.0,
+   "z": -87.0,
+   "rotY": 0.0,
+   "h": 1.5,
    "collide": true,
-   "tag": "picket searchlight"
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_04",
    "asset": "assets/kenney/roads/construction-barrier.glb",
    "x": -3.0,
-   "z": -89.0,
-   "rotY": 0,
+   "z": -57.0,
+   "rotY": 0.0,
    "h": 1.1,
-   "collide": true
+   "collide": false
   },
   {
    "id": "prop_05",
-   "asset": "assets/kenney/roads/construction-barrier.glb",
-   "x": 3.0,
-   "z": -89.0,
-   "rotY": 0,
-   "h": 1.1,
-   "collide": true
+   "asset": "assets/kenney/roads/light-square-double.glb",
+   "x": 27.0,
+   "z": -51.0,
+   "rotY": 0.0,
+   "h": 6,
+   "collide": false,
+   "tag": "picket_flood"
   },
   {
    "id": "prop_06",
-   "asset": "assets/kenney/roads/electricity-pole.glb",
-   "x": -10.0,
-   "z": -89.0,
-   "rotY": 0,
-   "h": 9,
-   "collide": true,
-   "tag": "bridge pylon stand-in"
-  },
-  {
-   "id": "prop_07",
-   "asset": "assets/kenney/roads/electricity-pole.glb",
-   "x": -10.0,
-   "z": -77.0,
-   "rotY": 0,
-   "h": 9,
-   "collide": true
-  },
-  {
-   "id": "prop_08",
-   "asset": "assets/kenney/roads/electricity-pole.glb",
-   "x": 11.0,
-   "z": -89.0,
-   "rotY": 0,
-   "h": 9,
-   "collide": true
-  },
-  {
-   "id": "prop_09",
-   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "asset": "assets/kenney/industrial/detail-tank.glb",
    "x": 5.0,
-   "z": -43.0,
-   "rotY": 1.0,
-   "h": 1.45,
-   "collide": true,
-   "tag": "abandoned on the ice"
-  },
-  {
-   "id": "prop_10",
-   "asset": "assets/kenney/industrial/building-m.glb",
-   "x": 0.0,
-   "z": -181.0,
+   "z": -171.0,
    "rotY": 0.0,
-   "h": 14,
+   "h": 1.2,
    "collide": false,
-   "tag": "Thomson powerhouse (lit windows)"
-  },
-  {
-   "id": "prop_11",
-   "asset": "assets/kenney/roads/light-square.glb",
-   "x": -3.0,
-   "z": -176.0,
-   "rotY": 0.0,
-   "h": 5.5,
-   "collide": true
-  },
-  {
-   "id": "prop_12",
-   "asset": "assets/kenney/roads/light-square.glb",
-   "x": 3.0,
-   "z": -176.0,
-   "rotY": 0.0,
-   "h": 5.5,
-   "collide": true
+   "tag": "burn_barrel"
   }
  ],
  "interactives": [
   {
-   "id": "ch09_barrel_1",
-   "type": "light_fire",
-   "x": -1.0,
-   "z": -19.0,
+   "id": "ch09_woodpile",
+   "type": "open",
+   "x": -9.0,
+   "z": -25.0,
    "r": 1.8,
-   "label": "Burn barrel (light)",
-   "requiresItems": [
-    "firewood"
-   ],
-   "setsFlag": "ch09_stop1"
+   "label": "Shelter woodpile (split for the march)",
+   "givesItems": {
+    "firewood": 3
+   }
   },
   {
-   "id": "ch09_tent_2",
-   "type": "light_fire",
-   "x": 1.0,
-   "z": -51.0,
+   "id": "ch09_picket_ids",
+   "type": "search",
+   "x": 39.0,
+   "z": -43.0,
    "r": 1.8,
-   "label": "Burn barrel + windbreak (light)",
-   "requiresItems": [
-    "firewood"
-   ],
-   "setsFlag": "ch09_stop2"
+   "label": "Picket-hut desk (ID cards, ammo)",
+   "givesItems": {
+    "ironwood_id": 1,
+    "rifle_ammo": 6
+   }
   },
   {
-   "id": "ch09_balance",
-   "type": "balance",
-   "x": 0.0,
-   "z": -157.0,
-   "r": 2.2,
-   "label": "Swinging bridge",
-   "setsFlag": "ch09_bridge_crossed"
+   "id": "ch09_column_stash",
+   "type": "open",
+   "x": -7.0,
+   "z": 1.0,
+   "r": 1.8,
+   "label": "Column bundle",
+   "givesItems": {
+    "wool_blanket": 1,
+    "mask_filter": 1,
+    "flare": 2
+   }
+  },
+  {
+   "id": "ch09_gate_cards",
+   "type": "install",
+   "x": -25.0,
+   "z": -217.0,
+   "r": 1.8,
+   "label": "Gatehouse: install the control cards",
+   "requiresItems": {
+    "control_cards": 1
+   },
+   "setsFlag": "cards_installed"
   }
  ],
  "safeZones": [
   {
    "id": "safe_01",
-   "kind": "burn_barrel",
-   "x": -1.0,
-   "z": -19.0,
-   "r": 3.4,
-   "label": "Stop 1: burn barrel (headcount)",
+   "kind": "shelter",
+   "x": -29.0,
+   "z": -9.0,
+   "r": 4.0,
+   "label": "Shelter (last warmth)",
    "warmth": true,
    "save": true,
-   "sealed": false,
-   "when": [
-    {
-     "flag": "ch09_stop1",
-     "eq": true
-    }
-   ]
+   "sealed": false
   },
   {
    "id": "safe_02",
-   "kind": "burn_barrel",
-   "x": 1.0,
-   "z": -51.0,
-   "r": 3.6,
-   "label": "Stop 2: windbreak fire (headcount)",
+   "kind": "campfire",
+   "x": 7.0,
+   "z": -171.0,
+   "r": 3.0,
+   "label": "Steamboat fire (Salt)",
    "warmth": true,
    "save": true,
-   "sealed": false,
-   "when": [
-    {
-     "flag": "ch09_stop2",
-     "eq": true
-    }
-   ]
+   "sealed": false
   },
   {
    "id": "safe_03",
-   "kind": "indoor",
-   "x": -15.0,
-   "z": -108.0,
-   "r": 3,
-   "label": "Warming hut (headcount)",
-   "warmth": true,
-   "save": true,
-   "sealed": false
-  },
-  {
-   "id": "safe_04",
    "kind": "campfire",
-   "x": -13.0,
-   "z": -141.0,
-   "r": 3.4,
-   "label": "Gorge-top fire",
-   "warmth": true,
-   "save": true,
-   "sealed": false
-  },
-  {
-   "id": "safe_05",
-   "kind": "warm_room",
-   "x": 0.0,
-   "z": -176.0,
-   "r": 3,
-   "label": "Dam gate (lights)",
+   "x": -37.0,
+   "z": -63.0,
+   "r": 3.0,
+   "label": "Rourke's ice camp",
    "warmth": true,
    "save": true,
    "sealed": false
@@ -1479,113 +1753,207 @@
   {
    "id": "sp_ch09_drone",
    "type": "ironwood_drone",
-   "area": {
-    "type": "circle",
-    "x": 5.0,
-    "z": -67.0,
-    "r": 2
-   },
-   "note": "Grounded by blizzard; harmless visual."
+   "path": [
+    [
+     33.0,
+     -41.0
+    ],
+    [
+     33.0,
+     -41.0
+    ]
+   ],
+   "note": "Grounded by the blizzard; visual only, on the hut roof.",
+   "grounded": true
   },
   {
-   "id": "sp_ch09_icebreak",
+   "id": "sp_ch09_ice_break",
    "type": "ice_break_qte",
    "area": {
     "type": "rect",
-    "x0": -4.0,
-    "z0": -132.0,
-    "x1": 4.0,
-    "z1": -124.0
+    "x0": -16.0,
+    "z0": -84.0,
+    "x1": -4.0,
+    "z1": -76.0
    },
-   "note": "Cody and the supply sled both go in; reach one."
+   "note": "ch09_ice: save a person or the sled."
+  },
+  {
+   "id": "sp_ch09_rope_line",
+   "type": "rope_line",
+   "path": [
+    [
+     -3.0,
+     -29.0
+    ],
+    [
+     -1.0,
+     -51.0
+    ],
+    [
+     -1.0,
+     -91.0
+    ],
+    [
+     -1.0,
+     -131.0
+    ],
+    [
+     -1.0,
+     -159.0
+    ],
+    [
+     -1.0,
+     -203.0
+    ]
+   ],
+   "note": "Column rope line down the ice; Hollows call from off the line."
   }
  ],
  "encounters": [
   {
-   "id": "enc_south",
+   "id": "z_ch09_picket",
    "area": {
     "type": "rect",
-    "x0": -20.0,
-    "z0": -52.0,
-    "x1": 20.0,
-    "z1": -12.0
-   },
-   "groups": [
-    {
-     "group": "g_scouts",
-     "wave": 1
-    },
-    {
-     "group": "g_husks_south",
-     "wave": 1
-    }
-   ]
-  },
-  {
-   "id": "enc_mid",
-   "area": {
-    "type": "rect",
-    "x0": -20.0,
+    "x0": -28.0,
     "z0": -64.0,
-    "x1": 20.0,
-    "z1": -52.0
+    "x1": 28.0,
+    "z1": -32.0
    },
    "groups": [
     {
-     "group": "g_husks_mid",
-     "wave": 1
-    }
-   ]
-  },
-  {
-   "id": "enc_picket",
-   "area": {
-    "type": "rect",
-    "x0": -20.0,
-    "z0": -98.0,
-    "x1": 20.0,
-    "z1": -64.0
-   },
-   "groups": [
-    {
-     "group": "g_picket",
+     "group": "g_ch09_picket_w1",
      "wave": 1
     },
     {
-     "group": "g_picket_reinf",
+     "group": "g_ch09_picket_w2",
      "wave": 2
     }
    ],
-   "note": "4 on the ice + searchlight; 2 reinforce on alarm. Gap/thin-ice routes bypass."
+   "storyEncounters": [
+    "enc_ch09_picket_assault"
+   ],
+   "note": "Glendale bridge picket: 4 + checkpoint, then 2 (cap 6)."
   },
   {
-   "id": "enc_hut",
+   "id": "z_ch09_east_bank",
    "area": {
     "type": "rect",
-    "x0": -20.0,
-    "z0": -122.0,
-    "x1": 20.0,
-    "z1": -98.0
+    "x0": 28.0,
+    "z0": -100.0,
+    "x1": 46.0,
+    "z1": -70.0
    },
    "groups": [
     {
-     "group": "g_husks_hut",
+     "group": "g_ch09_relief",
      "wave": 1
     }
    ]
   },
   {
-   "id": "enc_wolves",
+   "id": "z_ch09_whiteout_west",
    "area": {
     "type": "rect",
-    "x0": -20.0,
-    "z0": -172.0,
-    "x1": 20.0,
-    "z1": -134.0
+    "x0": -46.0,
+    "z0": -112.0,
+    "x1": -28.0,
+    "z1": -88.0
    },
    "groups": [
     {
-     "group": "g_wolves",
+     "group": "g_ch09_voices",
+     "wave": 1
+    }
+   ],
+   "storyEncounters": [
+    "enc_ch09_hollow_ambush"
+   ]
+  },
+  {
+   "id": "z_ch09_pack",
+   "area": {
+    "type": "rect",
+    "x0": -28.0,
+    "z0": -136.0,
+    "x1": 28.0,
+    "z1": -114.0
+   },
+   "groups": [
+    {
+     "group": "g_ch09_pack",
+     "wave": 1
+    }
+   ],
+   "storyEncounters": [
+    "enc_ch09_animal_pack"
+   ],
+   "note": "Silent; flee flares; break off after losing 2."
+  },
+  {
+   "id": "z_ch09_ice_north",
+   "area": {
+    "type": "rect",
+    "x0": -28.0,
+    "z0": -158.0,
+    "x1": 28.0,
+    "z1": -138.0
+   },
+   "groups": [
+    {
+     "group": "g_ch09_ice_tallmen",
+     "wave": 1
+    }
+   ],
+   "storyEncounters": [
+    "enc_ch09_ice_tallmen"
+   ],
+   "note": "Max 3; they test, then break off after losing 1."
+  },
+  {
+   "id": "z_ch09_creek_east",
+   "area": {
+    "type": "rect",
+    "x0": 30.0,
+    "z0": -204.0,
+    "x1": 46.0,
+    "z1": -180.0
+   },
+   "groups": [
+    {
+     "group": "g_ch09_coyotes",
+     "wave": 1
+    }
+   ]
+  },
+  {
+   "id": "z_ch09_creek_west",
+   "area": {
+    "type": "rect",
+    "x0": -46.0,
+    "z0": -180.0,
+    "x1": -6.0,
+    "z1": -162.0
+   },
+   "groups": [
+    {
+     "group": "g_ch09_culvert_husks",
+     "wave": 1
+    }
+   ]
+  },
+  {
+   "id": "z_ch09_block_east",
+   "area": {
+    "type": "rect",
+    "x0": 6.0,
+    "z0": -30.0,
+    "x1": 46.0,
+    "z1": 6.0
+   },
+   "groups": [
+    {
+     "group": "g_ch09_block_husks",
      "wave": 1
     }
    ]
@@ -1598,15 +1966,23 @@
    "once": true,
    "shape": {
     "type": "circle",
-    "x": 0.0,
-    "z": 1.0,
+    "x": -27.0,
+    "z": -11.0,
     "r": 3
    },
    "actions": [
     {
-     "type": "cutscene",
-     "id": "cs_ch09_headcount",
-     "text": "Headcount. Names on the screen."
+     "type": "set_time",
+     "value": 0.5
+    },
+    {
+     "type": "set_weather",
+     "weather": "blizzard"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch09_started",
+     "value": true
     },
     {
      "type": "checkpoint"
@@ -1614,20 +1990,20 @@
    ]
   },
   {
-   "id": "t_ch09_wren",
+   "id": "t_ch09_kit_sled",
    "on": "enter",
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -8.0,
-    "z0": -58.0,
-    "x1": 8.0,
-    "z1": -52.0
+    "x0": -14.0,
+    "z0": -18.0,
+    "x1": -4.0,
+    "z1": -4.0
    },
    "actions": [
     {
      "type": "dialogue",
-     "id": "ch09_wren_sled"
+     "id": "ch09_kit_sled"
     },
     {
      "type": "set_flag",
@@ -1637,12 +2013,12 @@
    ],
    "when": [
     {
-     "flag": "trust.wren",
-     "gte": 5
+     "flag": "kit_alive",
+     "eq": true
     },
     {
-     "flag": "wren_alive",
-     "ne": false
+     "trust": "kit",
+     "gte": 5
     }
    ]
   },
@@ -1654,8 +2030,8 @@
     "type": "rect",
     "x0": -12.0,
     "z0": -72.0,
-    "x1": 14.0,
-    "z1": -66.0
+    "x1": 12.0,
+    "z1": -60.0
    },
    "actions": [
     {
@@ -1663,111 +2039,43 @@
      "id": "ch09_picket"
     },
     {
-     "type": "checkpoint"
-    }
-   ]
-  },
-  {
-   "id": "t_ch09_gap",
-   "on": "enter",
-   "once": true,
-   "shape": {
-    "type": "rect",
-    "x0": -12.0,
-    "z0": -96.0,
-    "x1": -8.0,
-    "z1": -66.0
-   },
-   "actions": [
-    {
      "type": "set_flag",
-     "flag": "ch09_ruiz_gap",
+     "flag": "ch09_picket_met",
      "value": true
     }
    ],
    "when": [
     {
-     "flag": "ruiz_defected",
+     "flag": "ch09_started",
      "eq": true
     }
    ]
   },
   {
-   "id": "t_ch09_alarm",
+   "id": "t_ch09_picket_fight",
    "on": "flag",
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -20.0,
-    "z0": -98.0,
-    "x1": 20.0,
-    "z1": -64.0
+    "x0": -28.0,
+    "z0": -64.0,
+    "x1": 28.0,
+    "z1": -32.0
    },
    "actions": [
     {
      "type": "activate_group",
-     "group": "g_picket_reinf"
+     "group": "g_ch09_picket_w1"
+    },
+    {
+     "type": "activate_group",
+     "group": "g_ch09_picket_w2"
     }
    ],
    "when": [
     {
-     "flag": "ch09_picket_alarm",
+     "flag": "ch09_picket_fight",
      "eq": true
-    }
-   ]
-  },
-  {
-   "id": "t_ch09_thin",
-   "on": "enter",
-   "once": false,
-   "shape": {
-    "type": "rect",
-    "x0": 8.0,
-    "z0": -96.0,
-    "x1": 14.0,
-    "z1": -66.0
-   },
-   "actions": [
-    {
-     "type": "bark",
-     "speaker": "theo",
-     "text": "Mom. It's cracking."
-    },
-    {
-     "type": "start_sequence",
-     "id": "seq_ch09_thin_ice"
-    }
-   ]
-  },
-  {
-   "id": "t_ch09_hank",
-   "on": "enter",
-   "once": true,
-   "shape": {
-    "type": "rect",
-    "x0": -18.0,
-    "z0": -112.0,
-    "x1": -12.0,
-    "z1": -104.0
-   },
-   "actions": [
-    {
-     "type": "dialogue",
-     "id": "ch09_hank"
-    },
-    {
-     "type": "set_flag",
-     "flag": "hank_alive",
-     "value": false
-    },
-    {
-     "type": "checkpoint"
-    }
-   ],
-   "when": [
-    {
-     "flag": "hank_alive",
-     "ne": false
     }
    ]
   },
@@ -1777,126 +2085,288 @@
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -8.0,
-    "z0": -132.0,
-    "x1": 8.0,
-    "z1": -124.0
+    "x0": -18.0,
+    "z0": -88.0,
+    "x1": -2.0,
+    "z1": -72.0
    },
    "actions": [
     {
      "type": "spawn_setpiece",
-     "id": "sp_ch09_icebreak"
+     "id": "sp_ch09_ice_break"
     },
     {
      "type": "dialogue",
      "id": "ch09_ice"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch09_ice_done",
+     "value": true
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch09_picket_met",
+     "eq": true
     }
    ]
   },
   {
-   "id": "t_ch09_wolves",
+   "id": "t_ch09_voices",
    "on": "enter",
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -20.0,
-    "z0": -156.0,
-    "x1": 20.0,
-    "z1": -150.0
+    "x0": -28.0,
+    "z0": -114.0,
+    "x1": 28.0,
+    "z1": -88.0
+   },
+   "actions": [
+    {
+     "type": "set_time",
+     "value": 0.62
+    },
+    {
+     "type": "dialogue",
+     "id": "ch09_voices"
+    },
+    {
+     "type": "activate_group",
+     "group": "g_ch09_voices"
+    },
+    {
+     "type": "activate_group",
+     "group": "g_ch09_pack"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch09_voices_done",
+     "value": true
+    },
+    {
+     "type": "checkpoint"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch09_ice_done",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch09_wraith_hold",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -28.0,
+    "z0": -158.0,
+    "x1": 28.0,
+    "z1": -138.0
    },
    "actions": [
     {
      "type": "activate_group",
-     "group": "g_wolves"
+     "group": "g_ch09_ice_tallmen"
+    },
+    {
+     "type": "dialogue",
+     "id": "ch09_wraith_hold"
+    }
+   ],
+   "when": [
+    {
+     "flag": "wraith_injured",
+     "eq": true
+    },
+    {
+     "flag": "ch09_voices_done",
+     "eq": true
     }
    ]
   },
   {
-   "id": "t_ch09_lights",
+   "id": "t_ch09_tallmen",
    "on": "enter",
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -20.0,
-    "z0": -172.0,
-    "x1": 20.0,
-    "z1": -168.0
+    "x0": -28.0,
+    "z0": -144.0,
+    "x1": 28.0,
+    "z1": -136.0
    },
    "actions": [
     {
-     "type": "cutscene",
-     "id": "cs_ch09_lights",
-     "text": "Through the snow: the dam's lights."
+     "type": "activate_group",
+     "group": "g_ch09_ice_tallmen"
+    },
+    {
+     "type": "bark",
+     "speaker": "braith",
+     "text": "Lights. Everybody on the rope."
+    }
+   ],
+   "when": [
+    {
+     "not": {
+      "flag": "wraith_injured",
+      "eq": true
+     }
+    },
+    {
+     "flag": "ch09_voices_done",
+     "eq": true
     }
    ]
   },
   {
-   "id": "t_ch09_end",
+   "id": "t_ch09_night",
    "on": "enter",
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -6.0,
-    "z0": -178.0,
-    "x1": 6.0,
-    "z1": -174.0
+    "x0": -28.0,
+    "z0": -166.0,
+    "x1": 28.0,
+    "z1": -160.0
    },
    "actions": [
     {
-     "type": "story_check",
-     "id": "insulin_check"
+     "type": "set_time",
+     "value": 0.9
     },
     {
-     "type": "story_check",
-     "id": "ch09_theo_resolve"
-    },
+     "type": "set_flag",
+     "flag": "ch09_creek",
+     "value": true
+    }
+   ],
+   "when": [
     {
-     "type": "checkpoint"
-    },
-    {
-     "type": "chapter_end",
-     "next": "ch10_the_warm_room"
+     "flag": "ch09_voices_done",
+     "eq": true
     }
    ]
   },
   {
-   "id": "t_ch09_passed",
+   "id": "t_ch09_salt",
+   "on": "interact",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": 19.0,
+    "z": -179.0,
+    "r": 3
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch09_salt"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch09_salt_met",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch09_walt",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -8.0,
+    "z0": -184.0,
+    "x1": 10.0,
+    "z1": -166.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch09_walt"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch09_walt_done",
+     "value": true
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch09_creek",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch09_wraith_lead",
    "on": "enter",
    "once": true,
    "shape": {
     "type": "rect",
     "x0": -12.0,
-    "z0": -98.0,
-    "x1": 14.0,
-    "z1": -94.0
+    "z0": -204.0,
+    "x1": 12.0,
+    "z1": -190.0
    },
    "actions": [
     {
-     "type": "set_flag",
-     "flag": "ch09_picket_passed",
-     "value": true
+     "type": "dialogue",
+     "id": "ch09_wraith_lead"
     },
     {
-     "type": "checkpoint"
+     "type": "set_flag",
+     "flag": "wraith_led",
+     "value": true
+    }
+   ],
+   "when": [
+    {
+     "flag": "wraith_alive",
+     "eq": true
+    },
+    {
+     "not": {
+      "flag": "wraith_injured",
+      "eq": true
+     }
+    },
+    {
+     "trust": "wraith",
+     "gte": 5
     }
    ]
   },
   {
-   "id": "t_ch09_atdam",
+   "id": "t_ch09_galena_gate",
    "on": "enter",
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -6.0,
-    "z0": -178.0,
-    "x1": 6.0,
-    "z1": -172.0
+    "x0": -12.0,
+    "z0": -220.0,
+    "x1": 12.0,
+    "z1": -206.0
    },
    "actions": [
     {
-     "type": "set_flag",
-     "flag": "ch09_at_dam",
-     "value": true
+     "type": "dialogue",
+     "id": "ch09_galena_gate"
+    },
+    {
+     "type": "chapter_end",
+     "next": "ch10_the_warm_room"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch09_creek",
+     "eq": true
     }
    ]
   }
@@ -1905,11 +2375,11 @@
   {
    "id": "o1",
    "order": 1,
-   "text": "Lead the column up the river (headcount at each stop)",
+   "text": "Muster the column",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch09_stop2",
+     "flag": "ch09_started",
      "eq": true
     }
    ]
@@ -1917,11 +2387,11 @@
   {
    "id": "o2",
    "order": 2,
-   "text": "Get past the Remnant picket",
+   "text": "The picket at the Glendale bridge",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch09_picket_passed",
+     "flag": "ch09_picket_met",
      "eq": true
     }
    ]
@@ -1929,11 +2399,11 @@
   {
    "id": "o3",
    "order": 3,
-   "text": "Survive the whiteout and the wolves",
+   "text": "Cross the ice",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch09_bridge_crossed",
+     "flag": "ch09_ice_done",
      "eq": true
     }
    ]
@@ -1941,26 +2411,150 @@
   {
    "id": "o4",
    "order": 4,
-   "text": "Choose at the ice break",
+   "text": "Stay on the rope line",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch09_saved",
-     "ne": null
+     "flag": "ch09_voices_done",
+     "eq": true
     }
    ]
   },
   {
    "id": "o5",
    "order": 5,
-   "text": "Reach the dam",
+   "text": "Steamboat Creek",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch09_at_dam",
+     "flag": "ch09_walt_done",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o6",
+   "order": 6,
+   "text": "Galena's gate",
+   "optional": true,
+   "completeWhen": [
+    {
+     "flag": "cards_installed",
      "eq": true
     }
    ]
   }
- ]
+ ],
+ "companion": {
+  "id": "wraith",
+  "spawn": {
+   "x": -23.0,
+   "z": -7.0
+  },
+  "when": [
+   {
+    "flag": "wraith_alive",
+    "eq": true
+   }
+  ],
+  "follow": {
+   "leashM": 6.0,
+   "catchUpM": 14.0,
+   "nav": "grid_bfs_walkable",
+   "avoid": [
+    "door_clearance_cells",
+    "loot_cells"
+   ],
+   "note": "Ch9: WARN on Hollows; LEAD in the whiteout if trust.wraith >= 5; ch09_wraith_hold is the only place she can die."
+  },
+  "verbs": [
+   "track",
+   "warn",
+   "guard",
+   "hold"
+  ],
+  "injuredWhen": [
+   {
+    "flag": "wraith_injured",
+    "eq": true
+   }
+  ]
+ },
+ "horror": {
+  "sightlineM": 15,
+  "ambushPoints": [
+   {
+    "id": "ap_ch09_voice",
+    "x": -37.0,
+    "z": -99.0,
+    "r": 7.0,
+    "kind": "whiteout_voice",
+    "spawns": [
+     "en_10",
+     "en_11"
+    ],
+    "lightFlicker": false,
+    "note": "Walt's voice off the rope line; Walt is on the sled behind you."
+   },
+   {
+    "id": "ap_ch09_pack",
+    "x": -1.0,
+    "z": -125.0,
+    "r": 9.0,
+    "kind": "whiteout_pack",
+    "spawns": [
+     "en_12",
+     "en_13",
+     "en_14",
+     "en_15",
+     "en_16"
+    ],
+    "lightFlicker": false,
+    "note": "Silent pack; no breath, no paw sounds."
+   },
+   {
+    "id": "ap_ch09_ice_tallmen",
+    "x": -1.0,
+    "z": -149.0,
+    "r": 9.0,
+    "kind": "whiteout_stalk",
+    "spawns": [
+     "en_17",
+     "en_18",
+     "en_19"
+    ],
+    "lightFlicker": false,
+    "note": "They test the stragglers."
+   },
+   {
+    "id": "ap_ch09_culvert",
+    "x": -29.0,
+    "z": -171.0,
+    "r": 5.0,
+    "kind": "drift_hollow",
+    "spawns": [
+     "en_22",
+     "en_23"
+    ],
+    "lightFlicker": false,
+    "note": "Husks sheltering in the drifts by the culvert."
+   },
+   {
+    "id": "ap_ch09_block",
+    "x": 25.0,
+    "z": -11.0,
+    "r": 6.0,
+    "kind": "snowed_street",
+    "spawns": [
+     "en_24",
+     "en_25"
+    ],
+    "lightFlicker": false,
+    "note": ""
+   }
+  ],
+  "notes": "Whiteout: 15 m sightline, rope line is the only safe path; Hollows and Tallmen wake only below visibilityM.",
+  "binding": "Spawns tagged ambush=true + lowVisibilityTrigger=true stay dormant (no AI tick, hidden) until the player is inside the ambush point radius AND visibility (ash, fog, darkness, flashlight off) is below environment.visibilityM, or the point's lightFlicker drops out. Hollows (assimilated_human / assimilated_animal) never render a breath plume; living NPCs always do (story assimilation.tells)."
+ },
+ "lootSource": "v2"
 }

@@ -202,15 +202,232 @@ export const MANIFEST = {
   "bus": "sfx",
   "dur": 3.477
  },
+ "footstep_dirt_1": {
+  "src": "sfx/footstep_dirt_1",
+  "bus": "sfx",
+  "dur": 0.187,
+  "pool": "footstep_dirt"
+ },
+ "footstep_dirt_2": {
+  "src": "sfx/footstep_dirt_2",
+  "bus": "sfx",
+  "dur": 0.197,
+  "pool": "footstep_dirt"
+ },
+ "footstep_dirt_3": {
+  "src": "sfx/footstep_dirt_3",
+  "bus": "sfx",
+  "dur": 0.207,
+  "pool": "footstep_dirt"
+ },
+ "footstep_dirt_4": {
+  "src": "sfx/footstep_dirt_4",
+  "bus": "sfx",
+  "dur": 0.217,
+  "pool": "footstep_dirt"
+ },
+ "footstep_gravel_1": {
+  "src": "sfx/footstep_gravel_1",
+  "bus": "sfx",
+  "dur": 0.21,
+  "pool": "footstep_gravel"
+ },
+ "footstep_gravel_2": {
+  "src": "sfx/footstep_gravel_2",
+  "bus": "sfx",
+  "dur": 0.21,
+  "pool": "footstep_gravel"
+ },
+ "footstep_gravel_3": {
+  "src": "sfx/footstep_gravel_3",
+  "bus": "sfx",
+  "dur": 0.211,
+  "pool": "footstep_gravel"
+ },
+ "footstep_gravel_4": {
+  "src": "sfx/footstep_gravel_4",
+  "bus": "sfx",
+  "dur": 0.211,
+  "pool": "footstep_gravel"
+ },
+ "footstep_wet_1": {
+  "src": "sfx/footstep_wet_1",
+  "bus": "sfx",
+  "dur": 0.185,
+  "pool": "footstep_wet"
+ },
+ "footstep_wet_2": {
+  "src": "sfx/footstep_wet_2",
+  "bus": "sfx",
+  "dur": 0.185,
+  "pool": "footstep_wet"
+ },
+ "footstep_wet_3": {
+  "src": "sfx/footstep_wet_3",
+  "bus": "sfx",
+  "dur": 0.184,
+  "pool": "footstep_wet"
+ },
+ "footstep_wet_4": {
+  "src": "sfx/footstep_wet_4",
+  "bus": "sfx",
+  "dur": 0.185,
+  "pool": "footstep_wet"
+ },
+ "tallman_stalk": {
+  "src": "sfx/tallman_stalk",
+  "bus": "sfx",
+  "dur": 10.0,
+  "loop": true,
+  "loopLen": 10.0
+ },
+ "tallman_call_1": {
+  "src": "sfx/tallman_call_1",
+  "bus": "sfx",
+  "dur": 5.212,
+  "pool": "tallman_call"
+ },
+ "tallman_call_2": {
+  "src": "sfx/tallman_call_2",
+  "bus": "sfx",
+  "dur": 6.129,
+  "pool": "tallman_call"
+ },
+ "tallman_click_1": {
+  "src": "sfx/tallman_click_1",
+  "bus": "sfx",
+  "dur": 1.371,
+  "pool": "tallman_click"
+ },
+ "tallman_click_2": {
+  "src": "sfx/tallman_click_2",
+  "bus": "sfx",
+  "dur": 1.488,
+  "pool": "tallman_click"
+ },
+ "tallman_ambush": {
+  "src": "sfx/tallman_ambush",
+  "bus": "sfx",
+  "dur": 3.176
+ },
+ "assim_human_call_1": {
+  "src": "sfx/assim_human_call_1",
+  "bus": "sfx",
+  "dur": 4.504,
+  "pool": "assim_human_call"
+ },
+ "assim_human_call_2": {
+  "src": "sfx/assim_human_call_2",
+  "bus": "sfx",
+  "dur": 4.922,
+  "pool": "assim_human_call"
+ },
+ "assim_human_stalk": {
+  "src": "sfx/assim_human_stalk",
+  "bus": "sfx",
+  "dur": 8.0,
+  "loop": true,
+  "loopLen": 8.0
+ },
+ "assim_human_lunge": {
+  "src": "sfx/assim_human_lunge",
+  "bus": "sfx",
+  "dur": 1.611
+ },
+ "assim_animal_chitter_1": {
+  "src": "sfx/assim_animal_chitter_1",
+  "bus": "sfx",
+  "dur": 1.464,
+  "pool": "assim_animal_chitter"
+ },
+ "assim_animal_chitter_2": {
+  "src": "sfx/assim_animal_chitter_2",
+  "bus": "sfx",
+  "dur": 1.714,
+  "pool": "assim_animal_chitter"
+ },
+ "assim_animal_call": {
+  "src": "sfx/assim_animal_call",
+  "bus": "sfx",
+  "dur": 3.936
+ },
+ "assim_animal_scrape_1": {
+  "src": "sfx/assim_animal_scrape_1",
+  "bus": "sfx",
+  "dur": 1.959,
+  "pool": "assim_animal_scrape"
+ },
+ "assim_animal_scrape_2": {
+  "src": "sfx/assim_animal_scrape_2",
+  "bus": "sfx",
+  "dur": 1.668,
+  "pool": "assim_animal_scrape"
+ },
+ "assim_animal_lunge": {
+  "src": "sfx/assim_animal_lunge",
+  "bus": "sfx",
+  "dur": 1.325
+ },
+ "wraith_growl_1": {
+  "src": "sfx/wraith_growl_1",
+  "bus": "sfx",
+  "dur": 1.726,
+  "pool": "wraith_growl"
+ },
+ "wraith_growl_2": {
+  "src": "sfx/wraith_growl_2",
+  "bus": "sfx",
+  "dur": 2.317,
+  "pool": "wraith_growl"
+ },
+ "wraith_bark_1": {
+  "src": "sfx/wraith_bark_1",
+  "bus": "sfx",
+  "dur": 0.9,
+  "pool": "wraith_bark"
+ },
+ "wraith_bark_2": {
+  "src": "sfx/wraith_bark_2",
+  "bus": "sfx",
+  "dur": 0.9,
+  "pool": "wraith_bark"
+ },
+ "wraith_whine_1": {
+  "src": "sfx/wraith_whine_1",
+  "bus": "sfx",
+  "dur": 1.282,
+  "pool": "wraith_whine"
+ },
+ "wraith_whine_2": {
+  "src": "sfx/wraith_whine_2",
+  "bus": "sfx",
+  "dur": 1.297,
+  "pool": "wraith_whine"
+ },
+ "wraith_pant": {
+  "src": "sfx/wraith_pant",
+  "bus": "sfx",
+  "dur": 3.0,
+  "loop": true,
+  "loopLen": 3.0
+ },
+ "wraith_hollow_tell": {
+  "src": "sfx/wraith_hollow_tell",
+  "bus": "sfx",
+  "dur": 2.655
+ },
+ "wraith_husk_tell": {
+  "src": "sfx/wraith_husk_tell",
+  "bus": "sfx",
+  "dur": 1.594
+ },
+ "power_hum_drop": {
+  "src": "sfx/power_hum_drop",
+  "bus": "sfx",
+  "dur": 3.4
+ },
  "amb_wind": {
   "src": "amb/amb_wind",
-  "bus": "ambience",
-  "dur": 16.0,
-  "loop": true,
-  "loopLen": 16.0
- },
- "amb_blizzard": {
-  "src": "amb/amb_blizzard",
   "bus": "ambience",
   "dur": 16.0,
   "loop": true,
@@ -223,19 +440,96 @@ export const MANIFEST = {
   "loop": true,
   "loopLen": 10.0
  },
- "amb_war": {
-  "src": "amb/amb_war",
+ "amb_summer_wind": {
+  "src": "amb/amb_summer_wind",
+  "bus": "ambience",
+  "dur": 20.0,
+  "loop": true,
+  "loopLen": 20.0
+ },
+ "amb_cicadas": {
+  "src": "amb/amb_cicadas",
   "bus": "ambience",
   "dur": 24.0,
   "loop": true,
   "loopLen": 24.0
  },
+ "amb_stillness": {
+  "src": "amb/amb_stillness",
+  "bus": "ambience",
+  "dur": 16.0,
+  "loop": true,
+  "loopLen": 16.0
+ },
+ "amb_autumn_wind": {
+  "src": "amb/amb_autumn_wind",
+  "bus": "ambience",
+  "dur": 18.0,
+  "loop": true,
+  "loopLen": 18.0
+ },
+ "amb_dry_brush": {
+  "src": "amb/amb_dry_brush",
+  "bus": "ambience",
+  "dur": 16.0,
+  "loop": true,
+  "loopLen": 16.0
+ },
+ "amb_fall_rain": {
+  "src": "amb/amb_fall_rain",
+  "bus": "ambience",
+  "dur": 20.0,
+  "loop": true,
+  "loopLen": 20.0
+ },
+ "amb_war": {
+  "src": "amb/amb_war",
+  "bus": "ambience",
+  "dur": 32.0,
+  "loop": true,
+  "loopLen": 32.0
+ },
+ "amb_blizzard": {
+  "src": "amb/amb_blizzard",
+  "bus": "ambience",
+  "dur": 20.0,
+  "loop": true,
+  "loopLen": 20.0
+ },
+ "amb_subzero_creaks": {
+  "src": "amb/amb_subzero_creaks",
+  "bus": "ambience",
+  "dur": 24.0,
+  "loop": true,
+  "loopLen": 24.0
+ },
+ "amb_sleet": {
+  "src": "amb/amb_sleet",
+  "bus": "ambience",
+  "dur": 16.0,
+  "loop": true,
+  "loopLen": 16.0
+ },
+ "amb_ash_hush": {
+  "src": "amb/amb_ash_hush",
+  "bus": "ambience",
+  "dur": 16.0,
+  "loop": true,
+  "loopLen": 16.0
+ },
+ "amb_floodlight_hum": {
+  "src": "amb/amb_floodlight_hum",
+  "bus": "ambience",
+  "dur": 12.0,
+  "loop": true,
+  "loopLen": 12.0
+ },
  "music_blackout": {
   "src": "music/music_blackout",
   "bus": "music",
-  "dur": 43.636,
+  "dur": 48.0,
   "loop": true,
-  "loopLen": 43.636375
+  "loopLen": 48.0
  },
  "music_collapse": {
   "src": "music/music_collapse",
@@ -247,9 +541,9 @@ export const MANIFEST = {
  "music_civil_war": {
   "src": "music/music_civil_war",
   "bus": "music",
-  "dur": 40.0,
+  "dur": 37.5,
   "loop": true,
-  "loopLen": 40.0
+  "loopLen": 37.5
  },
  "music_nuclear_winter": {
   "src": "music/music_nuclear_winter",

@@ -1,137 +1,113 @@
 {
   "id": "ch07_where",
   "chapter": "ch07",
-  "location": "loc_east_end",
-  "trigger": "The first grey snow, late July. Chapter end decision.",
+  "location": "loc_peavine_shack",
+  "trigger": "Back on Peavine. Where do your people winter?",
   "speakers": [
-    "theo",
-    "marguerite",
-    "dell",
-    "narrator"
+    "narrator",
+    "carly",
+    "braith",
+    "walt",
+    "reyne"
   ],
   "start": "start",
   "nodes": [
     {
       "id": "start",
       "speaker": "narrator",
-      "text": "It's snowing in July. The flakes are grey and they don't melt right. They smear.",
+      "text": "Back in Sparks. Grey ash on the casinos. Carly's Switchboard is down to four radios that still work.",
       "next": "w1"
     },
     {
       "id": "w1",
-      "speaker": "theo",
-      "text": "it smells like a campfire. like the whole world's a campfire.",
+      "speaker": "carly",
+      "text": "The cards work? Walt says the cards work. So: Galena goes warm. Who goes with it?",
       "next": "w2"
     },
     {
       "id": "w2",
-      "speaker": "marguerite",
-      "text": "My dear. Some of us cannot walk twenty miles. Some of us will not leave the block.",
-      "branches": [
-        {
-          "next": "w_dam",
-          "conditions": [
-            {
-              "flag": "dam_running",
-              "eq": true
-            }
-          ]
-        },
-        {
-          "next": "w_nodam"
-        }
-      ]
-    },
-    {
-      "id": "w_nodam",
-      "speaker": "narrator",
-      "text": "With no running dam, there is no warm place upriver. You stay. Everyone stays.",
-      "effects": [
-        {
-          "set": "ch07_location",
-          "value": "city"
-        }
-      ],
-      "next": "end"
-    },
-    {
-      "id": "w_dam",
-      "speaker": "narrator",
-      "text": "The dam is warm. The city has the Harbor's grain, if there is any. You can't have both.",
+      "speaker": "walt",
+      "text": "The plant can heat a few hundred people. Maybe more with a greenhouse. Not the whole city. Never the whole city.",
       "choices": [
         {
-          "text": "We go to the dam. Now, before the cold.",
-          "next": "dam"
-        },
-        {
-          "text": "We stay. We hold the block together.",
-          "next": "city"
-        }
-      ]
-    },
-    {
-      "id": "dam",
-      "speaker": "marguerite",
-      "text": "Then go. I will keep the clinic. Someone has to be here when people knock.",
-      "effects": [
-        {
-          "set": "ch07_location",
-          "value": "dam"
-        }
-      ],
-      "next": "dam2"
-    },
-    {
-      "id": "dam2",
-      "speaker": "narrator",
-      "text": "You load the sled. Theo carries the cooler. Marguerite waves from her porch.",
-      "branches": [
-        {
-          "next": "dam_marg",
-          "conditions": [
+          "text": "We winter at Galena. Bring who we can.",
+          "next": "gal",
+          "effects": [
             {
-              "trust": "marguerite",
-              "gte": 3
+              "set": "ch07_location",
+              "value": "galena"
             }
           ]
         },
         {
-          "next": "end"
+          "text": "We stay in Sparks. Run heat lines later.",
+          "next": "city",
+          "effects": [
+            {
+              "set": "ch07_location",
+              "value": "city"
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            }
+          ]
         }
       ]
     },
     {
-      "id": "dam_marg",
-      "speaker": "marguerite",
-      "text": "Come back for me in a month. If I'm being stubborn, come anyway. You understand?",
-      "effects": [
-        {
-          "set": "marguerite_asked_return",
-          "value": true
-        }
-      ],
-      "next": "end"
+      "id": "gal",
+      "speaker": "carly",
+      "text": "Okay. I'll pick the list. No— we'll pick it together. Out loud. With names.",
+      "next": "reyne"
     },
     {
       "id": "city",
-      "speaker": "marguerite",
-      "text": "Good. We'll make this street a village. It almost already is.",
-      "effects": [
+      "speaker": "carly",
+      "text": "Then we hold the block. Lolo, Gil, the Pruitts. We hold what we've got until we can do better.",
+      "next": "reyne"
+    },
+    {
+      "id": "reyne",
+      "speaker": "reyne",
+      "text": "And me? I know how they hunt. I know what light does to them. I'd be useful. I'd also be... a reminder.",
+      "choices": [
         {
-          "set": "ch07_location",
-          "value": "city"
+          "text": "You're with us, Hollis.",
+          "next": "rin",
+          "effects": [
+            {
+              "set": "reyne_with_you",
+              "value": true
+            },
+            {
+              "trust": "reyne",
+              "delta": 2
+            }
+          ]
         },
         {
-          "trust": "marguerite",
-          "delta": 2
+          "text": "Go back to the Annex. Help Tolliver.",
+          "next": "rout"
         }
-      ],
+      ]
+    },
+    {
+      "id": "rin",
+      "speaker": "reyne",
+      "text": "Thank you. I'll earn it. Every night, I'll earn it.",
+      "next": "end"
+    },
+    {
+      "id": "rout",
+      "speaker": "reyne",
+      "text": "...Fair. I'll take the cart's old battery. Tolliver will want company. Or he'll shoot me. Either way.",
       "next": "end"
     },
     {
       "id": "end",
       "speaker": "narrator",
-      "text": "ACT III: ASHFALL →",
+      "text": "January is coming. The sky is the color of an old bruise.",
       "end": true
     }
   ]

@@ -1,6 +1,6 @@
 {
   "$schema_note": "See README.md#survivaljson. All rates are at difficulty tense_but_fair (1.0) and time_scale 1.0.",
-  "version": 1,
+  "version": 2,
   "time_model": {
     "source": "js/config.js CFG.dayLenSec",
     "day_length_real_seconds": 420,
@@ -22,9 +22,9 @@
       "base_drain": {
         "per_real_second": 0.3,
         "per_game_minute": 0.0875,
-        "applies": "outdoors, daytime, calm weather, ambient_cold 1.0, no clothing"
+        "applies": "outdoors, calm weather, cold multiplier 1.0, no clothing"
       },
-      "formula": "drain = base_drain * chapter.ambient_cold * product(active environment multipliers) * (1 - clothing_insulation) * difficulty.warmth_drain_mult; when a source with 'regen' is active it replaces the drain",
+      "formula": "drain/s = base_drain * C * product(environment multipliers except 'night') * (1 - clothing_insulation) * difficulty.warmth_drain_mult, where C = chapter_climate[ch].cold_drain_mult by day and chapter_climate[ch].night_cold_mult at night (night_cold_mult is ABSOLUTE and already includes the night effect: do NOT also apply environment_modifiers.night). When C == 0 and no cold weather is active, warmth regenerates at chapter_climate[ch].ambient_warmth_regen_per_real_second. A source with 'regen' (fire, heated room) replaces the drain.",
       "clothing_insulation": {
         "combine": "1 - product(1 - r_i) over equipped clothing slots",
         "cap": 0.75
@@ -81,7 +81,7 @@
         }
       ],
       "warning_at": 30,
-      "hud_note": "HUD 'warmth' from ch01; 'TEMP' (ambient \u00b0C readout) unlocks ch03 per story."
+      "hud_note": "Story hud_unlocks: HUD hydration from ch01 (late summer), warmth + TEMP from ch03 (autumn). Warmth still ticks in ch01-02 (night chill only) but the bar is hidden until ch03."
     },
     "satiety": {
       "code_field": "stats.hunger",
@@ -135,10 +135,21 @@
             "health_per_real_second": -0.4
           }
         }
-      ]
+      ],
+      "companion": {
+        "id": "wraith",
+        "food_items_per_chapter": 2,
+        "accepts": [
+          "canned_food",
+          "ration",
+          "jerky",
+          "mre"
+        ],
+        "note": "Wraith (Belgian Malinois) eats from inventory at rests: ~2 food items per chapter while wraith_alive. Unfed: she won't TRACK next chapter. Counted in the budget."
+      }
     },
     "hydration": {
-      "code_field": "stats.thirst (NEW - add to defaultStats)",
+      "code_field": "stats.thirst",
       "range": [
         0,
         100
@@ -190,18 +201,117 @@
         }
       ],
       "free_source": {
-        "id": "eat_snow",
-        "interaction": "hold USE on snow outdoors",
-        "hydration": 8,
-        "warmth": -6,
-        "cooldown_real_seconds": 6,
-        "radiation_per_use_by_act": {
-          "blackout": 0,
-          "collapse": 0,
-          "civil_war": 0,
-          "nuclear_winter": 5
+        "_note": "Anti-hard-lock valve: thirst can always be patched at some cost. Which source works depends on the chapter's season.",
+        "by_season": {
+          "late_summer": {
+            "id": "drink_raw",
+            "interaction": "hold USE at the Truckee River, Sparks Marina, an irrigation ditch or a stock tank",
+            "hydration": 10,
+            "chance_status": {
+              "sick": 0.15
+            },
+            "cooldown_real_seconds": 6,
+            "radiation": 0
+          },
+          "autumn": {
+            "id": "drink_raw",
+            "interaction": "hold USE at river/ditch/marina water or a rain barrel",
+            "hydration": 10,
+            "chance_status": {
+              "sick": 0.12
+            },
+            "cooldown_real_seconds": 6,
+            "radiation": 0
+          },
+          "late_fall": {
+            "id": "drink_raw",
+            "interaction": "hold USE at river/ditch water, puddles or rain barrels (freezing rain refills barrels)",
+            "hydration": 10,
+            "warmth": -3,
+            "chance_status": {
+              "sick": 0.1
+            },
+            "cooldown_real_seconds": 6,
+            "radiation": 0
+          },
+          "nuclear_winter": {
+            "id": "eat_snow",
+            "interaction": "hold USE on snow outdoors",
+            "hydration": 8,
+            "warmth": -6,
+            "chance_status": {
+              "sick": 0.0
+            },
+            "cooldown_real_seconds": 6,
+            "radiation": 5
+          }
+        }
+      },
+      "formula": "drain/s = base_drain * T * product(hydration modifiers) * heat_stress.hydration_mult * weather_modifiers[weather].thirst_mult (default 1) * difficulty.hydration_drain_mult, where T = chapter_climate[ch].thirst_drain_mult when outdoors in daytime, else chapter_climate[ch].thirst_drain_mult_night_or_indoors.",
+      "water_sources": {
+        "truckee_river": {
+          "where": [
+            "loc_sparks_block (river path)",
+            "loc_virginia_bridge",
+            "river_ice (Ch9: chop a hole)"
+          ],
+          "gives": "water_dirty",
+          "sick_chance_raw": 0.3
         },
-        "note": "Anti-hard-lock valve: thirst can always be patched, at a warmth (and in Act IV radiation) cost."
+        "sparks_marina": {
+          "where": [
+            "loc_sparks_marina (ch01_lake_edge: bucket x4)"
+          ],
+          "gives": "water_dirty",
+          "sick_chance_raw": 0.3
+        },
+        "irrigation_ditch": {
+          "where": [
+            "loc_us50_fallon (TCID canal)",
+            "loc_tric_warehouses (drainage)",
+            "loc_mustang_truckstop (stock tank)"
+          ],
+          "gives": "water_dirty",
+          "sick_chance_raw": 0.35
+        },
+        "rain_barrel": {
+          "where": [
+            "loc_sparks_block",
+            "loc_fourth_street"
+          ],
+          "seasons": [
+            "autumn",
+            "late_fall"
+          ],
+          "gives": "water_dirty",
+          "sick_chance_raw": 0.15
+        },
+        "steamboat_hot_spring": {
+          "where": [
+            "loc_steamboat_creek",
+            "loc_dixie_hotsprings"
+          ],
+          "gives": "water_dirty",
+          "sick_chance_raw": 0.5,
+          "note": "Mineral/arsenic geothermal water: boil does NOT fix it (still 0.25 sick after boiling); tablets do."
+        },
+        "melted_snow": {
+          "where": [
+            "anywhere outdoors"
+          ],
+          "seasons": [
+            "nuclear_winter"
+          ],
+          "gives": "water_dirty",
+          "note": "Carries fallout (radiation_by_act nuclear_winter)."
+        },
+        "cistern": {
+          "where": [
+            "loc_sparks_block (pruitt_cistern)",
+            "loc_galena_station"
+          ],
+          "gives": "water_clean"
+        }
       }
     },
     "stamina": {
@@ -231,7 +341,7 @@
       ],
       "start": 0,
       "unit": "dose points (accumulated, not rate)",
-      "visible_from": "dosimeter item (Ch7, Lou). Before that, rad still accrues but HUD hides it (there are no rad zones before Act IV).",
+      "visible_from": "dosimeter item (Ch7). Before that rad still accrues but the HUD hides it. Ambient outdoor radiation per chapter = chapter_climate[ch].radiation_ambient.",
       "zone_gain_per_real_second": {
         "rad_low": 0.12,
         "rad_med": 0.4,
@@ -247,13 +357,14 @@
       "mitigation": {
         "mask_filter_active": 0.2,
         "iodide_tablets_active": 0.5,
-        "indoors": "x (1 - seal/100) * 0.4 -- SEAL is the HUD shelter-seal % (story hud_unlocks ch08); 100 seal = no gain indoors"
+        "indoors": "x (1 - seal/100) * 0.4 -- SEAL is the HUD shelter-seal % (story hud_unlocks ch08, flag shelter_sealed); 100 seal = no gain indoors. Wraith GUARD adds +SEAL integrity at night.",
+        "mask_note": "Requires has_gas_mask (Ch8+) and a loaded mask_filter."
       },
       "natural_decay_per_real_second": 0.01,
       "decontamination": {
-        "dam_shower": -40,
+        "galena_shower": -40,
         "hospital_decon": -30,
-        "note": "story locations, once per visit"
+        "note": "loc_galena_station shower (after Ch4 black start) / loc_meadows_general decon, once per visit"
       },
       "thresholds": [
         {
@@ -324,8 +435,8 @@
     "wet": {
       "source": [
         "fall through ice",
-        "wade",
-        "fallout_rain without poncho"
+        "wade the Truckee",
+        "freezing_rain / fallout_rain / drizzle without rain_poncho"
       ],
       "warmth_drain_mult": 1.75,
       "dry_per_real_second": {
@@ -355,7 +466,8 @@
     "sick": {
       "source": [
         "water_dirty 30%",
-        "raw snow in Act IV 0%"
+        "raw river/ditch water (free_source)",
+        "hot-spring water 50%"
       ],
       "duration_real_seconds": 600,
       "effects": {
@@ -370,7 +482,7 @@
     "fracture": {
       "source": [
         "fall > 3 m",
-        "ice-break QTE fail (Ch9)"
+        "ice_break_qte fail (Ch9 river_ice)"
       ],
       "effects": {
         "no_sprint": true,
@@ -393,7 +505,6 @@
     }
   },
   "environment_modifiers": {
-    "note": "Multiply warmth drain. 'regen' entries set warmth gain instead of drain while active. Echo already has blizzard / night / inFire / radZone flags in Player.tickSurvival.",
     "outdoors": {
       "warmth_drain_mult": 1.0
     },
@@ -416,13 +527,15 @@
       "warmth_regen_per_real_second": 2.0,
       "examples": [
         "safe houses",
-        "dam control room after Ch4"
+        "Galena control room after the Ch4 black start",
+        "the Warm Room (Ch10)"
       ]
     },
     "near_fire": {
       "warmth_regen_per_real_second": 5.0,
       "radius_m": 2.5,
-      "code_note": "CFG uses 28/s; recommend 5/s so a fire is a stop of ~15 s, not instant"
+      "code_note": "CFG uses 28/s; recommend 5/s so a fire is a stop of ~15 s, not instant",
+      "note": "In late_summer a fire is only for boiling/light; it raises hydration drain x1.2 and heat_stress x1.25."
     },
     "near_candle_cluster": {
       "warmth_drain_mult": 0.5,
@@ -433,8 +546,8 @@
       "warmth_drain_mult": 0.85
     },
     "night": {
-      "warmth_drain_mult": 1.4,
-      "code_note": "CFG used 1.45"
+      "warmth_drain_mult": "use chapter_climate[ch].night_cold_mult instead (absolute)",
+      "note": "Seasonal curve: the old flat x1.4 night multiplier is replaced by per-chapter night_cold_mult. Do not stack both."
     },
     "blizzard": {
       "warmth_drain_mult": 2.2,
@@ -447,123 +560,344 @@
     },
     "sprinting": {
       "warmth_drain_mult": 0.8
-    }
+    },
+    "_note": "Multiply warmth drain. 'regen' entries set warmth gain instead of drain while active."
   },
   "chapter_climate": {
-    "note": "ambient_cold multiplies warmth drain; blizzard_chance is the share of blizzard windows that actually fire (CFG cycle). outdoor_share = expected fraction of play time outdoors, used by the budget check.",
+    "note": "Per-chapter climate profile read directly by Player.tickSurvival. season / ambient_temp_c_day / ambient_temp_c_night / weather are copied from story/gameplay_hooks.json chapters[] (validator enforces). cold_drain_mult = max(0, (20 - temp_c) / 25) by day; night_cold_mult = same formula on night_temp_c (ABSOLUTE at night: do not also apply environment_modifiers.night). thirst_drain_mult = daytime outdoors; thirst_drain_mult_night_or_indoors otherwise. heat_stress_insulation_threshold drives heat_stress (null = off). radiation_ambient adds outdoor rad/s (plus weather/zone rad). weather_weights pick the level weather when the level doesn't force one (ids = story weather_types; the story's chapter 'weather' always has weight). ambient_cold = legacy alias of cold_drain_mult.",
     "ch01": {
+      "season": "late_summer",
       "act": "blackout",
-      "temp_c": 6,
-      "ambient_cold": 0.5,
-      "blizzard_chance": 0.0,
+      "ambient_temp_c_day": 35,
+      "ambient_temp_c_night": 18,
+      "cold_drain_mult": 0.0,
+      "night_cold_mult": 0.08,
+      "ambient_cold": 0.0,
+      "thirst_drain_mult": 1.75,
+      "thirst_drain_mult_night_or_indoors": 1.15,
+      "heat_stress_insulation_threshold": 0.2,
+      "radiation_ambient": {
+        "outdoors_per_real_second": 0.0,
+        "zone": null
+      },
+      "weather": "heat_haze",
+      "weather_weights": {
+        "heat_haze": 0.75,
+        "dust_wind": 0.25
+      },
+      "blizzard_chance": 0,
       "fallout_rain": false,
-      "outdoor_share": 0.5,
-      "weather": "overcast",
-      "story_act": 1,
-      "date": "Oct 17"
+      "outdoor_share": 0.55,
+      "ambient_warmth_regen_per_real_second": 0.6,
+      "story_date": "Day 3 (Wed Aug 26, Year 1)",
+      "survival_focus": [
+        "hydration",
+        "heat",
+        "spoiled_food",
+        "dust"
+      ],
+      "heat_wave_chance": 0.35,
+      "heat_wave": {
+        "ambient_temp_c_day": 38,
+        "thirst_drain_mult": 2.0,
+        "note": "rolls per level day; story range 32-36 C, heat wave pushes it"
+      }
     },
     "ch02": {
+      "season": "late_summer",
       "act": "blackout",
-      "temp_c": -4,
-      "ambient_cold": 0.7,
-      "blizzard_chance": 0.15,
+      "ambient_temp_c_day": 33,
+      "ambient_temp_c_night": 15,
+      "cold_drain_mult": 0.0,
+      "night_cold_mult": 0.2,
+      "ambient_cold": 0.0,
+      "thirst_drain_mult": 1.6,
+      "thirst_drain_mult_night_or_indoors": 1.1,
+      "heat_stress_insulation_threshold": 0.22,
+      "radiation_ambient": {
+        "outdoors_per_real_second": 0.0,
+        "zone": null
+      },
+      "weather": "dust_wind",
+      "weather_weights": {
+        "dust_wind": 0.6,
+        "heat_haze": 0.4
+      },
+      "blizzard_chance": 0,
       "fallout_rain": false,
       "outdoor_share": 0.5,
-      "weather": "snow",
-      "story_act": 1,
-      "date": "Day 19 (Nov 2)"
+      "ambient_warmth_regen_per_real_second": 0.5,
+      "story_date": "Day 19 (Fri Sep 11, Year 1)",
+      "survival_focus": [
+        "hydration",
+        "heat",
+        "crowds",
+        "dust"
+      ]
     },
     "ch03": {
+      "season": "autumn",
       "act": "collapse",
-      "temp_c": -30,
-      "ambient_cold": 1.25,
-      "blizzard_chance": 0.6,
+      "ambient_temp_c_day": 14,
+      "ambient_temp_c_night": 4,
+      "cold_drain_mult": 0.24,
+      "night_cold_mult": 0.64,
+      "ambient_cold": 0.24,
+      "thirst_drain_mult": 1.1,
+      "thirst_drain_mult_night_or_indoors": 1.0,
+      "heat_stress_insulation_threshold": 0.45,
+      "radiation_ambient": {
+        "outdoors_per_real_second": 0.0,
+        "zone": null
+      },
+      "weather": "clear_autumn",
+      "weather_weights": {
+        "clear_autumn": 0.7,
+        "autumn_wind": 0.3
+      },
+      "blizzard_chance": 0,
       "fallout_rain": false,
-      "outdoor_share": 0.65,
-      "weather": "clear_cold",
-      "story_act": 1,
-      "date": "Day 60 (Dec 13)"
+      "outdoor_share": 0.6,
+      "ambient_warmth_regen_per_real_second": 0.1,
+      "story_date": "Day 50 (Mon Oct 12, Year 1)",
+      "survival_focus": [
+        "first_cold_nights",
+        "fuel",
+        "fire"
+      ]
     },
     "ch04": {
+      "season": "autumn",
       "act": "collapse",
-      "temp_c": -24,
-      "ambient_cold": 1.15,
-      "blizzard_chance": 0.4,
+      "ambient_temp_c_day": 12,
+      "ambient_temp_c_night": 5,
+      "cold_drain_mult": 0.32,
+      "night_cold_mult": 0.6,
+      "ambient_cold": 0.32,
+      "thirst_drain_mult": 1.0,
+      "thirst_drain_mult_night_or_indoors": 0.95,
+      "heat_stress_insulation_threshold": 0.5,
+      "radiation_ambient": {
+        "outdoors_per_real_second": 0.0,
+        "zone": null
+      },
+      "weather": "autumn_wind",
+      "weather_weights": {
+        "autumn_wind": 0.6,
+        "clear_autumn": 0.25,
+        "frost": 0.15
+      },
+      "blizzard_chance": 0,
       "fallout_rain": false,
       "outdoor_share": 0.6,
-      "weather": "snow",
-      "story_act": 2,
-      "date": "Late January"
+      "ambient_warmth_regen_per_real_second": 0.0,
+      "story_date": "Day 66 (Wed Oct 28, Year 1)",
+      "survival_focus": [
+        "cold_nights",
+        "fuel",
+        "heating"
+      ]
     },
     "ch05": {
+      "season": "late_fall",
       "act": "civil_war",
-      "temp_c": -8,
-      "ambient_cold": 0.85,
-      "blizzard_chance": 0.2,
+      "ambient_temp_c_day": 2,
+      "ambient_temp_c_night": -3,
+      "cold_drain_mult": 0.72,
+      "night_cold_mult": 0.92,
+      "ambient_cold": 0.72,
+      "thirst_drain_mult": 1.0,
+      "thirst_drain_mult_night_or_indoors": 0.9,
+      "heat_stress_insulation_threshold": 0.8,
+      "radiation_ambient": {
+        "outdoors_per_real_second": 0.0,
+        "zone": null
+      },
+      "weather": "sleet",
+      "weather_weights": {
+        "sleet": 0.55,
+        "overcast": 0.3,
+        "frost": 0.15
+      },
+      "blizzard_chance": 0.0,
       "fallout_rain": false,
       "outdoor_share": 0.75,
-      "weather": "freezing_rain",
-      "story_act": 2,
-      "date": "March",
-      "note": "freezing_rain: player gets 'wet' outdoors without rain_poncho"
+      "ambient_warmth_regen_per_real_second": 0.0,
+      "story_date": "Day 83 (Sat Nov 14, Year 1)",
+      "survival_focus": [
+        "warmth",
+        "wet_cold",
+        "wind"
+      ]
     },
     "ch06": {
+      "season": "late_fall",
       "act": "civil_war",
-      "temp_c": 4,
-      "ambient_cold": 0.4,
+      "ambient_temp_c_day": 1,
+      "ambient_temp_c_night": -3,
+      "cold_drain_mult": 0.76,
+      "night_cold_mult": 0.92,
+      "ambient_cold": 0.76,
+      "thirst_drain_mult": 1.0,
+      "thirst_drain_mult_night_or_indoors": 0.9,
+      "heat_stress_insulation_threshold": 0.8,
+      "radiation_ambient": {
+        "outdoors_per_real_second": 0.0,
+        "zone": null
+      },
+      "weather": "overcast",
+      "weather_weights": {
+        "overcast": 0.55,
+        "sleet": 0.3,
+        "frost": 0.15
+      },
       "blizzard_chance": 0.0,
       "fallout_rain": false,
       "outdoor_share": 0.6,
-      "weather": "drizzle",
-      "story_act": 2,
-      "date": "May"
+      "ambient_warmth_regen_per_real_second": 0.0,
+      "story_date": "Day 96 (Fri Nov 27, Year 1)",
+      "survival_focus": [
+        "warmth",
+        "wet_cold",
+        "curfew"
+      ]
     },
     "ch07": {
+      "season": "late_fall",
       "act": "civil_war",
-      "temp_c": 2,
-      "ambient_cold": 0.5,
-      "blizzard_chance": 0.0,
+      "ambient_temp_c_day": -1,
+      "ambient_temp_c_night": -3,
+      "cold_drain_mult": 0.84,
+      "night_cold_mult": 0.92,
+      "ambient_cold": 0.84,
+      "thirst_drain_mult": 1.0,
+      "thirst_drain_mult_night_or_indoors": 0.9,
+      "heat_stress_insulation_threshold": 0.85,
+      "radiation_ambient": {
+        "outdoors_per_real_second": 0.02,
+        "zone": null,
+        "note": "after the Dec 5 bursts (weather_after_bursts brown_sky): first fallout traces; dosimeter unlocks RAD"
+      },
+      "weather": "overcast",
+      "weather_weights": {
+        "overcast": 0.35,
+        "brown_sky": 0.35,
+        "frost": 0.15,
+        "grey_snow": 0.15
+      },
+      "blizzard_chance": 0.05,
       "fallout_rain": false,
       "outdoor_share": 0.6,
-      "note": "grey snow in July",
-      "weather": "brown_sky",
-      "story_act": 2,
-      "date": "July 9 \u2192 late July"
+      "ambient_warmth_regen_per_real_second": 0.0,
+      "story_date": "Day 104 (Sat Dec 5) → mid-December, Year 1",
+      "survival_focus": [
+        "warmth",
+        "wind",
+        "desert_night_cold"
+      ],
+      "weather_after_bursts": "brown_sky"
     },
     "ch08": {
+      "season": "nuclear_winter",
       "act": "nuclear_winter",
-      "temp_c": -10,
-      "ambient_cold": 0.9,
+      "ambient_temp_c_day": -10,
+      "ambient_temp_c_night": -18,
+      "cold_drain_mult": 1.2,
+      "night_cold_mult": 1.52,
+      "ambient_cold": 1.2,
+      "thirst_drain_mult": 0.95,
+      "thirst_drain_mult_night_or_indoors": 0.9,
+      "heat_stress_insulation_threshold": null,
+      "radiation_ambient": {
+        "outdoors_per_real_second": 0.06,
+        "zone": "rad_low",
+        "note": "plus fallout_rain_outdoors while raining"
+      },
+      "weather": "fallout_rain",
+      "weather_weights": {
+        "fallout_rain": 0.45,
+        "ashfall": 0.35,
+        "blizzard": 0.2
+      },
       "blizzard_chance": 0.3,
       "fallout_rain": true,
       "outdoor_share": 0.55,
-      "weather": "fallout_rain",
-      "story_act": 3,
-      "date": "August\u2013October"
+      "ambient_warmth_regen_per_real_second": 0.0,
+      "story_date": "January, Year 2",
+      "survival_focus": [
+        "warmth",
+        "radiation",
+        "filters",
+        "seal",
+        "dread"
+      ],
+      "weather_late": "ashfall"
     },
     "ch09": {
+      "season": "nuclear_winter",
       "act": "nuclear_winter",
-      "temp_c": -45,
-      "ambient_cold": 1.8,
+      "ambient_temp_c_day": -40,
+      "ambient_temp_c_night": -45,
+      "cold_drain_mult": 2.4,
+      "night_cold_mult": 2.6,
+      "ambient_cold": 2.4,
+      "thirst_drain_mult": 0.95,
+      "thirst_drain_mult_night_or_indoors": 0.9,
+      "heat_stress_insulation_threshold": null,
+      "radiation_ambient": {
+        "outdoors_per_real_second": 0.04,
+        "zone": "rad_low"
+      },
+      "weather": "blizzard",
+      "weather_weights": {
+        "blizzard": 0.7,
+        "ashfall": 0.3
+      },
       "blizzard_chance": 0.85,
       "fallout_rain": false,
       "outdoor_share": 0.85,
-      "weather": "blizzard",
-      "story_act": 3,
-      "date": "Midwinter, Year 2"
+      "ambient_warmth_regen_per_real_second": 0.0,
+      "story_date": "Early February, Year 2",
+      "survival_focus": [
+        "warmth",
+        "exposure",
+        "column",
+        "dread"
+      ]
     },
     "ch10": {
+      "season": "nuclear_winter",
       "act": "nuclear_winter",
-      "temp_c": -38,
-      "ambient_cold": 1.5,
-      "blizzard_chance": 0.5,
+      "ambient_temp_c_day": -34,
+      "ambient_temp_c_night": -45,
+      "cold_drain_mult": 2.16,
+      "night_cold_mult": 2.6,
+      "ambient_cold": 2.16,
+      "thirst_drain_mult": 0.95,
+      "thirst_drain_mult_night_or_indoors": 0.9,
+      "heat_stress_insulation_threshold": null,
+      "radiation_ambient": {
+        "outdoors_per_real_second": 0.03,
+        "zone": "rad_low"
+      },
+      "weather": "ashfall",
+      "weather_weights": {
+        "ashfall": 0.45,
+        "clear_cold": 0.35,
+        "blizzard": 0.2
+      },
+      "blizzard_chance": 0.4,
       "fallout_rain": false,
       "outdoor_share": 0.35,
-      "weather": "clear_cold",
-      "story_act": 3,
-      "date": "Midwinter"
-    },
-    "_note": "Keys = story/gameplay_hooks.json chapter ids. temp_c / weather / date copied from hooks; ambient_cold is the systems tuning value derived from temp_c."
+      "ambient_warmth_regen_per_real_second": 0.0,
+      "story_date": "Late February, Year 2",
+      "survival_focus": [
+        "warmth",
+        "light",
+        "power",
+        "dread"
+      ]
+    }
   },
   "recovery_sources": [
     {
@@ -578,7 +912,7 @@
       "stat": "warmth",
       "per_real_second": 5.0,
       "duration_real_seconds": 300,
-      "made_by": "found in level (Ch3, Ch9 stops); refuel with 2 firewood"
+      "made_by": "found in level (river_ice stops, Galena, Sparks yard); refuel with 2 firewood"
     },
     {
       "id": "safe_house",
@@ -597,9 +931,9 @@
       "see": "items.json effects.hydration"
     },
     {
-      "id": "eat_snow",
+      "id": "free_water",
       "stat": "hydration",
-      "see": "stats.hydration.free_source"
+      "see": "stats.hydration.free_source.by_season (drink_raw in late_summer..late_fall, eat_snow in nuclear_winter)"
     },
     {
       "id": "meds",
@@ -613,7 +947,7 @@
     }
   ],
   "weather_modifiers": {
-    "_note": "Ids = gameplay_hooks.json weather_types. Multiply warmth drain; 'wet_per_real_second' adds wetness outdoors unless rain_poncho; rad zone applies outdoors.",
+    "_note": "Ids = story/gameplay_hooks.json weather_types (all covered; clear/snow/drizzle kept as legacy fallbacks). Multiply warmth drain; 'wet_per_real_second' adds wetness outdoors unless rain_poncho; radiation_zone_outdoors applies outdoors.",
     "overcast": {
       "warmth_drain_mult": 1.0
     },
@@ -622,13 +956,15 @@
       "visibility_m": 40
     },
     "freezing_rain": {
-      "warmth_drain_mult": 1.15,
+      "warmth_drain_mult": 1.2,
       "wet_per_real_second": 0.01,
-      "visibility_m": 35
+      "visibility_m": 35,
+      "note": "late-fall sleet: wet + slick (sprint stamina x1.15)"
     },
     "drizzle": {
       "warmth_drain_mult": 1.0,
-      "wet_per_real_second": 0.004
+      "wet_per_real_second": 0.004,
+      "note": "autumn/late-fall rain: wet without rain_poncho"
     },
     "clear_cold": {
       "warmth_drain_mult": 1.0,
@@ -661,16 +997,57 @@
       "warmth_drain_mult": 2.2,
       "visibility_m": 18,
       "enemy_detect_mult": 0.6,
-      "note": "same as environment_modifiers.blizzard; Echo's CFG blizzard windows also apply on top of any chapter weather"
+      "note": "same as environment_modifiers.blizzard; blizzard windows only roll in chapters with blizzard_chance > 0"
+    },
+    "heat_haze": {
+      "warmth_drain_mult": 1.0,
+      "sun": true,
+      "thirst_mult": 1.1,
+      "visibility_m": 60,
+      "note": "late-summer heat shimmer; ball_cap sun_thirst_mult applies"
+    },
+    "dust_wind": {
+      "warmth_drain_mult": 1.0,
+      "thirst_mult": 1.1,
+      "visibility_m": 35,
+      "stamina_cost_mult": 1.05,
+      "note": "Washoe zephyr dust; bandana/balaclava optional"
+    },
+    "clear_autumn": {
+      "warmth_drain_mult": 1.0,
+      "sun": true,
+      "night_extra_mult": 1.05
+    },
+    "autumn_wind": {
+      "warmth_drain_mult": 1.15,
+      "note": "dry wind: cuts through a light shirt"
+    },
+    "sleet": {
+      "warmth_drain_mult": 1.2,
+      "wet_per_real_second": 0.01,
+      "visibility_m": 35,
+      "note": "late-fall sleet: wet + slick (sprint stamina x1.15) unless rain_poncho"
+    },
+    "clear": {
+      "warmth_drain_mult": 1.0,
+      "sun": true,
+      "note": "in late_summer/autumn daytime: ball_cap sun_thirst_mult applies"
+    },
+    "frost": {
+      "warmth_drain_mult": 1.1,
+      "night_extra_mult": 1.1,
+      "note": "autumn hard frost; radiative cooling"
     }
   },
   "hud_unlocks_from_story": {
     "ch01": [
       "hp",
-      "warmth",
-      "hunger"
+      "hydration",
+      "hunger",
+      "companion"
     ],
     "ch03": [
+      "warmth",
       "temp"
     ],
     "ch05": [
@@ -683,5 +1060,86 @@
       "filter",
       "seal"
     ]
+  },
+  "revision": "Nevada Revision 2 + evolving seasonal curve (late_summer -> autumn -> late_fall -> nuclear_winter)",
+  "heat_stress": {
+    "_note": "NEW (late-summer blackout). Wearing winter gear in the heat costs water and stamina. Clean, data-driven: one number per chapter (heat_stress_insulation_threshold) and one per clothing item (heat_penalty).",
+    "heat_load": "sum(item.heat_penalty) over equipped clothing (items.json)",
+    "threshold_field": "chapter_climate[ch].heat_stress_insulation_threshold (null = no heat stress this chapter)",
+    "applies": "daytime only; outdoors x1.0, indoors_unheated x0.5, near_fire x1.25; never at night",
+    "excess": "max(0, heat_load - threshold) * applies_mult * difficulty.heat_stress_mult",
+    "effects": {
+      "hydration_mult": "1 + 3.0 * excess (cap 2.5)",
+      "stamina_cost_mult": "1 + 2.0 * excess (cap 2.0)",
+      "stamina_regen_mult": "max(0.5, 1 - 1.0 * excess)"
+    },
+    "thresholds": [
+      {
+        "id": "ok",
+        "excess_max": 0.0,
+        "effects": {}
+      },
+      {
+        "id": "warm",
+        "excess_max": 0.15,
+        "hud": "sweat beads on the edges"
+      },
+      {
+        "id": "overheated",
+        "excess_max": 9,
+        "effects": {
+          "aim_sway_mult": 1.2,
+          "no_sprint_above_excess": 0.4
+        },
+        "hud": "heat shimmer, sweat drip, 'OVERHEATED' tag",
+        "death_reason_if_parched": "heatstroke"
+      }
+    ],
+    "examples_late_summer_ch01": {
+      "summer_kit (tee+jeans+sneakers+cap)": "heat_load 0.02 -> no stress",
+      "flannel+work_jacket": "0.18 -> no stress",
+      "wool coat over tee": "0.32 -> excess 0.12 -> thirst x1.36",
+      "military_parka + snow_pants + pac boots": "0.68 -> excess 0.48 -> thirst x2.44 (water bar ~4.7 min in heat_haze), stamina costs x1.96, regen x0.52"
+    }
+  },
+  "seasons": {
+    "late_summer": {
+      "act": "blackout",
+      "chapters": [
+        "ch01",
+        "ch02"
+      ],
+      "months": "late August – September",
+      "feel": "Reno high desert heat: 30+ °C days, cool nights. Water is the pressure, not cold. Wearing a coat is a mistake."
+    },
+    "autumn": {
+      "act": "collapse",
+      "chapters": [
+        "ch03",
+        "ch04"
+      ],
+      "months": "October",
+      "feel": "Mild days, nights near freezing. A flannel + jacket + base layer matter after dark and in rain/wind."
+    },
+    "late_fall": {
+      "act": "civil_war",
+      "chapters": [
+        "ch05",
+        "ch06",
+        "ch07"
+      ],
+      "months": "November",
+      "feel": "Cold wind, freezing rain and sleet; being wet hurts. Coats, rain protection and combat gear."
+    },
+    "nuclear_winter": {
+      "act": "nuclear_winter",
+      "chapters": [
+        "ch08",
+        "ch09",
+        "ch10"
+      ],
+      "months": "December onward (fallout winter)",
+      "feel": "Lethal cold, blizzards, fallout. Parka/pac boots/gloves/wrap required; mask_filter + shelter SEAL + fire management."
+    }
   }
 }

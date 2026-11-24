@@ -1,0 +1,134 @@
+{
+  "id": "ch02_carly_desk",
+  "chapter": "ch02",
+  "location": "loc_rscc_registry",
+  "trigger": "Talk to Carly at her registry table.",
+  "speakers": [
+    "narrator",
+    "carly",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "carly",
+      "text": "Don't be mad. Avila asked for anyone with dispatch experience. I can type ninety words a minute.",
+      "next": "c1"
+    },
+    {
+      "id": "c1",
+      "speaker": "carly",
+      "text": "They need people who can talk to scared people. That's literally my whole job.",
+      "branches": [
+        {
+          "next": "c_truth",
+          "conditions": [
+            {
+              "flag": "ch02_avila_truth",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "c2"
+        }
+      ]
+    },
+    {
+      "id": "c_truth",
+      "speaker": "braith",
+      "text": "Her count's wrong. Forty-one days, not a hundred and forty.",
+      "next": "c_truth2"
+    },
+    {
+      "id": "c_truth2",
+      "speaker": "carly",
+      "text": "...I know. I've seen the sheets. I'm going to find out why before I decide anything. Okay?",
+      "effects": [
+        {
+          "set": "carly_count_doubt",
+          "value": true
+        }
+      ],
+      "next": "c2"
+    },
+    {
+      "id": "c2",
+      "speaker": "carly",
+      "text": "Say something. You have your mechanic face. The one where you're listening for a bad bearing.",
+      "choices": [
+        {
+          "text": "If anyone can make it honest, it's you.",
+          "next": "back",
+          "effects": [
+            {
+              "set": "ch02_backed_carly",
+              "value": true
+            },
+            {
+              "trust": "carly",
+              "delta": 2
+            },
+            {
+              "set": "carly_job",
+              "value": true
+            }
+          ]
+        },
+        {
+          "text": "They'll use you to make lists.",
+          "next": "argue",
+          "effects": [
+            {
+              "trust": "carly",
+              "delta": -1
+            },
+            {
+              "set": "carly_job",
+              "value": true
+            }
+          ]
+        },
+        {
+          "text": "Quit. Come work the motor pool with me.",
+          "next": "quit"
+        }
+      ]
+    },
+    {
+      "id": "back",
+      "speaker": "carly",
+      "text": "Thank you. Seriously. I needed one person not to look at me like I joined a cult.",
+      "next": "c3"
+    },
+    {
+      "id": "argue",
+      "speaker": "carly",
+      "text": "Everyone's making lists, Braith. I'd rather it was someone who reads the names out loud.",
+      "next": "c3"
+    },
+    {
+      "id": "quit",
+      "speaker": "carly",
+      "text": "And do what, hand you wrenches? Nope. I'm good at this. Let me be good at something.",
+      "effects": [
+        {
+          "set": "carly_job",
+          "value": true
+        },
+        {
+          "trust": "carly",
+          "delta": -1
+        }
+      ],
+      "next": "c3"
+    },
+    {
+      "id": "c3",
+      "speaker": "carly",
+      "text": "Go get your rations. Get out before the line turns. It turns every day around two.",
+      "end": true
+    }
+  ]
+}

@@ -1,19 +1,19 @@
 {
   "id": "ch02_ames_diesel_return",
   "chapter": "ch02",
-  "location": "loc_lakehead_memorial",
+  "location": "loc_meadows_general",
   "trigger": "Return to Ames with hospital_diesel.",
   "speakers": [
+    "narrator",
     "ames",
-    "dell",
-    "narrator"
+    "braith"
   ],
   "start": "start",
   "nodes": [
     {
       "id": "start",
       "speaker": "ames",
-      "text": "You smell like diesel. That's the nicest thing anyone's done this week.",
+      "text": "You got it. Nobody's dead. I'm genuinely surprised on both counts.",
       "effects": [
         {
           "take": "hospital_diesel",
@@ -24,48 +24,56 @@
           "state": "complete"
         },
         {
-          "quest": "q_insulin",
-          "state": "complete"
+          "add": "kindness",
+          "value": 1
+        }
+      ],
+      "next": "a1"
+    },
+    {
+      "id": "a1",
+      "speaker": "ames",
+      "text": "Here. Antibiotics, gauze, a suture kit. For the Basque nurse. She's better than half my residents.",
+      "effects": [
+        {
+          "give": "antibiotics",
+          "qty": 1
         },
         {
-          "give": "insulin_vial",
+          "give": "med_kit",
           "qty": 1
+        }
+      ],
+      "next": "a2"
+    },
+    {
+      "id": "a2",
+      "speaker": "ames",
+      "text": "And a letter to Avila. You fixed a hospital generator. You get the essential card. Today.",
+      "effects": [
+        {
+          "set": "ch02_card_secured",
+          "value": true
+        },
+        {
+          "give": "priority_card",
+          "qty": 1
+        },
+        {
+          "quest": "q_essential_card",
+          "state": "complete"
         },
         {
           "trust": "ames",
           "delta": 3
         }
       ],
-      "next": "d1"
+      "next": "a3"
     },
     {
-      "id": "d1",
+      "id": "a3",
       "speaker": "ames",
-      "text": "One vial. No paperwork. If anyone asks, it expired.",
-      "next": "d2"
-    },
-    {
-      "id": "d2",
-      "speaker": "dell",
-      "text": "Where are you getting the rest of your fuel, Ames?",
-      "next": "d3"
-    },
-    {
-      "id": "d3",
-      "speaker": "ames",
-      "text": "From people who can get it. Don't ask what I pay them in. Next.",
-      "effects": [
-        {
-          "set": "ames_trade_hinted",
-          "value": true
-        }
-      ],
-      "next": "end"
-    },
-    {
-      "id": "end",
-      "speaker": "narrator",
-      "text": "On the way out, a teenage boy in a Bridge Boys bandana passes you, carrying a cooler toward Ames's office.",
+      "text": "If you ever get real power going, anywhere, come find me first. I mean that as a threat.",
       "end": true
     }
   ]

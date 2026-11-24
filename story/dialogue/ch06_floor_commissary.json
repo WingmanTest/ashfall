@@ -1,0 +1,117 @@
+{
+  "id": "ch06_floor_commissary",
+  "chapter": "ch06",
+  "location": "loc_silver_spur",
+  "trigger": "Commissary counter in the Silver Spur kitchens (trader_floor). Optional.",
+  "speakers": [
+    "narrator",
+    "trader_floor",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "A steam table behind a velvet rope. A hand-lettered sign: CHIPS ONLY. NO GUNS AT THE COUNTER.",
+      "next": "f1"
+    },
+    {
+      "id": "f1",
+      "speaker": "trader_floor",
+      "text": "Chips or labor, honey. Soup's lentil. Bread's yesterday's. Blankets are for families.",
+      "choices": [
+        {
+          "text": "[Pay 1 chip for a meal]",
+          "next": "soup",
+          "conditions": [
+            {
+              "item": "spur_chip",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "spur_chip",
+              "qty": 1
+            },
+            {
+              "stat": "satiety",
+              "delta": 30
+            },
+            {
+              "add": "trader_floor_rep",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "[Work the dish line for a chip]",
+          "next": "work",
+          "effects": [
+            {
+              "event": "time_skip",
+              "hours": 2
+            },
+            {
+              "give": "spur_chip",
+              "qty": 1
+            },
+            {
+              "add": "trader_floor_rep",
+              "value": 1
+            },
+            {
+              "add": "rep_harbor",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "Who's buying rifles with chips?",
+          "next": "guns"
+        },
+        {
+          "text": "Just passing through.",
+          "next": "end"
+        }
+      ]
+    },
+    {
+      "id": "soup",
+      "speaker": "trader_floor",
+      "text": "Bowl back when you're done. We count the bowls too.",
+      "next": "end"
+    },
+    {
+      "id": "work",
+      "speaker": "narrator",
+      "text": "Two hours of steam and grease. Your hands are clean for the first time in a month.",
+      "next": "work2"
+    },
+    {
+      "id": "work2",
+      "speaker": "trader_floor",
+      "text": "You scrub like a mechanic. Thorough and mad about it. Here's your chip.",
+      "next": "end"
+    },
+    {
+      "id": "guns",
+      "speaker": "trader_floor",
+      "text": "Nobody. And if Roz asks, I said nobody twice.",
+      "effects": [
+        {
+          "set": "roz_guns_known",
+          "value": true
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "trader_floor",
+      "text": "Next!",
+      "end": true
+    }
+  ]
+}

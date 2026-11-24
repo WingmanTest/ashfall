@@ -1,0 +1,196 @@
+{
+  "id": "ch07_recovery_detail",
+  "chapter": "ch07",
+  "location": "loc_dixie_annex",
+  "trigger": "Inside the hangar: the stranded Ironwood recovery detail.",
+  "speakers": [
+    "narrator",
+    "sfc_brandt",
+    "braith",
+    "ruiz"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "The hangar. A fire in a drum. Six soldiers in sleeping bags, too thin. One stands up with a rifle.",
+      "next": "r1"
+    },
+    {
+      "id": "r1",
+      "speaker": "sfc_brandt",
+      "text": "Sergeant First Class Brandt, Task Force Ironwood. We're tasked to secure this facility. Turn around.",
+      "next": "r2"
+    },
+    {
+      "id": "r2",
+      "speaker": "sfc_brandt",
+      "text": "We've been out here three weeks. Nobody's called. We ate the last MRE Sunday. So turn around.",
+      "branches": [
+        {
+          "next": "ruiz",
+          "conditions": [
+            {
+              "flag": "ruiz_defected",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "r3"
+        }
+      ]
+    },
+    {
+      "id": "ruiz",
+      "speaker": "ruiz",
+      "text": "Brandt. It's Nadia. Engineer Two. It's over, Jim. Kessler's holed up in a rail yard. There's no mission.",
+      "next": "ruiz2"
+    },
+    {
+      "id": "ruiz2",
+      "speaker": "sfc_brandt",
+      "text": "...Ruiz? God. Okay. Okay. Stand down, everybody. It's Ruiz.",
+      "effects": [
+        {
+          "set": "recovery_detail_outcome",
+          "value": "talked"
+        },
+        {
+          "add": "ironwood_hostility",
+          "value": -1
+        }
+      ],
+      "next": "talked"
+    },
+    {
+      "id": "r3",
+      "speaker": "narrator",
+      "text": "Six rifles. Six starving kids holding them.",
+      "choices": [
+        {
+          "text": "[Show the Ironwood ID]",
+          "next": "id",
+          "conditions": [
+            {
+              "item": "ironwood_id",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "ironwood_id",
+              "qty": 1
+            }
+          ]
+        },
+        {
+          "text": "[Offer food]",
+          "next": "food",
+          "conditions": [
+            {
+              "item": "canned_food",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "canned_food",
+              "qty": 1
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "[Fight]",
+          "next": "fight",
+          "effects": [
+            {
+              "event": "encounter",
+              "id": "enc_ch07_recovery_detail"
+            },
+            {
+              "set": "recovery_detail_outcome",
+              "value": "fought"
+            },
+            {
+              "add": "ironwood_hostility",
+              "value": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "id",
+      "speaker": "sfc_brandt",
+      "text": "Ruiz's ID. She's alive? ...Fine. Fine. We're not shooting anyone with Ruiz's ID.",
+      "effects": [
+        {
+          "set": "recovery_detail_outcome",
+          "value": "talked"
+        }
+      ],
+      "next": "talked"
+    },
+    {
+      "id": "food",
+      "speaker": "sfc_brandt",
+      "text": "[He takes it. His hands shake.] ...Okay. We'll talk. Talk while we eat.",
+      "effects": [
+        {
+          "set": "recovery_detail_outcome",
+          "value": "talked"
+        }
+      ],
+      "next": "talked"
+    },
+    {
+      "id": "fight",
+      "speaker": "narrator",
+      "text": "It's short and ugly and it should never have happened. You find their logbook after.",
+      "next": "after"
+    },
+    {
+      "id": "talked",
+      "speaker": "sfc_brandt",
+      "text": "The spares are in cage four. We didn't go in the main building. Nobody goes in there. You'll see why.",
+      "next": "after"
+    },
+    {
+      "id": "after",
+      "speaker": "narrator",
+      "text": "Cage four. Pelican cases. Shielded control modules, PLC cards, sealed floodlight heads. Everything Galena needs.",
+      "effects": [
+        {
+          "give": "control_cards",
+          "qty": 1
+        },
+        {
+          "give": "lamp_kit",
+          "qty": 1
+        },
+        {
+          "give": "mask_filter",
+          "qty": 4
+        },
+        {
+          "quest": "q_control_cards",
+          "state": "update",
+          "stage": "cards"
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "Reyne is standing at the door of the main building. 'You should see the holds. You should know what's out there.'",
+      "end": true
+    }
+  ]
+}

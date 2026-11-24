@@ -1,12 +1,22 @@
 import * as THREE from "three";
-import { fitHeight, makePerson, makeDog } from "./world.js?v=r8";
-import { tickActor } from "./actors.js?v=r8";
+import { fitHeight, makePerson, makeDog } from "./world.js?v=r9";
+import { tickActor } from "./actors.js?v=r9";
+import { getModel } from "./models3d.js?v=r9";
+
+const HOLLOW_KINDS = new Set(["assimilated_human", "assimilated_animal"]);
+const CREATURE_KINDS = new Set(["tallman", "assimilated_human", "assimilated_animal"]);
+export function isHollow(kind) { return HOLLOW_KINDS.has(kind); }
 
 const KINDS = {
   husk: { hp: 48, spd: 1.25, dmg: 9, range: 1.45, detect: 11, color: 0xb89a8c, body: "husk" },
   raider: { hp: 70, spd: 2.1, dmg: 14, range: 1.6, detect: 16, color: 0x3a3030, body: "person" },
   dog: { hp: 28, spd: 3.4, dmg: 9, range: 1.2, detect: 15, color: 0x3b322c, body: "dog" },
-  wolf: { hp: 36, spd: 3.2, dmg: 12, range: 1.25, detect: 16, color: 0x4a4a50, body: "dog" },
+  coyote: { hp: 30, spd: 3.3, dmg: 10, range: 1.2, detect: 15, color: 0x8a7458, body: "dog" },
+  recovery_detail: { hp: 85, spd: 1.9, dmg: 15, range: 1.7, detect: 17, color: 0x2e3430, body: "army" },
+  // Act III (Rev 2). Distinct, eerie silhouettes; Hollows never breathe.
+  tallman: { hp: 140, spd: 2.7, dmg: 22, range: 1.9, detect: 22, color: 0x1a1c20, body: "tallman" },
+  assimilated_human: { hp: 55, spd: 1.35, dmg: 12, range: 1.5, detect: 12, color: 0x7d8790, body: "mimic" },
+  assimilated_animal: { hp: 30, spd: 3.6, dmg: 10, range: 1.2, detect: 16, color: 0xa8aca6, body: "mimic_beast" },
   looter: { hp: 50, spd: 1.9, dmg: 10, range: 1.5, detect: 12, color: 0x4a4038, body: "person" },
   watch_militia: { hp: 60, spd: 1.8, dmg: 12, range: 1.55, detect: 14, color: 0x3a3a40, body: "person" },
   bridge_boy: { hp: 58, spd: 2.0, dmg: 12, range: 1.55, detect: 14, color: 0x3a3040, body: "person" },
@@ -21,6 +31,14 @@ const KINDS = {
 
 const TYPE_ALIAS = {
   feral_dog: "dog",
+  wolf: "coyote",
+  // systems code_kind fallbacks (Quartermaster): stalker->dog, mimic->husk, mimic_beast->dog,
+  // upgraded here to dedicated bodies.
+  stalker: "tallman",
+  tallman_glimpse: "tallman",
+  mimic: "assimilated_human",
+  hollow: "assimilated_human",
+  mimic_beast: "assimilated_animal",
   ironwood_drone: "ironwood_patrol",
   ironwood_mrap: "ironwood_checkpoint",
   ironwood_bradley: "ironwood_checkpoint",
@@ -40,6 +58,8 @@ export class EnemySystem {
   mapType(type) {
     return TYPE_ALIAS[type] || (KINDS[type] ? type : "raider");
   }
+
+  hasKind(type) { return !!(KINDS[type] || TYPE_ALIAS[type]); }
 
   spawn(kind, x, z, opts = {}) {
     kind = this.mapType(kind);
@@ -65,6 +85,12 @@ export class EnemySystem {
       if (actions.walk) { actions.walk.play(); actions.walk.timeScale = body === "husk" ? 0.78 : 1.05; }
       if (body === "husk") dressHusk(mesh);
       else dressCivilian(mesh, def, body === "army");
+    } else if (body === "tallman") {
+      mesh = makeTallman();
+    } else if (body === "mimic") {
+      mesh = makeMimic(def);
+    } else if (body === "mimic_beast") {
+      mesh = makeMimicBeast(def);
     } else if (body === "dog") {
       mesh = makeDog(def.color);
     } else if (body === "army") {
@@ -86,8 +112,28 @@ export class EnemySystem {
       heading: Math.random() * Math.PI * 2, hurtT: 0,
       ambient: opts.ambient !== false, encounter: opts.encounter || null,
     };
+    e.hollow = HOLLOW_KINDS.has(kind);
+    e.creature = CREATURE_KINDS.has(kind);
+    mesh.userData.enemyKind = kind;
+    mesh.userData.hollow = e.hollow;
     this.list.push(e);
     this._attachSfx(e);
+    if (e.creature) {
+      try { this._engine()?.playCreature?.(kind, "stalk", { emitter: e.sfx }); } catch {}
+    }
+    // Sculptor Watch militia GLB (keep live instances modest for iPhone draw calls).
+    if (kind === "watch_militia" && this.list.filter((x) => x.alive && x.model === "watch_militia").length < 4) {
+      e.model = "watch_militia";
+      getModel("watch_militia").then((m) => {
+        if (!m || !e.mesh || !e.alive) return;
+        const old = e.mesh;
+        m.position.copy(old.position); m.rotation.y = old.rotation.y; m.visible = old.visible;
+        m.userData.enemyKind = kind;
+        if (old.parent) old.parent.add(m);
+        old.parent?.remove(old);
+        e.mesh = m;
+      });
+    }
     return e;
   }
 
@@ -95,6 +141,7 @@ export class EnemySystem {
 
   clearAll() {
     for (const e of this.list) {
+      try { this._engine()?.stopCreature?.(e.sfx); } catch {}
       try { e.sfx?.dispose?.(); } catch {}
       if (e.mesh && e.mesh.parent) e.mesh.parent.remove(e.mesh);
     }
@@ -107,6 +154,7 @@ export class EnemySystem {
   }
 
   _voice(kind, def) {
+    if (CREATURE_KINDS.has(kind)) return null;
     if (kind === "husk" || def?.body === "husk") return "enemy_growl";
     if (kind === "dog" || kind === "wolf" || def?.body === "dog") return "dog_bark";
     return "raider_shout";
@@ -185,7 +233,34 @@ export class EnemySystem {
         : e.hostile === "conditional" ? !!e.hostileActive
         : true;
       if (see && e.state === "wander") {
-        e.sfx?.play?.(this._voice(e.kind, e.def), { randomPitch: 0.06 });
+        if (e.creature) {
+          if (!e.spotted) { e.spotted = true; try { this._engine()?.playCreature?.(e.kind, "spot", { emitter: e.sfx }); } catch {} }
+        } else {
+          const v = this._voice(e.kind, e.def);
+          if (v) e.sfx?.play?.(v, { randomPitch: 0.06 });
+        }
+      }
+      // Cartographer: a vision cone holding Braith for 1.5 s sets level "spotted" flags (ch06_spotted);
+      // hostileWhen flags then turn the whole group hostile.
+      if (Array.isArray(e.hostileWhen) && this.flags) {
+        const vc = e.levelRef?.visionCone;
+        let held = false;
+        if (see) {
+          const range = vc?.rangeM ?? e.def.detect;
+          const half = ((vc?.fovDeg ?? 90) * Math.PI / 180) / 2;
+          let da = Math.atan2(dx, dz) - (e.heading || 0);
+          while (da > Math.PI) da -= Math.PI * 2;
+          while (da < -Math.PI) da += Math.PI * 2;
+          held = dist <= range && Math.abs(da) <= half && !world.inBlindSpot?.(px, pz);
+        }
+        e._spotT = held ? (e._spotT || 0) + dt : Math.max(0, (e._spotT || 0) - dt * 0.5);
+        let ok = true;
+        for (const c of e.hostileWhen) {
+          if (!c || typeof c.flag !== "string") continue;
+          if (/_spotted$/.test(c.flag) && !this.flags[c.flag] && e._spotT >= 1.5) this.flags[c.flag] = true;
+          if ((this.flags[c.flag] ?? false) !== (c.eq ?? true)) ok = false;
+        }
+        if (ok) { e.provoked = true; e.hostileActive = true; }
       }
       if (see && hostile) e.state = dist < e.def.range * 0.95 ? "attack" : "chase";
       else if (e.state === "chase" || e.state === "attack") {
@@ -237,6 +312,7 @@ export class EnemySystem {
           e.atkT = 1.05;
           player.damage(e.def.dmg, e.kind);
           audio?.hurt();
+          if (e.creature) { try { this._engine()?.playCreature?.(e.kind, "lunge", { emitter: e.sfx }); } catch {} }
           if (e.actions.atk) { e.actions.atk.reset().play(); }
         }
       }
@@ -263,6 +339,9 @@ export class EnemySystem {
     }
     if (best) {
       best.provoked = true;
+      // Cartographer: hitting anything in the Dixie Valley den wakes the den.
+      if (this.flags && best.group === "g_ch07b_den") this.flags.ch07b_den_shot = true;
+      if (best.creature && best.hp - dmg > 0) { try { this._engine()?.playCreature?.(best.kind, "hurt", { emitter: best.sfx }); } catch {} }
       best.hp -= dmg;
       best.hurtT = 0.2;
       best.state = "chase";
@@ -276,8 +355,17 @@ export class EnemySystem {
   kill(e) {
     e.alive = false;
     e.mesh.visible = false;
+    // Loremaster: Tallmen and Hollows are counted separately; never a total.
+    if (this.flags) {
+      if (e.kind === "tallman") this.flags.tallmen_killed = (Number(this.flags.tallmen_killed) || 0) + 1;
+      else if (e.hollow) this.flags.assimilated_killed = (Number(this.flags.assimilated_killed) || 0) + 1;
+    }
     try {
-      e.sfx?.play?.("enemy_growl", { rate: 0.7, volume: 0.7 });
+      if (e.creature) {
+        const A = this._engine();
+        A?.stopCreature?.(e.sfx);
+        A?.playCreature?.(e.kind, "death", { emitter: e.sfx });
+      } else e.sfx?.play?.("enemy_growl", { rate: 0.7, volume: 0.7 });
       if (e.sfx) setTimeout(() => { try { e.sfx.dispose?.(); } catch {} }, 2000);
     } catch {}
     try { this.onKill?.(e); } catch (err) { console.warn("onKill", err); }
@@ -333,4 +421,68 @@ function dressHusk(root) {
     }
     if (/shirt|cloth|torso|body/.test(n)) c.set(0xd8d0c4);
   });
+}
+
+// ---- Act III bodies (procedural, low-poly, flat-shaded) ----
+function flatMat(color, extra = {}) {
+  return new THREE.MeshStandardMaterial({ color, roughness: 0.95, metalness: 0.02, flatShading: true, ...extra });
+}
+function eyes(g, y, z, gap, color = 0xd8e6ff, r = 0.022) {
+  const m = new THREE.MeshBasicMaterial({ color });
+  for (const sx of [-1, 1]) {
+    const e = new THREE.Mesh(new THREE.SphereGeometry(r, 5, 4), m);
+    e.position.set(sx * gap, y, z);
+    g.add(e);
+  }
+}
+
+/** Tallman: ~2.6 m, emaciated, too-long limbs, hunched, pinprick eyes. */
+function makeTallman() {
+  const g = new THREE.Group();
+  const skin = flatMat(0x2a2c30), dark = flatMat(0x141517);
+  const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.1, 0.95, 5), skin);
+  torso.position.set(0, 1.75, 0.06); torso.rotation.x = 0.28; g.add(torso);
+  const head = new THREE.Mesh(new THREE.ConeGeometry(0.13, 0.42, 5), skin);
+  head.position.set(0, 2.38, 0.24); head.rotation.x = Math.PI + 0.5; g.add(head);
+  eyes(g, 2.36, 0.36, 0.045, 0xf0f4ff, 0.018);
+  for (const sx of [-1, 1]) {
+    const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.035, 1.35, 4), dark);
+    leg.position.set(sx * 0.11, 0.68, 0); g.add(leg);
+    const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.025, 1.45, 4), skin);
+    arm.position.set(sx * 0.24, 1.42, 0.2); arm.rotation.set(-0.35, 0, sx * 0.12); g.add(arm);
+    const claw = new THREE.Mesh(new THREE.ConeGeometry(0.04, 0.22, 4), dark);
+    claw.position.set(sx * 0.27, 0.66, 0.44); claw.rotation.x = -2.6; g.add(claw);
+  }
+  g.traverse((o) => { if (o.isMesh) o.castShadow = true; });
+  return g;
+}
+
+/** Hollow (assimilated human): pale ash-grey person, head cocked wrong, arms hanging, dead flat eyes. */
+function makeMimic(def) {
+  const g = makePerson({ id: "hollow", role: "husk", color: 0x5c6268, hood: 0x3a3e42, skin: 0x9aa2a8 });
+  g.traverse((o) => {
+    if (!o.isMesh || !o.material) return;
+    o.material = o.material.clone();
+    if (o.material.color) o.material.color.lerp(new THREE.Color(def?.color || 0x7d8790), 0.55);
+    if ("emissive" in o.material) { o.material.emissive = new THREE.Color(0x0); o.material.emissiveIntensity = 0; }
+  });
+  const head = g.userData.head;
+  if (head) { head.rotation.z = 0.42; head.userData.locked = true; }
+  g.scale.set(0.96, 1.04, 0.96);
+  eyes(g, 1.6, 0.13, 0.04, 0x0b0d10, 0.02);
+  g.userData.actor = false; // never "looks at" the player like a living NPC
+  return g;
+}
+
+/** Hollow animal: elongated, pale, spine ridge, too-straight legs. */
+function makeMimicBeast(def) {
+  const g = makeDog(def?.color || 0xa8aca6);
+  g.scale.set(0.9, 0.95, 1.35);
+  const ridge = flatMat(0x5a5e5c);
+  for (let i = 0; i < 5; i++) {
+    const sp = new THREE.Mesh(new THREE.ConeGeometry(0.03, 0.12, 4), ridge);
+    sp.position.set(0, 0.5, -0.25 + i * 0.12); g.add(sp);
+  }
+  eyes(g, 0.46, 0.56, 0.05, 0x0b0d10, 0.018);
+  return g;
 }

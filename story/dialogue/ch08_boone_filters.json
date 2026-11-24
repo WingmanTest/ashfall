@@ -1,0 +1,154 @@
+{
+  "id": "ch08_boone_filters",
+  "chapter": "ch08",
+  "location": "loc_sparks_yard",
+  "trigger": "Boone's back door, Act III (trader). Some of his filters are expired.",
+  "speakers": [
+    "narrator",
+    "trader_boone",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "The yard's half empty. Boone is thinner, still smiling. 'Prices went up. Everything went up. Except morale.'",
+      "next": "b1"
+    },
+    {
+      "id": "b1",
+      "speaker": "trader_boone",
+      "text": "Filters. Twelve. Fresh off the truck. For whiskey, fuel, or that nice rifle.",
+      "choices": [
+        {
+          "text": "[Trade fuel for filters]",
+          "next": "trade",
+          "conditions": [
+            {
+              "item": "diesel_jug",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "diesel_jug",
+              "qty": 1
+            },
+            {
+              "give": "mask_filter",
+              "qty": 3
+            },
+            {
+              "add": "trader_boone_rep",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "[Check the dates first]",
+          "next": "check"
+        },
+        {
+          "text": "Kessler know you're selling?",
+          "next": "kess"
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "speaker": "narrator",
+      "text": "You turn one over. Lot number, date: expired three years ago. Half the box is the same.",
+      "effects": [
+        {
+          "set": "boone_filters_tested",
+          "value": true
+        }
+      ],
+      "next": "check2"
+    },
+    {
+      "id": "check2",
+      "speaker": "trader_boone",
+      "text": "...Okay. Okay! Half are good. I'll sort them. Don't tell anybody. Please.",
+      "choices": [
+        {
+          "text": "[Take the good ones. Keep quiet]",
+          "next": "quiet",
+          "effects": [
+            {
+              "give": "mask_filter",
+              "qty": 3
+            },
+            {
+              "add": "trader_boone_rep",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "text": "[Tell Ruiz]",
+          "next": "expose",
+          "conditions": [
+            {
+              "flag": "ruiz_defected",
+              "eq": true
+            }
+          ],
+          "effects": [
+            {
+              "set": "boone_exposed",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "expose",
+      "speaker": "narrator",
+      "text": "Ruiz gets word to the yard. By morning, Boone's gone. Kessler made an example. His stock is in a ditch.",
+      "effects": [
+        {
+          "give": "mask_filter",
+          "qty": 4
+        },
+        {
+          "give": "canned_food",
+          "qty": 3
+        }
+      ],
+      "next": "expose2"
+    },
+    {
+      "id": "expose2",
+      "speaker": "narrator",
+      "text": "You get what's left. You don't feel good about it.",
+      "next": "end"
+    },
+    {
+      "id": "quiet",
+      "speaker": "trader_boone",
+      "text": "Thank you. Seriously. You're a good guy. Rarest thing in the yard.",
+      "next": "end"
+    },
+    {
+      "id": "trade",
+      "speaker": "trader_boone",
+      "text": "Pleasure as always.",
+      "next": "end"
+    },
+    {
+      "id": "kess",
+      "speaker": "trader_boone",
+      "text": "Kessler knows everything. Kessler also needs somebody to trade for his cigarettes.",
+      "next": "b1"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "Behind you, the yard's floodlights flicker. Fuel's running low there too.",
+      "end": true
+    }
+  ]
+}

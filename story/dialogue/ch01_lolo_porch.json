@@ -1,0 +1,249 @@
+{
+  "id": "ch01_lolo_porch",
+  "chapter": "ch01",
+  "location": "loc_sparks_block",
+  "trigger": "Interact with Lolo on her porch.",
+  "speakers": [
+    "lolo",
+    "braith",
+    "narrator"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "lolo",
+      "text": "Braith, maitia. You look like a man who slept in his boots. Come. Sit.",
+      "next": "l1"
+    },
+    {
+      "id": "l1",
+      "speaker": "lolo",
+      "text": "Mr. Pruitt, three houses down. Eighty-four. His oxygen machine needs a wall plug.",
+      "next": "l2"
+    },
+    {
+      "id": "l2",
+      "speaker": "lolo",
+      "text": "His bottles run out tonight. After that he breathes on his own. He cannot.",
+      "next": "l3"
+    },
+    {
+      "id": "l3",
+      "speaker": "lolo",
+      "text": "You have a gas can in your truck. Gil has a generator he won't share. You see where I'm going.",
+      "choices": [
+        {
+          "text": "[Give her the gas can]",
+          "next": "give",
+          "conditions": [
+            {
+              "item": "gas_can",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "gas_can",
+              "qty": 1
+            },
+            {
+              "set": "ch01_fuel_to_pruitt",
+              "value": true
+            },
+            {
+              "set": "ch01_gas_choice",
+              "value": "pruitt"
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            },
+            {
+              "trust": "lolo",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "text": "That gas gets us to my dad's ranch.",
+          "next": "ranch"
+        },
+        {
+          "text": "Our house needs a generator too.",
+          "next": "gen"
+        },
+        {
+          "text": "Ask Gil. I'll go with you.",
+          "next": "gil"
+        },
+        {
+          "text": "How long does he have?",
+          "next": "how"
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "speaker": "lolo",
+      "text": "With the machine, months. Without it, maybe Thursday. Maybe Friday if he's stubborn.",
+      "next": "l4"
+    },
+    {
+      "id": "l4",
+      "speaker": "lolo",
+      "text": "I'm not asking you to choose, maitia. I'm telling you a choice exists. That's all.",
+      "choices": [
+        {
+          "text": "[Give her the gas can]",
+          "next": "give",
+          "conditions": [
+            {
+              "item": "gas_can",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "gas_can",
+              "qty": 1
+            },
+            {
+              "set": "ch01_fuel_to_pruitt",
+              "value": true
+            },
+            {
+              "set": "ch01_gas_choice",
+              "value": "pruitt"
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            },
+            {
+              "trust": "lolo",
+              "delta": 3
+            }
+          ]
+        },
+        {
+          "text": "That gas gets us to my dad's ranch.",
+          "next": "ranch"
+        },
+        {
+          "text": "Our house needs a generator too.",
+          "next": "gen"
+        },
+        {
+          "text": "Ask Gil. I'll go with you.",
+          "next": "gil"
+        }
+      ]
+    },
+    {
+      "id": "give",
+      "speaker": "lolo",
+      "text": "Thank you. He'll complain about the noise. That's how you'll know he's alive.",
+      "next": "give2"
+    },
+    {
+      "id": "give2",
+      "speaker": "lolo",
+      "text": "One more thing. He wandered off this morning. Confused. His grandson's out looking.",
+      "next": "scarf"
+    },
+    {
+      "id": "ranch",
+      "speaker": "lolo",
+      "text": "Your father's ranch. Of course. Family first. I would do the same.",
+      "effects": [
+        {
+          "set": "ch01_gas_choice",
+          "value": "drive"
+        },
+        {
+          "trust": "lolo",
+          "delta": -1
+        }
+      ],
+      "next": "ranch2"
+    },
+    {
+      "id": "ranch2",
+      "speaker": "lolo",
+      "text": "Will Carly go?",
+      "choices": [
+        {
+          "text": "She won't leave her console.",
+          "next": "ranch3"
+        },
+        {
+          "text": "I'll talk her into it.",
+          "next": "ranch3"
+        }
+      ]
+    },
+    {
+      "id": "ranch3",
+      "speaker": "lolo",
+      "text": "Then you're not going anywhere either. Keep the gas. Keep it close.",
+      "next": "scarf"
+    },
+    {
+      "id": "gen",
+      "speaker": "lolo",
+      "text": "A warm house is not nothing. Fine. I would hate it too.",
+      "effects": [
+        {
+          "set": "ch01_gas_choice",
+          "value": "generator"
+        },
+        {
+          "trust": "lolo",
+          "delta": -1
+        }
+      ],
+      "next": "scarf"
+    },
+    {
+      "id": "gil",
+      "speaker": "lolo",
+      "text": "I asked. He said 'listen here' and then said no for five minutes. Try. He likes mechanics.",
+      "effects": [
+        {
+          "set": "ch01_asked_gil_for_pruitt",
+          "value": true
+        }
+      ],
+      "next": "scarf"
+    },
+    {
+      "id": "scarf",
+      "speaker": "lolo",
+      "text": "Pruitt walked off at dawn. Deshawn found only this by the canal. Your dog has a nose, no?",
+      "effects": [
+        {
+          "give": "pruitt_scarf",
+          "qty": 1
+        }
+      ],
+      "next": "scarf2"
+    },
+    {
+      "id": "scarf2",
+      "speaker": "narrator",
+      "text": "QUEST: Wraith can TRACK from the scarf. Tap her, then TRACK.",
+      "effects": [
+        {
+          "quest": "q_find_pruitt",
+          "state": "start"
+        },
+        {
+          "quest": "q_clinic_supplies",
+          "state": "start"
+        }
+      ],
+      "end": true
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "units": {
     "damage": "hp per hit (shotgun: all pellets)",
     "attacks_per_second / shots_per_second": "max rate",
@@ -7,7 +7,7 @@
     "spread_deg": "cone half-angle, hip fire; ADS x0.5",
     "reload_real_seconds": "full reload, or per shell when reload_per_shell",
     "durability": "hits/shots until broken; at <25% guns jam 10%, melee deals x0.7",
-    "fire_modes": "semi = shots_per_second cap; auto = auto_shots_per_second with spread x auto_spread_mult",
+    "fire_modes": "semi | auto | burst | pump (manual pump between shots) | bolt (manual bolt) | break (break-action double barrel); every ranged weapon lists its modes",
     "ads_spread_mult": "spread multiplier when aiming down sights (default 0.5)",
     "real_world_reference": "exact real-world model/description the artist + modeller should match (viewmodel, paper doll, pickup sprite)"
   },
@@ -130,7 +130,10 @@
       "headshot_mult": 2.0,
       "paperdoll_layer": "main_hand_pistol",
       "real_world_reference": "Glock 17-style polymer-frame 9mm service pistol: matte black, squared slide, 4.5 in barrel, flush 15-17 round magazine (NOT a revolver or hand-cannon)",
-      "mag_note": "Changed 8 -> 15 to match the Glock 17-style reference (17 nominal, 15 = worn springs/partial mags). config.js mag 8."
+      "mag_note": "Changed 8 -> 15 to match the Glock 17-style reference (17 nominal, 15 = worn springs/partial mags). config.js mag 8.",
+      "fire_modes": [
+        "semi"
+      ]
     },
     {
       "id": "blaster",
@@ -157,7 +160,10 @@
       "desc": "Bridge Boys double-barrel pipe shotgun. Damage is total for all pellets at <= falloff_start_m. Magazine 2 = two barrels (config.js had 4).",
       "paperdoll_layer": "main_hand_pipe_shotgun",
       "two_handed": true,
-      "real_world_reference": "Improvised double-barrel 12-gauge pipe shotgun ('slam-fire'): two 3/4-in steel pipe barrels slid into 1-in pipe sleeves, hose clamps + wire wraps, scrap 2x4 wood stock, no trigger guard"
+      "real_world_reference": "Improvised double-barrel 12-gauge pipe shotgun ('slam-fire'): two 3/4-in steel pipe barrels slid into 1-in pipe sleeves, hose clamps + wire wraps, scrap 2x4 wood stock, no trigger guard",
+      "fire_modes": [
+        "break"
+      ]
     },
     {
       "id": "pump_shotgun",
@@ -180,7 +186,10 @@
       "headshot_mult": 1.3,
       "paperdoll_layer": "main_hand_pump_shotgun",
       "two_handed": true,
-      "real_world_reference": "Remington 870 Wingmaster-style 12-gauge pump: 18.5-20 in blued barrel with bead sight, walnut stock and fore-end, 4+1 tube magazine"
+      "real_world_reference": "Remington 870 Wingmaster-style 12-gauge pump: 18.5-20 in blued barrel with bead sight, walnut stock and fore-end, 4+1 tube magazine",
+      "fire_modes": [
+        "pump"
+      ]
     },
     {
       "id": "deer_rifle",
@@ -202,7 +211,10 @@
       "desc": "Watch and Compact militias carry these.",
       "paperdoll_layer": "main_hand_hunting_rifle",
       "two_handed": true,
-      "real_world_reference": "Remington 700 ADL-style bolt-action .30-06 hunting rifle: walnut sporter stock, blued barrel, 3-9x40 scope, orange/brown sling, 4-round internal magazine"
+      "real_world_reference": "Remington 700 ADL-style bolt-action .30-06 hunting rifle: walnut sporter stock, blued barrel, 3-9x40 scope, orange/brown sling, 4-round internal magazine",
+      "fire_modes": [
+        "bolt"
+      ]
     },
     {
       "id": "ar15",

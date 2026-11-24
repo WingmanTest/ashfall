@@ -1,0 +1,105 @@
+{
+  "id": "ch10_siege_night1",
+  "chapter": "ch10",
+  "location": "loc_galena_station",
+  "trigger": "Siege night 1 (the test). SKIPPED if den_killed or tallmen_killed>=2.",
+  "speakers": [
+    "narrator",
+    "braith",
+    "wraith",
+    "reyne"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Late February. Minus thirty-four. The lamp line: twelve floodlights on poles around the fence. Galena glows like a ship.",
+      "next": "n1"
+    },
+    {
+      "id": "n1",
+      "speaker": "narrator",
+      "text": "Two a.m. On the far side, by the cooling towers, one lamp goes dark.",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "speaker": "wraith",
+      "text": "[On her feet. Facing the dark lamp. Low, steady growl.]",
+      "branches": [
+        {
+          "next": "n2r",
+          "conditions": [
+            {
+              "flag": "reyne_with_you",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "n3"
+        }
+      ]
+    },
+    {
+      "id": "n2r",
+      "speaker": "reyne",
+      "text": "They're testing. One light. To see what we do. Whatever we do, they'll remember it.",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "speaker": "narrator",
+      "text": "The cable's been cut. Not chewed. Cut, at the splice, where it's weakest.",
+      "choices": [
+        {
+          "text": "[Fix it now, in the dark]",
+          "next": "fix",
+          "effects": [
+            {
+              "event": "encounter",
+              "id": "enc_ch10_siege_n1"
+            },
+            {
+              "stat": "warmth",
+              "delta": -15
+            },
+            {
+              "set": "lamp_line_built",
+              "value": true
+            }
+          ]
+        },
+        {
+          "text": "[Wait for dawn. Double the guard]",
+          "next": "wait",
+          "effects": [
+            {
+              "add": "siege_breaches",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fix",
+      "speaker": "narrator",
+      "text": "Twenty minutes in the snow with a splice kit and a flashlight in your teeth. Something watches you the whole time.",
+      "next": "end"
+    },
+    {
+      "id": "wait",
+      "speaker": "narrator",
+      "text": "At dawn, the lamp's fixed. And there are tracks inside the fence. Just one set. Just looking.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "They don't come in. Not tonight. Tonight was a question.",
+      "end": true
+    }
+  ]
+}

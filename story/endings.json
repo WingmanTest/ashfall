@@ -1,10 +1,10 @@
 {
-  "version": 1,
-  "note": "Echo loader shape: endings[id] = {title, body}. Full branching epilogue: dialogue/ch10_epilogue.json. Conditions mirror flags.json endings.",
+  "version": 2,
+  "note": "Loader shape: endings[id] = {title, body}. Full branching epilogue: dialogue/ch10_epilogue.json. Conditions mirror flags.json endings.",
   "endings": {
     "end_warm_room": {
       "title": "THE WARM ROOM",
-      "body": "The census board covers a wall of the powerhouse. Names in chalk, more every week. The council argues every night. No one is coming. There is a plan for this winter, and a draft for the next.",
+      "body": "The census board covers a wall of the turbine hall. Names in chalk, more every week. The lamp line burns every night. No one is coming. There is a plan for this winter, and a draft for the next.",
       "tone": "earned hope",
       "conditions": [
         {
@@ -22,10 +22,10 @@
         {
           "count_true": [
             "pruitt_alive",
-            "wren_alive",
-            "ray_alive",
-            "cody_alive",
-            "marguerite_alive",
+            "kit_alive",
+            "gil_alive",
+            "wes_alive",
+            "lolo_alive",
             "ruiz_defected",
             "lunds_stayed"
           ],
@@ -38,7 +38,7 @@
               "gte": 2
             },
             {
-              "flag": "strand_stance",
+              "flag": "avila_stance",
               "eq": "governor"
             },
             {
@@ -52,7 +52,7 @@
     },
     "end_ledger": {
       "title": "THE LEDGER",
-      "body": "The list has 412 names. In December the city had nine thousand. It is honest now. You have a desk, a warm bed, and a pencil with an eraser. You use the eraser.",
+      "body": "The list has 412 names. In December the valley had thirty thousand. It is honest now. You keep the turbines. You have a pencil with an eraser. You use the eraser.",
       "tone": "order",
       "conditions": [
         {
@@ -60,7 +60,7 @@
           "eq": "authority"
         },
         {
-          "flag": "strand_alive",
+          "flag": "avila_alive",
           "eq": true
         },
         {
@@ -70,9 +70,9 @@
       ],
       "priority": 2
     },
-    "end_iron_range": {
-      "title": "THE IRON RANGE",
-      "body": "The turbines go north on logging sleds. Seven hundred meters down it is always seven degrees. From the Highway 53 overlook you watch Duluth go black, one window at a time.",
+    "end_stillwater": {
+      "title": "STILLWATER",
+      "body": "The turbines go east on hay sleds to the Stillwater field. Your father meets the first sled. From the canyon you watch Reno go dark, one window at a time.",
       "tone": "survival by abandonment",
       "conditions": [
         {
@@ -80,7 +80,7 @@
           "eq": "compact"
         },
         {
-          "flag": "jory_alive",
+          "flag": "ander_alive",
           "eq": true
         },
         {
@@ -92,7 +92,7 @@
     },
     "end_dark_water": {
       "title": "DARK WATER",
-      "body": "The spillways roar open. Unit 2 dies with a sound Hank would have hated. Nobody will kill for this room again. Then the long walk south over the ice, with everyone who trusts you.",
+      "body": "The wellheads scream, then go quiet. Nobody will kill for this place again. The valley goes cold, the tall ones go still, and you walk south with everyone who trusts you.",
       "tone": "bleak sacrifice",
       "conditions": [
         {

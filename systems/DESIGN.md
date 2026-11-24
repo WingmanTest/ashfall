@@ -1,137 +1,118 @@
-# ASHFALL: Lakehead — Systems & Balance Design (v1)
+# Systems & Balance Design — Nevada Revision 2
 
-Owner: Quartermaster (systems/balance). Data lives in `/workspace/game2/systems/`; schema is in `README.md`.
-Numbers are authored at the **default mode, `tense_but_fair` (all multipliers 1.0)**. Every other mode is a multiplier set in `difficulty.json`.
+Sparks/Reno and the Lahontan Valley, from a late-summer blackout to a nuclear fallout winter. Player Braith Pearce with Wraith. This revision migrates every systems id to story Revision 2 and adds two user directions: an **evolving seasonal survival curve** and **nuclear-winter survival-horror enemies** (the Hollows).
 
 ## 1. Design pillars
+1. **Looting is the core loop; crafting is tertiary** (8 one- or two-ingredient recipes, no workbench).
+2. **Tense but fair** default: careful play is rarely starved; careless play runs short. Never a hard lock.
+3. **The season is the antagonist that changes.** Ch1–2 kill you with heat and thirst, Ch3–4 with cold nights, Ch5–7 with wet cold and soldiers, Ch8–10 with lethal cold, fallout and things in the ash.
+4. **Grounded horror.** Husks are sick people. Tallmen and Hollows are a creature family from the Annex, never contagious to the player, never a horde, and their numbers are never stated.
+5. **Light is a weapon.** Flashlight, flares, campfires and the lamp line repel Tallmen and break Hollow mimicry, so ammo is only part of the answer.
 
-1. **Warmth is the key stat.** It drains the fastest outdoors, it's driven by the chapter's climate, night, weather and blizzards, and it multiplies every other pressure (cold raises hunger, slows stamina, adds aim sway). Fire is the main "save point" of the body.
-2. **Scavenging is the core loop; crafting is tertiary.** There are 8 recipes, each with 1–2 ingredients and no stations except a lit campfire. Clothing, weapons, ammo, food, meds and purification tablets come **only from loot**, so every cupboard matters.
-3. **Tense but fair.** Per chapter, the player finds about **1.0–1.2×** the food they need, **0.5–0.85×** the clean water (the gap is covered by snow/lake water that costs firewood or tablets, or costs warmth if eaten raw), and **0.6–1.0×** the ammo they'd need to shoot everything. Being short on something is normal. Being hard-locked is designed out (see §6).
-4. **Story-true enemies.** Ch1–4 are people only. The federal Army arrives in Ch5. Dogs appear from Ch7, wolves from Ch9. **Husks** (sick, freezing *people*) appear from Ch8. There are no zombies, mutants or ghouls. Radiation is a hazard and never a monster source. This gating is enforced by `tools/validate.py`.
-5. **Escalation follows four systems acts** that Echo asked for, mapped onto Loremaster's 3 story acts:
+## 2. Seasonal survival curve
+| ch | season | °C day / night | cold mult day / night | thirst day / night-indoors | heat-stress threshold | rad/s outdoors | blizzard | weather weights |
+|---|---|---|---|---|---|---|---|---|
+| ch01 | `late_summer` | 35 / 18 | 0.0 / 0.08 | 1.75 / 1.15 | 0.2 | 0.0 | 0 | heat_haze 0.75, dust_wind 0.25 |
+| ch02 | `late_summer` | 33 / 15 | 0.0 / 0.2 | 1.6 / 1.1 | 0.22 | 0.0 | 0 | dust_wind 0.6, heat_haze 0.4 |
+| ch03 | `autumn` | 14 / 4 | 0.24 / 0.64 | 1.1 / 1.0 | 0.45 | 0.0 | 0 | clear_autumn 0.7, autumn_wind 0.3 |
+| ch04 | `autumn` | 12 / 5 | 0.32 / 0.6 | 1.0 / 0.95 | 0.5 | 0.0 | 0 | autumn_wind 0.6, clear_autumn 0.25, frost 0.15 |
+| ch05 | `late_fall` | 2 / -3 | 0.72 / 0.92 | 1.0 / 0.9 | 0.8 | 0.0 | 0.0 | sleet 0.55, overcast 0.3, frost 0.15 |
+| ch06 | `late_fall` | 1 / -3 | 0.76 / 0.92 | 1.0 / 0.9 | 0.8 | 0.0 | 0.0 | overcast 0.55, sleet 0.3, frost 0.15 |
+| ch07 | `late_fall` | -1 / -3 | 0.84 / 0.92 | 1.0 / 0.9 | 0.85 | 0.02 | 0.05 | overcast 0.35, brown_sky 0.35, frost 0.15, grey_snow 0.15 |
+| ch08 | `nuclear_winter` | -10 / -18 | 1.2 / 1.52 | 0.95 / 0.9 | — (off) | 0.06 | 0.3 | fallout_rain 0.45, ashfall 0.35, blizzard 0.2 |
+| ch09 | `nuclear_winter` | -40 / -45 | 2.4 / 2.6 | 0.95 / 0.9 | — (off) | 0.04 | 0.85 | blizzard 0.7, ashfall 0.3 |
+| ch10 | `nuclear_winter` | -34 / -45 | 2.16 / 2.6 | 0.95 / 0.9 | — (off) | 0.03 | 0.4 | ashfall 0.45, clear_cold 0.35, blizzard 0.2 |
 
-| Systems act | Story act | Chapters | Feel |
+How the numbers feel with season-typical clothing at the default difficulty, from a full bar:
+
+| | outfit (insulation) | warmth bar day / night | water bar outdoors by day |
 |---|---|---|---|
-| `blackout` | I The Dark | ch01 Day Three, ch02 The Registry | Canned food in cupboards, mild cold (6 °C → −4 °C), few guns. People are the threat. |
-| `collapse` | I→II | ch03 The Long Cold, ch04 Black Start | The deep cold hits (−30 °C). Firewood and clothing matter most. Pipe shotguns and deer rifles appear. |
-| `civil_war` | II The Split | ch05 Route 9, ch06 The Lift Bridge, ch07 Dead Air | Spring and summer warmth, guns and ammo flow, Ironwood fireteams and checkpoints. Ch7 brings the first dogs and the dosimeter. |
-| `nuclear_winter` | III Ashfall | ch08 Ashfall, ch09 The Long Night, ch10 The Warm Room | −45 °C, fallout rain, husks, ferals and the Remnant. Everything is scarce. |
+| Ch1 late summer, heat_haze | tee, jeans, sneakers, cap (0.08) | never drains by day (regen +0.6/s) / ~75 min | **~11.5 min** (19 min at night/indoors) |
+| Ch1 same, wearing parka + bibs + pac boots | heat_load 0.68 | — | **~4.7 min** (heat stress ×2.44; stamina costs ×1.96) |
+| Ch2 late summer, dust_wind | summer kit | — / ~30 min | ~12.6 min |
+| Ch3 autumn, clear | tee + flannel + work jacket + work boots + knit gloves (0.41) | ~39 min / ~15 min | ~20 min |
+| Ch5 late fall, sleet | thermal + wool coat + pac boots + hat + gloves + poncho (0.63) | ~17 min / ~14 min (same kit without coat and poncho: ~11 min, plus 'wet') | ~22 min |
+| Ch8 nuclear winter, fallout rain | full winter kit (0.75 cap) | ~14 min / ~11 min | ~23 min |
+| Ch9 nuclear winter, blizzard | full winter kit | **~4 min** / ~4 min | ~23 min |
+| Ch10 nuclear winter, ashfall | full winter kit | ~9 min / ~7 min | ~23 min |
 
-## 2. Time model
-- The game ticks in **real seconds** (`dt`). `CFG.dayLenSec = 420`, so **1 real s = 3.43 in-game minutes** and a 24 h day takes 7 real minutes.
-- Every rate in `survival.json` is given as `per_real_second` (authoritative) and `per_game_minute` (for UI).
-- Chapter length estimates (real minutes), used for the budget: 25 / 25 / 30 / 30 / 30 / 35 / 25 / 35 / 40 / 20, about **5 h total**.
+The validator's seasonal summary reads: average daytime thirst multiplier 1.68 in Ch1–2 vs 0.95 in Ch8–10, and an average cold multiplier (60/40 day/night) of 0.056 → 0.416 → 0.832 → 2.048 across the four seasons. That makes winter about 37× colder than late summer.
 
-## 3. Survival model (default)
+**Heat stress** (late summer, and autumn days in heavy gear): `heat_load = Σ heat_penalty`, and the thresholds are 0.20–0.22 (late summer), 0.45–0.50 (autumn) and 0.80–0.85 (late fall). Nuclear winter has none. Summer clothing has a heat_penalty of 0–0.04, so the late-summer start kit sits at 0.02. A wool coat is 0.30 and a parka is 0.40–0.50. Wearing the coat you found "for later" costs water you don't have, so the player has to carry it instead and pay in weight.
 
-| Stat | Range | Base rate (real s) | Empties in | Main pressure |
-|---|---|---|---|---|
-| Warmth | 0–100 | −0.30 outdoors × climate × weather × (1 − insulation) | ~16 min (Ch1 day, start clothes; ~11 min at night) to **~2.6 min** (Ch9 blizzard night, good clothes) | climate, night ×1.4, blizzard ×2.2, wet ×1.75 |
-| Satiety (`stats.hunger`) | 0–100 | −0.055 | ~30 min | cold ×1.25, rad ×1.3 |
-| Hydration (new) | 0–100 | −0.075 | ~22 min | sprint ×1.3, sick ×1.5 |
-| Stamina | 0–100 | +18 / −22 sprint | — | warmth, hunger, thirst thresholds |
-| Radiation (dose) | 0–100 | zones 0.12 / 0.4 / 1.0, fallout rain 0.25 | — | mask_filter ×0.2, iodide ×0.5, SEAL |
-| Health | 0–100 | soft regen +0.04 up to 70 | — | meds above 70 |
+**Water**: clean water is scarcest in late summer, at 0.74 / 0.62 of need in Ch1 / Ch2. The gap is meant to be filled by the Ch1 marina run (`ch01_lake_edge` gives 4 untreated water, boiled at `ch01_water_station`), by boiling Truckee / ditch / rain-barrel water at a fire, or by drinking raw water and risking 'sick'. Hot-spring water at Steamboat Creek is a trap: boiling doesn't fix the minerals, only tablets do. In nuclear winter, snow is free but carries fallout.
 
-Thresholds go from mild (stamina regen) to moderate (aim sway, speed) to lethal (health drain). Damage only starts at **warmth < 20, satiety < 10, hydration < 10 and rad ≥ 75**, which gives the player a long warning band.
+## 3. Pacing curve (threat per chapter, default)
+ch01 3.0 · ch02 9.0 · ch03 21.6 · ch04 10.65 · ch05 30.4 · ch06 84.6 · ch07 54.3 · ch08 58.1 · ch09 100.2 · ch10 64.4
 
-**Recommended code changes** (Echo, in `Player.tickSurvival`): warmth drain 1.15 → 0.30 base × modifiers, hunger drain 0.32 → 0.055, fire regen 28 → 5/s, hypothermia damage 6 → 1.2/s, rad natural decay 0.15 → 0.01. The current values empty warmth in ~70 s and hunger in ~5 min. That works for a demo but would make a 30-minute chapter impossible.
+Peaks: Ch6 (the Army sweep and trench fight), Ch9 (whiteout march: Remnant picket + Tallmen + Hollow ambush + coyotes + husks), and Ch10 (siege). Ch7 adds the first Tallman and coyotes. Ch8 is dread more than volume: 2 Hollows, 2 animal Hollows and 2 Tallmen trailing husks.
 
-## 4. Pacing curve
+## 4. Resource budget (expected found ÷ needed)
+Default **tense_but_fair**:
 
-| Ch | Act | Climate (°C, weather) | ambient_cold | Expected threat | Enemy mix (story hooks) |
-|---|---|---|---|---|---|
-| ch01 | blackout | 6, overcast | 0.5 | 2 | looter, watch_militia (mostly non-hostile) |
-| ch02 | blackout | −4, snow | 0.7 | 9 | 3 looters (garage); 6 authority_guard neutral |
-| ch03 | collapse | −30, clear_cold | 1.25 | 23 | bridge_boy raid ×6, watch_militia |
-| ch04 | collapse | −24, snow | 1.15 | 13 | Lunds, 2 bridge_boys, Authority standoff |
-| ch05 | civil_war | −8, freezing_rain | 0.85 | 30 | compact_militia ×8 **or** ironwood_patrol ×4; drone, MRAP |
-| ch06 | civil_war | 4, drizzle | 0.4 | **85 (spike)** | ironwood_patrol ×12, checkpoint, drones, Bradley; Harbor/Compact if held |
-| ch07 | civil_war | 2, brown_sky | 0.5 | 16 (breather) | feral_dog ×4, Remnant (conditional) |
-| ch08 | nuclear_winter | −10, fallout_rain | 0.9 | 31 | husk ×6, feral_dog ×5, looters, Remnant |
-| ch09 | nuclear_winter | −45, blizzard | 1.8 | **69 (cold + combat peak)** | Remnant ×8, picket, wolves ×5, husk ×4 |
-| ch10 | nuclear_winter | −38, clear_cold | 1.5 | 28 (0 if stand-down) | Remnant ×8, MRAP |
+| ch | season | food | clean water | firewood | healing | ammo | threat |
+|---|---|---|---|---|---|---|---|
+| ch01 | late_summer | 1.12 | 0.74 | 4.27 | 9.0 | 3.94 | 3.0 |
+| ch02 | late_summer | 0.9 | 0.62 | 0.23 | 2.36 | 1.49 | 9.0 |
+| ch03 | autumn | 1.06 | 0.62 | 3.35 | 1.08 | 0.69 | 21.6 |
+| ch04 | autumn | 1.11 | 0.69 | 1.36 | 1.62 | 1.0 | 10.65 |
+| ch05 | late_fall | 0.95 | 0.83 | 1.24 | 1.19 | 1.38 | 30.4 |
+| ch06 | late_fall | 1.02 | 0.84 | 0.94 | 0.95 | 0.88 | 84.6 |
+| ch07 | late_fall | 1.05 | 0.94 | 1.4 | 1.06 | 1.07 | 54.3 |
+| ch08 | nuclear_winter | 1.12 | 0.79 | 1.24 | 1.16 | 0.72 | 58.1 |
+| ch09 | nuclear_winter | 0.92 | 0.71 | 0.93 | 0.78 | 0.76 | 100.2 |
+| ch10 | nuclear_winter | 0.92 | 0.58 | 1.45 | 1.01 | 0.95 | 64.4 |
 
-The curve has two peaks: **Ch6 (combat)** and **Ch9 (cold plus combat)**, with Ch7 as a deliberate breather before Act III. Ch6 uses the story's count of 12 patrols. Level design should offer stealth and sweep-avoid routes so the full count is rarely fought at once (`max_concurrent` 6).
+Cumulative by Ch10: food 1.02, healing 1.09, ammo 0.92, clean water 0.74.
+Other modes (cumulative by Ch10, food / healing / ammo / water): story 1.67 / 3.01 / 2.47 / 1.62; hard_winter 0.81 / 0.65 / 0.49 / 0.51; whiteout 0.7 / 0.44 / 0.3 / 0.39.
 
-## 5. Resource budget (default mode, expected values)
+Targets: food 0.85–1.2; firewood 0.9–1.5; healing 0.75–1.2; clean water by season (late_summer 0.5–0.8, autumn/late_fall 0.55–0.95, nuclear_winter 0.45–0.9); ammo by act (blackout 0.3–1.0, collapse 0.5–1.0, civil_war 0.8–1.4, nuclear_winter 0.5–0.95). Firewood in Ch1–2 is skipped because need < 4 in summer. Food need includes Wraith (2 food items per chapter). The ammo need for Tallmen uses `budget_kill_share` 0.35, because most Tallman fights end with light rather than a kill. Ch1 healing and ammo ratios are huge only because almost no fighting is expected there.
 
-Generated by `tools/validate.py` → `budget_report.json`. The **found** column includes container loot × act modifiers, guaranteed story/level items, the story `start_inventory`, and 75% of expected enemy drops. Ratios = found / needed.
+The AR-15 still averages about 0.79 per playthrough, first from Ch3 gun safes.
 
-Model assumptions: needs come from chapter minutes × drain. Clean water counts bottled + boiled water + tablets × 35. Firewood need = 3 per campfire, with half of lost warmth recovered at scripted heated places and ~60 warmth per fire stop. Damage expected = 4.5 hp per expected threat point. Healing = meds + soft regen + one safe-house sleep (+30). Gun damage needed = enemy hp ÷ (1 − bullet resist) × gun share of kills (0.2 / 0.35 / 0.6 / 0.5 by act). Ammo is converted at 55% hit rate.
+## 5. Anti-hard-lock valves
+Free water every season (`drink_raw` / `eat_snow`), boiling, soft health regen to 70, sleeping at safe houses, warm interiors (Galena after the Ch4 black start, and the Warm Room), traders, and story gives (Ch8 starts with 6 filters and 2 iodide). Wraith's TRACK finds caches.
 
-| Ch | Act | Min | Satiety need / found | Clean-water hydr. need / found | Firewood need / found (fires) | Dmg expected / healing | Gun dmg need / found | 9mm · 12ga · rifle · 5.56 found | Threat (exp.) |
-|---|---|---|---|---|---|---|---|---|---|
-| ch01 | blackout | 25 | 86 / 103 (**1.2**) | 112 / 52 (**0.46**) | 3.3 / 5.7 (0.8) | 8 / 121 (**14.95**) | 8 / 36 (**4.48**) | 1 · 1 · 0.4 · 0.0 | 1.8 |
-| ch02 | blackout | 25 | 87 / 101 (**1.16**) | 112 / 73 (**0.65**) | 4.3 / 5.2 (1.1) | 40 / 96 (**2.36**) | 48 / 68 (**1.41**) | 3 · 1 · 0.4 · 0.0 | 9.0 |
-| ch03 | collapse | 30 | 111 / 132 (**1.19**) | 135 / 84 (**0.62**) | 10.2 / 11.1 (3.1) | 103 / 105 (**1.02**) | 168 / 170 (**1.01**) | 4 · 2 · 3.0 · 0.3 | 22.8 |
-| ch04 | collapse | 30 | 109 / 98 (**0.9**) | 135 / 102 (**0.76**) | 7.5 / 8.8 (2.2) | 58 / 77 (**1.32**) | 94 / 96 (**1.02**) | 4 · 1 · 0.8 · 0.6 | 12.9 |
-| ch05 | civil_war | 30 | 108 / 118 (**1.09**) | 135 / 116 (**0.86**) | 6.5 / 6.8 (1.8) | 137 / 153 (**1.12**) | 368 / 510 (**1.39**) | 9 · 3 · 5.2 · 15.4 | 30.4 |
-| ch06 | civil_war | 35 | 120 / 137 (**1.15**) | 158 / 100 (**0.64**) | 3.2 / 2.2 (0.7) | 381 / 332 (**0.87**) | 995 / 947 (**0.95**) | 10 · 4 · 2.1 · 54.0 | 84.6 |
-| ch07 | civil_war | 25 | 86 / 94 (**1.09**) | 112 / 61 (**0.54**) | 2.9 / 3.2 (0.6) | 71 / 75 (**1.05**) | 174 / 180 (**1.04**) | 3 · 2 · 1.0 · 6.3 | 15.8 |
-| ch08 | nuclear_winter | 35 | 136 / 143 (**1.05**) | 158 / 85 (**0.54**) | 5.7 / 6.9 (1.6) | 141 / 154 (**1.09**) | 350 / 247 (**0.7**) | 6 · 2 · 1.8 · 7.0 | 31.3 |
-| ch09 | nuclear_winter | 40 | 175 / 184 (**1.05**) | 180 / 137 (**0.76**) | 18.6 / 18.7 (5.9) | 312 / 272 (**0.87**) | 632 / 445 (**0.7**) | 5 · 1 · 0.8 · 26.3 | 69.3 |
-| ch10 | nuclear_winter | 20 | 78 / 95 (**1.23**) | 90 / 55 (**0.62**) | 3.6 / 1.9 (0.9) | 126 / 105 (**0.83**) | 253 / 205 (**0.81**) | 3 · 1 · 0.4 · 11.5 | 28.0 |
+## 6. Enemies added in Revision 2
+- **coyote** (replaces the v1 pack animal): hp 32, speed 4.4, packs of 3–5, hit and run, flees flares. `dog` AI.
+- **recovery_detail**: `remnant_patrol` at 60% HP (57). Starving, low ammo, can be talked down (Ruiz, ironwood_id, 3 canned food).
+- **tallman** (`stalker`, fallback `dog`): hp 220, bullet resistance 0.35, 28 damage per strike with 40% bleed. Heat-seeks within 45 m; sealed shelters hide heat by SEAL%. Retreats 25 m after 2 s in a flashlight cone, inside a 6 m flare radius, under floodlights, or near a campfire. Strikes once, then retreats. Max 3 active; the group disengages after losing 2 or at dawn. Kill → `tallmen_killed +1`. The two torpid den Tallmen are non-hostile unless shot.
+- **tallman_glimpse**: billboard set piece, Ch2–6. No collider or AI, ≥80 m away, despawns within 60 m or on LOS loss. `tallman_glimpses +1`.
 
-**Cumulative** (with carry-over), default: food 1.1, healing 1.08, ammo 0.94, clean water 0.65 by Ch10. In other words, a player who scavenges well has a thin surplus, and one who skips rooms or fights everything runs dry in Act III.
-
-Other modes (cumulative by Ch10; reports in `budget_report.<mode>.json`):
-
-| Mode | Food | Healing | Ammo | Clean water |
-|---|---|---|---|---|
-| story | ~2.0 | ~3.0 | ~2.3 | ~1.3 |
-| **tense_but_fair** (default) | **1.1** | **1.08** | **0.94** | **0.65** |
-| hard_winter | ~0.87 | ~0.64 | ~0.48 | ~0.49 |
-| whiteout | ~0.73 | ~0.42 | ~0.28 | ~0.38 |
-
-Hard Winter and Whiteout are below 1.0 on food by design. They assume traders, skipped fights, and the free snow/lake water valve. **Whiteout + Permadeath is meant to be lost sometimes.**
-
-Early chapters (Ch1–2) show high healing and ammo ratios because almost nothing there is hostile. The absolute amounts are tiny (a few rounds and bandages) and form a starter buffer.
-
-## 6. Anti-hard-lock valves
-- **Thirst:** snow and lake water are always available (`eat_snow` costs −6 warmth; `water_dirty` can make you sick 30% of the time, and in Act IV adds +6 rad). Boiling costs firewood, and tablets make it fully clean.
-- **Cold:** heated safe houses and scripted burn barrels on every Ch3/Ch9 route. A campfire costs only 3 firewood + 1 cloth, and woodpiles appear in every cold chapter.
-- **Food:** traders (Ray, Wren, Bea, Lou, Ames) take barter at any time, and Ch2 has the ration hand-out. Starvation damage starts slowly (−0.15/s below 10).
-- **Ammo:** melee is always available and repairable (`weapon_repair` = scrap 2 + wire 1). Enemies flee, surrender and can be talked to. Dogs and wolves flee fire and flares.
-- **Story items** (`quest: true`) are never scaled by difficulty and are always guaranteed.
-
-## 7. Crafting (tertiary, 8 recipes)
-`bandage` (cloth 2) · `campfire` (firewood 3 + cloth 1, placed) · `molotov` (fuel + cloth) · `torch` (firewood + cloth) · `splint` (firewood + cloth) · `clothing_patch` (cloth 2) · `weapon_repair` (scrap 2 + wire 1, melee only) · `boil_water` (water_dirty, near a campfire). There is also the story one-off `lake_cooler` (bucket + wire, Ch1, per hooks). Materials are trimmed to **cloth, firewood, fuel, scrap, wire**. The `coat`, `pipe` and `filter` recipes from config.js are removed (now loot-only).
-
-## 8. Combat numbers
-- TTK at default: a looter (60 hp) takes 3 pipe hits or 4 pistol hits. An Ironwood soldier (100 hp, 30% bullet resist) takes ~8 pistol rounds, 4 close shotgun blasts or 3 deer-rifle body shots (1–2 with headshots). A feral dog takes 2 knife hits. A husk takes 3 pipe hits.
-- Guns are loud (35–70 m noise radius) and alert enemies. Melee is quiet (2–5 m). This is the stealth/ammo trade-off.
-- 5.56 rifles (M4A1 `service_rifle`, civilian `ar15`) have 30-round mags but are ammo-limited: 5.56 is a trickle in collapse (≈0.3–0.6 rounds expected per chapter), flows in Ch5–6 (≈16 / 55) and Ch9 (≈26), and is scarce elsewhere.
-
-## 9. Progression & economy
-- **Gear-gated** with no XP: lineman_tools → crowbar → bolt_cutters → dosimeter / sled → mask_filter (Ch8). Clothing insulation is the real power curve (expected 0.30 → 0.62 combined).
-- **Perks:** pick 1 of 3 at the end of ch02, ch04, ch06 and ch08 (pool of 10, all small: −12% cold drain, +40% heals, etc.).
-- **Barter:** 1 ration tin = value 10. Buy price = value × act price multiplier × trader markup × difficulty; selling returns 50%. Food costs 2.2× and rad gear 2.5× in nuclear winter, while ammo is cheaper during the civil war (0.8×). Trust ≥ 3 gives a 15% discount.
-
-## 10. Tuning knobs (first ones to turn)
-| Symptom in playtest | Knob |
-|---|---|
-| Cold feels unfair | `survival.chapter_climate.<ch>.ambient_cold`, `stats.warmth.base_drain`, `weather_modifiers.blizzard` |
-| Too much/too little food | `loot_tables.act_modifiers.<act>.category_weight_mult.food`, kitchen_cabinet counts in `areas` |
-| Ammo glut in civil war | `act_modifiers.civil_war.category_weight_mult.ammo` (1.4), military_crate ammo_556 qty |
-| Fights too hard | `enemies.<id>.attack.accuracy`, `hostile_chance` in `chapter_curve.spawns` |
-| Whole game too easy/hard | add a mode in `difficulty.json`; never edit base files for that |
-Re-run `python3 tools/validate.py` after any change. It re-prints the budget table and warns when a ratio leaves its target band (`progression.resource_budget.targets_ratio_found_over_needed`).
-
-## 11. AR-15 (added at user request)
-`ar15` is a civilian semi-auto AR-15 in 5.56 (`ammo_556`, shared with the M4A1).
-
-| | `ar15` (civilian) | `service_rifle` (M4A1, military) |
+### Hollows (Ch8–10): `assimilated_human` and `assimilated_animal`
+| | assimilated_human ("Hollow") | assimilated_animal ("Hollow (animal)") |
 |---|---|---|
-| Damage / headshot | 24 / ×2.0 | 24 / ×2.0 (same cartridge) |
-| Fire modes | **semi only**, 3.5 shots/s | semi 4.0/s **+ auto 11/s** (spread ×2.5) |
-| Magazine / reload | 30 / 2.6 s | 30 / 2.4 s |
-| Range / falloff / spread | 45 m / 22 m / 1.2° (ADS ×0.5, iron sights) | 45 m / 25 m / 1.0° (ADS ×0.4, red dot) |
-| Durability | **320**, 4% jam when < 50% | 500, no jam |
-| Value / weight | 90 / 3.0 kg | 110 / 3.3 kg |
-| First act | **collapse** (Ch3) | civil_war (Ch5) |
+| code kind | `mimic` → fallback `husk` | `mimic_beast` → fallback `dog` (story lists `dog`) |
+| stats | hp 90, threat 6, walk 1.4 / lunge 5.5 m/s, 24 damage (×1.5 on the first ambush hit), stagger resistance 0.6, fire −0.4 | hp 50, threat 3, 4.6 m/s, 15 damage, 5 m pounce, fire −0.6 |
+| behavior | Repeats story voice lines off-cadence ('Let me in. I have filters.', 'Braith?', 'Open the gate, Pearce.'), knocks at doors, waits at doorways and fog edges. Stands unnaturally still until you come within 6 m or light it for 1 s. 6 m lunge, prefers flanks. 1 s of light breaks the disguise (35% lunge / 65% retreat); 2 s of sustained light always makes it retreat. In the door mimic encounter, SEAL drops while the door is open. Cannot be talked down. | Packs of 3–5 moving in eerie unison. Holds 2 m outside your light radius, waits instead of circling, whimpers like a hurt dog, then pounces together. Tests the floodlight poles. Flees flares for 8 s, won't enter a campfire radius, ignores a flashlight alone. Breaks off after losing 2. |
+| telegraphs | No breath plume, neck turning past the shoulders, ash-veined skin, eyes that reflect flat, wrong-cadence voice, static-like clicking breath. Wraith growls with hackles up and refuses to approach (`wraith_mimic_warned`). | Wrong synchronized gait, elongated joints, flat eyes, silent footsteps, hollow rattle, no yips. Wraith goes silent and places herself between them and Braith. |
+| drops | Modest pockets: cloth, a can, batteries, a note, a bandage, rarely a filter (45% empty) | Nothing: tainted carcass, no safe meat |
+| counter | `assimilated_killed +1` (separate from `tallmen_killed`; no totals) | same |
+| spawns (story-mandated) | ch08 ×2 (Henley house, midnight door), ch09 ×2 (whiteout voice ambush), ch10 ×2 (siege night 2) | ch08 ×2, ch09 ×5 (river_ice pack), ch10 ×3 (pole edges) |
 
-**Where it drops:** `gun_safe` (new rare hand-placed container: ch03 east end prepper house, ch04 Jay Cooke hunting cabin, ch06 and ch08 east end), `supply_cache` (w 0.12), `car_trunk` (w 0.06), and drops from bridge_boy (0.12), watch_militia (0.2), compact_militia (0.35, and 20% of them carry one) and harbor_militia (0.15). In collapse its weight is ×0.6 (`item_act_weight_mult`). Expected finds per playthrough are about 0.75 (≈0.1 per chapter in Ch3–4 and ≈0.2 in Ch5–6). Most players see one around Ch3–6. Ironwood and Remnant soldiers now drop their M4A1 (w 0.25), so the military rifle becomes reachable in Ch6–9.
+Husks stay distinct: sick, living people who rush food and heat, can be talked down (iodide + blanket + kindness ≥4), and get Wraith's soft whine.
 
-**5.56 budget:** `ammo_556` now unlocks in collapse at ×0.25 weight (≈0.3 rounds in Ch3, ≈0.6 in Ch4), so an early AR-15 is mostly a prize you can't feed yet. A whole act of collapse yields less than one magazine. Civil-war totals are unchanged in kind: Compact militia drops (w 1.2, 3–8 rounds) add ≈4 rounds in Ch5. Gun safes added a little 9mm/rifle ammo to Ch3–4, offset by removing one dam locker in Ch4. Ch3–4 ammo ratios sit at ≈1.0 (target band 0.5–1.0).
+## 7. Six-trader economy
+Price = value × trader act multiplier (story) × seasonal category multiplier × item seasonal multiplier × wanted-good 0.7 × rep ≥3 0.85 × difficulty. Currencies evolve with the acts. In Act I it's Authority ration cards (a weekly draw of 2 rations, 4 with the essential-worker card), cigarettes, cans, batteries and ammo. In Act II the Floor pays in Silver Spur chips (`spur_chip`, value 5, honored at full value only by `trader_floor`; Dutch takes them at half), and diesel, ammo, rumors and whiskey also trade. In Act III it's filters, diesel, batteries, ammo and **warm-bunk nights** at Galena (value 30). `rumor` (value 12, weightless) is currency with Rourke and Dutch.
+- **Dutch** (4th Street, Ch2/6): ×1.0 then ×1.5; gone in Act III. If rep ≤ −1 he sells your route to the Viaduct Crew (`enc_ch04_dutch_ambush`).
+- **Mo** (Mustang truck stop, Ch5/8): ×2 then ×3; the last fuel in the valley; fixing her pump (`q_mo_pump`) earns standing credit.
+- **Rourke** (Peavine → I-80 → Fallon → river camp): flat ×1.0; trades in stories and rumors; his escort quest earns the Annex rumor.
+- **Annie** (RSCC → library → Warm Room): ×0.8 → ×1.2 → ×1.5; antibiotics, iodide and vet kits.
+- **Boone** (Sparks yard, Ch5/8): ×1.5 then ×3. 1-in-3 of his Ch8 filters are expired unless you inspect them (§README).
+- **Floor commissary** (Silver Spur, Ch6): takes only spur_chip; prices fall with `rep_harbor`.
+
+## 8. Crafting (8 recipes)
+bandage (cloth 2) · campfire (firewood 3 + cloth) · molotov (fuel + cloth) · torch (firewood + cloth) · splint (firewood + cloth) · clothing_patch (cloth 2) · weapon_repair (scrap 2 + wire) · boil_water (untreated water, at a campfire). There are no story recipes in v2. The Ch1 water station is a level interactive.
+
+## 9. Tuning knobs (turn these first)
+1. Late-summer heat: `chapter_climate.ch01–02.thirst_drain_mult`, the `heat_stress` coefficients, and `difficulty.heat_stress_mult`.
+2. Water scarcity: `item_act_weight_mult.water_clean` and `act_modifiers.blackout.category_weight_mult.water`.
+3. Cold ramp: the cold formula `(20 − temp)/25` and the blizzard `warmth_drain_mult` of 2.2.
+4. Horror pressure: Tallman `threat_cost` / `budget_kill_share`, Hollow damage and lunge range, and the spawn `hostile_chance` values.
+5. Economy: trader `price_mult_by_act` (owned by story) and `category_season_mult` (owned by systems).
+
+## 10. Open items / assumptions
+- Playtime estimates (~5 h total) drive every budget number. Retune after playtests.
+- Boone's filter text: story dialogue says "half the box" is expired, while systems uses 1 in 3 per Loremaster's and Prime's direction. Loremaster may want to align the wording.
+- `assimilated_animal` code kind: story says `dog`; systems says `mimic_beast` with fallback `dog`. They behave the same if the engine lacks `mimic_beast`.
+- `radio_crystal` and `start_battery` remain only as legacy js world-spot fillers.

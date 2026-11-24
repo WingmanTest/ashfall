@@ -1,0 +1,178 @@
+{
+  "id": "ch07_annex_gate",
+  "chapter": "ch07",
+  "location": "loc_dixie_annex",
+  "trigger": "Annex gate. The guard who never left: Tolliver.",
+  "speakers": [
+    "narrator",
+    "amb_tolliver",
+    "braith",
+    "reyne"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "DIXIE VALLEY ANNEX — RESTRICTED — USE OF DEADLY FORCE AUTHORIZED. The sign has bullet holes. From the inside.",
+      "next": "g1"
+    },
+    {
+      "id": "g1",
+      "speaker": "amb_tolliver",
+      "text": "Halt. Sir. Ma'am. This is a restricted facility. State your business and your clearance.",
+      "next": "g2"
+    },
+    {
+      "id": "g2",
+      "speaker": "narrator",
+      "text": "A man in a contractor guard uniform, ironed. Beard to his chest. Rifle clean. Eyes very far away.",
+      "next": "g3"
+    },
+    {
+      "id": "g3",
+      "speaker": "reyne",
+      "text": "Tolliver. It's Dr. Reyne. Level three. You know me. You let me out.",
+      "next": "g4"
+    },
+    {
+      "id": "g4",
+      "speaker": "amb_tolliver",
+      "text": "Dr. Reyne. You left. Everyone left. I was told to hold the gate until relieved. I have not been relieved.",
+      "choices": [
+        {
+          "text": "I'm relieving you. Officially.",
+          "next": "relieve"
+        },
+        {
+          "text": "You did your job. It's over.",
+          "next": "over",
+          "effects": [
+            {
+              "add": "kindness",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "[Raise your rifle]",
+          "next": "raise"
+        }
+      ]
+    },
+    {
+      "id": "relieve",
+      "speaker": "amb_tolliver",
+      "text": "...By whose authority? ...No. No, there's nobody left to authorize anything, is there.",
+      "next": "g5"
+    },
+    {
+      "id": "over",
+      "speaker": "amb_tolliver",
+      "text": "Ninety-two days. I kept a log. Would you like to see it? Nobody's seen it.",
+      "effects": [
+        {
+          "give": "annex_log",
+          "qty": 1
+        }
+      ],
+      "next": "g5"
+    },
+    {
+      "id": "raise",
+      "speaker": "amb_tolliver",
+      "text": "Sir, I will defend this post.",
+      "choices": [
+        {
+          "text": "[Lower it. Talk]",
+          "next": "over"
+        },
+        {
+          "text": "[Fire]",
+          "next": "shoot"
+        }
+      ]
+    },
+    {
+      "id": "shoot",
+      "speaker": "narrator",
+      "text": "He's fast for a man that thin. Not fast enough. He dies at his post, which is what he wanted, maybe.",
+      "effects": [
+        {
+          "event": "encounter",
+          "id": "enc_ch07_tolliver"
+        },
+        {
+          "add": "kindness",
+          "value": -2
+        },
+        {
+          "set": "tolliver_fate",
+          "value": "dead"
+        }
+      ],
+      "next": "in"
+    },
+    {
+      "id": "g5",
+      "speaker": "amb_tolliver",
+      "text": "The doors are maglocked. Dead power means locked forever. You'd need a generator. A big one.",
+      "next": "g6"
+    },
+    {
+      "id": "g6",
+      "speaker": "braith",
+      "text": "I've got a ninety-kilowatt ground power cart on a flatbed.",
+      "next": "g7"
+    },
+    {
+      "id": "g7",
+      "speaker": "amb_tolliver",
+      "text": "...Well. That would do it. I'll lift the gate. Mind the lower wing. Something's been in and out of it.",
+      "choices": [
+        {
+          "text": "Come back with us, Tolliver.",
+          "next": "tjoin",
+          "effects": [
+            {
+              "set": "tolliver_fate",
+              "value": "joined"
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "Hold the gate. We'll radio.",
+          "next": "tstay",
+          "effects": [
+            {
+              "set": "tolliver_fate",
+              "value": "stayed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tjoin",
+      "speaker": "amb_tolliver",
+      "text": "...I'd like that. I'd like to be relieved. I'll pack the log.",
+      "next": "in"
+    },
+    {
+      "id": "tstay",
+      "speaker": "amb_tolliver",
+      "text": "Yes, sir. Holding the gate. It's what I'm good at.",
+      "next": "in"
+    },
+    {
+      "id": "in",
+      "speaker": "narrator",
+      "text": "Through the gate. A hangar, an airstrip with grey ash drifting across it. And a low concrete building with no windows.",
+      "end": true
+    }
+  ]
+}

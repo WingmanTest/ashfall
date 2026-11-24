@@ -1,0 +1,63 @@
+{
+  "id": "ch03_darlene_camp",
+  "chapter": "ch03",
+  "location": "loc_tric_warehouses",
+  "trigger": "Ambient: the stranded trucker at her reefer trailer.",
+  "speakers": [
+    "narrator",
+    "amb_darlene",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "A Freightliner parked crooked off USA Parkway. A reefer trailer, the diesel unit chugging. A woman with a thermos.",
+      "next": "d1"
+    },
+    {
+      "id": "d1",
+      "speaker": "amb_darlene",
+      "text": "Darlene. Phoenix to Boise, chicken. Got stuck at the Mustang exit Day Zero. Chicken's frozen, at least.",
+      "next": "d2"
+    },
+    {
+      "id": "d2",
+      "speaker": "amb_darlene",
+      "text": "I been feeding the shelter on Greg Street. Can't move a forty-ton truck on what's left in the tank.",
+      "choices": [
+        {
+          "text": "How long can the reefer run?",
+          "next": "run"
+        },
+        {
+          "text": "[Help her siphon to the reefer]",
+          "next": "help",
+          "effects": [
+            {
+              "add": "kindness",
+              "value": 1
+            },
+            {
+              "set": "darlene_helped",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "run",
+      "speaker": "amb_darlene",
+      "text": "Ten days. Then it's six thousand pounds of chicken thawing in the desert. Make it make sense.",
+      "end": true
+    },
+    {
+      "id": "help",
+      "speaker": "amb_darlene",
+      "text": "Well bless you. Come by anytime. I'll fry you a wing on the manifold.",
+      "end": true
+    }
+  ]
+}

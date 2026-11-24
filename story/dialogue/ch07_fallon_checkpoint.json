@@ -1,0 +1,190 @@
+{
+  "id": "ch07_fallon_checkpoint",
+  "chapter": "ch07",
+  "location": "loc_us50_fallon",
+  "trigger": "US-50 into Fallon: the Compact checkpoint at the canal bridge. Ross.",
+  "speakers": [
+    "narrator",
+    "ross",
+    "braith",
+    "compact_rider"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Fallon. Green fields gone grey. Irrigation canals still running. A checkpoint of hay bales on the canal bridge.",
+      "next": "f1"
+    },
+    {
+      "id": "f1",
+      "speaker": "compact_rider",
+      "text": "Truck stops there. City plates. You with the Army or the Authority?",
+      "branches": [
+        {
+          "next": "dad_warm",
+          "conditions": [
+            {
+              "trust": "ross",
+              "gte": 2
+            }
+          ]
+        },
+        {
+          "next": "dad_cold"
+        }
+      ]
+    },
+    {
+      "id": "dad_warm",
+      "speaker": "ross",
+      "text": "He's with me. That's my son. Lift the bar, Javi.",
+      "next": "d1"
+    },
+    {
+      "id": "dad_cold",
+      "speaker": "ross",
+      "text": "Let him wait a minute. ...Fine. He's my son. Lift it.",
+      "effects": [
+        {
+          "event": "time_skip",
+          "hours": 1
+        }
+      ],
+      "next": "d1"
+    },
+    {
+      "id": "d1",
+      "speaker": "ross",
+      "text": "Where are you going with a stolen airplane cart and a lady in a space suit?",
+      "choices": [
+        {
+          "text": "Dixie Valley. The Annex.",
+          "next": "annex"
+        },
+        {
+          "text": "Better you don't know.",
+          "next": "nope",
+          "effects": [
+            {
+              "trust": "ross",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "annex",
+      "speaker": "ross",
+      "text": "That place. Ander's lost two riders out there. Sheep gone in the night. Something big.",
+      "next": "d2"
+    },
+    {
+      "id": "nope",
+      "speaker": "ross",
+      "text": "Okay. Then you don't know what took forty of Etcheverry's sheep out there either.",
+      "next": "d2"
+    },
+    {
+      "id": "d2",
+      "speaker": "ross",
+      "text": "Stay. One night. Your brother would like to see you. I'd... it'd be good.",
+      "branches": [
+        {
+          "next": "wes_cage",
+          "conditions": [
+            {
+              "flag": "wes_prisoner",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "wes_gone",
+          "conditions": [
+            {
+              "flag": "wes_spared",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "wes_here"
+        }
+      ]
+    },
+    {
+      "id": "wes_cage",
+      "speaker": "ross",
+      "text": "They've got Wes. The Army. In a cage at the Sparks yard. I can't get him. Can you?",
+      "next": "d3"
+    },
+    {
+      "id": "wes_here",
+      "speaker": "narrator",
+      "text": "Wes limps out of the feed store on a crutch, grinning. 'BIG BROTHER. You brought a scientist?'",
+      "next": "d3"
+    },
+    {
+      "id": "wes_gone",
+      "speaker": "ross",
+      "text": "...He's with you, isn't he. Wes. Of course he is. You always were his hero.",
+      "next": "d3"
+    },
+    {
+      "id": "d3",
+      "speaker": "ross",
+      "text": "One night. Then go do your crazy thing.",
+      "choices": [
+        {
+          "text": "One night. Yeah, Dad.",
+          "next": "night",
+          "effects": [
+            {
+              "trust": "ross",
+              "delta": 2
+            },
+            {
+              "stat": "warmth",
+              "delta": 20
+            },
+            {
+              "stat": "satiety",
+              "delta": 20
+            }
+          ]
+        },
+        {
+          "text": "We can't. Every hour counts.",
+          "next": "nonight",
+          "effects": [
+            {
+              "trust": "ross",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "night",
+      "speaker": "narrator",
+      "text": "Lamb stew. A woodstove. Your father asleep in his chair at nine, like always. Some things outlast the world.",
+      "next": "end"
+    },
+    {
+      "id": "nonight",
+      "speaker": "ross",
+      "text": "Same as always. Go on, then.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "East of Fallon, the road crosses salt flats into a valley with no lights at all.",
+      "end": true
+    }
+  ]
+}

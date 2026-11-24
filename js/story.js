@@ -1,8 +1,8 @@
 // Data-driven story loader. Reads /story/ when present. NEVER writes there.
 // Full Loremaster contract (SCHEMA.md): condition ops, not, count_true,
 // if/then/else, value_from, on_end, flags.ending, chapter start/end scripts.
-import { tryFetch, loadJsonDir, listDir } from "./load.js?v=r8";
-import { aliasItem } from "./systems.js?v=r8";
+import { tryFetch, loadJsonDir, listDir } from "./load.js?v=r9";
+import { aliasItem } from "./systems.js?v=r9";
 
 const STORY_ROOT = "./story/";
 
@@ -44,13 +44,23 @@ export function readStat(ctx, name) {
   return p[name] ?? 0;
 }
 
+// Retroactive item -> flag satisfaction (r9 progression fix). Registered by game.js:
+// returns the item id that satisfies a "picked up X" style flag, or null.
+let _itemForFlag = null;
+export function registerItemFlagResolver(fn) { _itemForFlag = typeof fn === "function" ? fn : null; }
+export function itemForFlag(name) { return _itemForFlag ? _itemForFlag(name) : null; }
+
 export function evalCondition(cond, ctx) {
   if (cond == null) return true;
   if (Array.isArray(cond)) return cond.every((c) => evalCondition(c, ctx));
   if (typeof cond !== "object") return !!cond;
   if (cond.not !== undefined) return !evalCondition(cond.not, ctx);
-  if (cond.any) return cond.any.some((c) => evalCondition(c, ctx));
-  if (cond.all) return cond.all.every((c) => evalCondition(c, ctx));
+  // Multi-path objectives: ANY route satisfies an OR group (never treated as AND).
+  const anyOf = cond.any || cond.or || cond.anyOf || cond.oneOf || cond.either || cond.routes_any;
+  if (Array.isArray(anyOf)) return anyOf.some((c) => evalCondition(c, ctx));
+  const allOf = cond.all || cond.and || cond.allOf;
+  if (Array.isArray(allOf)) return allOf.every((c) => evalCondition(c, ctx));
+  if (Array.isArray(cond.any_flags)) return cond.any_flags.some((f) => evalCondition({ flag: f }, ctx));
   if (cond.none) return !cond.none.some((c) => evalCondition(c, ctx));
   const flags = ctx.flags || {};
   const inv = ctx.inventory || ctx.items || {};
@@ -63,7 +73,12 @@ export function evalCondition(cond, ctx) {
   if (cond.has_item) return invCount(inv, cond.has_item) > 0;
   if (cond.flag != null) {
     const v = flags[cond.flag];
-    const left = v === undefined ? null : v;
+    let left = v === undefined ? null : v;
+    // "picked up X" flags are satisfied by simply holding X (no soft-lock if looted early).
+    if (!left && _itemForFlag && (cond.eq === undefined || cond.eq === true)) {
+      const it = _itemForFlag(cond.flag);
+      if (it && invCount(inv, it) > 0) left = true;
+    }
     return cmpOp(left, cond);
   }
   if (cond.trust != null) return cmpOp(trust[cond.trust] ?? 0, cond);
@@ -111,18 +126,16 @@ export function evalWhen(when, ctx) {
 }
 
 export const FLAG_ALIASES = {
-  theo_talked: "ch01_theo_talked",
-  ch01_theo_talked: "theo_talked",
-  marg_talked: "ch01_marguerite_talked",
-  ch01_marguerite_talked: "marg_talked",
+  carly_talked: "ch01_carly_talked",
+  ch01_carly_talked: "carly_talked",
+  lolo_talked: "ch01_lolo_talked",
+  ch01_lolo_talked: "lolo_talked",
 };
 
 /** Objective-complete flags written when the matching conversation is finished. */
 export const DIALOGUE_OBJECTIVE_FLAGS = {
-  ch01_theo_morning: ["ch01_theo_talked"],
-  theo_start: ["ch01_theo_talked"],
-  ch01_marguerite_porch: ["ch01_marguerite_talked"],
-  marg_start: ["ch01_marguerite_talked"],
+  ch01_carly_home: ["ch01_carly_talked"],
+  ch01_lolo_porch: ["ch01_lolo_talked"],
 };
 
 export function setFlag(flags, name, value = true) {
@@ -210,7 +223,7 @@ export function resolveBranches(branches, ctx) {
 
 function inferNpc(d, fileHint) {
   if (d.npc || d.npc_id) return d.npc || d.npc_id;
-  const skip = new Set(["narrator", "dell", "you", "adele", "adele_kowalczyk", "player"]);
+  const skip = new Set(["narrator", "dell", "braith", "you", "adele", "adele_kowalczyk", "player"]);
   const speakers = d.speakers || [];
   const hit = speakers.find((s) => s && !skip.has(String(s).toLowerCase()));
   if (hit) return hit === "haas" ? "cpl_haas" : hit;
@@ -299,6 +312,9 @@ export class StorySystem {
     this.loadedFiles = [];
     this.quests = [];
     this.defaultFlags = {};
+    this.ambient = [];
+    this.traders = [];
+    this.generic = {};
   }
 
   async load() {
@@ -313,6 +329,10 @@ export class StorySystem {
     if (npcs) {
       this.npcs = npcs.npcs || npcs.characters || [];
       this.minor = npcs.minor_characters || npcs.minor || [];
+      // Rev 2 speakers: ambient NPCs, the 6 traders, and generic speakers (incl. "hollow").
+      this.ambient = npcs.ambient_npcs || [];
+      this.traders = npcs.traders || [];
+      this.generic = npcs.generic_speakers || {};
       this.loadedFiles.push("story/npcs.json");
     }
     if (hooks) { this.hooks = hooks; this.loadedFiles.push("story/gameplay_hooks.json"); }
@@ -357,7 +377,7 @@ export class StorySystem {
       else this.chapters.push(f.data);
     }
 
-    const { PLACEHOLDER } = await import("./data/placeholderStory.js?v=r8");
+    const { PLACEHOLDER } = await import("./data/placeholderStory.js?v=r9");
     if (!this.npcs.length) this.npcs = PLACEHOLDER.npcs;
     if (!Object.keys(this.endings).length) this.endings = PLACEHOLDER.endings;
     this.notesCatalog = PLACEHOLDER.notes;
@@ -387,7 +407,8 @@ export class StorySystem {
   /** Fetch remaining story files for a chapter the first time it is entered. */
   async ensureChapterStory(id) {
     const ch = String(id || "ch01");
-    const prefix = ch.replace(/_.*$/, "");
+    // ch07b (Dixie Valley) shares the ch07 dialogue files.
+    const prefix = (ch.match(/^ch\d+/) || [ch.replace(/_.*$/, "")])[0];
     if (this._storyLoaded && this._storyLoaded.has(prefix)) return;
     this._storyLoaded = this._storyLoaded || new Set(["ch01"]);
     const dlgListed = await listDir(STORY_ROOT + "dialogue/");
@@ -418,9 +439,11 @@ export class StorySystem {
 
   startingFlags() {
     const f = { ...(this.defaultFlags || {}) };
-    if (f.theo_alive === undefined) f.theo_alive = true;
+    // Rev 2: defaults come from story/flags.json only (no v1 theo/hank/insulin defaults).
+    for (const k of ["theo_alive", "hank_alive", "insulin_found", "insulin_given"]) delete f[k];
     if (f.kindness === undefined) f.kindness = 0;
-    if (f.hank_alive === undefined) f.hank_alive = true;
+    if (f.tallmen_killed === undefined) f.tallmen_killed = 0;
+    if (f.assimilated_killed === undefined) f.assimilated_killed = 0;
     if (!f.chapter) f.chapter = "ch01";
     return f;
   }
@@ -450,6 +473,14 @@ export class StorySystem {
   }
 
   encounterTypes(encId) {
+    const enc = this.hooks?.encounters?.[encId];
+    if (enc && Array.isArray(enc.enemies) && enc.enemies.length) {
+      return enc.enemies.map((e) => ({ type: e.type, count: e.count || 1 }));
+    }
+    return this._legacyEncounterTypes(encId);
+  }
+
+  _legacyEncounterTypes(encId) {
     // Hooks list per-chapter enemy types; map known encounter ids to a composition.
     const table = {
       enc_ch01_watch_standoff: [{ type: "watch_militia", count: 2 }],
@@ -482,14 +513,20 @@ export class StorySystem {
   npcById(id) {
     if (!id) return null;
     const alt = id === "haas" ? "cpl_haas" : id === "cpl_haas" ? "haas" : null;
-    return this.npcs.find((n) => n.id === id || n.id === alt)
-      || this.minor.find((n) => n.id === id || n.id === alt)
+    const m = (n) => n && (n.id === id || n.id === alt);
+    return this.npcs.find(m) || this.minor.find(m)
+      || (this.ambient || []).find(m) || (this.traders || []).find(m)
+      || (this.generic && this.generic[id] ? { id, name: id === "hollow" ? "???" : id.replace(/_/g, " "), generic: true } : null)
       || null;
+  }
+
+  traderById(id) {
+    return (this.traders || []).find((t) => t.id === id) || null;
   }
 
   npcName(id) {
     const n = this.npcById(id);
-    return n?.name || (id === "dam_console" ? "Thomson panel" : id || "");
+    return n?.name || (id === "dam_console" ? "Galena panel" : id || "");
   }
 
   _npcMatch(d, npcId) {

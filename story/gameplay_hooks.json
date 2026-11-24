@@ -1,76 +1,90 @@
 {
-  "version": 1,
-  "notes": "Per-chapter machine-readable hooks. Effects/conditions use the same schema as dialogue (see SCHEMA.md). chapter_start_effects run before the first scene; chapter_end_effects after the last.",
+  "version": 2,
+  "notes": "Revision 2 per-chapter machine-readable hooks. Effects/conditions use the dialogue schema (SCHEMA.md). chapter_start_effects run before the first scene; chapter_end_effects after the last. No medical-clock checkpoints exist in Revision 2. Every chapter has a season (late_summer | autumn | late_fall | nuclear_winter; see seasons{}). Act III adds the Hollows (assimilation{}). 'levels' lists the level files that implement a chapter (Ch7 spans two).",
   "enemy_types": {
     "looter": {
       "kind": "human",
+      "code_kind": "raider",
       "acts": [
         1,
-        2
+        2,
+        3
       ],
       "desc": "Desperate civilians stealing. Flee when hurt or threatened. Melee/pistol."
     },
     "watch_militia": {
       "kind": "human",
+      "code_kind": "raider",
       "acts": [
         1,
         2
       ],
-      "desc": "Block-watch neighbors with deer rifles. Neutral unless provoked or you carry stolen goods."
+      "desc": "Block-watch neighbors (Deputy Lusk's crew) with deer rifles. Neutral unless provoked or you carry stolen goods."
     },
     "bridge_boy": {
       "kind": "human",
+      "code_kind": "raider",
       "acts": [
         1,
         2
       ],
-      "desc": "Young scavenger-raiders. Pipes, pistols, molotovs. Break and run at 50% losses."
+      "display": "Viaduct Crew",
+      "desc": "Laid-off warehouse kids and motel residents from under the I-80 viaduct. Pipes, pistols, molotovs. Break and run at 50% losses."
     },
     "desperate_family": {
       "kind": "human",
+      "code_kind": "raider",
       "acts": [
         2
       ],
-      "desc": "Armed parent defending kids. Only hostile if threatened. Killing one: kindness -2, theo trust -2."
+      "desc": "Armed parent defending kids (Pete Lund). Only hostile if threatened. Killing one: kindness -2, carly trust -2."
     },
     "authority_guard": {
       "kind": "human",
+      "code_kind": "raider",
       "acts": [
         1,
         2,
         3
       ],
-      "desc": "County/Guard. Rifles, vests. Neutral unless you're hostile to the Authority."
+      "display": "Recovery Authority guard",
+      "desc": "County + Nevada Guard. Rifles, vests. Neutral unless you're hostile to the Authority."
     },
     "compact_militia": {
       "kind": "human",
+      "code_kind": "raider",
       "acts": [
         2,
         3
       ],
-      "desc": "Range miners and farmers. Deer rifles, plow trucks. Hostility depends on convoy_choice."
+      "display": "Lahontan Compact rider",
+      "desc": "Fallon and Mason Valley ranchers. Deer rifles, hay trucks. Hostility depends on convoy_choice."
     },
     "harbor_militia": {
       "kind": "human",
+      "code_kind": "raider",
       "acts": [
         2
       ],
-      "desc": "Longshoremen with rifles. Hostile only if bridge_choice=held."
+      "display": "Floor militia",
+      "desc": "Casino workers with rifles. Hostile only if bridge_choice=open."
     },
     "ironwood_patrol": {
       "kind": "human_military",
+      "code_kind": "raider",
       "acts": [
         2
       ],
-      "desc": "Federal Army fireteam (4). Rifles, grenades, NVGs at night. Can be avoided; some surrender if outflanked."
+      "desc": "Federal Army fireteam (4). Rifles, NVGs at night. Avoidable; some surrender if outflanked."
     },
     "ironwood_checkpoint": {
       "kind": "human_military",
+      "code_kind": "raider",
       "acts": [
         2,
         3
       ],
-      "desc": "Static: sandbags, searchlight, MG. Sneak, bribe with ironwood_id, or assault."
+      "desc": "Static: sandbags, searchlight, MG. Sneak, use ironwood_id, or assault."
     },
     "ironwood_drone": {
       "kind": "setpiece",
@@ -78,7 +92,7 @@
         2,
         3
       ],
-      "desc": "Small surveillance quadcopter. Spots and calls fire after 3s line of sight. Fog/blizzard ground it."
+      "desc": "Small surveillance quadcopter. Calls fire after 3 s LOS. Fog/blizzard ground it."
     },
     "ironwood_mrap": {
       "kind": "setpiece",
@@ -86,127 +100,750 @@
         2,
         3
       ],
-      "desc": "Armored truck with searchlight/MG. Not killable by small arms; avoid its lanes or use as cover."
+      "desc": "Armored truck with searchlight/MG. Not killable by small arms."
     },
     "ironwood_bradley": {
       "kind": "setpiece",
       "acts": [
         2
       ],
-      "desc": "IFV on the Canal Park pier. Never fought directly. Block with the pier crane or avoid."
+      "desc": "IFV in the Reno rail trench (Ch6). Never fought directly. Block with the freight car (freight_car_drop) or let pass."
     },
     "remnant_patrol": {
       "kind": "human_military",
+      "code_kind": "raider",
       "acts": [
         2,
         3
       ],
-      "desc": "Kessler's loyalists after Ch7. Better gear than anyone, low ammo, cold. Can stand down in Ch10."
+      "desc": "Kessler's loyalists after Ch7. Better gear, low ammo, cold. Can stand down in Ch10."
+    },
+    "recovery_detail": {
+      "kind": "human_military",
+      "code_kind": "raider",
+      "acts": [
+        2
+      ],
+      "first_chapter": "ch07",
+      "desc": "NEW. Stranded, starving Ironwood squad (6) at the Dixie Valley Annex under SFC Brandt. Hostile by default; talked down by Ruiz, ironwood_id, or food. Variant of remnant_patrol stats at 60% HP."
     },
     "feral_dog": {
       "kind": "animal",
+      "code_kind": "dog",
       "acts": [
         2,
         3
       ],
       "first_chapter": "ch07",
-      "desc": "Abandoned pets turned pack (3-5). Flee from fire and flares."
+      "desc": "Abandoned pets turned pack (3-5). Flee fire and flares."
     },
-    "wolf": {
+    "coyote": {
       "kind": "animal",
+      "code_kind": "dog",
       "acts": [
+        2,
         3
       ],
-      "first_chapter": "ch09",
-      "desc": "Jay Cooke pack (4-6). Circle, test, attack stragglers in the column."
+      "first_chapter": "ch07",
+      "desc": "NEW (replaces wolf). Smaller, faster than feral dogs; packs of 3-5 on the flats and creek. Flee flares."
     },
     "husk": {
       "kind": "human_sick",
+      "code_kind": "husk",
       "acts": [
         3
       ],
       "first_chapter": "ch08",
-      "desc": "Radiation-sick, hypothermic, starving people. Erratic; rush heat/food. Talk-down possible: holster, approach slowly, need iodide_tablets + wool_blanket + kindness>=4."
+      "desc": "Radiation-sick, hypothermic, starving PEOPLE. Not infected, not monsters, and NOT Hollows: they breathe (visible plume), talk in their own words, and Wraith whines softly at them. Rush heat/food. Talk-down: iodide_tablets + wool_blanket + kindness>=4. Tallmen follow husks."
+    },
+    "assimilated_human": {
+      "kind": "creature_human",
+      "code_kind": "mimic",
+      "fallback_code_kind": "husk",
+      "acts": [
+        3
+      ],
+      "first_chapter": "ch08",
+      "display_name": "Hollow",
+      "desc": "NEW (Act III). A person a Tallman fed on and kept. In-world: a Hollow. Wears the victim's clothes and voice: repeats half-remembered phrases off-cadence ('Let me in, I have filters', 'Braith?', 'Morning, neighbor', 'Open the gate'). Wrong gait and joint angles; neck turns past the shoulders. Draws warmth: NO breath plume in the cold. Knocks at doors and calls from the ash; lunges when a door opens or the player turns away. Flees sustained light like a Tallman. Wraith growls low with hackles up and refuses to approach (vs a soft whine at a real husk).",
+      "tells": [
+        "no_breath_plume",
+        "off_cadence_voice",
+        "wrong_gait",
+        "eyes_reflect_flat",
+        "wraith_growl_hackles"
+      ],
+      "voice_lines": [
+        "Let me in. I have filters.",
+        "Braith?",
+        "Morning, neighbor.",
+        "Got any filters?",
+        "Over here. I found the trail.",
+        "Halvorsen's here. He's fine.",
+        "Open the gate, Pearce."
+      ]
+    },
+    "assimilated_animal": {
+      "kind": "creature_animal",
+      "code_kind": "dog",
+      "fallback_code_kind": "dog",
+      "acts": [
+        3
+      ],
+      "first_chapter": "ch08",
+      "display_name": "Hollow (animal)",
+      "desc": "NEW (Act III). Assimilated coyotes, dogs and livestock. Silent (no yips), no breath plume, move in step like one animal with too many legs; wait instead of circling. Stalk river_ice and the Galena perimeter in packs of 3-5; test floodlight poles. Flee flares. Wraith goes silent and puts herself between them and Braith.",
+      "tells": [
+        "silent_pack",
+        "no_breath_plume",
+        "synchronized_gait"
+      ]
+    },
+    "tallman": {
+      "kind": "creature",
+      "code_kind": "stalker",
+      "fallback_code_kind": "dog",
+      "acts": [
+        2,
+        3
+      ],
+      "first_chapter": "ch07",
+      "desc": "NEW. Escaped LONG SLEEP subject from the Dixie Valley Annex. 7-8 ft, ash-grey, flat reflective eyes. Seeks heat; retreats from sustained light (flashlight cone 2 s, flare radius, floodlight); hit-and-retreat; max 3 active anywhere; disengages after losing 2 or at dawn. Never a horde. Engine: on each kill add tallmen_killed +1."
+    },
+    "tallman_glimpse": {
+      "kind": "setpiece_visual",
+      "acts": [
+        1,
+        2
+      ],
+      "first_chapter": "ch02",
+      "last_chapter": "ch06",
+      "desc": "NEW. Non-interactable silhouette billboard at long range (>=80 m). No collider, no AI, no HUD cue, no music sting. Requires LOS to player; despawns after duration, on approach (<60 m) or LOS loss. Triggers Wraith's stare/whine. on_show: tallman_glimpses +1."
+    }
+  },
+  "companion": {
+    "id": "wraith",
+    "verbs": {
+      "track": "Follow a scent from an item (pruitt_scarf) or blood trail; paw-print trail; finds caches/people.",
+      "warn": "Automatic growl/freeze/stare before enemies are visible; points at Tallmen first. Bark direction = threat side in Ch10.",
+      "guard": "Posted at a door/camp: reduces theft and break-ins; +SEAL integrity at night.",
+      "hold": "Pins ONE human enemy. Refuses Tallmen (backs away, ears flat)."
+    },
+    "stats": {
+      "hp": 60,
+      "warmth": true,
+      "eats_from_inventory": true
+    },
+    "down_rule": "At 0 HP Wraith is DOWN, never dead: set wraith_injured=true, carried (player speed -15%) or on the sled; recovers next chapter or with vet_kit.",
+    "death_rule": "wraith_alive=false ONLY via dialogue/ch09_wraith_hold choice '[Order Wraith to hold the line]' + explicit confirmation. validate.py enforces this.",
+    "injured": "wraith_injured=true: limps, no TRACK, still WARNs. Cleared by vet_kit or a full rest at a warm shelter."
+  },
+  "barter": {
+    "currencies": {
+      "act1": [
+        "ration_card (scrip)",
+        "cigarettes",
+        "canned_food",
+        "batteries",
+        "ammo"
+      ],
+      "act2": [
+        "spur_chip (Floor scrip)",
+        "diesel_jug",
+        "ammo",
+        "rumor",
+        "whiskey"
+      ],
+      "act3": [
+        "mask_filter",
+        "diesel_jug",
+        "batteries",
+        "ammo",
+        "warm-bunk nights at Galena"
+      ]
+    },
+    "price_mult_by_act": {
+      "1": 1.0,
+      "2": 1.5,
+      "3": 2.5
+    },
+    "note": "Each trader has wants[] (x0.7 price when paying in a wanted good) and a rep flag trader_<id>_rep (+1 per fair trade/quest). See npcs.json traders[]."
+  },
+  "encounters": {
+    "enc_ch01_watch_standoff": {
+      "chapter": "ch01",
+      "enemies": [
+        {
+          "type": "watch_militia",
+          "count": 2
+        }
+      ],
+      "note": "Wraith steps in front; ends if you holster or run."
+    },
+    "enc_ch02_crush": {
+      "chapter": "ch02",
+      "enemies": [],
+      "note": "Crowd crush hazard; timed escape."
+    },
+    "enc_ch03_fire_defend": {
+      "chapter": "ch03",
+      "enemies": [
+        {
+          "type": "bridge_boy",
+          "count": 6
+        }
+      ],
+      "note": "Two waves (4+2); flee at 50% losses."
+    },
+    "enc_ch03_fire_rescue": {
+      "chapter": "ch03",
+      "enemies": [],
+      "note": "house_fire heat hazard; carry Gil out."
+    },
+    "enc_ch04_ramp_chase": {
+      "chapter": "ch04",
+      "enemies": [
+        {
+          "type": "authority_guard",
+          "count": 3
+        }
+      ],
+      "note": "Tug chase off the ramp; no kills required."
+    },
+    "enc_ch04_dutch_ambush": {
+      "chapter": "ch04",
+      "enemies": [
+        {
+          "type": "bridge_boy",
+          "count": 5
+        }
+      ],
+      "note": "Only if trader_dutch_rep<=-1."
+    },
+    "enc_ch04_lund_fight": {
+      "chapter": "ch04",
+      "enemies": [
+        {
+          "type": "desperate_family",
+          "count": 1
+        }
+      ],
+      "note": "Avoidable."
+    },
+    "enc_ch05_compact_attack": {
+      "chapter": "ch05",
+      "enemies": [
+        {
+          "type": "compact_militia",
+          "count": 8
+        }
+      ],
+      "note": "Escort path. Sets fired_on_blockade via dialogue."
+    },
+    "enc_ch05_ironwood_turn": {
+      "chapter": "ch05",
+      "enemies": [
+        {
+          "type": "ironwood_patrol",
+          "count": 4
+        },
+        {
+          "type": "ironwood_drone",
+          "count": 1
+        }
+      ],
+      "note": "Sabotage path."
+    },
+    "enc_ch05_crossfire": {
+      "chapter": "ch05",
+      "enemies": [
+        {
+          "type": "compact_militia",
+          "count": 4
+        },
+        {
+          "type": "ironwood_patrol",
+          "count": 4
+        }
+      ],
+      "note": "Divert path."
+    },
+    "enc_ch06_trench_fight": {
+      "chapter": "ch06",
+      "enemies": [
+        {
+          "type": "compact_militia",
+          "count": 4
+        },
+        {
+          "type": "harbor_militia",
+          "count": 6
+        }
+      ],
+      "note": "Engine-triggered after ch06_trench if bridge_choice=open."
+    },
+    "enc_ch07_road_tallman": {
+      "chapter": "ch07",
+      "enemies": [
+        {
+          "type": "tallman",
+          "count": 1
+        }
+      ],
+      "note": "FIRST Tallman fight. Light pushes it back; it retreats wounded."
+    },
+    "enc_ch07_tolliver": {
+      "chapter": "ch07",
+      "enemies": [],
+      "note": "Single armed guard (use authority_guard stats). Only if you fire."
+    },
+    "enc_ch07_recovery_detail": {
+      "chapter": "ch07",
+      "enemies": [
+        {
+          "type": "recovery_detail",
+          "count": 6
+        }
+      ],
+      "note": "Only if fought."
+    },
+    "enc_ch07_holds_tallman": {
+      "chapter": "ch07",
+      "enemies": [
+        {
+          "type": "tallman",
+          "count": 1
+        }
+      ],
+      "note": "Wing A corridor; flees to the flooded stair."
+    },
+    "enc_ch08_husk": {
+      "chapter": "ch08",
+      "enemies": [
+        {
+          "type": "husk",
+          "count": 1
+        }
+      ],
+      "note": "A sick man. Not a monster."
+    },
+    "enc_ch08_hollow_first": {
+      "chapter": "ch08",
+      "enemies": [
+        {
+          "type": "assimilated_human",
+          "count": 1
+        }
+      ],
+      "note": "FIRST Hollow: Dale Henley in his kitchen (ch08_henley_house). Interior, flashlight only. Sets up the paranoia."
+    },
+    "enc_ch08_door_mimic": {
+      "chapter": "ch08",
+      "enemies": [
+        {
+          "type": "assimilated_human",
+          "count": 1
+        }
+      ],
+      "note": "Only if the player opens the door to the midnight knock (ch08_door). Close quarters in the hallway; SEAL drops while open."
+    },
+    "enc_ch09_picket_assault": {
+      "chapter": "ch09",
+      "enemies": [
+        {
+          "type": "remnant_patrol",
+          "count": 6
+        },
+        {
+          "type": "ironwood_checkpoint",
+          "count": 1
+        }
+      ]
+    },
+    "enc_ch09_hollow_ambush": {
+      "chapter": "ch09",
+      "enemies": [
+        {
+          "type": "assimilated_human",
+          "count": 2
+        }
+      ],
+      "note": "Whiteout voice ambush (ch09_voices): a Hollow calls in Walt's voice off the rope line. Following it costs one column member."
+    },
+    "enc_ch09_animal_pack": {
+      "chapter": "ch09",
+      "enemies": [
+        {
+          "type": "assimilated_animal",
+          "count": 5
+        }
+      ],
+      "note": "Assimilated coyote pack on river_ice (ch09_voices). Silent; flee flares; break off after losing 2."
+    },
+    "enc_ch09_ice_tallmen": {
+      "chapter": "ch09",
+      "enemies": [
+        {
+          "type": "tallman",
+          "count": 3
+        }
+      ],
+      "note": "Max 3; they test, then break off after losing 1."
+    },
+    "enc_ch10_siege_n1": {
+      "chapter": "ch10",
+      "enemies": [
+        {
+          "type": "tallman",
+          "count": 1
+        }
+      ],
+      "note": "Repair a cut lamp cable while watched. Usually no attack."
+    },
+    "enc_ch10_siege_n2": {
+      "chapter": "ch10",
+      "enemies": [
+        {
+          "type": "tallman",
+          "count": 2
+        }
+      ],
+      "note": "Clamp the cooling-water line under the lights."
+    },
+    "enc_ch10_hollow_prowlers": {
+      "chapter": "ch10",
+      "enemies": [
+        {
+          "type": "assimilated_human",
+          "count": 2
+        },
+        {
+          "type": "assimilated_animal",
+          "count": 3
+        }
+      ],
+      "note": "Siege night 2 (ch10_siege_night2): Hollows call names from past the lamp line; animal prowlers test each pole's dark edge. Night 3 reuses their voice barks between lamps."
+    },
+    "enc_ch10_siege_n3": {
+      "chapter": "ch10",
+      "enemies": [
+        {
+          "type": "tallman",
+          "count": 3
+        }
+      ],
+      "note": "Push on one side (if den_killed and tallmen_killed>=3) or two. Disengage after losing 2 or at dawn."
+    },
+    "enc_ch10_gate_battle": {
+      "chapter": "ch10",
+      "enemies": [
+        {
+          "type": "remnant_patrol",
+          "count": 8
+        },
+        {
+          "type": "ironwood_mrap",
+          "count": 1
+        }
+      ],
+      "note": "Only if the Remnant doesn't stand down."
     }
   },
   "locations": {
-    "loc_east_end": "Dell's block, East End, Superior WI. Authority SECTOR 4.",
-    "loc_belknap_pharmacy": "Looted corner pharmacy.",
-    "loc_blatnik_bridge": "High bridge; Authority (later Ironwood) checkpoint.",
-    "loc_decc_ration": "Duluth convention center: registry and ration hub.",
-    "loc_lakehead_memorial": "Hospital (fictional). Dr. Ames.",
-    "loc_proctor_yard": "Rail yard on the hill. Grain trains; later Ironwood Remnant base.",
-    "loc_lou_shack": "Lou's radio shack, Proctor hill.",
-    "loc_ore_docks": "Ore docks and grain elevators. Harbor stronghold.",
-    "loc_lift_bridge": "Aerial Lift Bridge and control house, Canal Park.",
-    "loc_hwy53_blockade": "Hwy 53 overpass on ROUTE 9. Compact blockade.",
-    "river_ice": "Frozen St. Louis River stretch from the Twin Ports up toward Jay Cooke. Ch9 blizzard march.",
-    "loc_jay_cooke": "State park forest, swinging bridge, river gorge.",
-    "loc_thomson_dam": "Thomson hydro station: headgates, powerhouse, control room."
+    "loc_sparks_block": "Braith and Carly's block, old Sparks near Prater Way. HUD SECTOR 4. Lolo's clinic, Gil's garage, the Pruitts.",
+    "loc_prater_pharmacy": "Corner pharmacy on Prater Way. Looted Day 2.",
+    "loc_sparks_marina": "Sparks Marina lake. Ch1 water run (interactive ch01_lake_edge).",
+    "loc_virginia_bridge": "Virginia Street bridge over the Truckee. Authority checkpoint (Cpl. Haas).",
+    "loc_rscc_registry": "Reno-Sparks Convention Center: registry, ration hall, Annie's table, Ruth's class; Avila's command post in Ch6.",
+    "loc_meadows_general": "Truckee Meadows General Hospital (fictional). Dr. Ames. Parking ramp level 3 tanker.",
+    "loc_fourth_street": "4th Street motel row and Silver State Pawn (Dutch). Viaduct Crew turf. Marsh's motel (Ch6).",
+    "loc_sparks_yard": "Union Pacific yard, Sparks. Convoys; Boone's back door; Remnant base in Act III.",
+    "loc_silver_spur": "The Silver Spur, a dead downtown casino (fictional). The Floor's HQ and kitchens; Carly's Switchboard in Ch6.",
+    "loc_sparks_library": "Sparks library on Pyramid Way. Annie's seed library; glass atrium greenhouse (Act III).",
+    "loc_airguard_ramp": "Air Guard ramp, Reno-Tahoe Airport. C-130s parked in rows; -86 ground power carts by Hangar 2.",
+    "loc_tric_warehouses": "Industrial-center warehouses east of Sparks. Ch5 convoy staging; Darlene's reefer trailer.",
+    "loc_mustang_truckstop": "Truck stop at the I-80 Mustang exit. Mo's fuel market.",
+    "loc_i80_blockade": "I-80 in the Truckee canyon east of Sparks. Compact blockade, rail signal cabinet, overpass.",
+    "loc_rail_trench": "The sunken rail trench through downtown Reno. Bradley set piece; freight car on the siding; the alley glimpse.",
+    "loc_peavine_shack": "Augie's radio shack under the repeater towers on Peavine Peak.",
+    "loc_us50_fallon": "US-50 into Fallon. Compact checkpoint at the canal bridge (Ross). The last 'normal' town.",
+    "loc_dixie_annex": "Dixie Valley Annex exterior: fence, guard shack (Tolliver), airstrip, hangar (recovery detail, cage four).",
+    "loc_annex_holds": "Annex interior: maglock corridor, Wing A torpor holds (all forced open), records room, stair to flooded/collapsed Wing B.",
+    "loc_dixie_hotsprings": "Hot springs 3 mi north of the Annex. Optional den: two Tallmen in torpor.",
+    "loc_steamboat_creek": "Steamboat Creek corridor and hot-spring vents. Salt's culvert. Approach to Galena.",
+    "loc_galena_station": "Galena Station geothermal plant (fictional, at the Steamboat field): well field, steam, break room, control room, fence and lamp line.",
+    "river_ice": "The frozen Truckee from Sparks east to the Steamboat Creek confluence. Ch9 blizzard march; Glendale bridge picket."
   },
   "quests": [
     {
-      "id": "q_cooler",
-      "title": "Keep It Cold",
-      "loc": "loc_east_end",
+      "id": "q_water",
+      "title": "Rolling Boil",
+      "loc": "loc_sparks_marina",
       "chapter": "ch01",
-      "hint": "Basement cooler + lake water."
+      "hint": "Marina shore, then the stove."
     },
     {
-      "id": "q_insulin",
-      "title": "Tier Two",
-      "loc": "loc_decc_ration",
+      "id": "q_find_pruitt",
+      "title": "Feed the Ducks",
+      "loc": "loc_sparks_block",
+      "chapter": "ch01",
+      "hint": "Give Wraith the scarf. TRACK."
+    },
+    {
+      "id": "q_clinic_supplies",
+      "title": "For the Clinic",
+      "loc": "loc_prater_pharmacy",
+      "chapter": "ch01",
+      "hint": "Prater Way pharmacy at dusk."
+    },
+    {
+      "id": "q_essential_card",
+      "title": "Essential",
+      "loc": "loc_rscc_registry",
       "chapter": "ch02",
-      "hint": "Registry desk, then Lakehead Memorial."
+      "hint": "Registry desk, or Ames's letter."
     },
     {
       "id": "q_hospital_diesel",
       "title": "Level Three",
-      "loc": "loc_lakehead_memorial",
+      "loc": "loc_meadows_general",
       "chapter": "ch02",
-      "hint": "Tanker in the parking ramp, level three."
+      "hint": "Tanker on parking ramp level three."
     },
     {
-      "id": "q_find_hank",
-      "title": "Bring Your Head",
-      "loc": "loc_lou_shack",
+      "id": "q_find_walt",
+      "title": "The Old Operator",
+      "loc": "loc_peavine_shack",
       "chapter": "ch03",
-      "hint": "Proctor hill, Lou's shack."
+      "hint": "Peavine Peak, under the towers."
+    },
+    {
+      "id": "q_ground_power",
+      "title": "Borrowed Power",
+      "loc": "loc_airguard_ramp",
+      "chapter": "ch04",
+      "hint": "Hangar 2, the yellow carts."
     },
     {
       "id": "q_black_start",
       "title": "Black Start",
-      "loc": "loc_thomson_dam",
+      "loc": "loc_galena_station",
       "chapter": "ch04",
-      "hint": "Headgates, exciter, sync, breaker."
+      "hint": "Cart, pumps, fans, turbine, breaker."
     },
     {
-      "id": "q_find_theo",
-      "title": "don't be mad",
-      "loc": "loc_ore_docks",
-      "chapter": "ch06",
-      "hint": "He went to whoever asked him."
+      "id": "q_find_wes",
+      "title": "Under the Overpass",
+      "loc": "loc_i80_blockade",
+      "chapter": "ch05",
+      "hint": "Follow his voice."
+    },
+    {
+      "id": "q_mo_pump",
+      "title": "Bad Bearing",
+      "loc": "loc_mustang_truckstop",
+      "chapter": "ch05",
+      "hint": "Transfer pump behind the counter."
+    },
+    {
+      "id": "q_rourke_escort",
+      "title": "Maisie Won't Walk",
+      "loc": "loc_i80_blockade",
+      "chapter": "ch05",
+      "hint": "Walk the burros past the soldiers."
+    },
+    {
+      "id": "q_control_cards",
+      "title": "Hardened",
+      "loc": "loc_dixie_annex",
+      "chapter": "ch07",
+      "hint": "Hangar cage four. Bring the cart."
+    },
+    {
+      "id": "q_annie_greenhouse",
+      "title": "Seeds Are Patient",
+      "loc": "loc_sparks_library",
+      "chapter": "ch08",
+      "hint": "Library atrium."
+    },
+    {
+      "id": "q_lamp_line",
+      "title": "The Lamp Line",
+      "loc": "loc_galena_station",
+      "chapter": "ch10",
+      "hint": "Twelve poles. Keep them lit."
     }
   ],
   "weather_types": [
+    "heat_haze",
+    "dust_wind",
+    "clear_autumn",
+    "autumn_wind",
+    "frost",
     "overcast",
-    "snow",
+    "sleet",
     "freezing_rain",
-    "drizzle",
-    "clear_cold",
     "brown_sky",
     "grey_snow",
     "fallout_rain",
     "ashfall",
-    "blizzard"
+    "blizzard",
+    "clear_cold"
   ],
+  "seasons": {
+    "late_summer": {
+      "chapters": [
+        "ch01",
+        "ch02"
+      ],
+      "months": "late Aug – mid Sep, Year 1",
+      "temp_c": [
+        32,
+        36
+      ],
+      "night_temp_c": [
+        15,
+        18
+      ],
+      "weather": [
+        "heat_haze",
+        "dust_wind"
+      ],
+      "survival": "hydration, heat, spoiled food, dust. No warmth/cold pressure.",
+      "palette": "warm amber dust, white sun glare, heat shimmer",
+      "notes": "Blackout in late-summer heat: no AC, fridges dead, marina water run. No frost, snow, coats or cold breath."
+    },
+    "autumn": {
+      "chapters": [
+        "ch03",
+        "ch04"
+      ],
+      "months": "October, Year 1",
+      "temp_c": [
+        12,
+        16
+      ],
+      "night_temp_c": [
+        4,
+        6
+      ],
+      "weather": [
+        "clear_autumn",
+        "autumn_wind"
+      ],
+      "survival": "warmth starts to bite at night; fuel and heating worries.",
+      "palette": "autumn gold, yellow cottonwoods along the Truckee, long shadows",
+      "notes": "Crisp high-desert autumn; first cold nights; dry wind."
+    },
+    "late_fall": {
+      "chapters": [
+        "ch05",
+        "ch06",
+        "ch07"
+      ],
+      "months": "mid Nov – mid Dec, Year 1",
+      "temp_c": [
+        -1,
+        2
+      ],
+      "night_temp_c": [
+        -3,
+        -3
+      ],
+      "weather": [
+        "sleet",
+        "overcast",
+        "frost",
+        "brown_sky",
+        "grey_snow"
+      ],
+      "survival": "warmth dominates; wet cold, biting wind.",
+      "palette": "overcast slate grey, wet asphalt, sodium-orange dead lamps",
+      "notes": "Civil war. First sleet and frost on Peavine and US-50. Cold desert nights at the Annex. Dec 5 bursts turn the sky brown; grey ash flakes fall."
+    },
+    "nuclear_winter": {
+      "chapters": [
+        "ch08",
+        "ch09",
+        "ch10"
+      ],
+      "months": "January – late February, Year 2",
+      "temp_c": [
+        -40,
+        -10
+      ],
+      "night_temp_c": [
+        -45,
+        -18
+      ],
+      "weather": [
+        "fallout_rain",
+        "ashfall",
+        "blizzard",
+        "clear_cold"
+      ],
+      "survival": "warmth, radiation, filters, SEAL; survival horror (Hollows).",
+      "palette": "ashfall blue-grey, near-monochrome; floodlight cones and flare red are the only warm colors",
+      "notes": "Fallout rain → thick ashfall → whiteout blizzards; frozen Truckee (river_ice). Tone shifts to grounded survival horror; endings stay dark-but-hopeful."
+    }
+  },
+  "assimilation": {
+    "in_world_term": "Hollows",
+    "chapters": [
+      "ch08",
+      "ch09",
+      "ch10"
+    ],
+    "enemy_types": [
+      "assimilated_human",
+      "assimilated_animal"
+    ],
+    "rule": "Tallmen feed on warmth and keep what's left: assimilated people and animals (Hollows) stalk the ash for them. Husks are still living, sick people and must stay distinct.",
+    "tells": {
+      "wraith": "Hollow: low growl, hackles up, refuses to approach (sets wraith_mimic_warned). Real husk or stranger: soft whine, noses their hand.",
+      "breath": "Hollows show NO breath plume in sub-zero air; living people always do (render a plume on every living NPC in Act III).",
+      "voice": "Copied phrases, off-cadence and repeated; the voice can belong to someone who is provably elsewhere.",
+      "gait": "Wrong joint angles; the neck keeps turning after the shoulders stop.",
+      "light": "Eyes reflect flat in a flashlight, like a Tallman's."
+    },
+    "flags": [
+      "assimilation_discovered",
+      "mimic_let_in",
+      "assimilated_killed",
+      "wraith_mimic_warned",
+      "ch09_voice_followed"
+    ],
+    "encounters": [
+      "enc_ch08_hollow_first",
+      "enc_ch08_door_mimic",
+      "enc_ch09_hollow_ambush",
+      "enc_ch09_animal_pack",
+      "enc_ch10_hollow_prowlers"
+    ],
+    "scenes": [
+      "ch08_henley_house",
+      "ch08_door",
+      "ch09_voices",
+      "ch10_siege_night2",
+      "ch10_siege_night3"
+    ],
+    "foreshadow": "Ch7: annex_log's water-swollen 'TISSUE INTEGRATION' page and Reyne's line in ch07_annex_holds (node many2). Nothing explicit before Ch8.",
+    "count_rule": "No Tallman or Hollow totals are ever stated. tallmen_killed and assimilated_killed are separate counters."
+  },
+  "timeline": {
+    "day_0": "Sun Aug 23, Year 1 (geomagnetic storm; grid down; Ross's call cuts out)",
+    "annex_diesel_out": "Day 16, Tue Sep 8, Year 1",
+    "bursts": "Day 104, Sat Dec 5, Year 1 (distant high-altitude bursts; Galena's controls fried)"
+  },
   "hud_unlocks": {
     "ch01": [
       "hp",
-      "warmth",
-      "hunger"
+      "hydration",
+      "hunger",
+      "companion"
     ],
     "ch03": [
+      "warmth",
       "temp"
     ],
     "ch05": [
@@ -225,29 +862,45 @@
       "id": "ch01",
       "title": "Day Three",
       "act": 1,
-      "date": "Oct 17",
-      "weather": "overcast",
-      "temp_c": 6,
+      "season": "late_summer",
+      "date": "Day 3 (Wed Aug 26, Year 1)",
+      "weather": "heat_haze",
+      "temp_c": 35,
+      "night_temp_c": 18,
+      "survival_focus": [
+        "hydration",
+        "heat",
+        "spoiled_food",
+        "dust"
+      ],
       "time_of_day": [
         "morning",
-        "dusk"
+        "dusk",
+        "night"
+      ],
+      "levels": [
+        "ch01_day_three"
       ],
       "locations": [
-        "loc_east_end",
-        "loc_belknap_pharmacy"
+        "loc_sparks_block",
+        "loc_sparks_marina",
+        "loc_prater_pharmacy"
       ],
       "objectives": [
-        "Talk to Theo",
-        "Build lake-water cooler (craft lake_cooler; sets ch01_cooler_built)",
-        "Get fuel (Ray or gas can)",
-        "Check on Marguerite",
-        "Pharmacy at dusk",
-        "Home before dark"
+        "Talk to Carly",
+        "Feed Wraith (companion tutorial)",
+        "Haul water from the marina and boil it (q_water)",
+        "Check on Lolo",
+        "Find Mr. Pruitt with Wraith (TRACK)",
+        "Fuel: Gil's garage or the gas can",
+        "Pharmacy at dusk: supplies for Lolo",
+        "Home before dark: the voicemail"
       ],
       "player_actions": [
         "explore",
         "scavenge",
-        "craft",
+        "companion_track",
+        "boil_water",
         "trade",
         "dialogue",
         "stealth_optional"
@@ -256,57 +909,71 @@
         {
           "type": "looter",
           "count": 1,
-          "note": "Wren; non-hostile unless attacked"
+          "note": "Kit; non-hostile unless attacked"
         },
         {
           "type": "watch_militia",
-          "count": 1,
-          "note": "Hostile only if you run with drugs or draw"
+          "count": 2,
+          "note": "Deputy Lusk + 1; hostile only if you run with drugs or draw"
         }
       ],
       "setpieces": [
-        "Looted pharmacy at dusk"
+        "Marina water line",
+        "Wraith's scent trail to the canal",
+        "Looted pharmacy at dusk",
+        "The voicemail"
       ],
+      "tallman_glimpses": [],
+      "traders": [],
+      "ambient_npcs": [
+        "amb_deputy_lusk",
+        "amb_bike_kids"
+      ],
+      "interactives": {
+        "ch01_water_station": "Repurposed from ch01_cooler_station: boil water_dirty -> water_clean (15 min).",
+        "ch01_lake_edge": "Fill water_dirty x4 at the marina.",
+        "ch01_phone": "Voicemail interactive (triggers ch01_voicemail at night)."
+      },
       "start_inventory": {
-        "insulin_vial": 3,
         "gas_can": 1,
-        "lineman_tools": 1,
-        "canned_food": 2,
-        "candles": 2
+        "mech_tools": 1,
+        "canned_food": 3,
+        "candles": 2,
+        "bucket": 1,
+        "flashlight": 1
       },
       "items": [
-        "insulin_vial",
         "gas_can",
-        "lineman_tools",
+        "mech_tools",
         "diesel_jug",
         "canned_food",
         "candles",
         "bucket",
+        "water_dirty",
+        "water_clean",
+        "pruitt_scarf",
         "pharmacy_bag",
-        "lake_cooler"
-      ],
-      "crafting": [
-        {
-          "result": "lake_cooler",
-          "inputs": {
-            "bucket": 1,
-            "wire": 1
-          },
-          "effects": [
-            {
-              "set": "ch01_cooler_built",
-              "value": true
-            }
-          ]
-        }
+        "flashlight"
       ],
       "scenes": [
-        "ch01_theo_morning",
-        "ch01_marguerite_porch",
-        "ch01_ray_garage",
-        "ch01_wren_pharmacy",
-        "ch01_theo_night"
+        "ch01_carly_home",
+        "ch01_wraith_morning",
+        "ch01_marina_water",
+        "ch01_lolo_porch",
+        "ch01_pruitt_found",
+        "ch01_gil_garage",
+        "ch01_block_ambient",
+        "ch01_kit_pharmacy",
+        "ch01_voicemail"
       ],
+      "scene_conditions": {
+        "ch01_pruitt_found": [
+          {
+            "item": "pruitt_scarf",
+            "gte": 1
+          }
+        ]
+      },
       "chapter_start_effects": [
         {
           "set": "kindness",
@@ -329,47 +996,51 @@
           "value": 0
         },
         {
-          "set": "theo_insulin_lapses",
-          "value": 0
-        },
-        {
-          "set": "theo_alive",
-          "value": true
-        },
-        {
-          "set": "theo_side",
+          "set": "carly_side",
           "value": "none"
         },
         {
-          "set": "ray_alive",
+          "set": "gil_alive",
           "value": true
         },
         {
-          "set": "wren_alive",
+          "set": "kit_alive",
           "value": true
         },
         {
-          "set": "strand_alive",
+          "set": "avila_alive",
           "value": true
         },
         {
-          "set": "bea_alive",
+          "set": "roz_alive",
           "value": true
         },
         {
-          "set": "jory_alive",
+          "set": "ander_alive",
           "value": true
         },
         {
-          "set": "hank_alive",
+          "set": "walt_alive",
           "value": true
         },
         {
-          "set": "marguerite_alive",
+          "set": "lolo_alive",
           "value": true
         },
         {
-          "set": "cody_alive",
+          "set": "wes_alive",
+          "value": true
+        },
+        {
+          "set": "ross_alive",
+          "value": true
+        },
+        {
+          "set": "wraith_alive",
+          "value": true
+        },
+        {
+          "set": "augie_alive",
           "value": true
         },
         {
@@ -379,36 +1050,104 @@
         {
           "set": "husks_talked_down",
           "value": 0
+        },
+        {
+          "set": "tallmen_killed",
+          "value": 0
+        },
+        {
+          "set": "assimilated_killed",
+          "value": 0
+        },
+        {
+          "set": "assimilation_discovered",
+          "value": false
+        },
+        {
+          "set": "mimic_let_in",
+          "value": false
+        },
+        {
+          "set": "den_killed",
+          "value": false
+        },
+        {
+          "set": "tallman_glimpses",
+          "value": 0
+        },
+        {
+          "set": "siege_breaches",
+          "value": 0
+        },
+        {
+          "quest": "q_water",
+          "state": "start"
         }
       ],
-      "chapter_end_effects": []
+      "chapter_end_effects": [
+        {
+          "set": "pruitt_alive",
+          "value": false
+        },
+        {
+          "if": [
+            {
+              "flag": "ch01_fuel_to_pruitt",
+              "eq": true
+            }
+          ],
+          "then": [
+            {
+              "set": "pruitt_alive",
+              "value": true
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ch02",
       "title": "The Registry",
       "act": 1,
-      "date": "Day 19 (Nov 2)",
-      "weather": "snow",
-      "temp_c": -4,
+      "season": "late_summer",
+      "date": "Day 19 (Fri Sep 11, Year 1)",
+      "weather": "dust_wind",
+      "temp_c": 33,
+      "night_temp_c": 15,
+      "survival_focus": [
+        "hydration",
+        "heat",
+        "crowds",
+        "dust"
+      ],
       "time_of_day": [
-        "day"
+        "day",
+        "dusk"
+      ],
+      "levels": [
+        "ch02_the_registry"
       ],
       "locations": [
-        "loc_blatnik_bridge",
-        "loc_decc_ration",
-        "loc_lakehead_memorial"
+        "loc_virginia_bridge",
+        "loc_rscc_registry",
+        "loc_meadows_general",
+        "loc_fourth_street"
       ],
       "objectives": [
-        "Cross the checkpoint",
-        "Register at the DECC",
-        "Get insulin (priority card or Ames diesel job)",
-        "Survive the crush"
+        "Cross the Virginia Street checkpoint",
+        "Register (Avila)",
+        "Earn the essential-worker card (q_essential_card)",
+        "See Carly at the registry",
+        "Survive the crush",
+        "Ames at Meadows General",
+        "Home at dusk"
       ],
       "player_actions": [
         "dialogue",
         "queue_timeskip",
         "timed_escape",
-        "explore_hospital"
+        "explore_hospital",
+        "trade"
       ],
       "enemies": [
         {
@@ -423,22 +1162,61 @@
         }
       ],
       "setpieces": [
-        "Ration-line crush (enc_ch02_crush)"
+        "Ration-line crush (enc_ch02_crush)",
+        "Dusk ridge glimpse at the hospital exit"
+      ],
+      "tallman_glimpses": [
+        {
+          "id": "glimpse_ch02_ridge",
+          "trigger": "Exit Meadows General at dusk after the Ames scene",
+          "where": "East ridge, ~600 m, single upright silhouette on the skyline",
+          "duration_s": 2.5,
+          "interactable": false,
+          "collider": false,
+          "despawn": "after duration OR player within 60 m OR LOS lost",
+          "on_show": [
+            {
+              "add": "tallman_glimpses",
+              "value": 1
+            }
+          ],
+          "companion_reaction": "wraith_stare",
+          "note": "FIRST glimpse. Scene ch02_ridge_glimpse plays the reaction."
+        }
+      ],
+      "traders": [
+        "trader_dutch",
+        "trader_annie"
+      ],
+      "ambient_npcs": [
+        "amb_lonnie",
+        "amb_brother_amos",
+        "amb_ruth"
       ],
       "items": [
         "ration_card",
         "priority_card",
-        "insulin_vial",
         "cigarettes",
-        "hospital_diesel"
+        "hospital_diesel",
+        "antibiotics",
+        "med_kit",
+        "batteries",
+        "ammo_9mm"
       ],
       "scenes": [
         "ch02_haas_checkpoint",
-        "ch02_lou_radio",
-        "ch02_wren_line",
-        "ch02_strand_registry",
+        "ch02_augie_radio",
+        "ch02_lonnie_line",
+        "ch02_kit_line",
+        "ch02_annie_table",
+        "ch02_avila_registry",
+        "ch02_carly_desk",
+        "ch02_crush",
+        "ch02_ruth_class",
         "ch02_ames_hospital",
-        "ch02_ames_diesel_return"
+        "ch02_ames_diesel_return",
+        "ch02_dutch_pawn",
+        "ch02_ridge_glimpse"
       ],
       "scene_conditions": {
         "ch02_ames_diesel_return": [
@@ -450,7 +1228,7 @@
       },
       "chapter_start_effects": [
         {
-          "quest": "q_insulin",
+          "quest": "q_essential_card",
           "state": "start"
         }
       ],
@@ -460,46 +1238,106 @@
       "id": "ch03",
       "title": "The Long Cold",
       "act": 1,
-      "date": "Day 60 (Dec 13)",
-      "weather": "clear_cold",
-      "temp_c": -30,
+      "season": "autumn",
+      "date": "Day 50 (Mon Oct 12, Year 1)",
+      "weather": "clear_autumn",
+      "temp_c": 14,
+      "night_temp_c": 4,
+      "survival_focus": [
+        "first_cold_nights",
+        "fuel",
+        "fire"
+      ],
       "time_of_day": [
+        "day",
         "night",
         "dawn"
       ],
+      "levels": [
+        "ch03_the_long_cold"
+      ],
       "locations": [
-        "loc_east_end",
-        "loc_proctor_yard",
-        "loc_lou_shack",
-        "loc_ore_docks"
+        "loc_sparks_block",
+        "loc_peavine_shack",
+        "loc_rscc_registry",
+        "loc_tric_warehouses"
       ],
       "objectives": [
+        "Wes arrives",
         "Survive the fire night",
-        "Cross to Proctor (warmth stops)",
-        "Find Hank",
-        "Decide who learns about the dam"
+        "Reach Peavine; fix Augie's transmitter",
+        "Meet Walt",
+        "Decide who learns about Galena"
       ],
       "player_actions": [
         "night_defense_or_rescue",
         "cold_traverse",
-        "scavenge_clothing",
-        "dialogue"
+        "repair",
+        "dialogue",
+        "trade"
       ],
       "enemies": [
         {
           "type": "bridge_boy",
           "count": 6,
-          "note": "Flee at 50% losses; warning shots work"
+          "note": "Viaduct Crew; flee at 50% losses; warning shots work"
         },
         {
           "type": "watch_militia",
           "count": 3,
-          "note": "Proctor patrol; talk past with ration_card"
+          "note": "Peavine road patrol; talk past with ration_card"
         }
       ],
       "setpieces": [
-        "Ray's house burning in the dark",
-        "Frozen boxcar in the rail yard"
+        "Gil's garage burning in the dark",
+        "Peavine switchbacks in the first cold wind; yellow cottonwoods along the Truckee"
+      ],
+      "tallman_glimpses": [
+        {
+          "id": "glimpse_ch03_fog",
+          "trigger": "Dawn traverse after the fire",
+          "where": "Edge of dawn ground fog off the Truckee by the Sparks yard, ~150 m, crossing the road on all fours",
+          "duration_s": 2.5,
+          "interactable": false,
+          "collider": false,
+          "despawn": "after duration OR player within 60 m OR LOS lost",
+          "on_show": [
+            {
+              "add": "tallman_glimpses",
+              "value": 1
+            }
+          ],
+          "companion_reaction": "wraith_stare",
+          "note": "Second-act glimpses get closer but stay distant."
+        },
+        {
+          "id": "glimpse_ch03_tracks",
+          "trigger": "Peavine road, approaching the shack",
+          "where": "Not a figure: a line of too-long tracks crossing the road; Wraith growls at nothing",
+          "duration_s": 60.0,
+          "interactable": false,
+          "collider": false,
+          "despawn": "after duration OR player within 60 m OR LOS lost",
+          "on_show": [
+            {
+              "add": "tallman_glimpses",
+              "value": 1
+            }
+          ],
+          "companion_reaction": "wraith_stare",
+          "note": "Decal only; tracks fade in 60 s."
+        }
+      ],
+      "traders": [
+        "trader_rourke",
+        "trader_annie"
+      ],
+      "ambient_npcs": [
+        "amb_darlene",
+        "amb_bike_kids",
+        "amb_night_owl",
+        "amb_brother_amos",
+        "amb_deputy_lusk"
       ],
       "items": [
         "firewood",
@@ -507,61 +1345,60 @@
         "boots_insulated",
         "hand_radio",
         "batteries",
-        "rifle_ammo"
+        "rifle_ammo",
+        "ross_letter",
+        "mech_tools",
+        "rumor",
+        "whiskey",
+        "candles"
       ],
       "scenes": [
-        "ch03_wren_warning",
-        "ch03_ray_fire",
-        "ch03_hank_proctor",
-        "ch03_dam_secret"
+        "ch03_wes_arrives",
+        "ch03_kit_warning",
+        "ch03_gil_fire",
+        "ch03_night_owl",
+        "ch03_rourke_road",
+        "ch03_augie_peavine",
+        "ch03_carly_count",
+        "ch03_plant_secret",
+        "ch03_darlene_camp"
       ],
       "scene_conditions": {
-        "ch03_wren_warning": [
+        "ch03_kit_warning": [
           {
-            "trust": "wren",
+            "trust": "kit",
             "gte": 3
+          }
+        ],
+        "ch03_night_owl": [
+          {
+            "item": "hand_radio",
+            "gte": 1
           }
         ]
       },
-      "chapter_start_effects": [],
+      "chapter_start_effects": [
+        {
+          "quest": "q_find_walt",
+          "state": "start"
+        }
+      ],
       "chapter_end_effects": [
         {
           "if": [
             {
-              "flag": "ray_house_burned",
+              "flag": "gil_house_burned",
               "eq": true
             },
             {
-              "flag": "ch03_helped_ray",
+              "flag": "ch03_helped_gil",
               "ne": true
             }
           ],
           "then": [
             {
-              "set": "ray_badly_burned",
+              "set": "gil_badly_burned",
               "value": true
-            }
-          ]
-        },
-        {
-          "if": [
-            {
-              "item": "insulin_vial",
-              "lt": 1
-            },
-            {
-              "flag": "dam_running",
-              "ne": true
-            },
-            {
-              "flag": "ames_deal",
-              "ne": true
-            }
-          ],
-          "then": [
-            {
-              "add": "theo_insulin_lapses",
-              "value": 1
             }
           ]
         }
@@ -571,26 +1408,38 @@
       "id": "ch04",
       "title": "Black Start",
       "act": 2,
-      "date": "Late January",
-      "weather": "snow",
-      "temp_c": -24,
+      "season": "autumn",
+      "date": "Day 66 (Wed Oct 28, Year 1)",
+      "weather": "autumn_wind",
+      "temp_c": 12,
+      "night_temp_c": 5,
+      "survival_focus": [
+        "cold_nights",
+        "fuel",
+        "heating"
+      ],
       "time_of_day": [
-        "day",
-        "night"
+        "night",
+        "dawn"
+      ],
+      "levels": [
+        "ch04_black_start"
       ],
       "locations": [
-        "loc_jay_cooke",
-        "loc_thomson_dam"
+        "loc_airguard_ramp",
+        "loc_steamboat_creek",
+        "loc_galena_station"
       ],
       "objectives": [
-        "Cross the swinging bridge",
+        "Take a ground power cart off the Air Guard ramp",
+        "Tow it up Steamboat Creek",
         "Deal with the Lunds",
-        "Get a relay",
-        "Black start Unit 2",
+        "Black start Unit 1",
         "Choose the first feeder"
       ],
       "player_actions": [
-        "balance_traverse",
+        "stealth_or_talk",
+        "tow_vehicle",
         "negotiate",
         "minigame_black_start",
         "valves_levers"
@@ -599,12 +1448,14 @@
         {
           "id": "mg_black_start",
           "steps": [
-            "headgate_wheel",
-            "exciter",
+            "cart_to_bus",
+            "circulation_pumps",
+            "cooling_fans",
+            "turbine_roll",
             "sync",
             "close_breaker"
           ],
-          "note": "Longer with relay_source=bypass; mistakes trip breaker"
+          "note": "Longer with relay_source=bypass or without mech_tools; mistakes trip the breaker."
         }
       ],
       "enemies": [
@@ -615,27 +1466,74 @@
         },
         {
           "type": "bridge_boy",
-          "count": 2,
-          "note": "Optional, river ice"
+          "count": 5,
+          "note": "Only if trader_dutch_rep<=-1 (Dutch's ambush)"
         },
         {
           "type": "authority_guard",
           "count": 8,
-          "note": "Story standoff only if dam_secret_told=authority"
+          "note": "Ramp sentry (1) + standoff only if dam_secret_told=authority"
         }
       ],
       "setpieces": [
-        "Swinging bridge in wind",
-        "Turbine spin-up, lights on at night (big warmth restore)"
+        "C-130s asleep under a cold moon",
+        "gpu_tow",
+        "Turbine spin-up; steam lit from below",
+        "Shape in the steam"
+      ],
+      "tallman_glimpses": [
+        {
+          "id": "glimpse_ch04_steam",
+          "trigger": "Immediately after the breaker closes",
+          "where": "Galena steam field, ~120 m, an upright shape inside the steam plume; gone when the plume shifts",
+          "duration_s": 3.0,
+          "interactable": false,
+          "collider": false,
+          "despawn": "after duration OR player within 60 m OR LOS lost",
+          "on_show": [
+            {
+              "add": "tallman_glimpses",
+              "value": 1
+            }
+          ],
+          "companion_reaction": "wraith_stare",
+          "note": "Played inside ch04_black_start."
+        },
+        {
+          "id": "glimpse_ch04_cow",
+          "trigger": "Steamboat Creek tow route",
+          "where": "A dead cow in a field with its chest opened; no figure",
+          "duration_s": 999.0,
+          "interactable": false,
+          "collider": false,
+          "despawn": "after duration OR player within 60 m OR LOS lost",
+          "on_show": [
+            {
+              "add": "tallman_glimpses",
+              "value": 1
+            }
+          ],
+          "companion_reaction": "wraith_stare",
+          "note": "Static prop, not a creature."
+        }
+      ],
+      "traders": [],
+      "ambient_npcs": [
+        "amb_salt"
       ],
       "items": [
+        "gpu_cart",
         "relay_kit",
-        "hank_keys",
-        "lineman_tools",
+        "walt_keys",
+        "mech_tools",
         "canned_food",
-        "firewood"
+        "firewood",
+        "flashlight"
       ],
       "scenes": [
+        "ch04_airguard_ramp",
+        "ch04_dutch_ambush",
+        "ch04_salt_culvert",
         "ch04_lunds",
         "ch04_standoff",
         "ch04_black_start"
@@ -646,9 +1544,23 @@
             "flag": "dam_secret_told",
             "eq": "authority"
           }
+        ],
+        "ch04_dutch_ambush": [
+          {
+            "flag": "trader_dutch_rep",
+            "lte": -1
+          }
         ]
       },
       "chapter_start_effects": [
+        {
+          "quest": "q_ground_power",
+          "state": "start"
+        },
+        {
+          "give": "walt_keys",
+          "qty": 1
+        },
         {
           "if": [
             {
@@ -660,6 +1572,24 @@
             {
               "set": "relay_source",
               "value": "harbor"
+            },
+            {
+              "give": "relay_kit",
+              "qty": 1
+            }
+          ]
+        },
+        {
+          "if": [
+            {
+              "flag": "dam_secret_told",
+              "eq": "compact"
+            }
+          ],
+          "then": [
+            {
+              "set": "relay_source",
+              "value": "compact"
             },
             {
               "give": "relay_kit",
@@ -688,28 +1618,41 @@
       "id": "ch05",
       "title": "Route 9",
       "act": 2,
-      "date": "March",
-      "weather": "freezing_rain",
-      "temp_c": -8,
+      "season": "late_fall",
+      "date": "Day 83 (Sat Nov 14, Year 1)",
+      "weather": "sleet",
+      "temp_c": 2,
+      "night_temp_c": -3,
+      "survival_focus": [
+        "warmth",
+        "wet_cold",
+        "wind"
+      ],
       "time_of_day": [
+        "dusk",
         "night"
       ],
+      "levels": [
+        "ch05_route_9"
+      ],
       "locations": [
-        "loc_ore_docks",
-        "loc_hwy53_blockade",
-        "loc_proctor_yard"
+        "loc_tric_warehouses",
+        "loc_i80_blockade",
+        "loc_mustang_truckstop",
+        "loc_sparks_yard"
       ],
       "objectives": [
         "Ride the Ironwood convoy",
-        "Restore the signal cabinet under fire",
+        "The signal cabinet",
         "Decide the convoy",
-        "Find the wounded man under the overpass"
+        "Find Wes under the overpass"
       ],
       "player_actions": [
         "convoy_onrails_shoot_or_hold",
         "repair_under_fire",
         "dialogue",
-        "medical"
+        "medical",
+        "trade"
       ],
       "enemies": [
         {
@@ -734,61 +1677,115 @@
         }
       ],
       "setpieces": [
-        "MRAP searchlight on snow",
-        "Logging-truck blockade on the overpass"
+        "MRAP searchlight on sleet",
+        "Hay-truck blockade in the canyon (armored_plow_truck reskin)",
+        "Tracers into the dark at something that isn't people"
+      ],
+      "tallman_glimpses": [
+        {
+          "id": "glimpse_ch05_flare",
+          "trigger": "During the canyon firefight, when any flare is fired",
+          "where": "Hillside above the canyon, ~70 m, lit by the flare: one figure, mid-stride, then gone",
+          "duration_s": 2.0,
+          "interactable": false,
+          "collider": false,
+          "despawn": "after duration OR player within 60 m OR LOS lost",
+          "on_show": [
+            {
+              "add": "tallman_glimpses",
+              "value": 1
+            }
+          ],
+          "companion_reaction": "wraith_stare",
+          "note": "Ironwood radio chatter plays: 'contact, not human, repeat not—'."
+        }
+      ],
+      "traders": [
+        "trader_mo",
+        "trader_rourke",
+        "trader_boone"
+      ],
+      "ambient_npcs": [
+        "amb_darlene"
       ],
       "items": [
         "med_kit",
         "rifle_ammo",
         "signal_fuse",
         "flare",
-        "grain_sack"
+        "grain_sack",
+        "diesel_jug",
+        "mask_filter",
+        "whiskey",
+        "cigarettes",
+        "rumor"
       ],
       "start_inventory": {
-        "med_kit": 1
+        "med_kit": 1,
+        "signal_fuse": 1
       },
       "scenes": [
         "ch05_ruiz_convoy",
-        "ch05_jory_blockade",
-        "ch05_cody"
+        "ch05_signal_cabinet",
+        "ch05_ander_blockade",
+        "ch05_wes_wounded",
+        "ch05_mo_truckstop",
+        "ch05_rourke_canyon",
+        "ch05_boone_backdoor"
       ],
       "chapter_start_effects": [
         {
           "set": "ironwood_arrived",
           "value": true
+        },
+        {
+          "quest": "q_find_wes",
+          "state": "start"
         }
       ],
       "chapter_end_effects": []
     },
     {
       "id": "ch06",
-      "title": "The Lift Bridge",
+      "title": "The Trench",
       "act": 2,
-      "date": "May",
-      "weather": "drizzle",
-      "temp_c": 4,
+      "season": "late_fall",
+      "date": "Day 96 (Fri Nov 27, Year 1)",
+      "weather": "overcast",
+      "temp_c": 1,
+      "night_temp_c": -3,
+      "survival_focus": [
+        "warmth",
+        "wet_cold",
+        "curfew"
+      ],
       "time_of_day": [
         "day",
         "night"
       ],
+      "levels": [
+        "ch06_the_trench"
+      ],
       "locations": [
-        "loc_east_end",
-        "loc_blatnik_bridge",
-        "loc_ore_docks",
-        "loc_lift_bridge"
+        "loc_sparks_block",
+        "loc_fourth_street",
+        "loc_silver_spur",
+        "loc_rscc_registry",
+        "loc_rail_trench"
       ],
       "objectives": [
         "Survive the sweep",
-        "Find Theo",
-        "Strand's command post",
-        "Cross Canal Park",
-        "Raise or hold the bridge"
+        "Find Carly at the Silver Spur",
+        "Avila's command post",
+        "Reach the trench",
+        "Ruiz under the MRAP door",
+        "Block or open the trench"
       ],
       "player_actions": [
         "stealth_hide_items",
         "checkpoint",
         "urban_night_battle",
-        "power_routing_puzzle"
+        "physics_puzzle_freight_car"
       ],
       "enemies": [
         {
@@ -803,55 +1800,92 @@
         {
           "type": "ironwood_drone",
           "count": 2,
-          "note": "Fog reduces detection"
+          "note": "Rain reduces detection"
         },
         {
           "type": "ironwood_bradley",
           "count": 1,
-          "note": "Setpiece; disable crane to block"
+          "note": "Setpiece; freight_car_drop blocks it"
         },
         {
           "type": "compact_militia",
           "count": 4,
-          "note": "Only if bridge_choice=held (last fight)"
+          "note": "Only if bridge_choice=open (last fight)"
         },
         {
           "type": "harbor_militia",
           "count": 6,
-          "note": "Only if bridge_choice=held (last fight)"
+          "note": "Only if bridge_choice=open (last fight)"
         }
       ],
       "setpieces": [
         "Quarantine sweep house-to-house",
-        "Bradley on the pier",
-        "Lift bridge rising under fire",
-        "Jump into the canal"
+        "ied_mrap (Ruiz pinned)",
+        "freight_car_drop into the rail trench",
+        "The alley glimpse"
+      ],
+      "tallman_glimpses": [
+        {
+          "id": "glimpse_ch06_alley",
+          "trigger": "Night route to the trench, alley behind the bowling stadium",
+          "where": "Far end of the alley under a dead sodium light, ~25 m (CLOSEST glimpse; still non-interactable): it looks at Braith, then leaves on all fours",
+          "duration_s": 4.0,
+          "interactable": false,
+          "collider": false,
+          "despawn": "after duration OR player within 60 m OR LOS lost",
+          "on_show": [
+            {
+              "add": "tallman_glimpses",
+              "value": 1
+            }
+          ],
+          "companion_reaction": "wraith_stare",
+          "note": "Exception to the 80 m rule, scripted inside ch06_alley_glimpse; player input locked for 4 s."
+        }
+      ],
+      "traders": [
+        "trader_dutch",
+        "trader_floor"
+      ],
+      "ambient_npcs": [
+        "amb_pvt_marsh",
+        "amb_deputy_lusk",
+        "amb_lonnie",
+        "amb_brother_amos",
+        "amb_bike_kids",
+        "amb_ruth"
       ],
       "items": [
         "rifle_ammo",
         "med_kit",
         "ironwood_id",
-        "bolt_cutters"
+        "bolt_cutters",
+        "spur_chip",
+        "vet_kit"
       ],
       "scenes": [
         "ch06_sweep",
-        "ch06_theo_side",
-        "ch06_strand_break",
+        "ch06_informant_list",
+        "ch06_marsh_motel",
+        "ch06_carly_side",
+        "ch06_avila_break",
+        "ch06_floor_commissary",
+        "ch06_alley_glimpse",
         "ch06_ruiz_pinned",
-        "ch06_lift_bridge"
+        "ch06_trench"
       ],
       "chapter_start_effects": [],
       "chapter_end_effects": [
         {
           "if": [
             {
-              "trust": "wren",
+              "trust": "kit",
               "lt": 3
             }
           ],
           "then": [
             {
-              "set": "wren_alive",
+              "set": "kit_alive",
               "value": false
             }
           ]
@@ -864,12 +1898,12 @@
             },
             {
               "flag": "bridge_choice",
-              "eq": "raised"
+              "eq": "blocked"
             }
           ],
           "then": [
             {
-              "set": "strand_alive",
+              "set": "avila_alive",
               "value": false
             }
           ]
@@ -877,32 +1911,28 @@
         {
           "if": [
             {
-              "flag": "bridge_choice",
-              "eq": "held"
-            },
-            {
-              "flag": "cody_alive",
-              "eq": false
-            }
-          ],
-          "then": [
-            {
-              "set": "ray_alive",
-              "value": false
-            }
-          ]
-        },
-        {
-          "if": [
-            {
-              "flag": "ray_badly_burned",
+              "flag": "gil_badly_burned",
               "eq": true
             }
           ],
           "then": [
             {
-              "set": "ray_alive",
+              "set": "gil_alive",
               "value": false
+            }
+          ]
+        },
+        {
+          "if": [
+            {
+              "trust": "carly",
+              "lte": -3
+            }
+          ],
+          "then": [
+            {
+              "set": "carly_left",
+              "value": true
             }
           ]
         }
@@ -912,56 +1942,143 @@
       "id": "ch07",
       "title": "Dead Air",
       "act": 2,
-      "date": "July 9 → late July",
-      "weather": "brown_sky",
-      "temp_c": 2,
+      "season": "late_fall",
+      "date": "Day 104 (Sat Dec 5) → mid-December, Year 1",
+      "weather": "overcast",
+      "weather_after_bursts": "brown_sky",
+      "temp_c": -1,
+      "night_temp_c": -3,
+      "survival_focus": [
+        "warmth",
+        "wind",
+        "desert_night_cold"
+      ],
       "time_of_day": [
         "night",
-        "day"
+        "day",
+        "night"
       ],
+      "levels": [
+        "ch07_dead_air",
+        "ch07b_dixie_valley"
+      ],
+      "level_split": {
+        "ch07_dead_air": [
+          "loc_peavine_shack",
+          "loc_us50_fallon"
+        ],
+        "ch07b_dixie_valley": [
+          "loc_dixie_annex",
+          "loc_annex_holds",
+          "loc_dixie_hotsprings"
+        ]
+      },
       "locations": [
-        "loc_lou_shack",
-        "loc_proctor_yard",
-        "loc_east_end"
+        "loc_peavine_shack",
+        "loc_us50_fallon",
+        "loc_dixie_annex",
+        "loc_annex_holds",
+        "loc_dixie_hotsprings"
       ],
       "objectives": [
-        "Reach Lou",
-        "Decide the broadcast",
-        "Ruiz at the door",
-        "Choose where to winter"
+        "Peavine: the radio dies",
+        "Reyne",
+        "Through Fallon (Ross)",
+        "Night on the Dixie Valley road",
+        "The Annex gate (Tolliver)",
+        "The hangar (recovery detail): control cards",
+        "The holds and the flooded wing",
+        "Optional: the hot-springs den",
+        "Home through Fallon",
+        "Where your people winter"
       ],
       "player_actions": [
         "night_walk",
+        "drive",
         "dialogue",
-        "defend_from_dogs",
-        "load_sled"
+        "night_defense_lights",
+        "power_cart_puzzle",
+        "explore_dark_interior",
+        "optional_moral_choice"
       ],
       "enemies": [
         {
           "type": "feral_dog",
-          "count": 4,
-          "note": "FIRST non-human enemy"
+          "count": 3,
+          "note": "Peavine road"
         },
         {
           "type": "remnant_patrol",
           "count": 4,
-          "note": "Hostile if ironwood_hostility>=3"
+          "note": "Peavine, hostile if ironwood_hostility>=3"
+        },
+        {
+          "type": "coyote",
+          "count": 3,
+          "note": "Dixie flats"
+        },
+        {
+          "type": "recovery_detail",
+          "count": 6,
+          "note": "Hangar; talkable"
+        },
+        {
+          "type": "tallman",
+          "count": 1,
+          "note": "FIRST FIGHT: enc_ch07_road_tallman (truck stalled)"
+        },
+        {
+          "type": "tallman",
+          "count": 1,
+          "note": "enc_ch07_holds_tallman (Wing A last hold)"
+        },
+        {
+          "type": "tallman",
+          "count": 2,
+          "note": "Optional den: torpid, non-hostile unless shot"
         }
       ],
       "setpieces": [
-        "Every frequency goes silent",
-        "Grey snow in July (palette shifts to Nuclear Winter)"
+        "Every frequency goes silent; green sky ripple in the east",
+        "Grey ash flakes in December that don't melt (palette shifts toward Nuclear Winter)",
+        "Truck stalled on the flats, headlights vs the dark",
+        "annex_maglock_power",
+        "annex_holds",
+        "annex_hangar",
+        "dixie_hotsprings_den",
+        "Flooded, collapsed Wing B: door bent outward"
+      ],
+      "tallman_glimpses": [],
+      "traders": [
+        "trader_rourke"
+      ],
+      "ambient_npcs": [
+        "amb_tolliver"
       ],
       "items": [
         "hand_radio",
         "batteries",
-        "sled",
         "dosimeter",
-        "flare"
+        "flare",
+        "control_cards",
+        "lamp_kit",
+        "annex_log",
+        "mask_filter",
+        "gpu_cart",
+        "ironwood_id",
+        "canned_food"
       ],
       "scenes": [
-        "ch07_lou_dead_air",
+        "ch07_augie_dead_air",
+        "ch07_reyne_arrives",
         "ch07_ruiz",
+        "ch07_fallon_checkpoint",
+        "ch07_dixie_road",
+        "ch07_annex_gate",
+        "ch07_recovery_detail",
+        "ch07_annex_holds",
+        "ch07_hotsprings_den",
+        "ch07_fallon_return",
         "ch07_where"
       ],
       "scene_conditions": {
@@ -972,51 +2089,58 @@
           }
         ]
       },
-      "chapter_start_effects": [],
+      "chapter_start_effects": [
+        {
+          "give": "gpu_cart",
+          "qty": 1
+        },
+        {
+          "event": "hud_unlock",
+          "hud": "radiation"
+        }
+      ],
       "chapter_end_effects": [
         {
           "if": [
             {
               "flag": "ch07_location",
-              "eq": "dam"
+              "eq": "galena"
             },
             {
-              "trust": "lou",
+              "trust": "augie",
               "lt": 3
             }
           ],
           "then": [
             {
-              "set": "lou_alive",
+              "set": "augie_alive",
               "value": false
-            }
-          ],
-          "else": [
-            {
-              "set": "lou_alive",
-              "value": true
             }
           ]
         },
         {
           "if": [
             {
-              "item": "insulin_vial",
-              "lt": 1
-            },
-            {
-              "flag": "dam_running",
+              "flag": "fired_on_blockade",
               "ne": true
             },
             {
-              "flag": "ames_deal",
-              "ne": true
+              "any": [
+                {
+                  "flag": "wes_spared",
+                  "eq": true
+                },
+                {
+                  "flag": "ross_goodbye",
+                  "eq": "honest"
+                }
+              ]
             }
           ],
           "then": [
             {
-              "add": "theo_insulin_lapses",
-              "value": 1
+              "set": "pearce_reconciled",
+              "value": true
             }
           ]
         }
@@ -1026,31 +2150,49 @@
       "id": "ch08",
       "title": "Ashfall",
       "act": 3,
-      "date": "August–October",
+      "season": "nuclear_winter",
+      "date": "January, Year 2",
       "weather": "fallout_rain",
+      "weather_late": "ashfall",
       "temp_c": -10,
+      "night_temp_c": -18,
+      "survival_focus": [
+        "warmth",
+        "radiation",
+        "filters",
+        "seal",
+        "dread"
+      ],
       "time_of_day": [
         "grey_day",
         "night"
       ],
+      "levels": [
+        "ch08_ashfall"
+      ],
       "locations": [
-        "loc_east_end",
-        "loc_lakehead_memorial",
-        "loc_ore_docks"
+        "loc_sparks_block",
+        "loc_meadows_general",
+        "loc_sparks_yard",
+        "loc_sparks_library",
+        "loc_galena_station"
       ],
       "objectives": [
-        "Iodide and filters",
-        "Clean water",
-        "Theo's foot",
+        "The mask (has_gas_mask)",
+        "Seal the shelter (seal_shelter)",
+        "Braith's hand",
         "The strangers at the door",
-        "Marguerite's list"
+        "Lolo's list",
+        "Filters: Boone or the Annex cache",
+        "Install the control cards (if wintering at Galena)"
       ],
       "player_actions": [
         "exposure_management",
         "seal_shelter",
         "scavenge",
         "talk_down",
-        "moral_choice"
+        "moral_choice",
+        "trade"
       ],
       "enemies": [
         {
@@ -1069,13 +2211,44 @@
         {
           "type": "remnant_patrol",
           "count": 4,
-          "note": "Elevators, if bridge_choice=held"
+          "note": "Sparks yard, if bridge_choice=open"
+        },
+        {
+          "type": "assimilated_human",
+          "count": 2,
+          "note": "Hollows: the Henley house, the midnight door; knock and call from the ash"
+        },
+        {
+          "type": "assimilated_animal",
+          "count": 2,
+          "note": "Assimilated dogs in the ash; silent"
+        },
+        {
+          "type": "tallman",
+          "count": 2,
+          "note": "Pairs following husks; visit unsealed houses at night"
         }
       ],
       "setpieces": [
-        "Fallout rain over the docks",
-        "Seal the shelter: tape plastic/tarp over windows (sets shelter_sealed; HUD SEAL unlocks). Husk/raider break-ins and broken windows lower SEAL.",
-        "Husk at the car"
+        "Fallout rain over Sparks",
+        "Seal the shelter: plastic/tarp over windows (sets shelter_sealed; HUD SEAL). Break-ins and broken windows lower SEAL. Sealed buildings leak less heat: Tallmen pass them by.",
+        "Husk at the truck (Wraith whines: a real, sick person)",
+        "A tall shape entering the Henleys' unsealed house",
+        "The Henley kitchen: first Hollow (enc_ch08_hollow_first)",
+        "Midnight knock: a mimic at the sealed door (enc_ch08_door_mimic)"
+      ],
+      "tallman_glimpses": [],
+      "traders": [
+        "trader_boone",
+        "trader_annie",
+        "trader_mo"
+      ],
+      "ambient_npcs": [
+        "amb_darlene",
+        "amb_brother_amos",
+        "amb_ruth",
+        "amb_bike_kids",
+        "amb_night_owl"
       ],
       "items": [
         "iodide_tablets",
@@ -1083,18 +2256,26 @@
         "med_kit",
         "antibiotics",
         "water_clean",
-        "wool_blanket"
+        "wool_blanket",
+        "diesel_jug",
+        "batteries",
+        "canned_food"
       ],
       "start_inventory": {
         "mask_filter": 6,
         "iodide_tablets": 2
       },
       "scenes": [
-        "ch08_ames_foot",
-        "ch08_marguerite_list",
+        "ch08_mask",
+        "ch08_seal",
         "ch08_husk",
+        "ch08_henley_house",
         "ch08_door",
-        "ch08_deshawn"
+        "ch08_lolo_list",
+        "ch08_ames_hand",
+        "ch08_deshawn",
+        "ch08_boone_filters",
+        "ch08_annie_greenhouse"
       ],
       "scene_conditions": {
         "ch08_deshawn": [
@@ -1114,37 +2295,109 @@
           "hud": "filter"
         }
       ],
-      "chapter_end_effects": []
+      "chapter_end_effects": [
+        {
+          "if": [
+            {
+              "flag": "ch07_location",
+              "eq": "galena"
+            },
+            {
+              "item": "control_cards",
+              "gte": 1
+            }
+          ],
+          "then": [
+            {
+              "set": "cards_installed",
+              "value": true
+            },
+            {
+              "set": "dam_running",
+              "value": true
+            }
+          ]
+        },
+        {
+          "if": [
+            {
+              "flag": "annex_told",
+              "ne": "compact"
+            },
+            {
+              "flag": "rep_compact",
+              "lt": 1
+            }
+          ],
+          "then": [
+            {
+              "set": "ross_alive",
+              "value": false
+            }
+          ]
+        },
+        {
+          "if": [
+            {
+              "trust": "lolo",
+              "lte": -1
+            },
+            {
+              "flag": "lolo_list_seen",
+              "eq": true
+            }
+          ],
+          "then": [
+            {
+              "set": "lolo_alive",
+              "value": false
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ch09",
       "title": "The Long Night",
       "act": 3,
-      "date": "Midwinter, Year 2",
+      "season": "nuclear_winter",
+      "date": "Early February, Year 2",
       "weather": "blizzard",
-      "temp_c": -45,
+      "temp_c": -40,
+      "night_temp_c": -45,
+      "survival_focus": [
+        "warmth",
+        "exposure",
+        "column",
+        "dread"
+      ],
       "time_of_day": [
         "polar_noon",
         "night"
       ],
+      "levels": [
+        "ch09_the_long_night"
+      ],
       "locations": [
-        "loc_east_end",
+        "loc_sparks_block",
         "river_ice",
-        "loc_jay_cooke",
-        "loc_thomson_dam"
+        "loc_steamboat_creek",
+        "loc_galena_station"
       ],
       "objectives": [
         "Lead the column",
-        "Pass the Remnant picket",
-        "Survive whiteout and wolves",
-        "The ice break",
-        "Reach the dam"
+        "Pass the Remnant picket at the Glendale bridge",
+        "The ice",
+        "Salt's culvert",
+        "Survive the whiteout",
+        "Reach Galena"
       ],
       "player_actions": [
         "blizzard_march",
         "escort_column",
         "stealth_or_assault",
-        "timed_choice"
+        "timed_choice",
+        "companion_lead"
       ],
       "enemies": [
         {
@@ -1161,18 +2414,46 @@
           "note": "Grounded by blizzard; visual only"
         },
         {
-          "type": "wolf",
-          "count": 5
+          "type": "coyote",
+          "count": 2
+        },
+        {
+          "type": "assimilated_animal",
+          "count": 5,
+          "note": "Silent pack on river_ice (enc_ch09_animal_pack)"
+        },
+        {
+          "type": "assimilated_human",
+          "count": 2,
+          "note": "Voice ambush in the whiteout (enc_ch09_hollow_ambush)"
         },
         {
           "type": "husk",
           "count": 4
+        },
+        {
+          "type": "tallman",
+          "count": 3,
+          "note": "Max 3 active; shadow the column in the whiteout; probe stragglers"
         }
       ],
       "setpieces": [
-        "Whiteout in Jay Cooke",
-        "Searchlight picket on the Hwy 210 bridge",
-        "River ice breaking"
+        "Whiteout on the river",
+        "A voice off the rope line in Walt's voice (enc_ch09_hollow_ambush)",
+        "Silent assimilated coyote pack on the ice (enc_ch09_animal_pack)",
+        "Searchlight picket on the Glendale bridge",
+        "ice_break_qte",
+        "Wraith's hold (only if wraith_injured)",
+        "Steam over the ridge"
+      ],
+      "tallman_glimpses": [],
+      "traders": [
+        "trader_rourke"
+      ],
+      "ambient_npcs": [
+        "amb_salt",
+        "amb_pvt_marsh",
+        "amb_tolliver"
       ],
       "items": [
         "sled",
@@ -1181,29 +2462,60 @@
         "flare",
         "rifle_ammo",
         "mask_filter",
-        "wool_blanket"
+        "wool_blanket",
+        "ironwood_id",
+        "control_cards"
       ],
       "scenes": [
-        "ch09_wren_sled",
+        "ch09_kit_sled",
         "ch09_picket",
-        "ch09_hank",
-        "ch09_ice"
+        "ch09_voices",
+        "ch09_ice",
+        "ch09_wraith_hold",
+        "ch09_salt",
+        "ch09_walt",
+        "ch09_wraith_lead",
+        "ch09_galena_gate"
       ],
       "scene_conditions": {
-        "ch09_wren_sled": [
+        "ch09_kit_sled": [
           {
-            "trust": "wren",
+            "trust": "kit",
             "gte": 5
           },
           {
-            "flag": "wren_alive",
+            "flag": "kit_alive",
             "eq": true
           }
         ],
-        "ch09_hank": [
+        "ch09_walt": [
           {
-            "flag": "hank_alive",
+            "flag": "walt_alive",
             "eq": true
+          }
+        ],
+        "ch09_wraith_hold": [
+          {
+            "flag": "wraith_injured",
+            "eq": true
+          },
+          {
+            "flag": "wraith_alive",
+            "eq": true
+          }
+        ],
+        "ch09_wraith_lead": [
+          {
+            "flag": "wraith_alive",
+            "eq": true
+          },
+          {
+            "flag": "wraith_injured",
+            "ne": true
+          },
+          {
+            "trust": "wraith",
+            "gte": 5
           }
         ]
       },
@@ -1211,6 +2523,20 @@
         {
           "set": "column_size",
           "value": 4
+        },
+        {
+          "if": [
+            {
+              "flag": "mimic_let_in",
+              "eq": true
+            }
+          ],
+          "then": [
+            {
+              "add": "column_size",
+              "value": -1
+            }
+          ]
         },
         {
           "if": [
@@ -1243,31 +2569,17 @@
         {
           "add": "column_size",
           "value_from": "husks_talked_down"
-        }
-      ],
-      "chapter_end_effects": [
-        {
-          "set": "hank_alive",
-          "value": false
         },
         {
           "if": [
             {
-              "item": "insulin_vial",
-              "lt": 1
-            },
-            {
-              "flag": "dam_running",
-              "ne": true
-            },
-            {
-              "flag": "ames_deal",
-              "ne": true
+              "flag": "ch06_marsh_hidden",
+              "eq": true
             }
           ],
           "then": [
             {
-              "add": "theo_insulin_lapses",
+              "add": "column_size",
               "value": 1
             }
           ]
@@ -1275,14 +2587,86 @@
         {
           "if": [
             {
-              "flag": "theo_insulin_lapses",
-              "gte": 2
+              "flag": "tolliver_fate",
+              "eq": "joined"
             }
           ],
           "then": [
             {
-              "set": "theo_alive",
+              "add": "column_size",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "give": "firewood",
+          "qty": 4
+        }
+      ],
+      "chapter_end_effects": [
+        {
+          "if": [
+            {
+              "flag": "ch09_saved",
+              "eq": "sled"
+            },
+            {
+              "flag": "wes_spared",
+              "eq": true
+            }
+          ],
+          "then": [
+            {
+              "set": "wes_alive",
               "value": false
+            }
+          ]
+        },
+        {
+          "if": [
+            {
+              "flag": "ch09_saved",
+              "eq": "sled"
+            },
+            {
+              "flag": "wes_spared",
+              "ne": true
+            },
+            {
+              "flag": "ch09_sled_brought",
+              "eq": true
+            }
+          ],
+          "then": [
+            {
+              "set": "kit_alive",
+              "value": false
+            }
+          ]
+        },
+        {
+          "set": "walt_alive",
+          "value": false
+        },
+        {
+          "if": [
+            {
+              "flag": "cards_installed",
+              "ne": true
+            },
+            {
+              "item": "control_cards",
+              "gte": 1
+            }
+          ],
+          "then": [
+            {
+              "set": "cards_installed",
+              "value": true
+            },
+            {
+              "set": "dam_running",
+              "value": true
             }
           ]
         }
@@ -1292,26 +2676,89 @@
       "id": "ch10",
       "title": "The Warm Room",
       "act": 3,
-      "date": "Midwinter",
-      "weather": "clear_cold",
-      "temp_c": -38,
+      "season": "nuclear_winter",
+      "date": "Late February, Year 2",
+      "weather": "ashfall",
+      "temp_c": -34,
+      "night_temp_c": -45,
+      "survival_focus": [
+        "warmth",
+        "light",
+        "power",
+        "dread"
+      ],
       "time_of_day": [
+        "night",
+        "day",
+        "night",
+        "night",
         "day"
       ],
+      "levels": [
+        "ch10_the_warm_room"
+      ],
       "locations": [
-        "loc_thomson_dam"
+        "loc_galena_station"
       ],
       "objectives": [
-        "Hold the gate",
-        "Hear the pitches",
-        "Decide"
+        "Build the lamp line",
+        "Night 1: the test (skipped if you thinned them at Dixie Valley)",
+        "Night 2: the probe",
+        "Kessler at the gate",
+        "Night 3: the push",
+        "The vote"
       ],
       "player_actions": [
+        "perimeter_repair_under_pressure",
+        "light_management",
         "gate_defense_optional",
         "dialogue",
         "ending"
       ],
+      "siege": {
+        "max_visible_tallmen": 3,
+        "disengage": "after losing 2 or at dawn",
+        "skip_night1_if": {
+          "any": [
+            {
+              "flag": "den_killed",
+              "eq": true
+            },
+            {
+              "flag": "tallmen_killed",
+              "gte": 2
+            }
+          ]
+        },
+        "night3_single_side_if": [
+          {
+            "flag": "den_killed",
+            "eq": true
+          },
+          {
+            "flag": "tallmen_killed",
+            "gte": 3
+          }
+        ],
+        "breach_effect": "each siege_breaches point = 1 named survivor lost in the epilogue census and -10% SEAL in the turbine hall",
+        "lamp_line": "12 floodlight poles from lamp_kit; Tallmen cut cables at splices, kill sentries on dark poles, split the cooling-water line"
+      },
       "enemies": [
+        {
+          "type": "tallman",
+          "count": 3,
+          "note": "Night 1 (one lamp test), night 2 (probe), night 3 (push). Never more than 3 visible."
+        },
+        {
+          "type": "assimilated_human",
+          "count": 2,
+          "note": "Call names from past the lamp line (enc_ch10_hollow_prowlers)"
+        },
+        {
+          "type": "assimilated_animal",
+          "count": 3,
+          "note": "Test the dark edge of each pole"
+        },
         {
           "type": "remnant_patrol",
           "count": 8,
@@ -1324,17 +2771,77 @@
         }
       ],
       "setpieces": [
+        "lamp_line_siege",
+        "Voices past the lamp line; Hollow prowlers testing poles (enc_ch10_hollow_prowlers)",
         "Control room at 18 °C",
-        "Warm Room epilogue: sun through the ash"
+        "Dawn through the ash"
       ],
-      "items": [],
+      "tallman_glimpses": [],
+      "traders": [
+        "trader_annie"
+      ],
+      "ambient_npcs": [
+        "amb_lonnie",
+        "amb_ruth",
+        "amb_bike_kids"
+      ],
+      "items": [
+        "lamp_kit",
+        "flare",
+        "rifle_ammo"
+      ],
       "scenes": [
+        "ch10_siege_night1",
+        "ch10_siege_night2",
         "ch10_gate",
+        "ch10_siege_night3",
         "ch10_final",
         "ch10_epilogue"
       ],
-      "chapter_start_effects": [],
-      "chapter_end_effects": []
+      "scene_conditions": {
+        "ch10_siege_night1": [
+          {
+            "not": {
+              "any": [
+                {
+                  "flag": "den_killed",
+                  "eq": true
+                },
+                {
+                  "flag": "tallmen_killed",
+                  "gte": 2
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "chapter_start_effects": [
+        {
+          "quest": "q_lamp_line",
+          "state": "start"
+        },
+        {
+          "if": [
+            {
+              "item": "lamp_kit",
+              "gte": 1
+            }
+          ],
+          "then": [
+            {
+              "set": "lamp_line_built",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "chapter_end_effects": [
+        {
+          "quest": "q_lamp_line",
+          "state": "complete"
+        }
+      ]
     }
   ]
 }

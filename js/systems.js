@@ -1,11 +1,28 @@
 // Data-driven items / recipes / weapons / enemies / loot / survival.
 // Loads /systems/*.json when Quartermaster has written them. Never writes there.
-import { ITEMS as BASE_ITEMS, RECIPES as BASE_RECIPES, CFG } from "./config.js?v=r8";
-import { tryFetch, loadJsonDir, listDir } from "./load.js?v=r8";
+import { ITEMS as BASE_ITEMS, RECIPES as BASE_RECIPES, CFG } from "./config.js?v=r9";
+import { tryFetch, loadJsonDir, listDir } from "./load.js?v=r9";
+
+// Rev 2 retired v1 ids (Quartermaster): stripped from catalogs, loot and saves.
+export const RETIRED_IDS = ["insulin_vial", "insulin", "insulin_vials", "cool_pack", "lake_cooler", "cooler", "wolf", "lineman_tools", "hank_keys", "strand_stance", "wren_dealt"];
+export const RENAMED_IDS = { lineman_tools: "mech_tools", hank_keys: "walt_keys", wolf: "coyote", strand_stance: "avila_stance", wren_dealt: "kit_dealt" };
+
+/** Drop retired v1 items from an inventory map (renamed ones are carried over). */
+export function stripRetiredInv(inv) {
+  if (!inv || typeof inv !== "object") return inv;
+  for (const k of Object.keys(inv)) {
+    if (!RETIRED_IDS.includes(k)) continue;
+    const n = inv[k];
+    delete inv[k];
+    const to = RENAMED_IDS[k];
+    if (to && n > 0) inv[to] = (inv[to] || 0) + n;
+  }
+  return inv;
+}
 
 export const ITEM_ALIAS = {
-  insulin_vial: "insulin",
-  insulin_vials: "insulin",
+  lineman_tools: "mech_tools",
+  hank_keys: "walt_keys",
   gas_can: "fuel",
   fuel_can: "fuel",
   petrol: "fuel",
@@ -117,24 +134,21 @@ export async function loadSystems() {
   // Story / bible extras so dialogue give/take always resolve
   const extras = {
     gas_can: { name: "Gas can", stack: 6, kind: "mat" },
-    lineman_tools: { name: "Lineman tools", stack: 1, kind: "quest" },
-    insulin_vial: { name: "Insulin vial", stack: 6, kind: "quest" },
-    cool_pack: items.cool_pack || { name: "Cool pack", stack: 2, kind: "quest" },
+    mech_tools: { name: "Flight-line tool roll", stack: 1, kind: "quest" },
     priority_card: { name: "Priority card", stack: 1, kind: "quest" },
     ration_card: { name: "Ration card", stack: 1, kind: "quest" },
     pharmacy_bag: { name: "Pharmacy bag", stack: 1, kind: "quest" },
     cigarettes: { name: "Cigarettes", stack: 4, kind: "mat" },
     canned_food: { name: "Canned food", stack: 8, kind: "use", hunger: -35, warmth: 4 },
-    cooler: { name: "Lake-water cooler", stack: 1, kind: "quest" },
-    lake_cooler: { name: "Lake-water cooler", stack: 1, kind: "quest" },
     bucket: { name: "Bucket", stack: 1, kind: "tool" },
     wire: { name: "Copper wire", stack: 12, kind: "mat" },
     relay_kit: { name: "Relay kit", stack: 1, kind: "quest" },
     note: items.note || { name: "Torn note", stack: 20, kind: "note" },
   };
   for (const [k, v] of Object.entries(extras)) if (!items[k]) items[k] = v;
+  for (const k of RETIRED_IDS) delete items[k];
   // Readable display names for objective craftables (Quartermaster's ids stay authoritative).
-  const DISPLAY = { lake_cooler: "Lake-water cooler", cooler: "Lake-water cooler", bucket: "Bucket", wire: "Copper wire" };
+  const DISPLAY = { bucket: "Bucket", wire: "Copper wire" };
   for (const [k, name] of Object.entries(DISPLAY)) if (items[k]) items[k] = { ...items[k], name };
 
   const craftFile = files["crafting.json"] || files["recipes.json"] || idx;
@@ -143,22 +157,10 @@ export async function loadSystems() {
   if (recipes.length > 8) recipes = recipes.slice(0, 8);
   // Story / objective recipes live in their own list so the 8-cap never drops them.
   const storyRecipes = normStoryRecipes((craftFile && craftFile.story_recipes) || idx.story_recipes);
-  // Ensure a ch01 cooler recipe exists even if Quartermaster didn't author one.
-  const hasCooler = (r) => r.id === "cooler" || r.id === "lake_cooler" || r.special === "cooler"
-    || r.out?.id === "cooler" || r.out?.id === "lake_cooler";
-  if (!recipes.some(hasCooler) && !storyRecipes.some(hasCooler)) {
-    storyRecipes.push({
-      id: "lake_cooler", name: null, note: null, requires: null, special: null,
-      out: { id: "lake_cooler", n: 1, place: null },
-      in: { bucket: 1, wire: 1 },
-      set_flags: ["ch01_cooler_built"], chapters: ["ch01"], story: true,
-    });
-  }
-  for (const r of storyRecipes) {
-    if (r.out?.id === "lake_cooler" || r.id === "lake_cooler" || r.out?.id === "cooler") {
-      r.set_flags = [...new Set([...(r.set_flags || []), "ch01_cooler_built"])];
-    }
-  }
+  // Rev 2: the v1 lake_cooler recipe is retired (Ch1 is a water run: boil water_dirty).
+  const retiredRecipe = (r) => RETIRED_IDS.includes(r.id) || RETIRED_IDS.includes(r.out?.id) || Object.keys(r.in || {}).some((k) => RETIRED_IDS.includes(k));
+  recipes = recipes.filter((r) => !retiredRecipe(r));
+  for (let i = storyRecipes.length - 1; i >= 0; i--) if (retiredRecipe(storyRecipes[i])) storyRecipes.splice(i, 1);
 
   const weaponsRaw = files["weapons.json"] || idx.weapons || null;
   const weaponsById = {};
@@ -275,6 +277,7 @@ export function rollContainer(containerId, location, chapter, guaranteed, system
   const out = {};
   const add = (id, n) => {
     id = aliasItem(id);
+    if (RETIRED_IDS.includes(id)) return;
     if (n > 0) out[id] = (out[id] || 0) + n;
   };
   if (Array.isArray(guaranteed)) {
@@ -347,7 +350,7 @@ function defaultLootTables() {
   return {
     dumpster: { cloth: [0, 3], scrap: [0, 2], wood: [0, 2], ration: [0, 1], cigarettes: [0, 1] },
     crate: { scrap: [1, 3], wire: [0, 2], cloth: [0, 1], ammo_shell: [0, 2] },
-    fridge: { ration: [0, 2], insulin: [0, 1], bandage: [0, 1] },
+    fridge: { ration: [0, 2], water_clean: [0, 1], bandage: [0, 1] },
     glovebox: { cigarettes: [0, 2], ammo_9mm: [0, 4], cloth: [0, 1] },
     body: { cloth: [0, 2], ammo_9mm: [0, 3], bandage: [0, 1], scrap: [0, 1] },
     locker: { cloth: [1, 2], ammo_shell: [0, 3], filter: [0, 1], scrap: [0, 2] },

@@ -1,0 +1,101 @@
+{
+  "id": "ch02_annie_table",
+  "chapter": "ch02",
+  "location": "loc_rscc_registry",
+  "trigger": "Annie's seed-and-book swap table by the registry hall doors (trader).",
+  "speakers": [
+    "narrator",
+    "trader_annie",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "A folding table: SEED LIBRARY. TAKE ONE, BRING ONE. A woman in a sun hat behind it, misting seedlings.",
+      "next": "a1"
+    },
+    {
+      "id": "a1",
+      "speaker": "trader_annie",
+      "text": "Hello. I'm Annie, Sparks branch. Well, I was. I'm still. The library didn't close, the building did.",
+      "effects": [
+        {
+          "set": "annie_met",
+          "value": true
+        }
+      ],
+      "next": "a2"
+    },
+    {
+      "id": "a2",
+      "speaker": "trader_annie",
+      "text": "Seeds, a few books, some antibiotics a vet donated. I trade for batteries, wire, glass. Or labor.",
+      "choices": [
+        {
+          "text": "[Trade: batteries for antibiotics]",
+          "next": "trade",
+          "conditions": [
+            {
+              "item": "batteries",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "batteries",
+              "qty": 1
+            },
+            {
+              "give": "antibiotics",
+              "qty": 1
+            },
+            {
+              "add": "trader_annie_rep",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "Why seeds? Who's planting now?",
+          "next": "why"
+        },
+        {
+          "text": "What do you need labor for?",
+          "next": "labor"
+        }
+      ]
+    },
+    {
+      "id": "trade",
+      "speaker": "trader_annie",
+      "text": "Thank you. Use them on someone who'll argue with you about it. Those ones live.",
+      "next": "a3"
+    },
+    {
+      "id": "why",
+      "speaker": "trader_annie",
+      "text": "Somebody will, next spring. That's the whole idea of a library, really.",
+      "next": "a3"
+    },
+    {
+      "id": "labor",
+      "speaker": "trader_annie",
+      "text": "The library has a glass atrium. If anyone ever gets power again, it's a greenhouse. Think about it.",
+      "effects": [
+        {
+          "add": "trader_annie_rep",
+          "value": 1
+        }
+      ],
+      "next": "a3"
+    },
+    {
+      "id": "a3",
+      "speaker": "trader_annie",
+      "text": "Come by the branch on Pyramid Way when you can. Bring a story. I'm collecting those too.",
+      "end": true
+    }
+  ]
+}

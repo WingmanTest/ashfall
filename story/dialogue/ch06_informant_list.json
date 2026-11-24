@@ -1,0 +1,142 @@
+{
+  "id": "ch06_informant_list",
+  "chapter": "ch06",
+  "location": "loc_sparks_block",
+  "trigger": "The informant list taped to a lamppost (v1 gap: now has dialogue).",
+  "speakers": [
+    "narrator",
+    "braith",
+    "gil",
+    "amb_deputy_lusk"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "INFORMANTS — SECTOR 4. Twelve names, handwritten. Somebody's been very busy.",
+      "branches": [
+        {
+          "next": "on",
+          "conditions": [
+            {
+              "flag": "ch02_reported_gil",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "off"
+        }
+      ]
+    },
+    {
+      "id": "on",
+      "speaker": "narrator",
+      "text": "Fourth line: B. PEARCE (FUEL REPORT, NOV 2). Gil is standing behind you. He's been reading it for a while.",
+      "effects": [
+        {
+          "set": "gil_knows_report",
+          "value": true
+        }
+      ],
+      "next": "gil1"
+    },
+    {
+      "id": "gil1",
+      "speaker": "gil",
+      "text": "Listen here. The Authority came for my diesel in September. Then the Viaduct came for the rest. Then the fire.",
+      "choices": [
+        {
+          "text": "I'm sorry, Gil. I was scared.",
+          "next": "sorry",
+          "effects": [
+            {
+              "trust": "gil",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "text": "Everyone was reporting everyone.",
+          "next": "everyone",
+          "effects": [
+            {
+              "trust": "gil",
+              "delta": -2
+            }
+          ]
+        },
+        {
+          "text": "[Tear the list down]",
+          "next": "tear",
+          "effects": [
+            {
+              "trust": "gil",
+              "delta": 1
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sorry",
+      "speaker": "gil",
+      "text": "Scared. Yeah. Everybody's scared. I'm scared, and I don't put names on lists.",
+      "next": "end"
+    },
+    {
+      "id": "everyone",
+      "speaker": "gil",
+      "text": "Then everyone can go to hell. You first.",
+      "next": "end"
+    },
+    {
+      "id": "tear",
+      "speaker": "gil",
+      "text": "...Doesn't un-say it. But fine. Fine. Don't talk to me for a while.",
+      "next": "end"
+    },
+    {
+      "id": "off",
+      "speaker": "amb_deputy_lusk",
+      "text": "My name's on there. For reporting a guy with a meth lab in '22. Funny how lists remember.",
+      "choices": [
+        {
+          "text": "[Tear the list down]",
+          "next": "tear2",
+          "effects": [
+            {
+              "add": "kindness",
+              "value": 1
+            },
+            {
+              "set": "ch06_informant_torn",
+              "value": true
+            }
+          ]
+        },
+        {
+          "text": "[Leave it]",
+          "next": "end"
+        }
+      ]
+    },
+    {
+      "id": "tear2",
+      "speaker": "amb_deputy_lusk",
+      "text": "Thanks. Not that it matters. They've got copies. Lists always have copies.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "Tonight there's going to be fighting downtown. You can hear the Bradley from here.",
+      "end": true
+    }
+  ]
+}

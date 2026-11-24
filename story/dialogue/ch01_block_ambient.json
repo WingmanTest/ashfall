@@ -1,0 +1,60 @@
+{
+  "id": "ch01_block_ambient",
+  "chapter": "ch01",
+  "location": "loc_sparks_block",
+  "trigger": "Walk the block mid-day (ambient barks; any order).",
+  "speakers": [
+    "narrator",
+    "braith",
+    "amb_deputy_lusk",
+    "amb_bike_kids"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Ninety-six in the shade. People grill everything in their freezers before it turns. A block party nobody wanted.",
+      "next": "a1"
+    },
+    {
+      "id": "a1",
+      "speaker": "amb_bike_kids",
+      "text": "Mister! Mister with the dog! Is it true the Chinese did it? Jaden says it was a nuke.",
+      "choices": [
+        {
+          "text": "It was the sun. Big solar storm.",
+          "next": "sun"
+        },
+        {
+          "text": "Nobody knows. Don't spread it.",
+          "next": "nobody"
+        }
+      ]
+    },
+    {
+      "id": "sun",
+      "speaker": "amb_bike_kids",
+      "text": "The SUN? That's so much worse. You can't fight the sun.",
+      "next": "a2"
+    },
+    {
+      "id": "nobody",
+      "speaker": "amb_bike_kids",
+      "text": "Okay but if it WAS a nuke, can we see it?",
+      "next": "a2"
+    },
+    {
+      "id": "a2",
+      "speaker": "amb_bike_kids",
+      "text": "We're doing deliveries. Notes between houses. Five cents a note. Or a granola bar.",
+      "next": "a3"
+    },
+    {
+      "id": "a3",
+      "speaker": "amb_deputy_lusk",
+      "text": "Curfew's dusk on this street. Not official. Mine. Don't make me be official.",
+      "end": true
+    }
+  ]
+}

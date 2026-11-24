@@ -1,36 +1,259 @@
 {
- "_note": "systems/*.json is authoritative for enemies, items, containers. Level-owned ids live here.",
+ "_note": "story/ (v2) is authoritative for locations, scenes, NPCs, items, quests, flags, encounters and enemy types; systems/ for stats, containers and loot. This file lists only ids the levels own, plus the offline fallback used when systems/ is missing.",
  "levelSetPieces": {
-  "armored_plow_truck": "Ch5 Compact plow truck charge (scripted)",
-  "ied_mrap": "Ch6 IED flips MRAP door onto Ruiz",
-  "ice_break_qte": "Ch9 timed save-one choice",
-  "house_fire": "Ch3 burning garage: heat hazard + light"
+  "scent_trail": "Ch1 Wraith TRACK paw-print trail (pruitt_scarf)",
+  "water_line": "Ch1 marina water line",
+  "ambient_light": "lighting accent volume",
+  "crowd_crush": "Ch2 ration-line surge (enc_ch02_crush)",
+  "backdrop_ridge": "distant skyline mesh for long-range glimpses",
+  "house_fire": "Ch3 Gil's garage fire: heat hazard + light (enc_ch03_fire_rescue)",
+  "fog_bank": "Ch3 freezing-fog volume over the yard",
+  "gpu_tow": "Ch4 tow the -86 ground power cart",
+  "turbine_spinup": "Ch4 black start steam + light",
+  "standoff": "scripted talk/standoff (no combat unless fired on)",
+  "armored_plow_truck": "Ch5 hay-truck barricade (plow truck reskin)",
+  "signal_cabinet": "Ch5 rail signal cabinet (cabinet_choice)",
+  "ied_mrap": "Ch6 IED flips an MRAP door onto Ruiz",
+  "freight_car_drop": "Ch6 drop the stalled grain hopper into the rail trench (bridge_choice blocked/open)",
+  "quarantine_sweep": "Ch6 house-to-house sweep timer",
+  "truck_stall": "Ch7b truck stalls on the flats; headlights vs the dark",
+  "annex_maglock_power": "Ch7b power the hold maglocks from the cart",
+  "annex_wing_b": "Ch7b flooded/collapsed Wing B, door bent outward, never enterable",
+  "dixie_hotsprings_den": "Ch7b optional den (2 torpid Tallmen)",
+  "seal_shelter": "Ch8 tarp/plastic window sealing (shelter_sealed, HUD SEAL)",
+  "unsealed_house": "Ch8 tall shape entering the Henleys' unsealed house",
+  "column_escort": "Ch9 column march + headcounts",
+  "ice_break_qte": "Ch9 save a person or the sled",
+  "searchlight_picket": "Ch9 Glendale bridge picket searchlight",
+  "lamp_line_siege": "Ch10 floodlight perimeter siege, three nights",
+  "ash_storm_corridor": "Ch8-10 low-visibility ash corridor volume",
+  "flicker_light": "Ch8-10 failing light that drops out to wake an ambush"
  },
- "engineFallback": {
-  "enemies": "use systems/enemies.json enemies[].code_kind (raider | dog | husk) with js/enemies.js EnemySystem.spawn(kind,x,z)",
-  "items": "use systems/items.json legacy_aliases (insulin->insulin_vial, wood->firewood, filter->mask_filter)"
+ "extras": {
+  "neighbor": "Ch1 block neighbors",
+  "ration_line": "Ch2 ration line crowd",
+  "camp": "camp/barricade crowd",
+  "shelter": "Ch8 shelter residents",
+  "column": "Ch9 column members",
+  "survivor": "Ch10 Galena survivors",
+  "worker": "plant/yard workers",
+  "detail": "Ch7b recovery detail extras"
+ },
+ "enemyVariants": {
+  "_note": "Story v2 makes assimilated_human / assimilated_animal real enemy types (story/gameplay_hooks enemy_types, systems/enemies.json); no level uses variants. Optional tag kept for future skins."
+ },
+ "remoteSpeakers": {
+  "_all": [
+   "ross_radio"
+  ],
+  "ch01_voicemail": [
+   "ross"
+  ],
+  "ch01_kit_pharmacy": [
+   "amb_deputy_lusk"
+  ],
+  "ch03_night_owl": [
+   "amb_night_owl"
+  ],
+  "ch05_ruiz_convoy": [],
+  "ch07_ruiz": [],
+  "ch10_epilogue": [
+   "ross",
+   "kit",
+   "carly",
+   "wraith"
+  ],
+  "ch10_final": [
+   "ander",
+   "avila",
+   "roz"
+  ]
+ },
+ "splitEnemyTypes": {
+  "ch07_dead_air": [
+   "feral_dog",
+   "remnant_patrol"
+  ],
+  "ch07b_dixie_valley": [
+   "coyote",
+   "recovery_detail",
+   "tallman"
+  ]
+ },
+ "splitEnemyCounts": {
+  "ch07_dead_air": {
+   "feral_dog": 3,
+   "remnant_patrol": 4
+  },
+  "ch07b_dixie_valley": {
+   "coyote": 3,
+   "recovery_detail": 6,
+   "tallman": 4
+  }
+ },
+ "splitEncounters": {
+  "ch07_dead_air": [],
+  "ch07b_dixie_valley": [
+   "enc_ch07_road_tallman",
+   "enc_ch07_tolliver",
+   "enc_ch07_recovery_detail",
+   "enc_ch07_holds_tallman"
+  ]
+ },
+ "splitNpcs": {
+  "ch07_dead_air": {
+   "traders": [
+    "trader_rourke"
+   ],
+   "ambient": []
+  },
+  "ch07b_dixie_valley": {
+   "traders": [],
+   "ambient": [
+    "amb_tolliver"
+   ]
+  }
+ },
+ "levelFlags": {
+  "ch01_day_three": [
+   "ch01_carly_talked",
+   "ch01_drew_weapon",
+   "ch01_dusk",
+   "ch01_gil_talked",
+   "ch01_kit_attacked",
+   "ch01_lolo_talked",
+   "ch01_marina_reached",
+   "ch01_night",
+   "ch01_pharmacy_done",
+   "ch01_phone_used",
+   "ch01_tracking",
+   "ch01_water_boiled",
+   "ch01_water_hauled",
+   "ch01_wraith_fed",
+   "ch01_wraith_met"
+  ],
+  "ch02_the_registry": [
+   "ch02_ames_met",
+   "ch02_avila_met",
+   "ch02_crush_started",
+   "ch02_diesel_drained",
+   "ch02_dusk",
+   "ch02_glimpse_seen",
+   "ch02_haas_met",
+   "ch02_hostile_authority"
+  ],
+  "ch03_the_long_cold": [
+   "ch03_augie_met",
+   "ch03_count_seen",
+   "ch03_darlene_met",
+   "ch03_dawn",
+   "ch03_night",
+   "ch03_radio_on",
+   "ch03_rourke_met",
+   "ch03_rumor_heard",
+   "ch03_slept",
+   "ch03_started",
+   "ch03_transmitter_fixed",
+   "ch03_walt_met",
+   "ch03_watch_provoked"
+  ],
+  "ch04_black_start": [
+   "ch04_breaker_closed",
+   "ch04_cart_hooked",
+   "ch04_cart_towed",
+   "ch04_in_hangar",
+   "ch04_lund_fight",
+   "ch04_lunds_met",
+   "ch04_ramp_clear",
+   "ch04_salt_seen",
+   "ch04_spotted",
+   "ch04_standoff_fired",
+   "ch04_started"
+  ],
+  "ch05_route_9": [
+   "ch05_ander_talked",
+   "ch05_boone_met",
+   "ch05_briefed",
+   "ch05_cabinet_used",
+   "ch05_canyon",
+   "ch05_flare_fired",
+   "ch05_issued",
+   "ch05_mo_met",
+   "ch05_pump_fixed",
+   "ch05_rourke_helped",
+   "ch05_wes_found"
+  ],
+  "ch06_the_trench": [
+   "ch06_avila_met",
+   "ch06_brake_reached",
+   "ch06_carly_found",
+   "ch06_door_pried",
+   "ch06_floor_met",
+   "ch06_list_read",
+   "ch06_marsh_found",
+   "ch06_night",
+   "ch06_ruiz_found",
+   "ch06_spotted",
+   "ch06_started",
+   "ch06_trench_decided"
+  ],
+  "ch07_dead_air": [
+   "ch07_checkpoint_passed",
+   "ch07_dead_air_heard",
+   "ch07_fallon_done",
+   "ch07_remnant_alerted",
+   "ch07_reyne_met",
+   "ch07_started",
+   "ch07b_done"
+  ],
+  "ch07b_dixie_valley": [
+   "ch07b_cards_taken",
+   "ch07b_den_seen",
+   "ch07b_den_shot",
+   "ch07b_done",
+   "ch07b_gate_open",
+   "ch07b_maglocks_on",
+   "ch07b_started"
+  ],
+  "ch08_ashfall": [
+   "ch08_ames_seen",
+   "ch08_atrium_seen",
+   "ch08_boone_seen",
+   "ch08_door_done",
+   "ch08_henley_seen",
+   "ch08_husk_done",
+   "ch08_list_seen",
+   "ch08_masked",
+   "ch08_morning",
+   "ch08_night",
+   "ch08_seal_started",
+   "ch08_sealed",
+   "ch08_slot_checked",
+   "ch08_started"
+  ],
+  "ch09_the_long_night": [
+   "ch09_creek",
+   "ch09_ice_done",
+   "ch09_picket_fight",
+   "ch09_picket_met",
+   "ch09_salt_met",
+   "ch09_started",
+   "ch09_voices_done",
+   "ch09_walt_done"
+  ],
+  "ch10_the_warm_room": [
+   "ch10_cable_fixed",
+   "ch10_clamp_done",
+   "ch10_gate_done",
+   "ch10_n1_attack",
+   "ch10_night1_done",
+   "ch10_night2_done",
+   "ch10_night3_done",
+   "ch10_started",
+   "ch10_vote_called"
+  ]
  },
  "offlineFallback": {
-  "enemyTypes": [
-   "looter",
-   "bridge_boy",
-   "watch_militia",
-   "desperate_family",
-   "authority_guard",
-   "compact_militia",
-   "harbor_militia",
-   "ironwood_patrol",
-   "remnant_patrol",
-   "feral_dog",
-   "wolf",
-   "husk",
-   "ironwood_checkpoint"
-  ],
-  "setPieces": [
-   "ironwood_drone",
-   "ironwood_mrap",
-   "ironwood_bradley"
-  ],
   "containers": [
    "kitchen_cabinet",
    "fridge",
@@ -43,7 +266,9 @@
    "military_crate",
    "supply_cache",
    "woodpile",
-   "corpse"
+   "corpse",
+   "gun_safe",
+   "cooler_chest"
   ]
  }
 }

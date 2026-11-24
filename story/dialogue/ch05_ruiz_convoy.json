@@ -1,35 +1,32 @@
 {
   "id": "ch05_ruiz_convoy",
   "chapter": "ch05",
-  "location": "loc_ore_docks",
-  "trigger": "Boarding the Ironwood MRAP before the convoy.",
+  "location": "loc_tric_warehouses",
+  "trigger": "Convoy staging at the warehouses. Sgt. Ruiz briefs drivers.",
   "speakers": [
-    "ruiz",
-    "dell",
     "narrator",
-    "kessler"
+    "ruiz",
+    "braith"
   ],
   "start": "start",
   "nodes": [
     {
       "id": "start",
-      "speaker": "kessler",
-      "text": "[Loudspeaker] Eleven thousand tons feeds Philadelphia for nine days. Load up.",
-      "effects": [
-        {
-          "set": "ironwood_arrived",
-          "value": true
-        }
-      ],
+      "speaker": "narrator",
+      "text": "Mid-November. Sleet. Thirty trucks of warehouse stock lined up for Donner Pass. Army MRAPs at each end.",
       "next": "r1"
     },
     {
       "id": "r1",
       "speaker": "ruiz",
-      "text": "You're the lineworker. Ruiz. Engineer. You touch the cabinet, I cover you.",
+      "text": "You're the mechanic. Pearce. I'm Ruiz, Engineer Two. You ride the lead truck. If it stops, you start it.",
       "effects": [
         {
           "set": "ruiz_met",
+          "value": true
+        },
+        {
+          "set": "ironwood_arrived",
           "value": true
         }
       ],
@@ -38,50 +35,44 @@
     {
       "id": "r2",
       "speaker": "ruiz",
-      "text": "That's the whole plan. Questions, keep them short.",
+      "text": "The Directive says this food feeds Sacramento. Sacramento's eating rats. I've seen it. That's the truth.",
       "choices": [
         {
-          "text": "You believe the nine days thing?",
-          "next": "believe"
+          "text": "And Reno eats what?",
+          "next": "reno"
         },
         {
-          "text": "Where are you from?",
-          "next": "home"
+          "text": "Orders are orders?",
+          "next": "orders"
         },
         {
-          "text": "No questions.",
-          "next": "end"
+          "text": "[Say nothing]",
+          "next": "quiet"
         }
       ]
     },
     {
-      "id": "believe",
+      "id": "reno",
       "speaker": "ruiz",
-      "text": "I believe Philly's eating rats. I believe this town's next. Both true, ma'am.",
-      "effects": [
-        {
-          "trust": "ruiz",
-          "delta": 1
-        }
-      ],
-      "next": "end"
+      "text": "Reno eats what's left. I know. I don't love it. I'm a combat engineer, not a philosopher.",
+      "next": "r3"
     },
     {
-      "id": "home",
+      "id": "orders",
       "speaker": "ruiz",
-      "text": "El Paso. Mom, sister. Haven't heard since October. Don't— yeah. Mount up.",
-      "effects": [
-        {
-          "trust": "ruiz",
-          "delta": 1
-        }
-      ],
-      "next": "end"
+      "text": "Orders are paper. I follow the ones I can live with. Today I can live with this one. Barely.",
+      "next": "r3"
     },
     {
-      "id": "end",
-      "speaker": "narrator",
-      "text": "The MRAP rolls. ROUTE 9 is a black line through the snow. A drone whines overhead.",
+      "id": "quiet",
+      "speaker": "ruiz",
+      "text": "Smart. Say nothing. It's the only thing they can't requisition.",
+      "next": "r3"
+    },
+    {
+      "id": "r3",
+      "speaker": "ruiz",
+      "text": "Compact's blocking the canyon. Farmers with deer rifles and hay trucks. If they shoot, we shoot. Please don't make me.",
       "end": true
     }
   ]

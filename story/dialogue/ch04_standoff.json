@@ -1,39 +1,73 @@
 {
   "id": "ch04_standoff",
   "chapter": "ch04",
-  "location": "loc_thomson_dam",
-  "trigger": "Only if dam_secret_told == authority. Guard squad arrives during the black start.",
+  "location": "loc_galena_station",
+  "trigger": "If dam_secret_told=authority: Avila's Guard arrives with conditions.",
   "speakers": [
-    "strand",
-    "hank",
-    "dell",
-    "narrator"
+    "narrator",
+    "avila",
+    "braith",
+    "walt"
   ],
   "start": "start",
   "nodes": [
     {
       "id": "start",
       "speaker": "narrator",
-      "text": "Headlights on the access road. A Guard squad, eight of them, rifles up. Strand is with them.",
-      "branches": [
+      "text": "Headlights up the access road. Two Humvees. Avila steps out like she owns the road.",
+      "next": "s1"
+    },
+    {
+      "id": "s1",
+      "speaker": "avila",
+      "text": "You did it. Good. Now the plant is under the Recovery Authority. Feeders go where my list says.",
+      "next": "s2"
+    },
+    {
+      "id": "s2",
+      "speaker": "walt",
+      "text": "Lady, the plant goes where the steam says. I've been here twenty-two years.",
+      "choices": [
         {
-          "next": "calm",
-          "conditions": [
+          "text": "Work with us, Captain. Not over us.",
+          "next": "with",
+          "effects": [
             {
-              "trust": "strand",
-              "gte": 2
+              "trust": "avila",
+              "delta": 1
             }
           ]
         },
         {
-          "next": "shot"
+          "text": "It's yours. Take it.",
+          "next": "yours",
+          "effects": [
+            {
+              "add": "rep_authority",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "text": "Walk away. This isn't your call.",
+          "next": "no",
+          "effects": [
+            {
+              "add": "rep_authority",
+              "value": -2
+            },
+            {
+              "add": "ironwood_hostility",
+              "value": 1
+            }
+          ]
         }
       ]
     },
     {
-      "id": "calm",
-      "speaker": "strand",
-      "text": "Easy. Everyone easy. Ms. Kowalczyk, we brought the relay kit. And dinner.",
+      "id": "with",
+      "speaker": "avila",
+      "text": "...I'll leave four guards. Not as a threat. As insurance.",
       "effects": [
         {
           "give": "relay_kit",
@@ -44,52 +78,12 @@
           "value": "authority"
         }
       ],
-      "next": "calm2"
+      "next": "end"
     },
     {
-      "id": "calm2",
-      "speaker": "hank",
-      "text": "Brought guns too, I see.",
-      "next": "calm3"
-    },
-    {
-      "id": "calm3",
-      "speaker": "strand",
-      "text": "I bring guns to everything now. Show me what you need, Mr. Lindqvist.",
-      "end": true
-    },
-    {
-      "id": "shot",
-      "speaker": "narrator",
-      "text": "Someone startles. A private fires once at the powerhouse door. Hank goes down.",
-      "effects": [
-        {
-          "set": "hank_alive",
-          "value": false
-        },
-        {
-          "event": "npc_death",
-          "npc": "hank"
-        }
-      ],
-      "next": "shot2"
-    },
-    {
-      "id": "shot2",
-      "speaker": "strand",
-      "text": "CEASE FIRE. Cease— God. Medic! Ms. Kowalczyk, I'm sorry. I am.",
-      "next": "shot3"
-    },
-    {
-      "id": "shot3",
-      "speaker": "narrator",
-      "text": "Hank grabs your sleeve. 'Exciter first. Then sync. Don't— let them make it a fort.'",
-      "next": "shot4"
-    },
-    {
-      "id": "shot4",
-      "speaker": "narrator",
-      "text": "He's gone before the medic gets the coat open.",
+      "id": "yours",
+      "speaker": "avila",
+      "text": "Thank you. That's how we survive. Somebody has to own it.",
       "effects": [
         {
           "give": "relay_kit",
@@ -98,12 +92,26 @@
         {
           "set": "relay_source",
           "value": "authority"
-        },
-        {
-          "trust": "strand",
-          "delta": -2
         }
       ],
+      "next": "end"
+    },
+    {
+      "id": "no",
+      "speaker": "avila",
+      "text": "I can't make you. Yet. Remember I asked nicely.",
+      "effects": [
+        {
+          "set": "relay_source",
+          "value": "bypass"
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "The Humvees idle. Somebody has to start the plant now.",
       "end": true
     }
   ]

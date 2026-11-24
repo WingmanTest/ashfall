@@ -1,82 +1,43 @@
 {
   "id": "ch08_deshawn",
   "chapter": "ch08",
-  "location": "loc_east_end",
-  "trigger": "Only if pruitt_alive. Deshawn shows you the cistern.",
+  "location": "loc_sparks_block",
+  "trigger": "If pruitt_alive: Deshawn's cistern.",
   "speakers": [
+    "narrator",
     "deshawn",
-    "dell",
-    "narrator"
+    "braith"
   ],
   "start": "start",
   "nodes": [
     {
       "id": "start",
       "speaker": "deshawn",
-      "text": "Ms. Dell. Grandpa says you're the gas-can lady. He said show you the basement.",
+      "text": "Hey. Grandpa says I owe you one. I'm paying it. Come look.",
       "next": "d1"
     },
     {
       "id": "d1",
       "speaker": "narrator",
-      "text": "A sealed concrete cistern from the 1920s, fed by an old well. Under a house. Under the ash.",
+      "text": "Under the Pruitts' back porch: a buried concrete cistern from the 1940s. Sealed lid. Clean water. Hundreds of gallons.",
+      "effects": [
+        {
+          "set": "pruitt_cistern",
+          "value": true
+        }
+      ],
       "next": "d2"
     },
     {
       "id": "d2",
       "speaker": "deshawn",
-      "text": "Grandpa says water's water if the sky can't touch it. He says that about a lot of stuff.",
-      "choices": [
-        {
-          "text": "Can the block use it?",
-          "next": "share"
-        },
-        {
-          "text": "Can we take some for Theo?",
-          "next": "some"
-        }
-      ]
-    },
-    {
-      "id": "share",
-      "speaker": "deshawn",
-      "text": "He said you'd ask that. He said yes. He said 'she asked first, so yes.'",
+      "text": "Ash can't get in. Grandpa says his dad dug it in the war. We share it. Everyone on the block. You tell people.",
       "effects": [
         {
-          "set": "pruitt_cistern",
-          "value": true
-        },
-        {
-          "add": "kindness",
-          "value": 1
-        },
-        {
           "give": "water_clean",
-          "qty": 10
+          "qty": 6
         }
       ],
-      "next": "end"
-    },
-    {
-      "id": "some",
-      "speaker": "deshawn",
-      "text": "Yeah. Take some. Grandpa says that's what it's for.",
-      "effects": [
-        {
-          "set": "pruitt_cistern",
-          "value": true
-        },
-        {
-          "give": "water_clean",
-          "qty": 4
-        }
-      ],
-      "next": "end"
-    },
-    {
-      "id": "end",
-      "speaker": "narrator",
-      "text": "Clean water. For a while, the block doesn't have to choose between thirst and the RAD needle.",
       "end": true
     }
   ]

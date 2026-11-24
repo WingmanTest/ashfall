@@ -1,0 +1,71 @@
+{
+  "id": "ch02_ridge_glimpse",
+  "chapter": "ch02",
+  "location": "loc_meadows_general",
+  "trigger": "Leave the hospital at dusk (tallman_glimpse, east ridge). Wraith stops.",
+  "speakers": [
+    "narrator",
+    "wraith",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Dusk. The asphalt still breathes heat. Dust hangs in the last light. The ridge to the east is a black line on orange.",
+      "effects": [
+        {
+          "add": "tallman_glimpses",
+          "value": 1
+        }
+      ],
+      "next": "g1"
+    },
+    {
+      "id": "g1",
+      "speaker": "wraith",
+      "text": "[Stops dead. Stares east. A thin, rising whine you've never heard from her.]",
+      "next": "g2"
+    },
+    {
+      "id": "g2",
+      "speaker": "narrator",
+      "text": "On the ridge: a shape. Upright. Too thin. Too still.",
+      "next": "g3"
+    },
+    {
+      "id": "g3",
+      "speaker": "narrator",
+      "text": "You blink. The ridge is empty.",
+      "choices": [
+        {
+          "text": "What is it, partner?",
+          "next": "what"
+        },
+        {
+          "text": "[Keep walking]",
+          "next": "walk"
+        }
+      ]
+    },
+    {
+      "id": "what",
+      "speaker": "wraith",
+      "text": "[She won't look away. Her hackles stay up all the way to the bridge.]",
+      "next": "end"
+    },
+    {
+      "id": "walk",
+      "speaker": "wraith",
+      "text": "[She follows, but walks backwards for ten steps, watching the ridge.]",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "A coyote, probably. A guy on a hike, probably. You don't mention it to Carly.",
+      "end": true
+    }
+  ]
+}

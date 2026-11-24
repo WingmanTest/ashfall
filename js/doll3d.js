@@ -5,7 +5,8 @@
  * canvas is mounted in the BAG tab; gear meshes rebuild (and dispose) on change.
  */
 import * as THREE from "three";
-import { paintFace } from "./actors.js?v=r8";
+import { paintFace } from "./actors.js?v=r9";
+import { getModel, attachBraithMask, setCapVisible, fitToGround } from "./models3d.js?v=r9";
 
 const W = 144, H = 200;
 const PLAYER = {
@@ -211,7 +212,60 @@ function ensure() {
   buildStage();
   buildBody();
   bindDrag();
+  loadBraithGLB();
   return S;
+}
+
+/**
+ * Sculptor's braith_summer.glb replaces the procedural body once loaded (the procedural rig stays
+ * as the instant fallback while it streams, and if it ever fails). Same single renderer.
+ */
+function loadBraithGLB() {
+  if (S.glbState) return;
+  S.glbState = "loading";
+  getModel("braith_summer").then((g) => {
+    if (!S || !g) { if (S) S.glbState = "failed"; return; }
+    g.rotation.set(0, 0, 0);
+    g.position.set(0, 0, 0);
+    fitToGround(g, 1.66);
+    g.traverse((o) => { if (o.isMesh) { o.castShadow = false; o.receiveShadow = false; o.frustumCulled = false; } });
+    g.name = "braith_glb";
+    S.body.root.add(g);
+    S.glb = g;
+    S.glbState = "ready";
+    stats.glb = true;
+    applyGlbVisibility();
+    if (S.game) syncMask(S.game);
+  }).catch(() => { if (S) S.glbState = "failed"; });
+}
+
+function applyGlbVisibility() {
+  if (!S || !S.glb) return;
+  const B = S.body;
+  for (const part of [B.hips, B.chest, B.head]) part.visible = false;
+  // Procedural gear meshes ride on the hidden rig; the GLB is already dressed.
+  for (const g of S.gear || []) if (g) g.visible = false;
+}
+
+function syncMask(game) {
+  if (!S || !S.glb) return;
+  const gear = game?.player?.gear || {};
+  const masked = !!gear.face || !!game?.player?.filterOn;
+  if (masked && !S.mask && !S.maskLoading) {
+    S.maskLoading = true;
+    attachBraithMask(S.glb).then((mk) => {
+      S.maskLoading = false;
+      if (!mk) return;
+      S.mask = mk;
+      const still = !!(S.game?.player?.gear?.face) || !!S.game?.player?.filterOn;
+      mk.visible = still;
+      setCapVisible(S.glb, !still);
+      stats.mask = true;
+    });
+  } else if (S.mask) {
+    S.mask.visible = masked;
+    setCapVisible(S.glb, !masked);
+  } else setCapVisible(S.glb, true);
 }
 
 function m(color, extra = {}) {
@@ -650,6 +704,8 @@ export function syncDoll3D(game) {
     S.sig = sig;
     buildGear(game);
   }
+  applyGlbVisibility();
+  syncMask(game);
 }
 
 export function stopDoll3D() {
@@ -678,6 +734,8 @@ export function doll3DDebug() {
     isWebGL2: !!(gl && typeof WebGL2RenderingContext !== "undefined" && gl instanceof WebGL2RenderingContext),
     contextLost: gl ? gl.isContextLost() : null,
     gearMeshes: S?.gear?.length || 0,
+    glb: S?.glbState || null,
+    masked: !!(S?.mask && S.mask.visible),
     mainKind: S?.mainKind || null,
     sig: S?.sig || "",
     width: W, height: H,

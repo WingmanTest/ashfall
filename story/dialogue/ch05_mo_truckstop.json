@@ -1,0 +1,161 @@
+{
+  "id": "ch05_mo_truckstop",
+  "chapter": "ch05",
+  "location": "loc_mustang_truckstop",
+  "trigger": "Mo's truck stop at the Mustang exit (trader; q_mo_pump).",
+  "speakers": [
+    "narrator",
+    "trader_mo",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "MUSTANG TRUCK STOP — DIESEL $41 OR TRADE. A woman in Carhartts behind a counter of sandbags.",
+      "next": "m1"
+    },
+    {
+      "id": "m1",
+      "speaker": "trader_mo",
+      "text": "Maureen Kessinger. Mo. I don't do credit, I don't do sob stories, and I don't do the Army.",
+      "effects": [
+        {
+          "set": "mo_met",
+          "value": true
+        }
+      ],
+      "next": "m2"
+    },
+    {
+      "id": "m2",
+      "speaker": "trader_mo",
+      "text": "Compact taxes me on the way in. Army taxes me on the way out. Prices are what they are.",
+      "choices": [
+        {
+          "text": "[Trade food for diesel]",
+          "next": "trade",
+          "conditions": [
+            {
+              "item": "canned_food",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "canned_food",
+              "qty": 1
+            },
+            {
+              "give": "diesel_jug",
+              "qty": 1
+            },
+            {
+              "add": "trader_mo_rep",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "Your pump's whining. Bad bearing.",
+          "next": "pump"
+        },
+        {
+          "text": "Just looking.",
+          "next": "look"
+        }
+      ]
+    },
+    {
+      "id": "pump",
+      "speaker": "trader_mo",
+      "text": "...You hear that from out here? Huh. Fix my transfer pump and you get standing credit. Fair?",
+      "choices": [
+        {
+          "text": "Deal.",
+          "next": "deal",
+          "effects": [
+            {
+              "quest": "q_mo_pump",
+              "state": "start"
+            }
+          ]
+        },
+        {
+          "text": "Not tonight.",
+          "next": "look"
+        }
+      ]
+    },
+    {
+      "id": "deal",
+      "speaker": "narrator",
+      "text": "Two hours on your back in diesel slush. New bearing from a dead Kenworth. It purrs.",
+      "effects": [
+        {
+          "quest": "q_mo_pump",
+          "state": "complete"
+        },
+        {
+          "add": "trader_mo_rep",
+          "value": 3
+        },
+        {
+          "give": "diesel_jug",
+          "qty": 1
+        }
+      ],
+      "next": "deal2"
+    },
+    {
+      "id": "deal2",
+      "speaker": "trader_mo",
+      "text": "Well. Damn. You're on the list, mechanic. Good list. The only list I keep.",
+      "branches": [
+        {
+          "next": "darlene",
+          "conditions": [
+            {
+              "flag": "darlene_helped",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "end"
+        }
+      ]
+    },
+    {
+      "id": "darlene",
+      "speaker": "trader_mo",
+      "text": "Darlene says you helped her too. She's moving her rig here. Chicken and diesel. We'll be fine.",
+      "effects": [
+        {
+          "set": "darlene_with_mo",
+          "value": true
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "trade",
+      "speaker": "trader_mo",
+      "text": "Jug's full. I checked. Don't make me regret that.",
+      "next": "end"
+    },
+    {
+      "id": "look",
+      "speaker": "trader_mo",
+      "text": "Looking's free. For now.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "trader_mo",
+      "text": "Drive safe. Nobody's coming if you don't.",
+      "end": true
+    }
+  ]
+}

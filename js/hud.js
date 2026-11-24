@@ -1,4 +1,4 @@
-import { CFG, ITEMS } from "./config.js?v=r8";
+import { CFG, ITEMS } from "./config.js?v=r9";
 
 export class HUD {
   constructor(canvas) {
@@ -56,9 +56,12 @@ export class HUD {
     const unlocks = opts.unlocks || new Set(["hp", "warmth", "hunger", "stm", "rad"]);
     const has = (k) => !unlocks.size || unlocks.has(k) || [...unlocks].some((u) => u.toLowerCase() === k);
     const bars = [];
+    // Rev 2 seasonal vitals: Summer HP/WATER/HUNGER; WARM unlocks at Ch3; RAD/FILTER in Act III.
     if (has("hp")) bars.push(["HP", s.health, "#d44", 100]);
+    if (has("hydration") || has("water")) bars.push(["WATER", s.hydration ?? 75, "#5ab4e0", 100]);
     if (has("warmth") || has("temp")) bars.push(["WARM", s.warmth, "#8ec8e8", 100]);
     if (has("hunger")) bars.push(["HUNGER", s.hunger, "#d4a15a", 100]);
+    if (has("rad") && (s.rad || 0) > 0.5) bars.push(["RAD", s.rad, "#c8d45a", 100]);
     if (has("filter")) bars.push(["FILTER", opts.filter ?? 0, "#9ad4a8", 100]);
     // Compact top-left vitals: never more than ~40% of the width, never under BAG / pause.
     const barW = Math.min(Math.round(w * 0.38), 152);

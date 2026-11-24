@@ -1,0 +1,316 @@
+{
+  "id": "ch01_kit_pharmacy",
+  "chapter": "ch01",
+  "location": "loc_prater_pharmacy",
+  "trigger": "Enter the Prater Way pharmacy at dusk (for Lolo's clinic supplies).",
+  "speakers": [
+    "narrator",
+    "kit",
+    "braith",
+    "wraith",
+    "amb_deputy_lusk"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "The pharmacy door is a frame of broken glass. Inside, a flashlight beam flicks off.",
+      "next": "k0"
+    },
+    {
+      "id": "k0",
+      "speaker": "wraith",
+      "text": "[Freezes. Low growl. Points at the back room.]",
+      "next": "k1"
+    },
+    {
+      "id": "k1",
+      "speaker": "kit",
+      "text": "Okay. Okay okay. Call off the wolf. I'm not armed. I mean I am. But not at you.",
+      "choices": [
+        {
+          "text": "Wraith. Easy.",
+          "next": "easy",
+          "effects": [
+            {
+              "trust": "kit",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "text": "[Hold her collar. Let her growl]",
+          "next": "hold"
+        },
+        {
+          "text": "Come out where I can see you.",
+          "next": "out"
+        }
+      ]
+    },
+    {
+      "id": "easy",
+      "speaker": "wraith",
+      "text": "[Stops. Still watching. Tail low.]",
+      "next": "out"
+    },
+    {
+      "id": "hold",
+      "speaker": "kit",
+      "text": "Wow. Cool. Very effective. I am extremely cooperative now.",
+      "next": "out"
+    },
+    {
+      "id": "out",
+      "speaker": "narrator",
+      "text": "A girl, maybe nineteen. Hoodie, ski goggles on her head, a duffel of pill bottles.",
+      "next": "k2"
+    },
+    {
+      "id": "k2",
+      "speaker": "kit",
+      "text": "Kit. Hi. Shelves are mostly picked. I got the back room. Antibiotics, gauze, blood pressure stuff.",
+      "choices": [
+        {
+          "text": "I need clinic supplies. For a nurse.",
+          "next": "nurse"
+        },
+        {
+          "text": "Who are you selling this to?",
+          "next": "who"
+        },
+        {
+          "text": "Put the bag down.",
+          "next": "down"
+        }
+      ]
+    },
+    {
+      "id": "nurse",
+      "speaker": "kit",
+      "text": "A nurse? Real one? ...Fine. Take the gauze and the amoxicillin. I'm not a monster.",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "speaker": "kit",
+      "text": "The rest goes to the Viaduct. People there are sick too, Wrench. Nobody's bringing them a nurse.",
+      "choices": [
+        {
+          "text": "[Take what she offers. Let her go]",
+          "next": "let",
+          "effects": [
+            {
+              "give": "pharmacy_bag",
+              "qty": 1
+            },
+            {
+              "set": "ch01_pharmacy_choice",
+              "value": "shared"
+            },
+            {
+              "set": "ch01_kit_let_go",
+              "value": true
+            },
+            {
+              "trust": "kit",
+              "delta": 3
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "[Take the whole bag]",
+          "next": "all"
+        },
+        {
+          "text": "[Leave a note for the owner]",
+          "next": "note"
+        }
+      ]
+    },
+    {
+      "id": "who",
+      "speaker": "kit",
+      "text": "Whoever's got food. Mostly the guys under the viaduct. They had warehouse jobs on Monday.",
+      "next": "n2"
+    },
+    {
+      "id": "down",
+      "speaker": "kit",
+      "text": "Or what? You'll shoot a girl in a CVS for Lipitor? Come on.",
+      "next": "n2"
+    },
+    {
+      "id": "all",
+      "speaker": "narrator",
+      "text": "You pull the duffel off her shoulder. She doesn't fight. She just looks at you, memorizing.",
+      "effects": [
+        {
+          "give": "pharmacy_bag",
+          "qty": 1
+        },
+        {
+          "set": "ch01_pharmacy_choice",
+          "value": "took_all"
+        },
+        {
+          "trust": "kit",
+          "delta": -3
+        }
+      ],
+      "next": "all2"
+    },
+    {
+      "id": "all2",
+      "speaker": "kit",
+      "text": "Cool. Cool. You're one of those. I'll remember the dog.",
+      "next": "watch"
+    },
+    {
+      "id": "note",
+      "speaker": "narrator",
+      "text": "You write: TOOK GAUZE, AMOXICILLIN FOR CLINIC ON 9TH. B. PEARCE. You tape it to the register.",
+      "effects": [
+        {
+          "give": "pharmacy_bag",
+          "qty": 1
+        },
+        {
+          "set": "ch01_pharmacy_choice",
+          "value": "left_note"
+        },
+        {
+          "set": "ch01_kit_let_go",
+          "value": true
+        },
+        {
+          "trust": "kit",
+          "delta": 2
+        }
+      ],
+      "next": "note2"
+    },
+    {
+      "id": "note2",
+      "speaker": "kit",
+      "text": "...You left a NOTE? Who's gonna read it? Oh my god. You're adorable. Bye, Wrench.",
+      "next": "watch"
+    },
+    {
+      "id": "let",
+      "speaker": "kit",
+      "text": "Pleasure doing crime with you. If anyone asks, I was never here. Neither was the wolf.",
+      "next": "watch"
+    },
+    {
+      "id": "watch",
+      "speaker": "narrator",
+      "text": "Outside, a flashlight. Deputy Lusk and two men from the block watch, rifles low.",
+      "branches": [
+        {
+          "next": "watch_bad",
+          "conditions": [
+            {
+              "flag": "ch01_pharmacy_choice",
+              "eq": "took_all"
+            }
+          ]
+        },
+        {
+          "next": "watch_ok"
+        }
+      ]
+    },
+    {
+      "id": "watch_ok",
+      "speaker": "amb_deputy_lusk",
+      "text": "Pearce. What's in the bag?",
+      "choices": [
+        {
+          "text": "Medicine for Lolo's clinic.",
+          "next": "clinic"
+        },
+        {
+          "text": "[Keep walking]",
+          "next": "walk"
+        }
+      ]
+    },
+    {
+      "id": "watch_bad",
+      "speaker": "amb_deputy_lusk",
+      "text": "Pearce. That's a big bag. What's in the big bag?",
+      "choices": [
+        {
+          "text": "Medicine for Lolo's clinic.",
+          "next": "clinic"
+        },
+        {
+          "text": "[Keep walking]",
+          "next": "walk"
+        },
+        {
+          "text": "[Hand over the bag]",
+          "next": "handover"
+        }
+      ]
+    },
+    {
+      "id": "clinic",
+      "speaker": "amb_deputy_lusk",
+      "text": "...Lolo. Fine. Tell her my mom's pills ran out. She knows which.",
+      "effects": [
+        {
+          "add": "lusk_rep",
+          "value": 1
+        }
+      ],
+      "next": "home"
+    },
+    {
+      "id": "handover",
+      "speaker": "narrator",
+      "text": "Lusk takes the bag. 'Evidence.' You both know it isn't.",
+      "effects": [
+        {
+          "take": "pharmacy_bag",
+          "qty": 1
+        },
+        {
+          "add": "lusk_rep",
+          "value": 1
+        }
+      ],
+      "next": "home"
+    },
+    {
+      "id": "walk",
+      "speaker": "narrator",
+      "text": "A rifle comes up. Wraith steps in front of you. Somebody says, 'Whoa, whoa.'",
+      "effects": [
+        {
+          "event": "encounter",
+          "id": "enc_ch01_watch_standoff"
+        }
+      ],
+      "next": "home"
+    },
+    {
+      "id": "home",
+      "speaker": "narrator",
+      "text": "Head home before full dark. Carly should be awake.",
+      "effects": [
+        {
+          "quest": "q_clinic_supplies",
+          "state": "complete"
+        }
+      ],
+      "end": true
+    }
+  ]
+}

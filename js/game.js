@@ -1,29 +1,33 @@
 import * as THREE from "three";
-import { CFG, WEAPONS_ORDER } from "./config.js?v=r8";
-import { weaponKind } from "./weapons/viewmodels.js?v=r8";
-import { Input } from "./input.js?v=r8";
-import { HUD } from "./hud.js?v=r8";
-import { World } from "./world.js?v=r8";
-import { Player } from "./player.js?v=r8";
-import { EnemySystem } from "./enemies.js?v=r8";
-import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r8";
-import { openCharacterSheet } from "./inventoryUI.js?v=r8";
-import { stopDoll3D } from "./doll3d.js?v=r8";
-import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r8";
-import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete } from "./story.js?v=r8";
-import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon } from "./systems.js?v=r8";
-import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r8";
-import { isMobileClient, canvasDpr } from "./device.js?v=r8";
-import { LevelRuntime } from "./levelLoader.js?v=r8";
-import { attachAudio } from "./audioHook.js?v=r8";
-import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r8";
-import { createRenderPipeline, TIERS } from "../render/index.js?v=r8";
-import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r8";
-import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js?v=r8";
+import { CFG, WEAPONS_ORDER } from "./config.js?v=r9";
+import { weaponKind } from "./weapons/viewmodels.js?v=r9";
+import { Input } from "./input.js?v=r9";
+import { HUD } from "./hud.js?v=r9";
+import { World } from "./world.js?v=r9";
+import { Player } from "./player.js?v=r9";
+import { EnemySystem } from "./enemies.js?v=r9";
+import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r9";
+import { openCharacterSheet } from "./inventoryUI.js?v=r9";
+import { stopDoll3D } from "./doll3d.js?v=r9";
+import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r9";
+import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r9";
+import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r9";
+import { tickCompanion, disposeCompanion } from "./companion.js?v=r9";
+import { BreathSystem } from "./breath.js?v=r9";
+import { openTradeModal } from "./trade.js?v=r9";
+import { preloadModels } from "./models3d.js?v=r9";
+import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r9";
+import { isMobileClient, canvasDpr } from "./device.js?v=r9";
+import { LevelRuntime } from "./levelLoader.js?v=r9";
+import { attachAudio } from "./audioHook.js?v=r9";
+import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r9";
+import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r9";
+import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r9";
+import { loadSave, hasSave, writeSave, clearSave, migrateSave } from "./save.js?v=r9";
 
 window.__ASHFALL_MODULE = true;
-window.__ASHFALL_BUILD = "r8";
-if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r8") {
+window.__ASHFALL_BUILD = "r9";
+if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r9") {
   if (typeof window.__ashfallBustStaleBuild === "function") window.__ashfallBustStaleBuild(window.__ASHFALL_BUILD);
 }
 
@@ -129,7 +133,7 @@ class Game {
     this.alive = {};
     this.inv = emptyInv();
     this.quests = {};
-    this.hudUnlocks = new Set((this.story.hooks?.hud_unlocks?.ch01) || ["hp", "warmth", "hunger"]);
+    this.hudUnlocks = new Set((this.story.hooks?.hud_unlocks?.ch01) || ["hp", "hydration", "hunger"]);
     this.seen = {};
     this.notes = [];
     this.firedTriggers = new Set();
@@ -146,8 +150,10 @@ class Game {
     this.last = performance.now();
     this.ray = new THREE.Raycaster();
     this._ended = false;
-    this.hudUnlocks = new Set(["hp", "warmth", "hunger"]);
     this.shelterSeals = {};
+    this.breath = new BreathSystem(this.world.scene);
+    // Rev 2: holding a quest item satisfies item-gated flags everywhere (objectives, branches, triggers).
+    registerItemFlagResolver((flag) => this._itemForFlag(flag));
     this._breakInCd = 0;
     this._bootHook();
     this._bindUi();
@@ -158,6 +164,8 @@ class Game {
     const self = this;
     window.__ASHFALL = {
       get ready() { return true; },
+      get game() { return self; },
+      reconcile: (why) => self.reconcileInventoryObjectives(why || "debug"),
       get mode() { return self.mode; },
       get flags() { return self.flags; },
       get player() { return self.player; },
@@ -377,7 +385,9 @@ class Game {
     this.alive = {};
     this.inv = emptyInv();
     this.quests = {};
-    this.hudUnlocks = new Set((this.story.hooks?.hud_unlocks?.ch01) || ["hp", "warmth", "hunger"]);
+    this._acquired = {};
+    this.traderStock = {};
+    this.hudUnlocks = new Set((this.story.hooks?.hud_unlocks?.ch01) || ["hp", "hydration", "hunger"]);
     this.seen = {};
     this.notes = [this.story.notesCatalog?.[0]].filter(Boolean);
     this.timeOfDay = 0.38;
@@ -396,7 +406,7 @@ class Game {
       z: this.levels.world.spawn?.z ?? 8,
       yaw: this.levels.world.spawn?.yaw ?? 0,
       pitch: -0.08,
-      stats: { health: 100, warmth: 82, hunger: 70, stamina: 100, rad: 0, insulinHours: 72 },
+      stats: { health: 100, warmth: 100, hunger: 82, hydration: 85, stamina: 100, rad: 0 },
       equipped: "knife", mags: { blaster: 0, pistol: 0 },
       coatOn: false, filterOn: false, alive: true,
     });
@@ -459,12 +469,15 @@ class Game {
       const mig = migrateSave(raw);
       if (!mig.ok) return startFresh(mig.notice);
       const s = mig.save;
+      for (const k of ["theo_alive", "hank_alive", "insulin_found", "insulin_given"]) delete s.flags?.[k];
       this.flags = { ...this.story.startingFlags(), ...(s.flags || {}) };
       this.flags.chapter = s.flags.chapter;
       this.trust = { ...this.story.startingTrust(), ...(s.trust || {}) };
       this.alive = s.alive || {};
-      this.inv = s.inv || emptyInv();
+      this.inv = stripRetiredInv(s.inv || emptyInv());
       this.quests = s.quests || {};
+      this.traderStock = s.traderStock || {};
+      this._acquired = s.acquired || {};
       this.seen = s.seen || {};
       this.notes = Array.isArray(s.notes) ? s.notes : [];
       this.timeOfDay = s.timeOfDay ?? 0.4;
@@ -485,7 +498,7 @@ class Game {
         }
       }
       const ch = this.flags.chapter || "ch01";
-      this.hudUnlocks = new Set(["hp", "warmth", "hunger"]);
+      this.hudUnlocks = new Set(["hp", "hydration", "hunger"]);
       const hookUnlocks = this.story.hooks?.hud_unlocks || {};
       const n = this._chapterNum(ch);
       for (const [cid, list] of Object.entries(hookUnlocks)) {
@@ -508,6 +521,7 @@ class Game {
         this.player.restore(s.player);
         hideLoad();
         this.enterPlay();
+        this.reconcileInventoryObjectives("restore");
       }).catch((err) => {
         console.warn("[continue]", err);
         return startFresh("Old save incompatible — starting a fresh shift");
@@ -536,6 +550,9 @@ class Game {
       shelterSeals: { ...this.shelterSeals },
       hudUnlocks: [...this.hudUnlocks],
       firedTriggers: [...(this.firedTriggers || [])],
+      traderStock: this.traderStock || {},
+      acquired: this._acquired || {},
+      storyVersion: 2,
     };
   }
 
@@ -586,7 +603,7 @@ class Game {
       trust: this.trust,
       player: this.player,
       alive: this.alive,
-      addItem: (id, n) => addItem(this.inv, aliasItem(id), n),
+      addItem: (id, n) => { const r = addItem(this.inv, aliasItem(id), n); this.noteAcquired(id, n || 1); return r; },
       takeItem: (id, n) => takeItem(this.inv, aliasItem(id), n),
       setQuest: (id, state, stage) => {
         this.quests[id] = state === "start" ? "active" : (state === "update" ? (stage || "active") : (state || "done"));
@@ -690,6 +707,8 @@ class Game {
   async setChapter(id, { endPrevious = true, fireLoad = true, teleport = true } = {}) {
     this.input?.resetTouch?.();
     showLoad(20, "Loading");
+    this.enemies.flags = this.flags;
+    disposeCompanion(this.world.companion);
     try {
       if (this.story?.ensureChapterStory) await this.story.ensureChapterStory(id);
       if (this.levels) await ensureChapterLevel(this.levels, id);
@@ -736,6 +755,7 @@ class Game {
           this.player.syncCamera?.();
         }
         showLoad(75, "Loading");
+        this._applyChapterEnvironment(id);
         this._attachLumenFires();
         if (this.pipeline?.warmup) {
           try { await this.pipeline.warmup(); } catch (err) { console.warn("[pipeline] warmup", err); }
@@ -754,9 +774,223 @@ class Game {
     const envWx = this.levelRuntime?.level?.environment?.weather || this.levelRuntime?.environment?.weather;
     this._weather = climate.weather || envWx || this._weather || "overcast";
     const n = parseInt(String(id).replace(/\D/g, ""), 10);
+    if (!this.levelRuntime) this._applyChapterEnvironment(id);
     this.audio?.impl?.setChapter?.(n);
     this.audio?.impl?.a?.setChapter?.(n);
+    const A = this._audioEngine();
+    try { A?.setWeatherType?.(this._weather); } catch {}
+    if (!this._isWinter()) { this.blizzard = false; this.blizzardT = 0; }
     showLoad(100, "Loading");
+    this.reconcileInventoryObjectives("chapter");
+    // The in-game loader must never linger over gameplay (r8 bug).
+    hideLoad();
+  }
+
+  _audioEngine() {
+    return this.audio?.impl?.engine || this.audio?.impl?.a || window.GameAudio || null;
+  }
+
+  _chapterClimate() {
+    const ch = this.flags.chapter || "ch01";
+    const cc = this.systems?.survival?.chapter_climate || {};
+    return cc[ch] || cc[ch.replace(/b$/, "")] || {};
+  }
+
+  _isWinter() {
+    const env = this.world.season || this._envCfg?.id;
+    if (env) return env === "fallout_winter";
+    return this._chapterNum(this.flags.chapter) >= 8;
+  }
+
+  /** Lumen preset + world season/ground for a chapter (ch07b -> ch7 = late_fall). */
+  _applyChapterEnvironment(id) {
+    const n = this._chapterNum(id);
+    const L = this.levelRuntime?.L || null;
+    const lvEnv = L?.environment || {};
+    let cfg = null;
+    try {
+      if (this.pipeline?.setEnvironment) cfg = this.pipeline.setEnvironment(lvEnv.season && /^(summer|autumn|late_fall|fallout_winter)$/.test(lvEnv.season) ? lvEnv.season : n);
+    } catch (err) { console.warn("[env] setEnvironment", err); }
+    if (!cfg) {
+      try { cfg = { id: environmentForChapter(n), sceneHints: { snow: n >= 8 } }; } catch {}
+    }
+    this._envCfg = cfg;
+    this.world.setEnvironment?.(cfg, lvEnv);
+  }
+
+  /** Attach Lumen campfire lights for the current level's fires (host point lights stripped). */
+  _attachLumenFires() {
+    const p = this.pipeline;
+    if (!p) return;
+    for (const f of this.world.fires || []) {
+      if (f.lumen) continue;
+      try {
+        if (typeof p.addCampfire === "function") {
+          f.lumen = p.addCampfire([f.x, 0.02, f.z]);
+          this.world.stripHostFireLight?.(f);
+        } else if (typeof p.addPointLight === "function" && f.light) {
+          p.addPointLight(f.light, { glow: 1.1 });
+        }
+      } catch (err) { console.warn("[fires]", err); }
+    }
+  }
+
+  // ---- Retroactive inventory -> objective reconciliation (user playtest fix) ----
+  _itemFlagRules() {
+    const L = this.levelRuntime?.L || null;
+    if (this._ifr && this._ifrLevel === L) return this._ifr;
+    const R = {
+      ch02_card_secured: "priority_card",
+      ch07b_cards_taken: "control_cards",
+      got_fuel: "gas_can",
+      has_gas_mask: "gas_mask",
+      ch08_masked: "gas_mask",
+    };
+    const soft = new Set(); // routes that only count items gained in play (not starting stock)
+    // Universal alternate routes: any interactive that both sets a flag and hands out an item
+    // (boil station -> water_clean, deployment bag -> gas mask, Hold A6 -> control cards ...)
+    // is also satisfied by holding that item, however it was obtained (loot, craft, trade, NPC).
+    const items = this.systems?.items || {};
+    for (const it of L?.interactives || []) {
+      if (!it.setsFlag || R[it.setsFlag] || !it.givesItems) continue;
+      const ids = Array.isArray(it.givesItems) ? it.givesItems : Object.keys(it.givesItems);
+      const id = ids.map((x) => aliasItem(x)).find((x) => items[x] && items[x].category !== "material");
+      if (id) { R[it.setsFlag] = id; soft.add(it.setsFlag); }
+    }
+    this._ifrSoft = soft;
+    this._ifr = R;
+    this._ifrLevel = L;
+    return R;
+  }
+
+  /**
+   * Multi-route ("OR") objectives whose single completion flag is only set on one route in data.
+   * Each resolver returns true when it changed flags. Generic shape so new chapters can add routes.
+   */
+  _resolveObjectiveRoutes() {
+    const f = this.flags;
+    let changed = false;
+    // Ch1 "Fuel: Gil's garage OR the gas can": Lolo's porch sets ch01_gas_choice; Gil's diesel route
+    // ("Ask Gil. I'll go with you." -> diesel_jug) never did. Bringing Gil's diesel resolves it.
+    if (f.chapter === "ch01" && !f.ch01_gas_choice && f.ch01_lolo_talked) {
+      if (f.ch01_asked_gil_for_pruitt && this._holds("diesel_jug")) {
+        takeItem(this.inv, "diesel_jug", 1);
+        f.ch01_fuel_to_pruitt = true;
+        f.ch01_gas_choice = "pruitt";
+        this.hud?.say?.("Gil's diesel goes to Mr. Pruitt's machine.");
+        changed = true;
+      } else if (f.ch01_fuel_to_pruitt) {
+        f.ch01_gas_choice = "pruitt";
+        changed = true;
+      }
+    }
+    // Lootable containers / props that declare a flag (setsFlag / setFlag / onLoot.setFlag).
+    for (const L of this.world.loot || []) {
+      if (!L.taken) continue;
+      for (const fl of [L.setsFlag, L.setFlag, L.onLoot?.setFlag, L.onLoot?.setsFlag].filter(Boolean)) {
+        if (!f[fl]) { f[fl] = true; changed = true; }
+      }
+    }
+    return changed;
+  }
+
+  /** Item id that satisfies an item-gated flag, or null. */
+  _itemForFlag(flag) {
+    if (!flag || typeof flag !== "string") return null;
+    const R = this._itemFlagRules();
+    if (R[flag]) {
+      if (this._ifrSoft?.has(flag) && !((this._acquired || {})[R[flag]] > 0)) return null;
+      return R[flag];
+    }
+    const items = this.systems?.items || {};
+    const base = flag.replace(/^ch\d+b?_/, "");
+    let m = base.match(/^(?:has|got|found|picked_up|have)_(.+)$/);
+    let cand = m ? m[1] : null;
+    if (!cand) { m = base.match(/^(.+?)_(?:found|taken|secured|collected|picked_up|got|obtained)$/); cand = m ? m[1] : null; }
+    if (!cand) return null;
+    if (items[cand]) return cand;
+    const al = aliasItem(cand);
+    if (al && items[al]) return al;
+    return null;
+  }
+
+  _holds(id) {
+    if (!id) return false;
+    if ((this.inv[id] || 0) > 0) return true;
+    const al = aliasItem(id);
+    if (al !== id && (this.inv[al] || 0) > 0) return true;
+    const gear = this.player?.gear || {};
+    for (const v of Object.values(gear)) {
+      const gid = v && typeof v === "object" ? v.id : v;
+      if (gid === id || gid === al) return true;
+    }
+    return false;
+  }
+
+  /** Every flag a live objective / hook could be waiting on. */
+  _gatedFlagsInPlay() {
+    const out = new Set(Object.keys(this._itemFlagRules()));
+    const walk = (c) => {
+      if (!c) return;
+      if (Array.isArray(c)) return c.forEach(walk);
+      if (typeof c !== "object") return;
+      if (typeof c.flag === "string") out.add(c.flag);
+      for (const k of ["all", "any", "and", "or", "not"]) if (c[k]) walk(c[k]);
+    };
+    for (const o of this.levelRuntime?.L?.objectives || []) { walk(o.completeWhen); walk(o.startWhen); }
+    for (const t of this.levelRuntime?.L?.triggers || []) walk(t.when);
+    const hooks = this.story?.hooks || {};
+    const ch = hooks.chapters?.[this.flags.chapter] || hooks[this.flags.chapter];
+    if (ch && typeof ch === "object") walk(ch.objectives || ch.end_conditions || null);
+    return out;
+  }
+
+  /**
+   * Holding an item satisfies any "picked up X" condition, no matter the order it happened in.
+   * Runs on objective activation, dialogue close, chapter load/restore, pickup, craft and trade.
+   */
+  reconcileInventoryObjectives(reason = "") {
+    if (this._reconciling || !this.flags) return [];
+    this._reconciling = true;
+    const set = [];
+    try {
+      const before = this.objectiveText();
+      if (this._resolveObjectiveRoutes()) set.push("route");
+      for (const f of this._gatedFlagsInPlay()) {
+        if (this.flags[f]) continue;
+        const item = this._itemForFlag(f);
+        if (item && this._holds(item)) { this.flags[f] = true; set.push(f); }
+      }
+      if (set.length) {
+        const after = this.objectiveText();
+        if (this.hud) this.hud.objText = after;
+        if (after !== before) {
+          const done = String(before).replace(/^OBJECTIVE\s+/, "");
+          this.hud?.say?.("OBJECTIVE COMPLETE — " + done);
+          try { this._audioEngine()?.play?.("ui_objective") || this._audioEngine()?.play?.("ui_confirm"); } catch {}
+        }
+        try { this._checkObjectiveCraftUnlock(); } catch {}
+      }
+      this._lastReconcile = { reason, set, t: Date.now() };
+    } catch (err) {
+      console.warn("[reconcile]", err);
+    } finally {
+      this._reconciling = false;
+    }
+    return set;
+  }
+
+  /** Items gained during play (loot, craft, trade, NPC gifts) — starting stock never counts. */
+  noteAcquired(id, n = 1) {
+    if (!id || !(n > 0)) return;
+    this._acquired = this._acquired || {};
+    id = aliasItem(id);
+    this._acquired[id] = (this._acquired[id] || 0) + n;
+  }
+
+  /** Called after any inventory gain (pickup / craft / trade / give). */
+  onItemsChanged(reason) {
+    this.reconcileInventoryObjectives(reason || "items");
   }
 
   _syncAliveFromFlags() {
@@ -927,6 +1161,7 @@ class Game {
 
   refreshObjective() {
     if (this.hud) this.hud.objText = this.objectiveText();
+    if (!this._reconciling) this.reconcileInventoryObjectives("objective");
     try { this._checkObjectiveCraftUnlock(); } catch (_) { /* never block the HUD */ }
   }
 
@@ -940,6 +1175,7 @@ class Game {
     this._pendingEvent = null;
     const resumeDlg = this.dlg;
     this.closePanel();
+    this.reconcileInventoryObjectives("dialogue");
     if (pending?.name === "encounter") return this._runEncounter(pending.ev, resumeDlg);
     if (pending?.name === "minigame") return this._runMinigame(pending.ev, resumeDlg);
     if (pending?.name === "play_epilogue") {
@@ -1178,12 +1414,12 @@ class Game {
   _onLootFlags(L, all) {
     const rem = L.remaining || {};
     const got = (id) => (L.items?.[id] || 0) > 0 && !rem[id];
-    if (got("insulin") || got("insulin_vial")) {
-      this.flags.insulin_found = true;
-      if (this.quests.obj_insulin === "active") this.quests.obj_insulin = "done";
-    }
-    if (got("radio_crystal") && this.quests.obj_radio !== "done") this.quests.obj_radio = "active";
     if (got("gas_can") || got("fuel")) this.flags.got_fuel = true;
+    const emptied = all || !Object.values(rem).some((v) => v > 0);
+    for (const fl of [L.setFlag, L.setsFlag, L.onLoot?.setFlag, L.onLoot?.setsFlag].filter(Boolean)) {
+      if (emptied || Object.keys(L.items || {}).some((id) => got(id))) this.flags[fl] = true;
+    }
+    this.reconcileInventoryObjectives("pickup");
   }
 
   _foundNote(id) {
@@ -1199,7 +1435,9 @@ class Game {
       this.hud.say("Too heavy.");
       return false;
     }
-    return addItem(this.inv, id, n);
+    const ok = addItem(this.inv, id, n);
+    if (ok) { this.noteAcquired(id, n); this.reconcileInventoryObjectives("give"); }
+    return ok;
   }
 
   openInventory(tab = "bag") {
@@ -1337,15 +1575,13 @@ class Game {
     if (res.ok) {
       this.audio.craft?.();
       const outId = r.out?.id || r.id;
+      this.noteAcquired(outId, r.out?.n || r.out?.qty || 1);
       if (r.set_flags) for (const f of r.set_flags) this.flags[f] = true;
       if (typeof r.setsFlag === "string") this.flags[r.setsFlag] = true;
-      if (r.id === "lake_cooler" || r.id === "cooler" || outId === "lake_cooler" || outId === "cooler") {
-        this.flags.ch01_cooler_built = true;
-        if (this.quests && this.quests.q_cooler && this.quests.q_cooler !== "done") this.quests.q_cooler = "done";
-      }
       const nm = this.systems.items?.[outId]?.name;
       if (nm && r.special !== "campfire") res.msg = "Made " + nm;
       this.refreshObjective();
+      this.reconcileInventoryObjectives("craft");
     }
     return res;
   }
@@ -1467,7 +1703,14 @@ class Game {
       if (this.alive[hit.obj.id] === false) { this.hud.say("They're gone."); return; }
       if (this._talkLockUntil && performance.now() < this._talkLockUntil) return;
       const dlg = this.story.pickDialogue(hit.obj.id, this._storyCtx());
+      if (hit.obj.trader && this.story.traderById?.(hit.obj.trader)) return this.openTrade(hit.obj, dlg);
+      // OR-route re-entry: the porch choice can be revisited until the fuel objective resolves.
+      if (!dlg && hit.obj.id === "lolo" && this.flags.chapter === "ch01" && this.flags.ch01_lolo_talked && !this.flags.ch01_gas_choice) {
+        const porch = this.story.dialogues.find((d) => d.id === "ch01_lolo_porch");
+        if (porch) { this.openDialogue(porch); if (porch.nodes?.l4) this.dlgId = "l4"; this._showNode(true); return; }
+      }
       if (dlg) return this.openDialogue(dlg);
+      if (hit.obj.companion) { this.hud.say("Wraith leans into your leg."); try { this._audioEngine()?.playWraith?.("whine", { emitter: hit.obj.sfx || undefined }); } catch {} return; }
       this.hud.say((hit.obj.name || "They") + " has nothing to say.");
       return;
     }
@@ -1481,6 +1724,16 @@ class Game {
       this.levelRuntime.useInteractive(hit.obj, this);
     }
     this.levelRuntime?.interactTriggers?.(this);
+  }
+
+  openTrade(rec, dlg) {
+    this.input?.resetTouch?.();
+    const ok = openTradeModal(this, panel, rec.trader, {
+      setMenuOpen,
+      onTalk: dlg ? () => { this.closePanel(); this.openDialogue(dlg); } : null,
+      onClose: () => { this._lockTalk(600); this.closePanel(); this.reconcileInventoryObjectives("trade"); },
+    });
+    if (!ok) { this.closePanel(); if (dlg) this.openDialogue(dlg); }
   }
 
   _wep(id) { return getWeapon(this.systems, id || this.player.equipped); }
@@ -1541,6 +1794,7 @@ class Game {
       p.recoil = mode === "auto" ? 0.55 : 0.85;
       p.flashT = 0.05;
       this.audio.gunshot(id === "blaster" || w.pellets);
+      this._noteGunfire();
       if (this._currentShelterId() && this.shelterSeals[this._currentShelterId()] > 0 && this._breakInCd <= 0) {
         this._damageShelterSeal(8, "window");
         this._breakInCd = 3;
@@ -1567,6 +1821,7 @@ class Game {
 
     if (typ === "thrown" || typ === "held_offhand" || w.kind === "throw" || id === "molotov" || id === "flare") {
       if (!takeItem(this.inv, id, 1)) return;
+      if (/flare/.test(id) && String(this.flags.chapter) === "ch05") this.flags.ch05_flare_fired = true;
       p.attackCD = 0.7;
       this.audio.gunshot(false);
       const tx = p.x - Math.sin(p.yaw) * 4;
@@ -1685,13 +1940,10 @@ class Game {
       if (o.completeWhen && evalCondition(o.completeWhen, ctx)) continue;
       if (o.text) return "OBJECTIVE  " + o.text;
     }
-    if (this.quests.obj_insulin === "active") return "OBJECTIVE  Find insulin — Belknap Pharmacy";
-    if (this.flags.insulin_found && !this.flags.insulin_given && (this.inv.insulin || this.inv.insulin_vial || 0) > 0) return "OBJECTIVE  Get the vial back to Theo";
-    if (this.quests.obj_radio === "active") return "OBJECTIVE  Bring a radio crystal to Lou";
-    if (this.quests.obj_dam === "active" || this.flags.hank_briefed) return "OBJECTIVE  Reach Thomson Dam — battery, fuel, filter";
-    if (this.flags.at_dam) return "OBJECTIVE  Decide who gets the heat";
-    if (this.flags.chapter === "ch02") return "OBJECTIVE  Register at the DECC — or find another way";
-    return "OBJECTIVE  Scavenge the East End. Don't freeze.";
+    const ch = this.flags.chapter || "ch01";
+    const def = this.story.chapterDef?.(ch);
+    if (def?.objective) return "OBJECTIVE  " + def.objective;
+    return this._chapterNum(ch) <= 2 ? "OBJECTIVE  Scavenge Sparks. Stay hydrated." : "OBJECTIVE  Keep moving. Stay alive.";
   }
 
   update(dt) {
@@ -1789,31 +2041,35 @@ class Game {
       }
     }
 
-    // Insulin clock: 1 game-day = dayLenSec. 72 hours = 3 days.
-    this.player.stats.insulinHours = Math.max(0, this.player.stats.insulinHours - dt * (24 / CFG.dayLenSec));
-    if (this.player.stats.insulinHours <= 0 && !this.inv.insulin && !this.inv.insulin_vial && this.flags.theo_alive) {
-      this.flags.theo_alive = false;
-      this.hud.say("Theo's time ran out.");
-    }
-
     this.timeOfDay += dt / CFG.dayLenSec;
     if (this.timeOfDay >= 1) { this.timeOfDay -= 1; this.dayN++; }
-    this.blizzardT += dt;
+    // Echoes/Lumen: blizzards exist only in nuclear winter (or where the chapter climate allows them).
+    const climate = this._chapterClimate();
+    const bzAllowed = this._isWinter() || (climate.blizzard_chance || 0) > 0;
     if (!this._lockWeather) {
-      const cycle = this.blizzardT % (CFG.blizzardPeriod + CFG.blizzardLen);
-      this.blizzard = cycle > CFG.blizzardPeriod;
+      if (bzAllowed) {
+        this.blizzardT += dt;
+        const cycle = this.blizzardT % (CFG.blizzardPeriod + CFG.blizzardLen);
+        this.blizzard = cycle > CFG.blizzardPeriod;
+      } else this.blizzard = false;
+    }
+    if (this.blizzard !== this._bzWas) {
+      this._bzWas = this.blizzard;
+      try { this._audioEngine()?.setWeatherType?.(this.blizzard ? "blizzard" : this._weather); } catch {}
     }
 
     const sky = this.world.setSky(this.timeOfDay, this.blizzard);
     this._syncPipeline(sky, night);
     this.world.cull?.(this.player.camera, this.blizzard ? 28 : 42);
     this.world.updateParticles(dt, this.player.camera, this.blizzard);
-    this.audio.setWind(this.blizzard ? 1 : 0.35 + (night ? 0.15 : 0));
+    this.audio.setWind(this.blizzard ? 1 : (this._isWinter() ? 0.35 : 0.18) + (night ? 0.12 : 0));
 
     this.enemies.update(dt, this.player, this.world, this.audio);
     this.player.syncCamera();
     this.world.tickPeople?.(dt, this.player);
     this.enemies.tickActors?.(dt, this.player);
+    try { tickCompanion(this, dt); } catch (err) { if (!this._compWarned) { this._compWarned = true; console.warn("[wraith]", err); } }
+    this._tickBreath(dt, night);
 
     // Flashlight follows camera if we own one (Lumen owns its own)
     if (this.world.lights.flash && !this.pipeline) {
@@ -1838,7 +2094,7 @@ class Game {
 
     if (loc?.id === "loc_thomson_dam") this.flags.at_dam = true;
     this.levelRuntime?.tick(dt, this);
-    const nextCh = advanceChapter(this.flags.chapter || "ch01", this.flags, this.levels.chapters);
+    const nextCh = advanceChapter(this.flags.chapter || "ch01", this.flags, this.levels.chapters, this.levels.storyVersion || 1);
     if (nextCh && nextCh !== this.flags.chapter && !this._loadingLevel) this.setChapter(nextCh);
     if (this._enc) this._tickEncounter();
 
@@ -1863,26 +2119,65 @@ class Game {
   _syncPipeline(sky, night) {
     const p = this.pipeline;
     if (!p) return;
+    // Lumen: modulate the ACTIVE seasonal preset (never force winter defaults).
+    const E = this._envCfg || (p.getEnvironmentConfig ? (this._envCfg = p.getEnvironmentConfig()) : null);
+    const bz = !!this.blizzard && this._isWinter();
     const fogCol = this.world.scene.background;
-    if (typeof p.setFog === "function") {
+    if (typeof p.setFog === "function" && E?.fog) {
+      const n = sky?.night ?? (night ? 1 : 0);
       p.setFog({
         color: fogCol,
-        density: this.blizzard ? 0.085 : (night ? 0.05 : 0.028),
-        maxDist: this.blizzard ? 16 : (night ? 28 : 50),
-        falloff: this.blizzard ? 0.04 : 0.08,
+        density: bz ? Math.max(0.085, E.fog.density * 6) : E.fog.density * (1 + n * 2.2),
+        maxDist: bz ? 16 : E.fog.maxDist * (1 - n * 0.45),
+        falloff: bz ? 0.04 : E.fog.falloff,
       });
     }
     if (typeof p.setSun === "function") {
       const sun = this.world.lights.sun;
-      const dir = sun.position.clone().sub(sun.target.position).normalize();
-      p.setSun({ intensity: sun.intensity, color: sun.color, direction: dir, scatter: this.blizzard ? 0.09 : 0.05 });
+      this._sunDir = this._sunDir || new THREE.Vector3();
+      const dir = this._sunDir.copy(sun.position).sub(sun.target.position).normalize();
+      const sc = E?.sun?.scatter ?? 0.05;
+      p.setSun({ intensity: sun.intensity, color: sun.color, direction: dir, scatter: bz ? Math.max(0.09, sc * 1.8) : sc });
     }
     if (typeof p.setFlashlight === "function") {
       p.setFlashlight(this.player.flashlight || night);
     }
     if (typeof p.setWeather === "function") {
-      p.setWeather({ blizzard: this.blizzard, timeOfDay: this.timeOfDay, flashlight: this.player.flashlight || night });
+      p.setWeather({ blizzard: bz, timeOfDay: this.timeOfDay, flashlight: this.player.flashlight || night });
     }
+  }
+
+  _noteGunfire() {
+    // Cartographer: gunfire inside the Dixie Valley den wakes it.
+    if (String(this.flags.chapter) !== "ch07b" || this.flags.ch07b_den_shot) return;
+    const p = this.player;
+    if (p.x >= -48 && p.x <= 18 && p.z >= -14 && p.z <= 6) this.flags.ch07b_den_shot = true;
+  }
+
+  _tickBreath(dt, night) {
+    if (!this.breath) return;
+    const c = this._chapterClimate();
+    const t = night ? (c.ambient_temp_c_night ?? c.night_temp_c) : (c.ambient_temp_c_day ?? c.ambient_temp_c_night);
+    const def = this.story.chapterDef?.(this.flags.chapter);
+    const temp = typeof t === "number" ? t : (night && typeof def?.night_temp_c === "number" ? def.night_temp_c : (this._isWinter() ? -12 : 20));
+    const cold = this.mode === "play" && temp <= 0;
+    const src = this._breathSrc || (this._breathSrc = []);
+    src.length = 0;
+    if (cold) {
+      for (const n of this.world.npcs || []) {
+        if (!n.mesh || n.alive === false || n.companion || !n.mesh.visible) continue;
+        n._b = n._b || { x: 0, z: 0, y: 1.55, yaw: 0, kind: "npc" };
+        n._b.x = n.mesh.position.x; n._b.z = n.mesh.position.z; n._b.yaw = n.mesh.rotation.y;
+        src.push(n._b);
+      }
+      for (const e of this.enemies.list || []) {
+        if (!e.alive || e.hollow || e.creature || e.kind === "husk" || e.dormant) continue;
+        e._b = e._b || { y: 1.55 };
+        e._b.x = e.x; e._b.z = e.z; e._b.yaw = e.mesh?.rotation?.y || 0; e._b.kind = e.kind;
+        src.push(e._b);
+      }
+    }
+    this.breath.update(dt, cold, src, this.player.camera);
   }
 
   _render(dt) {
@@ -2041,7 +2336,7 @@ async function boot() {
     await story.load();
     const systems = await loadSystems();
     const levels = await loadLevels();
-    const { rollTable } = await import("./systems.js?v=r8");
+    const { rollTable } = await import("./systems.js?v=r9");
 
     const renderer = new THREE.WebGLRenderer({
       canvas: view, antialias: false, alpha: false, powerPreference: "high-performance",
@@ -2100,11 +2395,14 @@ async function boot() {
       pipeline = createRenderPipeline({
         renderer, scene, camera,
         sun: world.lights.sun,
+        hemiLight: world.lights.hemi,
+        ambientLight: world.lights.amb,
+        environment: environmentForChapter("ch01"),
         tier, look, crt, targetFps: 30, adaptive: true,
         particles: true, takeOverFog: true, updateCamera: true, flashlight: true,
         mobile: isMobileClient(),
       });
-      pipeline.setSun?.({ direction: [-0.45, 0.42, -1] });
+      // Lumen: no hard-coded winter sun — the active preset owns direction/colour.
       // HUD stays a crisp 9:16 overlay at internalSize (afterCRT). beforeCRT would curve it with the screen.
       pipeline.hooks.afterCRT = () => { gameHudResize(hud, pipeline); };
       pipeline.hooks.beforeCRT = null;
@@ -2119,7 +2417,7 @@ async function boot() {
         }
       }
       const tierNow = pipeline.getTier?.() || tier;
-      renderInfo = { source: "lumen", url: "../render/index.js", api: Object.keys(pipeline), crt, tier: tierNow, requestedTier: tier, look, internal: pipeline.internalSize, caps: pipeline.caps || null };
+      renderInfo = { source: "lumen", url: "../render/index.js?v=r9", api: Object.keys(pipeline), crt, tier: tierNow, requestedTier: tier, look, internal: pipeline.internalSize, caps: pipeline.caps || null };
       sizeView(renderer, pipeline);
       gameHudResize(hud, pipeline);
     } catch (err) {
@@ -2162,7 +2460,7 @@ async function boot() {
     game.loop();
     window.__READY = true;
     window.__ASHFALL_BOOTED = true;
-    window.__ASHFALL_BUILD = "r8";
+    window.__ASHFALL_BUILD = "r9";
     const banner = $("boot-banner");
     if (banner) banner.classList.remove("show");
     window.__INTEGRATION = {

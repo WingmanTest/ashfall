@@ -1,71 +1,75 @@
-# ASHFALL Story Data: Schema
+# ASHFALL Story Data: Schema (Revision 2)
 
-All files are plain JSON (UTF-8). IDs are `snake_case`. Echo's repo had **no existing dialogue, NPC, quest or flag format**: `/workspace/game2/` is a three.js art-direction mockup. So this schema is new. It's designed to be trivial to interpret in JS.
+All files are plain JSON (UTF-8). Ids are `snake_case`. The format is the same one `js/story.js` already loads. Revision 2 changes the **content** (new ids; see `MIGRATION_V1_TO_V2.md`), not the shape, except for the additions marked **v2**.
 
 ## Files
 | File | What |
 |---|---|
-| `npcs.json` | 12 interactable NPCs (`npcs[]`), `minor_characters[]`, `generic_speakers{}`, `factions{}` |
-| `flags.json` | Every flag: `type`, `default`, `meaning`, `set_in`, `read_in`, `role`. Also `endings[]` and `theo_checkpoint_rule` |
-| `items.json` | Story item IDs → description |
-| `quests.json` | Quest IDs → title, chapter, stages |
-| `gameplay_hooks.json` | Per-chapter hooks: weather, temp, time of day, locations, enemies, set pieces, items, start inventory, scene order, scene conditions, chapter start/end scripts. Also global `enemy_types`, `locations`, `weather_types`, `hud_unlocks` |
-| `dialogue/<scene_id>.json` | One scene per file (41 of them) |
-| `chapters/chXX_*.md` | Human-readable chapter design docs |
-| `validate.py` | Integrity checker (run after any edit) |
+| `npcs.json` | `npcs[]` (15 main NPCs with trust), `minor_characters[]`, **v2** `ambient_npcs[]` (10), **v2** `traders[]` (6), `generic_speakers{}`, `factions{}` (incl. **v2** `annex`), `trust_scale` |
+| `flags.json` | Every flag: `type`, `default`, `meaning`, `set_in`, `read_in`, `role`. Also `endings[]` and `pearce_family_modifier` |
+| `endings.json` | `endings[id] = {title, body, tone, conditions, priority}` (5 endings) |
+| `items.json` | Story item ids → description |
+| `quests.json` | Quest ids → title, chapter, desc, stages |
+| `gameplay_hooks.json` | Global `enemy_types` (incl. **v2** `assimilated_human`, `assimilated_animal`), **v2** `encounters` (27), `locations`, `quests`, `weather_types`, `hud_unlocks`, **v2** `seasons`, **v2** `timeline`, **v2** `assimilation`, **v2** `companion` (Wraith), **v2** `barter`; and per-chapter `chapters[]` |
+| `dialogue/<scene_id>.json` | One scene per file (89) |
+| `chapters/chNN_*.md` | Chapter design docs (one per chapter; the "Gameplay hooks" section is generated) |
+| `authoring/*.py` | Generators for everything above. `authoring/build_all.sh` rebuilds and validates |
+| `validate.py` | Integrity checker. Must report 0 errors, 0 warnings |
+| `MIGRATION_V1_TO_V2.md` | Old → new id map, removed ids, per-team action lists, the retired-terms table |
 
 ## Game state the scripts expect
 ```js
 state = {
-  flags:  { kindness: 0, ... },          // defaults from flags.json
-  trust:  { theo: 5, marguerite: 2, ... },// npcs.json -> trust.start, clamp to [-10, 10]
-  items:  { insulin_vial: 3, ... },        // counts; take clamps at 0
-  quests: { q_cooler: "start", ... },
-  stats:  { health, warmth, satiety, hydration, stamina, radiation } // = systems/survival.json
+  flags:  { kindness: 0, wraith_alive: true, tallmen_killed: 0, ... }, // defaults from flags.json
+  trust:  { carly: 4, wraith: 5, ross: 1, ... },  // npcs[].trust.start, clamped to [-10, 10]
+  items:  { mech_tools: 1, ... },                   // counts; take clamps at 0
+  quests: { q_water: "start", ... },
+  stats:  { health, warmth, satiety, hydration, stamina, radiation }  // = systems/survival.json
 }
 ```
+- **Trust exists only for `npcs[]` ids** (including `wraith`, `ross`, `wes`, `reyne`). Ambient NPCs, traders and minor characters have **no trust**; they use int flags: `lusk_rep`, `haas_rep`, `trader_<id>_rep`. `validate.py` rejects trust on any other id.
 
 ## Dialogue scene
 ```json
 {
-  "id": "ch01_marguerite_porch",       // == filename
+  "id": "ch01_lolo_porch",            // == filename
   "chapter": "ch01",
-  "location": "loc_east_end",          // key in gameplay_hooks.locations
-  "trigger": "Interact with Marguerite on her porch.",   // human note for wiring
-  "trigger_conditions": [ ... ],       // optional; also see gameplay_hooks.chapters[].scene_conditions
-  "speakers": ["marguerite", "dell", "narrator"],
+  "location": "loc_sparks_block",     // key in gameplay_hooks.locations
+  "trigger": "Interact with Lolo on her porch.",   // human note for wiring
+  "trigger_conditions": [ ... ],      // optional; also see chapters[].scene_conditions
+  "speakers": ["narrator", "lolo", "braith"],      // every node speaker is listed
   "start": "start",
-  "on_end": [ ...effects ],            // optional; run when any end node finishes
+  "on_end": [ ...effects ],           // optional; run when any end node finishes
   "nodes": [ Node, ... ]
 }
 ```
 
 ### Node: exactly ONE of `next` | `choices` | `branches` | `end`
 ```json
-{ "id": "m3", "speaker": "marguerite", "text": "≤140 chars, usually ≤90",
-  "effects": [ ... ],                  // optional, applied on ENTERING the node
-  "choices": [ Choice, ... ] }         // or
-  "next": "m4"                          // or
-  "branches": [ {"conditions":[...], "next":"a"}, {"next":"fallback"} ]  // auto-route: first match wins; last is the fallback
+{ "id": "m3", "speaker": "lolo", "text": "≤140 chars, usually ≤90",
+  "effects": [ ... ],                 // optional, applied on ENTERING the node
+  "choices": [ Choice, ... ] }        // or
+  "next": "m4"                        // or
+  "branches": [ {"conditions":[...], "next":"a"}, {"next":"fallback"} ]  // first match wins; last is the fallback
   "end": true
 ```
-- `speaker`: an npc id, a minor character id, `dell` (player), or `narrator` (no portrait).
-- Show a choice only if its `conditions` pass. Suggestion: hide locked choices; `validate.py` warns if every choice in a node is conditional.
+- `speaker`: any id in `npcs[]`, `minor_characters[]`, `ambient_npcs[]`, `traders[]` or `generic_speakers` (incl. `braith` = the player, `narrator` = no portrait).
+- Show a choice only if its `conditions` pass. Every choice list has at least one unconditional option (the validator enforces it).
 
 ### Choice
 ```json
-{ "text": "[Give her the gas can]",     // ≤44 chars. [brackets] = action, otherwise Dell's spoken line
+{ "text": "[Give him the gas can]",   // ≤44 chars. [brackets] = action; otherwise Braith's spoken line
   "next": "give",
-  "conditions": [ ... ],                // optional, AND
-  "effects":    [ ... ] }               // optional, applied when picked (before entering next)
+  "conditions": [ ... ],              // optional, AND
+  "effects":    [ ... ] }             // optional, applied when picked (before entering next)
 ```
 
 ### Conditions (a list = AND)
 | Form | Meaning |
 |---|---|
-| `{"flag":"x","eq":true}` | ops: `eq ne gt gte lt lte`. For enums, compare strings; an unset enum is `null` |
-| `{"trust":"wren","gte":3}` | NPC trust |
-| `{"item":"insulin_vial","gte":1}` | inventory count |
+| `{"flag":"x","eq":true}` | ops `eq ne gt gte lt lte`. Enums compare strings; an unset enum is `null` |
+| `{"trust":"kit","gte":3}` | NPC trust (`npcs[]` ids only) |
+| `{"item":"flare","gte":1}` | inventory count |
 | `{"stat":"warmth","lt":30}` | survival stat |
 | `{"any":[c1,c2]}` | OR |
 | `{"not":c}` | NOT |
@@ -74,42 +78,80 @@ state = {
 ### Effects (a list, in order)
 | Form | Meaning |
 |---|---|
-| `{"set":"flag","value":v}` | set bool, int, or enum |
+| `{"set":"flag","value":v}` | set bool, int or enum |
 | `{"add":"flag","value":n}` | int add. `{"add":"f","value_from":"g"}` adds another flag's value |
 | `{"trust":"npc","delta":n}` | trust change (clamped) |
 | `{"give":"item","qty":n}` / `{"take":"item","qty":n}` | inventory |
 | `{"quest":"q_id","state":"start|update|complete|fail","stage":"..."}` | quest log |
-| `{"stat":"warmth","delta":-10}` | survival stat delta (stat names = systems/survival.json: health, warmth, satiety, hydration, stamina, radiation) |
+| `{"stat":"warmth","delta":-10}` | survival stat delta |
 | `{"if":[conds],"then":[effects],"else":[effects]}` | conditional |
-| `{"event":"name", ...}` | engine hook, see below |
+| `{"event":"name", ...}` | engine hook, below |
 
-### Engine events (Echo implements)
+### Engine events
 | Event | Params | Meaning |
 |---|---|---|
-| `encounter` | `id` | Start a combat or set-piece encounter. IDs: `enc_ch01_watch_standoff`, `enc_ch02_crush`, `enc_ch03_fire_defend`, `enc_ch03_fire_rescue`, `enc_ch05_compact_attack`, `enc_ch05_ironwood_turn`, `enc_ch05_crossfire`, `enc_ch06_escape_house`, `enc_ch06_harbor_retaliation`, `enc_ch08_husk`, `enc_ch09_picket_assault`, `enc_ch10_gate_battle`. Enemy composition is in `gameplay_hooks.json`. Resume the dialogue at `next` after the encounter resolves |
-| `minigame` | `id` | `mg_jumper_bridge` (Ch6). `mg_black_start` is triggered by gameplay, not dialogue (Ch4) |
+| `encounter` | `id` | Start a combat or set-piece encounter. Ids and enemy composition: `gameplay_hooks.encounters` (27). Resume the dialogue at `next` when it resolves |
+| `minigame` | `id` | `mg_black_start` (Ch4, triggered by gameplay; listed in `chapters[ch04].minigames`) |
 | `search_inventory` | `confiscate[]` | Checkpoint search animation |
 | `time_skip` | `hours` | Fade |
-| `npc_death` | `npc` | Remove the NPC from the world |
-| `hud_unlock` | `hud` | Show a HUD meter (`radiation`, Ch7) |
-| `set_theo_side_from_location` | | Set `theo_side` to the faction whose area he's found in (`harbor` at docks, `compact` with Cody's cell, `authority` with Ironwood/Guard). Echo picks the area by highest `rep_*` |
+| `npc_death` | `npc` | Remove the NPC (sets `<npc>_alive=false`). Not used by v2 data; deaths are flags. Never for `wraith` outside `ch09_wraith_hold` |
+| `hud_unlock` | `hud` | Show a HUD element (`gameplay_hooks.hud_unlocks`: `hp`, `hydration`, `hunger`, `companion` Ch1; `warmth`, `temp` Ch3; `ammo_military` Ch5, `rad` Ch7, `filter` + `seal` Ch8) |
 | `play_epilogue` | | Run scene `ch10_epilogue` |
 
-## Chapter flow (gameplay_hooks.json)
-1. On chapter load: apply `chapter_start_effects` (Ch1 initializes all defaults explicitly, too).
-2. Scenes in `scenes[]` are listed in narrative order. Wire each to its `trigger` (an NPC interact, or entering a location). Skip a scene if its `scene_conditions[scene]` fail.
-3. On chapter completion: apply `chapter_end_effects`. These hold the Theo insulin checkpoints (Ch3, Ch7, Ch9) and the death checks (Ch6).
-4. Endings: `ch10_final` sets `ending` directly. `flags.json → endings` mirrors the exact conditions for UI and debugging.
+## Chapter flow (`gameplay_hooks.json → chapters[]`)
+1. On chapter load, apply `chapter_start_effects` (Ch1 initializes all defaults explicitly; Ch8 sets `has_gas_mask`).
+2. `scenes[]` is in narrative order. Wire each to its `trigger`. Skip a scene if `scene_conditions[scene]` or its `trigger_conditions` fail.
+3. On completion, apply `chapter_end_effects` (death checks for Kit/Avila/Gil and Carly leaving at Ch6; Augie and `pearce_reconciled` at Ch7; Ross and Lolo at Ch8; Walt, Wes and Kit at Ch9). **There are no medical-clock checkpoints.**
+4. `levels[]` lists the level files for a chapter. **Ch7 has two** (`ch07_dead_air`, `ch07b_dixie_valley`); `level_split` says which locations live in which file.
+5. Per chapter, **v2** keys: `traders[]`, `ambient_npcs[]` (must match `npcs.json` chapters; validated), `tallman_glimpses[]` (non-interactable; each `on_show` adds 1 to `tallman_glimpses`), and for Ch10 `siege` (`skip_night1_if`, `night3_single_side_if`).
+6. Endings: `ch10_final` sets `ending` directly. `flags.json → endings` and `endings.json` mirror the exact conditions.
 
-## Writing constraints (portrait)
-Node text ≤140 chars (most are ≤90). Choices ≤44 chars. `validate.py` warns past those limits.
+## Seasons and weather (**v2**, `gameplay_hooks.json`)
+Every `chapters[]` entry carries:
 
-## Compatibility with Echo's `js/story.js` (as of 2026-11-23, 1:58 PM PST)
-Echo's loader already reads this format: array nodes, `next`, `branches`, `effects`, `conditions`, `endings.json`, and `gameplay_hooks.json → quests[]`. These are the gaps between it and the data:
-1. **Condition ops:** flag conditions use `gt`, `lt`, `lte` in addition to eq/ne/gte. Trust uses `lt` and `lte` (e.g. `ch06_theo_side`, Ch6/Ch7 end scripts). Item uses `lt` (Theo checkpoint). Today, unknown ops fall through as `!!v` or `true`.
-2. **`count_true`** (used in the `ch10_final` Warm Room branch and `endings.json`) and **`not`** are not handled. Today `count_true` returns `true`, which makes the good ending too easy.
-3. **`{"if":...,"then":...,"else":...}`** effects (chapter scripts, `ch01_theo_night`/`ch08_marguerite_list` on_end) and **`value_from`** (Ch9 column size) are not handled.
-4. Scene-level **`on_end`** isn't read by `normalizeDialogue`.
-5. The ending is set via `{"set":"ending","value":"end_..."}` (→ `flags.ending`). Echo's loader also stores `e.ending` as `flags.final_ending`, so read `flags.ending`.
-6. Events beyond `npc_death` and `search_inventory` (`encounter`, `minigame`, `time_skip`, `hud_unlock`, `set_theo_side_from_location`, `play_epilogue`) need handlers.
-7. Speaker id `cpl_haas` is used (Echo's loader already aliases `haas`).
+| Key | Type | Meaning |
+|---|---|---|
+| `season` | enum `late_summer` \| `autumn` \| `late_fall` \| `nuclear_winter` | Season band. Fixed: Ch1–2 `late_summer`, Ch3–4 `autumn`, Ch5–7 `late_fall`, Ch8–10 `nuclear_winter` (validated) |
+| `date` | string | In-world date, e.g. `"Day 3 (Wed Aug 26, Year 1)"` |
+| `weather` | `weather_types` id | Weather at chapter start; must be allowed by the season (validated) |
+| `weather_late` / `weather_after_bursts` | `weather_types` id, optional | Mid-chapter change (Ch8 `ashfall`; Ch7 `brown_sky` after the bursts) |
+| `temp_c` / `night_temp_c` | int °C | Day / night temperature; `temp_c` must be inside the season's range (validated) |
+| `survival_focus` | string[] | Which survival pressures the chapter leans on (`hydration`, `heat`, `dust`, `fuel`, `warmth`, `filters`, `dread`...) |
+
+Top-level blocks:
+- `seasons{season: {chapters[], months, temp_c[lo,hi], night_temp_c[lo,hi], weather[], survival, palette, notes}}`.
+- `timeline{}`: anchor dates (`day_0` = Sun Aug 23 Year 1, `annex_diesel_out` = Day 16 Tue Sep 8, `bursts` = Day 104 Sat Dec 5) and one line per chapter.
+- `weather_types[]`: `heat_haze`, `dust_wind`, `clear_autumn`, `autumn_wind`, `frost`, `overcast`, `sleet`, `freezing_rain`, `brown_sky`, `grey_snow`, `fallout_rain`, `ashfall`, `blizzard`, `clear_cold`.
+- `hud_unlocks`: `hydration` from Ch1 (late summer is a hydration/heat game); `warmth` + `temp` from Ch3.
+
+| Season | Ch | Temp °C (day / night) | Weather | Palette |
+|---|---|---|---|---|
+| `late_summer` | 1–2 | 32–36 / 15–18 | `heat_haze`, `dust_wind` | warm amber dust, white sun glare, heat shimmer |
+| `autumn` | 3–4 | 12–16 / 4–6 | `clear_autumn`, `autumn_wind` | autumn gold, yellow cottonwoods |
+| `late_fall` | 5–7 | −1–2 / −3 | `sleet`, `overcast`, `frost`, `brown_sky` | overcast slate grey |
+| `nuclear_winter` | 8–10 | −40 to −10 / −45 to −18 | `fallout_rain`, `ashfall`, `blizzard` | ashfall blue-grey; floodlight cones and flare red only |
+
+## Assimilated enemies: the Hollows (**v2**, Ch8–10)
+- `enemy_types.assimilated_human`: display "Hollow". `code_kind: "mimic"` (fallback `husk` behavior if the engine has no mimic kind). Carries `tells[]` and `voice_lines[]` for audio barks.
+- `enemy_types.assimilated_animal`: display "Hollow (animal)". `code_kind: "dog"`. Silent pack movement.
+- Both have `first_chapter: "ch08"` and may appear only in Ch8–10 (validated). The ids `assimilated_human` / `assimilated_animal` match `systems/enemies.json`.
+- `assimilation{}`: `in_world_term`, `tells{wraith, breath, voice, gait, light}`, `flags[]`, `encounters[]`, `scenes[]`, `foreshadow[]`, `count_rule`.
+- New encounters: `enc_ch08_hollow_first` (human ×1), `enc_ch08_door_mimic` (human ×1), `enc_ch09_hollow_ambush` (human ×2), `enc_ch09_animal_pack` (animal ×5), `enc_ch10_hollow_prowlers` (human ×2 + animal ×3).
+- New flags: `assimilation_discovered` (bool), `mimic_let_in` (bool; Ch9 start `column_size −1`), `assimilated_killed` (int, separate from `tallmen_killed`, never a total), `wraith_mimic_warned` (bool), `ch09_voice_followed` (bool; `column_size −1`).
+- **Husks are not Hollows.** `husk` stays a separate, non-hostile-by-default enemy type that can be talked down.
+
+## Hard story rules (validated where possible)
+- **Wraith** dies only in `dialogue/ch09_wraith_hold`, via `[Order Wraith to hold the line]` plus a plain-language confirmation. `validate.py` errors if any other file sets `wraith_alive=false` or fires `npc_death` for her. At 0 HP elsewhere she is *down* (`wraith_injured`), never dead.
+- **Tallmen count is unknown.** Nothing states a total. `tallmen_killed` (int) and `den_killed` (bool) ease the Ch10 siege: skip night 1 if `den_killed` or `tallmen_killed >= 2`; night 3 from one side if `den_killed` and `tallmen_killed >= 3`. Never more than 3 visible; never a horde.
+- **No medical mechanic** of any kind.
+- **Retired v1 terms** (table in `MIGRATION_V1_TO_V2.md`) may not appear in any other story file.
+- **Late summer means late summer.** `validate.py` errors on cold-weather words (snow, frost, winter, cold, coat, gloves, sleet, freezing, shiver, October...December/January/February) in any Ch1–2 dialogue line, choice or trigger, and in `chapters/ch01*`/`ch02*` docs.
+- **Hollow count is unknown,** like the Tallmen. `assimilated_killed` counts kills; nothing states how many exist.
+
+## Writing constraints (portrait 9:16)
+Node text ≤140 chars (most ≤90). Choices ≤44 chars. `validate.py` warns past those limits, on unreachable nodes, on a last branch with conditions, and on all-conditional choice lists.
+
+## Notes for `js/story.js`
+- `pickDialogue()` hides ids containing "night" during the day and "morning" at night. That's intended for `ch03_night_owl`, `ch10_siege_night1..3` and `ch01_wraith_morning`.
+- `startingTrust()` should also skip `ambient_npcs`/`traders` (they have no `trust`), and speaker lookup should include `ambient_npcs`, `traders` and `generic_speakers`.
+- Read encounter compositions from `gameplay_hooks.encounters` instead of the hard-coded table.

@@ -3,6 +3,65 @@
 I did not modify any file outside `render/`. `render/demo/existing.html` does all of the steps below at **runtime**
 to prove they work. To make them permanent, apply them in `js/main.js` / `index.html`:
 
+## 0a. Nevada Revision 2 — 4-Act Seasonal Atmosphere Presets (`environments.js`)
+
+Four mobile-safe, zero-allocation environment presets cover the full Sparks/Reno seasonal arc from high-desert summer to nuclear winter survival horror. Switching presets updates uniforms, sky/lights, particle config, and swaps the GPU-built 512×512 R8 palette LUT (`0` target rebuilds, `0` shader recompiles, `0` extra FBOs, `0` VRAM growth).
+
+### Canonical Preset IDs & Chapter Mapping
+
+| Act | Chapters | Preset ID (`ENVIRONMENT_ORDER`) | Aliases / Chapter Inputs | Palette (`refined` / `classic`) | Particles (1 draw call) | Atmosphere |
+|---:|---|---|---|---|---|---|
+| 1 | Ch 1–2 | `'summer'` | `'high_desert_summer'`, `'desert'`, `'act1'`, `1..2`, `'ch01'..'ch02'` | `summer64` / `summer32` | Slow golden dust motes (`countScale: 0.35`, **no snow**) | Warm dry Reno sunlight, ochre-blue Nevada sky, long clear visibility |
+| 2 | Ch 3–4 | `'autumn'` | `'dusty_autumn'`, `'fall'`, `'act2'`, `3..4`, `'ch03'..'ch04'` | `autumn64` / `autumn32` | Drifting dust + burnt-rust leaves (`countScale: 0.65`) | Low golden-amber afternoon sun, longer shadows, cooler violet-mauve twilight |
+| 3 | Ch 5–7 | `'late_fall'` | `'civil_war_late_fall'`, `'civil_war_fall'`, `'rain'`, `'act3'`, `5..7`, `'ch05'..'ch07'` | `late_fall64` / `late_fall32` | Angled pixel-art rain/drizzle streaks + mist (`countScale: 1.0`) | Cold overcast slate sky, distant smoke haze, bleak high contrast |
+| 4 | Ch 8–10 | `'fallout_winter'` | `'nuclear_winter'`, `'winter'`, `'ashfall'`, `'horror'`, `'act4'`, `8..10`, `'ch08'..'ch10'` | `fallout_winter64` / `fallout_winter32` | Dark falling soot + snow (`ashRatio: 0.55`, `countScale: 1.0`) | Sunless ash-choked sky, tight ambush fog (`maxDist: 30`), stark campfire & flashlight contrast |
+
+### Exact API (exported from `render/index.js`)
+
+```js
+import {
+  createRenderPipeline,
+  ENVIRONMENTS, ENVIRONMENT_ORDER,
+  environmentForChapter, resolveEnvironment, getEnvironmentConfig,
+} from '../render/index.js';
+
+// At boot (pass hemiLight + ambientLight so setEnvironment keeps scene lighting in sync):
+const pipeline = createRenderPipeline({
+  renderer, scene, camera,
+  sun: world.lights.sun,
+  hemiLight: world.lights.hemi,       // optional (auto-discovered if omitted)
+  ambientLight: world.lights.amb,     // optional (auto-discovered if omitted)
+  environment: environmentForChapter(chapterId), // or 'summer' | 'autumn' | 'late_fall' | 'fallout_winter'
+  tier: 'auto', look, crt, targetFps: 30, adaptive: true,
+  particles: true, takeOverFog: true, updateCamera: true, flashlight: true,
+  mobile: isMobileClient(),
+});
+
+// On chapter change (in game.js setChapter(id)):
+const envCfg = pipeline.setEnvironment(chapterId); // accepts 'ch01'..'ch10', 1..10, or canonical preset ID
+// Optional per-chapter overrides (e.g. night interior or storm spike):
+// pipeline.setEnvironment('fallout_winter', { fog: { density: 0.06 }, flashlight: { enabled: true } });
+
+pipeline.getEnvironment();       // -> 'summer' | 'autumn' | 'late_fall' | 'fallout_winter' | null
+pipeline.getEnvironmentConfig(); // deep copy of active preset (+ sceneHints for ground/props)
+```
+
+### Important Note for Prime's `_syncPipeline(sky, night)` (`js/game.js`)
+
+* `pipeline.setWeather(arg)` accepts **both** a preset/chapter string (`pipeline.setWeather('summer')`) **and** Prime's existing per-frame object (`pipeline.setWeather({ blizzard, timeOfDay, flashlight })`) without breaking existing calls. In `fallout_winter`, `blizzard: true` temporarily boosts wind/fall/particle density; in `summer`/`autumn`/`late_fall`, `blizzard` is safely ignored so snow never leaks into Act 1–3.
+* **Watch out for `_syncPipeline` overwriting seasonal fog/sun:** Prime's current `_syncPipeline` calls `p.setFog(...)` and `p.setSun(...)` every frame using the old winter sky table. Once `pipeline.setEnvironment(chapterId)` is active, let the preset drive base `fog`/`sun`/`sky`/`hemi`/`ambient` (or read `const base = pipeline.getEnvironmentConfig()` and modulate only for `night` / interior darkening) so the winter defaults don't clobber Summer/Autumn/Late Fall.
+* To opt out of automatic scene clearColor/background or hemi/ambient light syncing, pass `syncSky: false` and/or `syncLights: false` to `createRenderPipeline` or `setEnvironment`. Everything `setEnvironment` touches (clearColor, `scene.background`, `hemiLight`, `ambientLight`, `sun.color`/`intensity`) is restored cleanly on `dispose()`.
+* `setLook('classic' | 'refined')` automatically swaps between the active act's 32-color and 64-color seasonal palettes.
+
+### Verified Mobile GPU/VRAM Audit (Headless Chromium, all 6 profiles `ok=True`)
+
+* **iPhone Safari `mobile` tier (390×844 CSS / 196×422 internal, DPR 1 & DPR 3):** `6` passes/frame, `0` shadow passes, `5` FBOs, **`1,913.7 KB` owned VRAM** (`5.64 MB` total incl. canvas at DPR 1) — **identical across all 4 acts** (`summer`, `autumn`, `late_fall`, `fallout_winter`).
+* **Switch cost:** `0.3–2.1 ms` per act switch (GPU-built 512×512 R8 LUT, mobile LRU cache capped at 2 entries = max 514 KB extra).
+* **Stability:** 16 consecutive act switches (`setEnvironment_4acts_x16`): **`0` GL errors**, **`0` console errors**, **`0` target rebuilds**, **`0` shader recompiles**, **`0` geometry/texture leaks**; `dispose()` returns `renderer.info.memory` to exact baseline (`geometries: 2, textures: 1`).
+* **Visuals:** Verified on `render/demo/existing.html?env=summer|autumn|late_fall|fallout_winter` (`render/screenshots/compare_nevada_4acts_mobile.png`, `compare_nevada_4acts_high.png`).
+
+---
+
 ## 0. iPhone Safari safety (round 4 audit) — what Prime should change
 Read-only review of the live build (`js/game.js`, `js/world.js`, `js/levelLoader.js`, `js/device.js`, `js/player.js`, `js/inventory.js`).
 Line numbers are approximate (`game.js` was changing while I read it).

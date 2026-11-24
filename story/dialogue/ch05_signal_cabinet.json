@@ -1,0 +1,107 @@
+{
+  "id": "ch05_signal_cabinet",
+  "chapter": "ch05",
+  "location": "loc_i80_blockade",
+  "trigger": "The convoy halts at the canyon. Rail signal cabinet controls the crossing gates and floodlights.",
+  "speakers": [
+    "narrator",
+    "braith",
+    "ruiz"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "The convoy stops at the canyon mouth. A dead rail signal cabinet controls the gates and floodlights on the crossing.",
+      "next": "c1"
+    },
+    {
+      "id": "c1",
+      "speaker": "ruiz",
+      "text": "Get those floods on and we can see their positions. Get the gates up and we roll through.",
+      "choices": [
+        {
+          "text": "[Fix it. Floods on, gates up]",
+          "next": "fix",
+          "conditions": [
+            {
+              "item": "signal_fuse",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "set": "cabinet_choice",
+              "value": "fixed"
+            },
+            {
+              "add": "rep_authority",
+              "value": 1
+            },
+            {
+              "add": "rep_compact",
+              "value": -1
+            }
+          ]
+        },
+        {
+          "text": "[Jam it. Gates stay down]",
+          "next": "jam",
+          "effects": [
+            {
+              "set": "cabinet_choice",
+              "value": "jammed"
+            },
+            {
+              "add": "rep_compact",
+              "value": 1
+            },
+            {
+              "add": "ironwood_hostility",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "[Floods only. Let them see us too]",
+          "next": "floods",
+          "effects": [
+            {
+              "set": "cabinet_choice",
+              "value": "floods"
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fix",
+      "speaker": "narrator",
+      "text": "The floods slam on. Fifty yards up: hay trucks, pickups, men behind bales. And one you know.",
+      "next": "end"
+    },
+    {
+      "id": "jam",
+      "speaker": "ruiz",
+      "text": "...It's dead? Fine. Then we wait. Waiting is how people get shot, Pearce.",
+      "next": "end"
+    },
+    {
+      "id": "floods",
+      "speaker": "narrator",
+      "text": "Floods on, gates down. Both sides blinking in the light. Nobody fires. Yet.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "Behind the bales, a man in a sheepskin coat stands up with his hands empty.",
+      "end": true
+    }
+  ]
+}

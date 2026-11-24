@@ -1,0 +1,38 @@
+{
+  "id": "ch03_night_owl",
+  "chapter": "ch03",
+  "location": "loc_sparks_block",
+  "trigger": "Radio, late night, any night in Ch3+ (hand_radio).",
+  "speakers": [
+    "narrator",
+    "amb_night_owl",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Static. Then a woman's voice, very calm, very slow. No call sign.",
+      "next": "o1"
+    },
+    {
+      "id": "o1",
+      "speaker": "amb_night_owl",
+      "text": "This is the Night Owl. Here are tonight's names. If you know them, say them out loud where you are.",
+      "next": "o2"
+    },
+    {
+      "id": "o2",
+      "speaker": "amb_night_owl",
+      "text": "Dolores Paiz, Sun Valley. Marcus Webb, Sparks. Two children, unnamed, the Wells Avenue fire.",
+      "next": "o3"
+    },
+    {
+      "id": "o3",
+      "speaker": "amb_night_owl",
+      "text": "If you're missing someone, find a radio. I read every name I get. Goodnight. Keep each other warm.",
+      "end": true
+    }
+  ]
+}

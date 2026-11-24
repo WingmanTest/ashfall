@@ -1,0 +1,71 @@
+{
+  "id": "ch02_augie_radio",
+  "chapter": "ch02",
+  "location": "loc_rscc_registry",
+  "trigger": "Pass the man with a crank radio in the ration line.",
+  "speakers": [
+    "narrator",
+    "augie",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "A man in line is cranking a radio. A dozen people lean in. The voice is warm, tired, local.",
+      "next": "r1"
+    },
+    {
+      "id": "r1",
+      "speaker": "augie",
+      "text": "This is KK7AUG, Peavine Peak, still here. Day nineteen. Here's what I've got.",
+      "effects": [
+        {
+          "set": "augie_heard",
+          "value": true
+        }
+      ],
+      "next": "r2"
+    },
+    {
+      "id": "r2",
+      "speaker": "augie",
+      "text": "Sacramento's got power downtown. Allegedly. Salt Lake's handing out MREs at the fairgrounds. Allegedly.",
+      "next": "r3"
+    },
+    {
+      "id": "r3",
+      "speaker": "augie",
+      "text": "Transformer shipments from Korea in ninety days. I'd like that one to be true. So would you.",
+      "next": "r4"
+    },
+    {
+      "id": "r4",
+      "speaker": "augie",
+      "text": "If you've got a radio and batteries, get to me. I need ears in Sparks. KK7AUG, out.",
+      "choices": [
+        {
+          "text": "He's making half of that up.",
+          "next": "fake"
+        },
+        {
+          "text": "Where's Peavine Peak from here?",
+          "next": "where"
+        }
+      ]
+    },
+    {
+      "id": "fake",
+      "speaker": "narrator",
+      "text": "The man cranking shrugs. 'So? It's the only voice that isn't a loudspeaker.'",
+      "end": true
+    },
+    {
+      "id": "where",
+      "speaker": "narrator",
+      "text": "'North. The towers on the ridge. Old guy. Fixes everyone's CB.' You file it away.",
+      "end": true
+    }
+  ]
+}

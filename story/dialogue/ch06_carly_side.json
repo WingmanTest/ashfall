@@ -1,0 +1,162 @@
+{
+  "id": "ch06_carly_side",
+  "chapter": "ch06",
+  "location": "loc_silver_spur",
+  "trigger": "Find Carly: she's left the registry and is building the Switchboard.",
+  "speakers": [
+    "narrator",
+    "carly",
+    "braith",
+    "augie"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "The Silver Spur's old surveillance room. Twelve radios on a blackjack table. Carly, headset on, writing on a dealer's card.",
+      "next": "c1"
+    },
+    {
+      "id": "c1",
+      "speaker": "carly",
+      "text": "Station Six, copy, two hypothermia cases and a broken leg on Kietzke. Runner's on the way. Switchboard out.",
+      "next": "c2"
+    },
+    {
+      "id": "c2",
+      "speaker": "carly",
+      "text": "Hi. I quit. I took the stores sheets. Augie and I built a radio relay. Twelve neighborhoods. It works.",
+      "effects": [
+        {
+          "set": "switchboard_built",
+          "value": true
+        }
+      ],
+      "next": "c3"
+    },
+    {
+      "id": "c3",
+      "speaker": "augie",
+      "text": "[Over the radio] She's a natural! I've been doing this forty years and she makes me look like a ham sandwich.",
+      "next": "c4"
+    },
+    {
+      "id": "c4",
+      "speaker": "carly",
+      "text": "I need to decide who the Switchboard works with. It can't stay neutral. Nothing can, now.",
+      "choices": [
+        {
+          "text": "The Floor. Roz feeds people.",
+          "next": "harbor",
+          "effects": [
+            {
+              "set": "carly_side",
+              "value": "harbor"
+            },
+            {
+              "add": "rep_harbor",
+              "value": 1
+            },
+            {
+              "trust": "carly",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "text": "Avila. If she breaks with the Army.",
+          "next": "auth",
+          "effects": [
+            {
+              "set": "carly_side",
+              "value": "authority"
+            },
+            {
+              "add": "rep_authority",
+              "value": 1
+            },
+            {
+              "trust": "carly",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "text": "The Compact. My family.",
+          "next": "compact",
+          "effects": [
+            {
+              "set": "carly_side",
+              "value": "compact"
+            },
+            {
+              "add": "rep_compact",
+              "value": 1
+            },
+            {
+              "trust": "carly",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "text": "Whatever you choose, I'm with you.",
+          "next": "yours",
+          "effects": [
+            {
+              "trust": "carly",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "harbor",
+      "speaker": "carly",
+      "text": "The Floor. Yeah. They're messy and they buy guns, but they feed everyone who walks in.",
+      "next": "end"
+    },
+    {
+      "id": "auth",
+      "speaker": "carly",
+      "text": "Avila, if she breaks. She's a liar. She's also the only one with a count. Even a fake one.",
+      "next": "end"
+    },
+    {
+      "id": "compact",
+      "speaker": "carly",
+      "text": "Your dad. ...I get it. I don't love it. Fine. For now.",
+      "next": "end"
+    },
+    {
+      "id": "yours",
+      "speaker": "carly",
+      "text": "Then I choose... the Floor. Because Rosa's kid waves at me every morning. That's my reason.",
+      "effects": [
+        {
+          "set": "carly_side",
+          "value": "harbor"
+        },
+        {
+          "add": "rep_harbor",
+          "value": 1
+        }
+      ],
+      "next": "yours2"
+    },
+    {
+      "id": "yours2",
+      "speaker": "carly",
+      "text": "Go. Avila's at the old Harrah's. She's trying to decide whose side she's on too.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "On the way out, Rosa's boy Mateo waves at Wraith from the kitchen door.",
+      "end": true
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "id": "ch02_ruth_class",
+  "chapter": "ch02",
+  "location": "loc_rscc_registry",
+  "trigger": "Ambient: Ruth teaching kids in the convention hall corner.",
+  "speakers": [
+    "narrator",
+    "amb_ruth",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "In a corner, twenty kids on yoga mats. An old woman with a whiteboard: 'TODAY: FRACTIONS (FOOD).'",
+      "next": "r1"
+    },
+    {
+      "id": "r1",
+      "speaker": "amb_ruth",
+      "text": "If your family has three cans and four people, how much does each person get? Anyone?",
+      "next": "r2"
+    },
+    {
+      "id": "r2",
+      "speaker": "narrator",
+      "text": "A kid: 'Three-fourths of a can.' Another: 'Zero, my uncle eats it.' Ruth writes both down.",
+      "next": "r3"
+    },
+    {
+      "id": "r3",
+      "speaker": "amb_ruth",
+      "text": "Thirty-eight years of second grade. Never had a class this good at fractions. Isn't that awful?",
+      "end": true
+    }
+  ]
+}

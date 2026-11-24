@@ -1,73 +1,56 @@
 {
   "id": "ch02_haas_checkpoint",
   "chapter": "ch02",
-  "location": "loc_blatnik_bridge",
-  "trigger": "Reach the Authority checkpoint on the Blatnik bridge.",
+  "location": "loc_virginia_bridge",
+  "trigger": "Approach the Virginia Street bridge checkpoint.",
   "speakers": [
+    "narrator",
     "cpl_haas",
-    "dell",
-    "narrator"
+    "braith",
+    "wraith"
   ],
   "start": "start",
   "nodes": [
     {
       "id": "start",
       "speaker": "narrator",
-      "text": "Jersey barriers. A Humvee with no fuel, used as a wall. A corporal with a clipboard.",
+      "text": "Day nineteen. Ninety-one degrees and dust. The Virginia Street bridge is sandbags, a Humvee and one sunburned corporal.",
       "next": "h1"
     },
     {
       "id": "h1",
       "speaker": "cpl_haas",
-      "text": "Morning. ID and sector. Anything to declare, declare it.",
+      "text": "ID. Address. Is that a dog or a lawsuit?",
       "choices": [
         {
-          "text": "Sector 4. Here's my license.",
-          "next": "h2"
+          "text": "She's a working dog. Ex-military.",
+          "next": "dog"
         },
         {
-          "text": "[Offer a pack of cigarettes]",
-          "next": "bribe",
-          "conditions": [
-            {
-              "item": "cigarettes",
-              "gte": 1
-            }
-          ]
-        },
-        {
-          "text": "What happens if I don't?",
-          "next": "h_dont"
+          "text": "[Show your ID]",
+          "next": "id"
         }
       ]
     },
     {
-      "id": "h_dont",
+      "id": "dog",
       "speaker": "cpl_haas",
-      "text": "Then I search you, and we both have a worse morning.",
-      "next": "h2"
-    },
-    {
-      "id": "h2",
-      "speaker": "cpl_haas",
-      "text": "Kowalczyk. Lineworker? Huh. They want your kind registered first.",
+      "text": "Huh. MWD? ...Washout? Yeah. She's got washout eyes. Like me. Okay.",
       "effects": [
         {
-          "event": "search_inventory",
-          "confiscate": [
-            "pharmacy_bag"
-          ]
+          "add": "haas_rep",
+          "value": 1
         }
       ],
-      "next": "h3"
+      "next": "id"
     },
     {
-      "id": "h3",
+      "id": "id",
       "speaker": "cpl_haas",
-      "text": "Bag check. Meds over thirty days go to the hospital pool. Sorry.",
+      "text": "Pearce. Sparks. You carrying meds, fuel or firearms? I have to search for meds, fuel or firearms.",
       "branches": [
         {
-          "next": "h_bag",
+          "next": "bag",
           "conditions": [
             {
               "item": "pharmacy_bag",
@@ -76,42 +59,106 @@
           ]
         },
         {
-          "next": "h_pass"
+          "next": "clean"
         }
       ]
     },
     {
-      "id": "h_bag",
+      "id": "bag",
       "speaker": "narrator",
-      "text": "He takes the pharmacy bag. He leaves Theo's insulin. 'Personal use. Keep it cold.'",
-      "effects": [
+      "text": "The clinic bag is in your pack. Lolo needs it back across this bridge tonight.",
+      "choices": [
         {
-          "take": "pharmacy_bag",
-          "qty": 1
+          "text": "[Slip him cigarettes]",
+          "next": "bribe",
+          "conditions": [
+            {
+              "item": "cigarettes",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "cigarettes",
+              "qty": 1
+            },
+            {
+              "set": "ch02_haas_bribed",
+              "value": true
+            },
+            {
+              "add": "haas_rep",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "It's for a home clinic. Lolo Arrieta.",
+          "next": "truth"
+        },
+        {
+          "text": "[Let him search]",
+          "next": "search"
         }
-      ],
-      "next": "h_pass"
+      ]
     },
     {
       "id": "bribe",
       "speaker": "cpl_haas",
-      "text": "...Camels. God. Okay. Go. You never saw me smile.",
+      "text": "I'm gonna search this bag with my eyes closed. Wow. Nothing in here. Go.",
+      "next": "through"
+    },
+    {
+      "id": "truth",
+      "speaker": "cpl_haas",
+      "text": "...The Basque lady? She stitched my cousin's hand in '19. Fine. I didn't see a bag.",
+      "branches": [
+        {
+          "next": "through",
+          "conditions": [
+            {
+              "flag": "haas_rep",
+              "gte": 1
+            }
+          ]
+        },
+        {
+          "next": "search"
+        }
+      ]
+    },
+    {
+      "id": "search",
+      "speaker": "narrator",
+      "text": "He takes the bag. He looks sorry about it. A little.",
       "effects": [
         {
-          "take": "cigarettes",
+          "event": "search_inventory",
+          "confiscate": [
+            "pharmacy_bag"
+          ]
+        },
+        {
+          "take": "pharmacy_bag",
           "qty": 1
         },
         {
-          "set": "ch02_haas_bribed",
-          "value": true
+          "trust": "lolo",
+          "delta": -1
         }
       ],
-      "next": "h_pass"
+      "next": "through"
     },
     {
-      "id": "h_pass",
+      "id": "clean",
       "speaker": "cpl_haas",
-      "text": "DECC's past Canal Park. Line starts at the parking ramp. Bring patience.",
+      "text": "Okay. Ration line's in the convention center. Bring something to sit on. It's three hours.",
+      "next": "through"
+    },
+    {
+      "id": "through",
+      "speaker": "narrator",
+      "text": "Across the river, the casinos are dark. Someone has spray-painted the arch: BIGGEST LITTLE BLACKOUT.",
       "end": true
     }
   ]

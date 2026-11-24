@@ -1,22 +1,40 @@
 {
  "$schema": "./schema.json",
  "formatVersion": 1,
+ "storyVersion": 2,
  "id": "ch07_dead_air",
  "chapter": 7,
+ "storyChapter": "ch07",
  "title": "Dead Air",
- "act": "II-III",
+ "act": 2,
  "storyFile": "story/chapters/ch07_dead_air.md",
- "next": "ch08_ashfall",
- "summary": "July night walk up Proctor hill to Lou's shack (dead air, dosimeter) -> down past deserters and the Remnant at Proctor yard (dog pack lot) -> East End: Ruiz, grey snow, where to winter.",
+ "next": "ch07b_dixie_valley",
  "difficulty": 3,
+ "summary": "December 5. Augie's shack on Peavine when every frequency dies (the bursts; the sky turns brown), Reyne at the door before dawn, Ruiz (if spared), then US-50 to the Compact checkpoint at the Fallon canal bridge -> ch07b_dixie_valley. Return leg: after the Annex (ch07b_done) this level reloads at Fallon (fallon_return) and ends on Peavine (ch07_where).",
+ "returnLeg": {
+  "from": "ch07b_dixie_valley",
+  "flag": "ch07b_done",
+  "spawn": "spawn_return",
+  "scenes": [
+   "ch07_fallon_return",
+   "ch07_where"
+  ]
+ },
+ "startInventory": {
+  "mech_tools": 1,
+  "flashlight": 1,
+  "hand_radio": 1,
+  "gpu_cart": 1
+ },
+ "startInventoryNote": "carried over; gpu_cart rides in the truck for the Annex maglocks",
  "units": "meters",
  "grid": {
   "cellSize": 2.0,
-  "cols": 24,
-  "rows": 64,
+  "cols": 48,
+  "rows": 100,
   "origin": {
-   "x": -24.0,
-   "z": -120.0
+   "x": -48.0,
+   "z": -192.0
   },
   "legend": {
    "#": {
@@ -36,13 +54,24 @@
     "roof": true,
     "preview": "#b8ad98"
    },
-   "=": {
-    "name": "road",
+   ".": {
+    "name": "mud",
     "walkable": true,
     "solid": false,
     "height": 0,
-    "floorTex": "asphalt_snow",
-    "preview": "#8d969e"
+    "floorTex": "dirt",
+    "groundType": "mud_wet",
+    "preview": "#7a6852"
+   },
+   "=": {
+    "name": "asphalt_wet",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "road_damaged",
+    "groundType": "asphalt_wet",
+    "wet": true,
+    "preview": "#6e737a"
    },
    "B": {
     "name": "building_mass",
@@ -62,293 +91,474 @@
     "door": true,
     "preview": "#e0a040"
    },
-   "T": {
-    "name": "tree",
+   "H": {
+    "name": "high_wall",
     "walkable": false,
     "solid": true,
-    "height": 6,
-    "tree": true,
-    "preview": "#2e4a34"
+    "height": 8,
+    "wallTex": "dirty_concrete",
+    "preview": "#3c3f44"
    },
-   "c": {
-    "name": "cover_low",
-    "walkable": false,
-    "solid": true,
-    "height": 1.0,
-    "wallTex": "dirt",
-    "cover": true,
-    "preview": "#a08850"
-   },
-   "f": {
-    "name": "fence",
-    "walkable": false,
-    "solid": true,
-    "height": 1.3,
-    "wallTex": "rusty_corrugated_iron",
-    "preview": "#8a5a3a"
-   },
-   "g": {
-    "name": "dirt_gravel",
+   "b": {
+    "name": "bridge_deck",
     "walkable": true,
     "solid": false,
     "height": 0,
-    "floorTex": "dirt",
-    "preview": "#9c8f7a"
+    "floorTex": "rusty_metal",
+    "preview": "#7a6a5a"
    },
    "r": {
-    "name": "road_damaged",
+    "name": "road_wet_cracked",
     "walkable": true,
     "solid": false,
     "height": 0,
     "floorTex": "road_damaged",
-    "preview": "#7b7f80"
+    "groundType": "asphalt_wet_cracked",
+    "wet": true,
+    "preview": "#62666a"
+   },
+   "y": {
+    "name": "frost_grass",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirt",
+    "groundType": "frosted_dead_grass",
+    "scatter": "frost_grass",
+    "preview": "#8a8a72"
+   },
+   "~": {
+    "name": "open_water",
+    "walkable": false,
+    "solid": false,
+    "height": -0.6,
+    "floorTex": "dirty_concrete",
+    "water": true,
+    "preview": "#2f4a63"
    }
   },
   "tiles": [
-   "TTTTTTTTTTTTTTTTTTTTTTTT",
-   "Tggggggggg==gggggggggggT",
-   "Tggggggggg==gggggggggggT",
-   "Tgg######g==gg######gggT",
-   "Tgg#,,,,#g==gg#,,,,#gggT",
-   "Tgg#,,,,#g==gg#,,,,#gggT",
-   "Tgg#,,,,#g==ggD,,,,#gggT",
-   "Tgg#,,,,Dg==gg#,,,,#gggT",
-   "Tgg#,,,,#g==gg#,,,,#gggT",
-   "Tgg#,,,,#g==gg#,,,,#gggT",
-   "Tgg#,,,,#g==gg######gggT",
-   "Tgg######g==gggggggggggT",
-   "Tggggggggg==gggggggggggT",
-   "Tggggggggg==ggBBBBBBgggT",
-   "TBBBBBBBgg==ggBBBBBBgggT",
-   "TBBBBBBBgg==ggBBBBBBgggT",
-   "TBBBBBBBgg==ggBBBBBBgggT",
-   "TBBBBBBBgg==ggBBBBBBgggT",
-   "TBBBBBBBgg==ggBBBBBBgggT",
-   "TBBBBBBBgg==ggBBBBBBgggT",
-   "Tggggggggg==gggggggggggT",
-   "Tggggggggg==gggggggggggT",
-   "TgggggggggrrgggggggggggT",
-   "TgggggggggrrgggggggggggT",
-   "TgggggggggrrgccgBBBBBBgT",
-   "TgggggggggrrggggBBBBBBgT",
-   "TgggggggggrrgggcBBBBBBgT",
-   "TgggggggggrrgggcBBBBBBgT",
-   "TfffffffggrrgggcBBBBBBgT",
-   "TfgggggfggrrgggcBBBBBBgT",
-   "TfgggggfggrrgggcBBBBBBgT",
-   "TfgggggfggrrgggcBBBBBBgT",
-   "TfgggggfggrrgggcBBBBBBgT",
-   "TfgggggDggrrggggBBBBBBgT",
-   "TfgggggfggrrgggggggggggT",
-   "TfgggggfggrrgggggggggggT",
-   "TfgggggfggrrgggggggggggT",
-   "TfgggggfggrrgggggggggggT",
-   "TfffffffggrrgggggggggggT",
-   "TgggggggggrrgggggggggggT",
-   "TgggggggggrrgggggggggggT",
-   "TgggggggggrrgggggggggggT",
-   "TgggggggggrrgggggggggggT",
-   "TgggggggggrrgggggggggggT",
-   "TgggggggggrrrrrrrrgggggT",
-   "TgggggggggrrrrrrrrgggggT",
-   "TgggggggggggggggrrgggggT",
-   "TgggggggggggggggrrgggggT",
-   "TgggggggggggggggrrgggggT",
-   "TgggggggggggggggrrgggggT",
-   "TgggggggggggggggrrgggggT",
-   "TggggrrrrrrrrrrrrrgggggT",
-   "TggggrrrrrrrrrrrrrgggggT",
-   "Tggggrrggggggg##D###gggT",
-   "Tggggrrggggggg#,,,,#gggT",
-   "Tggggrrggggggg#,,,,#gggT",
-   "Tggggrrggggggg#,,,,#gggT",
-   "Tggggrrrrrrrrg######gggT",
-   "TggggrrrrrrrrggggggggggT",
-   "TggggggggggrrggggggggggT",
-   "TggggggggggrrggggggggggT",
-   "TggggggggggrrggggggggggT",
-   "TggggggggggrrggggggggggT",
-   "TTTTTTTTTTTTTTTTTTTTTTTT"
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyy###########yyyyyBBBBByyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyy#,,,,,#,,,#yyyyyBBBBByyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyy#,,,,,#,,,#yyyyyBBBBByyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyy#,,,,,D,,,#yyyyyBBBBByyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyy#,,,,,#,,,#yyyyyBBBBByyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyy#,,,,,#,,,#yyyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyy####D######yyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyrrrr====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyrrrr====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyyyyy====yyyyyyyyyyyyyyyyyyyyyH",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H.....................====...#########.........H",
+   "H.....................====...#,,,,,,,#.........H",
+   "H.....................====...#,,,,,,,#.........H",
+   "H.....................====...D,,,,,,,#.........H",
+   "H.....................====...#,,,,,,,#.........H",
+   "H.....................====...#########.........H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H~~~~~~~~~~~~~~~~~~~~~bbbb~~~~~~~~~~~~~~~~~~~~~H",
+   "H~~~~~~~~~~~~~~~~~~~~~bbbb~~~~~~~~~~~~~~~~~~~~~H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H...BBBBBBBBB.........====.....................H",
+   "H...BBBBBBBBB.........====.......BBBBBBBBBBB...H",
+   "H...BBBBBBBBB.........====.......BBBBBBBBBBB...H",
+   "H...BBBBBBBBB.........====.......BBBBBBBBBBB...H",
+   "H...BBBBBBBBB.........====.......BBBBBBBBBBB...H",
+   "H...BBBBBBBBB.........====.......BBBBBBBBBBB...H",
+   "H...BBBBBBBBB.........====.......BBBBBBBBBBB...H",
+   "H...BBBBBBBBB.........====.......BBBBBBBBBBB...H",
+   "H...BBBBBBBBB.........====.......BBBBBBBBBBB...H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H==============================================H",
+   "H==============================================H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H...###########.......====....BBBBBBBBBBBBB....H",
+   "H...#,,,,,,,,,#.......====....BBBBBBBBBBBBB....H",
+   "H...#,,,,,,,,,#.......====....BBBBBBBBBBBBB....H",
+   "H...#,,,,,,,,,#.......====....BBBBBBBBBBBBB....H",
+   "H...#,,,,,,,,,D.......====....BBBBBBBBBBBBB....H",
+   "H...#,,,,,,,,,#.......====....BBBBBBBBBBBBB....H",
+   "H...#,,,,,,,,,#.......====....BBBBBBBBBBBBB....H",
+   "H...#,,,,,,,,,#.......====.....................H",
+   "H...###########.......====.....................H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "H.....................====.....................H",
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
   ]
  },
  "environment": {
-  "timeStart": 0.9,
-  "timeEnd": 0.55,
-  "timeLocked": false,
-  "weather": "brown_sky",
-  "tempC": 2,
-  "blizzard": false,
+  "seasonArc": "civil_war_late_autumn",
+  "season": "late_fall",
+  "actName": "Civil War",
+  "groundType": "mud_wet_asphalt",
+  "precipitation": "drizzle",
+  "particles": "rain",
   "snowCover": 0.0,
-  "particles": "none",
-  "fogNear": 8,
-  "fogFar": 60,
-  "palette": "assets/palettes/rust-gold-8.json",
-  "ambientTint": "#d9a066",
-  "hud": {
-   "temp": true,
-   "hunger": true,
-   "rad": false,
-   "filter": false,
-   "seal": false
-  },
-  "warmthDrainMul": 0.0,
-  "maxAliveEnemies": 5,
-  "startWeather": "overcast",
-  "startTempC": 18,
+  "wetness": 0.8,
+  "fogColor": "#6a747d",
+  "skyColor": "#5c6872",
+  "sunColor": "#b8bcc2",
+  "ambientColor": "#7a8088",
+  "visibilityM": 48,
+  "fogNear": 4,
+  "fogFar": 48,
+  "windMs": 7,
+  "atmosphere": "Cold overcast late autumn: low cloud ceiling, drizzle and cold rain, mud and wet asphalt, smoke plumes over barricades and checkpoints.",
+  "environmentPreset": "late_fall",
+  "storySeason": "late_fall",
+  "storyPalette": "overcast slate grey, wet asphalt, sodium-orange dead lamps",
+  "storyWeather": "overcast",
+  "weather": "overcast",
+  "storyWeatherLate": "brown_sky",
+  "storyTempC": -1,
+  "tempC": -1,
+  "nightTempC": -3,
+  "survivalFocus": [
+   "warmth",
+   "wind",
+   "desert_night_cold"
+  ],
+  "timeStart": 0.92,
+  "timeEnd": 0.85,
+  "timeLocked": false,
+  "blizzard": false,
+  "warmthDrainMul": 1.1,
   "transitions": [
    {
-    "at": "t_ch07_brown",
+    "trigger": "t_ch07_augie_dead_air",
     "weather": "brown_sky",
-    "tempC": 9,
-    "palette": "assets/palettes/rust-gold-8.json"
-   },
-   {
-    "at": "t_ch07_greysnow",
-    "weather": "grey_snow",
-    "tempC": 2,
-    "palette": "assets/palettes/slso8.json",
-    "particles": "ash_snow"
+    "light": "green_glow_then_brown_sky"
    }
-  ]
+  ],
+  "seasonNote": "Dec 5: overcast late fall, frost on the Peavine grass; after the bursts the sky goes brown and a few grey flakes fall (no snow cover yet).",
+  "hud": {
+   "hp": true,
+   "hydration": true,
+   "hunger": true,
+   "companion": true,
+   "warmth": true,
+   "temp": true,
+   "ammo_military": true,
+   "rad": true
+  }
  },
  "locations": [
   {
-   "id": "loc_lou_shack",
+   "id": "loc_peavine_shack",
    "x": 0.0,
-   "z": -17.0,
+   "z": -150.0,
    "rect": {
     "type": "rect",
-    "x0": -22.0,
-    "z0": -40.0,
-    "x1": 22.0,
+    "x0": -46.0,
+    "z0": -190.0,
+    "x1": 46.0,
+    "z1": -110.0
+   },
+   "safe": false,
+   "name": "Peavine Peak (Augie's shack)"
+  },
+  {
+   "id": "loc_us50_fallon",
+   "x": 0.0,
+   "z": -52.0,
+   "rect": {
+    "type": "rect",
+    "x0": -46.0,
+    "z0": -110.0,
+    "x1": 46.0,
     "z1": 6.0
    },
-   "safe": true
-  },
-  {
-   "id": "loc_proctor_yard",
-   "x": 0.0,
-   "z": -60.0,
-   "rect": {
-    "type": "rect",
-    "x0": -22.0,
-    "z0": -76.0,
-    "x1": 22.0,
-    "z1": -44.0
-   },
-   "safe": false
-  },
-  {
-   "id": "loc_east_end",
-   "x": 0.0,
-   "z": -97.0,
-   "rect": {
-    "type": "rect",
-    "x0": -22.0,
-    "z0": -118.0,
-    "x1": 22.0,
-    "z1": -76.0
-   },
-   "safe": true
+   "safe": false,
+   "name": "US-50 / Fallon"
   }
  ],
- "landmarks": [
+ "landmarks": [],
+ "buildings": [
   {
-   "label": "Lou's shack",
-   "x": 10.0,
-   "z": -9.0
+   "id": "b_ch07_shack",
+   "label": "Augie's radio shack",
+   "kind": "walled",
+   "cells": [
+    14,
+    3,
+    24,
+    9
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -20.0,
+    "z0": -186.0,
+    "x1": 2.0,
+    "z1": -172.0
+   },
+   "doors": [
+    [
+     -11.0,
+     -173.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_peavine_shack",
+   "interior": "bunk room (west), radio room (east)"
   },
   {
-   "label": "Remnant dig-in",
-   "x": 13.0,
-   "z": -63.0
+   "id": "m_ch07_shed",
+   "label": "Antenna shed",
+   "kind": "mass",
+   "cells": [
+    30,
+    3,
+    34,
+    7
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 12.0,
+    "z0": -186.0,
+    "x1": 22.0,
+    "z1": -176.0
+   },
+   "doors": [],
+   "location": "loc_peavine_shack",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
   },
   {
-   "label": "Dog lot",
-   "x": -15.0,
-   "z": -53.0
+   "id": "b_ch07_checkpoint",
+   "label": "Compact checkpoint post",
+   "kind": "walled",
+   "cells": [
+    29,
+    54,
+    37,
+    59
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 10.0,
+    "z0": -84.0,
+    "x1": 28.0,
+    "z1": -72.0
+   },
+   "doors": [
+    [
+     11.0,
+     -77.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_us50_fallon"
   },
   {
-   "label": "Home",
-   "x": -12.0,
-   "z": -105.0
+   "id": "b_ch07_ross",
+   "label": "Ross's farmhouse (Fallon)",
+   "kind": "walled",
+   "cells": [
+    4,
+    82,
+    14,
+    90
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -40.0,
+    "z0": -28.0,
+    "x1": -18.0,
+    "z1": -10.0
+   },
+   "doors": [
+    [
+     -19.0,
+     -19.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_us50_fallon"
+  },
+  {
+   "id": "m_ch07_feed",
+   "label": "Feed store",
+   "kind": "mass",
+   "cells": [
+    30,
+    82,
+    42,
+    88
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 12.0,
+    "z0": -28.0,
+    "x1": 38.0,
+    "z1": -14.0
+   },
+   "doors": [],
+   "location": "loc_us50_fallon",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  },
+  {
+   "id": "m_ch07_grain",
+   "label": "Grain elevator",
+   "kind": "mass",
+   "cells": [
+    4,
+    66,
+    12,
+    74
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -40.0,
+    "z0": -60.0,
+    "x1": -22.0,
+    "z1": -42.0
+   },
+   "doors": [],
+   "location": "loc_us50_fallon",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  },
+  {
+   "id": "m_ch07_motel",
+   "label": "US-50 motel",
+   "kind": "mass",
+   "cells": [
+    33,
+    67,
+    43,
+    74
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 18.0,
+    "z0": -58.0,
+    "x1": 40.0,
+    "z1": -42.0
+   },
+   "doors": [],
+   "location": "loc_us50_fallon",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
   }
  ],
  "paths": {
   "critical": [
    [
-    0.0,
-    3.0
+    -9.0,
+    -177.0
    ],
    [
-    0.0,
-    -3.0
-   ],
-   [
-    -12.0,
-    -4.0
-   ],
-   [
-    -12.0,
-    -16.0
-   ],
-   [
-    9.0,
-    -16.0
-   ],
-   [
-    9.0,
-    -13.0
-   ],
-   [
-    9.0,
-    -9.0
-   ],
-   [
-    9.0,
-    -16.0
-   ],
-   [
-    10.0,
-    -30.0
-   ],
-   [
-    -2.0,
-    -30.0
-   ],
-   [
-    -2.0,
-    -75.0
-   ],
-   [
-    -2.0,
-    -103.0
-   ],
-   [
-    -5.0,
-    -103.0
+    -3.0,
+    -179.0
    ],
    [
     -9.0,
-    -94.0
+    -169.0
+   ],
+   [
+    -1.0,
+    -167.0
+   ],
+   [
+    -1.0,
+    -131.0
+   ],
+   [
+    -1.0,
+    -73.0
+   ],
+   [
+    -1.0,
+    -51.0
+   ],
+   [
+    -1.0,
+    3.0
    ]
   ],
   "optional": [
    {
-    "id": "b_dogs",
-    "label": "Dog lot (flares, loot)",
+    "id": "b_ch07_return",
+    "label": "Return leg (after ch07b)",
     "points": [
      [
-      -3.0,
-      -53.0
+      -1.0,
+      -31.0
+     ],
+     [
+      -13.0,
+      -19.0
+     ],
+     [
+      -1.0,
+      -31.0
+     ],
+     [
+      -1.0,
+      -111.0
+     ],
+     [
+      -1.0,
+      -167.0
      ],
      [
       -9.0,
-      -53.0
+      -169.0
      ],
      [
-      -15.0,
-      -53.0
+      -13.0,
+      -177.0
      ]
     ]
    }
@@ -357,404 +567,489 @@
  "spawns": {
   "player": [
    {
+    "id": "spawn_return",
+    "x": 1.0,
+    "z": -29.0,
+    "rotY": 0.0,
+    "when": [
+     {
+      "flag": "ch07b_done",
+      "eq": true
+     }
+    ]
+   },
+   {
     "id": "spawn_default",
-    "x": 0.0,
-    "z": 3.0,
+    "x": -9.0,
+    "z": -177.0,
     "rotY": 3.142
    }
   ],
   "npcs": [
    {
-    "id": "npc_lou",
-    "npc": "lou",
-    "x": 9.0,
-    "z": -9.0,
-    "rotY": 3.142,
-    "behavior": "idle",
-    "dialogue": "ch07_lou_dead_air"
+    "id": "npc_wraith",
+    "npc": "wraith",
+    "x": -9.0,
+    "z": -175.0,
+    "rotY": 0.0,
+    "behavior": "companion_follow",
+    "when": [
+     {
+      "flag": "wraith_alive",
+      "eq": true
+     }
+    ],
+    "label": "Wraith",
+    "companion": true
    },
    {
-    "id": "npc_deserter_1",
-    "npc": "deserter_1",
+    "id": "npc_augie",
+    "npc": "augie",
     "x": -3.0,
-    "z": -37.0,
+    "z": -181.0,
     "rotY": 0.0,
-    "behavior": "walk_south",
-    "label": "Deserter (asks the way to Wisconsin)"
+    "behavior": "idle",
+    "dialogue": "ch07_augie_dead_air",
+    "when": [
+     {
+      "not": {
+       "flag": "ch07b_done",
+       "eq": true
+      }
+     }
+    ]
    },
    {
-    "id": "npc_deserter_2",
-    "npc": "deserter_2",
-    "x": -1.0,
-    "z": -35.0,
+    "id": "npc_walt",
+    "npc": "walt",
+    "x": -15.0,
+    "z": -181.0,
     "rotY": 0.0,
-    "behavior": "walk_south",
-    "label": "Deserter"
+    "behavior": "idle"
    },
    {
-    "id": "npc_kessler",
-    "npc": "kessler",
-    "x": 5.0,
-    "z": -62.0,
+    "id": "npc_reyne",
+    "npc": "reyne",
+    "x": -11.0,
+    "z": -167.0,
     "rotY": 0.0,
-    "behavior": "voice",
-    "label": "Kessler (loudspeaker)"
+    "behavior": "idle",
+    "dialogue": "ch07_reyne_arrives",
+    "when": [
+     {
+      "not": {
+       "flag": "ch07b_done",
+       "eq": true
+      }
+     },
+     {
+      "flag": "ch07_dead_air_heard",
+      "eq": true
+     }
+    ]
    },
    {
     "id": "npc_ruiz",
     "npc": "ruiz",
-    "x": -5.0,
-    "z": -103.0,
-    "rotY": -1.571,
+    "x": 9.0,
+    "z": -163.0,
+    "rotY": 0.0,
     "behavior": "idle",
     "dialogue": "ch07_ruiz",
     "when": [
      {
+      "not": {
+       "flag": "ch07b_done",
+       "eq": true
+      }
+     },
+     {
       "flag": "ruiz_spared",
       "eq": true
      }
-    ],
-    "label": "Ruiz (ID cut up)"
+    ]
    },
    {
-    "id": "npc_theo",
-    "npc": "theo",
-    "x": -11.0,
-    "z": -94.0,
+    "id": "npc_carly_where",
+    "npc": "carly",
+    "x": -15.0,
+    "z": -177.0,
     "rotY": 0.0,
     "behavior": "idle",
-    "dialogue": "ch07_where"
+    "dialogue": "ch07_where",
+    "when": [
+     {
+      "flag": "ch07b_done",
+      "eq": true
+     }
+    ]
    },
    {
-    "id": "npc_marguerite",
-    "npc": "marguerite",
-    "x": 3.0,
-    "z": -107.0,
-    "rotY": 1.571,
+    "id": "npc_ross",
+    "npc": "ross",
+    "x": 1.0,
+    "z": -59.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch07_fallon_checkpoint",
+    "when": [
+     {
+      "not": {
+       "flag": "ch07b_done",
+       "eq": true
+      }
+     }
+    ]
+   },
+   {
+    "id": "npc_compact_rider",
+    "npc": "compact_rider",
+    "x": -5.0,
+    "z": -57.0,
+    "rotY": 0.0,
     "behavior": "idle"
    },
    {
-    "id": "npc_hank",
-    "npc": "hank",
-    "x": -5.0,
-    "z": -94.0,
+    "id": "npc_ross_return",
+    "npc": "ross",
+    "x": -13.0,
+    "z": -19.0,
     "rotY": 0.0,
     "behavior": "idle",
+    "dialogue": "ch07_fallon_return",
     "when": [
      {
-      "flag": "hank_alive",
-      "ne": false
+      "flag": "ch07b_done",
+      "eq": true
      }
     ]
+   },
+   {
+    "id": "npc_trader_rourke",
+    "npc": "trader_rourke",
+    "x": 13.0,
+    "z": -31.0,
+    "rotY": 0.0,
+    "behavior": "trade",
+    "label": "Rourke's wagon (Fallon main street)",
+    "trader": {
+     "stall": "Rourke's wagon (Fallon main street)",
+     "repFlag": "trader_rourke_rep",
+     "stockFrom": "story/npcs.json traders[].stock_by_act"
+    }
    }
   ],
   "enemies": [
    {
     "id": "en_01",
-    "type": "remnant_patrol",
-    "x": 5.0,
-    "z": -69.0,
-    "group": "g_remnant",
-    "tier": 4,
-    "behavior": "guard",
-    "hostile": "conditional",
-    "activate": "load",
-    "hostileWhen": [
-     {
-      "flag": "ironwood_hostility",
-      "gte": 3
-     }
-    ]
+    "type": "feral_dog",
+    "x": -35.0,
+    "z": -147.0,
+    "group": "g_ch07_dogs",
+    "tier": 1,
+    "behavior": "pack",
+    "hostile": "always",
+    "activate": "trigger",
+    "note": "Starving dogs on the Peavine slope after the bursts."
    },
    {
     "id": "en_02",
-    "type": "remnant_patrol",
-    "x": 5.0,
-    "z": -59.0,
-    "group": "g_remnant",
-    "tier": 4,
-    "behavior": "guard",
-    "hostile": "conditional",
-    "activate": "load",
-    "hostileWhen": [
-     {
-      "flag": "ironwood_hostility",
-      "gte": 3
-     }
-    ]
+    "type": "feral_dog",
+    "x": -27.0,
+    "z": -131.0,
+    "group": "g_ch07_dogs",
+    "tier": 1,
+    "behavior": "pack",
+    "hostile": "always",
+    "activate": "trigger",
+    "note": "Starving dogs on the Peavine slope after the bursts."
    },
    {
     "id": "en_03",
-    "type": "remnant_patrol",
-    "x": 3.0,
-    "z": -53.0,
-    "group": "g_remnant",
-    "tier": 4,
-    "behavior": "guard",
-    "hostile": "conditional",
-    "activate": "load",
-    "hostileWhen": [
-     {
-      "flag": "ironwood_hostility",
-      "gte": 3
-     }
-    ]
+    "type": "feral_dog",
+    "x": -19.0,
+    "z": -119.0,
+    "group": "g_ch07_dogs",
+    "tier": 1,
+    "behavior": "pack",
+    "hostile": "always",
+    "activate": "trigger",
+    "note": "Starving dogs on the Peavine slope after the bursts."
    },
    {
     "id": "en_04",
     "type": "remnant_patrol",
-    "x": 15.0,
-    "z": -51.0,
-    "group": "g_remnant",
-    "tier": 4,
-    "behavior": "guard",
+    "x": 17.0,
+    "z": -7.0,
+    "group": "g_ch07_remnant",
+    "tier": 1,
+    "behavior": "patrol",
     "hostile": "conditional",
     "activate": "load",
+    "patrol": [
+     [
+      17.0,
+      -7.0
+     ],
+     [
+      9.0,
+      -7.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
     "hostileWhen": [
      {
-      "flag": "ironwood_hostility",
-      "gte": 3
+      "flag": "ch07_remnant_alerted",
+      "eq": true
      }
-    ]
+    ],
+    "note": "Ironwood remnant scavenging Fallon."
    },
    {
     "id": "en_05",
-    "type": "feral_dog",
-    "x": -17.0,
-    "z": -59.0,
-    "group": "g_dogs",
-    "tier": 3,
-    "behavior": "pack",
-    "hostile": "always",
-    "activate": "trigger",
-    "note": "First non-human enemy; flee from fire/flares."
+    "type": "remnant_patrol",
+    "x": 33.0,
+    "z": -5.0,
+    "group": "g_ch07_remnant",
+    "tier": 1,
+    "behavior": "patrol",
+    "hostile": "conditional",
+    "activate": "load",
+    "patrol": [
+     [
+      33.0,
+      -5.0
+     ],
+     [
+      25.0,
+      -5.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
+    "hostileWhen": [
+     {
+      "flag": "ch07_remnant_alerted",
+      "eq": true
+     }
+    ],
+    "note": "Ironwood remnant scavenging Fallon."
    },
    {
     "id": "en_06",
-    "type": "feral_dog",
-    "x": -13.0,
-    "z": -55.0,
-    "group": "g_dogs",
-    "tier": 3,
-    "behavior": "pack",
-    "hostile": "always",
-    "activate": "trigger",
-    "note": "First non-human enemy; flee from fire/flares."
+    "type": "remnant_patrol",
+    "x": 41.0,
+    "z": -31.0,
+    "group": "g_ch07_remnant",
+    "tier": 1,
+    "behavior": "patrol",
+    "hostile": "conditional",
+    "activate": "load",
+    "patrol": [
+     [
+      41.0,
+      -31.0
+     ],
+     [
+      33.0,
+      -31.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
+    "hostileWhen": [
+     {
+      "flag": "ch07_remnant_alerted",
+      "eq": true
+     }
+    ],
+    "note": "Ironwood remnant scavenging Fallon."
    },
    {
     "id": "en_07",
-    "type": "feral_dog",
-    "x": -19.0,
-    "z": -49.0,
-    "group": "g_dogs",
-    "tier": 3,
-    "behavior": "pack",
-    "hostile": "always",
-    "activate": "trigger",
-    "note": "First non-human enemy; flee from fire/flares."
-   },
-   {
-    "id": "en_08",
-    "type": "feral_dog",
-    "x": -13.0,
-    "z": -45.0,
-    "group": "g_dogs",
-    "tier": 3,
-    "behavior": "pack",
-    "hostile": "always",
-    "activate": "trigger",
-    "note": "First non-human enemy; flee from fire/flares."
+    "type": "remnant_patrol",
+    "x": 25.0,
+    "z": -37.0,
+    "group": "g_ch07_remnant",
+    "tier": 1,
+    "behavior": "patrol",
+    "hostile": "conditional",
+    "activate": "load",
+    "patrol": [
+     [
+      25.0,
+      -37.0
+     ],
+     [
+      17.0,
+      -37.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
+    "hostileWhen": [
+     {
+      "flag": "ch07_remnant_alerted",
+      "eq": true
+     }
+    ],
+    "note": "Ironwood remnant scavenging Fallon."
    }
   ],
   "loot": [
    {
     "id": "loot_01",
-    "x": 11.0,
-    "z": -7.0,
-    "r": 1.6,
-    "label": "Lou's bench",
-    "container": "supply_cache",
-    "guaranteed": [
-     {
-      "item": "dosimeter",
-      "n": 1
-     },
-     {
-      "item": "batteries",
-      "n": 2
-     },
-     {
-      "item": "flare",
-      "n": 2
-     }
-    ],
-    "location": "loc_lou_shack"
+    "x": 8.0,
+    "z": -95.0,
+    "r": 3.1,
+    "label": "Abandoned pickup (US-50)",
+    "container": "car_trunk",
+    "propRef": "prop_01",
+    "render": "prop",
+    "location": "loc_us50_fallon"
    },
    {
     "id": "loot_02",
-    "x": -19.0,
-    "z": -61.0,
-    "r": 1.6,
-    "label": "Car trunk (lot)",
+    "x": -9.0,
+    "z": -5.0,
+    "r": 3.1,
+    "label": "Farm truck",
     "container": "car_trunk",
-    "guaranteed": [
-     {
-      "item": "sled",
-      "n": 1
-     }
-    ],
-    "location": "loc_proctor_yard"
+    "propRef": "prop_02",
+    "render": "prop",
+    "location": "loc_us50_fallon"
    },
    {
     "id": "loot_03",
-    "x": -11.0,
-    "z": -61.0,
-    "r": 1.6,
-    "label": "Kennel shed",
-    "container": "toolbox",
-    "location": "loc_proctor_yard"
+    "x": 27.0,
+    "z": -7.0,
+    "r": 2.2,
+    "label": "Feed-store dumpster",
+    "container": "dumpster",
+    "propRef": "prop_03",
+    "render": "prop",
+    "location": "loc_us50_fallon"
    },
    {
     "id": "loot_04",
-    "x": 17.0,
-    "z": -47.0,
-    "r": 1.6,
-    "label": "Deserter's dropped pack",
-    "container": "military_crate",
-    "location": "loc_proctor_yard"
-   },
-   {
-    "id": "loot_05",
-    "x": -9.0,
-    "z": -93.0,
-    "r": 1.6,
-    "label": "Garage",
-    "container": "wardrobe",
-    "location": "loc_east_end"
-   },
-   {
-    "id": "loot_06",
     "x": -15.0,
-    "z": -111.0,
+    "z": -183.0,
     "r": 1.6,
-    "label": "Pantry",
+    "label": "Augie's cabinet",
     "container": "kitchen_cabinet",
-    "location": "loc_east_end"
-   },
-   {
-    "id": "loot_07",
-    "x": 13.0,
-    "z": -11.0,
-    "r": 1.6,
-    "label": "Kitchen cabinet (filler)",
-    "container": "kitchen_cabinet",
-    "location": "loc_lou_shack",
-    "filler": true
-   },
-   {
-    "id": "loot_08",
-    "x": 7.0,
-    "z": -7.0,
-    "r": 1.6,
-    "label": "Toolbox / workbench drawer (filler)",
-    "container": "toolbox",
-    "location": "loc_lou_shack",
-    "filler": true
-   },
-   {
-    "id": "loot_09",
-    "x": 21.0,
-    "z": -75.0,
-    "r": 1.6,
-    "label": "Locker (filler)",
-    "container": "locker",
-    "location": "loc_proctor_yard",
-    "filler": true,
+    "location": "loc_peavine_shack",
     "guaranteed": [
      {
-      "item": "mask_filter",
+      "item": "dosimeter",
       "n": 1
      }
     ]
    },
    {
-    "id": "loot_10",
-    "x": -17.0,
-    "z": -45.0,
+    "id": "loot_05",
+    "x": -1.0,
+    "z": -183.0,
     "r": 1.6,
-    "label": "Car trunk (filler)",
-    "container": "car_trunk",
-    "location": "loc_proctor_yard",
+    "label": "Radio-room toolbox",
+    "container": "toolbox",
+    "location": "loc_peavine_shack",
+    "guaranteed": [
+     {
+      "item": "batteries",
+      "n": 2
+     }
+    ]
+   },
+   {
+    "id": "loot_06",
+    "x": -35.0,
+    "z": -23.0,
+    "r": 1.6,
+    "label": "Ross's kitchen",
+    "container": "kitchen_cabinet",
+    "location": "loc_us50_fallon"
+   },
+   {
+    "id": "loot_07",
+    "x": -23.0,
+    "z": -13.0,
+    "r": 1.6,
+    "label": "Ross's wardrobe",
+    "container": "wardrobe",
+    "location": "loc_us50_fallon"
+   },
+   {
+    "id": "loot_08",
+    "x": 25.0,
+    "z": -75.0,
+    "r": 1.6,
+    "label": "Checkpoint locker",
+    "container": "medicine_cabinet",
+    "location": "loc_us50_fallon"
+   },
+   {
+    "id": "loot_09",
+    "x": -9.0,
+    "z": -183.0,
+    "r": 1.6,
+    "label": "Hidden stash / supply cache",
+    "container": "supply_cache",
+    "location": "loc_peavine_shack",
+    "filler": true,
+    "guaranteed": [
+     {
+      "item": "flare",
+      "n": 2
+     }
+    ]
+   },
+   {
+    "id": "loot_10",
+    "x": 13.0,
+    "z": -81.0,
+    "r": 1.6,
+    "label": "Kitchen cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_us50_fallon",
     "filler": true
    },
    {
     "id": "loot_11",
-    "x": -21.0,
-    "z": -75.0,
-    "r": 1.6,
-    "label": "Car trunk (filler)",
+    "x": -41.0,
+    "z": -109.0,
+    "r": 3.1,
+    "label": "Car trunk",
     "container": "car_trunk",
-    "location": "loc_proctor_yard",
+    "propRef": "prop_08",
+    "render": "prop",
+    "location": "loc_us50_fallon",
     "filler": true
    },
    {
     "id": "loot_12",
-    "x": 21.0,
-    "z": -61.0,
+    "x": -23.0,
+    "z": -25.0,
     "r": 1.6,
-    "label": "Toolbox / workbench drawer (filler)",
-    "container": "toolbox",
-    "location": "loc_proctor_yard",
+    "label": "Closet / wardrobe",
+    "container": "wardrobe",
+    "location": "loc_us50_fallon",
     "filler": true
    },
    {
     "id": "loot_13",
-    "x": 13.0,
-    "z": -101.0,
+    "x": -37.0,
+    "z": -13.0,
     "r": 1.6,
-    "label": "Kitchen cabinet (filler)",
-    "container": "kitchen_cabinet",
-    "location": "loc_east_end",
+    "label": "Gun safe / prepper locker",
+    "container": "gun_safe",
+    "location": "loc_us50_fallon",
     "filler": true
    },
    {
     "id": "loot_14",
-    "x": 13.0,
-    "z": -111.0,
+    "x": -45.0,
+    "z": -63.0,
     "r": 1.6,
-    "label": "Kitchen cabinet (filler)",
-    "container": "kitchen_cabinet",
-    "location": "loc_east_end",
-    "filler": true
-   },
-   {
-    "id": "loot_15",
-    "x": -15.0,
-    "z": -101.0,
-    "r": 1.6,
-    "label": "Closet / wardrobe (filler)",
-    "container": "wardrobe",
-    "location": "loc_east_end",
-    "filler": true
-   },
-   {
-    "id": "loot_16",
-    "x": -9.0,
-    "z": -109.0,
-    "r": 1.6,
-    "label": "Medicine cabinet (filler)",
-    "container": "medicine_cabinet",
-    "location": "loc_east_end",
-    "filler": true
-   },
-   {
-    "id": "loot_17",
-    "x": 5.0,
-    "z": -79.0,
-    "r": 1.6,
-    "label": "Woodpile / pallets / broken furniture (filler)",
+    "label": "Woodpile / pallets / broken furniture",
     "container": "woodpile",
-    "location": "loc_east_end",
+    "location": "loc_us50_fallon",
     "filler": true
    }
   ]
@@ -762,149 +1057,145 @@
  "props": [
   {
    "id": "prop_01",
-   "asset": "assets/kenney/roads/electricity-pole.glb",
-   "x": 15.0,
-   "z": -15.0,
-   "rotY": 0,
-   "h": 10,
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": 8.0,
+   "z": -95.0,
+   "rotY": 0.2,
+   "h": 1.5,
    "collide": true,
-   "tag": "Lou's antenna"
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_02",
-   "asset": "assets/kenney/industrial/water-tower.glb",
-   "x": -19.0,
-   "z": -73.0,
-   "rotY": 0,
-   "h": 15,
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -9.0,
+   "z": -5.0,
+   "rotY": 1.571,
+   "h": 1.5,
    "collide": true,
-   "tag": "Proctor water tower"
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_03",
-   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
-   "x": -17.0,
-   "z": -57.0,
-   "rotY": 0.6,
-   "h": 1.45,
-   "collide": true
+   "asset": "assets/kenney/roads/dumpster.glb",
+   "x": 27.0,
+   "z": -7.0,
+   "rotY": 0.0,
+   "h": 1.4,
+   "collide": true,
+   "footprintR": 1.3,
+   "tag": "container"
   },
   {
    "id": "prop_04",
-   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
-   "x": -13.0,
-   "z": -47.0,
-   "rotY": -0.8,
-   "h": 1.45,
-   "collide": true
+   "asset": "assets/kenney/roads/electricity-pole.glb",
+   "x": 7.0,
+   "z": -181.0,
+   "rotY": 0.0,
+   "h": 9,
+   "collide": false,
+   "tag": "antenna"
   },
   {
    "id": "prop_05",
-   "asset": "assets/kenney/industrial/shipping-container-a.glb",
-   "x": 15.0,
-   "z": -49.0,
-   "rotY": 0,
-   "h": 2.6,
-   "collide": true
+   "asset": "assets/kenney/roads/construction-barrier.glb",
+   "x": -3.0,
+   "z": -71.0,
+   "rotY": 0.0,
+   "h": 1.1,
+   "collide": false
   },
   {
    "id": "prop_06",
-   "asset": "assets/kenney/roads/light-square-double.glb",
-   "x": 13.0,
-   "z": -63.0,
-   "rotY": 0,
-   "h": 6,
-   "collide": true,
-   "tag": "Remnant floodlight"
+   "asset": "assets/kenney/roads/construction-barrier.glb",
+   "x": 3.0,
+   "z": -71.0,
+   "rotY": 0.0,
+   "h": 1.1,
+   "collide": false
   },
   {
    "id": "prop_07",
-   "asset": "assets/kenney/roads/construction-barrier.glb",
-   "x": 4.0,
-   "z": -69.0,
-   "rotY": 0,
-   "h": 1.1,
-   "collide": true
+   "asset": "assets/kenney/roads/construction-fence.glb",
+   "x": -5.0,
+   "z": -61.0,
+   "rotY": 0.0,
+   "h": 1.6,
+   "collide": false,
+   "tag": "checkpoint"
   },
   {
    "id": "prop_08",
-   "asset": "assets/kenney/industrial/building-d.glb",
-   "x": 10.0,
-   "z": -87.0,
-   "rotY": 1.571,
-   "h": 7,
-   "collide": true
-  },
-  {
-   "id": "prop_09",
-   "asset": "assets/kenney/industrial/building-a.glb",
-   "x": -15.0,
-   "z": -86.0,
-   "rotY": -1.571,
-   "h": 7,
-   "collide": true
-  },
-  {
-   "id": "prop_10",
-   "asset": "assets/kenney/roads/electricity-pole.glb",
-   "x": 1.0,
-   "z": -103.0,
-   "rotY": 0,
-   "h": 8,
-   "collide": true
-  },
-  {
-   "id": "prop_11",
-   "asset": "assets/kenney/roads/light-square.glb",
-   "x": -5.0,
-   "z": -91.0,
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -41.0,
+   "z": -109.0,
    "rotY": 0.0,
-   "h": 5.5,
-   "collide": true
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   }
  ],
  "interactives": [
   {
-   "id": "ch07_radio",
+   "id": "ch07_dead_radio",
    "type": "radio",
-   "x": 8.0,
-   "z": -11.0,
+   "x": -3.0,
+   "z": -177.0,
    "r": 1.8,
-   "label": "Shortwave (choose the broadcast)",
-   "setsFlag": "ch07_broadcast_set"
+   "label": "Augie's rig: every band dead",
+   "setsFlag": "ch07_dead_air_heard",
+   "when": [
+    {
+     "not": {
+      "flag": "ch07b_done",
+      "eq": true
+     }
+    }
+   ]
   },
   {
-   "id": "ch07_sled",
-   "type": "load",
-   "x": -9.0,
-   "z": -91.0,
+   "id": "ch07_dosimeter",
+   "type": "open",
+   "x": -13.0,
+   "z": -177.0,
    "r": 1.8,
-   "label": "Load the sled",
-   "requiresItems": [
-    "sled"
-   ],
-   "setsFlag": "ch07_sled_loaded"
+   "label": "Augie's dosimeter drawer",
+   "givesItems": {
+    "dosimeter": 1,
+    "batteries": 2
+   },
+   "when": [
+    {
+     "not": {
+      "flag": "ch07b_done",
+      "eq": true
+     }
+    }
+   ]
   }
  ],
  "safeZones": [
   {
    "id": "safe_01",
-   "kind": "indoor",
-   "x": 10.0,
-   "z": -9.0,
-   "r": 3,
-   "label": "Lou's shack",
+   "kind": "camp",
+   "x": -9.0,
+   "z": -179.0,
+   "r": 3.0,
+   "label": "Augie's shack (stove)",
    "warmth": true,
    "save": true,
    "sealed": false
   },
   {
    "id": "safe_02",
-   "kind": "indoor",
-   "x": -12.0,
-   "z": -105.0,
-   "r": 3,
-   "label": "Home",
+   "kind": "camp",
+   "x": -29.0,
+   "z": -19.0,
+   "r": 3.0,
+   "label": "Ross's farmhouse",
    "warmth": true,
    "save": true,
    "sealed": false
@@ -913,34 +1204,33 @@
  "setPieces": [],
  "encounters": [
   {
-   "id": "enc_dog_lot",
+   "id": "z_ch07_slope",
    "area": {
     "type": "rect",
-    "x0": -22.0,
-    "z0": -64.0,
-    "x1": -6.0,
-    "z1": -42.0
+    "x0": -44.0,
+    "z0": -156.0,
+    "x1": -10.0,
+    "z1": -112.0
    },
    "groups": [
     {
-     "group": "g_dogs",
+     "group": "g_ch07_dogs",
      "wave": 1
     }
-   ],
-   "note": "Sled is in this lot: dogs guard it."
+   ]
   },
   {
-   "id": "enc_remnant",
+   "id": "z_ch07_fallon_east",
    "area": {
     "type": "rect",
-    "x0": 0.0,
-    "z0": -76.0,
-    "x1": 22.0,
-    "z1": -46.0
+    "x0": 8.0,
+    "z0": -42.0,
+    "x1": 46.0,
+    "z1": 4.0
    },
    "groups": [
     {
-     "group": "g_remnant",
+     "group": "g_ch07_remnant",
      "wave": 1
     }
    ]
@@ -953,121 +1243,119 @@
    "once": true,
    "shape": {
     "type": "circle",
-    "x": 0.0,
-    "z": 3.0,
+    "x": -9.0,
+    "z": -177.0,
     "r": 3
    },
    "actions": [
     {
-     "type": "bark",
-     "speaker": "lou",
-     "text": "(hand radio) Dell. Come up. Now."
+     "type": "set_time",
+     "value": 0.92
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch07_started",
+     "value": true
     },
     {
      "type": "checkpoint"
     }
-   ]
-  },
-  {
-   "id": "t_ch07_shack",
-   "on": "enter",
-   "once": true,
-   "shape": {
-    "type": "rect",
-    "x0": 6.0,
-    "z0": -12.0,
-    "x1": 14.0,
-    "z1": -6.0
-   },
-   "actions": [
+   ],
+   "when": [
     {
-     "type": "dialogue",
-     "id": "ch07_lou_dead_air"
-    },
-    {
-     "type": "hud_unlock",
-     "stat": "rad"
+     "not": {
+      "flag": "ch07b_done",
+      "eq": true
+     }
     }
    ]
   },
   {
-   "id": "t_ch07_deserters",
-   "on": "enter",
+   "id": "t_ch07_augie_dead_air",
+   "on": "flag",
    "once": true,
    "shape": {
     "type": "rect",
     "x0": -6.0,
-    "z0": -44.0,
-    "x1": 2.0,
-    "z1": -32.0
+    "z0": -184.0,
+    "x1": 0.0,
+    "z1": -174.0
    },
    "actions": [
     {
+     "type": "dialogue",
+     "id": "ch07_augie_dead_air"
+    },
+    {
      "type": "cutscene",
-     "id": "cs_ch07_deserters",
-     "text": "Soldiers in civilian coats. \"Which way's Wisconsin?\""
+     "id": "cs_ch07_bursts",
+     "text": "Green light over the Sierra. Then nothing on any band."
+    },
+    {
+     "type": "set_weather",
+     "weather": "brown_sky",
+     "fade": 40
+    },
+    {
+     "type": "hud_unlock",
+     "stat": "rad"
+    },
+    {
+     "type": "activate_group",
+     "group": "g_ch07_dogs"
+    },
+    {
+     "type": "checkpoint"
     }
    ],
    "when": [
     {
-     "flag": "ch07_broadcast_set",
+     "not": {
+      "flag": "ch07b_done",
+      "eq": true
+     }
+    },
+    {
+     "flag": "ch07_dead_air_heard",
      "eq": true
     }
    ]
   },
   {
-   "id": "t_ch07_dogs",
+   "id": "t_ch07_reyne_arrives",
    "on": "enter",
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -22.0,
-    "z0": -64.0,
+    "x0": -16.0,
+    "z0": -172.0,
     "x1": -4.0,
-    "z1": -42.0
-   },
-   "actions": [
-    {
-     "type": "activate_group",
-     "group": "g_dogs"
-    }
-   ],
-   "note": "Optional ambush; also fires if the player lingers by the lot gate."
-  },
-  {
-   "id": "t_ch07_brown",
-   "on": "enter",
-   "once": true,
-   "shape": {
-    "type": "rect",
-    "x0": -22.0,
-    "z0": -76.0,
-    "x1": 22.0,
-    "z1": -70.0
+    "z1": -164.0
    },
    "actions": [
     {
      "type": "set_time",
-     "value": 0.55
+     "value": 0.22
     },
     {
-     "type": "set_weather",
-     "weather": "brown_sky",
-     "blendSec": 30,
-     "tempC": 9
+     "type": "dialogue",
+     "id": "ch07_reyne_arrives"
     },
     {
-     "type": "cutscene",
-     "id": "cs_ch07_brown",
-     "text": "Ten days later the sky is the color of tea."
-    },
-    {
-     "type": "checkpoint"
+     "type": "set_flag",
+     "flag": "ch07_reyne_met",
+     "value": true
     }
    ],
    "when": [
     {
-     "flag": "ch07_broadcast_set",
+     "not": {
+      "flag": "ch07b_done",
+      "eq": true
+     }
+    },
+    {
+     "flag": "ch07_dead_air_heard",
      "eq": true
     }
    ]
@@ -1078,10 +1366,10 @@
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -8.0,
-    "z0": -108.0,
-    "x1": -2.0,
-    "z1": -100.0
+    "x0": 4.0,
+    "z0": -168.0,
+    "x1": 16.0,
+    "z1": -158.0
    },
    "actions": [
     {
@@ -1091,64 +1379,176 @@
    ],
    "when": [
     {
+     "not": {
+      "flag": "ch07b_done",
+      "eq": true
+     }
+    },
+    {
      "flag": "ruiz_spared",
+     "eq": true
+    },
+    {
+     "flag": "ch07_reyne_met",
      "eq": true
     }
    ]
   },
   {
-   "id": "t_ch07_greysnow",
+   "id": "t_ch07_fallon_checkpoint",
    "on": "enter",
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -16.0,
-    "z0": -96.0,
-    "x1": -4.0,
-    "z1": -88.0
+    "x0": -6.0,
+    "z0": -76.0,
+    "x1": 6.0,
+    "z1": -68.0
    },
    "actions": [
     {
-     "type": "set_weather",
-     "weather": "grey_snow",
-     "blendSec": 40,
-     "tempC": 2
-    },
-    {
-     "type": "cutscene",
-     "id": "cs_ch07_greysnow",
-     "text": "It snows in July. The snow is grey."
+     "type": "set_time",
+     "value": 0.45
     },
     {
      "type": "dialogue",
-     "id": "ch07_where"
+     "id": "ch07_fallon_checkpoint"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch07_checkpoint_passed",
+     "value": true
+    },
+    {
+     "type": "checkpoint"
     }
    ],
    "when": [
     {
-     "flag": "ch07_sled_loaded",
+     "not": {
+      "flag": "ch07b_done",
+      "eq": true
+     }
+    },
+    {
+     "flag": "ch07_reyne_met",
      "eq": true
     }
    ]
   },
   {
-   "id": "t_ch07_end",
-   "on": "flag",
+   "id": "t_ch07_to_annex",
+   "on": "enter",
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -16.0,
-    "z0": -96.0,
-    "x1": -4.0,
-    "z1": -88.0
+    "x0": -4.0,
+    "z0": 0.0,
+    "x1": 4.0,
+    "z1": 6.0
    },
    "actions": [
     {
-     "type": "story_check",
-     "id": "insulin_check"
+     "type": "cutscene",
+     "id": "cs_ch07_east",
+     "text": "East on US-50 toward Dixie Valley."
+    },
+    {
+     "type": "chapter_end",
+     "next": "ch07b_dixie_valley"
+    }
+   ],
+   "when": [
+    {
+     "not": {
+      "flag": "ch07b_done",
+      "eq": true
+     }
+    },
+    {
+     "flag": "ch07_checkpoint_passed",
+     "eq": true
+    }
+   ],
+   "note": "Outbound: hand off to ch07b_dixie_valley (engine strips to 'ch07b')."
+  },
+  {
+   "id": "t_ch07_return",
+   "on": "load",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": 1.0,
+    "z": -29.0,
+    "r": 3
+   },
+   "actions": [
+    {
+     "type": "set_time",
+     "value": 0.4
+    },
+    {
+     "type": "set_weather",
+     "weather": "brown_sky"
     },
     {
      "type": "checkpoint"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch07b_done",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch07_fallon_return",
+   "on": "interact",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": -13.0,
+    "z": -19.0,
+    "r": 3
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch07_fallon_return"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch07_fallon_done",
+     "value": true
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch07b_done",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch07_where",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -18.0,
+    "z0": -184.0,
+    "x1": -8.0,
+    "z1": -174.0
+   },
+   "actions": [
+    {
+     "type": "set_time",
+     "value": 0.85
+    },
+    {
+     "type": "dialogue",
+     "id": "ch07_where"
     },
     {
      "type": "chapter_end",
@@ -1157,27 +1557,12 @@
    ],
    "when": [
     {
-     "flag": "ch07_location",
-     "ne": null
-    }
-   ]
-  },
-  {
-   "id": "t_ch07_at_shack",
-   "on": "enter",
-   "once": true,
-   "shape": {
-    "type": "rect",
-    "x0": 4.0,
-    "z0": -20.0,
-    "x1": 16.0,
-    "z1": -4.0
-   },
-   "actions": [
+     "flag": "ch07b_done",
+     "eq": true
+    },
     {
-     "type": "set_flag",
-     "flag": "ch07_at_shack",
-     "value": true
+     "flag": "ch07_fallon_done",
+     "eq": true
     }
    ]
   }
@@ -1186,11 +1571,11 @@
   {
    "id": "o1",
    "order": 1,
-   "text": "Get to Lou's shack",
+   "text": "Augie's shack: the radio",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch07_at_shack",
+     "flag": "ch07_dead_air_heard",
      "eq": true
     }
    ]
@@ -1198,11 +1583,11 @@
   {
    "id": "o2",
    "order": 2,
-   "text": "Listen. Decide what Lou broadcasts",
+   "text": "The stranger at the door",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch07_broadcast_set",
+     "flag": "ch07_reyne_met",
      "eq": true
     }
    ]
@@ -1210,25 +1595,11 @@
   {
    "id": "o3",
    "order": 3,
-   "text": "Deal with Ruiz",
+   "text": "US-50: the Fallon checkpoint",
    "optional": false,
    "completeWhen": [
     {
-     "any": [
-      {
-       "flag": "ruiz_defected",
-       "eq": true
-      },
-      {
-       "flag": "ch07_ruiz_turned_away",
-       "eq": true
-      }
-     ]
-    }
-   ],
-   "startWhen": [
-    {
-     "flag": "ruiz_spared",
+     "flag": "ch07_checkpoint_passed",
      "eq": true
     }
    ]
@@ -1236,11 +1607,11 @@
   {
    "id": "o4",
    "order": 4,
-   "text": "Load the sled",
+   "text": "Dixie Valley (ch07b)",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch07_sled_loaded",
+     "flag": "ch07b_done",
      "eq": true
     }
    ]
@@ -1248,14 +1619,82 @@
   {
    "id": "o5",
    "order": 5,
-   "text": "Decide where your people winter: dam or city",
+   "text": "Back through Fallon",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch07_location",
-     "ne": null
+     "flag": "ch07_fallon_done",
+     "eq": true
+    }
+   ],
+   "startWhen": [
+    {
+     "flag": "ch07b_done",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o6",
+   "order": 6,
+   "text": "Peavine: where do your people winter?",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch07_location"
+    }
+   ],
+   "startWhen": [
+    {
+     "flag": "ch07b_done",
+     "eq": true
     }
    ]
   }
- ]
+ ],
+ "storyEnemyTypes": [
+  "feral_dog",
+  "remnant_patrol"
+ ],
+ "levelSplit": {
+  "chapter": "ch07",
+  "this": "loc_peavine_shack + loc_us50_fallon",
+  "other": "ch07b_dixie_valley"
+ },
+ "companion": {
+  "id": "wraith",
+  "spawn": {
+   "x": -7.0,
+   "z": -175.0
+  },
+  "when": [
+   {
+    "flag": "wraith_alive",
+    "eq": true
+   }
+  ],
+  "follow": {
+   "leashM": 6.0,
+   "catchUpM": 14.0,
+   "nav": "grid_bfs_walkable",
+   "avoid": [
+    "door_clearance_cells",
+    "loot_cells"
+   ],
+   "note": "Follows Braith over walkable tiles; idles at heel inside buildings."
+  },
+  "verbs": [
+   "track",
+   "warn",
+   "guard",
+   "hold"
+  ],
+  "injuredWhen": [
+   {
+    "flag": "wraith_injured",
+    "eq": true
+   }
+  ]
+ },
+ "lootSource": "v2"
 }

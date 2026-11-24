@@ -1,0 +1,121 @@
+{
+  "id": "ch07_dixie_road",
+  "chapter": "ch07",
+  "location": "loc_dixie_annex",
+  "trigger": "Night on the Dixie Valley road. The truck stalls. First Tallman fight (enc_ch07_road_tallman).",
+  "speakers": [
+    "narrator",
+    "braith",
+    "wraith",
+    "reyne"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Forty miles of washboard road. The truck dies three miles short of the fence. Fuel filter. Of course.",
+      "next": "t1"
+    },
+    {
+      "id": "t1",
+      "speaker": "wraith",
+      "text": "[On her feet in the truck bed. Not growling. Shaking. Staring into the dark.]",
+      "next": "t2"
+    },
+    {
+      "id": "t2",
+      "speaker": "reyne",
+      "text": "Lights. Every light you have. Now. They don't like light. They like heat. The engine block is a beacon.",
+      "next": "t3"
+    },
+    {
+      "id": "t3",
+      "speaker": "narrator",
+      "text": "Something moves at the edge of the headlights. Close this time. Long arms. It's coming low and fast.",
+      "choices": [
+        {
+          "text": "[Flare. Then shoot]",
+          "next": "fight",
+          "effects": [
+            {
+              "event": "encounter",
+              "id": "enc_ch07_road_tallman"
+            }
+          ]
+        },
+        {
+          "text": "[Everyone in the cab. Lights on. Wait]",
+          "next": "wait",
+          "effects": [
+            {
+              "event": "time_skip",
+              "hours": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fight",
+      "speaker": "narrator",
+      "text": "The flare turns the night red. It stops, flinches, screams without sound. You fire. It goes down. It gets up. It runs.",
+      "next": "f2"
+    },
+    {
+      "id": "f2",
+      "speaker": "narrator",
+      "text": "It's wounded and limping into the dark beyond the flare.",
+      "choices": [
+        {
+          "text": "[Chase it. Finish it]",
+          "next": "chase",
+          "effects": [
+            {
+              "add": "tallmen_killed",
+              "value": 1
+            },
+            {
+              "stat": "health",
+              "delta": -15
+            }
+          ]
+        },
+        {
+          "text": "[Let it go]",
+          "next": "let"
+        }
+      ]
+    },
+    {
+      "id": "chase",
+      "speaker": "narrator",
+      "text": "You find it in a dry wash, two hundred yards out. It takes four more shots. It dies like an animal. Quietly.",
+      "next": "body"
+    },
+    {
+      "id": "body",
+      "speaker": "reyne",
+      "text": "[Kneeling by it, very still] A-4. I named her Tamsin. She learned to open her hold latch in March. I'm sorry.",
+      "next": "end"
+    },
+    {
+      "id": "let",
+      "speaker": "reyne",
+      "text": "It'll remember the flare. They remember. Next time it'll come from the dark side.",
+      "next": "end"
+    },
+    {
+      "id": "wait",
+      "speaker": "narrator",
+      "text": "Five hours in a cold cab with every light on. Twice, something walks around the truck. At dawn there are tracks.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "Dawn. The Annex fence is a silver line on the flats. A guard shack. A light in the guard shack window.",
+      "end": true
+    }
+  ]
+}

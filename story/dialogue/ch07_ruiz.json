@@ -1,140 +1,136 @@
 {
   "id": "ch07_ruiz",
   "chapter": "ch07",
-  "location": "loc_east_end",
-  "trigger": "Two days after Dead Air. Knock at the door. Only if ruiz_spared.",
+  "location": "loc_peavine_shack",
+  "trigger": "If ruiz_spared: Ruiz arrives on the radio, then in person, with two deserters.",
   "speakers": [
-    "ruiz",
-    "dell",
     "narrator",
-    "theo"
+    "ruiz",
+    "braith",
+    "deserter"
   ],
   "start": "start",
   "nodes": [
     {
       "id": "start",
       "speaker": "narrator",
-      "text": "Ruiz, in a civilian parka. Her name tape is cut off. Rifle still slung.",
+      "text": "The grounded transmitter crackles. A familiar voice, on the plant's old frequency.",
       "next": "r1"
     },
     {
       "id": "r1",
       "speaker": "ruiz",
-      "text": "Kessler's shooting deserters now. Two this morning. I'm a deserter. Since about four a.m.",
+      "text": "Engineer Two to anyone at Peavine. Ironwood's gone dark. Kessler says hold the yard. Half of us are walking.",
       "next": "r2"
     },
     {
       "id": "r2",
-      "speaker": "ruiz",
-      "text": "I need somewhere to be that isn't there. I can wire, blast, and dig. I eat a lot.",
-      "choices": [
-        {
-          "text": "Come in. You're with us.",
-          "next": "yes",
-          "conditions": [
-            {
-              "trust": "ruiz",
-              "gte": 3
-            }
-          ]
-        },
-        {
-          "text": "Why should I trust you?",
-          "next": "why"
-        },
-        {
-          "text": "I can't. Not with Theo here.",
-          "next": "no"
-        }
-      ]
-    },
-    {
-      "id": "why",
-      "speaker": "ruiz",
-      "text": "You shouldn't. I skipped houses with kids on the list. That's my whole résumé.",
+      "speaker": "narrator",
+      "text": "An hour later, three soldiers come up the road with their hands visible. Ruiz is limping. Hip never healed right.",
       "effects": [
         {
-          "set": "ruiz_secret_known",
+          "set": "ruiz_met",
           "value": true
-        },
-        {
-          "trust": "ruiz",
-          "delta": 1
         }
       ],
       "next": "r3"
     },
     {
       "id": "r3",
-      "speaker": "narrator",
-      "text": "Theo looks at her rifle, then at you.",
+      "speaker": "ruiz",
+      "text": "Kessler's holding the Sparks yard with whoever's left. He wants your plant. He'll come for it in winter.",
+      "next": "r4"
+    },
+    {
+      "id": "r4",
+      "speaker": "deserter",
+      "text": "Ma'am says you're the mechanic who saved her. We're done with orders. We'll carry stuff. We're good at carrying.",
       "choices": [
         {
-          "text": "Come in. You're with us.",
-          "next": "yes",
+          "text": "Come with us. East.",
+          "next": "join",
           "conditions": [
             {
               "trust": "ruiz",
-              "gte": 3
+              "gte": 4
+            }
+          ],
+          "effects": [
+            {
+              "set": "ruiz_defected",
+              "value": true
+            },
+            {
+              "add": "ironwood_hostility",
+              "value": -2
+            },
+            {
+              "trust": "ruiz",
+              "delta": 2
             }
           ]
         },
         {
-          "text": "I can't. Not with Theo here.",
+          "text": "I can't feed three soldiers.",
+          "next": "no"
+        },
+        {
+          "text": "What's your price?",
+          "next": "price"
+        }
+      ]
+    },
+    {
+      "id": "price",
+      "speaker": "ruiz",
+      "text": "No price. I owe you. And I'd rather fix something than shoot it. That's all I've got.",
+      "choices": [
+        {
+          "text": "Come with us. East.",
+          "next": "join",
+          "effects": [
+            {
+              "set": "ruiz_defected",
+              "value": true
+            },
+            {
+              "add": "ironwood_hostility",
+              "value": -2
+            },
+            {
+              "trust": "ruiz",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "text": "I can't take you.",
           "next": "no"
         }
       ]
     },
     {
-      "id": "yes",
+      "id": "join",
       "speaker": "ruiz",
-      "text": "...Okay. Okay. Thanks. Don't— yeah. Where do I put my boots.",
+      "text": "Engineer Two, reporting. ...Unofficially. There's an Ironwood detail out at Dixie Valley. I know their sergeant.",
       "effects": [
         {
-          "set": "ruiz_defected",
+          "set": "ruiz_secret_known",
           "value": true
-        },
-        {
-          "trust": "ruiz",
-          "delta": 3
         }
       ],
-      "next": "yes2"
-    },
-    {
-      "id": "yes2",
-      "speaker": "theo",
-      "text": "you're the one who said 'clear'. at our house. i heard.",
-      "next": "yes3"
-    },
-    {
-      "id": "yes3",
-      "speaker": "ruiz",
-      "text": "Kid, I say 'clear' a lot. Sometimes it's even true.",
       "next": "end"
     },
     {
       "id": "no",
       "speaker": "ruiz",
-      "text": "Copy. Fair. Kowalczyk... buena suerte.",
-      "effects": [
-        {
-          "set": "ruiz_defected",
-          "value": false
-        }
-      ],
-      "next": "no2"
-    },
-    {
-      "id": "no2",
-      "speaker": "narrator",
-      "text": "She walks toward the bridge, toward Wisconsin. She doesn't look back.",
+      "text": "Okay. Understood. We'll head north. Watch for Kessler. He doesn't forgive.",
       "next": "end"
     },
     {
       "id": "end",
       "speaker": "narrator",
-      "text": "That week, the sky goes brown at noon.",
+      "text": "At dawn, the sky is brown. By noon, grey flakes are falling. They don't melt on your hand. It isn't snow.",
       "end": true
     }
   ]

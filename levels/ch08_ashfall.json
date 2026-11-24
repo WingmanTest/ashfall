@@ -1,22 +1,30 @@
 {
  "$schema": "./schema.json",
  "formatVersion": 1,
+ "storyVersion": 2,
  "id": "ch08_ashfall",
  "chapter": 8,
+ "storyChapter": "ch08",
  "title": "Ashfall",
- "act": "III",
+ "act": 3,
  "storyFile": "story/chapters/ch08_ashfall.md",
  "next": "ch09_the_long_night",
- "summary": "Fallout rain in the East End (seal up, husk at the car, the door, Marguerite's list) -> Lakehead Memorial pharmacy & Theo's foot -> Harbor stores at the ore docks for filters/iodide.",
  "difficulty": 4,
+ "summary": "January, Year 2. Fallout rain then ash. The mask, sealing the shelter, a husk at the truck, Lolo's notebook, Deshawn's cistern, Ames and the frostbitten hand at Meadows General, Boone's expired filters at the yard, Annie's atrium. Night: strangers at the sealed door, then the midnight mimic at the mail slot. Morning: Dale Henley facing his kitchen wall. Tight interiors, flashlight-only rooms, Hollows that keep a voice and no breath.",
+ "startInventory": {
+  "mech_tools": 1,
+  "flashlight": 1,
+  "hand_radio": 1
+ },
+ "startInventoryNote": "carried over",
  "units": "meters",
  "grid": {
   "cellSize": 2.0,
-  "cols": 26,
-  "rows": 72,
+  "cols": 52,
+  "rows": 104,
   "origin": {
-   "x": -26.0,
-   "z": -136.0
+   "x": -52.0,
+   "z": -200.0
   },
   "legend": {
    "#": {
@@ -37,20 +45,22 @@
     "preview": "#b8ad98"
    },
    ".": {
-    "name": "snow_ground",
+    "name": "ash_snow",
     "walkable": true,
     "solid": false,
     "height": 0,
     "floorTex": "snow_02",
-    "preview": "#d9e1e8"
+    "groundType": "ash_snow",
+    "preview": "#b4b5b0"
    },
    "=": {
-    "name": "road",
+    "name": "road_ash_snow",
     "walkable": true,
     "solid": false,
     "height": 0,
     "floorTex": "asphalt_snow",
-    "preview": "#8d969e"
+    "groundType": "asphalt_ash_snow",
+    "preview": "#8e908e"
    },
    "B": {
     "name": "building_mass",
@@ -87,370 +97,660 @@
     "cover": true,
     "preview": "#a08850"
    },
-   "f": {
-    "name": "fence",
-    "walkable": false,
-    "solid": true,
-    "height": 1.3,
-    "wallTex": "rusty_corrugated_iron",
-    "preview": "#8a5a3a"
-   },
-   "g": {
-    "name": "dirt_gravel",
+   "k": {
+    "name": "rail_track",
     "walkable": true,
     "solid": false,
     "height": 0,
-    "floorTex": "dirt",
-    "preview": "#9c8f7a"
+    "floorTex": "rusty_metal",
+    "preview": "#6a5a4e"
    },
-   "r": {
-    "name": "road_damaged",
+   "y": {
+    "name": "ash_drift",
     "walkable": true,
     "solid": false,
     "height": 0,
-    "floorTex": "road_damaged",
-    "preview": "#7b7f80"
-   },
-   "~": {
-    "name": "open_water",
-    "walkable": false,
-    "solid": false,
-    "height": -0.6,
-    "floorTex": "dirty_concrete",
-    "water": true,
-    "preview": "#2f4a63"
+    "floorTex": "snow_02",
+    "groundType": "ash_drift",
+    "scatter": "ash_drift",
+    "preview": "#9a9b96"
    }
   },
   "tiles": [
-   "HHHHHHHHHHHHHHHHHHHHHHHHHH",
-   "H.....................~~~H",
-   "HBBBBBBBB.............~~~H",
-   "HBBBBBBBB...#########.~~~H",
-   "HBBBBBBBB...#,,,,,,,#.~~~H",
-   "HBBBBBBBB...#,,,,,,,#.~~~H",
-   "HBBBBBBBB...#,,,,,,,#.~~~H",
-   "HBBBBBBBB...#,,,,,,,#.~~~H",
-   "HBBBBBBBB...#,,,,,,,#.~~~H",
-   "HBBBBBBBB...#,,,,,,,#.~~~H",
-   "HBBBBBBBB...####D####.~~~H",
-   "HBBBBBBBB.............~~~H",
-   "HBBBBBBBB.............~~~H",
-   "H.....................~~~H",
-   "H.............cc......~~~H",
-   "H.........cc..........~~~H",
-   "H.................cc..~~~H",
-   "H.....................~~~H",
-   "H.....................~~~H",
-   "H.....................~~~H",
-   "H.....................~~~H",
-   "H========================H",
-   "H========================H",
-   "H========================H",
-   "H..........rr............H",
-   "H..###################...H",
-   "H..#,,,,,#,,,,#,,,,,,#...H",
-   "H..#,,,,,#,,,,#,,,,,,#...H",
-   "H..#,,,,,#,,,,#,,,,,,#...H",
-   "H..#,,,,,#,,,,#,,,,,,#...H",
-   "H..####D###D####D#####...H",
-   "H..#,,,,,,,,,,,,,,,,,#...H",
-   "H..#,,,,,,,,,,,,,,,,,D...H",
-   "H..#####D###D#########...H",
-   "H..#,,,,,,,,,,,,,,,,,#...H",
-   "H..#,,,,,,,,,,,,,,,,,#...H",
-   "H..#,,,,,,,,,,,,,,,,,#...H",
-   "H..#,,,,,,,,,,,,,,,,,#...H",
-   "H..#,,,,,,,,,,,,,,,,,#...H",
-   "H..#########D#########...H",
-   "H..........rr............H",
-   "HrrrrrrrrrrrrrrrrrrrrrrrrH",
-   "HrrrrrrrrrrrrrrrrrrrrrrrrH",
-   "Hfffffff...rr..BBBBBBBBBBH",
-   "Hfgggggf...rr..BBBBBBBBBBH",
-   "Hfgggggf...rr..BBBBBBBBBBH",
-   "HfgggggD...rr..BBBBBBBBBBH",
-   "Hfgggggf...rr..BBBBBBBBBBH",
-   "Hfgggggf...rr..BBBBBBBBBBH",
-   "Hfffffff...rr..BBBBBBBBBBH",
-   "H========================H",
-   "H========================H",
-   "H..........==............H",
-   "HBBBBBBBBB.==..######.BBBH",
-   "HBBBBBBBBB.==..#,,,,#.BBBH",
-   "HBBBBBBBBB.==..D,,,,#.BBBH",
-   "HBBBBBBBBB.==..#,,,,#.BBBH",
-   "HBBBBBBBBB.==..#,,,,#.BBBH",
-   "HBBB.......==..######.BBBH",
-   "HBBB.......==.........BBBH",
-   "HBBB######.==..######.BBBH",
-   "HBBB#,,,,#.==..#,,,,#.BBBH",
-   "HBBB#,,,,#.==..#,,,,#.BBBH",
-   "HBBB#,,,,D.==..D,,,,#.BBBH",
-   "HBBB#,,,,#.==..#,,,,#.BBBH",
-   "HBBB#,,,,#.==..#,,,,#.BBBH",
-   "HBBB#,,,,#.==..#,,,,#.BBBH",
-   "HBBB######.==..######.BBBH",
-   "HBBB.......==.........BBBH",
-   "H..........==............H",
-   "H..........==............H",
-   "HHHHHHHHHHHHHHHHHHHHHHHHHH"
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",
+   "H.........................====.....................H",
+   "H.........................====.....................H",
+   "H.........................====yyyyyyyyyyyyyyyyyyyy.H",
+   "H.........................====yyyyyyyyyy#########y.H",
+   "H.........................====yyyyyyyyyy#,,,,,,,#y.H",
+   "H.........................====yyyyyyyyyy#,,,,,,,#y.H",
+   "H.........................====yyyyyyyyyyD,,,,,,,#y.H",
+   "Hkkkkkkkkkkkkkkkkkkkkkkkkk====yyyyyyyyyy#,,,,,,,#y.H",
+   "H.........................====yyyyyyyyyy#,,,,,,,#y.H",
+   "H.........................====yyyyyyyyyy#########y.H",
+   "H.........................====yyyyyyyyyyyyyyyyyyyy.H",
+   "H.........................====yyyyyyyyyyyyyyyyyyyy.H",
+   "H.........................====yyyyyyyyyyyyyyyyyyyy.H",
+   "Hkkkkkkkkkkkkkkkkkkkkkkkkk====yyyyyyyyyyyyyyyyyyyy.H",
+   "H.........................====yyyyyyyyyyyyyyyyyyyy.H",
+   "H.........................====yyyyyyyyyyyyyyyyyyyy.H",
+   "H.........................====yyyyyyyyyyyyyyyyyyyy.H",
+   "H.........................====yyyyyyyyyyyyyyyyyyyy.H",
+   "H.........................====yyyyyyyyyyyyyyyyyyyy.H",
+   "H.............###########.====yyyyyyyyyyyyyyyyyyyy.H",
+   "H.............#,,,,,,,,,#.====yyyyyyyyyyyyyyyyyyyy.H",
+   "H.............#,,,,,,,,,#.====yyyyyyyyyyyyyyyyyyyy.H",
+   "H.............D,,,,,,,,,#.====yyyyyyyyyyyyyyyyyyyy.H",
+   "H.............#,,,,,,,,,#.====yyyyyyyyyyyyyyyyyyyy.H",
+   "H.............#,,,,,,,,,#.====yyyyyyyyyyyyyyyyyyyy.H",
+   "H.............###########.====yyyyyyyyyyyyyyyyyyyy.H",
+   "H.........................====.....................H",
+   "H.........................====.....................H",
+   "H.........................====.....................H",
+   "H.........................====.....................H",
+   "H..####################...====..#################..H",
+   "H..#,,,,,,,,#,,,,,,,,,#...====..#,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,#,,,,,,,,,#...====..#,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,#,,,,,,,,,#...====..#,,ccccccccccc,,#..H",
+   "H..#,,,,,,,,#,,,,,,,,,#...====..#,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,D,,,,,,,,,#...====..#,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,#,,,,,,,,,#...====..#,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,#,,,,,,,,,#...====..#,,ccccccccccc,,#..H",
+   "H..#,,,,,,,,#,,,,,,,,,#...====..#,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,#,,,,,,,,,#...====..#,,,,,,,,,,,,,,,#..H",
+   "H..#####D########D#####...====..#,,ccccccccccc,,#..H",
+   "H..#,,,,,,,,,,,,,,,,,,#...====..#,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,,,,,,,,,,,#...====..#,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,,,,,,,,,,,#...====..########D########..H",
+   "H..#,,,,,,,,,,,,,,,,,,#...====..#,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,,,,,,,,,,,D...====..D,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,,,,,,,,,,,#...====..#,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,,,,,,,,,,,#...====..#,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,,,,,,,,,,,#...====..#,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,,,,,,,,,,,#...====..#,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,,,,,,,,,,,#...====..#,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,,,,,,,,,,,#...====..#,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,,,,,,,,,,,#...====..#,,,,,,,,,,,,,,,#..H",
+   "H..#########D##########...====..########D########..H",
+   "H.........................====.....................H",
+   "H.........................====.....................H",
+   "H.........................====.....................H",
+   "H.........................====.....................H",
+   "H.........................====.....................H",
+   "H==================================================H",
+   "H==================================================H",
+   "H.........................====.....................H",
+   "H.........................====.....................H",
+   "H...#############.........====......###########....H",
+   "H...#,,,,,,,,,,,#.........====......#,,,,,,,,,#....H",
+   "H...#,,,,,,,,,,,#.........====......#,,,,,,,,,#....H",
+   "H...#,,,,,,,,,,,#.........====......#,,,,,,,,,#....H",
+   "H...#,,,,,,,,,,,#.........====......D,,,,,,,,,#....H",
+   "H...#,,,,,,,,,,,#.........====......#,,,,,,,,,#....H",
+   "H...######D######.........====......#,,,,,,,,,#....H",
+   "H...#,,,,,,,,,,,#.........====......#,,,,,,,,,#....H",
+   "H...#,,,,,,,,,,,#.........====......###########....H",
+   "H...#,,,,,,,,,,,#.........====.....................H",
+   "H...######D######.........====.....................H",
+   "H.........................====.....................H",
+   "H.........................====.....................H",
+   "H.........................====.....................H",
+   "H.........................====.....................H",
+   "H.........................====.....................H",
+   "H...BBBBBBBBBBBB..........====.....................H",
+   "H...BBBBBBBBBBBB..........====.....................H",
+   "H...BBBBBBBBBBBB....#####D#####....................H",
+   "H...BBBBBBBBBBBB....#,,,,,#,,,#....................H",
+   "H...BBBBBBBBBBBB....#,,,,,#,,,#....................H",
+   "H...BBBBBBBBBBBB....#,,,,,#,,,#....................H",
+   "H...BBBBBBBBBBBB....#,,,,,D,,,#....................H",
+   "H...BBBBBBBBBBBB....#,,,,,#,,,#....................H",
+   "H...BBBBBBBBBBBB....#,,,,,#,,,#....................H",
+   "H...................#,,,,,#,,,#....................H",
+   "H...................###########....................H",
+   "H.........................====.....................H",
+   "H.........................====......BBBBBBBBB......H",
+   "H...BBBBBBBBBBBB..........====......BBBBBBBBB......H",
+   "H...BBBBBBBBBBBB..........====......BBBBBBBBB......H",
+   "H...BBBBBBBBBBBB..........====......BBBBBBBBB......H",
+   "H...BBBBBBBBBBBB..........====......BBBBBBBBB......H",
+   "H...BBBBBBBBBBBB..........====......BBBBBBBBB......H",
+   "H...BBBBBBBBBBBB..........====......BBBBBBBBB......H",
+   "H...BBBBBBBBBBBB..........====......BBBBBBBBB......H",
+   "H...BBBBBBBBBBBB..........====.....................H",
+   "H.........................====.....................H",
+   "H.........................====.....................H",
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
   ]
  },
  "environment": {
-  "timeStart": 0.6,
-  "timeEnd": 0.6,
-  "timeLocked": true,
+  "seasonArc": "fallout_nuclear_winter",
+  "season": "fallout_winter",
+  "actName": "Nuclear Fallout Winter",
+  "groundType": "ash_snow",
+  "precipitation": "fallout_rain",
+  "particles": "fallout",
+  "snowCover": 0.75,
+  "wetness": 0.1,
+  "fogColor": "#27303c",
+  "skyColor": "#222933",
+  "sunColor": "#8f8e7c",
+  "ambientColor": "#55574f",
+  "visibilityM": 30,
+  "fogNear": 3.4,
+  "fogFar": 30,
+  "windMs": 9,
+  "atmosphere": "Ash-choked nuclear winter: grey ash falling with snow, sickly dim light, tight fog, short oppressive sightlines.",
+  "environmentPreset": "fallout_winter",
+  "storySeason": "nuclear_winter",
+  "storyPalette": "ashfall blue-grey, near-monochrome; floodlight cones and flare red are the only warm colors",
+  "storyWeather": "fallout_rain",
   "weather": "fallout_rain",
+  "storyWeatherLate": "ashfall",
+  "storyTempC": -10,
   "tempC": -10,
+  "nightTempC": -18,
+  "survivalFocus": [
+   "warmth",
+   "radiation",
+   "filters",
+   "seal",
+   "dread"
+  ],
+  "timeStart": 0.4,
+  "timeEnd": 0.36,
+  "timeLocked": false,
   "blizzard": false,
-  "snowCover": 0.9,
-  "particles": "ash_rain",
-  "fogNear": 4,
-  "fogFar": 26,
-  "palette": "assets/palettes/ayy4.json",
-  "ambientTint": "#8a8f86",
+  "warmthDrainMul": 1.6,
+  "transitions": [
+   {
+    "trigger": "t_ch08_dusk",
+    "time": 0.92
+   },
+   {
+    "trigger": "t_ch08_morning",
+    "time": 0.36,
+    "weather": "ashfall"
+   }
+  ],
+  "mechanics": {
+   "seal": true,
+   "filters": true,
+   "breathPlumes": "living NPCs only"
+  },
+  "seasonNote": "January: fallout rain freezing into ash-snow (cover 0.75), blue-grey near-monochrome; floodlight and flare the only warm colors.",
   "hud": {
-   "temp": true,
+   "hp": true,
+   "hydration": true,
    "hunger": true,
+   "companion": true,
+   "warmth": true,
+   "temp": true,
+   "ammo_military": true,
    "rad": true,
    "filter": true,
    "seal": true
-  },
-  "warmthDrainMul": 1.3,
-  "maxAliveEnemies": 5,
-  "mechanics": {
-   "radOutdoorsMul": 2.5,
-   "sealedZonesBlockRad": true
-  },
-  "transitions": [
-   {
-    "at": "t_ch08_ashfall",
-    "weather": "ashfall",
-    "particles": "ash",
-    "fogFar": 20
-   }
-  ]
+  }
  },
  "locations": [
   {
-   "id": "loc_east_end",
-   "x": 0.0,
-   "z": -24.0,
+   "id": "loc_sparks_yard",
+   "x": -23.0,
+   "z": -171.0,
    "rect": {
     "type": "rect",
-    "x0": -24.0,
-    "z0": -54.0,
-    "x1": 24.0,
+    "x0": -50.0,
+    "z0": -198.0,
+    "x1": 4.0,
+    "z1": -144.0
+   },
+   "safe": false,
+   "name": "Sparks yard"
+  },
+  {
+   "id": "loc_galena_station",
+   "x": 27.0,
+   "z": -171.0,
+   "rect": {
+    "type": "rect",
+    "x0": 4.0,
+    "z0": -198.0,
+    "x1": 50.0,
+    "z1": -144.0
+   },
+   "safe": false,
+   "name": "Galena Station (gate road)"
+  },
+  {
+   "id": "loc_meadows_general",
+   "x": -23.0,
+   "z": -114.0,
+   "rect": {
+    "type": "rect",
+    "x0": -50.0,
+    "z0": -144.0,
+    "x1": 4.0,
+    "z1": -84.0
+   },
+   "safe": false,
+   "name": "Meadows General"
+  },
+  {
+   "id": "loc_sparks_library",
+   "x": 27.0,
+   "z": -114.0,
+   "rect": {
+    "type": "rect",
+    "x0": 4.0,
+    "z0": -144.0,
+    "x1": 50.0,
+    "z1": -84.0
+   },
+   "safe": false,
+   "name": "Sparks library"
+  },
+  {
+   "id": "loc_sparks_block",
+   "x": 0.0,
+   "z": -39.0,
+   "rect": {
+    "type": "rect",
+    "x0": -50.0,
+    "z0": -84.0,
+    "x1": 50.0,
     "z1": 6.0
    },
-   "safe": true
-  },
+   "safe": true,
+   "name": "Sector 4 (home block)"
+  }
+ ],
+ "landmarks": [],
+ "buildings": [
   {
-   "id": "loc_lakehead_memorial",
-   "x": -1.0,
-   "z": -70.0,
-   "rect": {
-    "type": "rect",
-    "x0": -20.0,
-    "z0": -86.0,
-    "x1": 18.0,
-    "z1": -54.0
-   },
-   "safe": false
-  },
-  {
-   "id": "loc_ore_docks",
-   "x": 0.0,
-   "z": -111.0,
+   "id": "b_ch08_depot",
+   "label": "Sparks yard depot (Boone)",
+   "kind": "walled",
+   "cells": [
+    14,
+    20,
+    24,
+    26
+   ],
    "rect": {
     "type": "rect",
     "x0": -24.0,
-    "z0": -134.0,
-    "x1": 24.0,
-    "z1": -88.0
+    "z0": -160.0,
+    "x1": -2.0,
+    "z1": -146.0
    },
-   "safe": false
-  }
- ],
- "landmarks": [
-  {
-   "label": "Home (sealed)",
-   "x": -12.0,
-   "z": -8.0
+   "doors": [
+    [
+     -23.0,
+     -153.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_sparks_yard"
   },
   {
-   "label": "Husk at the car",
-   "x": -1.0,
-   "z": -23.0
+   "id": "b_ch08_gatehouse",
+   "label": "Galena gatehouse",
+   "kind": "walled",
+   "cells": [
+    40,
+    4,
+    48,
+    10
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 28.0,
+    "z0": -192.0,
+    "x1": 46.0,
+    "z1": -178.0
+   },
+   "doors": [
+    [
+     29.0,
+     -185.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_galena_station"
   },
   {
-   "label": "Cistern",
-   "x": 10.0,
-   "z": -24.0
+   "id": "b_ch08_hospital",
+   "label": "Meadows General",
+   "kind": "walled",
+   "cells": [
+    3,
+    31,
+    22,
+    54
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -46.0,
+    "z0": -138.0,
+    "x1": -6.0,
+    "z1": -90.0
+   },
+   "doors": [
+    [
+     -7.0,
+     -107.0
+    ],
+    [
+     -27.0,
+     -91.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_meadows_general",
+   "interior": "wards W/E (north, dark), ER + Ames (south)"
   },
   {
-   "label": "Hospital pharmacy",
-   "x": -13.0,
-   "z": -79.0
+   "id": "b_ch08_library",
+   "label": "Sparks library",
+   "kind": "walled",
+   "cells": [
+    32,
+    31,
+    48,
+    54
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 12.0,
+    "z0": -138.0,
+    "x1": 46.0,
+    "z1": -90.0
+   },
+   "doors": [
+    [
+     13.0,
+     -107.0
+    ],
+    [
+     29.0,
+     -91.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_sparks_library",
+   "interior": "stacks (north, dark), glass atrium greenhouse (south)"
   },
   {
-   "label": "Harbor stores",
-   "x": 7.0,
-   "z": -122.0
+   "id": "b_ch08_shelter",
+   "label": "Shelter: Braith and Carly's house (sealable)",
+   "kind": "walled",
+   "cells": [
+    4,
+    64,
+    16,
+    74
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -44.0,
+    "z0": -72.0,
+    "x1": -18.0,
+    "z1": -50.0
+   },
+   "doors": [
+    [
+     -31.0,
+     -51.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_sparks_block",
+   "interior": "living rooms (north, 10-20 people), front hallway + mail-slot door (south)"
   },
   {
-   "label": "Lake intake",
-   "x": 17.0,
-   "z": -129.0
+   "id": "b_ch08_lolo",
+   "label": "Lolo's clinic",
+   "kind": "walled",
+   "cells": [
+    36,
+    64,
+    46,
+    72
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 20.0,
+    "z0": -72.0,
+    "x1": 42.0,
+    "z1": -54.0
+   },
+   "doors": [
+    [
+     21.0,
+     -63.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_sparks_block"
+  },
+  {
+   "id": "b_ch08_henley",
+   "label": "The Henleys' house (unsealed)",
+   "kind": "walled",
+   "cells": [
+    20,
+    82,
+    30,
+    90
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -12.0,
+    "z0": -36.0,
+    "x1": 10.0,
+    "z1": -18.0
+   },
+   "doors": [
+    [
+     -1.0,
+     -35.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_sparks_block",
+   "interior": "front room (west), kitchen (east; Dale)"
+  },
+  {
+   "id": "m_ch08_w_houses",
+   "label": "Neighbor houses",
+   "kind": "mass",
+   "cells": [
+    4,
+    80,
+    15,
+    88
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -44.0,
+    "z0": -40.0,
+    "x1": -20.0,
+    "z1": -22.0
+   },
+   "doors": [],
+   "location": "loc_sparks_block",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  },
+  {
+   "id": "m_ch08_sw_houses",
+   "label": "Neighbor houses",
+   "kind": "mass",
+   "cells": [
+    4,
+    93,
+    15,
+    100
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -44.0,
+    "z0": -14.0,
+    "x1": -20.0,
+    "z1": 2.0
+   },
+   "doors": [],
+   "location": "loc_sparks_block",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  },
+  {
+   "id": "m_ch08_cistern",
+   "label": "Pruitt cistern house",
+   "kind": "mass",
+   "cells": [
+    36,
+    92,
+    44,
+    99
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 20.0,
+    "z0": -16.0,
+    "x1": 38.0,
+    "z1": 0.0
+   },
+   "doors": [],
+   "location": "loc_sparks_block",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
   }
  ],
  "paths": {
   "critical": [
    [
-    -12.0,
-    -7.0
+    -33.0,
+    -67.0
    ],
    [
-    -7.0,
-    -9.0
-   ],
-   [
-    -2.0,
-    -15.0
-   ],
-   [
-    -2.0,
-    -35.0
-   ],
-   [
-    -2.0,
+    -31.0,
     -55.0
    ],
    [
-    -1.0,
-    -57.0
-   ],
-   [
-    -1.0,
-    -69.0
-   ],
-   [
-    -9.0,
-    -72.0
+    -31.0,
+    -47.0
    ],
    [
     -11.0,
-    -75.0
-   ],
-   [
-    -13.0,
-    -81.0
-   ],
-   [
-    7.0,
-    -75.0
-   ],
-   [
-    9.0,
-    -81.0
-   ],
-   [
-    17.0,
-    -71.0
-   ],
-   [
-    21.0,
-    -71.0
-   ],
-   [
-    21.0,
-    -87.0
-   ],
-   [
-    7.0,
-    -91.0
-   ],
-   [
-    7.0,
-    -115.0
+    -77.0
    ],
    [
     3.0,
-    -125.0
+    -77.0
    ],
    [
-    7.0,
-    -115.0
+    3.0,
+    -107.0
    ],
    [
-    -2.0,
-    -89.0
+    -5.0,
+    -107.0
    ],
    [
-    -2.0,
-    -35.0
+    -27.0,
+    -105.0
    ],
    [
-    -7.0,
-    -9.0
+    -5.0,
+    -107.0
    ],
    [
-    -12.0,
-    -7.0
+    3.0,
+    -107.0
+   ],
+   [
+    11.0,
+    -107.0
+   ],
+   [
+    29.0,
+    -101.0
+   ],
+   [
+    11.0,
+    -107.0
+   ],
+   [
+    3.0,
+    -139.0
+   ],
+   [
+    3.0,
+    -153.0
+   ],
+   [
+    -21.0,
+    -153.0
+   ],
+   [
+    3.0,
+    -153.0
+   ],
+   [
+    3.0,
+    -77.0
+   ],
+   [
+    19.0,
+    -63.0
+   ],
+   [
+    29.0,
+    -63.0
+   ],
+   [
+    3.0,
+    -77.0
+   ],
+   [
+    -31.0,
+    -47.0
+   ],
+   [
+    -31.0,
+    -63.0
+   ],
+   [
+    -31.0,
+    -47.0
+   ],
+   [
+    -1.0,
+    -39.0
+   ],
+   [
+    -1.0,
+    -31.0
+   ],
+   [
+    3.0,
+    -27.0
    ]
   ],
   "optional": [
    {
-    "id": "b_cistern",
-    "label": "Deshawn's cistern",
+    "id": "b_ch08_galena",
+    "label": "Galena gatehouse (control cards)",
     "points": [
      [
-      -2.0,
-      -25.0
+      3.0,
+      -179.0
      ],
      [
-      5.0,
-      -25.0
+      25.0,
+      -185.0
      ],
      [
-      10.0,
-      -24.0
-     ]
-    ]
-   },
-   {
-    "id": "b_intake",
-    "label": "Long trip: lake intake",
-    "points": [
-     [
-      7.0,
-      -111.0
-     ],
-     [
-      17.0,
-      -111.0
-     ],
-     [
-      17.0,
-      -126.0
-     ]
-    ]
-   },
-   {
-    "id": "b_clinic",
-    "label": "Marguerite's list",
-    "points": [
-     [
-      -2.0,
-      -9.0
-     ],
-     [
-      5.0,
-      -9.0
-     ],
-     [
-      13.0,
-      -11.0
+      37.0,
+      -185.0
      ]
     ]
    }
@@ -460,44 +760,67 @@
   "player": [
    {
     "id": "spawn_default",
-    "x": -12.0,
-    "z": -7.0,
-    "rotY": -1.571
+    "x": -33.0,
+    "z": -67.0,
+    "rotY": 3.142
    }
   ],
   "npcs": [
    {
-    "id": "npc_theo",
-    "npc": "theo",
-    "x": -14.0,
-    "z": -4.0,
+    "id": "npc_wraith",
+    "npc": "wraith",
+    "x": -29.0,
+    "z": -65.0,
     "rotY": 0.0,
-    "behavior": "rest",
-    "label": "Theo (infected foot)"
-   },
-   {
-    "id": "npc_marguerite",
-    "npc": "marguerite",
-    "x": 9.0,
-    "z": -11.0,
-    "rotY": 0.0,
-    "behavior": "idle",
-    "dialogue": "ch08_marguerite_list",
+    "behavior": "companion_follow",
     "when": [
      {
-      "flag": "marguerite_alive",
-      "ne": false
+      "flag": "wraith_alive",
+      "eq": true
+     }
+    ],
+    "label": "Wraith",
+    "companion": true
+   },
+   {
+    "id": "npc_carly",
+    "npc": "carly",
+    "x": -37.0,
+    "z": -67.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch08_mask"
+   },
+   {
+    "id": "npc_reyne",
+    "npc": "reyne",
+    "x": -23.0,
+    "z": -67.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "reyne_with_you",
+      "eq": true
      }
     ]
    },
    {
-    "id": "npc_deshawn",
-    "npc": "deshawn",
-    "x": 8.0,
-    "z": -23.0,
+    "id": "npc_lolo",
+    "npc": "lolo",
+    "x": 35.0,
+    "z": -67.0,
     "rotY": 0.0,
     "behavior": "idle",
-    "dialogue": "ch08_deshawn",
+    "dialogue": "ch08_lolo_list"
+   },
+   {
+    "id": "npc_deshawn",
+    "npc": "deshawn",
+    "x": 29.0,
+    "z": -19.0,
+    "rotY": 0.0,
+    "behavior": "idle",
     "when": [
      {
       "flag": "pruitt_alive",
@@ -506,766 +829,1157 @@
     ]
    },
    {
-    "id": "npc_stranger_mother",
-    "npc": "stranger_mother",
-    "x": -5.0,
-    "z": -9.0,
+    "id": "npc_ames",
+    "npc": "ames",
+    "x": -35.0,
+    "z": -105.0,
     "rotY": 0.0,
     "behavior": "idle",
-    "dialogue": "ch08_door",
+    "dialogue": "ch08_ames_hand"
+   },
+   {
+    "id": "npc_stranger_mother",
+    "npc": "stranger_mother",
+    "x": -31.0,
+    "z": -45.0,
+    "rotY": 0.0,
+    "behavior": "idle",
     "when": [
      {
-      "flag": "ch08_door_knock",
+      "flag": "ch08_night",
       "eq": true
      }
     ],
-    "label": "Strangers at the door"
+    "label": "Stranger at the door (Sun Valley)"
    },
    {
-    "id": "npc_ames",
-    "npc": "ames",
-    "x": 9.0,
-    "z": -81.0,
+    "id": "npc_trader_boone",
+    "npc": "trader_boone",
+    "x": -11.0,
+    "z": -153.0,
     "rotY": 0.0,
-    "behavior": "idle",
-    "dialogue": "ch08_ames_foot"
+    "behavior": "trade",
+    "label": "Boone's back door (yard depot)",
+    "trader": {
+     "stall": "Boone's back door (yard depot)",
+     "repFlag": "trader_boone_rep",
+     "stockFrom": "story/npcs.json traders[].stock_by_act"
+    }
    },
    {
-    "id": "npc_bea",
-    "npc": "bea",
-    "x": 7.0,
-    "z": -123.0,
+    "id": "npc_trader_annie",
+    "npc": "trader_annie",
+    "x": 37.0,
+    "z": -99.0,
+    "rotY": 0.0,
+    "behavior": "trade",
+    "label": "Annie's seed library (atrium)",
+    "trader": {
+     "stall": "Annie's seed library (atrium)",
+     "repFlag": "trader_annie_rep",
+     "stockFrom": "story/npcs.json traders[].stock_by_act"
+    }
+   },
+   {
+    "id": "npc_trader_mo",
+    "npc": "trader_mo",
+    "x": -15.0,
+    "z": -165.0,
+    "rotY": 0.0,
+    "behavior": "trade",
+    "label": "Mo's sled (yard; Mustang is cut off by the ash)",
+    "trader": {
+     "stall": "Mo's sled (yard; Mustang is cut off by the ash)",
+     "repFlag": "trader_mo_rep",
+     "stockFrom": "story/npcs.json traders[].stock_by_act"
+    },
+    "relocatedFrom": "loc_mustang_truckstop"
+   },
+   {
+    "id": "npc_amb_darlene",
+    "npc": "amb_darlene",
+    "x": -5.0,
+    "z": -191.0,
     "rotY": 0.0,
     "behavior": "idle"
    },
    {
-    "id": "npc_lou",
-    "npc": "lou",
-    "x": 11.0,
-    "z": -121.0,
+    "id": "npc_amb_brother_amos",
+    "npc": "amb_brother_amos",
+    "x": 17.0,
+    "z": -83.0,
     "rotY": 0.0,
-    "behavior": "idle",
-    "when": [
-     {
-      "flag": "ch07_location",
-      "eq": "city"
-     }
-    ]
+    "behavior": "preach"
    },
    {
-    "id": "npc_pete_lund",
-    "npc": "pete_lund",
-    "x": 3.0,
+    "id": "npc_amb_ruth",
+    "npc": "amb_ruth",
+    "x": -39.0,
     "z": -101.0,
     "rotY": 0.0,
+    "behavior": "idle"
+   },
+   {
+    "id": "npc_amb_bike_kids",
+    "npc": "amb_bike_kids",
+    "x": -25.0,
+    "z": -55.0,
+    "rotY": 0.0,
     "behavior": "idle",
-    "dialogue": "ch08_husk",
-    "when": [
-     {
-      "flag": "lunds_stayed",
-      "eq": false
-     }
-    ],
-    "label": "Pete Lund (husk)"
+    "label": "The Bike Kids (sheltering)"
+   },
+   {
+    "id": "npc_amb_night_owl",
+    "npc": "amb_night_owl",
+    "x": -21.0,
+    "z": -67.0,
+    "rotY": 0.0,
+    "behavior": "radio_voice",
+    "remote": true
+   },
+   {
+    "id": "npc_extra_shelter_01",
+    "npc": "extra_shelter_01",
+    "x": -45.0,
+    "z": -65.0,
+    "rotY": 0.0,
+    "behavior": "huddle",
+    "label": "Sheltering neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_shelter_02",
+    "npc": "extra_shelter_02",
+    "x": -31.0,
+    "z": -63.0,
+    "rotY": 0.0,
+    "behavior": "huddle",
+    "label": "Sheltering neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_shelter_03",
+    "npc": "extra_shelter_03",
+    "x": -25.0,
+    "z": -63.0,
+    "rotY": 0.0,
+    "behavior": "huddle",
+    "label": "Sheltering neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_shelter_04",
+    "npc": "extra_shelter_04",
+    "x": -41.0,
+    "z": -55.0,
+    "rotY": 0.0,
+    "behavior": "huddle",
+    "label": "Sheltering neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_shelter_05",
+    "npc": "extra_shelter_05",
+    "x": -29.0,
+    "z": -55.0,
+    "rotY": 0.0,
+    "behavior": "huddle",
+    "label": "Sheltering neighbor",
+    "crowd": true
    }
   ],
   "enemies": [
    {
     "id": "en_01",
-    "type": "husk",
-    "x": 1.0,
-    "z": -21.0,
-    "group": "g_car_husk",
-    "tier": 3,
-    "behavior": "rush_heat",
-    "hostile": "conditional",
-    "activate": "load",
-    "hostileWhen": [
-     {
-      "flag": "ch08_husk_talked_down",
-      "ne": true
-     }
-    ],
-    "note": "Talk-down: holster, approach slowly, offer iodide_tablets + wool_blanket, kindness>=4."
+    "type": "assimilated_human",
+    "x": 5.0,
+    "z": -29.0,
+    "group": "g_ch08_henley",
+    "tier": 1,
+    "behavior": "dormant_ambush",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch08_hollow_first",
+    "rotY": 1.571,
+    "note": "Dale Henley, facing the kitchen wall. Flashlight only.",
+    "ambush": true,
+    "lowVisibilityTrigger": true,
+    "voiceLine": "Morning, neighbor.",
+    "noBreathPlume": true
    },
    {
     "id": "en_02",
-    "type": "husk",
-    "x": -3.0,
-    "z": -43.0,
-    "group": "g_street_husks",
-    "tier": 3,
-    "behavior": "rush_heat",
+    "type": "assimilated_human",
+    "x": -31.0,
+    "z": -45.0,
+    "group": "g_ch08_mimic",
+    "tier": 1,
+    "behavior": "dormant_ambush",
     "hostile": "always",
-    "activate": "load"
+    "activate": "trigger",
+    "storyEncounter": "enc_ch08_door_mimic",
+    "when": [
+     {
+      "flag": "mimic_let_in",
+      "eq": true
+     }
+    ],
+    "note": "Only if the door is opened to the midnight knock; close quarters in the hallway, SEAL drops while open.",
+    "ambush": true,
+    "lowVisibilityTrigger": true,
+    "voiceLine": "Let me in. I have filters.",
+    "noBreathPlume": true
    },
    {
     "id": "en_03",
     "type": "husk",
-    "x": -1.0,
-    "z": -53.0,
-    "group": "g_street_husks",
-    "tier": 3,
-    "behavior": "rush_heat",
-    "hostile": "always",
-    "activate": "load"
+    "x": -7.0,
+    "z": -67.0,
+    "group": "g_ch08_husk_truck",
+    "tier": 1,
+    "behavior": "drawn_to_heat",
+    "hostile": "on_provoke",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch08_husk",
+    "note": "A sick man at the truck in the fallout rain. Not a monster.",
+    "talkDown": true
    },
    {
     "id": "en_04",
     "type": "husk",
-    "x": 15.0,
-    "z": -53.0,
-    "group": "g_street_husks",
-    "tier": 3,
-    "behavior": "rush_heat",
-    "hostile": "always",
-    "activate": "load"
+    "x": -39.0,
+    "z": -131.0,
+    "group": "g_ch08_wards",
+    "tier": 1,
+    "behavior": "erratic_wander",
+    "hostile": "on_provoke",
+    "activate": "load",
+    "note": "Freezing patients in the dark wards.",
+    "ambush": true,
+    "lowVisibilityTrigger": true
    },
    {
     "id": "en_05",
-    "type": "feral_dog",
-    "x": -19.0,
-    "z": -47.0,
-    "group": "g_dogs",
-    "tier": 3,
-    "behavior": "pack",
-    "hostile": "always",
-    "activate": "trigger"
+    "type": "husk",
+    "x": -17.0,
+    "z": -123.0,
+    "group": "g_ch08_wards",
+    "tier": 1,
+    "behavior": "erratic_wander",
+    "hostile": "on_provoke",
+    "activate": "load",
+    "note": "Freezing patients in the dark wards.",
+    "ambush": true,
+    "lowVisibilityTrigger": true
    },
    {
     "id": "en_06",
-    "type": "feral_dog",
-    "x": -15.0,
-    "z": -41.0,
-    "group": "g_dogs",
-    "tier": 3,
-    "behavior": "pack",
-    "hostile": "always",
-    "activate": "trigger"
+    "type": "husk",
+    "x": -33.0,
+    "z": -121.0,
+    "group": "g_ch08_wards",
+    "tier": 1,
+    "behavior": "erratic_wander",
+    "hostile": "on_provoke",
+    "activate": "load",
+    "note": "Freezing patients in the dark wards.",
+    "ambush": true,
+    "lowVisibilityTrigger": true
    },
    {
     "id": "en_07",
-    "type": "feral_dog",
-    "x": -21.0,
-    "z": -39.0,
-    "group": "g_dogs",
-    "tier": 3,
-    "behavior": "pack",
+    "type": "looter",
+    "x": -41.0,
+    "z": -99.0,
+    "group": "g_ch08_er",
+    "tier": 1,
+    "behavior": "loot_and_flee",
     "hostile": "always",
-    "activate": "trigger"
+    "activate": "load",
+    "note": "Stripping the ER for drugs."
    },
    {
     "id": "en_08",
-    "type": "feral_dog",
-    "x": -17.0,
-    "z": -45.0,
-    "group": "g_dogs",
-    "tier": 3,
-    "behavior": "pack",
+    "type": "looter",
+    "x": -15.0,
+    "z": -111.0,
+    "group": "g_ch08_er",
+    "tier": 1,
+    "behavior": "loot_and_flee",
     "hostile": "always",
-    "activate": "trigger"
+    "activate": "load",
+    "note": "Stripping the ER for drugs."
    },
    {
     "id": "en_09",
-    "type": "feral_dog",
-    "x": -13.0,
-    "z": -47.0,
-    "group": "g_dogs",
-    "tier": 3,
-    "behavior": "pack",
+    "type": "looter",
+    "x": -21.0,
+    "z": -95.0,
+    "group": "g_ch08_er",
+    "tier": 1,
+    "behavior": "loot_and_flee",
     "hostile": "always",
-    "activate": "trigger"
+    "activate": "load",
+    "note": "Stripping the ER for drugs."
    },
    {
     "id": "en_10",
-    "type": "looter",
-    "x": -13.0,
-    "z": -81.0,
-    "group": "g_hosp_looters",
-    "tier": 3,
-    "behavior": "guard",
-    "hostile": "always",
-    "activate": "trigger"
+    "type": "husk",
+    "x": 15.0,
+    "z": -7.0,
+    "group": "g_ch08_ash_husks",
+    "tier": 1,
+    "behavior": "erratic_wander",
+    "hostile": "on_provoke",
+    "activate": "load",
+    "note": "Husks walking in the ash; Tallmen follow."
    },
    {
     "id": "en_11",
-    "type": "looter",
-    "x": -11.0,
-    "z": -77.0,
-    "group": "g_hosp_looters",
-    "tier": 3,
-    "behavior": "guard",
-    "hostile": "always",
-    "activate": "trigger"
+    "type": "husk",
+    "x": 43.0,
+    "z": -29.0,
+    "group": "g_ch08_ash_husks",
+    "tier": 1,
+    "behavior": "erratic_wander",
+    "hostile": "on_provoke",
+    "activate": "load",
+    "note": "Husks walking in the ash; Tallmen follow."
    },
    {
     "id": "en_12",
-    "type": "looter",
-    "x": -15.0,
-    "z": -78.0,
-    "group": "g_hosp_looters",
-    "tier": 3,
-    "behavior": "guard",
+    "type": "tallman",
+    "x": 45.0,
+    "z": -9.0,
+    "group": "g_ch08_tallmen",
+    "tier": 1,
+    "behavior": "follow_husks",
     "hostile": "always",
-    "activate": "trigger"
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "ch08_night",
+      "eq": true
+     }
+    ],
+    "note": "A pair following the husks; visits unsealed houses at night.",
+    "heatSeek": true
    },
    {
     "id": "en_13",
-    "type": "husk",
-    "x": 11.0,
-    "z": -65.0,
-    "group": "g_hosp_husk",
-    "tier": 3,
-    "behavior": "wander",
+    "type": "tallman",
+    "x": 43.0,
+    "z": 1.0,
+    "group": "g_ch08_tallmen",
+    "tier": 1,
+    "behavior": "follow_husks",
     "hostile": "always",
-    "activate": "load"
+    "activate": "trigger",
+    "when": [
+     {
+      "flag": "ch08_night",
+      "eq": true
+     }
+    ],
+    "note": "A pair following the husks; visits unsealed houses at night.",
+    "heatSeek": true
    },
    {
     "id": "en_14",
-    "type": "husk",
-    "x": 1.0,
-    "z": -95.0,
-    "group": "g_dock_husk",
-    "tier": 3,
-    "behavior": "rush_heat",
+    "type": "assimilated_animal",
+    "x": 23.0,
+    "z": -127.0,
+    "group": "g_ch08_stacks",
+    "tier": 1,
+    "behavior": "dormant_ambush",
     "hostile": "always",
-    "activate": "load"
+    "activate": "load",
+    "note": "Assimilated dogs in the dark stacks; silent.",
+    "ambush": true,
+    "lowVisibilityTrigger": true,
+    "silent": true,
+    "noBreathPlume": true
    },
    {
     "id": "en_15",
-    "type": "remnant_patrol",
-    "x": -7.0,
-    "z": -107.0,
-    "group": "g_elevator_guard",
-    "tier": 4,
-    "behavior": "guard",
+    "type": "assimilated_animal",
+    "x": 37.0,
+    "z": -119.0,
+    "group": "g_ch08_stacks",
+    "tier": 1,
+    "behavior": "dormant_ambush",
     "hostile": "always",
     "activate": "load",
-    "when": [
-     {
-      "flag": "bridge_choice",
-      "eq": "held"
-     }
-    ]
+    "note": "Assimilated dogs in the dark stacks; silent.",
+    "ambush": true,
+    "lowVisibilityTrigger": true,
+    "silent": true,
+    "noBreathPlume": true
    },
    {
     "id": "en_16",
     "type": "remnant_patrol",
-    "x": -15.0,
-    "z": -105.0,
-    "group": "g_elevator_guard",
-    "tier": 4,
-    "behavior": "guard",
+    "x": -41.0,
+    "z": -191.0,
+    "group": "g_ch08_yard",
+    "tier": 1,
+    "behavior": "patrol",
     "hostile": "always",
     "activate": "load",
+    "patrol": [
+     [
+      -41.0,
+      -191.0
+     ],
+     [
+      -35.0,
+      -191.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
     "when": [
      {
       "flag": "bridge_choice",
-      "eq": "held"
+      "eq": "open"
      }
-    ]
+    ],
+    "note": "Remnant base at the yard (only if the trench was left open)."
    },
    {
     "id": "en_17",
     "type": "remnant_patrol",
-    "x": -9.0,
-    "z": -97.0,
-    "group": "g_elevator_guard",
-    "tier": 4,
-    "behavior": "guard",
+    "x": -23.0,
+    "z": -177.0,
+    "group": "g_ch08_yard",
+    "tier": 1,
+    "behavior": "patrol",
     "hostile": "always",
     "activate": "load",
+    "patrol": [
+     [
+      -23.0,
+      -177.0
+     ],
+     [
+      -17.0,
+      -177.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
     "when": [
      {
       "flag": "bridge_choice",
-      "eq": "held"
+      "eq": "open"
      }
-    ]
+    ],
+    "note": "Remnant base at the yard (only if the trench was left open)."
    },
    {
     "id": "en_18",
     "type": "remnant_patrol",
-    "x": -19.0,
-    "z": -99.0,
-    "group": "g_elevator_guard",
-    "tier": 4,
-    "behavior": "guard",
+    "x": -7.0,
+    "z": -189.0,
+    "group": "g_ch08_yard",
+    "tier": 1,
+    "behavior": "patrol",
     "hostile": "always",
     "activate": "load",
+    "patrol": [
+     [
+      -7.0,
+      -189.0
+     ],
+     [
+      -1.0,
+      -189.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
     "when": [
      {
       "flag": "bridge_choice",
-      "eq": "held"
+      "eq": "open"
      }
-    ]
+    ],
+    "note": "Remnant base at the yard (only if the trench was left open)."
+   },
+   {
+    "id": "en_19",
+    "type": "remnant_patrol",
+    "x": -31.0,
+    "z": -165.0,
+    "group": "g_ch08_yard",
+    "tier": 1,
+    "behavior": "patrol",
+    "hostile": "always",
+    "activate": "load",
+    "patrol": [
+     [
+      -31.0,
+      -165.0
+     ],
+     [
+      -25.0,
+      -165.0
+     ]
+    ],
+    "patrolWaitSec": 1.2,
+    "when": [
+     {
+      "flag": "bridge_choice",
+      "eq": "open"
+     }
+    ],
+    "note": "Remnant base at the yard (only if the trench was left open)."
+   },
+   {
+    "id": "en_20",
+    "type": "feral_dog",
+    "x": 15.0,
+    "z": -171.0,
+    "group": "g_ch08_dogs_w1",
+    "tier": 1,
+    "behavior": "pack",
+    "hostile": "always",
+    "activate": "load"
+   },
+   {
+    "id": "en_21",
+    "type": "feral_dog",
+    "x": 25.0,
+    "z": -159.0,
+    "group": "g_ch08_dogs_w1",
+    "tier": 1,
+    "behavior": "pack",
+    "hostile": "always",
+    "activate": "load"
+   },
+   {
+    "id": "en_22",
+    "type": "feral_dog",
+    "x": 39.0,
+    "z": -167.0,
+    "group": "g_ch08_dogs_w1",
+    "tier": 1,
+    "behavior": "pack",
+    "hostile": "always",
+    "activate": "load"
+   },
+   {
+    "id": "en_23",
+    "type": "feral_dog",
+    "x": 17.0,
+    "z": -151.0,
+    "group": "g_ch08_dogs_w2",
+    "tier": 1,
+    "behavior": "pack",
+    "hostile": "always",
+    "activate": "load"
+   },
+   {
+    "id": "en_24",
+    "type": "feral_dog",
+    "x": 43.0,
+    "z": -151.0,
+    "group": "g_ch08_dogs_w2",
+    "tier": 1,
+    "behavior": "pack",
+    "hostile": "always",
+    "activate": "load"
    }
   ],
   "loot": [
    {
     "id": "loot_01",
-    "x": -15.0,
-    "z": -11.0,
-    "r": 1.6,
-    "label": "Seal kit shelf",
-    "container": "locker",
-    "location": "loc_east_end"
+    "x": -11.0,
+    "z": -73.0,
+    "r": 3.1,
+    "label": "Braith's truck",
+    "container": "car_trunk",
+    "propRef": "prop_01",
+    "render": "prop",
+    "location": "loc_sparks_block"
    },
    {
     "id": "loot_02",
-    "x": 13.0,
-    "z": -13.0,
-    "r": 1.6,
-    "label": "Clinic drawer",
-    "container": "medicine_cabinet",
-    "location": "loc_east_end"
+    "x": 15.0,
+    "z": -45.0,
+    "r": 3.1,
+    "label": "Ash-buried sedan",
+    "container": "car_trunk",
+    "propRef": "prop_02",
+    "render": "prop",
+    "location": "loc_sparks_block"
    },
    {
     "id": "loot_03",
-    "x": -13.0,
-    "z": -81.0,
-    "r": 1.6,
-    "label": "Hospital pharmacy",
-    "container": "medicine_cabinet",
-    "guaranteed": [
-     {
-      "item": "iodide_tablets",
-      "n": 3
-     },
-     {
-      "item": "antibiotics",
-      "n": 1
-     },
-     {
-      "item": "mask_filter",
-      "n": 2
-     }
-    ],
-    "location": "loc_lakehead_memorial"
+    "x": -43.0,
+    "z": -163.0,
+    "r": 2.2,
+    "label": "Yard dumpster",
+    "container": "dumpster",
+    "propRef": "prop_03",
+    "render": "prop",
+    "location": "loc_sparks_yard"
    },
    {
     "id": "loot_04",
-    "x": -3.0,
-    "z": -81.0,
+    "x": -39.0,
+    "z": -69.0,
     "r": 1.6,
-    "label": "Ward cart",
-    "container": "locker",
-    "location": "loc_lakehead_memorial"
+    "label": "Shelter kitchen",
+    "container": "kitchen_cabinet",
+    "location": "loc_sparks_block"
    },
    {
     "id": "loot_05",
-    "x": 13.0,
-    "z": -61.0,
+    "x": -23.0,
+    "z": -69.0,
     "r": 1.6,
-    "label": "Supply room",
-    "container": "locker",
-    "location": "loc_lakehead_memorial"
+    "label": "Shelter wardrobe",
+    "container": "wardrobe",
+    "location": "loc_sparks_block"
    },
    {
     "id": "loot_06",
-    "x": 3.0,
-    "z": -125.0,
+    "x": 37.0,
+    "z": -57.0,
     "r": 1.6,
-    "label": "Harbor stores",
-    "container": "supply_cache",
-    "guaranteed": [
-     {
-      "item": "wool_blanket",
-      "n": 1
-     },
-     {
-      "item": "dried_fish",
-      "n": 1
-     }
-    ],
-    "location": "loc_ore_docks"
+    "label": "Clinic cabinet",
+    "container": "medicine_cabinet",
+    "location": "loc_sparks_block"
    },
    {
     "id": "loot_07",
-    "x": -19.0,
-    "z": -41.0,
+    "x": -7.0,
+    "z": -23.0,
     "r": 1.6,
-    "label": "Kennel shed",
-    "container": "toolbox",
-    "location": "loc_east_end"
+    "label": "Henley front room wardrobe",
+    "container": "wardrobe",
+    "location": "loc_sparks_block"
    },
    {
     "id": "loot_08",
     "x": -11.0,
-    "z": -95.0,
+    "z": -99.0,
     "r": 1.6,
-    "label": "Elevator office",
-    "container": "military_crate",
-    "when": [
+    "label": "ER drug cabinet",
+    "container": "medicine_cabinet",
+    "location": "loc_meadows_general",
+    "guaranteed": [
      {
-      "flag": "bridge_choice",
-      "eq": "held"
+      "item": "iodide_tablets",
+      "n": 2
      }
-    ],
-    "location": "loc_ore_docks"
+    ]
    },
    {
     "id": "loot_09",
-    "x": 7.0,
-    "z": -3.0,
+    "x": -43.0,
+    "z": -125.0,
     "r": 1.6,
-    "label": "Kitchen cabinet (filler)",
-    "container": "kitchen_cabinet",
-    "location": "loc_east_end",
-    "filler": true
+    "label": "Ward cabinet",
+    "container": "medicine_cabinet",
+    "location": "loc_meadows_general",
+    "guaranteed": [
+     {
+      "item": "mask_filter",
+      "n": 2
+     }
+    ]
    },
    {
     "id": "loot_10",
-    "x": 13.0,
-    "z": -27.0,
+    "x": 17.0,
+    "z": -103.0,
     "r": 1.6,
-    "label": "Kitchen cabinet (filler)",
+    "label": "Atrium kitchen",
     "container": "kitchen_cabinet",
-    "location": "loc_east_end",
-    "filler": true
+    "location": "loc_sparks_library",
+    "guaranteed": [
+     {
+      "item": "wool_blanket",
+      "n": 1
+     }
+    ]
    },
    {
     "id": "loot_11",
-    "x": 13.0,
-    "z": -5.0,
+    "x": 41.0,
+    "z": -181.0,
     "r": 1.6,
-    "label": "Closet / wardrobe (filler)",
-    "container": "wardrobe",
-    "location": "loc_east_end",
-    "filler": true
+    "label": "Gatehouse locker",
+    "container": "locker",
+    "location": "loc_galena_station",
+    "guaranteed": [
+     {
+      "item": "bandage",
+      "n": 2
+     }
+    ]
    },
    {
     "id": "loot_12",
-    "x": -9.0,
-    "z": -3.0,
+    "x": 7.0,
+    "z": -31.0,
     "r": 1.6,
-    "label": "Closet / wardrobe (filler)",
-    "container": "wardrobe",
-    "location": "loc_east_end",
+    "label": "Kitchen cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_sparks_block",
     "filler": true
    },
    {
     "id": "loot_13",
-    "x": 3.0,
-    "z": -45.0,
+    "x": -49.0,
+    "z": 5.0,
     "r": 1.6,
-    "label": "Frozen body (filler)",
+    "label": "Frozen body",
     "container": "corpse",
-    "location": "loc_east_end",
+    "location": "loc_sparks_block",
     "filler": true
    },
    {
     "id": "loot_14",
-    "x": -7.0,
-    "z": -31.0,
+    "x": 7.0,
+    "z": 5.0,
     "r": 1.6,
-    "label": "Frozen body (filler)",
+    "label": "Frozen body",
     "container": "corpse",
-    "location": "loc_east_end",
+    "location": "loc_sparks_block",
     "filler": true
    },
    {
     "id": "loot_15",
-    "x": 23.0,
-    "z": -51.0,
+    "x": 49.0,
+    "z": 5.0,
     "r": 1.6,
-    "label": "Woodpile / pallets / broken furniture (filler)",
+    "label": "Woodpile / pallets / broken furniture",
     "container": "woodpile",
-    "location": "loc_east_end",
+    "location": "loc_sparks_block",
     "filler": true
    },
    {
     "id": "loot_16",
-    "x": 23.0,
-    "z": 5.0,
+    "x": -21.0,
+    "z": 3.0,
     "r": 1.6,
-    "label": "Woodpile / pallets / broken furniture (filler)",
+    "label": "Woodpile / pallets / broken furniture",
     "container": "woodpile",
-    "location": "loc_east_end",
+    "location": "loc_sparks_block",
     "filler": true
    },
    {
     "id": "loot_17",
-    "x": -17.0,
-    "z": -61.0,
+    "x": 23.0,
+    "z": -59.0,
     "r": 1.6,
-    "label": "Medicine cabinet (filler)",
-    "container": "medicine_cabinet",
-    "location": "loc_lakehead_memorial",
+    "label": "Locker",
+    "container": "locker",
+    "location": "loc_sparks_block",
     "filler": true
    },
    {
     "id": "loot_18",
-    "x": -3.0,
-    "z": -59.0,
+    "x": 25.0,
+    "z": -69.0,
     "r": 1.6,
-    "label": "Medicine cabinet (filler)",
-    "container": "medicine_cabinet",
-    "location": "loc_lakehead_memorial",
+    "label": "Gun safe / prepper locker",
+    "container": "gun_safe",
+    "location": "loc_sparks_block",
     "filler": true
    },
    {
     "id": "loot_19",
-    "x": 3.0,
-    "z": -71.0,
+    "x": -15.0,
+    "z": -127.0,
     "r": 1.6,
-    "label": "Medicine cabinet (filler)",
+    "label": "Medicine cabinet",
     "container": "medicine_cabinet",
-    "location": "loc_lakehead_memorial",
-    "filler": true
+    "location": "loc_meadows_general",
+    "filler": true,
+    "guaranteed": [
+     {
+      "item": "antibiotics",
+      "n": 1
+     }
+    ]
    },
    {
     "id": "loot_20",
-    "x": -15.0,
-    "z": -71.0,
+    "x": -29.0,
+    "z": -135.0,
     "r": 1.6,
-    "label": "Medicine cabinet (filler)",
+    "label": "Medicine cabinet",
     "container": "medicine_cabinet",
-    "location": "loc_lakehead_memorial",
-    "filler": true
+    "location": "loc_meadows_general",
+    "filler": true,
+    "guaranteed": [
+     {
+      "item": "med_kit",
+      "n": 1
+     }
+    ]
    },
    {
     "id": "loot_21",
-    "x": 15.0,
-    "z": -71.0,
+    "x": -17.0,
+    "z": -113.0,
     "r": 1.6,
-    "label": "Locker (filler)",
-    "container": "locker",
-    "location": "loc_lakehead_memorial",
+    "label": "Medicine cabinet",
+    "container": "medicine_cabinet",
+    "location": "loc_meadows_general",
     "filler": true
    },
    {
     "id": "loot_22",
-    "x": -7.0,
-    "z": -67.0,
+    "x": -29.0,
+    "z": -121.0,
     "r": 1.6,
-    "label": "Kitchen cabinet (filler)",
-    "container": "kitchen_cabinet",
-    "location": "loc_lakehead_memorial",
+    "label": "Locker",
+    "container": "locker",
+    "location": "loc_meadows_general",
     "filler": true
    },
    {
     "id": "loot_23",
-    "x": 5.0,
-    "z": -55.0,
+    "x": -23.0,
+    "z": -93.0,
     "r": 1.6,
-    "label": "Military crate (filler)",
-    "container": "military_crate",
-    "location": "loc_lakehead_memorial",
+    "label": "Locker",
+    "container": "locker",
+    "location": "loc_meadows_general",
     "filler": true
    },
    {
     "id": "loot_24",
-    "x": 1.0,
-    "z": -117.0,
+    "x": -43.0,
+    "z": -113.0,
     "r": 1.6,
-    "label": "Kitchen cabinet (filler)",
-    "container": "kitchen_cabinet",
-    "location": "loc_ore_docks",
+    "label": "Locker",
+    "container": "locker",
+    "location": "loc_meadows_general",
     "filler": true
    },
    {
     "id": "loot_25",
-    "x": -23.0,
-    "z": -133.0,
+    "x": -41.0,
+    "z": -135.0,
     "r": 1.6,
-    "label": "Frozen body (filler)",
-    "container": "corpse",
-    "location": "loc_ore_docks",
+    "label": "Kitchen cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_meadows_general",
     "filler": true
    },
    {
     "id": "loot_26",
-    "x": -23.0,
-    "z": -109.0,
+    "x": 3.0,
+    "z": -137.0,
     "r": 1.6,
-    "label": "Frozen body (filler)",
-    "container": "corpse",
-    "location": "loc_ore_docks",
+    "label": "Military crate",
+    "container": "military_crate",
+    "location": "loc_meadows_general",
     "filler": true
    },
    {
     "id": "loot_27",
-    "x": 23.0,
-    "z": -93.0,
+    "x": -27.0,
+    "z": -197.0,
     "r": 1.6,
-    "label": "Frozen body (filler)",
+    "label": "Frozen body",
     "container": "corpse",
-    "location": "loc_ore_docks",
+    "location": "loc_sparks_yard",
     "filler": true
    },
    {
     "id": "loot_28",
-    "x": 11.0,
-    "z": -127.0,
+    "x": -49.0,
+    "z": -197.0,
     "r": 1.6,
-    "label": "Locker (filler)",
-    "container": "locker",
-    "location": "loc_ore_docks",
+    "label": "Frozen body",
+    "container": "corpse",
+    "location": "loc_sparks_yard",
     "filler": true
    },
    {
     "id": "loot_29",
-    "x": -9.0,
-    "z": -133.0,
+    "x": 3.0,
+    "z": -169.0,
     "r": 1.6,
-    "label": "Woodpile / pallets / broken furniture (filler)",
+    "label": "Frozen body",
+    "container": "corpse",
+    "location": "loc_sparks_yard",
+    "filler": true
+   },
+   {
+    "id": "loot_30",
+    "x": -21.0,
+    "z": -149.0,
+    "r": 1.6,
+    "label": "Locker",
+    "container": "locker",
+    "location": "loc_sparks_yard",
+    "filler": true
+   },
+   {
+    "id": "loot_31",
+    "x": -19.0,
+    "z": -157.0,
+    "r": 1.6,
+    "label": "Locker",
+    "container": "locker",
+    "location": "loc_sparks_yard",
+    "filler": true
+   },
+   {
+    "id": "loot_32",
+    "x": -21.0,
+    "z": -181.0,
+    "r": 1.6,
+    "label": "Military crate",
+    "container": "military_crate",
+    "location": "loc_sparks_yard",
+    "filler": true
+   },
+   {
+    "id": "loot_33",
+    "x": -49.0,
+    "z": -149.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture",
     "container": "woodpile",
-    "location": "loc_ore_docks",
+    "location": "loc_sparks_yard",
+    "filler": true
+   },
+   {
+    "id": "loot_34",
+    "x": 43.0,
+    "z": -135.0,
+    "r": 1.6,
+    "label": "Kitchen cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_sparks_library",
+    "filler": true
+   },
+   {
+    "id": "loot_35",
+    "x": 23.0,
+    "z": -125.0,
+    "r": 1.6,
+    "label": "Locker",
+    "container": "locker",
+    "location": "loc_sparks_library",
+    "filler": true
+   },
+   {
+    "id": "loot_36",
+    "x": 41.0,
+    "z": -117.0,
+    "r": 1.6,
+    "label": "Medicine cabinet",
+    "container": "medicine_cabinet",
+    "location": "loc_sparks_library",
+    "filler": true
+   },
+   {
+    "id": "loot_37",
+    "x": 5.0,
+    "z": -117.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture",
+    "container": "woodpile",
+    "location": "loc_sparks_library",
+    "filler": true
+   },
+   {
+    "id": "loot_38",
+    "x": 31.0,
+    "z": -189.0,
+    "r": 1.6,
+    "label": "Kitchen cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_galena_station",
+    "filler": true,
+    "guaranteed": [
+     {
+      "item": "canned_food",
+      "n": 2
+     }
+    ]
+   },
+   {
+    "id": "loot_39",
+    "x": 31.0,
+    "z": -181.0,
+    "r": 1.6,
+    "label": "Kitchen cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_galena_station",
+    "filler": true
+   },
+   {
+    "id": "loot_40",
+    "x": 37.0,
+    "z": -189.0,
+    "r": 1.6,
+    "label": "Medicine cabinet",
+    "container": "medicine_cabinet",
+    "location": "loc_galena_station",
     "filler": true
    }
   ]
  },
  "props": [
   {
-   "id": "prop_husk_car",
-   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
-   "x": -1.0,
-   "z": -23.0,
-   "rotY": 0.2,
-   "h": 1.45,
-   "collide": true,
-   "tag": "family sheltering inside"
-  },
-  {
    "id": "prop_01",
-   "asset": "assets/kenney/industrial/building-h.glb",
-   "x": -1.0,
-   "z": -83.0,
-   "rotY": 0.0,
-   "h": 14,
-   "collide": false,
-   "tag": "hospital tower backdrop"
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -11.0,
+   "z": -73.0,
+   "rotY": 1.571,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_02",
-   "asset": "assets/kenney/industrial/detail-tank-large.glb",
-   "x": -20.0,
-   "z": -127.0,
-   "rotY": 0,
-   "h": 10,
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": 15.0,
+   "z": -45.0,
+   "rotY": 0.0,
+   "h": 1.5,
    "collide": true,
-   "tag": "elevator silo"
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_03",
-   "asset": "assets/kenney/industrial/detail-tank-large.glb",
-   "x": -13.0,
-   "z": -127.0,
-   "rotY": 0,
-   "h": 10,
-   "collide": true
+   "asset": "assets/kenney/roads/dumpster.glb",
+   "x": -43.0,
+   "z": -163.0,
+   "rotY": 0.0,
+   "h": 1.4,
+   "collide": true,
+   "footprintR": 1.3,
+   "tag": "container"
   },
   {
    "id": "prop_04",
-   "asset": "assets/kenney/industrial/chimney-large.glb",
-   "x": -16.0,
-   "z": -115.0,
-   "rotY": 0,
-   "h": 20,
+   "asset": "assets/kenney/industrial/shipping-container-b.glb",
+   "x": -35.0,
+   "z": -183.0,
+   "rotY": 1.571,
+   "h": 2.6,
    "collide": true,
-   "tag": "elevator head"
+   "footprintR": 3.0,
+   "tag": "boxcar"
   },
   {
    "id": "prop_05",
-   "asset": "assets/kenney/industrial/shipping-container-a.glb",
-   "x": -5.0,
-   "z": -99.0,
-   "rotY": 0,
+   "asset": "assets/kenney/industrial/shipping-container-b.glb",
+   "x": -13.0,
+   "z": -171.0,
+   "rotY": 1.571,
    "h": 2.6,
-   "collide": true
+   "collide": true,
+   "footprintR": 3.0,
+   "tag": "boxcar"
   },
   {
    "id": "prop_06",
-   "asset": "assets/kenney/industrial/shipping-container-b.glb",
-   "x": 5.0,
-   "z": -99.0,
-   "rotY": 0.1,
-   "h": 2.6,
-   "collide": true
+   "asset": "assets/kenney/roads/light-square.glb",
+   "x": -1.0,
+   "z": -81.0,
+   "rotY": 0.0,
+   "h": 5,
+   "collide": false,
+   "tag": "dead_lamp"
   },
   {
    "id": "prop_07",
-   "asset": "assets/kenney/industrial/shipping-container-c.glb",
-   "x": 13.0,
-   "z": -109.0,
-   "rotY": 1.571,
-   "h": 2.6,
-   "collide": true
+   "asset": "assets/kenney/roads/light-square.glb",
+   "x": -13.0,
+   "z": -41.0,
+   "rotY": 0.0,
+   "h": 5,
+   "collide": false,
+   "tag": "dead_lamp"
   },
   {
    "id": "prop_08",
-   "asset": "assets/kenney/roads/dumpster.glb",
-   "x": 1.0,
-   "z": -45.0,
-   "rotY": 0,
-   "h": 1.4,
-   "collide": true
-  },
-  {
-   "id": "prop_09",
-   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
-   "x": -5.0,
-   "z": -62.0,
-   "rotY": 1.4,
-   "h": 1.45,
-   "collide": true
-  },
-  {
-   "id": "prop_10",
-   "asset": "assets/kenney/roads/electricity-pole.glb",
-   "x": 1.0,
-   "z": -31.0,
-   "rotY": 0,
-   "h": 8,
-   "collide": true
-  },
-  {
-   "id": "prop_11",
-   "asset": "assets/kenney/roads/electricity-pole.glb",
-   "x": 1.0,
-   "z": -74.0,
-   "rotY": 0,
-   "h": 8,
-   "collide": true
-  },
-  {
-   "id": "prop_12",
-   "asset": "assets/kenney/industrial/building-f.glb",
-   "x": 14.0,
-   "z": -43.0,
-   "rotY": 1.571,
-   "h": 8,
-   "collide": true
-  },
-  {
-   "id": "prop_13",
-   "asset": "assets/kenney/industrial/building-e.glb",
-   "x": -22.0,
-   "z": -15.0,
-   "rotY": -1.571,
-   "h": 9,
-   "collide": false
-  },
-  {
-   "id": "prop_14",
-   "asset": "assets/kenney/industrial/detail-tank.glb",
-   "x": 17.0,
-   "z": -129.0,
-   "rotY": 0,
-   "h": 3,
-   "collide": true,
-   "tag": "lake intake pump"
+   "asset": "assets/kenney/roads/light-square.glb",
+   "x": 9.0,
+   "z": -133.0,
+   "rotY": 0.0,
+   "h": 5,
+   "collide": false,
+   "tag": "dead_lamp"
   }
  ],
  "interactives": [
   {
+   "id": "ch08_mask_bag",
+   "type": "open",
+   "x": -41.0,
+   "z": -63.0,
+   "r": 1.8,
+   "label": "Deployment bag: the Air Force mask",
+   "setsFlag": "ch08_masked",
+   "givesItems": {
+    "mask_filter": 1
+   }
+  },
+  {
+   "id": "ch08_seal_kit",
+   "type": "seal",
+   "x": -21.0,
+   "z": -65.0,
+   "r": 1.8,
+   "label": "Seal the windows (plastic + tarp)",
+   "setsFlag": "ch08_seal_started"
+  },
+  {
+   "id": "ch08_mail_slot",
+   "type": "inspect",
+   "x": -31.0,
+   "z": -55.0,
+   "r": 1.8,
+   "label": "Mail slot: look for breath",
+   "setsFlag": "ch08_slot_checked",
+   "when": [
+    {
+     "flag": "ch08_night",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "ch08_cards_slot",
+   "type": "install",
+   "x": 41.0,
+   "z": -185.0,
+   "r": 1.8,
+   "label": "Galena gatehouse: install the control cards",
+   "requiresItems": {
+    "control_cards": 1
+   },
+   "setsFlag": "cards_installed",
+   "when": [
+    {
+     "flag": "ch07_location",
+     "eq": "galena"
+    }
+   ]
+  },
+  {
    "id": "ch08_cistern",
-   "type": "water_source",
-   "x": 11.0,
+   "type": "fill",
+   "x": 29.0,
    "z": -21.0,
    "r": 1.8,
-   "label": "Cistern taps (clean water)",
-   "setsFlag": "pruitt_cistern",
+   "label": "Deshawn's cistern (clean water)",
+   "givesItems": {
+    "water_clean": 2
+   },
    "when": [
     {
      "flag": "pruitt_alive",
@@ -1274,188 +1988,245 @@
    ]
   },
   {
-   "id": "ch08_intake",
-   "type": "water_source",
-   "x": 17.0,
-   "z": -126.0,
+   "id": "ch08_ames_supplies",
+   "type": "open",
+   "x": -29.0,
+   "z": -105.0,
    "r": 1.8,
-   "label": "Lake intake (clean water, long trip)",
-   "setsFlag": "ch08_intake_water"
-  },
-  {
-   "id": "ch08_list",
-   "type": "read",
-   "x": 13.0,
-   "z": -11.0,
-   "r": 1.8,
-   "label": "Marguerite's drawer: the list",
-   "setsFlag": "marguerite_list_seen"
-  },
-  {
-   "id": "ch08_door",
-   "type": "door_choice",
-   "x": -7.0,
-   "z": -9.0,
-   "r": 1.8,
-   "label": "The door (share filters?)",
-   "requiresFlags": [
+   "label": "Ames's crash cart",
+   "givesItems": {
+    "iodide_tablets": 1,
+    "antibiotics": 1
+   },
+   "when": [
     {
-     "flag": "ch08_door_knock",
+     "flag": "ch08_ames_seen",
      "eq": true
     }
    ]
+  },
+  {
+   "id": "ch08_blankets",
+   "type": "open",
+   "x": 39.0,
+   "z": -69.0,
+   "r": 1.8,
+   "label": "Clinic blanket shelf",
+   "givesItems": {
+    "wool_blanket": 1
+   }
+  },
+  {
+   "id": "ch08_signal_box",
+   "type": "open",
+   "x": -39.0,
+   "z": -177.0,
+   "r": 1.8,
+   "label": "Yard signal box (spare cells)",
+   "givesItems": {
+    "batteries": 2
+   }
+  },
+  {
+   "id": "ch08_diesel",
+   "type": "drain",
+   "x": -3.0,
+   "z": -187.0,
+   "r": 1.8,
+   "label": "Yard fuel tank (dregs)",
+   "requiresItems": {
+    "mech_tools": 1
+   },
+   "givesItems": {
+    "diesel_jug": 1
+   }
   }
  ],
  "safeZones": [
   {
    "id": "safe_01",
-   "kind": "sealed",
-   "x": -12.0,
-   "z": -8.0,
-   "r": 3.2,
-   "label": "Home (taped, sealed)",
+   "kind": "shelter",
+   "x": -31.0,
+   "z": -67.0,
+   "r": 4.5,
+   "label": "Sealed shelter (SEAL %)",
    "warmth": true,
    "save": true,
-   "sealed": false
+   "sealed": true,
+   "sealFlag": "shelter_sealed"
   },
   {
    "id": "safe_02",
-   "kind": "sealed",
-   "x": 10.0,
-   "z": -8.0,
-   "r": 3,
-   "label": "Clinic (sealed)",
+   "kind": "camp",
+   "x": 29.0,
+   "z": -61.0,
+   "r": 3.0,
+   "label": "Lolo's clinic stove",
    "warmth": true,
    "save": true,
    "sealed": false
-  },
-  {
-   "id": "safe_03",
-   "kind": "sealed",
-   "x": -1.0,
-   "z": -72.0,
-   "r": 4,
-   "label": "Hospital corridor (sealed doors)",
-   "warmth": true,
-   "save": true,
-   "sealed": false
-  },
-  {
-   "id": "safe_04",
-   "kind": "sealed",
-   "x": 7.0,
-   "z": -122.0,
-   "r": 4,
-   "label": "Harbor stores (sealed)",
-   "warmth": true,
-   "save": true,
-   "sealed": false
-  },
-  {
-   "id": "safe_05",
-   "kind": "sealed",
-   "x": 10.0,
-   "z": -24.0,
-   "r": 2.5,
-   "label": "Cistern basement",
-   "warmth": true,
-   "save": true,
-   "sealed": false,
-   "when": [
-    {
-     "flag": "pruitt_alive",
-     "eq": true
-    }
-   ]
   }
  ],
  "setPieces": [],
  "encounters": [
   {
-   "id": "enc_car",
+   "id": "z_ch08_henley",
    "area": {
     "type": "rect",
-    "x0": -8.0,
-    "z0": -32.0,
-    "x1": 4.0,
-    "z1": -16.0
+    "x0": -10.0,
+    "z0": -34.0,
+    "x1": 8.0,
+    "z1": -20.0
    },
    "groups": [
     {
-     "group": "g_car_husk",
+     "group": "g_ch08_henley",
      "wave": 1
     }
+   ],
+   "storyEncounters": [
+    "enc_ch08_hollow_first"
    ]
   },
   {
-   "id": "enc_street",
+   "id": "z_ch08_hallway",
    "area": {
     "type": "rect",
-    "x0": -8.0,
-    "z0": -56.0,
-    "x1": 24.0,
-    "z1": -36.0
+    "x0": -42.0,
+    "z0": -58.0,
+    "x1": -20.0,
+    "z1": -40.0
    },
    "groups": [
     {
-     "group": "g_street_husks",
+     "group": "g_ch08_mimic",
      "wave": 1
     }
+   ],
+   "storyEncounters": [
+    "enc_ch08_door_mimic"
    ]
   },
   {
-   "id": "enc_dog_lot",
+   "id": "z_ch08_truck",
    "area": {
     "type": "rect",
-    "x0": -24.0,
-    "z0": -50.0,
+    "x0": -16.0,
+    "z0": -76.0,
+    "x1": -2.0,
+    "z1": -66.0
+   },
+   "groups": [
+    {
+     "group": "g_ch08_husk_truck",
+     "wave": 1
+    }
+   ],
+   "storyEncounters": [
+    "enc_ch08_husk"
+   ]
+  },
+  {
+   "id": "z_ch08_wards",
+   "area": {
+    "type": "rect",
+    "x0": -44.0,
+    "z0": -136.0,
     "x1": -8.0,
-    "z1": -36.0
+    "z1": -118.0
    },
    "groups": [
     {
-     "group": "g_dogs",
+     "group": "g_ch08_wards",
      "wave": 1
     }
    ]
   },
   {
-   "id": "enc_hospital",
+   "id": "z_ch08_er",
    "area": {
     "type": "rect",
-    "x0": -20.0,
-    "z0": -86.0,
-    "x1": 18.0,
-    "z1": -56.0
+    "x0": -44.0,
+    "z0": -116.0,
+    "x1": -8.0,
+    "z1": -92.0
    },
    "groups": [
     {
-     "group": "g_hosp_looters",
-     "wave": 1
-    },
-    {
-     "group": "g_hosp_husk",
+     "group": "g_ch08_er",
      "wave": 1
     }
    ]
   },
   {
-   "id": "enc_docks",
+   "id": "z_ch08_east_block",
    "area": {
     "type": "rect",
-    "x0": -24.0,
-    "z0": -134.0,
-    "x1": 24.0,
-    "z1": -88.0
+    "x0": 10.0,
+    "z0": -52.0,
+    "x1": 50.0,
+    "z1": 6.0
    },
    "groups": [
     {
-     "group": "g_elevator_guard",
+     "group": "g_ch08_ash_husks",
      "wave": 1
     },
     {
-     "group": "g_dock_husk",
+     "group": "g_ch08_tallmen",
+     "wave": 2
+    }
+   ]
+  },
+  {
+   "id": "z_ch08_stacks",
+   "area": {
+    "type": "rect",
+    "x0": 14.0,
+    "z0": -136.0,
+    "x1": 44.0,
+    "z1": -112.0
+   },
+   "groups": [
+    {
+     "group": "g_ch08_stacks",
      "wave": 1
+    }
+   ]
+  },
+  {
+   "id": "z_ch08_yard",
+   "area": {
+    "type": "rect",
+    "x0": -50.0,
+    "z0": -198.0,
+    "x1": 0.0,
+    "z1": -160.0
+   },
+   "groups": [
+    {
+     "group": "g_ch08_yard",
+     "wave": 1
+    }
+   ]
+  },
+  {
+   "id": "z_ch08_wellfield",
+   "area": {
+    "type": "rect",
+    "x0": 8.0,
+    "z0": -176.0,
+    "x1": 50.0,
+    "z1": -144.0
+   },
+   "groups": [
+    {
+     "group": "g_ch08_dogs_w1",
+     "wave": 1
+    },
+    {
+     "group": "g_ch08_dogs_w2",
+     "wave": 2
     }
    ]
   }
@@ -1467,27 +2238,27 @@
    "once": true,
    "shape": {
     "type": "circle",
-    "x": -12.0,
-    "z": -7.0,
+    "x": -33.0,
+    "z": -67.0,
     "r": 3
    },
    "actions": [
     {
-     "type": "hud_unlock",
-     "stat": "rad"
+     "type": "set_time",
+     "value": 0.4
     },
     {
-     "type": "hud_unlock",
-     "stat": "filter"
+     "type": "set_weather",
+     "weather": "fallout_rain"
     },
     {
-     "type": "hud_unlock",
-     "stat": "seal"
+     "type": "dialogue",
+     "id": "ch08_mask"
     },
     {
-     "type": "cutscene",
-     "id": "cs_ch08_fallout",
-     "text": "The dosimeter starts clicking. Get indoors."
+     "type": "set_flag",
+     "flag": "ch08_started",
+     "value": true
     },
     {
      "type": "checkpoint"
@@ -1495,136 +2266,227 @@
    ]
   },
   {
-   "id": "t_ch08_car",
-   "on": "enter",
+   "id": "t_ch08_seal",
+   "on": "flag",
    "once": true,
    "shape": {
-    "type": "circle",
-    "x": -1.0,
-    "z": -23.0,
-    "r": 4
+    "type": "rect",
+    "x0": -42.0,
+    "z0": -70.0,
+    "x1": -20.0,
+    "z1": -60.0
    },
    "actions": [
     {
      "type": "dialogue",
-     "id": "ch08_husk"
-    }
-   ]
-  },
-  {
-   "id": "t_ch08_dogs",
-   "on": "enter",
-   "once": true,
-   "shape": {
-    "type": "rect",
-    "x0": -24.0,
-    "z0": -50.0,
-    "x1": -8.0,
-    "z1": -36.0
-   },
-   "actions": [
-    {
-     "type": "activate_group",
-     "group": "g_dogs"
-    }
-   ]
-  },
-  {
-   "id": "t_ch08_hospital",
-   "on": "enter",
-   "once": true,
-   "shape": {
-    "type": "rect",
-    "x0": -18.0,
-    "z0": -74.0,
-    "x1": 16.0,
-    "z1": -70.0
-   },
-   "actions": [
-    {
-     "type": "activate_group",
-     "group": "g_hosp_looters"
+     "id": "ch08_seal"
     },
     {
-     "type": "checkpoint"
-    }
-   ]
-  },
-  {
-   "id": "t_ch08_foot",
-   "on": "enter",
-   "once": true,
-   "shape": {
-    "type": "rect",
-    "x0": 4.0,
-    "z0": -84.0,
-    "x1": 16.0,
-    "z1": -76.0
-   },
-   "actions": [
-    {
-     "type": "dialogue",
-     "id": "ch08_ames_foot"
+     "type": "set_flag",
+     "flag": "ch08_sealed",
+     "value": true
     }
    ],
    "when": [
     {
-     "flag": "ames_deal",
+     "flag": "ch08_seal_started",
      "eq": true
     }
    ]
   },
   {
-   "id": "t_ch08_ashfall",
+   "id": "t_ch08_husk",
    "on": "enter",
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -24.0,
-    "z0": -94.0,
-    "x1": 24.0,
-    "z1": -88.0
+    "x0": -16.0,
+    "z0": -76.0,
+    "x1": -2.0,
+    "z1": -66.0
    },
    "actions": [
     {
-     "type": "set_weather",
-     "weather": "ashfall",
-     "blendSec": 40,
-     "tempC": -10
+     "type": "activate_group",
+     "group": "g_ch08_husk_truck"
+    },
+    {
+     "type": "dialogue",
+     "id": "ch08_husk"
     },
     {
      "type": "set_flag",
-     "flag": "ch08_ashfall",
+     "flag": "ch08_husk_done",
+     "value": true
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch08_masked",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch08_lolo_list",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": 22.0,
+    "z0": -70.0,
+    "x1": 40.0,
+    "z1": -56.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch08_lolo_list"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch08_list_seen",
      "value": true
     }
    ]
   },
   {
-   "id": "t_ch08_return",
-   "on": "enter",
+   "id": "t_ch08_deshawn",
+   "on": "interact",
    "once": true,
    "shape": {
-    "type": "rect",
-    "x0": -24.0,
-    "z0": -36.0,
-    "x1": 24.0,
-    "z1": -32.0
+    "type": "circle",
+    "x": 29.0,
+    "z": -19.0,
+    "r": 3
    },
    "actions": [
     {
-     "type": "set_flag",
-     "flag": "ch08_door_knock",
-     "value": true
-    },
-    {
-     "type": "bark",
-     "speaker": "dell",
-     "text": "Someone's at my door."
+     "type": "dialogue",
+     "id": "ch08_deshawn"
     }
    ],
    "when": [
     {
-     "flag": "ch08_supplies_found",
+     "flag": "pruitt_alive",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch08_ames_hand",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -44.0,
+    "z0": -116.0,
+    "x1": -8.0,
+    "z1": -92.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch08_ames_hand"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch08_ames_seen",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch08_boone_filters",
+   "on": "interact",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": -11.0,
+    "z": -153.0,
+    "r": 3
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch08_boone_filters"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch08_boone_seen",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch08_annie_greenhouse",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": 14.0,
+    "z0": -110.0,
+    "x1": 44.0,
+    "z1": -92.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch08_annie_greenhouse"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch08_atrium_seen",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch08_dusk",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -42.0,
+    "z0": -70.0,
+    "x1": -20.0,
+    "z1": -60.0
+   },
+   "actions": [
+    {
+     "type": "set_time",
+     "value": 0.92
+    },
+    {
+     "type": "set_weather",
+     "weather": "fallout_rain",
+     "intensity": 0.6
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch08_night",
+     "value": true
+    },
+    {
+     "type": "cutscene",
+     "id": "cs_ch08_tall_shape",
+     "text": "Across the street a tall shape steps over the Henleys' fence and goes inside."
+    },
+    {
+     "type": "activate_group",
+     "group": "g_ch08_tallmen"
+    },
+    {
+     "type": "checkpoint"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch08_sealed",
+     "eq": true
+    },
+    {
+     "flag": "ch08_husk_done",
      "eq": true
     }
    ]
@@ -1635,39 +2497,135 @@
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -16.0,
-    "z0": -14.0,
-    "x1": -8.0,
-    "z1": -2.0
+    "x0": -42.0,
+    "z0": -58.0,
+    "x1": -20.0,
+    "z1": -52.0
    },
    "actions": [
     {
      "type": "dialogue",
      "id": "ch08_door"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch08_door_done",
+     "value": true
     }
    ],
    "when": [
     {
-     "flag": "ch08_door_knock",
+     "flag": "ch08_night",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch08_mimic",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -42.0,
+    "z0": -58.0,
+    "x1": -20.0,
+    "z1": -52.0
+   },
+   "actions": [
+    {
+     "type": "activate_group",
+     "group": "g_ch08_mimic"
+    }
+   ],
+   "when": [
+    {
+     "flag": "mimic_let_in",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch08_morning",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -42.0,
+    "z0": -70.0,
+    "x1": -20.0,
+    "z1": -60.0
+   },
+   "actions": [
+    {
+     "type": "set_time",
+     "value": 0.36
+    },
+    {
+     "type": "set_weather",
+     "weather": "ashfall"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch08_morning",
+     "value": true
+    },
+    {
+     "type": "checkpoint"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch08_door_done",
+     "eq": true
+    }
+   ],
+   "note": "weather_late: fallout_rain -> ashfall."
+  },
+  {
+   "id": "t_ch08_henley_house",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -10.0,
+    "z0": -34.0,
+    "x1": 0.0,
+    "z1": -20.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch08_henley_house"
+    },
+    {
+     "type": "activate_group",
+     "group": "g_ch08_henley"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch08_henley_seen",
+     "value": true
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch08_morning",
      "eq": true
     }
    ]
   },
   {
    "id": "t_ch08_end",
-   "on": "flag",
+   "on": "enter",
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -16.0,
-    "z0": -14.0,
-    "x1": -8.0,
-    "z1": -2.0
+    "x0": -42.0,
+    "z0": -70.0,
+    "x1": -20.0,
+    "z1": -60.0
    },
    "actions": [
-    {
-     "type": "checkpoint"
-    },
     {
      "type": "chapter_end",
      "next": "ch09_the_long_night"
@@ -1675,24 +2633,8 @@
    ],
    "when": [
     {
-     "flag": "ch08_door_resolved",
+     "flag": "ch08_henley_seen",
      "eq": true
-    },
-    {
-     "flag": "marguerite_list_seen",
-     "eq": true
-    },
-    {
-     "any": [
-      {
-       "flag": "ch08_foot_treated",
-       "eq": true
-      },
-      {
-       "flag": "ch08_foot_saved",
-       "eq": true
-      }
-     ]
     }
    ]
   }
@@ -1701,11 +2643,11 @@
   {
    "id": "o1",
    "order": 1,
-   "text": "Iodide and mask filters (hospital or Harbor stores)",
+   "text": "Find the mask",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch08_supplies_found",
+     "flag": "ch08_masked",
      "eq": true
     }
    ]
@@ -1713,51 +2655,35 @@
   {
    "id": "o2",
    "order": 2,
-   "text": "Clean water: Deshawn's cistern or the lake intake",
+   "text": "Seal the shelter",
    "optional": false,
    "completeWhen": [
     {
-     "any": [
-      {
-       "flag": "pruitt_cistern",
-       "eq": true
-      },
-      {
-       "flag": "ch08_intake_water",
-       "eq": true
-      }
-     ]
+     "flag": "ch08_sealed",
+     "eq": true
     }
    ]
   },
   {
    "id": "o3",
    "order": 3,
-   "text": "Get Theo's foot treated",
+   "text": "The man at the truck",
    "optional": false,
    "completeWhen": [
     {
-     "any": [
-      {
-       "flag": "ch08_foot_treated",
-       "eq": true
-      },
-      {
-       "flag": "ch08_foot_saved",
-       "eq": true
-      }
-     ]
+     "flag": "ch08_husk_done",
+     "eq": true
     }
    ]
   },
   {
    "id": "o4",
    "order": 4,
-   "text": "The door: share supplies with strangers?",
-   "optional": false,
+   "text": "Ames: the hand",
+   "optional": true,
    "completeWhen": [
     {
-     "flag": "ch08_door_resolved",
+     "flag": "ch08_ames_seen",
      "eq": true
     }
    ]
@@ -1765,14 +2691,158 @@
   {
    "id": "o5",
    "order": 5,
-   "text": "Marguerite's list",
+   "text": "Boone's filters",
+   "optional": true,
+   "completeWhen": [
+    {
+     "flag": "ch08_boone_seen",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o6",
+   "order": 6,
+   "text": "Annie's greenhouse: promise a heat line",
+   "optional": true,
+   "completeWhen": [
+    {
+     "flag": "ch08_atrium_seen",
+     "eq": true
+    }
+   ],
+   "quest": "q_annie_greenhouse"
+  },
+  {
+   "id": "o7",
+   "order": 7,
+   "text": "The door at night",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "marguerite_list_seen",
+     "flag": "ch08_door_done",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o8",
+   "order": 8,
+   "text": "The Henley house",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch08_henley_seen",
      "eq": true
     }
    ]
   }
- ]
+ ],
+ "companion": {
+  "id": "wraith",
+  "spawn": {
+   "x": -29.0,
+   "z": -65.0
+  },
+  "when": [
+   {
+    "flag": "wraith_alive",
+    "eq": true
+   }
+  ],
+  "follow": {
+   "leashM": 6.0,
+   "catchUpM": 14.0,
+   "nav": "grid_bfs_walkable",
+   "avoid": [
+    "door_clearance_cells",
+    "loot_cells"
+   ],
+   "note": "Act III: growls with hackles up at Hollows, soft whine at real husks (sets wraith_mimic_warned)."
+  },
+  "verbs": [
+   "track",
+   "warn",
+   "guard",
+   "hold"
+  ],
+  "injuredWhen": [
+   {
+    "flag": "wraith_injured",
+    "eq": true
+   }
+  ]
+ },
+ "horror": {
+  "sightlineM": 22,
+  "ambushPoints": [
+   {
+    "id": "ap_ch08_henley_kitchen",
+    "x": 3.0,
+    "z": -27.0,
+    "r": 3.5,
+    "kind": "interior_dark",
+    "spawns": [
+     "en_01"
+    ],
+    "lightFlicker": true,
+    "note": "Flashlight only; Dale turns when the beam leaves him."
+   },
+   {
+    "id": "ap_ch08_mail_slot",
+    "x": -31.0,
+    "z": -49.0,
+    "r": 3.0,
+    "kind": "door_knock",
+    "spawns": [
+     "en_02"
+    ],
+    "lightFlicker": false,
+    "note": "Check the slot for breath; Wraith growls."
+   },
+   {
+    "id": "ap_ch08_wards",
+    "x": -27.0,
+    "z": -127.0,
+    "r": 5.0,
+    "kind": "interior_dark",
+    "spawns": [
+     "en_04",
+     "en_05",
+     "en_06"
+    ],
+    "lightFlicker": true,
+    "note": "Ward stairwell; emergency light dies."
+   },
+   {
+    "id": "ap_ch08_stacks",
+    "x": 29.0,
+    "z": -125.0,
+    "r": 5.0,
+    "kind": "interior_dark",
+    "spawns": [
+     "en_14",
+     "en_15"
+    ],
+    "lightFlicker": false,
+    "note": "Silent dogs between the stacks."
+   },
+   {
+    "id": "ap_ch08_ash_street",
+    "x": 39.0,
+    "z": -5.0,
+    "r": 6.0,
+    "kind": "ashfall_whiteout",
+    "spawns": [
+     "en_12",
+     "en_13"
+    ],
+    "lightFlicker": false,
+    "note": "Night pair in the ash past the cistern."
+   }
+  ],
+  "notes": "Survival horror: tight interiors (hallway 3 cells, Henley kitchen 3 cells, wards), dead lamps, 22 m sightlines in ash; max 2 Tallmen active; Hollows wake only in low visibility.",
+  "binding": "Spawns tagged ambush=true + lowVisibilityTrigger=true stay dormant (no AI tick, hidden) until the player is inside the ambush point radius AND visibility (ash, fog, darkness, flashlight off) is below environment.visibilityM, or the point's lightFlicker drops out. Hollows (assimilated_human / assimilated_animal) never render a breath plume; living NPCs always do (story assimilation.tells)."
+ },
+ "lootSource": "v2"
 }

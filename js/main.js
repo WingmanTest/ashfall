@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { KTX2Loader } from 'three/addons/loaders/KTX2Loader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
-import { POST_VERT, POST_FRAG } from './shaders.js?v=r8';
+import { POST_VERT, POST_FRAG } from './shaders.js?v=r9';
 
 const STYLE = (new URLSearchParams(location.search).get('style') || 'A').toUpperCase();
 

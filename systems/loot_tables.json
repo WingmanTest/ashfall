@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "units": {
     "rolls": "[min,max] entries drawn (uniform int) per container",
     "weight": "relative weight",
@@ -38,8 +38,8 @@
     "blackout": {
       "empty_chance_add": -0.05,
       "category_weight_mult": {
-        "food": 1.4,
-        "water": 1.3,
+        "food": 1.15,
+        "water": 1.0,
         "med": 1.0,
         "material": 1.0,
         "clothing": 1.0,
@@ -50,58 +50,62 @@
         "weapon": 0.5,
         "trade": 1.2,
         "quest": 1.0
-      }
+      },
+      "season": "late_summer"
     },
     "collapse": {
       "empty_chance_add": 0.0,
       "category_weight_mult": {
-        "food": 1.0,
-        "water": 0.9,
+        "food": 1.3,
+        "water": 0.8,
         "med": 0.8,
         "material": 1.15,
-        "clothing": 1.25,
+        "clothing": 1.2,
         "rad": 0.0,
         "tool": 1.0,
         "throwable": 1.0,
-        "ammo": 0.7,
+        "ammo": 0.38,
         "weapon": 0.8,
         "trade": 1.0,
         "quest": 1.0
-      }
+      },
+      "season": "autumn"
     },
     "civil_war": {
       "empty_chance_add": 0.05,
       "category_weight_mult": {
-        "food": 0.85,
-        "water": 0.9,
-        "med": 1.0,
+        "food": 0.95,
+        "water": 0.6,
+        "med": 1.2,
         "material": 1.0,
-        "clothing": 0.9,
+        "clothing": 1.1,
         "rad": 0.3,
         "tool": 1.0,
         "throwable": 1.2,
-        "ammo": 1.4,
+        "ammo": 1.25,
         "weapon": 1.5,
         "trade": 0.9,
         "quest": 1.0
-      }
+      },
+      "season": "late_fall"
     },
     "nuclear_winter": {
-      "empty_chance_add": 0.15,
+      "empty_chance_add": 0.12,
       "category_weight_mult": {
-        "food": 0.6,
-        "water": 0.6,
-        "med": 0.6,
+        "food": 0.75,
+        "water": 0.5,
+        "med": 0.85,
         "material": 0.8,
-        "clothing": 1.1,
+        "clothing": 1.0,
         "rad": 1.6,
         "tool": 0.9,
         "throwable": 0.9,
-        "ammo": 0.6,
+        "ammo": 0.8,
         "weapon": 0.6,
         "trade": 0.5,
         "quest": 1.0
-      }
+      },
+      "season": "nuclear_winter"
     }
   },
   "item_act_gate": {
@@ -169,10 +173,10 @@
         },
         {
           "item": "water_clean",
-          "weight": 3,
+          "weight": 3.5,
           "qty": [
             1,
-            1
+            2
           ]
         },
         {
@@ -201,6 +205,14 @@
         },
         {
           "item": "candy_bar",
+          "weight": 2,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "jerky",
           "weight": 2,
           "qty": [
             1,
@@ -243,6 +255,14 @@
         },
         {
           "item": "peanut_butter",
+          "weight": 1,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "jerky",
           "weight": 1,
           "qty": [
             1,
@@ -302,6 +322,14 @@
         {
           "item": "med_kit",
           "weight": 0.4,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "vet_kit",
+          "weight": 0.15,
           "qty": [
             1,
             1
@@ -409,10 +437,10 @@
         },
         {
           "item": "water_clean",
-          "weight": 2,
+          "weight": 2.5,
           "qty": [
             1,
-            1
+            2
           ]
         },
         {
@@ -493,6 +521,14 @@
           "qty": [
             3,
             6
+          ]
+        },
+        {
+          "item": "empty_bottle",
+          "weight": 1.5,
+          "qty": [
+            1,
+            1
           ]
         }
       ],
@@ -596,6 +632,46 @@
         {
           "item": "arctic_parka",
           "weight": 0.15,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "cotton_tee",
+          "weight": 3,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "flannel_shirt",
+          "weight": 2.5,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "ball_cap",
+          "weight": 2,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "work_boots",
+          "weight": 1.2,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "work_jacket",
+          "weight": 1.2,
           "qty": [
             1,
             1
@@ -760,6 +836,22 @@
         {
           "item": "baseball_bat",
           "weight": 0.4,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "work_boots",
+          "weight": 0.8,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "ball_cap",
+          "weight": 0.8,
           "qty": [
             1,
             1
@@ -968,6 +1060,14 @@
             4,
             8
           ]
+        },
+        {
+          "item": "jerky",
+          "weight": 1.5,
+          "qty": [
+            1,
+            2
+          ]
         }
       ],
       "label": "Hidden stash / supply cache"
@@ -1068,6 +1168,14 @@
             1,
             1
           ]
+        },
+        {
+          "item": "jerky",
+          "weight": 1,
+          "qty": [
+            1,
+            1
+          ]
         }
       ],
       "label": "Frozen body"
@@ -1155,71 +1263,133 @@
       "label": "Gun safe / prepper locker",
       "requires": "crowbar or bolt_cutters (pry/chained), else 'locked'",
       "note": "Rare, hand-placed: prepper basements, hunting cabins, a gun shop back room."
+    },
+    "cooler_chest": {
+      "rolls": [
+        1,
+        2
+      ],
+      "empty_chance": 0.4,
+      "label": "Cooler chest / vending machine",
+      "season_note": "late-summer staple (picnic coolers, dead vending machines, truck-stop fridges)",
+      "entries": [
+        {
+          "item": "water_clean",
+          "weight": 3,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "candy_bar",
+          "weight": 3,
+          "qty": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "jerky",
+          "weight": 2,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "crackers",
+          "weight": 2,
+          "qty": [
+            1,
+            1
+          ]
+        },
+        {
+          "item": "coffee",
+          "weight": 1,
+          "qty": [
+            1,
+            1
+          ]
+        }
+      ]
     }
   },
   "areas": {
     "ch01": [
       {
-        "location": "loc_east_end",
+        "location": "loc_sparks_block",
         "containers": {
           "kitchen_cabinet": 2,
+          "fridge": 1,
           "medicine_cabinet": 1,
           "dumpster": 3,
           "wardrobe": 3,
           "car_trunk": 2,
           "toolbox": 2,
-          "woodpile": 2
+          "woodpile": 1
         },
         "guaranteed": {
-          "candles": 3,
-          "lineman_tools": 1,
-          "gas_can": 1
+          "candles": 2,
+          "empty_bottle": 1
         },
-        "note": "home, Marguerite's porch, Ray's garage, alley. diesel_jug comes via Ray dialogue."
+        "note": "Home block near Prater Way (HUD SECTOR 4): Braith & Carly's house, Lolo's clinic porch, Gil's garage, the Pruitts. gas_can/mech_tools come from start_inventory; pruitt_scarf from Lolo (dialogue). Rain-barrel/river water source (late summer)."
       },
       {
-        "location": "loc_belknap_pharmacy",
+        "location": "loc_sparks_marina",
+        "containers": {
+          "car_trunk": 2,
+          "cooler_chest": 1,
+          "dumpster": 1
+        },
+        "guaranteed": {},
+        "note": "Ch1 water run: ch01_lake_edge fills water_dirty x4 with the bucket; boil at ch01_water_station (-> water_clean). Late-summer heat: little shade."
+      },
+      {
+        "location": "loc_prater_pharmacy",
         "containers": {
           "medicine_cabinet": 2,
           "dumpster": 1,
           "locker": 1
         },
         "guaranteed": {
-          "pharmacy_bag": 1,
-          "insulin_vial": 2,
-          "cool_pack": 1,
           "bandage": 1
         },
         "category_bias": {
           "med": 1.3
         },
-        "note": "world.js spots dump_pharm + pharm_back. insulin_vial gated by flag wren_dealt."
+        "flag_gated": {
+          "flag": "kit_dealt",
+          "effect": "if true (Kit's crew already stripped the back room) medicine_cabinet count -1"
+        },
+        "note": "Looted Day 2. pharmacy_bag (clinic supplies) comes from ch01_kit_pharmacy dialogue."
       }
     ],
     "ch02": [
       {
-        "location": "loc_blatnik_bridge",
+        "location": "loc_virginia_bridge",
         "containers": {
           "car_trunk": 3,
-          "dumpster": 1,
-          "woodpile": 2
+          "dumpster": 1
         },
-        "guaranteed": {}
+        "guaranteed": {},
+        "note": "Authority checkpoint (Cpl. Haas). River access under the bridge."
       },
       {
-        "location": "loc_decc_ration",
+        "location": "loc_rscc_registry",
         "containers": {
           "kitchen_cabinet": 1,
-          "locker": 1
+          "locker": 1,
+          "cooler_chest": 1
         },
         "guaranteed": {
-          "ration": 1,
-          "ration_card": 1
+          "ration": 1
         },
-        "note": "ration line hand-out"
+        "note": "Registry + ration hall hand-out. ration_card / priority_card come from dialogue."
       },
       {
-        "location": "loc_lakehead_memorial",
+        "location": "loc_meadows_general",
         "containers": {
           "medicine_cabinet": 2,
           "locker": 1,
@@ -1232,14 +1402,25 @@
         "category_bias": {
           "med": 1.2
         },
-        "note": "parking garage looters"
+        "note": "Parking ramp level 3 tanker (q_hospital_diesel), squatters."
+      },
+      {
+        "location": "loc_fourth_street",
+        "containers": {
+          "dumpster": 2,
+          "car_trunk": 2,
+          "kitchen_cabinet": 1,
+          "wardrobe": 1
+        },
+        "guaranteed": {},
+        "note": "Motel row; Dutch's Silver State Pawn (trader_dutch). Viaduct Crew turf."
       }
     ],
     "ch03": [
       {
-        "location": "loc_east_end",
+        "location": "loc_sparks_block",
         "containers": {
-          "kitchen_cabinet": 1,
+          "kitchen_cabinet": 2,
           "wardrobe": 3,
           "woodpile": 2,
           "dumpster": 2,
@@ -1250,10 +1431,25 @@
           "wool_blanket": 1,
           "firewood": 2
         },
-        "note": "night fire"
+        "note": "Night fire at Gil's garage. First cold autumn nights."
       },
       {
-        "location": "loc_proctor_yard",
+        "location": "loc_peavine_shack",
+        "containers": {
+          "kitchen_cabinet": 1,
+          "toolbox": 1,
+          "supply_cache": 1
+        },
+        "guaranteed": {
+          "hand_radio": 1,
+          "batteries": 2,
+          "water_clean": 1,
+          "bandage": 1
+        },
+        "note": "Augie's radio shack on Peavine; Walt met here; Rourke on the road."
+      },
+      {
+        "location": "loc_tric_warehouses",
         "containers": {
           "car_trunk": 2,
           "toolbox": 3,
@@ -1267,52 +1463,48 @@
         "category_bias": {
           "material": 1.3
         },
-        "note": "world.js crate_yard + bus_battery spots"
+        "note": "Industrial center east of Sparks (Darlene)."
       },
       {
-        "location": "loc_lou_shack",
+        "location": "loc_rscc_registry",
         "containers": {
-          "kitchen_cabinet": 1,
-          "toolbox": 1,
-          "supply_cache": 1
+          "wardrobe": 1,
+          "kitchen_cabinet": 1
         },
-        "guaranteed": {
-          "hand_radio": 1,
-          "batteries": 2,
-          "radio_crystal": 0,
-          "water_clean": 1,
-          "bandage": 1
-        }
-      },
-      {
-        "location": "loc_ore_docks",
-        "containers": {
-          "wardrobe": 1
-        },
-        "guaranteed": {
-          "dried_fish": 1
-        },
+        "guaranteed": {},
         "optional": true,
-        "note": "Harbor soup line (optional)"
+        "note": "Ration hall / Annie's table (optional)."
       }
     ],
     "ch04": [
       {
-        "location": "loc_jay_cooke",
+        "location": "loc_airguard_ramp",
+        "containers": {
+          "locker": 1,
+          "toolbox": 2,
+          "car_trunk": 2,
+          "kitchen_cabinet": 1
+        },
+        "guaranteed": {},
+        "note": "Air Guard ramp, Hangar 2: gpu_cart heist (dialogue give). Authority guards chase (enc_ch04_ramp_chase)."
+      },
+      {
+        "location": "loc_steamboat_creek",
         "containers": {
           "car_trunk": 2,
-          "woodpile": 2,
+          "woodpile": 1,
           "corpse": 1,
-          "kitchen_cabinet": 1,
+          "kitchen_cabinet": 2,
           "wardrobe": 2,
           "gun_safe": 1
         },
         "guaranteed": {
-          "firewood": 4
-        }
+          "firewood": 2
+        },
+        "note": "Approach to Galena; Salt's culvert; Lunds."
       },
       {
-        "location": "loc_thomson_dam",
+        "location": "loc_galena_station",
         "containers": {
           "locker": 1,
           "toolbox": 3,
@@ -1321,18 +1513,15 @@
           "wardrobe": 1
         },
         "guaranteed": {
-          "relay_kit": 1,
-          "hank_keys": 1,
-          "canned_food": 1,
-          "start_battery": 1,
-          "water_clean": 2
+          "canned_food": 2,
+          "water_clean": 1
         },
-        "note": "powerhouse; dam_filter spot = intake locker"
+        "note": "Geothermal plant. walt_keys + relay_kit given by chapter_start_effects (not loot)."
       }
     ],
     "ch05": [
       {
-        "location": "loc_ore_docks",
+        "location": "loc_tric_warehouses",
         "containers": {
           "kitchen_cabinet": 2,
           "locker": 1,
@@ -1340,12 +1529,12 @@
         },
         "guaranteed": {
           "grain_sack": 1,
-          "water_clean": 2
+          "water_clean": 1
         },
-        "note": "world.js dock_crate"
+        "note": "Convoy staging; Darlene's reefer trailer."
       },
       {
-        "location": "loc_hwy53_blockade",
+        "location": "loc_i80_blockade",
         "containers": {
           "car_trunk": 3,
           "locker": 1,
@@ -1354,13 +1543,22 @@
           "woodpile": 2
         },
         "guaranteed": {
-          "flare": 2,
-          "signal_fuse": 1
+          "flare": 2
         },
-        "note": "world.js blockade_fuel (burned sedan)"
+        "note": "Compact blockade, rail signal cabinet (signal_fuse = start_inventory), overpass (Wes)."
       },
       {
-        "location": "loc_proctor_yard",
+        "location": "loc_mustang_truckstop",
+        "containers": {
+          "kitchen_cabinet": 2,
+          "car_trunk": 3,
+          "locker": 1
+        },
+        "guaranteed": {},
+        "note": "Mo's fuel market (trader_mo); stock tank water."
+      },
+      {
+        "location": "loc_sparks_yard",
         "containers": {
           "toolbox": 2,
           "locker": 1,
@@ -1368,35 +1566,57 @@
         },
         "guaranteed": {
           "canned_food": 1
-        }
+        },
+        "note": "UP yard: Boone's back door (trader_boone)."
       }
     ],
     "ch06": [
       {
-        "location": "loc_east_end",
+        "location": "loc_sparks_block",
         "containers": {
           "medicine_cabinet": 2,
           "wardrobe": 2,
-          "woodpile": 1,
+          "woodpile": 2,
           "gun_safe": 1
         },
         "guaranteed": {
           "bolt_cutters": 1,
-          "water_clean": 1
+          "water_clean": 1,
+          "vet_kit": 1
         },
-        "note": "quarantine sweep; floor_cache = player stash mechanic, not loot"
+        "note": "Quarantine sweep. vet_kit at Lolo's clinic (story ch06 items)."
       },
       {
-        "location": "loc_blatnik_bridge",
+        "location": "loc_fourth_street",
         "containers": {
-          "car_trunk": 3,
+          "car_trunk": 2,
+          "dumpster": 2,
+          "locker": 1
+        },
+        "guaranteed": {},
+        "note": "Dutch (Act II prices), Marsh's motel."
+      },
+      {
+        "location": "loc_silver_spur",
+        "containers": {
+          "kitchen_cabinet": 3,
+          "locker": 1,
+          "fridge": 1
+        },
+        "guaranteed": {},
+        "note": "The Floor's HQ; Floor commissary (trader_floor, spur_chip)."
+      },
+      {
+        "location": "loc_rscc_registry",
+        "containers": {
           "military_crate": 1,
           "locker": 1
         },
-        "guaranteed": {}
+        "guaranteed": {},
+        "note": "Avila's command post."
       },
       {
-        "location": "loc_lift_bridge",
+        "location": "loc_rail_trench",
         "containers": {
           "locker": 1,
           "military_crate": 1,
@@ -1404,15 +1624,15 @@
         },
         "guaranteed": {
           "med_kit": 1,
-          "ironwood_id": 0,
           "bandage": 2
         },
-        "note": "ironwood_id via Ruiz if spared"
+        "note": "Bradley set piece / freight_car_drop. ironwood_id via Ruiz if spared (dialogue)."
       }
     ],
     "ch07": [
       {
-        "location": "loc_lou_shack",
+        "location": "loc_peavine_shack",
+        "level": "ch07_dead_air",
         "containers": {
           "kitchen_cabinet": 1,
           "supply_cache": 1,
@@ -1420,37 +1640,69 @@
         },
         "guaranteed": {
           "dosimeter": 1,
-          "hand_radio": 0,
           "batteries": 2,
           "flare": 2
-        }
+        },
+        "note": "Dead air; dosimeter unlocks RAD."
       },
       {
-        "location": "loc_proctor_yard",
+        "location": "loc_us50_fallon",
+        "level": "ch07_dead_air",
+        "containers": {
+          "kitchen_cabinet": 2,
+          "car_trunk": 3,
+          "wardrobe": 2,
+          "gun_safe": 1,
+          "woodpile": 1,
+          "medicine_cabinet": 1
+        },
+        "guaranteed": {},
+        "note": "Compact checkpoint at the canal bridge (Ross); TCID canal water; Rourke."
+      },
+      {
+        "location": "loc_dixie_annex",
+        "level": "ch07b_dixie_valley",
         "containers": {
           "locker": 1,
-          "car_trunk": 3,
-          "toolbox": 2
-        },
-        "guaranteed": {
-          "sled": 1,
-          "mask_filter": 1
-        }
-      },
-      {
-        "location": "loc_east_end",
-        "containers": {
-          "kitchen_cabinet": 3,
-          "wardrobe": 2,
-          "medicine_cabinet": 1,
+          "car_trunk": 2,
+          "toolbox": 2,
+          "military_crate": 1,
           "woodpile": 1
         },
-        "guaranteed": {}
+        "guaranteed": {
+          "mask_filter": 1
+        },
+        "note": "Fence, guard shack (Tolliver), hangar (recovery detail, cage four: control_cards via dialogue). gpu_cart powers the maglocks."
+      },
+      {
+        "location": "loc_annex_holds",
+        "level": "ch07b_dixie_valley",
+        "containers": {
+          "locker": 3,
+          "medicine_cabinet": 2,
+          "military_crate": 1
+        },
+        "guaranteed": {
+          "iodide_tablets": 1,
+          "med_kit": 1,
+          "bandage": 2
+        },
+        "note": "Wing A holds; lamp_kit / annex_log via dialogue. Infirmary in Wing A: guaranteed med_kit + bandages."
+      },
+      {
+        "location": "loc_dixie_hotsprings",
+        "level": "ch07b_dixie_valley",
+        "containers": {
+          "corpse": 2
+        },
+        "guaranteed": {},
+        "optional": true,
+        "note": "Optional den: two torpid Tallmen."
       }
     ],
     "ch08": [
       {
-        "location": "loc_east_end",
+        "location": "loc_sparks_block",
         "containers": {
           "kitchen_cabinet": 2,
           "wardrobe": 2,
@@ -1466,7 +1718,7 @@
         }
       },
       {
-        "location": "loc_lakehead_memorial",
+        "location": "loc_meadows_general",
         "containers": {
           "medicine_cabinet": 5,
           "locker": 3,
@@ -1474,9 +1726,10 @@
           "military_crate": 1
         },
         "guaranteed": {
-          "iodide_tablets": 3,
+          "iodide_tablets": 2,
           "mask_filter": 2,
-          "antibiotics": 1
+          "antibiotics": 1,
+          "med_kit": 1
         },
         "category_bias": {
           "med": 1.4
@@ -1484,45 +1737,79 @@
         "rad_zones": {
           "rad_med": 0.3,
           "rad_low": 0.4
-        }
+        },
+        "note": "Dr. Ames (ch08_ames_hand)."
       },
       {
-        "location": "loc_ore_docks",
+        "location": "loc_sparks_yard",
         "containers": {
-          "supply_cache": 1,
-          "kitchen_cabinet": 1,
           "corpse": 3,
-          "locker": 1,
+          "locker": 2,
+          "military_crate": 1,
           "woodpile": 1
         },
-        "guaranteed": {
-          "dried_fish": 1,
-          "wool_blanket": 1
-        },
+        "guaranteed": {},
         "rad_zones": {
           "rad_low": 0.5,
           "rad_med": 0.2
-        }
+        },
+        "note": "Remnant base; Boone (expired filters risk)."
+      },
+      {
+        "location": "loc_sparks_library",
+        "containers": {
+          "kitchen_cabinet": 2,
+          "locker": 1,
+          "medicine_cabinet": 1,
+          "woodpile": 1
+        },
+        "guaranteed": {
+          "wool_blanket": 1
+        },
+        "note": "Annie's seed library / atrium greenhouse (q_annie_greenhouse)."
+      },
+      {
+        "location": "loc_galena_station",
+        "containers": {
+          "locker": 1,
+          "kitchen_cabinet": 2,
+          "medicine_cabinet": 1
+        },
+        "guaranteed": {
+          "bandage": 2,
+          "canned_food": 2
+        },
+        "note": "Warm base; galena_shower decon."
       }
     ],
     "ch09": [
+      {
+        "location": "loc_sparks_block",
+        "containers": {
+          "wardrobe": 1,
+          "corpse": 1,
+          "woodpile": 1,
+          "kitchen_cabinet": 1,
+          "medicine_cabinet": 1
+        },
+        "guaranteed": {},
+        "note": "Column departure."
+      },
       {
         "location": "river_ice",
         "containers": {
           "corpse": 4,
           "car_trunk": 2,
-          "woodpile": 3
+          "woodpile": 4
         },
         "guaranteed": {
-          "firewood": 4,
           "flare": 2,
           "bandage": 2
         },
-        "proposed_area_id": true,
-        "note": "story says 'river ice' between east end and Jay Cooke; burn barrels at stops"
+        "note": "Frozen Truckee: burn barrels at stops; Glendale bridge picket; ice_break_qte. +4 firewood from chapter_start_effects."
       },
       {
-        "location": "loc_jay_cooke",
+        "location": "loc_steamboat_creek",
         "containers": {
           "woodpile": 4,
           "corpse": 3,
@@ -1542,15 +1829,15 @@
         }
       },
       {
-        "location": "loc_thomson_dam",
+        "location": "loc_galena_station",
         "containers": {
           "military_crate": 2,
           "locker": 2,
           "kitchen_cabinet": 2
         },
         "guaranteed": {
-          "sled": 0,
-          "water_clean": 1
+          "med_kit": 1,
+          "ammo_556": 12
         },
         "rad_zones": {
           "rad_low": 0.2
@@ -1559,24 +1846,28 @@
     ],
     "ch10": [
       {
-        "location": "loc_thomson_dam",
+        "location": "loc_galena_station",
         "containers": {
-          "military_crate": 1,
+          "military_crate": 2,
           "locker": 2,
-          "medicine_cabinet": 1,
-          "woodpile": 1,
-          "kitchen_cabinet": 1
+          "medicine_cabinet": 2,
+          "woodpile": 3,
+          "kitchen_cabinet": 2
         },
         "guaranteed": {
-          "water_clean": 1,
-          "bandage": 1,
-          "ration": 1
-        }
+          "bandage": 3,
+          "ration": 1,
+          "flare": 2,
+          "med_kit": 2,
+          "rifle_ammo": 4,
+          "ammo_556": 6
+        },
+        "note": "Lamp line siege. Warm Room infirmary (med_kit x2), Remnant ammo cache (rifle_ammo, 5.56). trader_annie in the Warm Room."
       }
     ]
   },
   "legacy_world_spots": {
-    "note": "js/world.js this.loot fixed spots -> container type + fixed contents (ids normalised via items.legacy_aliases). Keep them as hand-placed guaranteed loot.",
+    "note": "js/world.js this.loot fixed spots -> container type + fixed contents (ids normalised via items.legacy_aliases). v2 locations: dump_pharm/pharm_back = loc_prater_pharmacy, crate_yard/bus_battery = loc_sparks_yard, dump_home = loc_sparks_block, blockade_fuel = loc_i80_blockade, dam_filter = loc_galena_station, dock_crate = loc_silver_spur.",
     "spots": {
       "dump_pharm": {
         "container": "dumpster",
@@ -1598,7 +1889,7 @@
       "dump_home": {
         "container": "dumpster",
         "fixed_items": {
-          "firewood": 3,
+          "firewood": 2,
           "cloth": 2,
           "ration": 1,
           "fuel": 1
@@ -1611,7 +1902,8 @@
           "ammo_9mm": 8,
           "pistol": 1,
           "scrap": 2
-        }
+        },
+        "note": "loc_i80_blockade burned sedan"
       },
       "bus_battery": {
         "container": "toolbox",
@@ -1624,9 +1916,8 @@
       "pharm_back": {
         "container": "fridge",
         "fixed_items": {
-          "insulin_vial": 1,
           "bandage": 2,
-          "cool_pack": 1,
+          "painkillers": 1,
           "ration": 1
         }
       },
@@ -1635,26 +1926,133 @@
         "fixed_items": {
           "mask_filter": 2,
           "scrap": 2
-        }
+        },
+        "note": "Galena intake locker"
       },
       "dock_crate": {
         "container": "supply_cache",
         "fixed_items": {
           "ration": 2,
           "cloth": 2,
-          "firewood": 2
-        }
+          "water_clean": 1
+        },
+        "note": "v1 harbor crate -> Silver Spur kitchen crate"
       }
     }
   },
   "note_start_inventory": "Story chapter start_inventory (items.json starting_loadout.by_chapter_from_story) is counted in the budget on top of these tables.",
   "item_act_weight_mult": {
-    "_note": "Per-item act multiplier applied on top of category_weight_mult (missing act = 1.0). Keeps 5.56 / AR-15 a rare prepper find in collapse.",
+    "_note": "Per-item act multiplier on top of category_weight_mult (missing act = 1.0). Seasonal: winter gear is rare in late_summer, ramps through autumn/late_fall and is vital in nuclear_winter; summer gear fades. 5.56 / AR-15 stay rare prepper finds in collapse.",
     "ammo_556": {
       "collapse": 0.25
     },
     "ar15": {
       "collapse": 0.6
+    },
+    "arctic_parka": {
+      "collapse": 0.35,
+      "civil_war": 0.8,
+      "nuclear_winter": 1.8
+    },
+    "military_parka": {
+      "civil_war": 1.0,
+      "nuclear_winter": 1.6
+    },
+    "snow_pants": {
+      "blackout": 0.1,
+      "collapse": 0.5,
+      "civil_war": 1.0,
+      "nuclear_winter": 1.6
+    },
+    "coat": {
+      "blackout": 0.3,
+      "collapse": 0.9,
+      "civil_war": 1.2,
+      "nuclear_winter": 1.4
+    },
+    "boots_insulated": {
+      "blackout": 0.2,
+      "collapse": 0.6,
+      "civil_war": 1.0,
+      "nuclear_winter": 1.6
+    },
+    "balaclava": {
+      "blackout": 0.1,
+      "collapse": 0.5,
+      "civil_war": 1.0,
+      "nuclear_winter": 1.5
+    },
+    "insulated_gloves": {
+      "blackout": 0.2,
+      "collapse": 0.6,
+      "civil_war": 1.0,
+      "nuclear_winter": 1.5
+    },
+    "wool_hat": {
+      "blackout": 0.3,
+      "collapse": 0.8,
+      "civil_war": 1.0,
+      "nuclear_winter": 1.3
+    },
+    "thermal_underlayer": {
+      "blackout": 0.3,
+      "collapse": 0.8,
+      "civil_war": 1.0,
+      "nuclear_winter": 1.4
+    },
+    "wool_blanket": {
+      "blackout": 0.5,
+      "collapse": 0.9,
+      "nuclear_winter": 1.3
+    },
+    "rain_poncho": {
+      "blackout": 0.6,
+      "collapse": 1.2,
+      "civil_war": 1.5,
+      "nuclear_winter": 1.2
+    },
+    "cotton_tee": {
+      "collapse": 0.6,
+      "civil_war": 0.3,
+      "nuclear_winter": 0.15
+    },
+    "ball_cap": {
+      "collapse": 0.6,
+      "civil_war": 0.3,
+      "nuclear_winter": 0.15
+    },
+    "flannel_shirt": {
+      "blackout": 0.8,
+      "collapse": 1.3,
+      "civil_war": 0.9,
+      "nuclear_winter": 0.6
+    },
+    "work_boots": {
+      "collapse": 1.0,
+      "civil_war": 0.8,
+      "nuclear_winter": 0.5
+    },
+    "water_clean": {
+      "blackout": 0.6,
+      "collapse": 0.8,
+      "civil_war": 0.85
+    },
+    "empty_bottle": {
+      "blackout": 1.4
+    },
+    "candy_bar": {
+      "blackout": 1.2
+    },
+    "firewood": {
+      "blackout": 0.7,
+      "nuclear_winter": 1.2
     }
+  },
+  "revision": "Nevada Revision 2 locations + seasonal loot weighting",
+  "season_of_act": {
+    "blackout": "late_summer",
+    "collapse": "autumn",
+    "civil_war": "late_fall",
+    "nuclear_winter": "nuclear_winter"
   }
 }

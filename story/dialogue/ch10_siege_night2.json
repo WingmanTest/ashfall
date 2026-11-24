@@ -1,0 +1,163 @@
+{
+  "id": "ch10_siege_night2",
+  "chapter": "ch10",
+  "location": "loc_galena_station",
+  "trigger": "Siege night 2 (the probe). Hollows call from the dark; prowlers test the poles (enc_ch10_hollow_prowlers).",
+  "speakers": [
+    "narrator",
+    "braith",
+    "wraith",
+    "pete_lund",
+    "hollow"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Night two. The lamp line holds. Every pole has a guard. Every guard has a flare.",
+      "branches": [
+        {
+          "next": "skip",
+          "conditions": [
+            {
+              "any": [
+                {
+                  "flag": "den_killed",
+                  "eq": true
+                },
+                {
+                  "flag": "tallmen_killed",
+                  "gte": 2
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "next": "n1"
+        }
+      ]
+    },
+    {
+      "id": "skip",
+      "speaker": "narrator",
+      "text": "You thinned them out at Dixie Valley. You don't know by how many. You only know they skipped the test. They're in a hurry.",
+      "next": "n1"
+    },
+    {
+      "id": "n1",
+      "speaker": "narrator",
+      "text": "Three a.m. A scream from the north fence. Then silence. Then the cooling-water line starts to whistle.",
+      "next": "v1"
+    },
+    {
+      "id": "v1",
+      "speaker": "hollow",
+      "text": "[From the dark past the north fence] Halvorsen's here. He's fine. Open the gate. Open the gate, Pearce.",
+      "branches": [
+        {
+          "next": "v2w",
+          "conditions": [
+            {
+              "flag": "wraith_alive",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "v2x"
+        }
+      ]
+    },
+    {
+      "id": "v2w",
+      "speaker": "wraith",
+      "text": "[Hackles up. Growling at the voice, not the fence. She won't go near the north gate.]",
+      "effects": [
+        {
+          "set": "wraith_mimic_warned",
+          "value": true
+        }
+      ],
+      "next": "v3"
+    },
+    {
+      "id": "v2x",
+      "speaker": "narrator",
+      "text": "At the edge of the floodlight: a man-shape. No breath plume. Smiling with half its face.",
+      "next": "v3"
+    },
+    {
+      "id": "v3",
+      "speaker": "narrator",
+      "text": "Low shapes on all fours along the dark edge of the lights, testing each pole. Coyote-sized. Wrong.",
+      "effects": [
+        {
+          "event": "encounter",
+          "id": "enc_ch10_hollow_prowlers"
+        }
+      ],
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "speaker": "pete_lund",
+      "text": "They got Halvorsen! Off the north pole! And the water line's split, Pearce! The pressure's dropping!",
+      "choices": [
+        {
+          "text": "[Fix the line. Under the lights]",
+          "next": "line",
+          "effects": [
+            {
+              "event": "encounter",
+              "id": "enc_ch10_siege_n2"
+            },
+            {
+              "stat": "health",
+              "delta": -15
+            }
+          ]
+        },
+        {
+          "text": "[Go after Halvorsen]",
+          "next": "man",
+          "effects": [
+            {
+              "add": "kindness",
+              "value": 1
+            },
+            {
+              "add": "siege_breaches",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "line",
+      "speaker": "narrator",
+      "text": "You clamp the line while Pete and two others stand over you with flares. Something takes a step into the light. Then back.",
+      "next": "end"
+    },
+    {
+      "id": "man",
+      "speaker": "narrator",
+      "text": "You find Halvorsen in the snow outside the fence. Alive. Dragged, then dropped when your flashlight hit them.",
+      "next": "man2"
+    },
+    {
+      "id": "man2",
+      "speaker": "narrator",
+      "text": "By the time you're back, the water line's frozen. Unit 1 trips. It's four hours to restart.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "wraith",
+      "text": "[Wraith sleeps against the control room door all day. She doesn't sleep at night anymore.]",
+      "end": true
+    }
+  ]
+}

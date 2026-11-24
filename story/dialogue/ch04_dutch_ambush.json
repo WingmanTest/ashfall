@@ -1,0 +1,88 @@
+{
+  "id": "ch04_dutch_ambush",
+  "chapter": "ch04",
+  "location": "loc_steamboat_creek",
+  "trigger": "On the Steamboat road, if trader_dutch_rep <= -1: Dutch sold your route.",
+  "speakers": [
+    "narrator",
+    "bridge_boy",
+    "braith",
+    "wraith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "wraith",
+      "text": "[Freezes in the road. Growls at the culvert ahead.]",
+      "next": "a1"
+    },
+    {
+      "id": "a1",
+      "speaker": "bridge_boy",
+      "text": "Nice cart, airman. Dutch says it's worth a lot. Dutch says you're cheap.",
+      "next": "a2"
+    },
+    {
+      "id": "a2",
+      "speaker": "narrator",
+      "text": "Five of them. Viaduct Crew. Hungry, armed, scared. Somebody sold you for a can of peaches.",
+      "choices": [
+        {
+          "text": "[Fight]",
+          "next": "fight",
+          "effects": [
+            {
+              "event": "encounter",
+              "id": "enc_ch04_dutch_ambush"
+            }
+          ]
+        },
+        {
+          "text": "[Offer food to pass]",
+          "next": "pay",
+          "conditions": [
+            {
+              "item": "canned_food",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "canned_food",
+              "qty": 1
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fight",
+      "speaker": "narrator",
+      "text": "When it's over, two of them are running. One isn't. He was maybe seventeen.",
+      "next": "end"
+    },
+    {
+      "id": "pay",
+      "speaker": "narrator",
+      "text": "They take the cans and back off. One of them says, 'Sorry, man. It's Dutch. It's not personal.'",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "Dutch won't see you again. You'll make sure of it.",
+      "effects": [
+        {
+          "set": "dutch_betrayed",
+          "value": true
+        }
+      ],
+      "end": true
+    }
+  ]
+}

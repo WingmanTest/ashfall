@@ -1,211 +1,180 @@
-# ASHFALL: Lakehead, level data (`/workspace/game2/levels/`)
+# Nevada Revision 2: level data (`/workspace/game2/levels/`)
 
-There is one JSON level per story chapter (10 in total). Each level is a 2 m tile grid plus placed entities. Everything here is data. No engine, story, systems or asset files were modified.
+Sparks / Reno, Nevada. Protagonist Braith Pearce. **11 level files for 10 story chapters**: Chapter 7 is split into
+`ch07_dead_air` and `ch07b_dixie_valley`. Everything here is data plus the Python tools that generate and check it.
+`story/` (Loremaster), `systems/` (Quartermaster), `render/` (Lumen), `js/` (Prime) and `assets/` are read-only inputs.
+`minimap_mockups/` is a separate deliverable and is never touched by the tools.
 
 ```
 levels/
-  README.md                 this file
-  schema.json               JSON Schema (draft 2020-12) for a level file
-  id_registry.json          level-owned ids (scripted set pieces) + offline fallback ids
-  ch01_day_three.json ... ch10_the_warm_room.json
-  previews/chXX_*.png       top-down maps rendered from the JSON
+  README.md            this file
+  index.json           level manifest (engine-compatible; see below)
+  schema.json          JSON Schema (draft 2020-12) for a level file (formatVersion 1, storyVersion 2)
+  id_registry.json     level-owned ids: flags, set pieces, extras, Ch7 split tables, remote speakers
+  ch01_day_three.json ... ch10_the_warm_room.json   (11 files, list below)
+  previews/<level id>.png    top-down maps rendered from the JSON
+  minimap_mockups/     (separate mock-ups; untouched)
   tools/
-    validate.py             schema + assets + reachability + story/systems cross-checks (run this)
-    render_preview.py       JSON -> previews/*.png
-    build_levels.py         authoring source the JSON was generated from (+ levelkit.py helpers)
-    make_schema.py, make_registry.py, build_all.sh
+    build_all.sh       make_schema -> build_levels -> make_registry -> render_preview -> make_index -> validate
+    build_levels.py    authoring source for all 11 levels (uses levelkit.py)
+    levelkit.py        grid/building/spawn helpers; season tile palettes; systems loot top-up; prop-backed containers
+    validate.py        the gate (must print "11/11 levels pass. 0 global errors.")
+    render_preview.py  JSON -> previews/*.png (removes stale PNGs)
+    make_schema.py, make_registry.py, make_index.py
 ```
 
 ```bash
-python3 levels/tools/validate.py            # expect: 10/10 levels pass  (VERBOSE=1 lists warnings)
-python3 levels/tools/render_preview.py      # re-render PNGs after hand edits
+bash levels/tools/build_all.sh                 # regenerate everything + validate
+python3 levels/tools/validate.py               # validate only (VERBOSE=1 lists warnings)
 ```
-You can edit the JSON by hand. **Don't run `build_all.sh` / `build_levels.py` afterwards**, because they regenerate and overwrite the JSON.
+Hand edits to the JSON are fine, but `build_all.sh` regenerates and overwrites them: edit `build_levels.py` instead.
 
-## Format choice
+## Chapter list (exact `story/gameplay_hooks.json` order)
 
-The engine (`js/world.js`) has **no level loader or level format**. Its world is one hard-coded street: buildings, props, loot, NPC positions and fires all live in `World.build()`. `index.html` currently points to `js/game.js`, which doesn't exist yet, so the engine is mid-rewrite. Rather than invent conflicting conventions, this format **adopts the engine's existing conventions exactly** so that Echo can feed it to the code that already exists:
+| # | Level file | Story chapter | Locations | Lumen preset |
+|---|---|---|---|---|
+| 1 | `ch01_day_three.json` | ch01 | loc_sparks_block, loc_sparks_marina, loc_prater_pharmacy | `summer` |
+| 2 | `ch02_the_registry.json` | ch02 | loc_virginia_bridge, loc_rscc_registry, loc_meadows_general, loc_fourth_street | `summer` |
+| 3 | `ch03_the_long_cold.json` | ch03 | loc_sparks_block, loc_peavine_shack, loc_rscc_registry, loc_tric_warehouses | `autumn` |
+| 4 | `ch04_black_start.json` | ch04 | loc_airguard_ramp, loc_steamboat_creek, loc_galena_station | `autumn` |
+| 5 | `ch05_route_9.json` | ch05 | loc_tric_warehouses, loc_i80_blockade, loc_mustang_truckstop, loc_sparks_yard | `late_fall` |
+| 6 | `ch06_the_trench.json` | ch06 | loc_sparks_block, loc_fourth_street, loc_silver_spur, loc_rscc_registry, loc_rail_trench | `late_fall` |
+| 7 | `ch07_dead_air.json` | ch07 (part 1 + return leg) | loc_peavine_shack, loc_us50_fallon | `late_fall` |
+| 7b | `ch07b_dixie_valley.json` | ch07 (Annex) | loc_dixie_annex, loc_annex_holds, loc_dixie_hotsprings | `late_fall` |
+| 8 | `ch08_ashfall.json` | ch08 | loc_sparks_block, loc_meadows_general, loc_sparks_yard, loc_sparks_library, loc_galena_station | `fallout_winter` |
+| 9 | `ch09_the_long_night.json` | ch09 | loc_sparks_block, river_ice, loc_steamboat_creek, loc_galena_station | `fallout_winter` |
+| 10 | `ch10_the_warm_room.json` | ch10 | loc_galena_station | `fallout_winter` |
 
-| Engine convention (world.js / enemies.js / config.js) | Level format |
+Chapter 7 play order: `ch07_dead_air` (Peavine, US-50, Fallon checkpoint) -> `chapter_end next "ch07b_dixie_valley"` ->
+`ch07b_dixie_valley` (Annex) -> `chapter_end next "ch07_dead_air"` with `ch07b_done=true` (the level's `returnTo`) ->
+`ch07_dead_air` reloads at `spawn_return` in Fallon (`ch07_fallon_return`, then `ch07_where` on Peavine) -> `ch08_ashfall`.
+Each file's top-level `next` is the story-order next level (dead_air -> ch07b, ch07b -> ch08).
+
+## `index.json`
+
+Generated by `tools/make_index.py`, shaped for the existing engine readers (checked read-only):
+
+* `files[]`: plain file names. `js/load.js listDir()` maps `index.files[]` to names. `js/levels.js loadLevels()` then boots only
+  `schema.json`, `id_registry.json` and the `ch01*` file, and lazy-loads the rest.
+* `chapters[]`: the **10 story chapters** in order (`id`, `title`, `act`, `season`, `storySeason`, `file`, `levels[]`).
+  `loadLevels()` uses `index.chapters` as the chapter list and `advanceChapter()` indexes it by position, so ch07b is listed
+  inside `chapters[ch07].levels`, not as an 11th chapter.
+* `levels[]`: all **11 level files** in play order with `id`, `file`, `chapter`, `title`, `act`, `season` (Lumen preset),
+  `storySeason`, `weather`, `locations`, `preview`, `next`, `returnTo`, `storyVersion: 2`, `formatVersion: 1`.
+* There are deliberately no top-level `world` / `level` keys, because `loadLevels()` would take them as the world map.
+* `validate.py` checks the manifest against the level files and previews.
+
+## Format (formatVersion 1, storyVersion 2)
+
+Grid: `grid.cellSize` 2 m, `origin` = NW corner, row 0 = north (-z), `tiles[]` strings and a `legend` (walkable / solid /
+roof / preview colour / floorTex / wallTex / groundType). The engine-relevant fields are unchanged from formatVersion 1:
+`spawns.player|npcs|enemies|loot`, `props[]`, `interactives[]`, `safeZones[]`, `triggers[]` (`on` = enter / exit / interact /
+flag / load; actions dialogue, set_flag, activate_group, set_time, set_weather, checkpoint, hud_unlock, cutscene, bark,
+push_back, chapter_end, spawn_setpiece), `encounters[]` (zone + groups with `wave` / `branch`), `objectives[]`, `locations[]`,
+`environment{}`. Revision 2 adds:
+
+| Field | Meaning |
 |---|---|
-| 1 unit = 1 m (`CFG.walk` 3.15 m/s, `eyeH` 1.62) | `units: "meters"` |
-| +x = right/east, forward = **-z**, y up, flat ground at y=0 | same. North/top of every map = -z, so the player starts at the bottom and walks "up" |
-| `rotation.y` radians (three.js) | `rotY` (PI faces -z/north, 0 faces +z/south, -PI/2 east, +PI/2 west) |
-| props placed with `fitHeight(obj, h)` then `position.set(x,0,z)` | prop `{asset, x, z, rotY, h, collide}`; `h` = target height for `fitHeight` |
-| AABB colliders `{minX,maxX,minZ,maxZ}` | solid tiles merge into AABBs (snippet below); props with `collide:true` push `boxOf()` |
-| `pbr(name)` loads `assets/polyhaven/<name>/<name>_{diff,nor,rough}_1k.jpg` | legend `floorTex` / `wallTex` are those Poly Haven names |
-| loot spot `{id,x,z,r,items,label,taken}` | loot `{id,x,z,r,label,container,location,guaranteed[]}`; roll `items` from `systems/loot_tables.json` |
-| `EnemySystem.spawn(kind,x,z)` kinds husk / raider / dog | enemy `type` = `systems/enemies.json` id; use its `code_kind` for `spawn()` |
-| `_addFire(scene,x,z,id)`, fire radius 3.4 m | `safeZones` of kind `campfire` / `burn_barrel` |
-| `setSky(timeOfDay, blizzard)`, 0 night, .25 dawn, .5 noon, .75 dusk | `environment.timeStart/timeEnd`, `set_time` action |
-| `LOCATIONS` `{x,z}` used for HUD place names | `locations[]` with id, centre and rect |
-| `CFG.maxEnemies` | `encounters[]` (zones with waves), capped at min(6, systems `chapter_curve.max_concurrent`) |
+| `storyVersion: 2`, `storyChapter`, `storyFile`, `returnTo`, `returnLeg` | story linkage; Ch7 return leg |
+| `buildings[]` | every building hull: `walled` (`#` perimeter, `,` interior, `D` doors, partitions) or `mass` (`B` rectangle); must equal what the grid shows |
+| `spawns.enemies[].storyEncounter`, `ambush`, `lowVisibilityTrigger`, `torpid`, `voiceLine`, `noBreathPlume`, `silent` | story encounter binding + Act III horror tags |
+| `spawns.loot[].propRef`, `render` | prop-backed containers (see the loot-to-prop section) |
+| `spawns.loot[].location`, `filler`, `guaranteed[]` | systems area binding (`systems/loot_tables.json areas[chNN]`) |
+| `spawns.npcs[].trader{}`, `relocatedFrom`, `crowd`, `companion` | trader stalls, ambient extras, Wraith |
+| `setPieces[]` | `tallman_glimpse` billboards (no collider / AI / interaction), `freight_car_drop`, `sealed_wing`, `standoff`, drones, MRAP, Bradley |
+| `stealth{routes, blindSpots}` | Ch6 sweep |
+| `companion{}` | Wraith spawn, follow nav (leash 6 m, catch-up 14 m, grid BFS), verbs |
+| `horror{}` | Ch8-10 sightline + `ambushPoints[]` |
+| `environment{season, environmentPreset, storySeason, seasonArc, ...}` | seasonal atmosphere (below) |
 
-The ids come from the other packages: **enemies, items and containers come from `systems/`** (Quartermaster). **Area/location ids, dialogue scene ids, NPC ids and weather ids come from `story/`** (Loremaster). Levels decide only **where** things go and **when** they activate. No stats are defined here.
+## Seasonal presets (Lumen `render/environments.js`)
 
-## Coordinates and the grid
+`environment.season` and `environment.environmentPreset` are exactly Lumen's `ENVIRONMENT_ORDER` ids, so
+`pipeline.setEnvironment(level.environment.season)` works directly. `storySeason` keeps the story id; `weather` / `tempC` /
+`nightTempC` are the story values (`gameplay_hooks.chapters[]`). Fog and sky colours, visibility and particle mode mirror the Lumen preset.
 
-```
-grid.origin = world (x,z) of the NW corner of cell (col 0, row 0)
-cell (c, r) spans  x = [ox + c*cs, ox + (c+1)*cs],  z = [oz + r*cs, oz + (r+1)*cs]      (cs = cellSize = 2 m)
-cell centre       x = ox + (c+0.5)*cs,             z = oz + (r+0.5)*cs
-tiles[r][c]       row 0 is the north edge (most negative z); the last row is the south edge (player start side)
-```
-All entity coordinates are **world meters** (not cells), so they plug straight into `position.set(x,0,z)`. Every map is laid out so the player starts near z ≈ 0..+8 (like the current engine street) and progresses toward -z.
+| Act | Chapters | `season` (Lumen) | `storySeason` | Weather (story) | Ground / precip | Visibility | snowCover |
+|---|---|---|---|---|---|---|---|
+| Blackout | 1-2 | `summer` | late_summer | heat_haze 35 C, dust_wind 33 C | dry dirt, sagebrush, dry lawns; precip `none`; particles `dust` | 95 m | 0 (no snow tiles, no frost) |
+| Society devolving | 3-4 | `autumn` | autumn | clear_autumn 14 C, autumn_wind 12 C | dusty dirt, dry leaves; `none`; `leaves` | 70 m | 0 |
+| Civil war | 5-7, 7b | `late_fall` | late_fall | sleet 2 C, overcast 1 C, overcast -1 C -> brown_sky | mud, wet asphalt, frost grass, salt playa; `sleet` / `drizzle`; `rain` | 48 m | 0 |
+| Fallout winter | 8-10 | `fallout_winter` | nuclear_winter | fallout_rain -> ashfall -10 C, blizzard -40 C, ashfall -34 C | ash snow, river ice, thin ice; `fallout_rain` / `ash_snow` / `ash`; `fallout` | 30 / 15 / 26 m | 0.75 / 1.0 / 0.9 |
 
-### Tile legend (each level embeds the legend entries it uses)
-| char | name | walk | solid | height m | render hint |
-|---|---|---|---|---|---|
-| `.` | snow_ground | ✓ | | 0 | floor `snow_02` |
-| `g` | dirt_gravel | ✓ | | 0 | floor `dirt` (rail yards, trails, Ch7 summer) |
-| `=` | road | ✓ | | 0 | floor `asphalt_snow` |
-| `r` | road_damaged | ✓ | | 0 | floor `road_damaged` (alleys, lanes) |
-| `,` | interior_floor | ✓ | | 0 | floor `dirty_concrete`, `roof:true` (ceiling at wall height) |
-| `D` | door | ✓ | | 0 | opening in a wall |
-| `G` | locked_gate | ✓* | ✓ | 1.8 | solid until the interactive on that cell sets its flag (Ch6 catwalk gate) |
-| `#` | wall | | ✓ | 4 | box, `red_brick` |
-| `H` | high_wall | | ✓ | 8 | box, `dirty_concrete` (map edges, abutments, cliffs) |
-| `B` | building_mass | | ✓ | 0 | **collision only**; a Kenney building prop stands on it (fallback: draw a `red_brick` box 7 m tall) |
-| `f` | fence | | ✓ | 1.3 | `rusty_corrugated_iron`, see-through for AI |
-| `c` | cover_low | | ✓ | 1.0 | sandbags/planters; crouch cover (`cover:true`) |
-| `x` | debris | | ✓ | 0.9 | `rust_coarse_01` (turbine housings, pylons, tables) |
-| `~` | open_water | | | -0.6 | water plane; not walkable |
-| `I` | river_ice | ✓ | | 0 | `snow_02` tinted blue |
-| `i` | thin_ice | ✓ | | 0 | `hazard:"thin_ice"` (crack/fall sequence) |
-| `_` | chasm | | | -8 | void (gorge) |
-| `b` | bridge_deck | ✓ | | 0 | `rusty_metal` (deck visuals; engine stays flat) |
-| `U` | covered_floor | ✓ | | 0 | roof at 5 m; `blocksAirLOS:true` (drones can't see you: overpasses, under bridges) |
-| `T` | tree | | ✓ | 6 | no tree asset; draw a trunk cylinder + cone/billboard |
+Snow textures (`snow_02`, `asphalt_snow`) and the ice tiles `I` / `i` exist only in the `nuclear_winter` tile palette.
+The only weather override is `ch07b_dixie_valley`, which uses `brown_sky` (the story's `weather_after_bursts`) for the whole
+level, documented in `environment.weatherOverride`. Mid-level changes use `set_weather` triggers: Ch7 Augie's radio goes dead
+-> `brown_sky`; Ch8 morning -> `ashfall` (`weather_late`). HUD unlocks (`environment.hud`) accumulate per `hud_unlocks`:
+Ch1 hp/hydration/hunger/companion, Ch3 warmth/temp, Ch5 ammo_military, Ch7 rad, Ch8 filter/seal.
 
-\* `G` counts as walkable for reachability (the gate is meant to be opened).
+## Act III: Tallmen and Hollows (Ch8-10 survival horror)
 
-## Top-level fields (see schema.json for every property)
+Enemy ids are exactly `story/gameplay_hooks.json` / `systems/enemies.json`: `tallman`, `assimilated_human` (Hollow,
+code_kind `mimic`), `assimilated_animal` (code_kind `mimic_beast`), `husk` (sick people, never Hollows). Ambush spawns carry
+`ambush: true` + `lowVisibilityTrigger: true` (+ `voiceLine`, `noBreathPlume`, `silent`). `horror.ambushPoints[]` lists each
+point `{id, x, z, r, kind, spawns[], lightFlicker}`. **Binding:** a tagged spawn stays dormant (hidden, no AI tick) until the
+player is inside the point radius AND visibility (ash, fog, darkness, flashlight off) is below `environment.visibilityM`, or
+the point's light flickers out. Hollows never render a breath plume; every living NPC must (story `assimilation.tells`).
 
-| field | meaning |
-|---|---|
-| `id`, `chapter`, `title`, `act`, `storyFile`, `next`, `summary`, `difficulty` | metadata; `next` = next level id (null for Ch10) |
-| `grid` | `cellSize`, `cols`, `rows`, `origin`, `legend`, `tiles` |
-| `environment` | `weather` (= hooks chapter weather), optional `startWeather`/`startTempC`, `tempC`, `timeStart`/`timeEnd`/`timeLocked`, `blizzard`, `snowCover`, `particles`, `fogNear/fogFar`, `palette` (assets/palettes/*.json), `warmthDrainMul`, `hud` flags, `mechanics` hints, `transitions[]` (weather changes keyed to trigger ids) |
-| `locations[]` | **area ids** with centre and rect. They match `story/gameplay_hooks.json` chapter `locations` ∪ `systems/loot_tables.json` `areas[chXX]` exactly (validated). Ch9 uses `river_ice` for the river stretch |
-| `landmarks[]` | labelled points (for map and HUD hints) |
-| `paths.critical` / `paths.optional[]` | designer polylines (critical path, optional branches); not used at runtime |
-| `spawns.player[]` | `{id,x,z,rotY,when?}`: use the first whose `when` passes |
-| `spawns.npcs[]` | `{id, npc (story/npcs.json id), x,z,rotY, behavior, dialogue?, when?, label?, combatProfile?}`. Multiple entries per NPC are variants gated by `when` |
-| `spawns.enemies[]` | `{id, type (systems id), x,z, rotY?, group, tier, behavior, patrol[[x,z]..]?, patrolWaitSec?, hostile (always/on_provoke/conditional/never), hostileWhen?, when?, activate (load/trigger), note?}` |
-| `spawns.loot[]` | `{id, x,z, r, label, container (systems container_types key), location (area id), guaranteed[{item,n}]?, when?, setsFlag?, filler?}`. Roll contents with Quartermaster's `roll_algorithm`; `guaranteed` = that area's fixed items placed in this container. `filler:true` = auto-placed to meet the area's container budget |
-| `props[]` | `{id, asset (path relative to game root), x,z, rotY, h, collide, tag?}` |
-| `interactives[]` | `{id, type, x,z, r, label, requiresItems?, requiresFlags?, setsFlag?, sequenceStep?, when?}`. Types used: craft, fill, valve, lever, panel, choice_panel, minigame, balance, repair, vehicle, read, cut, trade, hide_cache, radio, load, light_fire, water_source, rescue, door_choice, ambient_audio |
-| `safeZones[]` | `{id, kind (campfire/burn_barrel/indoor/sealed/tent/warm_room), x,z, r, warmth, save, sealed, when?}`: warmth restore, checkpoint save, `sealed` blocks RAD (Act III) |
-| `setPieces[]` | `{id, type, path?, area?, when?, note?}`. Types: systems `ironwood_drone/mrap/bradley` + level-owned `armored_plow_truck`, `ied_mrap`, `ice_break_qte`, `house_fire` |
-| `encounters[]` | `{id, area, groups[{group, wave}]}`: the enemy activation and cap system (below) |
-| `stealth` (Ch6) | `routes[]` (id, label, points, note) + `blindSpots[]` (shape, note): sightline gaps and cover the AI/drone can't see into |
-| `triggers[]` | `{id, on (load/enter/exit/interact/flag), once, shape (circle/rect), when?, actions[], note?}` |
-| `objectives[]` | `{id, order, text (<=60 chars), optional, completeWhen[], startWhen?}`: completion is flag-driven |
+* **Ch8 `ch08_ashfall`** (sightline 22 m): the **Henley house** (unsealed; front room plus a 3-cell kitchen where Dale faces
+  the wall, `enc_ch08_hollow_first`, flashlight only); the **shelter** (sealable house with a front hallway and the
+  **mail-slot door**: a `ch08_mail_slot` interactive, with `enc_ch08_door_mimic` spawning in the hallway/porch only if
+  `mimic_let_in`); dark hospital wards (3 husks); library stacks (2 silent `assimilated_animal`); a Tallman pair in the ash
+  at night (2 active max); `enc_ch08_husk` at the truck (talk-down).
+* **Ch9 `ch09_the_long_night`** (whiteout, 15 m): the rope line down the frozen Truckee; `enc_ch09_hollow_ambush` (2 Hollows
+  calling in Walt's voice off the line); `enc_ch09_animal_pack` (5 silent assimilated coyotes on the ice; flee flares);
+  `enc_ch09_ice_tallmen` (3 max); husks in the drifts; thin-ice break.
+* **Ch10 `ch10_the_warm_room`** (26 m): the lamp line (8 floodlight poles) around Galena; the dark north/west/east bands
+  outside it hold `enc_ch10_siege_n1` / `n2` / `n3` (never more than 3 Tallmen active) and `enc_ch10_hollow_prowlers`
+  (2 Hollows calling names + 3 animals testing each pole); the steam-tunnel house is a tight interior ambush.
 
-### Conditions (`when`, `hostileWhen`, `completeWhen`, `requiresFlags`)
-These use the same shape as `story/dialogue` conditions: a list = AND of `{ "flag": "name", "eq"|"ne"|"gt"|"gte"|"lt"|"lte": value }`. Flag names follow story/flags.json (including `trust.wren`). Level extensions:
-- `{ "item": "ration_card", "gte": 1 }` checks the inventory count.
-- `{ "any": [cond, cond, ...] }` is an OR.
-- `"ne": null` means "flag has been set".
-- The engine should set `cleared.<group>` when every member of a group is dead or fled. Waves and some triggers key off this.
+Caps: every encounter zone's peak (per wave, max branch) is <= min(6, `systems/enemies.json chapter_curve[chNN].max_concurrent`).
+Tallman <= 3 active (<= 2 in ch07b, plus 2 torpid in the den that stay non-hostile unless shot).
 
-### Trigger actions
-`dialogue{id}` (story/dialogue scene) · `cutscene{id,text}` · `bark{speaker,text}` · `set_flag{flag,value}` · `activate_group{group}` · `set_time{value 0..1}` · `set_weather{weather,tempC?,blendSec}` · `checkpoint` (save) · `hud_unlock{stat}` · `story_check{id}` (`insulin_check`, `ch01_end_pruitt`, `ch06_death_checks`, `ch09_theo_resolve`, `endings`, all from the chapter docs / flags.json) · `start_sequence{id}` (minigames/QTE/on-rails: `seq_ch02_crush`, `seq_ch04_balance`, `seq_ch05_convoy_ride`, `seq_ch05_cabinet_choice`, `seq_ch06_sweep_timer`, `seq_ch09_thin_ice`) · `push_back` (soft gate: shove the player out of the volume) · `spawn_setpiece{id}` · `teleport{x,z}` · `chapter_end{next}`.
+## iPhone layout rules (validated)
 
-### Encounters and the active-enemy cap
-- Every enemy `group` belongs to exactly one encounter zone. **Only the zone containing the player is live**; enemies in other zones stay dormant (not updated), and the engine should despawn or freeze a zone when the player leaves it.
-- Inside a zone, groups activate by `activate:"load"` (when the zone goes live) or by an `activate_group` trigger action. A `wave` of 2 or more activates when the previous wave is cleared or fled (`cleared.<group>`). The levels include explicit triggers for this too.
-- `validate.py` computes each zone's **peak simultaneous enemies**: the max over waves of the largest set of non-exclusive groups. Groups whose `when` can't both hold (for example `bridge_choice eq held` vs `ne held`, or `convoy_choice eq sabotage` vs `ne sabotage`) aren't summed. The validator fails if the peak is above **min(6, systems chapter_curve.max_concurrent)**, which is 5 for most chapters and 6 for Ch6, 9 and 10. It also fails on overlapping zones, spawns or patrol points outside their zone, and groups with no zone.
-- Current peaks: Ch1 1 · Ch2 5 · Ch3 4 · Ch4 4 · Ch5 4 · Ch6 6 · Ch7 4 · Ch8 5 · Ch9 5 · Ch10 4.
+1. **Buildings never overlap.** Every walled hull is a closed rectangle (`#`/`D` perimeter, `#` corners) whose footprint
+   holds only interior tiles. Every `B` mass is one rectangle of at least 3x3 (so `js/buildings.js` greedyRects stamps one model).
+   A 1-tile walkable ring surrounds every hull: no shared walls, no nesting, no touching. `buildings[]` must equal the grid.
+   No seams between different solid tiles (greedyRects would merge them with the wrong material). No `T`/`G` tiles.
+   Doors need walkable cells on both sides (2 outside, 1 inside) and a 2.5 m clearance free of NPCs, colliding props and loot.
+2. **Loot snaps to its real prop.** `js/levelLoader.js _placeLoot()` always adds a 0.55 m `lootCrate()` mesh at each loot
+   `(x, z)`, and `props[]` render separately. Containers that have a real model (`dumpster` -> `dumpster.glb`, `car_trunk`
+   -> `wrecked-sedan`) are therefore **prop-backed**: the loot entry has `propRef` = the prop id, **identical `(x, z)`**,
+   `render: "prop"`, and an interaction radius `r` >= footprint + 0.5 m so it can be opened from outside the collider.
+   Each prop backs at most one container. All other containers (cabinets, wardrobes, lockers, crates, woodpiles, corpses) are
+   `render`-less crates and must stay >= footprint + 1.5 m away from any car/dumpster prop, so no crate floats beside a
+   trash can or car. Crates also keep 0.9 m from walls, 2 m from each other, 1.5 m from NPCs, two free approach sides,
+   and are reachable from the player spawn.
 
-## Loader integration (for Echo; no engine edits were made)
+## Systems v2 binding
 
-```js
-// js/levelLoader.js (sketch). Uses helpers that already exist in world.js / enemies.js.
-import * as THREE from "three";
-import { fitHeight } from "./world.js";
+`systems/` is Revision 2 (it has tallman, coyote and assimilated_* enemies, and the v2 area ids). The validator checks strictly that:
+enemy types exist in `systems/enemies.json`; container types exist in `loot_tables.json container_types`; every
+`areas[chNN]` location in a level has at least the listed container counts by type (hand-placed first; `levelkit.dress_from_systems`
+tops up with `filler: true` spots or prop-backed cars/dumpsters); per-area guaranteed items equal systems exactly; items
+are known to story or systems; and zone caps follow `chapter_curve.max_concurrent`.
 
-export async function loadLevel(id, { world, enemies, scene, gltf, pbr, flags, inv }) {
-  const L = await (await fetch(`./levels/${id}.json`)).json();
-  const { cellSize: cs, cols, rows, origin: o, legend, tiles } = L.grid;
-  const check = (conds = []) => conds.every((c) => c.any ? c.any.some((x) => check([x]))
-      : c.item ? cmp(inv.count(c.item), c) : cmp(getFlag(flags, c.flag), c));
+## Story v2 binding (validated)
 
-  // 1) Geometry: merge horizontal runs of solid tiles into AABB colliders + one box mesh per run.
-  world.colliders.length = 0;
-  world.bounds = { minX: o.x, maxX: o.x + cols * cs, minZ: o.z, maxZ: o.z + rows * cs };
-  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; ) {
-    const ch = tiles[r][c], t = legend[ch];
-    if (!t.solid) { c++; continue; }
-    let c2 = c; while (c2 + 1 < cols && tiles[r][c2 + 1] === ch) c2++;
-    const minX = o.x + c * cs, maxX = o.x + (c2 + 1) * cs, minZ = o.z + r * cs, maxZ = minZ + cs;
-    world.colliders.push({ minX, maxX, minZ, maxZ });
-    if (!t.massOnly && t.height > 0) {               // 'B' is collision-only (building prop on top)
-      const tex = t.wallTex && (await pbr(t.wallTex));
-      const m = new THREE.Mesh(new THREE.BoxGeometry(maxX - minX, t.height, cs),
-        new THREE.MeshStandardMaterial(tex ? { map: tex.diff, normalMap: tex.nor, roughnessMap: tex.rough } : { color: 0x2e4a34 }));
-      m.position.set((minX + maxX) / 2, t.height / 2, (minZ + maxZ) / 2); scene.add(m);
-    }
-    c = c2 + 1;
-  }
-  // Floors: group cells by floorTex into InstancedMesh planes (or bake one canvas texture); water '~' / chasm '_' are visual only.
+Locations equal `chapters[].locations` (Ch7 via `level_split`). Every scene is triggered once inside its story location
+rect. NPC ids are v2 (main, minor, ambient, traders, generic, or registry extras `extra_<kind>_NN`). Traders and ambient NPCs
+are placed (Ch7 split per `id_registry.splitNpcs`). Tallman glimpses Ch2-6 are billboards with no collider, AI or interaction.
+Enemy types and counts are >= story. Story encounters are bound with exact composition. Quests have objectives. Flags exist in
+`flags.json` or are `chNN_` level flags listed in `id_registry.levelFlags`. Retired v1 terms: zero, both as whole words in
+every levels/ text file (except `minimap_mockups/` and previews) and as old ids in level JSON.
 
-  // 2) Props
-  for (const p of L.props) {
-    const g = await gltf.loadAsync("./" + p.asset); const obj = g.scene;
-    fitHeight(obj, p.h); obj.position.set(p.x, 0, p.z); obj.rotation.y = p.rotY || 0; scene.add(obj);
-    if (p.collide) { const b = new THREE.Box3().setFromObject(obj);
-      world.colliders.push({ minX: b.min.x, maxX: b.max.x, minZ: b.min.z, maxZ: b.max.z }); }
-  }
-  // 3) Player, NPCs (first variant whose `when` passes), fires, loot, interactives
-  const spawn = L.spawns.player.find((s) => check(s.when)) || L.spawns.player[0];
-  for (const s of L.safeZones) if (s.kind === "campfire" || s.kind === "burn_barrel") world._addFire(scene, s.x, s.z, s.id);
-  world.loot = L.spawns.loot.filter((l) => check(l.when)).map((l) => ({ ...l, taken: false,
-      items: rollContainer(l.container, l.location, L.chapter, l.guaranteed) }));   // Quartermaster's roll_algorithm
-  world.interactives = L.interactives;
-  // NPC meshes: reuse world._placeNpcs logic with L.spawns.npcs positions instead of the hard-coded `places` table.
+## Engine notes for Prime (`js/` is read-only here)
 
-  // 4) Enemies: dormant until their encounter zone is live; activate:"trigger" groups wait for activate_group.
-  const SYS = await (await fetch("./systems/enemies.json")).json();
-  const kindOf = Object.fromEntries(SYS.enemies.map((e) => [e.id, e.code_kind]));   // raider | dog | husk
-  const zoneOf = {}; for (const z of L.encounters) for (const g of z.groups) zoneOf[g.group] = z;
-  const live = new Set(L.spawns.enemies.filter((e) => e.activate === "load").map((e) => e.group));
-  function tickEncounters(px, pz) {        // call each frame; spawns only inside the player's zone
-    const zone = L.encounters.find((z) => inShape(z.area, px, pz));
-    for (const e of L.spawns.enemies) {
-      if (e._ent || !live.has(e.group) || zoneOf[e.group] !== zone || !check(e.when)) continue;
-      e._ent = enemies.spawn(kindOf[e.type] || "raider", e.x, e.z); Object.assign(e._ent, { def_id: e.type, patrol: e.patrol, levelRef: e });
-    }
-    // despawn/freeze entities whose zone !== zone; set flags["cleared."+group] when a group is all dead/fled
-  }
-  // 5) Triggers: each frame test shapes (enter/exit), plus on interact and on flag change; honour `once` + `when`.
-  //    activate_group -> live.add(group); dialogue -> StorySystem scene id; chapter_end -> loadLevel(next).
-  return { L, spawn, tickEncounters };
-}
-```
-`world.locationAt()` can use `L.locations` instead of `config.LOCATIONS`. The `rect` gives exact area membership, which also feeds `loot_tables.json` area modifiers.
-
-## Chapter designs
-
-Every map is portrait-first: a long north-south spine, streets 2–4 cells (4–8 m) wide, and one tall landmark visible straight ahead from the start (water tower, chimneys, elevator heads, the dam's lit windows). Warmth stops are about 30–40 m apart in cold chapters.
-
-| # | Level | Size | Design summary |
-|---|---|---|---|
-| 1 | `ch01_day_three` | 44×92 m | Tutorial block in Superior's East End. Home (kitchen + basement cooler) → Marguerite's porch → Ray's garage via the back alley *or* the gas can in Dell's car → north up E 5th to Belknap Pharmacy at dusk (Wren in the back room, block-watch patroller on Belknap) → home. A soft gate holds dusk until the porch and fuel beats are done. The water tower is the landmark straight up the street. 1 enemy. |
-| 2 | `ch02_the_registry` | 48×120 m | Narrow Blatnik deck over the bay with Cpl. Haas's single-lane checkpoint (chokepoint) → DECC plaza with a serpentine ration queue built from fences (Wren, Lou's crank radio) → registry office (Strand) → the crush escape set piece (exit via the east gate or north) → Lakehead Memorial corridor (Ames). Optional parking-garage branch with 3 looters and the hospital diesel. |
-| 3 | `ch03_the_long_cold` | 52×128 m | Night fire at Ray's garage: Bridge Boys in 2 waves (4+2), with Wren's warning at the back door. Then a dawn traverse of the frozen Proctor rail yard: boxcar strings form lanes with gaps, there are 4 burn barrels, and 3 block-watch patrollers (a ration card talks you past). The route climbs a switchback to Lou's shack (Hank). Optional NE branch to the Harbor soup line (Bea). |
-| 4 | `ch04_black_start` | 48×128 m | Jay Cooke trail through the trees → a 2 m-wide swinging bridge over the open gorge (balance sequence) → Thomson Dam: Lunds' camp on the powerhouse floor, then the 4-step black start in strict order (headgate wheel on the deck → exciter → synchroscope → breaker) and the feeder choice. Story standoff guards split 4 at the gate + 4 on the headgate deck. Optional river-ice scavengers. |
-| 5 | `ch05_route_9` | 44×128 m | Ore docks muster (elevator, Strand, Ruiz at the MRAP) → on-rails convoy ride up ROUTE 9 → Hwy 53 overpass: a logging-truck blockade with a 1-cell gap, Jory's parley, the signal cabinet repair under fire, and Cody under the overpass. The roofed underpass breaks drone line of sight on the sabotage branch. Compact fight in 2 waves (4+4), with Ironwood 4 as the exclusive sabotage branch. The junction switch at Proctor yard is the "divert" option. |
-| 6 | `ch06_the_lift_bridge` | 52×144 m | **Stealth chapter, with 12 `ironwood_patrol` in 3 fireteams on patrol loops.** (A) Day sweep in Sector 4: a street walker, a house clearer, a Dell's-house checker and a cordon guard; stealth route S1 runs out the back door, down the back alley (dumpster and hedge cover) and through the cordon gap. (B) Blatnik checkpoint: talk, bribe with `ironwood_id`, or bolt-cut onto the unlit catwalk under the deck (S2). (C) Night Canal Park: a 4-soldier loop staggered half a lap apart, plus 2 bridge-foot sentries and 2 bank walkers. Routes: S3 shop alley → Bea's boat (teleport across) → control house service door; S4 pier crates → crane (blocks the Bradley lane) → east bank flank; S5 fog-run straight through. Five marked blind spots. The held-bridge branch swaps in 6 Harbor + 4 Compact in 2 waves. Peak live: 6. |
-| 7 | `ch07_dead_air` | 48×128 m | Summer dirt (no snow). A switchback climb to Lou's shack (dead air, dosimeter, RAD unlocks) → down past deserters → Proctor yard, where the Remnant digs in behind sandbags (hostile only if `ironwood_hostility>=3`). The fenced dog lot holds the **sled**: the first dogs guard it, and flares come from Lou. → East End: Ruiz at the door, sled loading, grey snow, where to winter. Weather: overcast → brown_sky → grey_snow. |
-| 8 | `ch08_ashfall` | 52×144 m | Fallout rain: sealed safe zones (home, clinic, hospital corridor, Harbor stores, cistern). Husk at the family's car (talk-down), the strangers at the door, Marguerite's drawer, Deshawn's cistern. → Lakehead Memorial: pharmacy (3 looters, iodide and filters), Ames's surgery. → Ore docks: Harbor stores, the lake intake as the long water option, and Remnant guarding the elevators if the bridge was held. Ashfall transition at the docks. |
-| 9 | `ch09_the_long_night` | 44×192 m | Blizzard march up the frozen river, with column escort and headcounts at stop 1 (burn barrel), stop 2 (windbreak), the warming hut (Hank's death) and the gorge fire. At the Hwy 210 picket (4 on the ice + searchlight, 2 reinforce on alarm), take Ruiz's pylon gap (west), the thin-ice detour (east), or fight. Then the ice-break QTE, then the swinging bridge, where the west cliff forces the crossing and the wolves wait. The dam lights and Jory are at the gate. Area ids: `loc_east_end` (start), `river_ice`, `loc_jay_cooke`, `loc_thomson_dam`. |
-| 10 | `ch10_the_warm_room` | 48×104 m | Gate parley with Kessler, or the last battle in the snow (Remnant 4+4 in 2 waves, MRAP set piece; zero enemies if a stand-down happens) → the yard and the Lunds' greenhouse branch → the powerhouse floor → the control room table, with every surviving leader seated by `*_alive` and the final choice → epilogue. The blizzard clears to clear_cold. |
-
-## Known gaps and conflicts (as of validation)
-- **Hooks vs systems area lists disagree.** In Ch6, hooks list `loc_ore_docks` but systems has no Ch6 area for it; the level adds it as the Harbor pier/boats zone, where Theo's Harbor variant is. In Ch9, systems uses `river_ice` and hooks list `loc_east_end`; the level includes both. The validator requires the union and warns about the disagreement.
-- **Missing art:** there are no trees, houses or residential buildings, no lift bridge, crane, boats, trucks, MRAP/Bradley or drone models. Stand-ins: Kenney industrial buildings for houses and shops, chimneys for the lift-bridge towers, `detail-tank` for the crane, containers for logging trucks, the wrecked sedan for the MRAP and plow truck, and `T` tiles drawn procedurally for trees.
-- **Story ids not in npcs.json:** generic extras `annie_lund`, `boot_strippers`, `deserter_1/2`, `stranger_mother` and `column` (Pete Lund is `pete_lund`). They draw as generic people.
-- **Container budgets:** a few hand-placed story containers are types that aren't in that area's systems budget (VERBOSE=1 lists them, about 15). Guaranteed items match systems exactly.
-- **No dialogue yet** for the Ch5 cabinet choice, the Ch6 informant list, the Ch7 deserters or the Ch9 dam gate. These use `cutscene` or `start_sequence` placeholders.
-- The engine is flat (no jump or stairs): decks, docks and overpasses are visual, and the "basement" is a ground-floor room.
+* `js/levels.js ensureChapterLevel()` pretty-names still map `ch06` to the old v1 file name. Use `ch06_the_trench.json`
+  (or read `index.json chapters[].file` / `levels[].file`). Add `ch07b` -> `ch07b_dixie_valley.json`.
+* `chapter_end.next` is a full level id; the engine strips after `_`, so `ch07b_dixie_valley` becomes `ch07b` and
+  `ch07_dead_air` becomes `ch07`. Honour `returnTo` / `returnLeg` and pick `spawn_return` when `ch07b_done`. Player spawns
+  use `when` like NPC spawns (first passing entry wins).
+* `index.json` now exists, so `loadLevels()` uses its `chapters[]` (titles from story v2) instead of `FALLBACK_CHAPTERS`.
+* `_placeLoot()`: skip `lootCrate()` when `loot.render === "prop"` (or `propRef` is set), so the dumpster/car is the container.
+* Seasons: call `pipeline.setEnvironment(level.environment.season)`. Gate `js/buildings.js` snow caps on
+  `environment.snowCover > 0` (only Ch8-10). Drive particles from Lumen's preset (`environment.particles` = mode).
+* Act III tags: `ambush`, `lowVisibilityTrigger`, `noBreathPlume`, `voiceLine`, `silent`, `torpid`, `horror.ambushPoints`;
+  `environment.mechanics.breathPlumes = "living NPCs only"`. Flags the engine should set: `ch06_spotted` (vision cone),
+  `ch05_flare_fired` (any flare in the canyon), `ch07b_den_shot`.
+* Interactive type `boil` (water station / stoves) replaces `craft`, which looks for a v1 recipe.

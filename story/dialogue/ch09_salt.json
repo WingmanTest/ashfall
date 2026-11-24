@@ -1,0 +1,69 @@
+{
+  "id": "ch09_salt",
+  "chapter": "ch09",
+  "location": "loc_steamboat_creek",
+  "trigger": "Salt's culvert on Steamboat Creek.",
+  "speakers": [
+    "narrator",
+    "amb_salt",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "The culvert. The tarp is frozen stiff.",
+      "branches": [
+        {
+          "next": "alive",
+          "conditions": [
+            {
+              "flag": "salt_fed",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "dead"
+        }
+      ]
+    },
+    {
+      "id": "alive",
+      "speaker": "amb_salt",
+      "text": "Airman! Your light's still working. I kept it on all winter. They never came in. Not once.",
+      "next": "alive2"
+    },
+    {
+      "id": "alive2",
+      "speaker": "amb_salt",
+      "text": "There's more of them now. Up the creek. They walk your plant's fence every night. Counting the lights.",
+      "next": "alive3"
+    },
+    {
+      "id": "alive3",
+      "speaker": "amb_salt",
+      "text": "I'm coming with you. Ha. Don't look like that. I can carry. I'm warm-blooded too.",
+      "effects": [
+        {
+          "add": "column_size",
+          "value": 1
+        }
+      ],
+      "end": true
+    },
+    {
+      "id": "dead",
+      "speaker": "narrator",
+      "text": "Salt is in his camp chair, frozen. His eyes are open toward the steam. The snow around him is full of long tracks.",
+      "effects": [
+        {
+          "add": "tallman_glimpses",
+          "value": 1
+        }
+      ],
+      "end": true
+    }
+  ]
+}

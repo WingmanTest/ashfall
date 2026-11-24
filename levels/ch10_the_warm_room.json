@@ -1,22 +1,31 @@
 {
  "$schema": "./schema.json",
  "formatVersion": 1,
+ "storyVersion": 2,
  "id": "ch10_the_warm_room",
  "chapter": 10,
+ "storyChapter": "ch10",
  "title": "The Warm Room",
- "act": "III",
+ "act": 3,
  "storyFile": "story/chapters/ch10_the_warm_room.md",
  "next": null,
- "summary": "Thomson Dam: gate parley or last battle in the snow -> powerhouse floor -> the control room vote -> ending.",
  "difficulty": 5,
+ "summary": "Late February at Galena Station. The lamp line holds the dark: night 1 (a cut cable, watched), night 2 (the cooling-water clamp; Hollows call names past the lamps while animal prowlers test each pole), Kessler's Remnant at the gate, night 3 (the push), the control-room vote and the epilogue in the warm room.",
+ "startInventory": {
+  "flashlight": 1,
+  "hand_radio": 1,
+  "mech_tools": 1,
+  "lamp_kit": 1
+ },
+ "startInventoryNote": "carried over",
  "units": "meters",
  "grid": {
   "cellSize": 2.0,
-  "cols": 24,
-  "rows": 52,
+  "cols": 52,
+  "rows": 96,
   "origin": {
-   "x": -24.0,
-   "z": -96.0
+   "x": -52.0,
+   "z": -184.0
   },
   "legend": {
    "#": {
@@ -37,20 +46,22 @@
     "preview": "#b8ad98"
    },
    ".": {
-    "name": "snow_ground",
+    "name": "ash_snow",
     "walkable": true,
     "solid": false,
     "height": 0,
     "floorTex": "snow_02",
-    "preview": "#d9e1e8"
+    "groundType": "ash_snow",
+    "preview": "#b4b5b0"
    },
    "=": {
-    "name": "road",
+    "name": "road_ash_snow",
     "walkable": true,
     "solid": false,
     "height": 0,
     "floorTex": "asphalt_snow",
-    "preview": "#8d969e"
+    "groundType": "asphalt_ash_snow",
+    "preview": "#8e908e"
    },
    "B": {
     "name": "building_mass",
@@ -77,201 +88,341 @@
     "height": 8,
     "wallTex": "dirty_concrete",
     "preview": "#3c3f44"
-   },
-   "c": {
-    "name": "cover_low",
-    "walkable": false,
-    "solid": true,
-    "height": 1.0,
-    "wallTex": "dirt",
-    "cover": true,
-    "preview": "#a08850"
-   },
-   "g": {
-    "name": "dirt_gravel",
-    "walkable": true,
-    "solid": false,
-    "height": 0,
-    "floorTex": "dirt",
-    "preview": "#9c8f7a"
-   },
-   "x": {
-    "name": "debris",
-    "walkable": false,
-    "solid": true,
-    "height": 0.9,
-    "wallTex": "rust_coarse_01",
-    "preview": "#6e5545"
-   },
-   "~": {
-    "name": "open_water",
-    "walkable": false,
-    "solid": false,
-    "height": -0.6,
-    "floorTex": "dirty_concrete",
-    "water": true,
-    "preview": "#2f4a63"
    }
   },
   "tiles": [
-   "HHHHHHHHHHHHHHHHHHHHHHHH",
-   "HBBBBBB............~~~~H",
-   "HBBBBBB.#########..~~~~H",
-   "HBBBBBB.#,,,,,,,#..~~~~H",
-   "HBBBBBB.#,,,,,,,#..~~~~H",
-   "HBBBBBB.#,,xxx,,#..~~~~H",
-   "HBBBBBB.#,,xxx,,#..~~~~H",
-   "HBBBBBB.#,,,,,,,#..~~~~H",
-   "HBBBBBB.#,,,,,,,#..~~~~H",
-   "HBBBBBB.#,,,,,,,#..~~~~H",
-   "HBBBBBB.####D####..~~~~H",
-   "H..........#,#.........H",
-   "H........###D#########.H",
-   "H........#,,,,,,,,,,,#.H",
-   "H........#,,,,,,,,,,,#.H",
-   "H........#,,,,,,,,,,,#.H",
-   "H........#,,,,,,,,,,,#.H",
-   "H........#,,,,,,,,,,,#.H",
-   "H........#,,,,,,,,,,,#.H",
-   "H........#,x,,,x,,,x,#.H",
-   "H........#,x,,,x,,,x,#.H",
-   "H.######.#,,,,,,,,,,,#.H",
-   "H.#gggg#.#,,,,,,,,,,,#.H",
-   "H.#gggg#.#,,,,,,,,,,,#.H",
-   "H.#gggg#.#,,,,,,,,,,,#.H",
-   "H.#ggggD.#,,,,,,,,,,,#.H",
-   "H.#gggg#.#,,,,,,,,,,,#.H",
-   "H.#gggg#.#,,,,,,,,,,,#.H",
-   "H.#gggg#.#,,,,,,,,,,,#.H",
-   "H.######.#,,,,,,,,,,,#.H",
-   "H........######D######.H",
-   "H......................H",
-   "H......................H",
-   "HHHHHHHHHHHDDHHHHHHHHHHH",
-   "H.........====.........H",
-   "H.........====.........H",
-   "H.........====.........H",
-   "H.....cc..====..cc.....H",
-   "H.........====.........H",
-   "H.........====.........H",
-   "H.......cc====.........H",
-   "H.........====.cc......H",
-   "H.........====.........H",
-   "H.........====.........H",
-   "H...cc....====.........H",
-   "H.........====....cc...H",
-   "H.........=cc=.........H",
-   "H.........====.........H",
-   "H.........====.........H",
-   "H.........====.........H",
-   "H.........====.........H",
-   "HHHHHHHHHHHHHHHHHHHHHHHH"
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H...............#####################..............H",
+   "H...............#,,,,,,,,,#,,,,,,,,,#..............H",
+   "H...............#,,,,,,,,,#,,,,,,,,,#..............H",
+   "H...............#,,,,,,,,,#,,,,,,,,,#..............H",
+   "H...########....#,,,,,,,,,#,,,,,,,,,#....BBBBBB....H",
+   "H...#,,,,,,#....#,,,,,,,,,D,,,,,,,,,#....BBBBBB....H",
+   "H...#,,,,,,#....#,,,,,,,,,#,,,,,,,,,#....BBBBBB....H",
+   "H...#,,,,,,#....#,,,,,,,,,#,,,,,,,,,#....BBBBBB....H",
+   "H...#,,,,,,#....#,,,,,,,,,#,,,,,,,,,#....BBBBBB....H",
+   "H...#,,,,,,#....#,,,,,,,,,#,,,,,,,,,#....BBBBBB....H",
+   "H...#,,,,,,D....#####D#########D#####....BBBBBB....H",
+   "H...#,,,,,,#....#,,,,,,,,,,,,,,,,,,,#....BBBBBB....H",
+   "H...#,,,,,,#....#,,,,,,,,,,,,,,,,,,,#....BBBBBB....H",
+   "H...#,,,,,,#....D,,,,,,,,,,,,,,,,,,,#....BBBBBB....H",
+   "H...#,,,,,,#....#,,,,,,,,,,,,,,,,,,,#....BBBBBB....H",
+   "H...#,,,,,,#....#,,,,,,,,,,,,,,,,,,,#..............H",
+   "H...########....#,,,,,,,,,,,,,,,,,,,#..............H",
+   "H...............#,,,,,,,,,,,,,,,,,,,#..............H",
+   "H...............##########D##########..............H",
+   "H...............#,,,,,,,,,,,,,,,,,,,#..............H",
+   "H...............#,,,,,,,,,,,,,,,,,,,#..............H",
+   "H...............#,,,,,,,,,,,,,,,,,,,#..............H",
+   "H...............#,,,,,,,,,,,,,,,,,,,#...BBBBBBB....H",
+   "H...............#,,,,,,,,,,,,,,,,,,,#...BBBBBBB....H",
+   "H...............#,,,,,,,,,,,,,,,,,,,#...BBBBBBB....H",
+   "H...............#,,,,,,,,,,,,,,,,,,,#...BBBBBBB....H",
+   "H...............##########D##########...BBBBBBB....H",
+   "H.......................................BBBBBBB....H",
+   "H.......................................BBBBBBB....H",
+   "H..................................................H",
+   "H..................................................H",
+   "H.................BBBBBBBBBBBBBBBBB................H",
+   "H.................BBBBBBBBBBBBBBBBB................H",
+   "H.................BBBBBBBBBBBBBBBBB................H",
+   "H.................BBBBBBBBBBBBBBBBB................H",
+   "H.................BBBBBBBBBBBBBBBBB................H",
+   "H.................BBBBBBBBBBBBBBBBB................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "H..................................................H",
+   "HHHHHHHHHHHHHHHHHHHHHHHH....HHHHHHHHHHHHHHHHHHHHHHHH",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "H.......................====.......................H",
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
   ]
  },
  "environment": {
-  "timeStart": 0.5,
-  "timeEnd": 0.5,
-  "timeLocked": true,
-  "weather": "clear_cold",
-  "tempC": -38,
-  "blizzard": true,
-  "snowCover": 1.0,
-  "particles": "snow_heavy",
-  "fogNear": 3,
-  "fogFar": 18,
-  "palette": "assets/palettes/slso8.json",
-  "ambientTint": "#c9d6e6",
+  "seasonArc": "fallout_nuclear_winter",
+  "season": "fallout_winter",
+  "actName": "Nuclear Fallout Winter",
+  "groundType": "ash_snow",
+  "precipitation": "ash",
+  "particles": "fallout",
+  "snowCover": 0.9,
+  "wetness": 0.1,
+  "fogColor": "#27303c",
+  "skyColor": "#222933",
+  "sunColor": "#8f8e7c",
+  "ambientColor": "#55574f",
+  "visibilityM": 26,
+  "fogNear": 3.4,
+  "fogFar": 26,
+  "windMs": 9,
+  "atmosphere": "Ash-choked nuclear winter: grey ash falling with snow, sickly dim light, tight fog, short oppressive sightlines.",
+  "environmentPreset": "fallout_winter",
+  "storySeason": "nuclear_winter",
+  "storyPalette": "ashfall blue-grey, near-monochrome; floodlight cones and flare red are the only warm colors",
+  "storyWeather": "ashfall",
+  "weather": "ashfall",
+  "storyTempC": -34,
+  "tempC": -34,
+  "nightTempC": -45,
+  "survivalFocus": [
+   "warmth",
+   "light",
+   "power",
+   "dread"
+  ],
+  "timeStart": 0.88,
+  "timeEnd": 0.3,
+  "timeLocked": false,
+  "blizzard": false,
+  "warmthDrainMul": 2.0,
+  "mechanics": {
+   "lampLine": [
+    [
+     -35.0,
+     -135.0
+    ],
+    [
+     1.0,
+     -139.0
+    ],
+    [
+     37.0,
+     -135.0
+    ],
+    [
+     -35.0,
+     -47.0
+    ],
+    [
+     37.0,
+     -47.0
+    ],
+    [
+     -23.0,
+     -79.0
+    ],
+    [
+     45.0,
+     -91.0
+    ],
+    [
+     -45.0,
+     -83.0
+    ]
+   ],
+   "floodlightCones": true,
+   "breathPlumes": "living NPCs only"
+  },
+  "seasonNote": "Late February: ashfall over Galena; the lamp line's floodlight cones and flares are the only warm colors.",
   "hud": {
-   "temp": true,
+   "hp": true,
+   "hydration": true,
    "hunger": true,
+   "companion": true,
+   "warmth": true,
+   "temp": true,
+   "ammo_military": true,
    "rad": true,
    "filter": true,
-   "seal": false
-  },
-  "warmthDrainMul": 2.5,
-  "maxAliveEnemies": 5,
-  "startWeather": "blizzard",
-  "transitions": [
-   {
-    "at": "t_ch10_room",
-    "weather": "clear_cold",
-    "tempC": -38,
-    "particles": "snow_light",
-    "fogFar": 45
-   },
-   {
-    "at": "epilogue_end_warm_room",
-    "weather": "clear_cold",
-    "sunShaft": true
-   }
-  ]
+   "seal": true
+  }
  },
  "locations": [
   {
-   "id": "loc_thomson_dam",
+   "id": "loc_galena_station",
    "x": 0.0,
-   "z": -44.0,
+   "z": -88.0,
    "rect": {
     "type": "rect",
-    "x0": -22.0,
-    "z0": -94.0,
-    "x1": 22.0,
+    "x0": -50.0,
+    "z0": -182.0,
+    "x1": 50.0,
     "z1": 6.0
    },
-   "safe": true
+   "safe": false,
+   "name": "Galena Station"
   }
  ],
- "landmarks": [
+ "landmarks": [],
+ "buildings": [
   {
-   "label": "Dam gate",
-   "x": 0.0,
-   "z": -29.0
+   "id": "b_ch10_plant",
+   "label": "Galena plant",
+   "kind": "walled",
+   "cells": [
+    16,
+    30,
+    36,
+    56
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -20.0,
+    "z0": -124.0,
+    "x1": 22.0,
+    "z1": -70.0
+   },
+   "doors": [
+    [
+     1.0,
+     -71.0
+    ],
+    [
+     -19.0,
+     -97.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_galena_station",
+   "interior": "control room (NW), break room (NE), the warm room (middle), turbine hall (south)"
   },
   {
-   "label": "Greenhouse",
-   "x": -14.0,
-   "z": -45.0
+   "id": "b_ch10_tunnel",
+   "label": "Steam-tunnel access house",
+   "kind": "walled",
+   "cells": [
+    4,
+    34,
+    11,
+    46
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -44.0,
+    "z0": -116.0,
+    "x1": -28.0,
+    "z1": -90.0
+   },
+   "doors": [
+    [
+     -29.0,
+     -103.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_galena_station",
+   "interior": "tight steam tunnel head"
   },
   {
-   "label": "Powerhouse floor",
-   "x": 7.0,
-   "z": -45.0
+   "id": "m_ch10_power",
+   "label": "Powerhouse / switchyard",
+   "kind": "mass",
+   "cells": [
+    41,
+    34,
+    46,
+    44
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 30.0,
+    "z0": -116.0,
+    "x1": 42.0,
+    "z1": -94.0
+   },
+   "doors": [],
+   "location": "loc_galena_station",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
   },
   {
-   "label": "Control room",
-   "x": 1.0,
-   "z": -83.0
+   "id": "m_ch10_wells",
+   "label": "Wellhead pad",
+   "kind": "mass",
+   "cells": [
+    18,
+    61,
+    34,
+    66
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -16.0,
+    "z0": -62.0,
+    "x1": 18.0,
+    "z1": -50.0
+   },
+   "doors": [],
+   "location": "loc_galena_station",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  },
+  {
+   "id": "m_ch10_cooling",
+   "label": "Cooling tower base",
+   "kind": "mass",
+   "cells": [
+    40,
+    52,
+    46,
+    58
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 28.0,
+    "z0": -80.0,
+    "x1": 42.0,
+    "z1": -66.0
+   },
+   "doors": [],
+   "location": "loc_galena_station",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
   }
  ],
  "paths": {
   "critical": [
    [
-    0.0,
-    -32.0
-   ],
-   [
-    0.0,
-    -27.0
-   ],
-   [
-    0.0,
-    -11.0
-   ],
-   [
-    0.0,
-    -27.0
-   ],
-   [
-    0.0,
-    -29.0
-   ],
-   [
-    7.0,
-    -35.0
-   ],
-   [
-    7.0,
-    -51.0
+    1.0,
+    -63.0
    ],
    [
     1.0,
@@ -279,59 +430,173 @@
    ],
    [
     1.0,
-    -75.0
+    -79.0
    ],
    [
     1.0,
-    -81.0
+    -91.0
+   ],
+   [
+    -11.0,
+    -95.0
+   ],
+   [
+    -17.0,
+    -97.0
+   ],
+   [
+    -23.0,
+    -97.0
+   ],
+   [
+    -23.0,
+    -127.0
+   ],
+   [
+    1.0,
+    -135.0
+   ],
+   [
+    -23.0,
+    -127.0
+   ],
+   [
+    -23.0,
+    -97.0
+   ],
+   [
+    -27.0,
+    -87.0
+   ],
+   [
+    -41.0,
+    -83.0
+   ],
+   [
+    -23.0,
+    -83.0
+   ],
+   [
+    -23.0,
+    -63.0
+   ],
+   [
+    -1.0,
+    -43.0
+   ],
+   [
+    -1.0,
+    -27.0
+   ],
+   [
+    -1.0,
+    -43.0
+   ],
+   [
+    1.0,
+    -63.0
+   ],
+   [
+    1.0,
+    -79.0
+   ],
+   [
+    1.0,
+    -91.0
+   ],
+   [
+    -9.0,
+    -99.0
+   ],
+   [
+    -9.0,
+    -107.0
+   ],
+   [
+    -9.0,
+    -113.0
    ]
   ],
-  "optional": [
-   {
-    "id": "b_greenhouse",
-    "label": "Lunds' greenhouse",
-    "points": [
-     [
-      0.0,
-      -31.0
-     ],
-     [
-      -9.0,
-      -45.0
-     ],
-     [
-      -14.0,
-      -45.0
-     ]
-    ]
-   }
-  ]
+  "optional": []
  },
  "spawns": {
   "player": [
    {
     "id": "spawn_default",
-    "x": 0.0,
-    "z": -32.0,
+    "x": 1.0,
+    "z": -63.0,
     "rotY": 0.0
    }
   ],
   "npcs": [
    {
-    "id": "npc_kessler",
-    "npc": "kessler",
-    "x": 0.0,
-    "z": -9.0,
-    "rotY": 3.142,
+    "id": "npc_wraith",
+    "npc": "wraith",
+    "x": 5.0,
+    "z": -63.0,
+    "rotY": 0.0,
+    "behavior": "companion_follow",
+    "when": [
+     {
+      "flag": "wraith_alive",
+      "eq": true
+     }
+    ],
+    "label": "Wraith",
+    "companion": true
+   },
+   {
+    "id": "npc_carly",
+    "npc": "carly",
+    "x": -7.0,
+    "z": -95.0,
+    "rotY": 0.0,
     "behavior": "idle",
-    "dialogue": "ch10_gate",
-    "label": "Maj. Kessler (in person)"
+    "dialogue": "ch10_siege_night3"
+   },
+   {
+    "id": "npc_walt",
+    "npc": "walt",
+    "x": -11.0,
+    "z": -109.0,
+    "rotY": 0.0,
+    "behavior": "idle"
+   },
+   {
+    "id": "npc_reyne",
+    "npc": "reyne",
+    "x": 9.0,
+    "z": -95.0,
+    "rotY": 0.0,
+    "behavior": "idle"
+   },
+   {
+    "id": "npc_pete_lund",
+    "npc": "pete_lund",
+    "x": 15.0,
+    "z": -109.0,
+    "rotY": 0.0,
+    "behavior": "idle"
+   },
+   {
+    "id": "npc_wes",
+    "npc": "wes",
+    "x": -5.0,
+    "z": -65.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "wes_alive",
+      "eq": true
+     }
+    ]
    },
    {
     "id": "npc_ruiz",
     "npc": "ruiz",
-    "x": -3.0,
-    "z": -32.0,
+    "x": 7.0,
+    "z": -43.0,
     "rotY": 0.0,
     "behavior": "idle",
     "when": [
@@ -342,298 +607,528 @@
     ]
    },
    {
-    "id": "npc_strand",
-    "npc": "strand",
-    "x": 3.0,
-    "z": -32.0,
+    "id": "npc_kessler",
+    "npc": "kessler",
+    "x": -1.0,
+    "z": -23.0,
     "rotY": 0.0,
     "behavior": "idle",
+    "dialogue": "ch10_gate",
     "when": [
      {
-      "flag": "strand_alive",
-      "ne": false
+      "flag": "ch10_night2_done",
+      "eq": true
      }
     ]
    },
    {
-    "id": "npc_theo",
-    "npc": "theo",
-    "x": 1.0,
+    "id": "npc_avila",
+    "npc": "avila",
+    "x": -13.0,
+    "z": -117.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "avila_alive",
+      "eq": true
+     }
+    ]
+   },
+   {
+    "id": "npc_roz",
+    "npc": "roz",
+    "x": -5.0,
+    "z": -117.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "roz_alive",
+      "eq": true
+     }
+    ]
+   },
+   {
+    "id": "npc_ander",
+    "npc": "ander",
+    "x": 15.0,
+    "z": -117.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "ander_alive",
+      "eq": true
+     }
+    ]
+   },
+   {
+    "id": "npc_kit",
+    "npc": "kit",
+    "x": 3.0,
     "z": -79.0,
     "rotY": 0.0,
     "behavior": "idle",
     "when": [
      {
-      "flag": "theo_alive",
-      "ne": false
-     }
-    ]
-   },
-   {
-    "id": "npc_bea_room",
-    "npc": "bea",
-    "x": -3.0,
-    "z": -87.0,
-    "rotY": 0.0,
-    "behavior": "idle",
-    "dialogue": "ch10_final",
-    "when": [
-     {
-      "flag": "bea_alive",
-      "ne": false
-     }
-    ]
-   },
-   {
-    "id": "npc_jory_room",
-    "npc": "jory",
-    "x": 5.0,
-    "z": -87.0,
-    "rotY": 0.0,
-    "behavior": "idle",
-    "dialogue": "ch10_final",
-    "when": [
-     {
-      "flag": "jory_alive",
-      "ne": false
-     }
-    ]
-   },
-   {
-    "id": "npc_strand_room",
-    "npc": "strand",
-    "x": 1.0,
-    "z": -88.0,
-    "rotY": 0.0,
-    "behavior": "idle",
-    "dialogue": "ch10_final",
-    "when": [
-     {
-      "flag": "strand_alive",
-      "ne": false
-     }
-    ]
-   },
-   {
-    "id": "npc_ames_room",
-    "npc": "ames",
-    "x": -4.0,
-    "z": -81.0,
-    "rotY": 0.0,
-    "behavior": "idle",
-    "when": [
-     {
-      "flag": "ames_alive",
-      "ne": false
-     }
-    ]
-   },
-   {
-    "id": "npc_marguerite_room",
-    "npc": "marguerite",
-    "x": 6.0,
-    "z": -81.0,
-    "rotY": 0.0,
-    "behavior": "idle",
-    "when": [
-     {
-      "flag": "marguerite_alive",
-      "ne": false
-     }
-    ]
-   },
-   {
-    "id": "npc_ray_room",
-    "npc": "ray",
-    "x": -3.0,
-    "z": -78.0,
-    "rotY": 0.0,
-    "behavior": "idle",
-    "when": [
-     {
-      "flag": "ray_alive",
-      "ne": false
-     }
-    ]
-   },
-   {
-    "id": "npc_cody_room",
-    "npc": "cody",
-    "x": 4.0,
-    "z": -78.0,
-    "rotY": 0.0,
-    "behavior": "idle",
-    "when": [
-     {
-      "flag": "cody_alive",
-      "ne": false
-     }
-    ]
-   },
-   {
-    "id": "npc_wren_room",
-    "npc": "wren",
-    "x": 7.0,
-    "z": -84.0,
-    "rotY": 0.0,
-    "behavior": "idle",
-    "when": [
-     {
-      "flag": "wren_alive",
-      "ne": false
-     }
-    ]
-   },
-   {
-    "id": "npc_annie_lund",
-    "npc": "annie_lund",
-    "x": -14.0,
-    "z": -47.0,
-    "rotY": 0.0,
-    "behavior": "idle",
-    "when": [
-     {
-      "flag": "lunds_stayed",
+      "flag": "kit_alive",
       "eq": true
      }
-    ],
-    "label": "Lunds (greenhouse)"
+    ]
+   },
+   {
+    "id": "npc_ross",
+    "npc": "ross",
+    "x": 11.0,
+    "z": -79.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "ross_alive",
+      "eq": true
+     }
+    ]
+   },
+   {
+    "id": "npc_trader_annie",
+    "npc": "trader_annie",
+    "x": -11.0,
+    "z": -79.0,
+    "rotY": 0.0,
+    "behavior": "trade",
+    "label": "Annie's seed table (turbine hall)",
+    "trader": {
+     "stall": "Annie's seed table (turbine hall)",
+     "repFlag": "trader_annie_rep",
+     "stockFrom": "story/npcs.json traders[].stock_by_act"
+    },
+    "relocatedFrom": "loc_sparks_library"
+   },
+   {
+    "id": "npc_amb_lonnie",
+    "npc": "amb_lonnie",
+    "x": 13.0,
+    "z": -65.0,
+    "rotY": 0.0,
+    "behavior": "idle"
+   },
+   {
+    "id": "npc_amb_ruth",
+    "npc": "amb_ruth",
+    "x": -15.0,
+    "z": -93.0,
+    "rotY": 0.0,
+    "behavior": "idle"
+   },
+   {
+    "id": "npc_amb_bike_kids",
+    "npc": "amb_bike_kids",
+    "x": -7.0,
+    "z": -81.0,
+    "rotY": 0.0,
+    "behavior": "idle"
+   },
+   {
+    "id": "npc_extra_survivor_01",
+    "npc": "extra_survivor_01",
+    "x": -15.0,
+    "z": -91.0,
+    "rotY": 0.0,
+    "behavior": "huddle",
+    "label": "survivor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_survivor_02",
+    "npc": "extra_survivor_02",
+    "x": -7.0,
+    "z": -91.0,
+    "rotY": 0.0,
+    "behavior": "huddle",
+    "label": "survivor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_survivor_03",
+    "npc": "extra_survivor_03",
+    "x": 1.0,
+    "z": -91.0,
+    "rotY": 0.0,
+    "behavior": "huddle",
+    "label": "survivor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_survivor_04",
+    "npc": "extra_survivor_04",
+    "x": 9.0,
+    "z": -91.0,
+    "rotY": 0.0,
+    "behavior": "huddle",
+    "label": "survivor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_survivor_05",
+    "npc": "extra_survivor_05",
+    "x": 13.0,
+    "z": -97.0,
+    "rotY": 0.0,
+    "behavior": "huddle",
+    "label": "survivor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_survivor_06",
+    "npc": "extra_survivor_06",
+    "x": -21.0,
+    "z": -75.0,
+    "rotY": 0.0,
+    "behavior": "huddle",
+    "label": "survivor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_survivor_07",
+    "npc": "extra_survivor_07",
+    "x": 13.0,
+    "z": -75.0,
+    "rotY": 0.0,
+    "behavior": "huddle",
+    "label": "survivor",
+    "crowd": true
    }
   ],
   "enemies": [
    {
     "id": "en_01",
-    "type": "remnant_patrol",
-    "x": -13.0,
-    "z": -5.0,
-    "group": "g_gate_a",
-    "tier": 5,
-    "behavior": "assault",
-    "hostile": "always",
+    "type": "tallman",
+    "x": 1.0,
+    "z": -171.0,
+    "group": "g_ch10_n1",
+    "tier": 1,
+    "behavior": "watch_from_dark",
+    "hostile": "conditional",
     "activate": "trigger",
-    "when": [
+    "storyEncounter": "enc_ch10_siege_n1",
+    "hostileWhen": [
      {
-      "flag": "ch10_no_standdown",
+      "flag": "ch10_n1_attack",
       "eq": true
      }
-    ]
+    ],
+    "lowVisibilityTrigger": true
    },
    {
     "id": "en_02",
-    "type": "remnant_patrol",
-    "x": -7.0,
-    "z": -13.0,
-    "group": "g_gate_a",
-    "tier": 5,
-    "behavior": "assault",
+    "type": "tallman",
+    "x": -31.0,
+    "z": -163.0,
+    "group": "g_ch10_n3",
+    "tier": 1,
+    "behavior": "push",
     "hostile": "always",
     "activate": "trigger",
-    "when": [
-     {
-      "flag": "ch10_no_standdown",
-      "eq": true
-     }
-    ]
+    "storyEncounter": "enc_ch10_siege_n3",
+    "lowVisibilityTrigger": true,
+    "breakOffAfterLosses": 2
    },
    {
     "id": "en_03",
-    "type": "remnant_patrol",
-    "x": 7.0,
-    "z": -11.0,
-    "group": "g_gate_a",
-    "tier": 5,
-    "behavior": "assault",
+    "type": "tallman",
+    "x": 1.0,
+    "z": -155.0,
+    "group": "g_ch10_n3",
+    "tier": 1,
+    "behavior": "push",
     "hostile": "always",
     "activate": "trigger",
-    "when": [
-     {
-      "flag": "ch10_no_standdown",
-      "eq": true
-     }
-    ]
+    "storyEncounter": "enc_ch10_siege_n3",
+    "lowVisibilityTrigger": true,
+    "breakOffAfterLosses": 2
    },
    {
     "id": "en_04",
-    "type": "remnant_patrol",
-    "x": 13.0,
-    "z": -3.0,
-    "group": "g_gate_a",
-    "tier": 5,
-    "behavior": "assault",
+    "type": "tallman",
+    "x": 33.0,
+    "z": -163.0,
+    "group": "g_ch10_n3",
+    "tier": 1,
+    "behavior": "push",
     "hostile": "always",
     "activate": "trigger",
-    "when": [
-     {
-      "flag": "ch10_no_standdown",
-      "eq": true
-     }
-    ]
+    "storyEncounter": "enc_ch10_siege_n3",
+    "lowVisibilityTrigger": true,
+    "breakOffAfterLosses": 2
    },
    {
     "id": "en_05",
-    "type": "remnant_patrol",
-    "x": -11.0,
-    "z": -19.0,
-    "group": "g_gate_b",
-    "tier": 5,
-    "behavior": "flank",
+    "type": "tallman",
+    "x": -47.0,
+    "z": -123.0,
+    "group": "g_ch10_n2",
+    "tier": 1,
+    "behavior": "probe",
     "hostile": "always",
     "activate": "trigger",
-    "when": [
-     {
-      "flag": "ch10_no_standdown",
-      "eq": true
-     }
-    ]
+    "storyEncounter": "enc_ch10_siege_n2",
+    "lowVisibilityTrigger": true
    },
    {
     "id": "en_06",
-    "type": "remnant_patrol",
-    "x": 9.0,
-    "z": -19.0,
-    "group": "g_gate_b",
-    "tier": 5,
-    "behavior": "flank",
+    "type": "tallman",
+    "x": -47.0,
+    "z": -67.0,
+    "group": "g_ch10_n2",
+    "tier": 1,
+    "behavior": "probe",
     "hostile": "always",
     "activate": "trigger",
-    "when": [
-     {
-      "flag": "ch10_no_standdown",
-      "eq": true
-     }
-    ]
+    "storyEncounter": "enc_ch10_siege_n2",
+    "lowVisibilityTrigger": true
    },
    {
     "id": "en_07",
-    "type": "remnant_patrol",
-    "x": -17.0,
-    "z": -1.0,
-    "group": "g_gate_b",
-    "tier": 5,
-    "behavior": "flank",
+    "type": "assimilated_human",
+    "x": 47.0,
+    "z": -127.0,
+    "group": "g_ch10_prowlers",
+    "tier": 1,
+    "behavior": "dormant_ambush",
     "hostile": "always",
     "activate": "trigger",
+    "storyEncounter": "enc_ch10_hollow_prowlers",
+    "ambush": true,
+    "lowVisibilityTrigger": true,
+    "voiceLine": "Open the gate, Pearce.",
+    "noBreathPlume": true
+   },
+   {
+    "id": "en_08",
+    "type": "assimilated_human",
+    "x": 47.0,
+    "z": -55.0,
+    "group": "g_ch10_prowlers",
+    "tier": 1,
+    "behavior": "dormant_ambush",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch10_hollow_prowlers",
+    "ambush": true,
+    "lowVisibilityTrigger": true,
+    "voiceLine": "Open the gate, Pearce.",
+    "noBreathPlume": true
+   },
+   {
+    "id": "en_09",
+    "type": "assimilated_animal",
+    "x": 45.0,
+    "z": -111.0,
+    "group": "g_ch10_prowlers",
+    "tier": 1,
+    "behavior": "dormant_ambush",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch10_hollow_prowlers",
+    "ambush": true,
+    "lowVisibilityTrigger": true,
+    "silent": true,
+    "noBreathPlume": true,
+    "testsLampEdge": true
+   },
+   {
+    "id": "en_10",
+    "type": "assimilated_animal",
+    "x": 47.0,
+    "z": -83.0,
+    "group": "g_ch10_prowlers",
+    "tier": 1,
+    "behavior": "dormant_ambush",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch10_hollow_prowlers",
+    "ambush": true,
+    "lowVisibilityTrigger": true,
+    "silent": true,
+    "noBreathPlume": true,
+    "testsLampEdge": true
+   },
+   {
+    "id": "en_11",
+    "type": "assimilated_animal",
+    "x": 45.0,
+    "z": -63.0,
+    "group": "g_ch10_prowlers",
+    "tier": 1,
+    "behavior": "dormant_ambush",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch10_hollow_prowlers",
+    "ambush": true,
+    "lowVisibilityTrigger": true,
+    "silent": true,
+    "noBreathPlume": true,
+    "testsLampEdge": true
+   },
+   {
+    "id": "en_12",
+    "type": "remnant_patrol",
+    "x": -11.0,
+    "z": -23.0,
+    "group": "g_ch10_gate_w1",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch10_gate_battle",
     "when": [
      {
-      "flag": "ch10_no_standdown",
-      "eq": true
+      "not": {
+       "flag": "remnant_stood_down",
+       "eq": true
+      }
      }
     ]
    },
    {
-    "id": "en_08",
+    "id": "en_13",
     "type": "remnant_patrol",
-    "x": 17.0,
-    "z": 1.0,
-    "group": "g_gate_b",
-    "tier": 5,
-    "behavior": "flank",
+    "x": 9.0,
+    "z": -23.0,
+    "group": "g_ch10_gate_w1",
+    "tier": 1,
+    "behavior": "assault",
     "hostile": "always",
     "activate": "trigger",
+    "storyEncounter": "enc_ch10_gate_battle",
     "when": [
      {
-      "flag": "ch10_no_standdown",
-      "eq": true
+      "not": {
+       "flag": "remnant_stood_down",
+       "eq": true
+      }
+     }
+    ]
+   },
+   {
+    "id": "en_14",
+    "type": "remnant_patrol",
+    "x": -23.0,
+    "z": -11.0,
+    "group": "g_ch10_gate_w1",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch10_gate_battle",
+    "when": [
+     {
+      "not": {
+       "flag": "remnant_stood_down",
+       "eq": true
+      }
+     }
+    ]
+   },
+   {
+    "id": "en_15",
+    "type": "remnant_patrol",
+    "x": 21.0,
+    "z": -11.0,
+    "group": "g_ch10_gate_w1",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch10_gate_battle",
+    "when": [
+     {
+      "not": {
+       "flag": "remnant_stood_down",
+       "eq": true
+      }
+     }
+    ]
+   },
+   {
+    "id": "en_16",
+    "type": "remnant_patrol",
+    "x": -15.0,
+    "z": -3.0,
+    "group": "g_ch10_gate_w2",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch10_gate_battle",
+    "when": [
+     {
+      "not": {
+       "flag": "remnant_stood_down",
+       "eq": true
+      }
+     }
+    ]
+   },
+   {
+    "id": "en_17",
+    "type": "remnant_patrol",
+    "x": 13.0,
+    "z": -3.0,
+    "group": "g_ch10_gate_w2",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch10_gate_battle",
+    "when": [
+     {
+      "not": {
+       "flag": "remnant_stood_down",
+       "eq": true
+      }
+     }
+    ]
+   },
+   {
+    "id": "en_18",
+    "type": "remnant_patrol",
+    "x": -31.0,
+    "z": 1.0,
+    "group": "g_ch10_gate_w2",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch10_gate_battle",
+    "when": [
+     {
+      "not": {
+       "flag": "remnant_stood_down",
+       "eq": true
+      }
+     }
+    ]
+   },
+   {
+    "id": "en_19",
+    "type": "remnant_patrol",
+    "x": 29.0,
+    "z": 1.0,
+    "group": "g_ch10_gate_w2",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch10_gate_battle",
+    "when": [
+     {
+      "not": {
+       "flag": "remnant_stood_down",
+       "eq": true
+      }
      }
     ]
    }
@@ -641,237 +1136,367 @@
   "loot": [
    {
     "id": "loot_01",
-    "x": 17.0,
-    "z": -67.0,
-    "r": 1.6,
-    "label": "Plant stores",
-    "container": "locker",
-    "location": "loc_thomson_dam"
-   },
-   {
-    "id": "loot_02",
-    "x": -17.0,
-    "z": -39.0,
-    "r": 1.6,
-    "label": "Greenhouse shelf",
-    "container": "kitchen_cabinet",
-    "location": "loc_thomson_dam"
-   },
-   {
-    "id": "loot_03",
-    "x": -4.0,
-    "z": -32.0,
-    "r": 1.6,
-    "label": "Gate ammo crate",
-    "container": "military_crate",
-    "when": [
-     {
-      "flag": "ch10_no_standdown",
-      "eq": true
-     }
-    ],
-    "location": "loc_thomson_dam"
-   },
-   {
-    "id": "loot_04",
-    "x": 17.0,
-    "z": -47.0,
-    "r": 1.6,
-    "label": "Locker (filler)",
-    "container": "locker",
-    "location": "loc_thomson_dam",
-    "filler": true,
-    "guaranteed": [
-     {
-      "item": "water_clean",
-      "n": 1
-     }
-    ]
-   },
-   {
-    "id": "loot_05",
-    "x": 1.0,
-    "z": -57.0,
-    "r": 1.6,
-    "label": "Medicine cabinet (filler)",
-    "container": "medicine_cabinet",
-    "location": "loc_thomson_dam",
-    "filler": true,
+    "x": -25.0,
+    "z": -63.0,
+    "r": 3.1,
+    "label": "Plant pickup",
+    "container": "car_trunk",
+    "propRef": "prop_01",
+    "render": "prop",
+    "location": "loc_galena_station",
     "guaranteed": [
      {
       "item": "bandage",
-      "n": 1
+      "n": 3
      }
     ]
    },
    {
-    "id": "loot_06",
-    "x": -21.0,
-    "z": 5.0,
-    "r": 1.6,
-    "label": "Woodpile / pallets / broken furniture (filler)",
-    "container": "woodpile",
-    "location": "loc_thomson_dam",
-    "filler": true,
+    "id": "loot_02",
+    "x": 25.0,
+    "z": -47.0,
+    "r": 3.1,
+    "label": "Maintenance truck",
+    "container": "car_trunk",
+    "propRef": "prop_02",
+    "render": "prop",
+    "location": "loc_galena_station",
     "guaranteed": [
      {
       "item": "ration",
       "n": 1
      }
     ]
+   },
+   {
+    "id": "loot_03",
+    "x": 11.0,
+    "z": -15.0,
+    "r": 3.1,
+    "label": "Remnant truck (gate road)",
+    "container": "car_trunk",
+    "propRef": "prop_03",
+    "render": "prop",
+    "when": [
+     {
+      "flag": "remnant_stood_down",
+      "eq": true
+     }
+    ],
+    "location": "loc_galena_station"
+   },
+   {
+    "id": "loot_04",
+    "x": -15.0,
+    "z": -119.0,
+    "r": 1.6,
+    "label": "Control-room locker",
+    "container": "locker",
+    "location": "loc_galena_station",
+    "guaranteed": [
+     {
+      "item": "flare",
+      "n": 2
+     }
+    ]
+   },
+   {
+    "id": "loot_05",
+    "x": 17.0,
+    "z": -119.0,
+    "r": 1.6,
+    "label": "Break-room kitchen",
+    "container": "kitchen_cabinet",
+    "location": "loc_galena_station",
+    "guaranteed": [
+     {
+      "item": "med_kit",
+      "n": 2
+     }
+    ]
+   },
+   {
+    "id": "loot_06",
+    "x": -15.0,
+    "z": -83.0,
+    "r": 1.6,
+    "label": "Turbine-hall crate",
+    "container": "military_crate",
+    "location": "loc_galena_station",
+    "guaranteed": [
+     {
+      "item": "rifle_ammo",
+      "n": 4
+     }
+    ]
+   },
+   {
+    "id": "loot_07",
+    "x": 17.0,
+    "z": -83.0,
+    "r": 1.6,
+    "label": "Turbine-hall medicine cabinet",
+    "container": "medicine_cabinet",
+    "location": "loc_galena_station",
+    "guaranteed": [
+     {
+      "item": "ammo_556",
+      "n": 6
+     }
+    ]
+   },
+   {
+    "id": "loot_08",
+    "x": -39.0,
+    "z": -95.0,
+    "r": 1.6,
+    "label": "Tunnel-house woodpile",
+    "container": "woodpile",
+    "location": "loc_galena_station"
+   },
+   {
+    "id": "loot_09",
+    "x": -49.0,
+    "z": -181.0,
+    "r": 1.6,
+    "label": "Military crate",
+    "container": "military_crate",
+    "location": "loc_galena_station",
+    "filler": true
+   },
+   {
+    "id": "loot_10",
+    "x": -33.0,
+    "z": -113.0,
+    "r": 1.6,
+    "label": "Locker",
+    "container": "locker",
+    "location": "loc_galena_station",
+    "filler": true
+   },
+   {
+    "id": "loot_11",
+    "x": 3.0,
+    "z": -107.0,
+    "r": 1.6,
+    "label": "Medicine cabinet",
+    "container": "medicine_cabinet",
+    "location": "loc_galena_station",
+    "filler": true
+   },
+   {
+    "id": "loot_12",
+    "x": 49.0,
+    "z": -181.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture",
+    "container": "woodpile",
+    "location": "loc_galena_station",
+    "filler": true
+   },
+   {
+    "id": "loot_13",
+    "x": -49.0,
+    "z": 5.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture",
+    "container": "woodpile",
+    "location": "loc_galena_station",
+    "filler": true
+   },
+   {
+    "id": "loot_14",
+    "x": 5.0,
+    "z": -121.0,
+    "r": 1.6,
+    "label": "Kitchen cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_galena_station",
+    "filler": true
    }
   ]
  },
  "props": [
   {
    "id": "prop_01",
-   "asset": "assets/kenney/industrial/detail-tank-large.glb",
-   "x": -1.0,
-   "z": -56.0,
-   "rotY": 0,
-   "h": 3.2,
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -25.0,
+   "z": -63.0,
+   "rotY": 0.0,
+   "h": 1.5,
    "collide": true,
-   "tag": "Unit 1"
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_02",
-   "asset": "assets/kenney/industrial/detail-tank-large.glb",
-   "x": 7.0,
-   "z": -56.0,
-   "rotY": 0,
-   "h": 3.2,
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": 25.0,
+   "z": -47.0,
+   "rotY": 1.571,
+   "h": 1.5,
    "collide": true,
-   "tag": "Unit 2 (running)"
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_03",
-   "asset": "assets/kenney/industrial/detail-tank-large.glb",
-   "x": 15.0,
-   "z": -56.0,
-   "rotY": 0,
-   "h": 3.2,
-   "collide": true,
-   "tag": "Unit 3"
-  },
-  {
-   "id": "prop_04",
-   "asset": "assets/kenney/industrial/building-m.glb",
-   "x": 7.0,
-   "z": -69.0,
-   "rotY": 0.0,
-   "h": 13,
-   "collide": false,
-   "tag": "powerhouse silhouette"
-  },
-  {
-   "id": "prop_05",
-   "asset": "assets/kenney/industrial/chimney-medium.glb",
-   "x": 19.0,
-   "z": -73.0,
-   "rotY": 0,
-   "h": 11,
-   "collide": true,
-   "tag": "surge tower"
-  },
-  {
-   "id": "prop_06",
-   "asset": "assets/kenney/industrial/detail-tank.glb",
-   "x": -16.0,
-   "z": -85.0,
-   "rotY": 0,
-   "h": 4,
-   "collide": true
-  },
-  {
-   "id": "prop_07",
-   "asset": "assets/kenney/roads/light-square-double.glb",
-   "x": -3.0,
-   "z": -31.0,
-   "rotY": 0,
-   "h": 6,
-   "collide": true
-  },
-  {
-   "id": "prop_08",
-   "asset": "assets/kenney/roads/light-square-double.glb",
-   "x": 5.0,
-   "z": -31.0,
-   "rotY": 0,
-   "h": 6,
-   "collide": true
-  },
-  {
-   "id": "prop_09",
-   "asset": "assets/kenney/roads/construction-barrier.glb",
-   "x": -1.0,
-   "z": -23.0,
-   "rotY": 0,
-   "h": 1.1,
-   "collide": true
-  },
-  {
-   "id": "prop_10",
-   "asset": "assets/kenney/industrial/shipping-container-a.glb",
-   "x": -17.0,
-   "z": -15.0,
-   "rotY": 0.2,
-   "h": 2.6,
-   "collide": true,
-   "tag": "Remnant fuel trailer stand-in"
-  },
-  {
-   "id": "prop_11",
    "asset": "assets/tevy/wrecked-sedan-lod1.glb",
-   "x": 15.0,
-   "z": -17.0,
-   "rotY": -0.5,
-   "h": 1.45,
-   "collide": true
+   "x": 11.0,
+   "z": -15.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
+  },
+  {
+   "id": "prop_lamp_01",
+   "asset": "assets/kenney/roads/light-square-double.glb",
+   "x": -35.0,
+   "z": -135.0,
+   "rotY": 0.0,
+   "h": 7,
+   "collide": false,
+   "tag": "lamp_line"
+  },
+  {
+   "id": "prop_lamp_02",
+   "asset": "assets/kenney/roads/light-square-double.glb",
+   "x": 1.0,
+   "z": -139.0,
+   "rotY": 0.0,
+   "h": 7,
+   "collide": false,
+   "tag": "lamp_line"
+  },
+  {
+   "id": "prop_lamp_03",
+   "asset": "assets/kenney/roads/light-square-double.glb",
+   "x": 37.0,
+   "z": -135.0,
+   "rotY": 0.0,
+   "h": 7,
+   "collide": false,
+   "tag": "lamp_line"
+  },
+  {
+   "id": "prop_lamp_04",
+   "asset": "assets/kenney/roads/light-square-double.glb",
+   "x": -35.0,
+   "z": -47.0,
+   "rotY": 0.0,
+   "h": 7,
+   "collide": false,
+   "tag": "lamp_line"
+  },
+  {
+   "id": "prop_lamp_05",
+   "asset": "assets/kenney/roads/light-square-double.glb",
+   "x": 37.0,
+   "z": -47.0,
+   "rotY": 0.0,
+   "h": 7,
+   "collide": false,
+   "tag": "lamp_line"
+  },
+  {
+   "id": "prop_lamp_06",
+   "asset": "assets/kenney/roads/light-square-double.glb",
+   "x": -23.0,
+   "z": -79.0,
+   "rotY": 0.0,
+   "h": 7,
+   "collide": false,
+   "tag": "lamp_line"
+  },
+  {
+   "id": "prop_lamp_07",
+   "asset": "assets/kenney/roads/light-square-double.glb",
+   "x": 45.0,
+   "z": -91.0,
+   "rotY": 0.0,
+   "h": 7,
+   "collide": false,
+   "tag": "lamp_line"
+  },
+  {
+   "id": "prop_lamp_08",
+   "asset": "assets/kenney/roads/light-square-double.glb",
+   "x": -45.0,
+   "z": -83.0,
+   "rotY": 0.0,
+   "h": 7,
+   "collide": false,
+   "tag": "lamp_line"
   }
  ],
  "interactives": [
   {
-   "id": "ch10_table",
-   "type": "choice_panel",
+   "id": "ch10_lamp_cable",
+   "type": "repair",
    "x": 1.0,
-   "z": -81.0,
-   "r": 2.4,
-   "label": "The table (final choice)"
+   "z": -135.0,
+   "r": 1.8,
+   "label": "North lamp: splice the cut cable",
+   "requiresItems": {
+    "lamp_kit": 1
+   },
+   "setsFlag": "ch10_cable_fixed",
+   "quest": "q_lamp_line"
+  },
+  {
+   "id": "ch10_cooling_clamp",
+   "type": "repair",
+   "x": -41.0,
+   "z": -83.0,
+   "r": 1.8,
+   "label": "Clamp the cooling-water line",
+   "requiresItems": {
+    "mech_tools": 1
+   },
+   "setsFlag": "ch10_clamp_done",
+   "quest": "q_lamp_line"
+  },
+  {
+   "id": "ch10_flare_box",
+   "type": "open",
+   "x": -7.0,
+   "z": -67.0,
+   "r": 1.8,
+   "label": "Flare box",
+   "givesItems": {
+    "flare": 3,
+    "rifle_ammo": 6
+   }
+  },
+  {
+   "id": "ch10_vote",
+   "type": "vote",
+   "x": -9.0,
+   "z": -113.0,
+   "r": 1.8,
+   "label": "Control room: the vote",
+   "setsFlag": "ch10_vote_called",
+   "when": [
+    {
+     "flag": "ch10_night3_done",
+     "eq": true
+    }
+   ]
   }
  ],
  "safeZones": [
   {
    "id": "safe_01",
-   "kind": "warm_room",
+   "kind": "shelter",
    "x": 1.0,
-   "z": -83.0,
-   "r": 4.5,
-   "label": "Control room, 18 C",
+   "z": -95.0,
+   "r": 5.0,
+   "label": "The warm room",
    "warmth": true,
    "save": true,
-   "sealed": false
-  },
-  {
-   "id": "safe_02",
-   "kind": "warm_room",
-   "x": 7.0,
-   "z": -45.0,
-   "r": 5,
-   "label": "Powerhouse floor",
-   "warmth": true,
-   "save": true,
-   "sealed": false
-  },
-  {
-   "id": "safe_03",
-   "kind": "indoor",
-   "x": -14.0,
-   "z": -45.0,
-   "r": 3,
-   "label": "Greenhouse",
-   "warmth": true,
-   "save": true,
-   "sealed": false
+   "sealed": true
   }
  ],
  "setPieces": [
@@ -880,48 +1505,114 @@
    "type": "ironwood_mrap",
    "path": [
     [
-     0.0,
-     3.0
+     -1.0,
+     5.0
     ],
     [
-     0.0,
-     -15.0
-    ],
-    [
-     0.0,
-     -21.0
+     -1.0,
+     -23.0
     ]
    ],
    "when": [
     {
-     "flag": "ch10_no_standdown",
-     "eq": true
+     "not": {
+      "flag": "remnant_stood_down",
+      "eq": true
+     }
     }
    ],
-   "note": "Never dueled; disable or survive."
+   "storyEncounter": "enc_ch10_gate_battle"
   }
  ],
  "encounters": [
   {
-   "id": "enc_gate",
+   "id": "z_ch10_north_dark",
    "area": {
     "type": "rect",
-    "x0": -22.0,
-    "z0": -28.0,
-    "x1": 22.0,
+    "x0": -50.0,
+    "z0": -182.0,
+    "x1": 50.0,
+    "z1": -144.0
+   },
+   "groups": [
+    {
+     "group": "g_ch10_n1",
+     "wave": 1
+    },
+    {
+     "group": "g_ch10_n3",
+     "wave": 2
+    }
+   ],
+   "storyEncounters": [
+    "enc_ch10_siege_n1",
+    "enc_ch10_siege_n3"
+   ],
+   "note": "Night 1 watcher (wave 1), night 3 push (wave 2). Never more than 3 visible."
+  },
+  {
+   "id": "z_ch10_west_dark",
+   "area": {
+    "type": "rect",
+    "x0": -50.0,
+    "z0": -132.0,
+    "x1": -46.0,
+    "z1": -42.0
+   },
+   "groups": [
+    {
+     "group": "g_ch10_n2",
+     "wave": 1
+    }
+   ],
+   "storyEncounters": [
+    "enc_ch10_siege_n2"
+   ],
+   "note": "Night 2: under the lights at the cooling line."
+  },
+  {
+   "id": "z_ch10_east_dark",
+   "area": {
+    "type": "rect",
+    "x0": 44.0,
+    "z0": -132.0,
+    "x1": 50.0,
+    "z1": -42.0
+   },
+   "groups": [
+    {
+     "group": "g_ch10_prowlers",
+     "wave": 1
+    }
+   ],
+   "storyEncounters": [
+    "enc_ch10_hollow_prowlers"
+   ],
+   "note": "Night 2: Hollows call names past the lamp line; prowlers test each pole's dark edge."
+  },
+  {
+   "id": "z_ch10_gate",
+   "area": {
+    "type": "rect",
+    "x0": -50.0,
+    "z0": -36.0,
+    "x1": 50.0,
     "z1": 6.0
    },
    "groups": [
     {
-     "group": "g_gate_a",
+     "group": "g_ch10_gate_w1",
      "wave": 1
     },
     {
-     "group": "g_gate_b",
+     "group": "g_ch10_gate_w2",
      "wave": 2
     }
    ],
-   "note": "0 enemies if the Remnant stands down."
+   "storyEncounters": [
+    "enc_ch10_gate_battle"
+   ],
+   "note": "Only if the Remnant doesn't stand down: 4 + 4 and the MRAP."
   }
  ],
  "triggers": [
@@ -931,13 +1622,147 @@
    "once": true,
    "shape": {
     "type": "circle",
-    "x": 0.0,
-    "z": -32.0,
+    "x": 1.0,
+    "z": -63.0,
     "r": 3
    },
    "actions": [
     {
+     "type": "set_time",
+     "value": 0.88
+    },
+    {
+     "type": "set_weather",
+     "weather": "ashfall"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch10_started",
+     "value": true
+    },
+    {
      "type": "checkpoint"
+    }
+   ]
+  },
+  {
+   "id": "t_ch10_siege_night1",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -12.0,
+    "z0": -144.0,
+    "x1": 14.0,
+    "z1": -128.0
+   },
+   "actions": [
+    {
+     "type": "activate_group",
+     "group": "g_ch10_n1"
+    },
+    {
+     "type": "dialogue",
+     "id": "ch10_siege_night1"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch10_night1_done",
+     "value": true
+    }
+   ],
+   "when": [
+    {
+     "not": {
+      "any": [
+       {
+        "flag": "den_killed",
+        "eq": true
+       },
+       {
+        "flag": "tallmen_killed",
+        "gte": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "t_ch10_night1_skip",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -12.0,
+    "z0": -144.0,
+    "x1": 14.0,
+    "z1": -128.0
+   },
+   "actions": [
+    {
+     "type": "set_flag",
+     "flag": "ch10_night1_done",
+     "value": true
+    }
+   ],
+   "when": [
+    {
+     "any": [
+      {
+       "flag": "den_killed",
+       "eq": true
+      },
+      {
+       "flag": "tallmen_killed",
+       "gte": 2
+      }
+     ]
+    }
+   ],
+   "note": "Night 1 is skipped if the den was killed or 2+ Tallmen are dead."
+  },
+  {
+   "id": "t_ch10_siege_night2",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -46.0,
+    "z0": -92.0,
+    "x1": -34.0,
+    "z1": -74.0
+   },
+   "actions": [
+    {
+     "type": "set_time",
+     "value": 0.9
+    },
+    {
+     "type": "activate_group",
+     "group": "g_ch10_n2"
+    },
+    {
+     "type": "activate_group",
+     "group": "g_ch10_prowlers"
+    },
+    {
+     "type": "dialogue",
+     "id": "ch10_siege_night2"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch10_night2_done",
+     "value": true
+    },
+    {
+     "type": "checkpoint"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch10_night1_done",
+     "eq": true
     }
    ]
   },
@@ -947,88 +1772,126 @@
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -6.0,
-    "z0": -28.0,
-    "x1": 6.0,
+    "x0": -8.0,
+    "z0": -36.0,
+    "x1": 8.0,
     "z1": -22.0
    },
    "actions": [
     {
+     "type": "set_time",
+     "value": 0.45
+    },
+    {
      "type": "dialogue",
      "id": "ch10_gate"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch10_gate_done",
+     "value": true
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch10_night2_done",
+     "eq": true
     }
    ]
   },
   {
-   "id": "t_ch10_battle",
+   "id": "t_ch10_gate_battle",
    "on": "flag",
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -22.0,
-    "z0": -28.0,
-    "x1": 22.0,
-    "z1": 6.0
+    "x0": -8.0,
+    "z0": -36.0,
+    "x1": 8.0,
+    "z1": -22.0
    },
    "actions": [
     {
      "type": "activate_group",
-     "group": "g_gate_a"
+     "group": "g_ch10_gate_w1"
+    },
+    {
+     "type": "activate_group",
+     "group": "g_ch10_gate_w2"
     },
     {
      "type": "spawn_setpiece",
      "id": "sp_ch10_mrap"
+    },
+    {
+     "type": "checkpoint"
     }
    ],
    "when": [
     {
-     "flag": "ch10_no_standdown",
+     "flag": "ch10_gate_done",
      "eq": true
+    },
+    {
+     "not": {
+      "flag": "remnant_stood_down",
+      "eq": true
+     }
     }
-   ],
-   "note": "Engine sets ch10_no_standdown when NOT ruiz_defected AND strand_stance!=governor AND ironwood_hostility>=5."
+   ]
   },
   {
-   "id": "t_ch10_wave2",
-   "on": "flag",
+   "id": "t_ch10_siege_night3",
+   "on": "enter",
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -22.0,
-    "z0": -28.0,
-    "x1": 22.0,
-    "z1": 6.0
+    "x0": -18.0,
+    "z0": -102.0,
+    "x1": 20.0,
+    "z1": -88.0
    },
    "actions": [
     {
+     "type": "set_time",
+     "value": 0.92
+    },
+    {
      "type": "activate_group",
-     "group": "g_gate_b"
+     "group": "g_ch10_n3"
+    },
+    {
+     "type": "dialogue",
+     "id": "ch10_siege_night3"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch10_night3_done",
+     "value": true
     }
    ],
    "when": [
     {
-     "flag": "cleared.g_gate_a",
+     "flag": "ch10_gate_done",
      "eq": true
     }
    ]
   },
   {
-   "id": "t_ch10_room",
-   "on": "enter",
+   "id": "t_ch10_final",
+   "on": "flag",
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -6.0,
-    "z0": -90.0,
-    "x1": 8.0,
-    "z1": -76.0
+    "x0": -18.0,
+    "z0": -122.0,
+    "x1": 0.0,
+    "z1": -104.0
    },
    "actions": [
     {
-     "type": "set_weather",
-     "weather": "clear_cold",
-     "blendSec": 60,
-     "tempC": -38
+     "type": "set_time",
+     "value": 0.3
     },
     {
      "type": "dialogue",
@@ -1037,55 +1900,23 @@
    ],
    "when": [
     {
-     "flag": "ch10_gate_resolved",
+     "flag": "ch10_vote_called",
      "eq": true
     }
    ]
   },
   {
-   "id": "t_ch10_gate_block",
-   "on": "enter",
-   "once": false,
-   "shape": {
-    "type": "rect",
-    "x0": -4.0,
-    "z0": -36.0,
-    "x1": 4.0,
-    "z1": -32.0
-   },
-   "actions": [
-    {
-     "type": "bark",
-     "speaker": "dell",
-     "text": "The gate first."
-    },
-    {
-     "type": "push_back"
-    }
-   ],
-   "when": [
-    {
-     "flag": "ch10_gate_resolved",
-     "ne": true
-    }
-   ]
-  },
-  {
-   "id": "t_ch10_end",
+   "id": "t_ch10_epilogue",
    "on": "flag",
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -6.0,
-    "z0": -90.0,
-    "x1": 8.0,
-    "z1": -76.0
+    "x0": -18.0,
+    "z0": -102.0,
+    "x1": 20.0,
+    "z1": -88.0
    },
    "actions": [
-    {
-     "type": "story_check",
-     "id": "endings"
-    },
     {
      "type": "dialogue",
      "id": "ch10_epilogue"
@@ -1097,8 +1928,7 @@
    ],
    "when": [
     {
-     "flag": "final_choice",
-     "ne": null
+     "flag": "ending"
     }
    ]
   }
@@ -1107,38 +1937,162 @@
   {
    "id": "o1",
    "order": 1,
-   "text": "Hold the gate long enough to talk (or fight)",
+   "text": "Night 1: the cut cable",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch10_gate_resolved",
+     "flag": "ch10_night1_done",
      "eq": true
     }
-   ]
+   ],
+   "quest": "q_lamp_line"
   },
   {
    "id": "o2",
    "order": 2,
-   "text": "Hear each faction's offer",
+   "text": "Night 2: the cooling-water line",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch10_offers_heard",
+     "flag": "ch10_night2_done",
+     "eq": true
+    }
+   ],
+   "quest": "q_lamp_line"
+  },
+  {
+   "id": "o3",
+   "order": 3,
+   "text": "Kessler at the gate",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch10_gate_done",
      "eq": true
     }
    ]
   },
   {
-   "id": "o3",
-   "order": 3,
-   "text": "Decide who controls the dam",
+   "id": "o4",
+   "order": 4,
+   "text": "Night 3: hold until dawn",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "final_choice",
-     "ne": null
+     "flag": "ch10_night3_done",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "o5",
+   "order": 5,
+   "text": "The control-room vote",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ending"
     }
    ]
   }
- ]
+ ],
+ "companion": {
+  "id": "wraith",
+  "spawn": {
+   "x": 5.0,
+   "z": -61.0
+  },
+  "when": [
+   {
+    "flag": "wraith_alive",
+    "eq": true
+   }
+  ],
+  "follow": {
+   "leashM": 6.0,
+   "catchUpM": 14.0,
+   "nav": "grid_bfs_walkable",
+   "avoid": [
+    "door_clearance_cells",
+    "loot_cells"
+   ],
+   "note": "Follows Braith over walkable tiles; idles at heel inside buildings."
+  },
+  "verbs": [
+   "track",
+   "warn",
+   "guard",
+   "hold"
+  ],
+  "injuredWhen": [
+   {
+    "flag": "wraith_injured",
+    "eq": true
+   }
+  ]
+ },
+ "horror": {
+  "sightlineM": 26,
+  "ambushPoints": [
+   {
+    "id": "ap_ch10_north_edge",
+    "x": 1.0,
+    "z": -147.0,
+    "r": 8.0,
+    "kind": "lamp_edge",
+    "spawns": [
+     "en_01",
+     "en_02",
+     "en_03",
+     "en_04"
+    ],
+    "lightFlicker": true,
+    "note": "Cut cable: the north lamp drops out."
+   },
+   {
+    "id": "ap_ch10_cooling_line",
+    "x": -43.0,
+    "z": -95.0,
+    "r": 6.0,
+    "kind": "lamp_edge",
+    "spawns": [
+     "en_05",
+     "en_06"
+    ],
+    "lightFlicker": true,
+    "note": "Clamp the cooling line under the lights."
+   },
+   {
+    "id": "ap_ch10_east_voices",
+    "x": 45.0,
+    "z": -91.0,
+    "r": 8.0,
+    "kind": "voice_past_lamps",
+    "spawns": [
+     "en_07",
+     "en_08",
+     "en_09",
+     "en_10",
+     "en_11"
+    ],
+    "lightFlicker": false,
+    "note": "Names called past the lamp line."
+   },
+   {
+    "id": "ap_ch10_tunnel",
+    "x": -37.0,
+    "z": -103.0,
+    "r": 3.0,
+    "kind": "interior_dark",
+    "spawns": [
+     "en_05"
+    ],
+    "lightFlicker": true,
+    "note": "Steam-tunnel head: steam hides breath and shapes."
+   }
+  ],
+  "notes": "Siege: the lamp line is the safe ring; everything outside it is dark (26 m). Tallmen <= 3 active; Hollows test the poles.",
+  "binding": "Spawns tagged ambush=true + lowVisibilityTrigger=true stay dormant (no AI tick, hidden) until the player is inside the ambush point radius AND visibility (ash, fog, darkness, flashlight off) is below environment.visibilityM, or the point's lightFlicker drops out. Hollows (assimilated_human / assimilated_animal) never render a breath plume; living NPCs always do (story assimilation.tells)."
+ },
+ "lootSource": "v2"
 }

@@ -1,11 +1,35 @@
 // Cartographer chapter loader. Builds geometry from levels/*.json (do not edit those files).
 import * as THREE from "three";
-import { CFG } from "./config.js?v=r8";
-import { fitHeight, makePerson, makeDog } from "./world.js?v=r8";
-import { evalCondition, applyEffects } from "./story.js?v=r8";
-import { rollContainer, aliasItem } from "./systems.js?v=r8";
-import { addItem, takeItem, hasItems } from "./inventory.js?v=r8";
-import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js?v=r8";
+import { CFG } from "./config.js?v=r9";
+import { fitHeight, makePerson, makeDog } from "./world.js?v=r9";
+import { evalCondition, applyEffects } from "./story.js?v=r9";
+import { rollContainer, aliasItem } from "./systems.js?v=r9";
+import { addItem, takeItem, hasItems } from "./inventory.js?v=r9";
+import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings } from "./buildings.js?v=r9";
+import { getModel, fitToGround } from "./models3d.js?v=r9";
+
+const SNOW_HEX = 0xeef2f6;
+function stripSnow(obj) {
+  obj.traverse((o) => { if (o.isMesh && o.material && o.material.color && o.material.color.getHex() === SNOW_HEX) o.visible = false; });
+  return obj;
+}
+/** Build one InstancedMesh per GLB primitive (few draw calls for many copies). */
+function instanceGLB(src, mats) {
+  const out = [];
+  src.updateMatrixWorld(true);
+  src.traverse((o) => {
+    if (!o.isMesh) return;
+    const im = new THREE.InstancedMesh(o.geometry, o.material, mats.length);
+    const tmp = new THREE.Matrix4();
+    mats.forEach((m, i) => { tmp.multiplyMatrices(m, o.matrixWorld); im.setMatrixAt(i, tmp); });
+    im.instanceMatrix.needsUpdate = true;
+    im.userData.sharedAsset = true;
+    im.castShadow = false; im.receiveShadow = true;
+    im.frustumCulled = false;
+    out.push(im);
+  });
+  return out;
+}
 
 function cleanLabel(s) {
   return String(s || "").replace(/\s*\(\s*filler\s*\)/gi, "").replace(/\s{2,}/g, " ").trim();
@@ -306,6 +330,7 @@ export class LevelRuntime {
     }
 
     this.world.clearLevel?.();
+    this.world._levelLoaded = true;
     this.group = this.world.levelGroup;
     await this._buildGrid(L);
     await this._placeProps(L);
@@ -449,7 +474,9 @@ export class LevelRuntime {
     const concMat = pbrMat(concrete, 0xe8e0d4);
     const corrMat = pbrMat(corr, 0xffffff);
     const rustMat = pbrMat(rust, 0xffffff);
-    const snowMat = pbrMat(snowP, 0xf4f7fb, { roughness: 0.92 });
+    // Nevada Rev 2: snow caps only where the level actually has snow cover (Ch 1–7 are dry).
+    this._snowy = (Number(L.environment?.snowCover) || 0) > 0;
+    const snowMat = this._snowy ? pbrMat(snowP, 0xf4f7fb, { roughness: 0.92 }) : null;
     const facadeMats = { window: null, board: rustMat, door: pbrMat(concrete, 0x3a322c), frame: rustMat };
     facadeMats.window = new THREE.MeshStandardMaterial({
       color: 0x1a2228, roughness: 0.22, metalness: 0.18, emissive: 0x2a1e10, emissiveIntensity: 0.15,
@@ -460,8 +487,25 @@ export class LevelRuntime {
     this._lots = lots.map((rec) => rectWorld(rec, o, cs));
     const buildingProps = (L.props || []).filter((p) => isBuildingAsset(p.asset));
     this._buildingProps = buildingProps;
+    this._coreMatEarly = concMat;
+    const chNum = parseInt(String(L.chapter || L.id || "").replace(/\D/g, ""), 10) || 0;
+    const houseLots = new Set();
+    if ([1, 2, 3, 6, 8].includes(chNum)) {
+      const houses = (L.buildings || []).filter((b) => b.kind === "mass" && /house/i.test(b.label || "") && b.rect);
+      let budget = 4; // Lumen: 13-material GLB, keep on-screen instances modest
+      for (const rec of lots) {
+        if (budget <= 0) break;
+        const box = rectWorld(rec, o, cs);
+        const hit = houses.find((b) => box.cx > Math.min(b.rect.x0, b.rect.x1) && box.cx < Math.max(b.rect.x0, b.rect.x1) && box.cz > Math.min(b.rect.z0, b.rect.z1) && box.cz < Math.max(b.rect.z0, b.rect.z1));
+        if (!hit) continue;
+        const n = Math.max(1, Math.min(budget, Math.round(Math.max(box.w, box.d) / 10)));
+        houseLots.add(rec); rec._houses = n; budget -= n;
+      }
+    }
+    this._tractHouses = 0;
     for (const rec of lots) {
       const box = rectWorld(rec, o, cs);
+      if (houseLots.has(rec) && await this._placeTractHouses(scene, box, rec._houses, L)) continue;
       const reserved = buildingProps.some((p) => p.x >= box.minX - 0.4 && p.x <= box.maxX + 0.4 && p.z >= box.minZ - 0.4 && p.z <= box.maxZ + 0.4);
       const ok = await stampBuildings(rec, world, scene, o, cs, snowMat, {
         skip: () => reserved,
@@ -473,9 +517,11 @@ export class LevelRuntime {
         shell.position.set(box.cx, h / 2, box.cz);
         shell.userData.kind = "building_shell";
         scene.add(shell);
-        const cap = snowCap(box.w, box.d, h, snowMat);
-        cap.position.x = box.cx; cap.position.z = box.cz;
-        scene.add(cap);
+        if (snowMat) {
+          const cap = snowCap(box.w, box.d, h, snowMat);
+          cap.position.x = box.cx; cap.position.z = box.cz;
+          scene.add(cap);
+        }
         addFacadeDetails(scene, { ...box, h, y0: 0 }, facadeMats);
       } else if (ok !== "reserved") {
         // r8: Kenney GLB lot. The kit model carries its own windows/doors, so never
@@ -511,7 +557,7 @@ export class LevelRuntime {
       scene.add(mesh);
       if (h < 2.2) world.farProps.push(mesh);
       if (h >= 2.4 && rec.ch !== "f") addFacadeDetails(scene, { ...box, h, y0: 0 }, facadeMats);
-      if (h >= 1.2 && rec.ch !== "G") {
+      if (snowMat && h >= 1.2 && rec.ch !== "G") {
         const cap = snowCap(box.w, box.d, h, snowMat, rec.ch === "H" ? 0.14 : 0.08);
         cap.position.x = box.cx;
         cap.position.z = box.cz;
@@ -543,12 +589,83 @@ export class LevelRuntime {
       }
     }
 
+    // Nevada sagebrush on scrub tiles (instanced: ~5 draw calls for the whole field).
+    await this._placeSagebrush(L, floors, scene);
+
     // Bind G tiles to the nearest door-like interactive
     for (const g of this.gates) {
       const ix = (g.minX + g.maxX) / 2, iz = (g.minZ + g.maxZ) / 2;
       const near = (L.interactives || []).find((it) => Math.hypot(it.x - ix, it.z - iz) < 4 && it.setsFlag);
       if (near) g.flag = near.setsFlag;
     }
+  }
+
+  async _placeTractHouses(scene, box, n, L) {
+    const src = await getModel("sparks_tract_house", { receiveShadow: true });
+    if (!src) return false;
+    const alongX = box.w >= box.d;
+    const seg = (alongX ? box.w : box.d) / n;
+    const mapMidZ = (this.world.bounds.minZ + this.world.bounds.maxZ) / 2;
+    for (let i = 0; i < n; i++) {
+      const h = i === 0 ? src : await getModel("sparks_tract_house");
+      if (!h) break;
+      // Face the street: long lots along X face +/-Z, deep lots face toward x = 0.
+      h.rotation.y = alongX ? (box.cz < mapMidZ ? 0 : Math.PI) : (box.cx < 0 ? Math.PI / 2 : -Math.PI / 2);
+      h.updateMatrixWorld(true);
+      let b = new THREE.Box3().setFromObject(h);
+      const cw = alongX ? seg : box.w, cd = alongX ? box.d : seg;
+      const fx = (cw * 0.94) / Math.max(0.1, b.max.x - b.min.x);
+      const fz = (cd * 0.94) / Math.max(0.1, b.max.z - b.min.z);
+      const swap = Math.abs(Math.sin(h.rotation.y)) > 0.7;
+      const uni = Math.max(0.6, Math.min(1.6, Math.min(fx, fz)));
+      h.scale.set((swap ? fz : fx), uni, (swap ? fx : fz));
+      h.scale.x = Math.max(0.5, Math.min(2.2, h.scale.x));
+      h.scale.z = Math.max(0.5, Math.min(2.2, h.scale.z));
+      const cx = alongX ? box.minX + seg * (i + 0.5) : box.cx;
+      const cz = alongX ? box.cz : box.minZ + seg * (i + 0.5);
+      h.position.set(cx, 0, cz);
+      h.updateMatrixWorld(true);
+      b = new THREE.Box3().setFromObject(h);
+      h.position.x += cx - (b.min.x + b.max.x) / 2;
+      h.position.z += cz - (b.min.z + b.max.z) / 2;
+      fitToGround(h);
+      if (!this._snowy) stripSnow(h);
+      h.userData.kind = "building";
+      h.userData.model = "sparks_tract_house";
+      scene.add(h);
+      this.world.farProps.push(h);
+      this._tractHouses++;
+    }
+    // Solid inset core: the B tiles are the collider; the core guarantees no see-through gap.
+    this._addLotCore(scene, box, 2.2, this._coreMatEarly || null);
+    return true;
+  }
+
+  async _placeSagebrush(L, floors, scene) {
+    const cells = [];
+    for (const [ch, list] of floors) {
+      const t = L.grid.legend[ch] || {};
+      if (/sage|scrub/i.test(t.name || "")) cells.push(...list);
+    }
+    const season = String(L.environment?.season || "");
+    if (!cells.length || /winter/.test(season)) { this._sage = 0; return; }
+    const src = await getModel("sagebrush_clump");
+    if (!src) { this._sage = 0; return; }
+    const mats = [];
+    let h = 2166136261;
+    const rnd = () => { h = (Math.imul(h ^ 0x9e37, 16777619) + 1013904223) >>> 0; return h / 4294967296; };
+    const maxN = 90;
+    const step = Math.max(1, Math.floor(cells.length / maxN));
+    for (let i = 0; i < cells.length && mats.length < maxN; i += step) {
+      const c = cells[i];
+      const m = new THREE.Matrix4();
+      const s = 0.7 + rnd() * 0.6;
+      m.compose(new THREE.Vector3(c.x + (rnd() - 0.5) * 1.2, 0, c.z + (rnd() - 0.5) * 1.2),
+        new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), rnd() * 6.28), new THREE.Vector3(s, s, s));
+      mats.push(m);
+    }
+    for (const im of instanceGLB(src, mats)) { im.userData.kind = "sagebrush"; scene.add(im); }
+    this._sage = mats.length;
   }
 
   async _placeProps(L) {
@@ -722,21 +839,36 @@ export class LevelRuntime {
       const items = rollContainer(l.container, l.location, ch, l.guaranteed, this.systems, l.id);
       const rec = { ...l, taken: false, items, remaining: { ...items }, label: cleanLabel(l.label || l.container || "Container") };
       const kind = lootPropKind(l);
-      let best = null, bestD = 3.5;
-      for (const d of decor) {
+      const propBound = l.render === "prop" || !!l.propRef;
+      let best = l.propRef ? decor.find((d) => !d.bound && d.id === l.propRef) || null : null;
+      let bestD = propBound ? 6 : 3.5;
+      if (!best) for (const d of decor) {
         if (d.bound || d.kind !== kind) continue;
         const dd = Math.hypot(d.x - l.x, d.z - l.z);
         if (dd < bestD) { bestD = dd; best = d; }
       }
       if (best) {
         bind(rec, best, l);
+      } else if (propBound) {
+        // Cartographer: render === "prop" / propRef means the car/dumpster IS the container.
+        // Never add a lootCrate() next to it; keep it searchable at its authored point.
+        rec.prop = null; rec.propKind = kind; rec.mesh = null;
       } else {
-        let obj = await prefab(kind);
+        let obj = null;
+        if (kind === "locker") obj = await getModel("metal_locker");
+        else if (/grill|bbq|barbecue/i.test(String(l.label || ""))) obj = await getModel("charcoal_grill");
         if (obj) {
+          fitToGround(obj);
+          obj.userData.model = kind === "locker" ? "metal_locker" : "charcoal_grill";
+        } else obj = await prefab(kind);
+        if (obj && obj.userData.model) {
+          // Sculptor searchable already at real scale.
+        } else if (obj) {
           fitHeight(obj, kind === "car" ? 1.5 : 1.2);
           obj.traverse((o) => { if (o.isMesh) { o.castShadow = false; o.receiveShadow = true; } });
         } else {
           obj = makeLootProp(kind);
+          if (!this._snowy) stripSnow(obj);
         }
         obj.position.x = l.x; obj.position.z = l.z;
         obj.rotation.y = Number.isFinite(l.rotY) ? l.rotY : (((l.x * 7 + l.z * 3) % 4) | 0) * (Math.PI / 2);
@@ -746,6 +878,38 @@ export class LevelRuntime {
         rec.prop = obj; rec.propKind = kind; rec.mesh = null;
       }
       world.loot.push(rec);
+    }
+    // Sculptor charcoal grill: a searchable backyard grill beside the home in Ch1 / Ch3.
+    const chN = parseInt(String(ch || "").replace(/\D/g, ""), 10) || 0;
+    const home = (L.buildings || []).find((b) => /_home$/.test(b.id || "") && b.rect);
+    if ((chN === 1 || chN === 3) && home) {
+      const doors = home.doors || [];
+      const x0 = Math.min(home.rect.x0, home.rect.x1), x1 = Math.max(home.rect.x0, home.rect.x1);
+      const cands = [];
+      for (const [dx, dz] of doors) for (const off of [2.5, 3.5, 4.5]) {
+        const out = dx <= x0 + 1.5 ? -off : (dx >= x1 - 1.5 ? off : 0);
+        if (!out) continue;
+        cands.push([dx + out, dz + 2.2], [dx + out, dz - 2.2]);
+      }
+      const free = (x, z) => {
+        const t = this.tileAt(x, z);
+        if (!t || !t.def || !t.def.walkable || t.def.solid) return false;
+        return !(world.colliders || []).some((c) => x > c.minX - 0.6 && x < c.maxX + 0.6 && z > c.minZ - 0.6 && z < c.maxZ + 0.6)
+          && !world.loot.some((r) => Math.hypot(r.x - x, r.z - z) < 1.6);
+      };
+      const spot = cands.find(([x, z]) => free(x, z));
+      const grill = spot ? await getModel("charcoal_grill") : null;
+      if (grill) {
+        fitToGround(grill);
+        grill.position.x = spot[0]; grill.position.z = spot[1];
+        grill.rotation.y = spot[0] < home.rect.x0 ? Math.PI / 2 : -Math.PI / 2;
+        grill.userData.kind = "loot_grill"; grill.userData.model = "charcoal_grill";
+        this.group.add(grill);
+        world.colliders.push({ minX: spot[0] - 0.35, maxX: spot[0] + 0.35, minZ: spot[1] - 0.35, maxZ: spot[1] + 0.35, src: "grill", kind: "prop" });
+        const id = "search_grill_" + (L.id || ch);
+        const items = rollContainer("kitchen_cabinet", home.location || null, ch, null, this.systems, id) || {};
+        world.loot.push({ id, x: spot[0], z: spot[1], r: 1.6, label: "Charcoal grill", container: "kitchen_cabinet", items, remaining: { ...items }, taken: false, prop: grill, propKind: "grill" });
+      }
     }
     // Street dumpsters / cars / bins with no authored container are searchable too.
     const locId = (x, z) => {
@@ -779,16 +943,46 @@ export class LevelRuntime {
       if (chosen.has(id)) continue;
       chosen.set(id, s);
     }
+    world.companion = null;
+    let militia = 0;
     for (const [id, s] of chosen) {
-      const mesh = makePerson({ id });
+      const isWraith = id === "wraith" || s.companion;
+      const isMilitia = /militia|deputy|watch|guard/i.test(id + " " + (s.label || "")) && militia < 3;
+      const mesh = isWraith ? makeDog(0x8a6a44) : makePerson({ id });
       mesh.position.set(s.x, 0, s.z);
       mesh.rotation.y = s.rotY || 0;
       this.group.add(mesh);
-      world.npcs.push({
+      const rec = {
         id, name: s.label || (id || '').replace(/_/g, ' '), x: s.x, z: s.z, rotY: s.rotY || 0,
         mesh, alive: true, dialogue: s.dialogue, behavior: s.behavior,
-      });
+        companion: !!isWraith, trader: /^trader_/.test(id) ? id : (s.trader || null),
+      };
+      world.npcs.push(rec);
+      if (isWraith) {
+        world.companion = rec;
+        rec.r = 1.6;
+        this._swapModel(rec, "wraith_malinois");
+      } else if (isMilitia) {
+        militia++;
+        this._swapModel(rec, "watch_militia");
+      }
     }
+  }
+
+  /** Replace a placeholder actor mesh with a Sculptor GLB once the template is loaded. */
+  async _swapModel(rec, modelId) {
+    const group = this.group;
+    const m = await getModel(modelId);
+    if (!m || !rec.mesh || rec.mesh.parent !== group) return;
+    m.position.copy(rec.mesh.position);
+    m.rotation.y = rec.mesh.rotation.y;
+    m.visible = rec.mesh.visible;
+    m.userData.kind = rec.companion ? "wraith" : "npc";
+    m.userData.model = modelId;
+    group.remove(rec.mesh);
+    rec.mesh = m;
+    rec.model = modelId;
+    group.add(m);
   }
 
   _placeInteractives(L) {
@@ -883,7 +1077,9 @@ export class LevelRuntime {
       const inLiveZone = zone && zinfo && zinfo.zone === zone;
       const shouldExist = this.live.has(e.group) && inLiveZone && check(e.when);
       if (shouldExist && !e._ent && living.length < cap) {
-        const kind = this.kindOf[e.type] || e.type || "raider";
+        // Keep the story type when the engine has a dedicated body for it (tallman, Hollows,
+        // watch_militia GLB...); otherwise fall back to systems code_kind.
+        const kind = this.enemies.hasKind?.(e.type) ? e.type : (this.kindOf[e.type] || e.type || "raider");
         const ent = this.enemies.spawn(kind, e.x, e.z, { ambient: false, encounter: zone?.id });
         if (ent) {
           ent.patrol = e.patrol;

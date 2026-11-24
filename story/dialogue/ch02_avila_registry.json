@@ -1,0 +1,224 @@
+{
+  "id": "ch02_avila_registry",
+  "chapter": "ch02",
+  "location": "loc_rscc_registry",
+  "trigger": "Reach the registry desk.",
+  "speakers": [
+    "narrator",
+    "avila",
+    "braith",
+    "carly"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "The registry is a hall of folding tables. Laptops on car batteries. A Guard captain walks the rows like a teacher.",
+      "next": "r1"
+    },
+    {
+      "id": "r1",
+      "speaker": "avila",
+      "text": "Name, address, household. Skills. Be honest about skills; it changes your ration tier.",
+      "choices": [
+        {
+          "text": "Braith Pearce. A&P mechanic. Ex-Air Force.",
+          "next": "skills"
+        },
+        {
+          "text": "Why does my skill matter?",
+          "next": "why"
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "speaker": "avila",
+      "text": "Because pumps, trucks and generators keep this valley alive. And people who fix them eat first.",
+      "next": "skills"
+    },
+    {
+      "id": "skills",
+      "speaker": "avila",
+      "text": "F-15 crew chief? Mountain Home? ...Pearce, you just became the most useful man in this room.",
+      "effects": [
+        {
+          "set": "ch02_registered",
+          "value": true
+        },
+        {
+          "give": "ration_card",
+          "qty": 1
+        },
+        {
+          "add": "rep_authority",
+          "value": 1
+        }
+      ],
+      "next": "r2"
+    },
+    {
+      "id": "r2",
+      "speaker": "avila",
+      "text": "Essential worker card. Double rations, travel pass. You work my motor pool three days a week.",
+      "next": "r3"
+    },
+    {
+      "id": "r3",
+      "speaker": "avila",
+      "text": "One more thing. Anyone on your block holding fuel or food over thirty days? It's not a crime. It's a count.",
+      "choices": [
+        {
+          "text": "Gil Shumway. Six jugs of diesel.",
+          "next": "report",
+          "effects": [
+            {
+              "set": "ch02_reported_gil",
+              "value": true
+            },
+            {
+              "add": "rep_authority",
+              "value": 1
+            },
+            {
+              "set": "ch02_card_secured",
+              "value": true
+            },
+            {
+              "give": "priority_card",
+              "qty": 1
+            },
+            {
+              "trust": "avila",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "text": "No. Nobody.",
+          "next": "no"
+        },
+        {
+          "text": "Show me your count first.",
+          "next": "count"
+        }
+      ]
+    },
+    {
+      "id": "report",
+      "speaker": "avila",
+      "text": "Thank you. That's how this works. Card's yours, effective today.",
+      "effects": [
+        {
+          "quest": "q_essential_card",
+          "state": "complete"
+        }
+      ],
+      "next": "carly"
+    },
+    {
+      "id": "no",
+      "speaker": "avila",
+      "text": "Then you're on the standard queue for the card. Two weeks. Unless the motor pool needs you sooner.",
+      "next": "carly"
+    },
+    {
+      "id": "count",
+      "speaker": "narrator",
+      "text": "You lean over her clipboard. STORES: 140 DAYS. The tally under it says otherwise. 41.",
+      "next": "count2"
+    },
+    {
+      "id": "count2",
+      "speaker": "avila",
+      "text": "...Lower your voice.",
+      "choices": [
+        {
+          "text": "[Quietly] Forty-one days.",
+          "next": "quiet",
+          "effects": [
+            {
+              "set": "ch02_avila_truth",
+              "value": true
+            },
+            {
+              "trust": "avila",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "text": "[Loudly] FORTY-ONE DAYS OF FOOD.",
+          "next": "loud",
+          "effects": [
+            {
+              "set": "ch02_avila_truth",
+              "value": true
+            },
+            {
+              "set": "ch02_exposed_numbers",
+              "value": true
+            },
+            {
+              "trust": "avila",
+              "delta": -4
+            },
+            {
+              "add": "rep_authority",
+              "value": -2
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "quiet",
+      "speaker": "avila",
+      "text": "If this hall hears forty-one, I have a riot by noon and nobody gets anything. Help me buy time.",
+      "next": "quiet2"
+    },
+    {
+      "id": "quiet2",
+      "speaker": "avila",
+      "text": "Card's yours. Not as a bribe. Because you know, and I need people who know.",
+      "effects": [
+        {
+          "set": "ch02_card_secured",
+          "value": true
+        },
+        {
+          "give": "priority_card",
+          "qty": 1
+        },
+        {
+          "quest": "q_essential_card",
+          "state": "complete"
+        }
+      ],
+      "next": "carly"
+    },
+    {
+      "id": "loud",
+      "speaker": "narrator",
+      "text": "The hall goes silent. Then it isn't silent at all.",
+      "effects": [
+        {
+          "event": "encounter",
+          "id": "enc_ch02_crush"
+        }
+      ],
+      "next": "carly"
+    },
+    {
+      "id": "carly",
+      "speaker": "narrator",
+      "text": "Two tables down, wearing a lanyard: Carly. She's typing names into a laptop. She sees you and winces.",
+      "end": true
+    }
+  ]
+}

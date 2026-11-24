@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "default_mode": "tense_but_fair",
   "units": {
     "*_mult": "multiplier applied to the matching base value in survival/enemies/loot/progression json",
@@ -9,7 +9,7 @@
   "how_to_apply": {
     "warmth_drain_mult": "survival warmth drain",
     "satiety_drain_mult": "survival satiety drain",
-    "hydration_drain_mult": "survival hydration drain",
+    "hydration_drain_mult": "survival hydration drain (stacks with chapter thirst_drain_mult)",
     "radiation_gain_mult": "zone gain",
     "survival_damage_mult": "health damage from freezing/starving/dehydration/radiation thresholds",
     "enemy_*": "enemies.json stats",
@@ -20,7 +20,8 @@
     "food_mult": "qty of food + water category",
     "barter_*": "progression.json economy prices",
     "campfire_burn_mult": "campfire/burn_barrel duration",
-    "quest_items": "never scaled"
+    "quest_items": "never scaled",
+    "heat_stress_mult": "multiplies heat_stress excess (survival.json heat_stress) — late-summer overheating"
   },
   "modes": [
     {
@@ -49,7 +50,8 @@
         "clothing_wear_mult": 0.6,
         "barter_buy_mult": 0.8,
         "barter_sell_mult": 1.2,
-        "campfire_burn_mult": 1.5
+        "campfire_burn_mult": 1.5,
+        "heat_stress_mult": 0.7
       },
       "save_rules": {
         "manual_save": true,
@@ -86,7 +88,8 @@
         "clothing_wear_mult": 1.0,
         "barter_buy_mult": 1.0,
         "barter_sell_mult": 1.0,
-        "campfire_burn_mult": 1.0
+        "campfire_burn_mult": 1.0,
+        "heat_stress_mult": 1.0
       },
       "save_rules": {
         "manual_save": "safe houses only",
@@ -123,7 +126,8 @@
         "clothing_wear_mult": 1.3,
         "barter_buy_mult": 1.2,
         "barter_sell_mult": 0.85,
-        "campfire_burn_mult": 0.85
+        "campfire_burn_mult": 0.85,
+        "heat_stress_mult": 1.15
       },
       "save_rules": {
         "manual_save": "safe houses only",
@@ -160,7 +164,8 @@
         "clothing_wear_mult": 1.6,
         "barter_buy_mult": 1.4,
         "barter_sell_mult": 0.7,
-        "campfire_burn_mult": 0.7
+        "campfire_burn_mult": 0.7,
+        "heat_stress_mult": 1.3
       },
       "save_rules": {
         "manual_save": false,

@@ -1,952 +1,1646 @@
 {
-  "version": 1,
-  "trust_scale": {
-    "min": -10,
-    "max": 10,
-    "note": "Stored as trust.<npc_id>. >=3 friendly, >=6 loyal (will take risks for Dell), <=-3 hostile, <=-6 will act against Dell."
-  },
-  "npcs": [
+ "version": 2,
+ "trust_scale": {
+  "min": -10,
+  "max": 10,
+  "note": "Stored as trust.<npc_id> for npcs[] only. >=3 friendly, >=6 loyal, <=-3 hostile, <=-6 acts against Braith. Ambient NPCs and traders use flags (lusk_rep, trader_<id>_rep), not trust."
+ },
+ "npcs": [
+  {
+   "id": "carly",
+   "name": "Carly Redmond",
+   "age": 26,
+   "role": "Braith's girlfriend. Washoe County 911 dispatcher; registry clerk (Ch2–5); founder of the Switchboard radio relay (Ch6+); runs intake and the census.",
+   "faction": "none",
+   "personality": "Fast, precise, funny a second after bad news. Grew up in foster care in Reno; the valley's people are her family. Allergic to being protected.",
+   "voice": "Triage cadence: 'Address? Breathing? Okay.' Calls Braith by name when serious, 'babe' when not. Dark one-liners.",
+   "motives": "Make the count honest. Write every name down so it happened. Keep Braith from becoming a man who decides who's worth heat.",
+   "secret": "She copied Avila's real stores sheets in Ch3 and kept them. In Ch6 she chooses the Switchboard's side with or without Braith.",
+   "where_met": "loc_sparks_block, kitchen, Ch1 opening",
+   "chapters": [
+    "ch01",
+    "ch02",
+    "ch03",
+    "ch05",
+    "ch06",
+    "ch07",
+    "ch08",
+    "ch09",
+    "ch10"
+   ],
+   "trust": {
+    "start": 4
+   },
+   "relationship_effects": [
     {
-      "id": "theo",
-      "name": "Theo Kowalczyk",
-      "age": 15,
-      "role": "Dell's son. Type 1 diabetic. Your reason.",
-      "faction": "none",
-      "personality": "Funny, embarrassed by needing anything, desperate to be useful. Gets quieter as the world gets louder.",
-      "voice": "Lowercase energy. Short, deflecting jokes. Calls Dell 'Ma' when scared and 'Dell' when angry. Gamer slang that dies out by Act III.",
-      "motives": "Stop being the reason his mother takes risks. Matter to someone besides her.",
-      "secret": "From Ch3 on he skips doses to stretch the insulin. Ames catches it in Ch8 (foot infection).",
-      "where_met": "loc_east_end (home), Ch1",
-      "chapters": [
-        "ch01",
-        "ch02",
-        "ch03",
-        "ch04",
-        "ch05",
-        "ch06",
-        "ch07",
-        "ch08",
-        "ch09",
-        "ch10"
-      ],
-      "trust": {
-        "start": 5
-      },
-      "relationship_effects": [
-        {
-          "when": "Dell includes him in a task (cooler, radio, dam)",
-          "trust": 1
-        },
-        {
-          "when": "Dell lies to him about insulin stock",
-          "trust": -2
-        },
-        {
-          "when": "Dell lets him choose a side in Ch6",
-          "trust": 2,
-          "note": "Sets theo_side"
-        },
-        {
-          "when": "Dell forbids him in Ch6",
-          "trust": -2,
-          "note": "theo_side stays none; if trust<=1 he leaves anyway"
-        }
-      ],
-      "fates": [
-        {
-          "id": "theo_lives_with_dell",
-          "conditions": [
-            {
-              "flag": "theo_alive",
-              "eq": true
-            },
-            {
-              "flag": "theo_side",
-              "eq": "none"
-            }
-          ],
-          "outcome": "Stands beside Dell in the epilogue."
-        },
-        {
-          "id": "theo_lives_apart",
-          "conditions": [
-            {
-              "flag": "theo_alive",
-              "eq": true
-            },
-            {
-              "flag": "theo_side",
-              "ne": "none"
-            }
-          ],
-          "outcome": "Alive with his faction. If that faction lost the ending, a letter."
-        },
-        {
-          "id": "theo_dies",
-          "conditions": [
-            {
-              "flag": "theo_alive",
-              "eq": false
-            }
-          ],
-          "outcome": "DKA in the cold. The game does not show it; Marguerite tells you."
-        }
-      ]
+     "when": "Back her registry job (ch02_backed_carly)",
+     "trust": 2
     },
     {
-      "id": "marguerite",
-      "name": "Marguerite Okafor",
-      "age": 67,
-      "role": "Next-door neighbor. Retired ICU nurse. Runs a kitchen-table clinic.",
-      "faction": "harbor",
-      "personality": "Warm and unbendable. Laughs at the worst moments. Has done triage before and knows what it costs.",
-      "voice": "Measured, formal English with Lagos rhythms. Calls everyone 'my dear'. Ends hard truths with a question: 'You understand?'",
-      "motives": "Keep the block alive as a block. Never again choose who dies alone in a hallway.",
-      "secret": "She keeps a list of patients she has 'helped go' with clinic morphine. In Ch8, Theo's name is on the 'if it comes to it' page.",
-      "where_met": "loc_east_end, her porch, Ch1",
-      "chapters": [
-        "ch01",
-        "ch02",
-        "ch03",
-        "ch07",
-        "ch08",
-        "ch10"
-      ],
-      "trust": {
-        "start": 2
-      },
-      "relationship_effects": [
-        {
-          "when": "Give fuel for Mr. Pruitt (ch01_fuel_to_pruitt)",
-          "trust": 3,
-          "kindness": 1
-        },
-        {
-          "when": "Report Ray (ch02_reported_ray)",
-          "trust": -1
-        },
-        {
-          "when": "Bring strangers in during Ch8 (filters_shared)",
-          "trust": 2
-        },
-        {
-          "when": "Confront her about the list harshly",
-          "trust": -3
-        }
-      ],
-      "fates": [
-        {
-          "id": "marguerite_council",
-          "conditions": [
-            {
-              "flag": "marguerite_alive",
-              "eq": true
-            },
-            {
-              "flag": "ending",
-              "eq": "end_warm_room"
-            }
-          ],
-          "outcome": "Runs the dam's infirmary. Burns the list."
-        },
-        {
-          "id": "marguerite_stays",
-          "conditions": [
-            {
-              "flag": "ch07_location",
-              "eq": "dam"
-            },
-            {
-              "trust": "marguerite",
-              "lt": 3
-            }
-          ],
-          "outcome": "Refuses to leave the block in Ch7. Found in Ch8 if Dell returns; otherwise lost."
-        },
-        {
-          "id": "marguerite_last_dose",
-          "conditions": [
-            {
-              "flag": "marguerite_alive",
-              "eq": false
-            }
-          ],
-          "outcome": "Uses the last morphine on herself, with a note to Dell."
-        }
-      ]
+     "when": "Hid Avila's count from her",
+     "trust": -1
     },
     {
-      "id": "ray",
-      "name": "Ray Brekke",
-      "age": 58,
-      "role": "Neighbor across the alley. Retired machinist. Has a generator and 200 gallons of diesel.",
-      "faction": "none (later Compact-sympathetic)",
-      "personality": "Gruff, generous to whoever he's decided is 'his people', paranoid about everyone else. Fixes things to avoid feelings.",
-      "voice": "Clipped Wisconsin. 'Yah, no.' Talks in prices and part numbers. Never says thank you; says 'we're square'.",
-      "motives": "Protect what he built. Get his estranged son Cody to come home.",
-      "secret": "Half the diesel came from the Kwik Trip tanks on Day 2. He siphoned them before anyone organized. His son Cody fights for the Compact.",
-      "where_met": "loc_east_end, his garage, Ch1",
-      "chapters": [
-        "ch01",
-        "ch02",
-        "ch03",
-        "ch05",
-        "ch06",
-        "ch09",
-        "ch10"
-      ],
-      "trust": {
-        "start": 1
-      },
-      "relationship_effects": [
-        {
-          "when": "Trade fairly in Ch1 (ch01_ray_traded)",
-          "trust": 2
-        },
-        {
-          "when": "Report his stockpile (ch02_reported_ray)",
-          "trust": -6,
-          "note": "Takes effect only once ray_knows_report is set (Ch6)"
-        },
-        {
-          "when": "Help defend his house in Ch3",
-          "trust": 3,
-          "kindness": 1
-        },
-        {
-          "when": "Spare Cody in Ch5 (cody_spared)",
-          "trust": 4
-        }
-      ],
-      "fates": [
-        {
-          "id": "ray_burned_out",
-          "conditions": [
-            {
-              "flag": "ray_house_burned",
-              "eq": true
-            }
-          ],
-          "outcome": "Moves into Marguerite's basement, bitter. Can still survive."
-        },
-        {
-          "id": "ray_dies_bridge",
-          "conditions": [
-            {
-              "flag": "bridge_choice",
-              "eq": "held"
-            },
-            {
-              "flag": "cody_alive",
-              "eq": false
-            }
-          ],
-          "outcome": "Goes looking for Cody's body in Ch6 and doesn't come back."
-        },
-        {
-          "id": "ray_council",
-          "conditions": [
-            {
-              "flag": "ray_alive",
-              "eq": true
-            },
-            {
-              "flag": "ending",
-              "eq": "end_warm_room"
-            }
-          ],
-          "outcome": "Keeps the turbines running. Calls it 'square'."
-        }
-      ]
+     "when": "Turn strangers away in Ch8",
+     "trust": -3
     },
     {
-      "id": "wren",
-      "name": "Wren Tollefson",
-      "age": 19,
-      "role": "Scavenger and runner for the Bridge Boys. Trades rumors and stolen medicine.",
-      "faction": "bridge_boys",
-      "personality": "Fast, funny, lies by reflex, loyal to anyone who was kind to her once. Aged out of foster care a year before the blackout.",
-      "voice": "Rapid, half-sentences, no greetings. Nicknames for everyone ('Sparky' for Dell). Never answers a question with a straight answer the first time.",
-      "motives": "Never be hungry and alone at the same time again.",
-      "secret": "She knew the Bridge Boys planned to burn Ray's house in Ch3. She was the one who scouted it.",
-      "where_met": "loc_belknap_pharmacy, looting it at dusk, Ch1",
-      "chapters": [
-        "ch01",
-        "ch02",
-        "ch03",
-        "ch06",
-        "ch09",
-        "ch10"
-      ],
-      "trust": {
-        "start": 0
-      },
-      "relationship_effects": [
-        {
-          "when": "Let her go with the pills in Ch1 (ch01_wren_let_go)",
-          "trust": 2,
-          "kindness": 1
-        },
-        {
-          "when": "Cover for her at the ration line (ch02_covered_wren)",
-          "trust": 3,
-          "kindness": 1
-        },
-        {
-          "when": "Turn her in to the Authority",
-          "trust": -6
-        }
-      ],
-      "fates": [
-        {
-          "id": "wren_warns",
-          "conditions": [
-            {
-              "trust": "wren",
-              "gte": 3
-            }
-          ],
-          "outcome": "Warns Dell about the fire in Ch3 (ch03_wren_warned)."
-        },
-        {
-          "id": "wren_sled",
-          "conditions": [
-            {
-              "trust": "wren",
-              "gte": 5
-            },
-            {
-              "flag": "wren_alive",
-              "eq": true
-            }
-          ],
-          "outcome": "Brings the supply sled in Ch9 (ch09_sled_brought)."
-        },
-        {
-          "id": "wren_lost",
-          "conditions": [
-            {
-              "trust": "wren",
-              "lt": 3
-            }
-          ],
-          "outcome": "Dies in the Ch6 lift-bridge crossfire (wren_alive=false)."
-        }
-      ]
-    },
-    {
-      "id": "strand",
-      "name": "Capt. Yvonne Strand",
-      "age": 44,
-      "role": "Minnesota National Guard. Runs the Northland Restoration Authority.",
-      "faction": "authority",
-      "personality": "Exhausted, precise, quietly decent, and willing to do anything the spreadsheet says. Believes order is a form of mercy.",
-      "voice": "Military brevity, then a sudden human aside. Uses numbers when she's upset. Never swears. Calls Dell 'Ms. Kowalczyk' until trust>=5, then 'Dell'.",
-      "motives": "Keep as many people alive as the numbers allow. Not be the officer who lost the city.",
-      "secret": "The registry's food projections are falsified. Real stores last 40 days, not 140. Later, she ships grain east under the Directive even though she knows it starves Duluth.",
-      "where_met": "loc_decc_ration, registry desk, Ch2",
-      "chapters": [
-        "ch02",
-        "ch03",
-        "ch04",
-        "ch05",
-        "ch06",
-        "ch08",
-        "ch10"
-      ],
-      "trust": {
-        "start": 0
-      },
-      "relationship_effects": [
-        {
-          "when": "Register (ch02_registered)",
-          "trust": 1,
-          "rep": {
-            "authority": 1
-          }
-        },
-        {
-          "when": "Report Ray (ch02_reported_ray)",
-          "trust": 2,
-          "rep": {
-            "authority": 1
-          }
-        },
-        {
-          "when": "Confront the numbers privately (ch02_strand_truth)",
-          "trust": 2,
-          "note": "She respects it; publicly, -3"
-        },
-        {
-          "when": "Power to Authority in Ch4",
-          "trust": 3,
-          "rep": {
-            "authority": 2
-          }
-        },
-        {
-          "when": "Raise the lift bridge (bridge_choice=raised)",
-          "trust": -5,
-          "rep": {
-            "authority": -3
-          }
-        }
-      ],
-      "fates": [
-        {
-          "id": "strand_ledger",
-          "conditions": [
-            {
-              "flag": "ending",
-              "eq": "end_ledger"
-            }
-          ],
-          "outcome": "Runs the dam on a list. Thanks Dell. Means it."
-        },
-        {
-          "id": "strand_council",
-          "conditions": [
-            {
-              "flag": "strand_alive",
-              "eq": true
-            },
-            {
-              "flag": "ending",
-              "eq": "end_warm_room"
-            }
-          ],
-          "outcome": "Keeps the census, this time honestly."
-        },
-        {
-          "id": "strand_killed",
-          "conditions": [
-            {
-              "flag": "convoy_choice",
-              "eq": "sabotage"
-            },
-            {
-              "flag": "bridge_choice",
-              "eq": "raised"
-            }
-          ],
-          "outcome": "Killed in the Ch6 port fighting (strand_alive=false)."
-        }
-      ]
-    },
-    {
-      "id": "lou",
-      "name": "Lou Vang",
-      "age": 71,
-      "role": "Ham radio operator in Proctor. The region's only news.",
-      "faction": "none",
-      "personality": "Gentle, nosy, a storyteller. Hmong-American Vietnam-era refugee who has seen a country end before.",
-      "voice": "Radio cadence: 'This is KD0LOU, still here.' Slow, kind, digressive. Ends broadcasts with the weather, always.",
-      "motives": "Keep people calm enough not to kill each other. Find out if his daughter in St. Paul is alive.",
-      "secret": "He invents some 'good news' rumors (FEMA trucks, transformer ships). In Ch7 he can't decide which version of the bombs to broadcast.",
-      "where_met": "loc_lou_shack, Ch3 (heard on radio from Ch2)",
-      "chapters": [
-        "ch02",
-        "ch03",
-        "ch05",
-        "ch07",
-        "ch08"
-      ],
-      "trust": {
-        "start": 1
-      },
-      "relationship_effects": [
-        {
-          "when": "Bring him batteries or fuel",
-          "trust": 2,
-          "kindness": 1
-        },
-        {
-          "when": "Expose his invented rumors publicly",
-          "trust": -4
-        }
-      ],
-      "fates": [
-        {
-          "id": "lou_signs_off",
-          "conditions": [
-            {
-              "flag": "ch07_location",
-              "eq": "dam"
-            }
-          ],
-          "outcome": "Stays at the shack. His last broadcast is weather. lou_alive=false in Ch8."
-        },
-        {
-          "id": "lou_at_dam",
-          "conditions": [
-            {
-              "flag": "ch07_location",
-              "eq": "city"
-            },
-            {
-              "trust": "lou",
-              "gte": 3
-            }
-          ],
-          "outcome": "Comes with you. Runs the dam's radio."
-        }
-      ]
-    },
-    {
-      "id": "hank",
-      "name": "Hank Lindqvist",
-      "age": 63,
-      "role": "Dell's old line-crew foreman. Knows Thomson Dam's black-start sequence.",
-      "faction": "none",
-      "personality": "Patient, profane, proud of the work. Treats the dam like a sick horse.",
-      "voice": "Old lineman shorthand: 'hot', 'dead', 'tagged out'. Tells stories that turn out to be instructions. Calls Dell 'kid'.",
-      "motives": "Have one last thing he did right. Keep the plant from becoming a fort.",
-      "secret": "Stage 4 lung cancer. He won't see spring. He also knows the plant needs a relay kit only the Authority's Proctor depot has.",
-      "where_met": "loc_lou_shack (Proctor), Ch3",
-      "chapters": [
-        "ch03",
-        "ch04",
-        "ch05",
-        "ch07",
-        "ch09"
-      ],
-      "trust": {
-        "start": 4
-      },
-      "relationship_effects": [
-        {
-          "when": "Keep the dam secret (dam_secret_told=none)",
-          "trust": 2
-        },
-        {
-          "when": "Power to the Authority",
-          "trust": -3
-        },
-        {
-          "when": "Learn and keep his secret",
-          "trust": 2
-        }
-      ],
-      "fates": [
-        {
-          "id": "hank_dies_ch9",
-          "conditions": [
-            {
-              "flag": "hank_alive",
-              "eq": true
-            }
-          ],
-          "outcome": "Dies of his illness in Ch9 after teaching Theo the panel. Not in combat."
-        },
-        {
-          "id": "hank_shot_ch4",
-          "conditions": [
-            {
-              "flag": "dam_secret_told",
-              "eq": "authority"
-            },
-            {
-              "trust": "strand",
-              "lt": 2
-            }
-          ],
-          "outcome": "Shot in the Ch4 standoff when Authority soldiers arrive (hank_alive=false)."
-        }
-      ]
-    },
-    {
-      "id": "ames",
-      "name": "Dr. Samuel Ames",
-      "age": 50,
-      "role": "Last attending physician at Lakehead Memorial Hospital.",
-      "faction": "none (hospital)",
-      "personality": "Brilliant, rude, sleep-deprived. Thinks in beds and doses.",
-      "voice": "Clinical shorthand, interrupts himself. 'Next.' Dark jokes. No small talk.",
-      "motives": "Keep the ICU open. Anything that does that is moral.",
-      "secret": "He trades hospital insulin and morphine to the Bridge Boys for diesel. Some of what Wren sells came from him.",
-      "where_met": "loc_lakehead_memorial, Ch2",
-      "chapters": [
-        "ch02",
-        "ch04",
-        "ch06",
-        "ch08",
-        "ch10"
-      ],
-      "trust": {
-        "start": 0
-      },
-      "relationship_effects": [
-        {
-          "when": "Power to the hospital (power_priority=hospital)",
-          "trust": 5,
-          "note": "Sets ames_deal"
-        },
-        {
-          "when": "Expose his diesel trade",
-          "trust": -5
-        }
-      ],
-      "fates": [
-        {
-          "id": "ames_saves_foot",
-          "conditions": [
-            {
-              "flag": "ames_deal",
-              "eq": true
-            }
-          ],
-          "outcome": "Saves Theo's foot in Ch8."
-        },
-        {
-          "id": "ames_council",
-          "conditions": [
-            {
-              "flag": "ending",
-              "eq": "end_warm_room"
-            }
-          ],
-          "outcome": "Runs the dam's ward with Marguerite. They argue constantly."
-        }
-      ]
-    },
-    {
-      "id": "bea",
-      "name": "Bea Salvesen",
-      "age": 52,
-      "role": "Longshore union local president. Leads the Harbor mutual aid from the ore docks.",
-      "faction": "harbor",
-      "personality": "Big laugh, long memory, organizes like breathing. Kind to individuals, ruthless about 'our people'.",
-      "voice": "Union-hall plain talk. 'Here's the deal.' Uses 'we' constantly. Asks for a show of hands even with two people.",
-      "motives": "Keep the grain in the elevators and the port alive. Prove that people can run things without a uniform.",
-      "secret": "She trades grain to the Bridge Boys for rifles, and to the Compact for diesel, behind the Harbor's vote.",
-      "where_met": "loc_ore_docks, Ch3 (soup line) or Ch4",
-      "chapters": [
-        "ch03",
-        "ch04",
-        "ch05",
-        "ch06",
-        "ch08",
-        "ch10"
-      ],
-      "trust": {
-        "start": 1
-      },
-      "relationship_effects": [
-        {
-          "when": "Tell the Harbor about the dam (dam_secret_told=harbor)",
-          "trust": 3,
-          "rep": {
-            "harbor": 2
-          }
-        },
-        {
-          "when": "Power to the Harbor",
-          "trust": 3,
-          "rep": {
-            "harbor": 2
-          }
-        },
-        {
-          "when": "Raise the lift bridge",
-          "trust": 4,
-          "rep": {
-            "harbor": 3
-          }
-        },
-        {
-          "when": "Expose her gun trade to the Harbor",
-          "trust": -4,
-          "rep": {
-            "harbor": 1
-          }
-        }
-      ],
-      "fates": [
-        {
-          "id": "bea_council",
-          "conditions": [
-            {
-              "flag": "ending",
-              "eq": "end_warm_room"
-            }
-          ],
-          "outcome": "Chairs the council. Hates that the first vote isn't hers."
-        },
-        {
-          "id": "bea_jailed",
-          "conditions": [
-            {
-              "flag": "ending",
-              "eq": "end_ledger"
-            }
-          ],
-          "outcome": "Held by the Authority, alive."
-        }
-      ]
-    },
-    {
-      "id": "jory",
-      "name": "Jory Maki",
-      "age": 39,
-      "role": "Range Compact organizer. Ex-taconite union steward from Virginia, MN.",
-      "faction": "compact",
-      "personality": "Charismatic, folksy, very hard underneath. Believes what he says, which makes it dangerous.",
-      "voice": "Storyteller with a preacher's timing. Folksy idioms ('that dog won't hunt'). Calls Dell 'neighbor'.",
-      "motives": "Keep the Range alive and the food in the North. Not let Saint Paul or Washington decide who eats.",
-      "secret": "He ordered the blockade that starved the Hibbing nursing home. 31 people. He keeps their names in his coat.",
-      "where_met": "loc_hwy53_blockade, Ch5",
-      "chapters": [
-        "ch05",
-        "ch06",
-        "ch09",
-        "ch10"
-      ],
-      "trust": {
-        "start": 0
-      },
-      "relationship_effects": [
-        {
-          "when": "Sabotage the grain train (convoy_choice=sabotage)",
-          "trust": 4,
-          "rep": {
-            "compact": 3
-          }
-        },
-        {
-          "when": "Spare Cody (cody_spared)",
-          "trust": 2,
-          "rep": {
-            "compact": 1
-          }
-        },
-        {
-          "when": "Confront him with Hibbing (jory_secret_known)",
-          "trust": -2,
-          "note": "If kindness>=4 he confesses instead; trust +1"
-        }
-      ],
-      "fates": [
-        {
-          "id": "jory_range",
-          "conditions": [
-            {
-              "flag": "ending",
-              "eq": "end_iron_range"
-            }
-          ],
-          "outcome": "Leads the Range underground. Reads the 31 names every Sunday."
-        },
-        {
-          "id": "jory_council",
-          "conditions": [
-            {
-              "flag": "jory_alive",
-              "eq": true
-            },
-            {
-              "flag": "ending",
-              "eq": "end_warm_room"
-            }
-          ],
-          "outcome": "Sits on the council. Votes no on everything, then helps."
-        }
-      ]
-    },
-    {
-      "id": "cody",
-      "name": "Cody Brekke",
-      "age": 27,
-      "role": "Ray's estranged son. Compact fighter.",
-      "faction": "compact",
-      "personality": "Angry, brave, ashamed of both. Lost his job, then his marriage, then the country.",
-      "voice": "Flat, defensive. Talks about his dad without saying 'Dad'. Laughs when he's scared.",
-      "motives": "Belong to something that isn't his father. Secretly, get home.",
-      "secret": "He's the one who told the Compact about the dam in Ch5. He was trying to protect Ray.",
-      "where_met": "loc_hwy53_blockade, Ch5 (wounded)",
-      "chapters": [
-        "ch05",
-        "ch06",
-        "ch09",
-        "ch10"
-      ],
-      "trust": {
-        "start": -2
-      },
-      "relationship_effects": [
-        {
-          "when": "Spare and treat him in Ch5 (cody_spared)",
-          "trust": 4,
-          "kindness": 1
-        },
-        {
-          "when": "Ray learns you reported him (ray_knows_report)",
-          "trust": -4
-        },
-        {
-          "when": "Save Cody in Ch9 (ch09_saved=cody)",
-          "trust": 5
-        }
-      ],
-      "fates": [
-        {
-          "id": "cody_dies_ch5",
-          "conditions": [
-            {
-              "flag": "cody_spared",
-              "eq": false
-            }
-          ],
-          "outcome": "Dies at the blockade (cody_alive=false)."
-        },
-        {
-          "id": "cody_dies_ch9",
-          "conditions": [
-            {
-              "flag": "ch09_saved",
-              "eq": "sled"
-            }
-          ],
-          "outcome": "Lost through the ice at the river (cody_alive=false)."
-        },
-        {
-          "id": "cody_home",
-          "conditions": [
-            {
-              "flag": "cody_alive",
-              "eq": true
-            },
-            {
-              "flag": "ray_alive",
-              "eq": true
-            }
-          ],
-          "outcome": "He and Ray fix a turbine without speaking. It counts."
-        }
-      ]
-    },
-    {
-      "id": "ruiz",
-      "name": "Sgt. Nadia Ruiz",
-      "age": 31,
-      "role": "Combat engineer, Task Force Ironwood (US Army). Defectable soldier.",
-      "faction": "ironwood",
-      "personality": "Competent, dry, homesick for El Paso. Follows orders until she can't hold them and her conscience at the same time. Hates being thanked.",
-      "voice": "Army flat affect, radio procedure when stressed ('say again'). Spanish under her breath. Short declaratives. Calls Dell 'ma'am', then 'Kowalczyk', then 'Dell'.",
-      "motives": "Get her squad home alive. Find out if her mother and sister in El Paso are alive. Not become the thing in the old photos.",
-      "secret": "She rigged the Sector 4 confiscation list to skip houses with kids, and her lieutenant knows. She'll be court-martialed or shot if she goes back.",
-      "where_met": "loc_east_end, Sector 4 quarantine sweep, Ch6 (seen at the Ch5 convoy first)",
-      "chapters": [
-        "ch05",
-        "ch06",
-        "ch07",
-        "ch09",
-        "ch10"
-      ],
-      "trust": {
-        "start": -1
-      },
-      "relationship_effects": [
-        {
-          "when": "Spare her when she's pinned under the MRAP door in Ch6 (ruiz_spared)",
-          "trust": 4,
-          "kindness": 1
-        },
-        {
-          "when": "Hide the Pruitts and she pretends not to see (ch06_hid_neighbors)",
-          "trust": 2
-        },
-        {
-          "when": "Offer her a place with you (ruiz_defected)",
-          "trust": 3,
-          "note": "Requires ruiz_spared and trust.ruiz>=3"
-        },
-        {
-          "when": "Turn her over to the Compact or Harbor as a prisoner",
-          "trust": -8
-        }
-      ],
-      "fates": [
-        {
-          "id": "ruiz_dies_ch6",
-          "conditions": [
-            {
-              "flag": "ruiz_spared",
-              "eq": false
-            }
-          ],
-          "outcome": "Killed in the canal fighting, or by Dell's hand."
-        },
-        {
-          "id": "ruiz_defects",
-          "conditions": [
-            {
-              "flag": "ruiz_defected",
-              "eq": true
-            }
-          ],
-          "outcome": "Joins Dell in Ch7. Ch9: shows the gap in the Remnant picket. Ch10: talks her old squad into standing down."
-        },
-        {
-          "id": "ruiz_returns",
-          "conditions": [
-            {
-              "flag": "ruiz_spared",
-              "eq": true
-            },
-            {
-              "flag": "ruiz_defected",
-              "eq": false
-            }
-          ],
-          "outcome": "Goes back to Ironwood. Ch9: she's on the Remnant line and shoots wide, once."
-        }
-      ]
+     "when": "Let her choose the Switchboard's side",
+     "trust": 2
     }
-  ],
-  "minor_characters": [
+   ],
+   "fates": [
     {
-      "id": "pruitt",
-      "name": "Mr. Earl Pruitt",
-      "note": "84, on home oxygen, 3 doors down. Lives if ch01_fuel_to_pruitt. His grandson Deshawn (12) appears in Ch8."
+     "id": "carly_census",
+     "conditions": [
+      {
+       "flag": "ending",
+       "eq": "end_warm_room"
+      },
+      {
+       "flag": "carly_left",
+       "ne": true
+      }
+     ],
+     "outcome": "Keeps the census board on the turbine hall wall."
     },
     {
-      "id": "deshawn",
-      "name": "Deshawn Pruitt",
-      "note": "12. If pruitt_alive, shows Dell the clean basement cistern in Ch8 (pruitt_cistern)."
+     "id": "carly_own_way",
+     "conditions": [
+      {
+       "flag": "carly_left",
+       "eq": true
+      }
+     ],
+     "outcome": "Leaves Braith at the end of Ch6 (trust.carly<=-3); runs the Switchboard for her chosen faction; sits at its table in Ch10. Never dies in a scripted beat."
     },
     {
-      "id": "cpl_haas",
-      "name": "Cpl. Haas",
-      "note": "Strand's checkpoint corporal. Bored and decent. Can be bribed with cigarettes."
-    },
-    {
-      "id": "kessler",
-      "name": "Maj. Dale Kessler",
-      "note": "Ironwood commander. Heard over loudspeakers and radio in Ch5–8; met in Ch9–10. Believes the East's starving cities justify everything. He isn't wrong about the East. Not a villain monologuer: he speaks in tonnages and casualty estimates."
-    },
-    {
-      "id": "pete_lund",
-      "name": "Pete Lund",
-      "note": "40, Esko farmer squatting in the powerhouse with wife Annie and three kids (Ch4). If driven out, he may be the husk in Ch8."
-    },
-    {
-      "id": "rosa",
-      "name": "Rosa Esparza",
-      "note": "Harbor member, mother of Mateo (8). Met if ch02_crush_helped; returns in Ch8 with a filter tip."
+     "id": "carly_walk",
+     "conditions": [
+      {
+       "flag": "ending",
+       "eq": "end_dark_water"
+      }
+     ],
+     "outcome": "Walks south beside Braith, writing names in a notebook."
     }
-  ],
-  "factions": {
-    "authority": "Northland Restoration Authority (county + Guard). Leader: strand. Rep flag rep_authority.",
-    "harbor": "Harbor mutual aid (longshore union + churches). Leader: bea. Rep flag rep_harbor.",
-    "compact": "Range Compact (Iron Range union/farm militia). Leader: jory. Rep flag rep_compact.",
-    "ironwood": "Task Force Ironwood, federal Army unit enforcing the Directive (Act II), later the Ironwood Remnant (Act III). Leader: kessler. Tracked by ironwood_hostility.",
-    "bridge_boys": "Scavenger/raider crew under the Blatnik bridge. No leader NPC; wren is their runner.",
-    "none": "Unaligned."
+   ],
+   "companion": true,
+   "can_die": false
   },
-  "generic_speakers": {
-    "dell": "The player (Adele Kowalczyk). Lines are short and dry.",
-    "narrator": "On-screen description, no portrait.",
-    "authority_guard": "Unnamed Authority guard.",
-    "husk": "Unnamed radiation-sick person (Ch8)."
+  {
+   "id": "wraith",
+   "name": "Wraith",
+   "age": 4,
+   "role": "Belgian Malinois. Military working dog washout ('too soft on the bite'). Braith's companion.",
+   "faction": "none",
+   "personality": "Intense, bright, a little neurotic. Loves Wes's dirt bike, hates loudspeakers. Sees the Tallmen first and will not fight them.",
+   "voice": "Non-verbal. Lines are bracketed action text: '[Ears up. One sharp bark.]'",
+   "motives": "Stay with Braith. Keep the pack together.",
+   "secret": "None. She's a dog.",
+   "where_met": "loc_sparks_block, Ch1 (always with Braith)",
+   "chapters": [
+    "ch01",
+    "ch02",
+    "ch03",
+    "ch04",
+    "ch05",
+    "ch06",
+    "ch07",
+    "ch08",
+    "ch09",
+    "ch10"
+   ],
+   "trust": {
+    "start": 5
+   },
+   "relationship_effects": [
+    {
+     "when": "Feed her first when food is short",
+     "trust": 2
+    },
+    {
+     "when": "Make her wait for food",
+     "trust": -1
+    },
+    {
+     "when": "Order GUARD during the Ch6 sweep (gets her injured)",
+     "wraith_injured": true
+    }
+   ],
+   "fates": [
+    {
+     "id": "wraith_hold",
+     "conditions": [
+      {
+       "flag": "ch09_wraith_hold",
+       "eq": true
+      }
+     ],
+     "outcome": "Dies holding the line on the river ice in Ch9. ONLY path to wraith_alive=false; requires wraith_injured and an explicit, confirmed order."
+    },
+    {
+     "id": "wraith_lead",
+     "conditions": [
+      {
+       "flag": "wraith_led",
+       "eq": true
+      }
+     ],
+     "outcome": "Leads the column through the Ch9 whiteout to Galena by the smell of sulfur."
+    },
+    {
+     "id": "wraith_warm",
+     "conditions": [
+      {
+       "flag": "wraith_alive",
+       "eq": true
+      }
+     ],
+     "outcome": "Sleeps against the warmest wall in the world."
+    }
+   ],
+   "companion": true,
+   "companion_rules": "See gameplay_hooks.json companion.",
+   "can_die": "only ch09_wraith_hold"
+  },
+  {
+   "id": "ross",
+   "name": "Ross Pearce",
+   "age": 58,
+   "role": "Braith's father. Hay rancher, Yerington (Mason Valley). Widower. Lahontan Compact lieutenant under Ander.",
+   "faction": "compact",
+   "personality": "Stubborn, proud, decent; says less than he means. Keeps the radio on all night.",
+   "voice": "Short rancher sentences. Writes on feed receipts. Calls Braith 'son' only when it matters.",
+   "motives": "Keep the ranch and the valley fed. Get his sons home.",
+   "secret": "He left the Day 0 voicemail meaning to say 'before I lose you too.' He blames himself for the fight that drove Braith away.",
+   "where_met": "Voicemail Ch1; loc_i80_blockade, Ch5; loc_us50_fallon, Ch7",
+   "chapters": [
+    "ch01",
+    "ch03",
+    "ch05",
+    "ch07",
+    "ch10"
+   ],
+   "trust": {
+    "start": 1
+   },
+   "relationship_effects": [
+    {
+     "when": "Carry Wes to the Compact medics (Ch5)",
+     "trust": 2
+    },
+    {
+     "when": "Fire on the blockade (fired_on_blockade)",
+     "trust": -2
+    },
+    {
+     "when": "Tell him what's in the Annex (annex_told=compact)",
+     "trust": 2
+    },
+    {
+     "when": "Honest goodbye in Fallon",
+     "trust": 3
+    }
+   ],
+   "fates": [
+    {
+     "id": "ross_letters",
+     "conditions": [
+      {
+       "flag": "ross_alive",
+       "eq": true
+      },
+      {
+       "flag": "pearce_reconciled",
+       "eq": true
+      }
+     ],
+     "outcome": "Sends seed hay on the spring sled; letters signed 'Dad'."
+    },
+    {
+     "id": "ross_cold",
+     "conditions": [
+      {
+       "flag": "ross_alive",
+       "eq": true
+      },
+      {
+       "flag": "pearce_reconciled",
+       "ne": true
+      }
+     ],
+     "outcome": "Alive, distant. One-line letters."
+    },
+    {
+     "id": "ross_winter",
+     "conditions": [
+      {
+       "flag": "ross_alive",
+       "eq": false
+      }
+     ],
+     "outcome": "Dies in Fallon in the second winter (annex not shared and the Compact starving)."
+    }
+   ]
+  },
+  {
+   "id": "wes",
+   "name": "Wes Pearce",
+   "age": 19,
+   "role": "Braith's younger brother. Compact rider. Wounded at the Ch5 blockade.",
+   "faction": "compact",
+   "personality": "Funny, reckless, loyal, idolizes Braith and resents him for leaving the ranch.",
+   "voice": "Loud, all caps when excited. 'BIG BROTHER.' Jokes through pain.",
+   "motives": "Make Dad proud. Be part of something. Not be the little brother forever.",
+   "secret": "He's scared of the city and of being useless with a bad leg.",
+   "where_met": "loc_sparks_block, Ch3 (dirt bike)",
+   "chapters": [
+    "ch03",
+    "ch05",
+    "ch07",
+    "ch09",
+    "ch10"
+   ],
+   "trust": {
+    "start": 3
+   },
+   "relationship_effects": [
+    {
+     "when": "Ask him to stay (ch03_wes_stayed)",
+     "trust": 1
+    },
+    {
+     "when": "Treat him and take him with you (wes_spared)",
+     "trust": 3
+    },
+    {
+     "when": "Hand him to Ironwood (wes_prisoner)",
+     "trust": -2
+    }
+   ],
+   "fates": [
+    {
+     "id": "wes_column",
+     "conditions": [
+      {
+       "flag": "wes_spared",
+       "eq": true
+      },
+      {
+       "flag": "wes_alive",
+       "eq": true
+      }
+     ],
+     "outcome": "Marches with the column in Ch9; the ice-break choice may cost him."
+    },
+    {
+     "id": "wes_ice",
+     "conditions": [
+      {
+       "flag": "wes_alive",
+       "eq": false
+      }
+     ],
+     "outcome": "Lost under the river ice in Ch9 when Braith grabbed the sled."
+    },
+    {
+     "id": "wes_returned",
+     "conditions": [
+      {
+       "flag": "remnant_stood_down",
+       "eq": true
+      },
+      {
+       "flag": "wes_alive",
+       "eq": true
+      }
+     ],
+     "outcome": "If he was a prisoner, freed from the Remnant's MRAP in Ch10."
+    }
+   ]
+  },
+  {
+   "id": "lolo",
+   "name": "Dolores 'Lolo' Arrieta",
+   "age": 68,
+   "role": "Next-door neighbor. Retired ICU nurse. Runs a kitchen-table clinic. Basque family from Winnemucca.",
+   "faction": "harbor",
+   "personality": "Warm and unbendable. Has done triage before and knows what it costs. Laughs at the worst moments.",
+   "voice": "Calls everyone 'maitia' (Basque: dear). Ends hard truths with a soft question.",
+   "motives": "Keep the block alive as a block. Never let anyone die alone in a hallway.",
+   "secret": "Keeps a notebook of patients she has 'helped go' with clinic morphine, and an 'if it comes to it' page. In Ch8 Wes is on it if he's with you, wounded.",
+   "where_met": "loc_sparks_block, her porch, Ch1",
+   "chapters": [
+    "ch01",
+    "ch06",
+    "ch07",
+    "ch08",
+    "ch10"
+   ],
+   "trust": {
+    "start": 2
+   },
+   "relationship_effects": [
+    {
+     "when": "Give the gas can for Mr. Pruitt",
+     "trust": 3,
+     "kindness": 1
+    },
+    {
+     "when": "Hide her morphine in the sweep",
+     "trust": 2
+    },
+    {
+     "when": "Confront the list harshly",
+     "trust": -3
+    }
+   ],
+   "fates": [
+    {
+     "id": "lolo_infirmary",
+     "conditions": [
+      {
+       "flag": "lolo_alive",
+       "eq": true
+      },
+      {
+       "flag": "ending",
+       "eq": "end_warm_room"
+      }
+     ],
+     "outcome": "Runs Galena's infirmary. Burns the list."
+    },
+    {
+     "id": "lolo_last_dose",
+     "conditions": [
+      {
+       "flag": "lolo_alive",
+       "eq": false
+      }
+     ],
+     "outcome": "Uses the last morphine on herself, with a note to Braith."
+    }
+   ]
+  },
+  {
+   "id": "gil",
+   "name": "Gil Shumway",
+   "age": 66,
+   "role": "Neighbor across the alley. Retired Union Pacific diesel mechanic. Generator and six jugs of diesel.",
+   "faction": "none",
+   "personality": "Prickly, practical, generous only when nobody's looking. Respects anyone who can fix things.",
+   "voice": "'Listen here.' Calls Braith 'flyboy'.",
+   "motives": "Be ready when the help runs out. His pension is the diesel.",
+   "secret": "He siphoned the diesel from a dead Maverik station on Day 1.",
+   "where_met": "loc_sparks_block, his garage, Ch1",
+   "chapters": [
+    "ch01",
+    "ch03",
+    "ch06",
+    "ch08",
+    "ch10"
+   ],
+   "trust": {
+    "start": 0
+   },
+   "relationship_effects": [
+    {
+     "when": "Trade him your tools",
+     "trust": 2
+    },
+    {
+     "when": "Report his diesel (ch02_reported_gil)",
+     "trust": -4
+    },
+    {
+     "when": "Go in for him during the fire",
+     "trust": 3
+    }
+   ],
+   "fates": [
+    {
+     "id": "gil_burned",
+     "conditions": [
+      {
+       "flag": "gil_badly_burned",
+       "eq": true
+      }
+     ],
+     "outcome": "Burned in the Ch3 fire with no help; dies at end of Ch6."
+    },
+    {
+     "id": "gil_engineer",
+     "conditions": [
+      {
+       "flag": "gil_alive",
+       "eq": true
+      },
+      {
+       "flag": "ending",
+       "eq": "end_warm_room"
+      }
+     ],
+     "outcome": "Runs Galena's diesel backup. Complains constantly."
+    }
+   ]
+  },
+  {
+   "id": "kit",
+   "name": "Kit Darrow",
+   "age": 19,
+   "role": "Scavenger and runner for the Viaduct Crew. Trades meds and rumors.",
+   "faction": "bridge_boys",
+   "personality": "Quick, funny, scared underneath. Pays her debts. Keeps count of favors.",
+   "voice": "Fast patter, nicknames ('Wrench', 'the wolf'), deflects with jokes.",
+   "motives": "Keep the Viaduct kids alive. Never owe anyone.",
+   "secret": "She scouted Gil's garage for the raid in Ch3, paid in soup.",
+   "where_met": "loc_prater_pharmacy, looting it at dusk, Ch1",
+   "chapters": [
+    "ch01",
+    "ch02",
+    "ch03",
+    "ch06",
+    "ch09",
+    "ch10"
+   ],
+   "trust": {
+    "start": 0
+   },
+   "relationship_effects": [
+    {
+     "when": "Let her go in the pharmacy",
+     "trust": 3
+    },
+    {
+     "when": "Cover for her in the line",
+     "trust": 3,
+     "kindness": 1
+    },
+    {
+     "when": "Report her",
+     "trust": -4
+    }
+   ],
+   "fates": [
+    {
+     "id": "kit_gone",
+     "conditions": [
+      {
+       "flag": "kit_alive",
+       "eq": false
+      }
+     ],
+     "outcome": "Dies in the Ch6 crackdown if trust.kit<3, or under the ice in Ch9."
+    },
+    {
+     "id": "kit_radio",
+     "conditions": [
+      {
+       "flag": "kit_alive",
+       "eq": true
+      },
+      {
+       "flag": "ending",
+       "eq": "end_two_coats"
+      }
+     ],
+     "outcome": "Her voice on a stolen radio is the last thing you hear."
+    }
+   ]
+  },
+  {
+   "id": "avila",
+   "name": "Capt. Lorna Avila",
+   "age": 44,
+   "role": "Nevada Army National Guard. Runs the Truckee Meadows Recovery Authority.",
+   "faction": "authority",
+   "personality": "Crisp, exhausted, competent. Believes order is mercy. Lies to prevent panic and hates herself for it.",
+   "voice": "Clipped command voice. Numbers. 'It's not a crime. It's a count.'",
+   "motives": "Keep the valley from starving all at once.",
+   "secret": "The stores count is falsified: 41 days, not 140.",
+   "where_met": "loc_rscc_registry, registry hall, Ch2",
+   "chapters": [
+    "ch02",
+    "ch04",
+    "ch06",
+    "ch10"
+   ],
+   "trust": {
+    "start": 0
+   },
+   "relationship_effects": [
+    {
+     "when": "Keep her secret quietly",
+     "trust": 2
+    },
+    {
+     "when": "Shout the real number (ch02_exposed_numbers)",
+     "trust": -4
+    },
+    {
+     "when": "Push her to break with Ironwood",
+     "trust": 2
+    }
+   ],
+   "fates": [
+    {
+     "id": "avila_ledger",
+     "conditions": [
+      {
+       "flag": "ending",
+       "eq": "end_ledger"
+      }
+     ],
+     "outcome": "Runs Galena from an honest list of 412 names."
+    },
+    {
+     "id": "avila_dead",
+     "conditions": [
+      {
+       "flag": "avila_alive",
+       "eq": false
+      }
+     ],
+     "outcome": "Killed in the Ch6 fighting (convoy sabotaged and trench blocked)."
+    }
+   ]
+  },
+  {
+   "id": "augie",
+   "name": "Augie Bell",
+   "age": 71,
+   "role": "Ham radio operator on Peavine Peak (KK7AUG). The valley's only news.",
+   "faction": "none",
+   "personality": "Garrulous, kind, a showman. Invents good news on purpose.",
+   "voice": "Radio patter: 'This is KK7AUG, still here.' Calls Braith 'my ears in Sparks.'",
+   "motives": "Keep people listening. Hope is a public service.",
+   "secret": "Half his good news is made up.",
+   "where_met": "Radio voice Ch2; loc_peavine_shack Ch3",
+   "chapters": [
+    "ch02",
+    "ch03",
+    "ch06",
+    "ch07",
+    "ch10"
+   ],
+   "trust": {
+    "start": 1
+   },
+   "relationship_effects": [
+    {
+     "when": "Fix his transmitter",
+     "trust": 3,
+     "kindness": 1
+    },
+    {
+     "when": "Tell the truth in Ch7 (augie_broadcast=truth)",
+     "trust": 1
+    }
+   ],
+   "fates": [
+    {
+     "id": "augie_peavine",
+     "conditions": [
+      {
+       "flag": "augie_alive",
+       "eq": false
+      }
+     ],
+     "outcome": "Stays on Peavine when your people winter at Galena with trust<3; the shack goes silent in Act III."
+    }
+   ]
+  },
+  {
+   "id": "walt",
+   "name": "Walt Okada",
+   "age": 73,
+   "role": "Ran Galena Station's control room for 22 years. Knows the black-start and the well field.",
+   "faction": "none",
+   "personality": "Dry, patient, dying. Loves the plant more than most people.",
+   "voice": "Slow, technical, affectionate about machines. 'That's the only good sound left in the world.'",
+   "motives": "Hear the turbine run one more time. Hand the plant to someone who'll respect it.",
+   "secret": "His lungs are failing from forty years of hydrogen sulfide; he won't see spring.",
+   "where_met": "loc_peavine_shack, Ch3",
+   "chapters": [
+    "ch03",
+    "ch04",
+    "ch07",
+    "ch09"
+   ],
+   "trust": {
+    "start": 2
+   },
+   "relationship_effects": [
+    {
+     "when": "Ask about his lungs",
+     "walt_secret_known": true
+    }
+   ],
+   "fates": [
+    {
+     "id": "walt_last_run",
+     "conditions": [
+      {
+       "flag": "walt_alive",
+       "eq": false
+      }
+     ],
+     "outcome": "Dies at Galena's control room window in Ch9 as the turbine spins up."
+    }
+   ]
+  },
+  {
+   "id": "ames",
+   "name": "Dr. Samuel Ames",
+   "age": 52,
+   "role": "Last attending physician at Truckee Meadows General.",
+   "faction": "none",
+   "personality": "Gallows humor, bone-tired, still kind.",
+   "voice": "Dry, rapid. 'If you're not bleeding, you're in the wrong building.'",
+   "motives": "Keep the hospital open one more day.",
+   "secret": "He trades hospital supplies to the Viaduct Crew for diesel.",
+   "where_met": "loc_meadows_general, Ch2",
+   "chapters": [
+    "ch02",
+    "ch08",
+    "ch10"
+   ],
+   "trust": {
+    "start": 1
+   },
+   "relationship_effects": [
+    {
+     "when": "Bring the hospital diesel",
+     "trust": 3
+    },
+    {
+     "when": "First Galena power to the hospital",
+     "trust": 3
+    }
+   ],
+   "fates": [
+    {
+     "id": "ames_ward",
+     "conditions": [
+      {
+       "flag": "ending",
+       "eq": "end_warm_room"
+      }
+     ],
+     "outcome": "Runs the Galena-heated ward."
+    }
+   ]
+  },
+  {
+   "id": "roz",
+   "name": "Roz Tafoya",
+   "age": 49,
+   "role": "Head chef and union steward at the Silver Spur. Leads the Floor.",
+   "faction": "harbor",
+   "personality": "Loud, generous, ruthless about logistics. Feeds 3,000 a day.",
+   "voice": "Calls everyone 'baby'. Kitchen shouting.",
+   "motives": "Everybody eats. Everybody works.",
+   "secret": "The Floor trades casino stock and food for guns.",
+   "where_met": "loc_silver_spur, Ch3/Ch6",
+   "chapters": [
+    "ch03",
+    "ch06",
+    "ch10"
+   ],
+   "trust": {
+    "start": 0
+   },
+   "relationship_effects": [
+    {
+     "when": "First Galena power to the Floor",
+     "rep_harbor": 2
+    },
+    {
+     "when": "Block the trench (Ch6)",
+     "trust": 3
+    }
+   ],
+   "fates": [
+    {
+     "id": "roz_council",
+     "conditions": [
+      {
+       "flag": "ending",
+       "eq": "end_warm_room"
+      }
+     ],
+     "outcome": "Runs the council's kitchens."
+    }
+   ]
+  },
+  {
+   "id": "ander",
+   "name": "Ander Etcheverry",
+   "age": 61,
+   "role": "Basque sheep rancher from Fallon. Leader of the Lahontan Compact.",
+   "faction": "compact",
+   "personality": "Measured, devout, a born organizer. Right about the Directive and knows the cost of his blockade.",
+   "voice": "Slow, preacher cadence. Asks questions instead of giving orders.",
+   "motives": "Keep Nevada's food in Nevada. Keep his people alive.",
+   "secret": "His blockade is starving his own aunt's care home in Sparks.",
+   "where_met": "loc_i80_blockade, Ch5",
+   "chapters": [
+    "ch05",
+    "ch07",
+    "ch10"
+   ],
+   "trust": {
+    "start": 0
+   },
+   "relationship_effects": [
+    {
+     "when": "Sabotage the convoy",
+     "rep_compact": 2
+    },
+    {
+     "when": "Share the Annex stock (annex_told=compact)",
+     "rep_compact": 2
+    }
+   ],
+   "fates": [
+    {
+     "id": "ander_stillwater",
+     "conditions": [
+      {
+       "flag": "ending",
+       "eq": "end_stillwater"
+      }
+     ],
+     "outcome": "Takes Galena's turbines east to the Stillwater field."
+    }
+   ]
+  },
+  {
+   "id": "ruiz",
+   "name": "Sgt. Nadia Ruiz",
+   "age": 31,
+   "role": "Combat engineer, Task Force Ironwood (US Army). Call sign 'Engineer Two'. Defectable soldier.",
+   "faction": "ironwood",
+   "personality": "Practical, honest, tired. Follows the orders she can live with.",
+   "voice": "Plain soldier talk. 'Orders are paper.'",
+   "motives": "Fix things instead of shooting them. Get her people home.",
+   "secret": "She marks kids' houses clear on the sweep lists with two pencil dots. She saw a Tallman in Ch6 and logged it as 'animal'.",
+   "where_met": "loc_tric_warehouses, Ch5 convoy",
+   "chapters": [
+    "ch05",
+    "ch06",
+    "ch07",
+    "ch09",
+    "ch10"
+   ],
+   "trust": {
+    "start": 0
+   },
+   "relationship_effects": [
+    {
+     "when": "Lever the MRAP door off her (ruiz_spared)",
+     "trust": 4,
+     "kindness": 1
+    },
+    {
+     "when": "Treat Wes in front of her",
+     "trust": 2
+    },
+    {
+     "when": "Take her rifle and leave",
+     "trust": -3
+    }
+   ],
+   "fates": [
+    {
+     "id": "ruiz_defects",
+     "conditions": [
+      {
+       "flag": "ruiz_defected",
+       "eq": true
+      }
+     ],
+     "outcome": "Joins Braith in Ch7; talks down the recovery detail; finds the Ch9 picket gap; enables a clean Dark Water demolition."
+    }
+   ]
+  },
+  {
+   "id": "reyne",
+   "name": "Dr. Hollis Reyne",
+   "age": 39,
+   "role": "Biologist, Dixie Valley Annex (contractor, Level 3 clearance). LONG SLEEP program, Wing A.",
+   "faction": "annex",
+   "personality": "Clinical, guilty, brave in small ways. Named the subjects she wasn't supposed to name.",
+   "voice": "Precise, quiet, scientific vocabulary that cracks under feeling.",
+   "motives": "Make it right, or at least help carry what it costs.",
+   "secret": "She opened the Annex's outer door on Day 16 to get out and did not close it. She never had clearance for Wing B and does not know how many were held there.",
+   "where_met": "loc_peavine_shack, Ch7",
+   "chapters": [
+    "ch07",
+    "ch08",
+    "ch10"
+   ],
+   "trust": {
+    "start": 0
+   },
+   "relationship_effects": [
+    {
+     "when": "Forgive her (ch07_annex_holds)",
+     "trust": 2
+    },
+    {
+     "when": "Kill the sleeping den",
+     "trust": -3
+    },
+    {
+     "when": "Bring her to Galena (reyne_with_you)",
+     "trust": 2
+    }
+   ],
+   "fates": [
+    {
+     "id": "reyne_lamps",
+     "conditions": [
+      {
+       "flag": "reyne_with_you",
+       "eq": true
+      }
+     ],
+     "outcome": "Runs the lamp line's night watch; predicts where they'll test."
+    },
+    {
+     "id": "reyne_annex",
+     "conditions": [
+      {
+       "flag": "reyne_with_you",
+       "ne": true
+      }
+     ],
+     "outcome": "Returns to the Annex to keep Tolliver company."
+    }
+   ]
   }
+ ],
+ "minor_characters": [
+  {
+   "id": "pruitt",
+   "name": "Mr. Earl Pruitt",
+   "age": 84,
+   "note": "Oxygen concentrator. Wanders to feed ducks that aren't there. Lives through Act I only with the gas can (pruitt_alive).",
+   "chapters": [
+    "ch01",
+    "ch08"
+   ]
+  },
+  {
+   "id": "deshawn",
+   "name": "Deshawn Pruitt",
+   "age": 16,
+   "note": "Pruitt's grandson. Owes Braith one. Shows the 1940s cistern in Ch8 (pruitt_cistern).",
+   "chapters": [
+    "ch01",
+    "ch08"
+   ]
+  },
+  {
+   "id": "cpl_haas",
+   "name": "Cpl. Haas",
+   "age": 23,
+   "note": "Bored, decent checkpoint corporal on the Virginia Street bridge. Bribable with cigarettes; trusts Lolo.",
+   "chapters": [
+    "ch02",
+    "ch06"
+   ]
+  },
+  {
+   "id": "pete_lund",
+   "name": "Pete Lund",
+   "age": 38,
+   "note": "HVAC tech squatting in Galena with two kids. Crew if you lower your gun (lunds_stayed). May appear as the Ch8 husk.",
+   "chapters": [
+    "ch04",
+    "ch08",
+    "ch09",
+    "ch10"
+   ]
+  },
+  {
+   "id": "rosa",
+   "name": "Rosa Esparza",
+   "age": 34,
+   "note": "Floor kitchen worker, mother of Mateo (8). Met if you help in the crush; returns in Act III with a filter tip.",
+   "chapters": [
+    "ch02",
+    "ch06",
+    "ch08"
+   ]
+  },
+  {
+   "id": "kessler",
+   "name": "Maj. Dale Kessler",
+   "age": 47,
+   "note": "Ironwood commander; holds the Sparks yard after Ch7. At Galena's gate in Ch10; stands down if ruiz_defected or avila_stance=governor (and ironwood_hostility<5).",
+   "chapters": [
+    "ch09",
+    "ch10"
+   ]
+  },
+  {
+   "id": "sfc_brandt",
+   "name": "SFC Jim Brandt",
+   "age": 36,
+   "note": "Leader of the stranded Ironwood recovery detail at the Annex. Ruiz's old squadmate.",
+   "chapters": [
+    "ch07"
+   ]
+  }
+ ],
+ "ambient_npcs": [
+  {
+   "id": "amb_brother_amos",
+   "name": "Brother Amos",
+   "age": 60,
+   "hook": "Street preacher at the Virginia Street bridge who counts the dead aloud.",
+   "where_met": "loc_rscc_registry (ration line), Ch2",
+   "chapters": [
+    "ch02",
+    "ch03",
+    "ch06",
+    "ch08"
+   ],
+   "acts": {
+    "1": "Preaches and counts in the ration line.",
+    "2": "Runs a volunteer burial crew.",
+    "3": "A husk in the ash, or Galena's chaplain if given a blanket/coat."
+   },
+   "fates": [
+    {
+     "id": "amos_chaplain",
+     "conditions": [
+      {
+       "flag": "ending",
+       "eq": "end_warm_room"
+      }
+     ],
+     "outcome": "Chaplain at Galena; reads the census names on Sundays."
+    }
+   ]
+  },
+  {
+   "id": "amb_lonnie",
+   "name": "Lonnie Vance",
+   "age": 57,
+   "hook": "Silver Spur lounge singer in a gold sequined jacket, singing Sinatra in the ration line for crackers.",
+   "where_met": "loc_rscc_registry, Ch2",
+   "chapters": [
+    "ch02",
+    "ch06",
+    "ch10"
+   ],
+   "acts": {
+    "1": "Sings in the line.",
+    "2": "Sings on Carly's Switchboard between dispatches.",
+    "3": "Sings at Galena, or his voice on an old recording in Two Coats."
+   },
+   "fates": [
+    {
+     "id": "lonnie_sings",
+     "conditions": [
+      {
+       "flag": "lonnie_fed",
+       "eq": true
+      }
+     ],
+     "outcome": "Remembers the crackers; sings 'your song' at the Warm Room."
+    }
+   ]
+  },
+  {
+   "id": "amb_salt",
+   "name": "'Salt'",
+   "age": 66,
+   "hook": "Desert hermit in a culvert by the Steamboat hot springs. First person to name the Tallmen: 'They've been watching me since September.'",
+   "where_met": "loc_steamboat_creek, Ch4",
+   "chapters": [
+    "ch04",
+    "ch09"
+   ],
+   "acts": {
+    "1": "(Not met.)",
+    "2": "Warns you in Ch4.",
+    "3": "Ch9: frozen dead in his chair, or alive and joining the column if you fed him or left him your flashlight."
+   },
+   "fates": [
+    {
+     "id": "salt_lives",
+     "conditions": [
+      {
+       "flag": "salt_fed",
+       "eq": true
+      }
+     ],
+     "outcome": "Joins the column (+1)."
+    },
+    {
+     "id": "salt_dies",
+     "conditions": [
+      {
+       "flag": "salt_fed",
+       "ne": true
+      }
+     ],
+     "outcome": "Found frozen; long tracks around his chair."
+    }
+   ]
+  },
+  {
+   "id": "amb_darlene",
+   "name": "Darlene Okoye-Pratt",
+   "age": 52,
+   "hook": "Stranded long-haul trucker with a reefer trailer of frozen chicken off USA Parkway.",
+   "where_met": "loc_tric_warehouses, Ch3",
+   "chapters": [
+    "ch03",
+    "ch05",
+    "ch08"
+   ],
+   "acts": {
+    "1": "Feeds the Greg Street shelter.",
+    "2": "Armed and hoarding; requisitioned in Ch5 unless she moves to Mo's.",
+    "3": "With Mo at the truck stop, or gone."
+   },
+   "fates": [
+    {
+     "id": "darlene_mo",
+     "conditions": [
+      {
+       "flag": "darlene_with_mo",
+       "eq": true
+      }
+     ],
+     "outcome": "Runs the truck stop kitchen with Mo through Act III."
+    }
+   ]
+  },
+  {
+   "id": "amb_bike_kids",
+   "name": "The Bike Kids",
+   "age": 12,
+   "hook": "A pack of 12-year-olds on bikes who run notes between houses, later for the Switchboard.",
+   "where_met": "loc_sparks_block, Ch1",
+   "chapters": [
+    "ch01",
+    "ch03",
+    "ch06",
+    "ch08",
+    "ch10"
+   ],
+   "acts": {
+    "1": "Five-cent deliveries and rumors.",
+    "2": "Switchboard runners; reveal map icons. One dies in the Ch6 sweep unless neighbors were hidden.",
+    "3": "Galena's runners."
+   },
+   "fates": [
+    {
+     "id": "bike_kid_lost",
+     "conditions": [
+      {
+       "flag": "ch06_hid_neighbors",
+       "ne": true
+      }
+     ],
+     "outcome": "Jaden is killed in the Ch6 sweep crossfire."
+    }
+   ]
+  },
+  {
+   "id": "amb_deputy_lusk",
+   "name": "Deputy Cal Lusk",
+   "age": 45,
+   "hook": "Off-duty Washoe sheriff's deputy in pajama pants and a uniform jacket; runs the block watch and the marina water line.",
+   "where_met": "loc_sparks_marina, Ch1",
+   "chapters": [
+    "ch01",
+    "ch03",
+    "ch06"
+   ],
+   "acts": {
+    "1": "Self-appointed rules: one trip per family, dusk curfew.",
+    "2": "Joins the Authority, or closes his cul-de-sac to strangers if Gil was reported.",
+    "3": "Shuts his street to everyone and dies there, unless lusk_rep>=1 (then he comes to Galena)."
+   },
+   "fates": [
+    {
+     "id": "lusk_galena",
+     "conditions": [
+      {
+       "flag": "lusk_rep",
+       "gte": 1
+      }
+     ],
+     "outcome": "Comes to Galena; runs the gate watch."
+    }
+   ]
+  },
+  {
+   "id": "amb_ruth",
+   "name": "Ruth Calloway",
+   "age": 74,
+   "hook": "Retired second-grade teacher running a class on yoga mats in the convention center ('FRACTIONS (FOOD)').",
+   "where_met": "loc_rscc_registry, Ch2",
+   "chapters": [
+    "ch02",
+    "ch06",
+    "ch08",
+    "ch10"
+   ],
+   "acts": {
+    "1": "Teaches in the ration hall.",
+    "2": "Moves the class into the Silver Spur.",
+    "3": "Revealed as the Night Owl in Ch8. Runs Galena's school if a council or the Floor holds."
+   },
+   "fates": [
+    {
+     "id": "ruth_school",
+     "conditions": [
+      {
+       "flag": "ending",
+       "eq": "end_warm_room"
+      }
+     ],
+     "outcome": "Galena school, kids at the census board."
+    }
+   ]
+  },
+  {
+   "id": "amb_pvt_marsh",
+   "name": "Pvt. Danny Marsh",
+   "age": 19,
+   "hook": "Ironwood deserter hiding in a 4th Street motel after refusing to clear a house with kids in it.",
+   "where_met": "loc_fourth_street, Ch6",
+   "chapters": [
+    "ch06",
+    "ch09"
+   ],
+   "acts": {
+    "2": "Hide him, turn him in, or send him east.",
+    "3": "In the column with Ruiz if hidden; otherwise shot by the Remnant at the picket."
+   },
+   "fates": [
+    {
+     "id": "marsh_column",
+     "conditions": [
+      {
+       "flag": "ch06_marsh_hidden",
+       "eq": true
+      }
+     ],
+     "outcome": "Marches in the column (+1)."
+    }
+   ]
+  },
+  {
+   "id": "amb_night_owl",
+   "name": "The Night Owl",
+   "age": null,
+   "hook": "Anonymous radio voice reading the names of the missing every night. Radio only.",
+   "where_met": "hand_radio, Ch3",
+   "chapters": [
+    "ch03",
+    "ch08"
+   ],
+   "acts": {
+    "1": "Reads names.",
+    "2": "Carly's rival, then ally on the Switchboard.",
+    "3": "Revealed to be Ruth."
+   },
+   "fates": []
+  },
+  {
+   "id": "amb_tolliver",
+   "name": "Mr. Tolliver",
+   "age": 50,
+   "hook": "Annex contractor guard who held the gate alone for 92 days, uniform still ironed.",
+   "where_met": "loc_dixie_annex, Ch7",
+   "chapters": [
+    "ch07",
+    "ch09"
+   ],
+   "acts": {
+    "2": "Talk him down, relieve him, or shoot him.",
+    "3": "Comes back with you (+1 column, armed guard), stays at the Annex, or is dead."
+   },
+   "fates": [
+    {
+     "id": "tolliver_joined",
+     "conditions": [
+      {
+       "flag": "tolliver_fate",
+       "eq": "joined"
+      }
+     ],
+     "outcome": "Guards Galena's gate; keeps a new log."
+    }
+   ]
+  }
+ ],
+ "traders": [
+  {
+   "id": "trader_dutch",
+   "name": "Dutch Albertson",
+   "age": 58,
+   "personality": "Cheerful, cynical 4th Street pawnbroker. Everything has a price.",
+   "voice": "Salesman patter: 'my friend', 'very interesting prices'.",
+   "location": "loc_fourth_street",
+   "chapters": [
+    "ch02",
+    "ch06"
+   ],
+   "trades": [
+    "tools",
+    "guns",
+    "cigarettes",
+    "stolen meds",
+    "ammo_9mm"
+   ],
+   "wants": [
+    "batteries",
+    "ammo",
+    "jewelry",
+    "rumor"
+   ],
+   "currency": [
+    "cash (Act I week 1 only)",
+    "cigarettes",
+    "rumor"
+   ],
+   "act_shift": {
+    "1": "Takes cash for a week, then barter only.",
+    "2": "Fences Ironwood gear; prices x1.5.",
+    "3": "Gone (shop burned)."
+   },
+   "price_mult_by_act": {
+    "1": 1.0,
+    "2": 1.5,
+    "3": null
+   },
+   "hook": {
+    "type": "betrayal",
+    "detail": "If trader_dutch_rep<=-1 he sells your Galena route to the Viaduct Crew (ch04_dutch_ambush).",
+    "flag": "dutch_betrayed"
+   },
+   "rep_flag": "trader_dutch_rep",
+   "stock_by_act": {
+    "1": {
+     "ammo_9mm": 24,
+     "cigarettes": 10,
+     "med_kit": 1,
+     "bolt_cutters": 1
+    },
+    "2": {
+     "rifle_ammo": 20,
+     "ironwood_id": 0,
+     "flare": 3
+    }
+   }
+  },
+  {
+   "id": "trader_mo",
+   "name": "Maureen 'Mo' Kessinger",
+   "age": 55,
+   "personality": "Gruff, fair truck-stop owner. Hates freeloaders, the Army, and sob stories.",
+   "voice": "Short, flat, Carhartt-tough.",
+   "location": "loc_mustang_truckstop",
+   "chapters": [
+    "ch05",
+    "ch08"
+   ],
+   "trades": [
+    "diesel_jug",
+    "gas_can",
+    "tire chains",
+    "sled parts"
+   ],
+   "wants": [
+    "mechanic labor",
+    "parts",
+    "canned_food"
+   ],
+   "currency": [
+    "food",
+    "labor credit",
+    "warm-bunk nights (Act III)"
+   ],
+   "act_shift": {
+    "1": "(Not met.)",
+    "2": "Taxed by Compact and Ironwood; prices x2.",
+    "3": "Last fuel in the valley; sold for warm bunks at Galena."
+   },
+   "price_mult_by_act": {
+    "1": null,
+    "2": 2.0,
+    "3": 3.0
+   },
+   "hook": {
+    "type": "quest",
+    "quest": "q_mo_pump",
+    "detail": "Fix her transfer pump for standing credit (+3 rep, free diesel). With Darlene (darlene_with_mo) she survives Act III."
+   },
+   "rep_flag": "trader_mo_rep",
+   "stock_by_act": {
+    "2": {
+     "diesel_jug": 6,
+     "gas_can": 2
+    },
+    "3": {
+     "diesel_jug": 2
+    }
+   }
+  },
+  {
+   "id": "trader_rourke",
+   "name": "Wendell Rourke",
+   "age": 77,
+   "personality": "Virginia City prospector with three burros (Maisie leads). Storyteller and liar.",
+   "voice": "Old-West tall-tale cadence; talks to the burros.",
+   "location": "loc_peavine_shack (Ch3), loc_i80_blockade (Ch5), loc_us50_fallon (Ch7), river_ice camp (Ch9)",
+   "chapters": [
+    "ch03",
+    "ch05",
+    "ch07",
+    "ch09"
+   ],
+   "trades": [
+    "whiskey",
+    "candles",
+    "maps",
+    "tea",
+    "reloading supplies",
+    "rumor"
+   ],
+   "wants": [
+    "stories",
+    "rumor",
+    "salt"
+   ],
+   "currency": [
+    "stories",
+    "rumor"
+   ],
+   "act_shift": {
+    "1": "Peavine road; trades candles for stories.",
+    "2": "Canyon; needs an escort; first to sell an Annex rumor.",
+    "3": "River camp; strangest stock, same prices."
+   },
+   "price_mult_by_act": {
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   "hook": {
+    "type": "quest",
+    "quest": "q_rourke_escort",
+    "detail": "Get his burros through the Ch5 canyon; reward: the Annex rumor (annex_known)."
+   },
+   "rep_flag": "trader_rourke_rep",
+   "stock_by_act": {
+    "1": {
+     "candles": 4,
+     "whiskey": 1
+    },
+    "2": {
+     "rumor": 2,
+     "flare": 2
+    },
+    "3": {
+     "tent_tarp": 1,
+     "candles": 6
+    }
+   }
+  },
+  {
+   "id": "trader_annie",
+   "name": "Annie Tran",
+   "age": 63,
+   "personality": "Gentle, unbudging librarian running the seed library.",
+   "voice": "Soft-spoken, precise, library metaphors.",
+   "location": "loc_rscc_registry (Ch2 table), loc_sparks_library (Ch3+)",
+   "chapters": [
+    "ch02",
+    "ch03",
+    "ch08",
+    "ch10"
+   ],
+   "trades": [
+    "seeds",
+    "antibiotics",
+    "iodide_tablets",
+    "books",
+    "grow lights",
+    "vet_kit"
+   ],
+   "wants": [
+    "batteries",
+    "wire",
+    "glass",
+    "labor",
+    "stories"
+   ],
+   "currency": [
+    "batteries",
+    "labor"
+   ],
+   "act_shift": {
+    "1": "Generous.",
+    "2": "Rations antibiotics.",
+    "3": "Her atrium needs Galena heat; becomes a council member in the Warm Room."
+   },
+   "price_mult_by_act": {
+    "1": 0.8,
+    "2": 1.2,
+    "3": 1.5
+   },
+   "hook": {
+    "type": "quest",
+    "quest": "q_annie_greenhouse",
+    "detail": "Promise a heat line to the library atrium (Ch8). Pays off in the Warm Room epilogue."
+   },
+   "rep_flag": "trader_annie_rep",
+   "stock_by_act": {
+    "1": {
+     "antibiotics": 2,
+     "vet_kit": 1
+    },
+    "2": {
+     "antibiotics": 1,
+     "iodide_tablets": 2
+    },
+    "3": {
+     "iodide_tablets": 2,
+     "vet_kit": 1
+    }
+   }
+  },
+  {
+   "id": "trader_boone",
+   "name": "SSgt. Tyrell Boone",
+   "age": 34,
+   "personality": "Charming, scared Ironwood supply sergeant selling out the back door.",
+   "voice": "Easy smile, salesman-soldier. 'Very lost, very available.'",
+   "location": "loc_sparks_yard",
+   "chapters": [
+    "ch05",
+    "ch08"
+   ],
+   "trades": [
+    "canned_food (MREs)",
+    "mask_filter",
+    "rifle_ammo",
+    "dosimeter"
+   ],
+   "wants": [
+    "cigarettes",
+    "whiskey",
+    "silence",
+    "diesel_jug"
+   ],
+   "currency": [
+    "cigarettes",
+    "whiskey",
+    "fuel"
+   ],
+   "act_shift": {
+    "1": "(Not met.)",
+    "2": "Needs ironwood_id or a bribe.",
+    "3": "Remnant prices x3; half his filters are expired."
+   },
+   "price_mult_by_act": {
+    "1": null,
+    "2": 1.5,
+    "3": 3.0
+   },
+   "hook": {
+    "type": "betrayal",
+    "detail": "About half his Act III filters are expired (boone_filters_tested reveals it). Expose him to Ruiz (boone_exposed) and Kessler shoots him; his stock drops as loot."
+   },
+   "rep_flag": "trader_boone_rep",
+   "stock_by_act": {
+    "2": {
+     "mask_filter": 4,
+     "canned_food": 6,
+     "rifle_ammo": 30
+    },
+    "3": {
+     "mask_filter": 6,
+     "dosimeter": 1
+    }
+   }
+  },
+  {
+   "id": "trader_floor",
+   "name": "Floor commissary",
+   "age": null,
+   "personality": "Generic Silver Spur commissary counter run by Roz's cooks.",
+   "voice": "Kitchen shouting.",
+   "location": "loc_silver_spur",
+   "chapters": [
+    "ch06"
+   ],
+   "trades": [
+    "canned_food",
+    "firewood",
+    "wool_blanket"
+   ],
+   "wants": [
+    "labor",
+    "spur_chip"
+   ],
+   "currency": [
+    "spur_chip"
+   ],
+   "act_shift": {
+    "2": "Silver Spur chips honored; prices fall with rep_harbor.",
+    "3": "Closed unless the Floor holds the city."
+   },
+   "price_mult_by_act": {
+    "2": 1.0,
+    "3": null
+   },
+   "hook": {
+    "type": "none",
+    "detail": "Spend spur_chip earned from Floor jobs."
+   },
+   "rep_flag": "trader_floor_rep",
+   "stock_by_act": {
+    "2": {
+     "canned_food": 10,
+     "firewood": 8,
+     "wool_blanket": 2
+    }
+   }
+  }
+ ],
+ "generic_speakers": {
+  "braith": "The player (Braith Pearce, 25, ex-USAF F-15E crew chief, A&P mechanic). Lines are short, dry, flight-line shorthand.",
+  "narrator": "On-screen description, no portrait.",
+  "authority_guard": "Unnamed Recovery Authority guard.",
+  "ironwood_soldier": "Unnamed Task Force Ironwood soldier.",
+  "deserter": "Unnamed Ironwood deserter with Ruiz (Ch7).",
+  "compact_rider": "Unnamed Lahontan Compact rider at a checkpoint.",
+  "bridge_boy": "Unnamed Viaduct Crew member.",
+  "husk": "Unnamed radiation-sick, hypothermic person (Act III).",
+  "stranger_mother": "Mother at the sealed door in Ch8 (from Sun Valley).",
+  "lund_kid": "Pete Lund's daughter, Mia (9).",
+  "column": "Group voice of the Ch9 column.",
+  "deserter_1": "Level extra: Ironwood deserter with Ruiz (Ch7). Draws as generic soldier.",
+  "deserter_2": "Level extra: second Ironwood deserter (Ch7).",
+  "hollow": "An assimilated person (enemy type assimilated_human, in-world 'Hollow'). Speaks only in copied, off-cadence phrases. No portrait; silhouette with no breath plume.",
+  "boot_strippers": "Level extra: scavengers stripping boots from the dead on the river ice (Ch9)."
+ },
+ "factions": {
+  "authority": {
+   "name": "Truckee Meadows Recovery Authority",
+   "leader": "avila",
+   "rep_flag": "rep_authority",
+   "pitch": "County emergency management + Nevada Guard. Registry, ration cards, sectors. Right that counting keeps people alive; wrong that the count is a lie, and in Act II it ships the valley's stocks west."
+  },
+  "harbor": {
+   "name": "The Floor",
+   "leader": "roz",
+   "rep_flag": "rep_harbor",
+   "pitch": "Casino workers, churches and UNR students feeding the city from dead casino kitchens; Silver Spur chips as scrip. 'Here' quietly shrinks to 'us,' and they buy guns."
+  },
+  "compact": {
+   "name": "Lahontan Compact",
+   "leader": "ander",
+   "rep_flag": "rep_compact",
+   "pitch": "Fallon and Mason Valley farms and ranches allied with the state bloc; Ross Pearce is Ander's lieutenant. Right that the Directive strips Nevada for California; their blockade starves Reno's care homes."
+  },
+  "ironwood": {
+   "name": "Task Force Ironwood",
+   "leader": "kessler",
+   "rep_flag": null,
+   "tracker": "ironwood_hostility",
+   "pitch": "Federal Army battalion-minus from Fort Irwin enforcing the Reconstruction Directive (Act II); the Remnant holds the Sparks yard after Ch7. Tired kids under a contested chain of command; some can be spared or turned (Ruiz)."
+  },
+  "bridge_boys": {
+   "name": "The Viaduct Crew",
+   "leader": null,
+   "rep_flag": null,
+   "pitch": "Laid-off warehouse kids and 4th Street motel residents under the I-80 viaduct. Hungry, armed, scared. Kit runs for them."
+  },
+  "annex": {
+   "name": "Tallmen (Dixie Valley Annex)",
+   "leader": null,
+   "rep_flag": null,
+   "pitch": "Not a faction: the escaped LONG SLEEP subjects. No rep, no dialogue. Unknown number. From Act III they also make Hollows (assimilated_human, assimilated_animal): people and animals they fed on and kept. Reyne is the Annex's only human voice."
+  },
+  "none": {
+   "name": "Unaligned",
+   "leader": null,
+   "rep_flag": null,
+   "pitch": "Unaligned."
+  }
+ }
 }

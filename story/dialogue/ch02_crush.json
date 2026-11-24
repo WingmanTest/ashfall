@@ -1,0 +1,114 @@
+{
+  "id": "ch02_crush",
+  "chapter": "ch02",
+  "location": "loc_rscc_registry",
+  "trigger": "Set piece: the ration line surges (enc_ch02_crush).",
+  "speakers": [
+    "narrator",
+    "braith",
+    "rosa",
+    "wraith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Somebody shouts that the flour's gone. It isn't. It doesn't matter. The line folds like a wave.",
+      "next": "c1"
+    },
+    {
+      "id": "c1",
+      "speaker": "wraith",
+      "text": "[Bracing against your leg. Barking at the crowd, high and frantic.]",
+      "next": "c2"
+    },
+    {
+      "id": "c2",
+      "speaker": "narrator",
+      "text": "A boy, eight maybe, goes down between the barriers. His mother is screaming a name. Mateo.",
+      "choices": [
+        {
+          "text": "[Shove in and pull him out]",
+          "next": "pull",
+          "effects": [
+            {
+              "set": "ch02_crush_helped",
+              "value": true
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            },
+            {
+              "stat": "health",
+              "delta": -15
+            }
+          ]
+        },
+        {
+          "text": "[Wraith, HOLD the barrier]",
+          "next": "dog",
+          "effects": [
+            {
+              "set": "ch02_crush_helped",
+              "value": true
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            },
+            {
+              "trust": "wraith",
+              "delta": 1
+            },
+            {
+              "stat": "health",
+              "delta": -5
+            }
+          ]
+        },
+        {
+          "text": "[Get clear. Get out]",
+          "next": "out"
+        }
+      ]
+    },
+    {
+      "id": "pull",
+      "speaker": "narrator",
+      "text": "An elbow catches your ribs. Then you have him by the shirt, and you're both out, and he's breathing.",
+      "next": "mom"
+    },
+    {
+      "id": "dog",
+      "speaker": "narrator",
+      "text": "Wraith plants herself in the gap and bares her teeth. The crowd parts around her like water around a rock.",
+      "next": "mom"
+    },
+    {
+      "id": "mom",
+      "speaker": "rosa",
+      "text": "Mateo! Mijo— Thank you. Thank you. I'm Rosa. We're with the Floor. At the Silver Spur. Anything.",
+      "effects": [
+        {
+          "set": "rosa_met",
+          "value": true
+        }
+      ],
+      "next": "mom2"
+    },
+    {
+      "id": "mom2",
+      "speaker": "rosa",
+      "text": "If you ever need something, ask for Rosa in the kitchen. I mean it. I don't forget.",
+      "end": true
+    },
+    {
+      "id": "out",
+      "speaker": "narrator",
+      "text": "You get clear. Behind you, the screaming goes on longer than it should. You don't look back.",
+      "end": true
+    }
+  ]
+}

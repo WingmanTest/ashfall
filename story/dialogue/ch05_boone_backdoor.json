@@ -1,0 +1,115 @@
+{
+  "id": "ch05_boone_backdoor",
+  "chapter": "ch05",
+  "location": "loc_sparks_yard",
+  "trigger": "SSgt. Boone's back door at the Sparks yard depot (trader).",
+  "speakers": [
+    "narrator",
+    "trader_boone",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Behind a boxcar at the Sparks yard: a supply sergeant with a cigarette and a very clean smile.",
+      "next": "b1"
+    },
+    {
+      "id": "b1",
+      "speaker": "trader_boone",
+      "text": "Tyrell Boone. Staff sergeant. I'm the guy who knows what fell off the truck. Lots fell off the truck.",
+      "effects": [
+        {
+          "set": "boone_met",
+          "value": true
+        }
+      ],
+      "next": "b2"
+    },
+    {
+      "id": "b2",
+      "speaker": "trader_boone",
+      "text": "MREs. Filters. Five-five-six. All very lost, all very available. I want cigarettes, whiskey, and silence.",
+      "choices": [
+        {
+          "text": "[Trade whiskey for filters]",
+          "next": "trade",
+          "conditions": [
+            {
+              "item": "whiskey",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "whiskey",
+              "qty": 1
+            },
+            {
+              "give": "mask_filter",
+              "qty": 2
+            },
+            {
+              "add": "trader_boone_rep",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "[Trade cigarettes for MREs]",
+          "next": "trade2",
+          "conditions": [
+            {
+              "item": "cigarettes",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "cigarettes",
+              "qty": 1
+            },
+            {
+              "give": "canned_food",
+              "qty": 3
+            },
+            {
+              "add": "trader_boone_rep",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "Your CO know about this?",
+          "next": "co"
+        }
+      ]
+    },
+    {
+      "id": "trade",
+      "speaker": "trader_boone",
+      "text": "Pleasure. Filters are fresh. Mostly. Probably.",
+      "next": "end"
+    },
+    {
+      "id": "trade2",
+      "speaker": "trader_boone",
+      "text": "Enjoy. Chili-mac is the good one. Don't let anybody tell you different.",
+      "next": "end"
+    },
+    {
+      "id": "co",
+      "speaker": "trader_boone",
+      "text": "My CO knows the war's lost and the trucks are full. We all know. Want to buy something or not?",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "trader_boone",
+      "text": "Come back with an ID or something to drink. I'm here 'til I'm not.",
+      "end": true
+    }
+  ]
+}

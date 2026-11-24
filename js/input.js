@@ -1,4 +1,4 @@
-import { CFG } from "./config.js?v=r8";
+import { CFG } from "./config.js?v=r9";
 
 export class Input {
   constructor(frame, onUnlock) {

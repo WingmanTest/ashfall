@@ -1,0 +1,165 @@
+{
+  "id": "ch01_voicemail",
+  "chapter": "ch01",
+  "location": "loc_sparks_block",
+  "trigger": "Night. Home. After the pharmacy. Chapter end.",
+  "speakers": [
+    "narrator",
+    "braith",
+    "carly",
+    "ross",
+    "wraith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Candles. Windows open for any breeze. Carly reading your dead phone like it might change its mind.",
+      "next": "v1"
+    },
+    {
+      "id": "v1",
+      "speaker": "carly",
+      "text": "It still has the voicemail. From Sunday. You never listened to it.",
+      "choices": [
+        {
+          "text": "[Play it]",
+          "next": "play"
+        },
+        {
+          "text": "I know what it says.",
+          "next": "know"
+        }
+      ]
+    },
+    {
+      "id": "know",
+      "speaker": "carly",
+      "text": "Play it anyway. For me.",
+      "next": "play"
+    },
+    {
+      "id": "play",
+      "speaker": "ross",
+      "text": "Braith. It's Dad. Sky's doing something crazy out here. Green, all the way down to Walker Lake.",
+      "next": "v2"
+    },
+    {
+      "id": "v2",
+      "speaker": "ross",
+      "text": "Radio says the grid's going. Not just us. Everywhere. Listen. Come home, both of you, before—",
+      "next": "v3"
+    },
+    {
+      "id": "v3",
+      "speaker": "narrator",
+      "text": "The message ends. Three seconds of silence. Then the phone dies for good.",
+      "effects": [
+        {
+          "set": "ch01_voicemail_heard",
+          "value": true
+        }
+      ],
+      "next": "v4"
+    },
+    {
+      "id": "v4",
+      "speaker": "carly",
+      "text": "Seventy miles. You could make it on what we've got.",
+      "branches": [
+        {
+          "next": "v_gas",
+          "conditions": [
+            {
+              "flag": "ch01_gas_choice",
+              "eq": "drive"
+            }
+          ]
+        },
+        {
+          "next": "v_nogas"
+        }
+      ]
+    },
+    {
+      "id": "v_gas",
+      "speaker": "carly",
+      "text": "You kept the gas for this. I saw. It's okay. I'd have done the same.",
+      "next": "v5"
+    },
+    {
+      "id": "v_nogas",
+      "speaker": "carly",
+      "text": "Well. Maybe not on what we've got.",
+      "next": "v5"
+    },
+    {
+      "id": "v5",
+      "speaker": "carly",
+      "text": "I'm not leaving. People are still walking into dispatch. Somebody has to write it down.",
+      "choices": [
+        {
+          "text": "Then I'm staying.",
+          "next": "stay",
+          "effects": [
+            {
+              "trust": "carly",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "text": "He's my family, Carly.",
+          "next": "family"
+        },
+        {
+          "text": "We'll go together. Soon.",
+          "next": "soon",
+          "effects": [
+            {
+              "trust": "carly",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "family",
+      "speaker": "carly",
+      "text": "I know. So go. I mean it. I'll be here.",
+      "next": "family2"
+    },
+    {
+      "id": "family2",
+      "speaker": "braith",
+      "text": "...No. You're here. So I'm here.",
+      "effects": [
+        {
+          "trust": "carly",
+          "delta": 1
+        }
+      ],
+      "next": "stay"
+    },
+    {
+      "id": "soon",
+      "speaker": "carly",
+      "text": "Don't promise me soon. Nobody gets soon anymore.",
+      "next": "stay"
+    },
+    {
+      "id": "stay",
+      "speaker": "narrator",
+      "text": "Wraith climbs onto the bed, which is not allowed, and nobody says anything.",
+      "next": "v6"
+    },
+    {
+      "id": "v6",
+      "speaker": "narrator",
+      "text": "Somewhere east, your father is waiting by a phone that will never ring.",
+      "end": true
+    }
+  ]
+}

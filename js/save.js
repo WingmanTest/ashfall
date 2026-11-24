@@ -1,4 +1,9 @@
-import { CFG } from "./config.js?v=r8";
+import { CFG } from "./config.js?v=r9";
+import { stripRetiredInv } from "./systems.js?v=r9";
+
+/** Nevada Revision 2 story/save schema. Older saves (v1: Theo, insulin, Marguerite…) can't be mapped. */
+export const SAVE_STORY_VERSION = 2;
+const V1_FLAG_KEYS = ["theo_alive", "theo_side", "hank_alive", "insulin_found", "insulin_given", "marguerite_alive"];
 
 export function loadSave() {
   try {
@@ -16,7 +21,7 @@ export function hasSave() {
 
 export function writeSave(data) {
   try {
-    localStorage.setItem(CFG.saveKey, JSON.stringify({ ...data, ts: Date.now() }));
+    localStorage.setItem(CFG.saveKey, JSON.stringify({ ...data, storyVersion: SAVE_STORY_VERSION, ts: Date.now() }));
     return true;
   } catch {
     return false;
@@ -34,10 +39,10 @@ export function normalizeChapter(ch) {
     return "ch" + String(n).padStart(2, "0");
   }
   const s = String(ch).trim();
-  const m = s.match(/^(?:ch)?\s*0*(\d+)$/i);
+  const m = s.match(/^(?:ch)?\s*0*(\d+)(b?)$/i);
   if (m) {
     const n = Math.max(1, Math.min(10, parseInt(m[1], 10) || 1));
-    return "ch" + String(n).padStart(2, "0");
+    return "ch" + String(n).padStart(2, "0") + (m[2] && n === 7 ? "b" : "");
   }
   return "ch01";
 }
@@ -54,6 +59,10 @@ function asArray(v) {
 export function migrateSave(raw) {
   if (!raw || typeof raw !== "object") {
     return { ok: false, notice: "Old save incompatible — starting a fresh shift" };
+  }
+  const rawFlags = raw.flags && typeof raw.flags === "object" ? raw.flags : {};
+  if (raw.storyVersion !== SAVE_STORY_VERSION || V1_FLAG_KEYS.some((k) => k in rawFlags)) {
+    return { ok: false, v1: true, notice: "Save from before Nevada Revision 2 — starting a fresh shift" };
   }
   try {
     const flags = { ...(raw.flags && typeof raw.flags === "object" && !Array.isArray(raw.flags) ? raw.flags : {}) };
@@ -75,7 +84,7 @@ export function migrateSave(raw) {
     if (!Number.isFinite(player.z)) player.z = -8.5;
     if (!Number.isFinite(player.yaw)) player.yaw = 0;
     if (!player.stats || typeof player.stats !== "object") {
-      player.stats = { health: 100, warmth: 82, hunger: 70, stamina: 100, rad: 0, insulinHours: 72 };
+      player.stats = { health: 100, warmth: 82, hunger: 70, stamina: 100, rad: 0 };
     }
     if (!player.equipped) player.equipped = raw.equipped || "knife";
     if (!player.mags || typeof player.mags !== "object") player.mags = { blaster: 0, pistol: 0 };
@@ -84,6 +93,7 @@ export function migrateSave(raw) {
     if (raw.inv && typeof raw.inv === "object" && !Array.isArray(raw.inv)) inv = { ...raw.inv };
     else if (raw.inventory && typeof raw.inventory === "object" && !Array.isArray(raw.inventory)) inv = { ...raw.inventory };
 
+    inv = stripRetiredInv(inv);
     const save = {
       ...raw,
       flags,

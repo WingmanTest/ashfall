@@ -1,22 +1,24 @@
 {
  "$schema": "./schema.json",
  "formatVersion": 1,
+ "storyVersion": 2,
  "id": "ch02_the_registry",
  "chapter": 2,
+ "storyChapter": "ch02",
  "title": "The Registry",
- "act": "I",
+ "act": 1,
  "storyFile": "story/chapters/ch02_the_registry.md",
  "next": "ch03_the_long_cold",
- "summary": "Blatnik bridge checkpoint -> DECC ration line & registry -> Lakehead Memorial; crush escape set piece.",
  "difficulty": 1,
+ "summary": "Dry, hot Reno, Day 19. The Virginia Street bridge checkpoint (Haas), 4th Street (Dutch's pawn), the convention center registry and ration hall (Avila, Carly, Annie, the crush), Meadows General (Ames, the level-3 tanker) and the first Tallman glimpse on the east ridge at dusk.",
  "units": "meters",
  "grid": {
   "cellSize": 2.0,
-  "cols": 24,
-  "rows": 60,
+  "cols": 46,
+  "rows": 84,
   "origin": {
-   "x": -24.0,
-   "z": -112.0
+   "x": -46.0,
+   "z": -160.0
   },
   "legend": {
    "#": {
@@ -37,20 +39,31 @@
     "preview": "#b8ad98"
    },
    ".": {
-    "name": "snow_ground",
+    "name": "dry_dirt",
     "walkable": true,
     "solid": false,
     "height": 0,
-    "floorTex": "snow_02",
-    "preview": "#d9e1e8"
+    "floorTex": "dirt",
+    "groundType": "dry_dirt",
+    "preview": "#c9a87c"
    },
    "=": {
-    "name": "road",
+    "name": "asphalt_dry",
     "walkable": true,
     "solid": false,
     "height": 0,
-    "floorTex": "asphalt_snow",
-    "preview": "#8d969e"
+    "floorTex": "road_damaged",
+    "groundType": "asphalt_dry",
+    "preview": "#a59a8c"
+   },
+   "B": {
+    "name": "building_mass",
+    "walkable": false,
+    "solid": true,
+    "height": 0,
+    "wallTex": "red_brick",
+    "massOnly": true,
+    "preview": "#4a4f57"
    },
    "D": {
     "name": "door",
@@ -97,13 +110,15 @@
     "cover": true,
     "preview": "#a08850"
    },
-   "f": {
-    "name": "fence",
-    "walkable": false,
-    "solid": true,
-    "height": 1.3,
-    "wallTex": "rusty_corrugated_iron",
-    "preview": "#8a5a3a"
+   "y": {
+    "name": "sagebrush_scrub",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirt",
+    "groundType": "sagebrush",
+    "scatter": "sagebrush",
+    "preview": "#9a9a68"
    },
    "~": {
     "name": "open_water",
@@ -116,268 +131,518 @@
    }
   },
   "tiles": [
-   "HHHHHHHHHHHHHHHHHHHHHHHH",
-   "HHHHHHH###############.H",
-   "HHUUUUH#,,,,,,,,,,,,,#.H",
-   "HHUUUUH#,,,,,,,,,,,,,#.H",
-   "HHUUUUH###D#######D###.H",
-   "HHUUUUD#,,,,,,,,,,,,,#.H",
-   "HHUUUUH#,,,,,,,,,,,,,#.H",
-   "HHUUUUH###D##D########.H",
-   "HHUUUUH#,,,,,,,,,,,,,#.H",
-   "HHUUUUH#,,,,,,,,,,,,,#.H",
-   "HHHDHHH######D########.H",
-   "H======================H",
-   "H======================H",
-   "H########..............H",
-   "H#,,,,,,#..............H",
-   "H#,,,,,,#..............H",
-   "H#,,,,,,#..............H",
-   "H#,,,,,,D..ffffffffff..H",
-   "H#,,,,,,#..............H",
-   "H#,,,,,,#..............H",
-   "H###D####.ffffffffff...H",
-   "H#,,,,,,#.............DH",
-   "H#,,,,,,#..............H",
-   "H#,,,,,,#..ffffffffff..H",
-   "H#,,,,,,D..............H",
-   "H#,,,,,,#..............H",
-   "H#,,,,,,#.ffffffffff...H",
-   "H########..............H",
-   "H.........====.........H",
-   "H.........====.........H",
-   "H.........====.........H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fcbbcf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H~~~~~~~~fbbbbf~~~~~~~~H",
-   "H.........====.........H",
-   "H.........====.........H",
-   "H.........====.........H",
-   "H.........====.........H",
-   "H.........====.........H",
-   "HHHHHHHHHHHHHHHHHHHHHHHH"
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",
+   "H............................................H",
+   "H............................................H",
+   "H............................................H",
+   "H...#####################....###############.H",
+   "H...#,,,,,,,,,,,,,,,,,,,#....#,,,,,,,,,,,,,#.H",
+   "H...#,,,,,,,,,,,,,,,,,,,#....#,,,,,,,,,,,,,#.H",
+   "H...#,,,,,,,,,,,,,,,,,,,#....#,,,,,,,,,,,,,#.H",
+   "H...#,,,,,,,,,,,,,,,,,,,#....#,,,,,,,,,,,,,#.H",
+   "H...#,,,,,,,,,,,,,,,,,,,#....#,,,,,,,,,,,,,#.H",
+   "H...#,,,,,,,,,,,,,,,,,,,D....#,,,,,,,,,,,,,#.H",
+   "H...#,,,,,,,,,,,,,,,,,,,#....D,,,,,,,,,,,,,#.H",
+   "H...####D#####D##########....D,,,,,,,,,,,,,#.H",
+   "H...#,,,,,,,,,,,,,,,,,,,#....#,,,,,,,,,,,,,#.H",
+   "H...#,,,,,,,,,,,,,,,,,,,#....#,,,,,,,,,,,,,#.H",
+   "H...#,,,,,,,,,,,,,,,,,,,#....#,,,,,,,,,,,,,#.H",
+   "H...#,,,,,,,,,,,,,,,,,,,#....#,,,,,,,,,,,,,#.H",
+   "H...#,,,,,,,,,,,,,,,,,,,#....#,,,,,,,,,,,,,#.H",
+   "H...#,,,,,,,,,,,,,,,,,,,#....###############.H",
+   "H...#,,,,,,,,,,,,,,,,,,,#....................H",
+   "H...##########D##########....................H",
+   "H............................................H",
+   "H...................======...................H",
+   "H...................======...................H",
+   "H...................======...................H",
+   "H..BBBBBBBBBBBBBB...======...BBBBBBBBBBBBBBB.H",
+   "H..BBBBBBBBBBBBBB...======...BBBBBBBBBBBBBBB.H",
+   "H..BBBBBBBBBBBBBB...======...BBBBBBBBBBBBBBB.H",
+   "H..BBBBBBBBBBBBBB...======...BBBBBBBBBBBBBBB.H",
+   "H..BBBBBBBBBBBBBB...======...BBBBBBBBBBBBBBB.H",
+   "H..BBBBBBBBBBBBBB...======...BBBBBBBBBBBBBBB.H",
+   "H..BBBBBBBBBBBBBB...======...BBBBBBBBBBBBBBB.H",
+   "H..BBBBBBBBBBBBBB...======...BBBBBBBBBBBBBBB.H",
+   "H..BBBBBBBBBBBBBB...======...BBBBBBBBBBBBBBB.H",
+   "H..BBBBBBBBBBBBBB...======...BBBBBBBBBBBBBBB.H",
+   "H..BBBBBBBBBBBBBB...======...BBBBBBBBBBBBBBB.H",
+   "H..BBBBBBBBBBBBBB...======...BBBBBBBBBBBBBBB.H",
+   "H...................======...................H",
+   "H...................======...................H",
+   "H...................======...................H",
+   "H============================================H",
+   "H============================================H",
+   "H============================================H",
+   "H...............UUUU======...................H",
+   "H...............UUUU======.#################.H",
+   "H..#############UUUU======.#,,,,,,,,,,,,,,,#.H",
+   "H..#,,,#,,,#,,,#UUUU======.#,,,,,,,,,,,,,,,#.H",
+   "H..#,,,#,,,#,,,#UUUU======.#,,,,,,,,,,,,,,,#.H",
+   "H..#,,,D,,,D,,,DUUUU======.#,,,,,,,,,,,,,,,#.H",
+   "H..#,,,#,,,#,,,#UUUU======.#,,,,,,,,,,,,,,,#.H",
+   "H..#,,,#,,,#,,,#UUUU======.#,,,,,,,,,,,,,,,#.H",
+   "H..#,,,#,,,#,,,#UUUU======.####D#######D####.H",
+   "H..#############UUUU======.D,,,,,,,,,,,,,,,#.H",
+   "H...............UUUU======.#,,,,,,,,,,,,,,,#.H",
+   "H...............UUUU======.#,,,,,,,,,,,,,,,#.H",
+   "H..############.UUUU======.#,,,,,,,,,,,,,,,#.H",
+   "H..#,,,,,,,,,,#.UUUU======.#,,,,,,,,,,,,,,,#.H",
+   "H..#,,,,,,,,,,#.UUUU======.#,,,,,,,,,,,,,,,#.H",
+   "H..#,,,,,,,,,,D.UUUU======.#,,,,,,,,,,,,,,,#.H",
+   "H..#,,,,,,,,,,#.UUUU======.#,,,,,,,,,,,,,,,#.H",
+   "H..#,,,,,,,,,,#.UUUU======.#,,,,,,,,,,,,,,,#.H",
+   "H..############.UUUU======.#,,,,,,,,,,,,,,,#.H",
+   "H...............UUUU======.#######DD########.H",
+   "H...................======...................H",
+   "H...................======...................H",
+   "H...................======...................H",
+   "H................cc.======.cc................H",
+   "H...................======...................H",
+   "H...................======...................H",
+   "H...................======...................H",
+   "H~~~~~~~~~~~~~~~~~~bbbbbbbb~~~~~~~~~~~~~~~~~~H",
+   "H~~~~~~~~~~~~~~~~~~bbbbbbbb~~~~~~~~~~~~~~~~~~H",
+   "H~~~~~~~~~~~~~~~~~~bbbbbbbb~~~~~~~~~~~~~~~~~~H",
+   "H~~~~~~~~~~~~~~~~~~bbbbbbbb~~~~~~~~~~~~~~~~~~H",
+   "Hyyyyyyyyyyyyyyyyyy.======.yyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyy.======.yyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyy.======.yyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyy.======.yyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyy.======.yyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyy.======.yyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyy.======.yyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyy.======.yyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyyyyyyy.======.yyyyyyyyyyyyyyyyyyH",
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
   ]
  },
  "environment": {
-  "timeStart": 0.42,
-  "timeEnd": 0.6,
-  "timeLocked": true,
-  "weather": "snow",
-  "tempC": -4,
+  "seasonArc": "blackout_late_summer",
+  "season": "summer",
+  "actName": "Blackout",
+  "groundType": "dry_dirt_asphalt_sagebrush",
+  "precipitation": "none",
+  "particles": "dust",
+  "snowCover": 0.0,
+  "wetness": 0.0,
+  "fogColor": "#cdbfa6",
+  "skyColor": "#6298c8",
+  "sunColor": "#ffd59a",
+  "ambientColor": "#c9a87a",
+  "visibilityM": 110,
+  "fogNear": 10,
+  "fogFar": 110,
+  "windMs": 3,
+  "atmosphere": "Dry late-summer Sparks/Reno and high desert: dust in amber light, heat shimmer over asphalt, sagebrush, no snow anywhere.",
+  "environmentPreset": "summer",
+  "storySeason": "late_summer",
+  "storyPalette": "warm amber dust, white sun glare, heat shimmer",
+  "storyWeather": "dust_wind",
+  "weather": "dust_wind",
+  "storyTempC": 33,
+  "tempC": 33,
+  "nightTempC": 15,
+  "survivalFocus": [
+   "hydration",
+   "heat",
+   "crowds",
+   "dust"
+  ],
+  "timeStart": 0.45,
+  "timeEnd": 0.78,
+  "timeLocked": false,
   "blizzard": false,
-  "snowCover": 0.5,
-  "particles": "snow",
-  "fogNear": 8,
-  "fogFar": 48,
-  "palette": "assets/palettes/endesga-32.json",
-  "ambientTint": "#c9d6e6",
-  "hud": {
-   "temp": false,
-   "hunger": true,
-   "rad": false,
-   "filter": false,
-   "seal": false
+  "warmthDrainMul": 0.0,
+  "hydrationDrainMul": 1.3,
+  "seasonNote": "Day 19 (mid September): dust wind down Virginia Street, hot crowd, amber dusk; no snow.",
+  "transitions": [
+   {
+    "trigger": "t_ch02_dusk",
+    "time": 0.74,
+    "light": "amber_dusk"
+   }
+  ],
+  "mechanics": {
+   "crowdCrush": true,
+   "noSnow": true
   },
-  "warmthDrainMul": 0.5,
-  "maxAliveEnemies": 5
+  "hud": {
+   "hp": true,
+   "hydration": true,
+   "hunger": true,
+   "companion": true
+  }
  },
  "locations": [
   {
-   "id": "loc_blatnik_bridge",
+   "id": "loc_meadows_general",
    "x": 0.0,
-   "z": -22.0,
+   "z": -120.0,
    "rect": {
     "type": "rect",
-    "x0": -22.0,
-    "z0": -50.0,
-    "x1": 22.0,
+    "x0": -44.0,
+    "z0": -158.0,
+    "x1": 44.0,
+    "z1": -82.0
+   },
+   "safe": false,
+   "name": "Meadows General"
+  },
+  {
+   "id": "loc_fourth_street",
+   "x": -22.0,
+   "z": -56.0,
+   "rect": {
+    "type": "rect",
+    "x0": -44.0,
+    "z0": -82.0,
+    "x1": 0.0,
+    "z1": -30.0
+   },
+   "safe": false,
+   "name": "4th Street"
+  },
+  {
+   "id": "loc_rscc_registry",
+   "x": 22.0,
+   "z": -56.0,
+   "rect": {
+    "type": "rect",
+    "x0": 0.0,
+    "z0": -82.0,
+    "x1": 44.0,
+    "z1": -30.0
+   },
+   "safe": false,
+   "name": "Convention center registry"
+  },
+  {
+   "id": "loc_virginia_bridge",
+   "x": 0.0,
+   "z": -12.0,
+   "rect": {
+    "type": "rect",
+    "x0": -44.0,
+    "z0": -30.0,
+    "x1": 44.0,
     "z1": 6.0
    },
-   "safe": false
-  },
-  {
-   "id": "loc_decc_ration",
-   "x": 0.0,
-   "z": -68.0,
-   "rect": {
-    "type": "rect",
-    "x0": -22.0,
-    "z0": -86.0,
-    "x1": 22.0,
-    "z1": -50.0
-   },
-   "safe": false
-  },
-  {
-   "id": "loc_lakehead_memorial",
-   "x": -1.0,
-   "z": -100.0,
-   "rect": {
-    "type": "rect",
-    "x0": -22.0,
-    "z0": -110.0,
-    "x1": 20.0,
-    "z1": -90.0
-   },
-   "safe": false
+   "safe": false,
+   "name": "Virginia Street bridge"
   }
  ],
- "landmarks": [
+ "landmarks": [],
+ "buildings": [
   {
-   "label": "Blatnik checkpoint",
-   "x": 0.0,
-   "z": -21.0
+   "id": "b_ch02_hospital",
+   "label": "Truckee Meadows General",
+   "kind": "walled",
+   "cells": [
+    4,
+    4,
+    24,
+    20
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -38.0,
+    "z0": -152.0,
+    "x1": 4.0,
+    "z1": -118.0
+   },
+   "doors": [
+    [
+     -17.0,
+     -119.0
+    ],
+    [
+     3.0,
+     -139.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_meadows_general",
+   "interior": "wards (north), main hallway + ER (south)"
   },
   {
-   "label": "DECC",
-   "x": -14.0,
-   "z": -75.0
+   "id": "b_ch02_ramp",
+   "label": "Parking ramp, level 3",
+   "kind": "walled",
+   "cells": [
+    29,
+    4,
+    43,
+    18
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 12.0,
+    "z0": -152.0,
+    "x1": 42.0,
+    "z1": -122.0
+   },
+   "doors": [
+    [
+     13.0,
+     -137.0
+    ],
+    [
+     13.0,
+     -135.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_meadows_general",
+   "notes": "Flat engine: level 3 of the ramp is played as one roofed deck."
   },
   {
-   "label": "Ration line",
-   "x": 7.0,
-   "z": -67.0
+   "id": "b_ch02_motel",
+   "label": "4th Street motel row",
+   "kind": "walled",
+   "cells": [
+    3,
+    45,
+    15,
+    52
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -40.0,
+    "z0": -70.0,
+    "x1": -14.0,
+    "z1": -54.0
+   },
+   "doors": [
+    [
+     -15.0,
+     -63.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_fourth_street"
   },
   {
-   "label": "Lakehead Memorial",
-   "x": 5.0,
-   "z": -100.0
+   "id": "b_ch02_pawn",
+   "label": "Silver State Pawn",
+   "kind": "walled",
+   "cells": [
+    3,
+    55,
+    14,
+    61
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -40.0,
+    "z0": -50.0,
+    "x1": -16.0,
+    "z1": -36.0
+   },
+   "doors": [
+    [
+     -17.0,
+     -43.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_fourth_street"
   },
   {
-   "label": "Parking garage",
-   "x": -16.0,
-   "z": -101.0
+   "id": "b_ch02_rscc",
+   "label": "Reno-Sparks Convention Center",
+   "kind": "walled",
+   "cells": [
+    27,
+    44,
+    43,
+    62
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 8.0,
+    "z0": -72.0,
+    "x1": 42.0,
+    "z1": -34.0
+   },
+   "doors": [
+    [
+     9.0,
+     -55.0
+    ],
+    [
+     23.0,
+     -35.0
+    ],
+    [
+     25.0,
+     -35.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_rscc_registry",
+   "interior": "registry hall (north), ration hall (south)"
+  },
+  {
+   "id": "m_ch02_casino_row",
+   "label": "Downtown blocks",
+   "kind": "mass",
+   "cells": [
+    29,
+    25,
+    43,
+    36
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 12.0,
+    "z0": -110.0,
+    "x1": 42.0,
+    "z1": -86.0
+   },
+   "doors": [],
+   "location": null,
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  },
+  {
+   "id": "m_ch02_west_blocks",
+   "label": "Downtown blocks",
+   "kind": "mass",
+   "cells": [
+    3,
+    25,
+    16,
+    36
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -40.0,
+    "z0": -110.0,
+    "x1": -12.0,
+    "z1": -86.0
+   },
+   "doors": [],
+   "location": null,
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
   }
  ],
  "paths": {
   "critical": [
    [
-    0.0,
-    3.0
-   ],
-   [
-    0.0,
-    -19.0
-   ],
-   [
-    0.0,
-    -49.0
-   ],
-   [
-    0.0,
-    -55.0
-   ],
-   [
-    -3.0,
-    -57.0
-   ],
-   [
-    17.0,
-    -61.0
+    -1.0,
+    1.0
    ],
    [
     -1.0,
-    -67.0
+    -19.0
    ],
    [
-    17.0,
-    -73.0
+    -1.0,
+    -27.0
    ],
    [
-    -3.0,
-    -79.0
-   ],
-   [
-    -7.0,
-    -77.0
-   ],
-   [
-    -15.0,
-    -73.0
-   ],
-   [
-    -15.0,
-    -69.0
-   ],
-   [
-    -7.0,
-    -63.0
-   ],
-   [
-    1.0,
+    -1.0,
     -55.0
    ],
    [
-    1.0,
-    -85.0
+    5.0,
+    -55.0
    ],
    [
-    3.0,
-    -91.0
+    23.0,
+    -47.0
    ],
    [
-    3.0,
-    -99.0
+    25.0,
+    -63.0
    ],
    [
-    15.0,
-    -100.0
+    25.0,
+    -43.0
+   ],
+   [
+    24.0,
+    -33.0
+   ],
+   [
+    -1.0,
+    -55.0
+   ],
+   [
+    -1.0,
+    -113.0
+   ],
+   [
+    -17.0,
+    -115.0
+   ],
+   [
+    -17.0,
+    -123.0
+   ],
+   [
+    -9.0,
+    -127.0
+   ],
+   [
+    -17.0,
+    -123.0
+   ],
+   [
+    -17.0,
+    -115.0
+   ],
+   [
+    -1.0,
+    -113.0
+   ],
+   [
+    -1.0,
+    1.0
    ]
   ],
   "optional": [
    {
-    "id": "b_garage",
-    "label": "Diesel side job: parking garage",
+    "id": "b_ch02_pawn",
+    "label": "Silver State Pawn",
     "points": [
      [
-      -3.0,
-      -100.0
+      -1.0,
+      -77.0
      ],
      [
       -11.0,
-      -101.0
+      -77.0
      ],
      [
-      -18.0,
-      -106.0
+      -11.0,
+      -43.0
+     ],
+     [
+      -31.0,
+      -43.0
      ]
     ]
    },
    {
-    "id": "b_crush_exit",
-    "label": "Crush escape east gate",
+    "id": "b_ch02_ramp",
+    "label": "Level-3 tanker",
     "points": [
      [
+      -1.0,
+      -113.0
+     ],
+     [
       7.0,
-      -67.0
+      -137.0
      ],
      [
-      19.0,
-      -69.0
+      13.0,
+      -136.0
      ],
      [
-      21.0,
-      -69.0
+      31.0,
+      -135.0
      ]
     ]
    }
@@ -387,144 +652,374 @@
   "player": [
    {
     "id": "spawn_default",
-    "x": 0.0,
-    "z": 3.0,
+    "x": -1.0,
+    "z": 1.0,
     "rotY": 3.142
    }
   ],
   "npcs": [
    {
+    "id": "npc_wraith",
+    "npc": "wraith",
+    "x": 3.0,
+    "z": 1.0,
+    "rotY": 0.0,
+    "behavior": "companion_follow",
+    "when": [
+     {
+      "flag": "wraith_alive",
+      "eq": true
+     }
+    ],
+    "label": "Wraith",
+    "companion": true
+   },
+   {
     "id": "npc_cpl_haas",
     "npc": "cpl_haas",
     "x": 1.0,
-    "z": -19.0,
+    "z": -25.0,
     "rotY": 0.0,
-    "behavior": "idle",
-    "dialogue": "ch02_haas_checkpoint",
-    "label": "Cpl. Haas"
+    "behavior": "checkpoint"
    },
    {
-    "id": "npc_wren",
-    "npc": "wren",
-    "x": 5.0,
-    "z": -73.0,
+    "id": "npc_amb_brother_amos",
+    "npc": "amb_brother_amos",
+    "x": 17.0,
+    "z": -45.0,
     "rotY": 0.0,
-    "behavior": "idle",
-    "dialogue": "ch02_wren_line"
+    "behavior": "preach",
+    "label": "Brother Amos (counting the dead)"
    },
    {
-    "id": "npc_strand",
-    "npc": "strand",
-    "x": -15.0,
-    "z": -77.0,
+    "id": "npc_augie",
+    "npc": "augie",
+    "x": 21.0,
+    "z": -41.0,
     "rotY": 0.0,
     "behavior": "idle",
-    "dialogue": "ch02_strand_registry"
+    "label": "Man with a crank radio"
+   },
+   {
+    "id": "npc_amb_lonnie",
+    "npc": "amb_lonnie",
+    "x": 29.0,
+    "z": -45.0,
+    "rotY": 0.0,
+    "behavior": "sing",
+    "label": "Lonnie Vance (singing for crackers)"
+   },
+   {
+    "id": "npc_kit",
+    "npc": "kit",
+    "x": 33.0,
+    "z": -41.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "label": "Kit (lifting ration cards)"
+   },
+   {
+    "id": "npc_rosa",
+    "npc": "rosa",
+    "x": 27.0,
+    "z": -51.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "label": "Rosa"
+   },
+   {
+    "id": "npc_amb_ruth",
+    "npc": "amb_ruth",
+    "x": 37.0,
+    "z": -51.0,
+    "rotY": 0.0,
+    "behavior": "teach",
+    "label": "Ruth's class (FRACTIONS (FOOD))"
+   },
+   {
+    "id": "npc_avila",
+    "npc": "avila",
+    "x": 25.0,
+    "z": -67.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "label": "Capt. Avila (registry desk)"
+   },
+   {
+    "id": "npc_carly",
+    "npc": "carly",
+    "x": 35.0,
+    "z": -63.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "label": "Carly (registry table)"
+   },
+   {
+    "id": "npc_trader_annie",
+    "npc": "trader_annie",
+    "x": 15.0,
+    "z": -61.0,
+    "rotY": 0.0,
+    "behavior": "trade",
+    "label": "Annie's seed-and-book table",
+    "trader": {
+     "stall": "Annie's seed-and-book table",
+     "repFlag": "trader_annie_rep",
+     "stockFrom": "story/npcs.json traders[].stock_by_act"
+    }
+   },
+   {
+    "id": "npc_trader_dutch",
+    "npc": "trader_dutch",
+    "x": -31.0,
+    "z": -43.0,
+    "rotY": 0.0,
+    "behavior": "trade",
+    "label": "Silver State Pawn counter",
+    "trader": {
+     "stall": "Silver State Pawn counter",
+     "repFlag": "trader_dutch_rep",
+     "stockFrom": "story/npcs.json traders[].stock_by_act"
+    }
    },
    {
     "id": "npc_ames",
     "npc": "ames",
-    "x": 15.0,
-    "z": -100.0,
-    "rotY": 1.571,
-    "behavior": "idle",
-    "dialogue": "ch02_ames_hospital"
-   },
-   {
-    "id": "npc_ames_diesel",
-    "npc": "ames",
-    "x": 15.0,
-    "z": -100.0,
+    "x": -9.0,
+    "z": -127.0,
     "rotY": 0.0,
     "behavior": "idle",
-    "dialogue": "ch02_ames_diesel_return",
-    "when": [
-     {
-      "item": "hospital_diesel",
-      "gte": 1
-     }
-    ]
+    "label": "Dr. Ames (hallway)"
    },
    {
-    "id": "npc_theo",
-    "npc": "theo",
-    "x": -1.0,
-    "z": 1.0,
+    "id": "npc_extra_ration_line_01",
+    "npc": "extra_ration_line_01",
+    "x": 7.0,
+    "z": -49.0,
     "rotY": 0.0,
-    "behavior": "follow",
-    "when": [
-     {
-      "flag": "ch02_theo_along",
-      "eq": true
-     }
-    ]
+    "behavior": "queue",
+    "label": "ration line",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_ration_line_02",
+    "npc": "extra_ration_line_02",
+    "x": 13.0,
+    "z": -51.0,
+    "rotY": 0.0,
+    "behavior": "queue",
+    "label": "ration line",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_ration_line_03",
+    "npc": "extra_ration_line_03",
+    "x": 17.0,
+    "z": -49.0,
+    "rotY": 0.0,
+    "behavior": "queue",
+    "label": "ration line",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_ration_line_04",
+    "npc": "extra_ration_line_04",
+    "x": 21.0,
+    "z": -43.0,
+    "rotY": 0.0,
+    "behavior": "queue",
+    "label": "ration line",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_ration_line_05",
+    "npc": "extra_ration_line_05",
+    "x": 25.0,
+    "z": -39.0,
+    "rotY": 0.0,
+    "behavior": "queue",
+    "label": "ration line",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_ration_line_06",
+    "npc": "extra_ration_line_06",
+    "x": 29.0,
+    "z": -49.0,
+    "rotY": 0.0,
+    "behavior": "queue",
+    "label": "ration line",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_ration_line_07",
+    "npc": "extra_ration_line_07",
+    "x": 33.0,
+    "z": -43.0,
+    "rotY": 0.0,
+    "behavior": "queue",
+    "label": "ration line",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_ration_line_08",
+    "npc": "extra_ration_line_08",
+    "x": 11.0,
+    "z": -37.0,
+    "rotY": 0.0,
+    "behavior": "queue",
+    "label": "ration line",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_ration_line_09",
+    "npc": "extra_ration_line_09",
+    "x": 17.0,
+    "z": -31.0,
+    "rotY": 0.0,
+    "behavior": "queue",
+    "label": "ration line",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_ration_line_10",
+    "npc": "extra_ration_line_10",
+    "x": 21.0,
+    "z": -29.0,
+    "rotY": 0.0,
+    "behavior": "queue",
+    "label": "ration line",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_ration_line_11",
+    "npc": "extra_ration_line_11",
+    "x": 27.0,
+    "z": -31.0,
+    "rotY": 0.0,
+    "behavior": "queue",
+    "label": "ration line",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_ration_line_12",
+    "npc": "extra_ration_line_12",
+    "x": 13.0,
+    "z": -31.0,
+    "rotY": 0.0,
+    "behavior": "queue",
+    "label": "ration line",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_ration_line_13",
+    "npc": "extra_ration_line_13",
+    "x": 29.0,
+    "z": -31.0,
+    "rotY": 0.0,
+    "behavior": "queue",
+    "label": "ration line",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_ration_line_14",
+    "npc": "extra_ration_line_14",
+    "x": 7.0,
+    "z": -63.0,
+    "rotY": 0.0,
+    "behavior": "queue",
+    "label": "ration line",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_ration_line_15",
+    "npc": "extra_ration_line_15",
+    "x": 25.0,
+    "z": -61.0,
+    "rotY": 0.0,
+    "behavior": "queue",
+    "label": "ration line",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_ration_line_16",
+    "npc": "extra_ration_line_16",
+    "x": 17.0,
+    "z": -65.0,
+    "rotY": 0.0,
+    "behavior": "queue",
+    "label": "ration line",
+    "crowd": true
    }
   ],
   "enemies": [
    {
     "id": "en_01",
     "type": "authority_guard",
-    "x": -2.0,
-    "z": -19.0,
-    "group": "g_checkpoint",
+    "x": -7.0,
+    "z": -25.0,
+    "group": "g_ch02_checkpoint",
     "tier": 1,
-    "behavior": "guard",
+    "behavior": "guard_post",
     "hostile": "conditional",
     "activate": "load",
     "hostileWhen": [
      {
-      "flag": "stole_from_authority",
+      "flag": "ch02_hostile_authority",
       "eq": true
      }
-    ]
+    ],
+    "note": "Neutral unless Braith fights or steals."
    },
    {
     "id": "en_02",
     "type": "authority_guard",
-    "x": 3.0,
-    "z": -19.0,
-    "group": "g_checkpoint",
+    "x": 7.0,
+    "z": -25.0,
+    "group": "g_ch02_checkpoint",
     "tier": 1,
-    "behavior": "guard",
+    "behavior": "guard_post",
     "hostile": "conditional",
     "activate": "load",
     "hostileWhen": [
      {
-      "flag": "stole_from_authority",
+      "flag": "ch02_hostile_authority",
       "eq": true
      }
-    ]
+    ],
+    "note": "Neutral unless Braith fights or steals."
    },
    {
     "id": "en_03",
     "type": "authority_guard",
-    "x": -5.0,
-    "z": -79.0,
-    "group": "g_decc_guards",
+    "x": -1.0,
+    "z": -31.0,
+    "group": "g_ch02_checkpoint",
     "tier": 1,
-    "behavior": "guard",
+    "behavior": "guard_post",
     "hostile": "conditional",
     "activate": "load",
     "hostileWhen": [
      {
-      "flag": "stole_from_authority",
+      "flag": "ch02_hostile_authority",
       "eq": true
      }
-    ]
+    ],
+    "note": "Neutral unless Braith fights or steals."
    },
    {
     "id": "en_04",
     "type": "authority_guard",
-    "x": -5.0,
-    "z": -61.0,
-    "group": "g_decc_guards",
+    "x": 13.0,
+    "z": -67.0,
+    "group": "g_ch02_rscc",
     "tier": 1,
-    "behavior": "guard",
+    "behavior": "guard_post",
     "hostile": "conditional",
     "activate": "load",
     "hostileWhen": [
      {
-      "flag": "stole_from_authority",
+      "flag": "ch02_hostile_authority",
       "eq": true
      }
     ]
@@ -532,16 +1027,16 @@
    {
     "id": "en_05",
     "type": "authority_guard",
-    "x": 2.0,
-    "z": -88.0,
-    "group": "g_hosp_guards",
+    "x": 37.0,
+    "z": -67.0,
+    "group": "g_ch02_rscc",
     "tier": 1,
-    "behavior": "guard",
+    "behavior": "guard_post",
     "hostile": "conditional",
     "activate": "load",
     "hostileWhen": [
      {
-      "flag": "stole_from_authority",
+      "flag": "ch02_hostile_authority",
       "eq": true
      }
     ]
@@ -549,16 +1044,16 @@
    {
     "id": "en_06",
     "type": "authority_guard",
-    "x": 5.0,
-    "z": -93.0,
-    "group": "g_hosp_guards",
+    "x": 15.0,
+    "z": -43.0,
+    "group": "g_ch02_rscc",
     "tier": 1,
-    "behavior": "guard",
+    "behavior": "guard_post",
     "hostile": "conditional",
     "activate": "load",
     "hostileWhen": [
      {
-      "flag": "stole_from_authority",
+      "flag": "ch02_hostile_authority",
       "eq": true
      }
     ]
@@ -566,157 +1061,79 @@
    {
     "id": "en_07",
     "type": "looter",
-    "x": -19.0,
-    "z": -105.0,
-    "group": "g_garage",
-    "tier": 2,
-    "behavior": "ambush",
-    "hostile": "always",
-    "activate": "trigger",
-    "note": "Only if Dell takes Ames's diesel job."
+    "x": 21.0,
+    "z": -147.0,
+    "group": "g_ch02_squatters",
+    "tier": 1,
+    "behavior": "wander",
+    "hostile": "on_provoke",
+    "activate": "load",
+    "note": "Parking-ramp squatters; can be talked off."
    },
    {
     "id": "en_08",
     "type": "looter",
-    "x": -15.0,
-    "z": -97.0,
-    "group": "g_garage",
-    "tier": 2,
-    "behavior": "ambush",
-    "hostile": "always",
-    "activate": "trigger",
-    "note": "Only if Dell takes Ames's diesel job."
+    "x": 35.0,
+    "z": -131.0,
+    "group": "g_ch02_squatters",
+    "tier": 1,
+    "behavior": "wander",
+    "hostile": "on_provoke",
+    "activate": "load",
+    "note": "Parking-ramp squatters; can be talked off."
    },
    {
     "id": "en_09",
     "type": "looter",
-    "x": -13.0,
-    "z": -107.0,
-    "group": "g_garage",
-    "tier": 2,
-    "behavior": "ambush",
-    "hostile": "always",
-    "activate": "trigger",
-    "note": "Only if Dell takes Ames's diesel job."
+    "x": 19.0,
+    "z": -127.0,
+    "group": "g_ch02_squatters",
+    "tier": 1,
+    "behavior": "wander",
+    "hostile": "on_provoke",
+    "activate": "load",
+    "note": "Parking-ramp squatters; can be talked off."
    }
   ],
   "loot": [
    {
     "id": "loot_01",
-    "x": -18.0,
-    "z": -106.0,
-    "r": 1.6,
-    "label": "Generator diesel drum",
-    "container": "supply_cache",
+    "x": 0.0,
+    "z": -97.0,
+    "r": 3.1,
+    "label": "Stalled car on the bridge",
+    "container": "car_trunk",
+    "propRef": "prop_05",
+    "render": "prop",
+    "location": "loc_meadows_general",
     "guaranteed": [
      {
       "item": "hospital_diesel",
       "n": 1
      }
-    ],
-    "when": [
-     {
-      "flag": "ch02_diesel_job",
-      "eq": true
-     }
-    ],
-    "location": "loc_lakehead_memorial"
+    ]
    },
    {
     "id": "loot_02",
-    "x": -13.0,
-    "z": -93.0,
-    "r": 1.6,
-    "label": "Abandoned car",
+    "x": -29.0,
+    "z": -77.0,
+    "r": 3.1,
+    "label": "Sedan trunk (4th Street)",
     "container": "car_trunk",
-    "location": "loc_lakehead_memorial"
+    "propRef": "prop_06",
+    "render": "prop",
+    "location": "loc_fourth_street"
    },
    {
     "id": "loot_03",
-    "x": 17.0,
-    "z": -106.0,
-    "r": 1.6,
-    "label": "Supply closet",
-    "container": "locker",
-    "location": "loc_lakehead_memorial"
-   },
-   {
-    "id": "loot_04",
-    "x": -19.0,
-    "z": -1.0,
-    "r": 1.6,
-    "label": "Bus shelter",
-    "container": "dumpster",
-    "location": "loc_blatnik_bridge"
-   },
-   {
-    "id": "loot_05",
-    "x": -17.0,
-    "z": -59.0,
-    "r": 1.6,
-    "label": "Coat check",
-    "container": "wardrobe",
-    "location": "loc_decc_ration"
-   },
-   {
-    "id": "loot_06",
-    "x": -3.0,
-    "z": -41.0,
-    "r": 1.6,
-    "label": "Car trunk (filler)",
+    "x": 31.0,
+    "z": -77.0,
+    "r": 3.1,
+    "label": "Abandoned car",
     "container": "car_trunk",
-    "location": "loc_blatnik_bridge",
-    "filler": true
-   },
-   {
-    "id": "loot_07",
-    "x": 21.0,
-    "z": -3.0,
-    "r": 1.6,
-    "label": "Car trunk (filler)",
-    "container": "car_trunk",
-    "location": "loc_blatnik_bridge",
-    "filler": true
-   },
-   {
-    "id": "loot_08",
-    "x": 3.0,
-    "z": -31.0,
-    "r": 1.6,
-    "label": "Car trunk (filler)",
-    "container": "car_trunk",
-    "location": "loc_blatnik_bridge",
-    "filler": true
-   },
-   {
-    "id": "loot_09",
-    "x": 13.0,
-    "z": 5.0,
-    "r": 1.6,
-    "label": "Woodpile / pallets / broken furniture (filler)",
-    "container": "woodpile",
-    "location": "loc_blatnik_bridge",
-    "filler": true
-   },
-   {
-    "id": "loot_10",
-    "x": -3.0,
-    "z": -9.0,
-    "r": 1.6,
-    "label": "Woodpile / pallets / broken furniture (filler)",
-    "container": "woodpile",
-    "location": "loc_blatnik_bridge",
-    "filler": true
-   },
-   {
-    "id": "loot_11",
-    "x": -9.0,
-    "z": -67.0,
-    "r": 1.6,
-    "label": "Kitchen cabinet (filler)",
-    "container": "kitchen_cabinet",
-    "location": "loc_decc_ration",
-    "filler": true,
+    "propRef": "prop_07",
+    "render": "prop",
+    "location": "loc_rscc_registry",
     "guaranteed": [
      {
       "item": "ration",
@@ -725,30 +1142,15 @@
     ]
    },
    {
-    "id": "loot_12",
-    "x": -19.0,
-    "z": -69.0,
-    "r": 1.6,
-    "label": "Locker (filler)",
-    "container": "locker",
-    "location": "loc_decc_ration",
-    "filler": true,
-    "guaranteed": [
-     {
-      "item": "ration_card",
-      "n": 1
-     }
-    ]
-   },
-   {
-    "id": "loot_13",
-    "x": -1.0,
-    "z": -107.0,
-    "r": 1.6,
-    "label": "Medicine cabinet (filler)",
-    "container": "medicine_cabinet",
-    "location": "loc_lakehead_memorial",
-    "filler": true,
+    "id": "loot_04",
+    "x": -9.0,
+    "z": -83.0,
+    "r": 2.2,
+    "label": "4th Street dumpster",
+    "container": "dumpster",
+    "propRef": "prop_09",
+    "render": "prop",
+    "location": "loc_meadows_general",
     "guaranteed": [
      {
       "item": "cigarettes",
@@ -757,23 +1159,193 @@
     ]
    },
    {
-    "id": "loot_14",
-    "x": 1.0,
-    "z": -93.0,
+    "id": "loot_05",
+    "x": -27.0,
+    "z": -145.0,
     "r": 1.6,
-    "label": "Medicine cabinet (filler)",
+    "label": "Ward supply cabinet",
     "container": "medicine_cabinet",
-    "location": "loc_lakehead_memorial",
+    "location": "loc_meadows_general"
+   },
+   {
+    "id": "loot_06",
+    "x": -5.0,
+    "z": -123.0,
+    "r": 1.6,
+    "label": "ER cabinet",
+    "container": "medicine_cabinet",
+    "location": "loc_meadows_general"
+   },
+   {
+    "id": "loot_07",
+    "x": 37.0,
+    "z": -147.0,
+    "r": 1.6,
+    "label": "Ramp locker",
+    "container": "locker",
+    "location": "loc_meadows_general"
+   },
+   {
+    "id": "loot_08",
+    "x": -35.0,
+    "z": -65.0,
+    "r": 1.6,
+    "label": "Motel wardrobe (room 1)",
+    "container": "wardrobe",
+    "location": "loc_fourth_street"
+   },
+   {
+    "id": "loot_09",
+    "x": -19.0,
+    "z": -65.0,
+    "r": 1.6,
+    "label": "Motel wardrobe (room 3)",
+    "container": "wardrobe",
+    "location": "loc_fourth_street"
+   },
+   {
+    "id": "loot_10",
+    "x": -37.0,
+    "z": -39.0,
+    "r": 1.6,
+    "label": "Pawn back shelf",
+    "container": "supply_cache",
+    "location": "loc_fourth_street"
+   },
+   {
+    "id": "loot_11",
+    "x": -39.0,
+    "z": -7.0,
+    "r": 3.1,
+    "label": "Car trunk",
+    "container": "car_trunk",
+    "propRef": "prop_12",
+    "render": "prop",
+    "location": "loc_virginia_bridge",
+    "filler": true
+   },
+   {
+    "id": "loot_12",
+    "x": -9.0,
+    "z": -7.0,
+    "r": 3.1,
+    "label": "Car trunk",
+    "container": "car_trunk",
+    "propRef": "prop_13",
+    "render": "prop",
+    "location": "loc_virginia_bridge",
+    "filler": true
+   },
+   {
+    "id": "loot_13",
+    "x": 21.0,
+    "z": -7.0,
+    "r": 3.1,
+    "label": "Car trunk",
+    "container": "car_trunk",
+    "propRef": "prop_14",
+    "render": "prop",
+    "location": "loc_virginia_bridge",
+    "filler": true
+   },
+   {
+    "id": "loot_14",
+    "x": 39.0,
+    "z": -25.0,
+    "r": 2.2,
+    "label": "Dumpster",
+    "container": "dumpster",
+    "propRef": "prop_15",
+    "render": "prop",
+    "location": "loc_virginia_bridge",
     "filler": true
    },
    {
     "id": "loot_15",
-    "x": -19.0,
-    "z": -97.0,
+    "x": 11.0,
+    "z": -69.0,
     "r": 1.6,
-    "label": "Car trunk (filler)",
+    "label": "Kitchen cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_rscc_registry",
+    "filler": true
+   },
+   {
+    "id": "loot_16",
+    "x": 39.0,
+    "z": -69.0,
+    "r": 1.6,
+    "label": "Locker",
+    "container": "locker",
+    "location": "loc_rscc_registry",
+    "filler": true
+   },
+   {
+    "id": "loot_17",
+    "x": 21.0,
+    "z": -55.0,
+    "r": 1.6,
+    "label": "Cooler chest / vending machine",
+    "container": "cooler_chest",
+    "location": "loc_rscc_registry",
+    "filler": true
+   },
+   {
+    "id": "loot_18",
+    "x": 17.0,
+    "z": -115.0,
+    "r": 3.1,
+    "label": "Car trunk",
     "container": "car_trunk",
-    "location": "loc_lakehead_memorial",
+    "propRef": "prop_16",
+    "render": "prop",
+    "location": "loc_meadows_general",
+    "filler": true
+   },
+   {
+    "id": "loot_19",
+    "x": -7.0,
+    "z": -37.0,
+    "r": 2.2,
+    "label": "Dumpster",
+    "container": "dumpster",
+    "propRef": "prop_17",
+    "render": "prop",
+    "location": "loc_fourth_street",
+    "filler": true
+   },
+   {
+    "id": "loot_20",
+    "x": -3.0,
+    "z": -57.0,
+    "r": 2.2,
+    "label": "Dumpster",
+    "container": "dumpster",
+    "propRef": "prop_18",
+    "render": "prop",
+    "location": "loc_fourth_street",
+    "filler": true
+   },
+   {
+    "id": "loot_21",
+    "x": -23.0,
+    "z": -31.0,
+    "r": 3.1,
+    "label": "Car trunk",
+    "container": "car_trunk",
+    "propRef": "prop_19",
+    "render": "prop",
+    "location": "loc_fourth_street",
+    "filler": true
+   },
+   {
+    "id": "loot_22",
+    "x": -19.0,
+    "z": -47.0,
+    "r": 1.6,
+    "label": "Kitchen cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_fourth_street",
     "filler": true
    }
   ]
@@ -781,225 +1353,344 @@
  "props": [
   {
    "id": "prop_01",
-   "asset": "assets/kenney/roads/light-square-double.glb",
-   "x": -5.0,
-   "z": -21.0,
+   "asset": "assets/kenney/roads/construction-barrier.glb",
+   "x": -3.0,
+   "z": -27.0,
    "rotY": 0,
-   "h": 6,
-   "collide": true,
-   "tag": "checkpoint floodlight"
+   "h": 1.1,
+   "collide": false
   },
   {
    "id": "prop_02",
    "asset": "assets/kenney/roads/construction-barrier.glb",
-   "x": -2.0,
-   "z": -21.0,
+   "x": 3.0,
+   "z": -27.0,
    "rotY": 0,
    "h": 1.1,
-   "collide": true
+   "collide": false
   },
   {
    "id": "prop_03",
-   "asset": "assets/kenney/roads/construction-barrier.glb",
-   "x": 3.0,
-   "z": -21.0,
-   "rotY": 0,
-   "h": 1.1,
-   "collide": true
+   "asset": "assets/kenney/roads/light-square-double.glb",
+   "x": -7.0,
+   "z": -31.0,
+   "rotY": 0.0,
+   "h": 5,
+   "collide": false
   },
   {
    "id": "prop_04",
-   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
-   "x": 2.0,
-   "z": -11.0,
-   "rotY": 0.3,
-   "h": 1.45,
-   "collide": true
+   "asset": "assets/kenney/roads/light-square-double.glb",
+   "x": 7.0,
+   "z": -31.0,
+   "rotY": 0.0,
+   "h": 5,
+   "collide": false
   },
   {
    "id": "prop_05",
    "asset": "assets/tevy/wrecked-sedan-lod1.glb",
-   "x": -2.0,
-   "z": -35.0,
-   "rotY": -0.4,
-   "h": 1.45,
-   "collide": true
+   "x": 0.0,
+   "z": -97.0,
+   "rotY": 3.142,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_06",
-   "asset": "assets/kenney/roads/light-square.glb",
-   "x": -5.0,
-   "z": -43.0,
-   "rotY": 0.0,
-   "h": 5.5,
-   "collide": true
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -29.0,
+   "z": -77.0,
+   "rotY": 1.571,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_07",
-   "asset": "assets/kenney/roads/light-square.glb",
-   "x": -5.0,
-   "z": -29.0,
-   "rotY": 0.0,
-   "h": 5.5,
-   "collide": true
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": 31.0,
+   "z": -77.0,
+   "rotY": -1.571,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_08",
-   "asset": "assets/kenney/roads/light-square.glb",
-   "x": -5.0,
-   "z": -15.0,
+   "asset": "assets/kenney/industrial/detail-tank-large.glb",
+   "x": 27.0,
+   "z": -141.0,
    "rotY": 0.0,
-   "h": 5.5,
-   "collide": true
+   "h": 3.0,
+   "collide": true,
+   "footprintR": 2.0,
+   "note": "Hospital diesel tanker (q_hospital_diesel)"
   },
   {
    "id": "prop_09",
-   "asset": "assets/kenney/industrial/building-m.glb",
-   "x": -14.0,
-   "z": -80.0,
-   "rotY": -1.571,
-   "h": 11,
-   "collide": false,
-   "tag": "DECC facade (backdrop above wall tiles)"
+   "asset": "assets/kenney/roads/dumpster.glb",
+   "x": -9.0,
+   "z": -83.0,
+   "rotY": 0.0,
+   "h": 1.4,
+   "collide": true,
+   "footprintR": 1.3,
+   "tag": "container"
   },
   {
    "id": "prop_10",
-   "asset": "assets/kenney/roads/construction-fence.glb",
-   "x": 7.0,
-   "z": -54.0,
-   "rotY": 0,
-   "h": 1.6,
-   "collide": true
+   "asset": "assets/kenney/roads/construction-cone.glb",
+   "x": -3.0,
+   "z": -9.0,
+   "rotY": 0.0,
+   "h": 0.7,
+   "collide": false
   },
   {
    "id": "prop_11",
    "asset": "assets/kenney/roads/construction-cone.glb",
-   "x": -1.0,
-   "z": -54.0,
+   "x": 3.0,
+   "z": -9.0,
    "rotY": 0.0,
    "h": 0.7,
-   "collide": true
+   "collide": false
   },
   {
    "id": "prop_12",
-   "asset": "assets/kenney/industrial/building-h.glb",
-   "x": 5.0,
-   "z": -107.0,
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -39.0,
+   "z": -7.0,
    "rotY": 0.0,
-   "h": 14,
-   "collide": false,
-   "tag": "hospital tower backdrop"
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_13",
-   "asset": "assets/kenney/industrial/detail-tank-large.glb",
-   "x": -17.0,
-   "z": -105.0,
-   "rotY": 0,
-   "h": 3,
-   "collide": true
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -9.0,
+   "z": -7.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
+  },
+  {
+   "id": "prop_14",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": 21.0,
+   "z": -7.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
+  },
+  {
+   "id": "prop_15",
+   "asset": "assets/kenney/roads/dumpster.glb",
+   "x": 39.0,
+   "z": -25.0,
+   "rotY": 0.0,
+   "h": 1.4,
+   "collide": true,
+   "footprintR": 1.3,
+   "tag": "container"
+  },
+  {
+   "id": "prop_16",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": 17.0,
+   "z": -115.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
+  },
+  {
+   "id": "prop_17",
+   "asset": "assets/kenney/roads/dumpster.glb",
+   "x": -7.0,
+   "z": -37.0,
+   "rotY": 0.0,
+   "h": 1.4,
+   "collide": true,
+   "footprintR": 1.3,
+   "tag": "container"
+  },
+  {
+   "id": "prop_18",
+   "asset": "assets/kenney/roads/dumpster.glb",
+   "x": -3.0,
+   "z": -57.0,
+   "rotY": 0.0,
+   "h": 1.4,
+   "collide": true,
+   "footprintR": 1.3,
+   "tag": "container"
+  },
+  {
+   "id": "prop_19",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -23.0,
+   "z": -31.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   }
  ],
  "interactives": [
   {
    "id": "ch02_crank_radio",
-   "type": "ambient_audio",
-   "x": 15.0,
-   "z": -57.0,
+   "type": "listen",
+   "x": 23.0,
+   "z": -45.0,
    "r": 1.8,
-   "label": "Crank radio (KD0LOU)",
-   "setsFlag": "ch02_lou_heard"
+   "label": "Augie's crank radio (KK7AUG): he trades you spare cells",
+   "setsFlag": "augie_heard",
+   "givesItems": {
+    "batteries": 2
+   }
   },
   {
    "id": "ch02_crush_kid",
    "type": "rescue",
-   "x": 7.0,
-   "z": -67.0,
+   "x": 31.0,
+   "z": -53.0,
    "r": 1.8,
-   "label": "Pull the kid out",
+   "label": "Pull Mateo out of the crush",
    "setsFlag": "ch02_crush_helped",
    "when": [
     {
-     "flag": "ch02_crush_active",
+     "flag": "ch02_crush_started",
      "eq": true
     }
    ]
-  }
- ],
- "safeZones": [
-  {
-   "id": "safe_01",
-   "kind": "indoor",
-   "x": -15.0,
-   "z": -65.0,
-   "r": 4,
-   "label": "DECC hall (heated)",
-   "warmth": true,
-   "save": true,
-   "sealed": false
   },
   {
-   "id": "safe_02",
-   "kind": "indoor",
-   "x": 3.0,
-   "z": -94.0,
-   "r": 3,
-   "label": "Hospital lobby",
-   "warmth": true,
-   "save": true,
-   "sealed": false
+   "id": "ch02_tanker_valve",
+   "type": "drain",
+   "x": 31.0,
+   "z": -135.0,
+   "r": 1.8,
+   "label": "Tanker valve (level 3)",
+   "requiresItems": {
+    "diesel_jug": 1
+   },
+   "setsFlag": "ch02_diesel_drained",
+   "givesItems": {
+    "hospital_diesel": 1
+   },
+   "quest": "q_hospital_diesel"
   }
  ],
- "setPieces": [],
+ "safeZones": [],
+ "setPieces": [
+  {
+   "id": "sp_ch02_crush",
+   "type": "crowd_crush",
+   "area": {
+    "type": "rect",
+    "x0": 10.0,
+    "z0": -56.0,
+    "x1": 40.0,
+    "z1": -36.0
+   },
+   "note": "Ration-line surge: timed escape toward the south doors; Rosa's boy Mateo (ch02_crush_kid).",
+   "storyEncounter": "enc_ch02_crush",
+   "hazard": "crowd_crush",
+   "timerS": 25
+  },
+  {
+   "id": "sp_ch02_east_ridge",
+   "type": "backdrop_ridge",
+   "note": "Distant east-ridge skyline mesh the glimpse stands on.",
+   "x": 643.0,
+   "z": -139.0
+  },
+  {
+   "id": "sp_glimpse_ch02_ridge",
+   "type": "tallman_glimpse",
+   "note": "FIRST glimpse. Scene ch02_ridge_glimpse plays the reaction.",
+   "glimpse": "glimpse_ch02_ridge",
+   "kind": "silhouette",
+   "x": 573.88,
+   "z": -219.19,
+   "distanceM": 600,
+   "bearingDeg": 80,
+   "durationS": 2.5,
+   "interactable": false,
+   "collider": false,
+   "ai": false,
+   "hudCue": false,
+   "musicSting": false,
+   "despawn": "after duration OR player within 60 m OR LOS lost",
+   "onShow": [
+    {
+     "add": "tallman_glimpses",
+     "value": 1
+    }
+   ],
+   "companionReaction": "wraith_stare",
+   "where": "East ridge, ~600 m, single upright silhouette on the skyline",
+   "offMap": true
+  }
+ ],
  "encounters": [
   {
-   "id": "enc_checkpoint",
+   "id": "z_ch02_checkpoint",
    "area": {
     "type": "rect",
-    "x0": -22.0,
-    "z0": -50.0,
-    "x1": 22.0,
-    "z1": 6.0
+    "x0": -18.0,
+    "z0": -34.0,
+    "x1": 18.0,
+    "z1": -20.0
    },
    "groups": [
     {
-     "group": "g_checkpoint",
+     "group": "g_ch02_checkpoint",
      "wave": 1
     }
    ]
   },
   {
-   "id": "enc_decc",
+   "id": "z_ch02_rscc",
    "area": {
     "type": "rect",
-    "x0": -22.0,
-    "z0": -86.0,
-    "x1": 22.0,
-    "z1": -50.0
+    "x0": 8.0,
+    "z0": -72.0,
+    "x1": 42.0,
+    "z1": -34.0
    },
    "groups": [
     {
-     "group": "g_decc_guards",
+     "group": "g_ch02_rscc",
      "wave": 1
     }
    ]
   },
   {
-   "id": "enc_hospital",
+   "id": "z_ch02_ramp",
    "area": {
     "type": "rect",
-    "x0": -22.0,
-    "z0": -110.0,
-    "x1": 22.0,
-    "z1": -86.0
+    "x0": 12.0,
+    "z0": -152.0,
+    "x1": 42.0,
+    "z1": -122.0
    },
    "groups": [
     {
-     "group": "g_hosp_guards",
-     "wave": 1
-    },
-    {
-     "group": "g_garage",
+     "group": "g_ch02_squatters",
      "wave": 1
     }
    ]
@@ -1007,31 +1698,15 @@
  ],
  "triggers": [
   {
-   "id": "t_ch02_start",
-   "on": "load",
-   "once": true,
-   "shape": {
-    "type": "circle",
-    "x": 0.0,
-    "z": 3.0,
-    "r": 3
-   },
-   "actions": [
-    {
-     "type": "checkpoint"
-    }
-   ]
-  },
-  {
-   "id": "t_ch02_checkpoint",
+   "id": "t_ch02_haas_checkpoint",
    "on": "enter",
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -4.0,
-    "z0": -20.0,
-    "x1": 4.0,
-    "z1": -16.0
+    "x0": -8.0,
+    "z0": -32.0,
+    "x1": 8.0,
+    "z1": -20.0
    },
    "actions": [
     {
@@ -1041,83 +1716,115 @@
    ]
   },
   {
-   "id": "t_ch02_checkpoint_block",
-   "on": "enter",
-   "once": false,
-   "shape": {
-    "type": "rect",
-    "x0": -4.0,
-    "z0": -24.0,
-    "x1": 4.0,
-    "z1": -22.0
-   },
-   "actions": [
-    {
-     "type": "bark",
-     "speaker": "cpl_haas",
-     "text": "ID first."
-    },
-    {
-     "type": "push_back"
-    }
-   ],
-   "when": [
-    {
-     "flag": "ch02_checkpoint_cleared",
-     "ne": true
-    }
-   ]
-  },
-  {
-   "id": "t_ch02_radio",
+   "id": "t_ch02_augie_radio",
    "on": "enter",
    "once": true,
    "shape": {
     "type": "circle",
-    "x": 13.0,
-    "z": -59.0,
-    "r": 3
+    "x": 21.0,
+    "z": -41.0,
+    "r": 2.5
    },
    "actions": [
     {
      "type": "dialogue",
-     "id": "ch02_lou_radio"
+     "id": "ch02_augie_radio"
     }
    ]
   },
   {
-   "id": "t_ch02_line",
+   "id": "t_ch02_lonnie_line",
    "on": "enter",
    "once": true,
    "shape": {
-    "type": "rect",
-    "x0": -4.0,
-    "z0": -76.0,
-    "x1": 18.0,
-    "z1": -66.0
+    "type": "circle",
+    "x": 29.0,
+    "z": -45.0,
+    "r": 3.0
    },
    "actions": [
     {
      "type": "dialogue",
-     "id": "ch02_wren_line"
+     "id": "ch02_lonnie_line"
     }
    ]
   },
   {
-   "id": "t_ch02_registry",
-   "on": "enter",
+   "id": "t_ch02_kit_line",
+   "on": "interact",
    "once": true,
    "shape": {
-    "type": "rect",
-    "x0": -20.0,
-    "z0": -80.0,
-    "x1": -8.0,
-    "z1": -72.0
+    "type": "circle",
+    "x": 33.0,
+    "z": -41.0,
+    "r": 2.5
    },
    "actions": [
     {
      "type": "dialogue",
-     "id": "ch02_strand_registry"
+     "id": "ch02_kit_line"
+    }
+   ]
+  },
+  {
+   "id": "t_ch02_annie_table",
+   "on": "interact",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": 15.0,
+    "z": -61.0,
+    "r": 2.5
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch02_annie_table"
+    },
+    {
+     "type": "set_flag",
+     "flag": "annie_met",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch02_avila_registry",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": 16.0,
+    "z0": -70.0,
+    "x1": 34.0,
+    "z1": -64.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch02_avila_registry"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch02_avila_met",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch02_carly_desk",
+   "on": "interact",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": 35.0,
+    "z": -63.0,
+    "r": 2.5
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch02_carly_desk"
     }
    ]
   },
@@ -1127,23 +1834,24 @@
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -4.0,
-    "z0": -84.0,
-    "x1": 20.0,
-    "z1": -56.0
+    "x0": 10.0,
+    "z0": -56.0,
+    "x1": 40.0,
+    "z1": -46.0
    },
    "actions": [
     {
-     "type": "cutscene",
-     "id": "cs_ch02_rumor",
-     "text": "\"No more flour!\" The line surges."
+     "type": "dialogue",
+     "id": "ch02_crush"
     },
     {
-     "type": "start_sequence",
-     "id": "seq_ch02_crush"
+     "type": "set_flag",
+     "flag": "ch02_crush_started",
+     "value": true
     },
     {
-     "type": "checkpoint"
+     "type": "spawn_setpiece",
+     "id": "sp_ch02_crush"
     }
    ],
    "when": [
@@ -1151,50 +1859,163 @@
      "flag": "ch02_registered",
      "eq": true
     }
-   ],
-   "note": "Timed movement escape. Kid at the marked spot; exits: east gate or north to 1st St."
+   ]
   },
   {
-   "id": "t_ch02_hospital",
+   "id": "t_ch02_ruth_class",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": 37.0,
+    "z": -51.0,
+    "r": 2.5
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch02_ruth_class"
+    }
+   ]
+  },
+  {
+   "id": "t_ch02_ames_hospital",
    "on": "enter",
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": 8.0,
-    "z0": -102.0,
-    "x1": 18.0,
-    "z1": -98.0
+    "x0": -16.0,
+    "z0": -134.0,
+    "x1": 2.0,
+    "z1": -120.0
    },
    "actions": [
     {
      "type": "dialogue",
      "id": "ch02_ames_hospital"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch02_ames_met",
+     "value": true
     }
    ]
   },
   {
-   "id": "t_ch02_garage",
+   "id": "t_ch02_ames_diesel_return",
+   "on": "interact",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": -9.0,
+    "z": -127.0,
+    "r": 3.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch02_ames_diesel_return"
+    }
+   ],
+   "when": [
+    {
+     "item": "hospital_diesel",
+     "gte": 1
+    }
+   ]
+  },
+  {
+   "id": "t_ch02_dutch_pawn",
+   "on": "interact",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": -31.0,
+    "z": -43.0,
+    "r": 2.5
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch02_dutch_pawn"
+    },
+    {
+     "type": "set_flag",
+     "flag": "dutch_met",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch02_dusk",
    "on": "enter",
    "once": true,
    "shape": {
     "type": "rect",
     "x0": -22.0,
-    "z0": -110.0,
+    "z0": -118.0,
     "x1": -10.0,
-    "z1": -90.0
+    "z1": -112.0
    },
    "actions": [
     {
-     "type": "activate_group",
-     "group": "g_garage"
+     "type": "set_time",
+     "value": 0.74
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch02_dusk",
+     "value": true
     }
    ],
    "when": [
     {
-     "flag": "ch02_diesel_job",
+     "flag": "ch02_ames_met",
+     "eq": true
+    },
+    {
+     "flag": "ch02_registered",
      "eq": true
     }
    ]
+  },
+  {
+   "id": "t_glimpse_ch02_ridge",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -118.0,
+    "x1": -10.0,
+    "z1": -112.0
+   },
+   "actions": [
+    {
+     "type": "spawn_setpiece",
+     "id": "sp_glimpse_ch02_ridge"
+    },
+    {
+     "type": "dialogue",
+     "id": "ch02_ridge_glimpse"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch02_glimpse_seen",
+     "value": true
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch02_dusk",
+     "eq": true
+    },
+    {
+     "flag": "ch02_ames_met",
+     "eq": true
+    }
+   ],
+   "note": "Exit Meadows General at dusk after the Ames scene"
   },
   {
    "id": "t_ch02_end",
@@ -1202,10 +2023,10 @@
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": 0.0,
-    "z0": -90.0,
-    "x1": 6.0,
-    "z1": -86.0
+    "x0": -8.0,
+    "z0": -4.0,
+    "x1": 8.0,
+    "z1": 6.0
    },
    "actions": [
     {
@@ -1215,8 +2036,27 @@
    ],
    "when": [
     {
-     "flag": "ch02_insulin_secured",
+     "flag": "ch02_glimpse_seen",
      "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch02_haas_flag",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -8.0,
+    "z0": -34.0,
+    "x1": 8.0,
+    "z1": -30.0
+   },
+   "actions": [
+    {
+     "type": "set_flag",
+     "flag": "ch02_haas_met",
+     "value": true
     }
    ]
   }
@@ -1225,11 +2065,11 @@
   {
    "id": "o1",
    "order": 1,
-   "text": "Cross the Blatnik checkpoint",
+   "text": "Cross the Virginia Street checkpoint",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch02_checkpoint_cleared",
+     "flag": "ch02_haas_met",
      "eq": true
     }
    ]
@@ -1237,23 +2077,24 @@
   {
    "id": "o2",
    "order": 2,
-   "text": "Register at the DECC",
+   "text": "Register with Avila; earn the essential-worker card",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch02_registered",
+     "flag": "ch02_card_secured",
      "eq": true
     }
-   ]
+   ],
+   "quest": "q_essential_card"
   },
   {
    "id": "o3",
    "order": 3,
-   "text": "Survive the ration-line crush",
-   "optional": false,
+   "text": "See Carly at the registry table",
+   "optional": true,
    "completeWhen": [
     {
-     "flag": "ch02_crush_done",
+     "flag": "ch02_backed_carly",
      "eq": true
     }
    ]
@@ -1261,11 +2102,11 @@
   {
    "id": "o4",
    "order": 4,
-   "text": "Get Theo's insulin (priority card, Dr. Ames, or Wren)",
+   "text": "Ames at Meadows General",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch02_insulin_secured",
+     "flag": "ch02_ames_met",
      "eq": true
     }
    ]
@@ -1273,20 +2114,67 @@
   {
    "id": "o5",
    "order": 5,
-   "text": "Optional: find the hospital diesel for Ames",
+   "text": "Optional: drain the level-3 tanker for Ames",
    "optional": true,
    "completeWhen": [
     {
-     "item": "hospital_diesel",
-     "gte": 1
+     "flag": "ch02_diesel_drained",
+     "eq": true
     }
    ],
-   "startWhen": [
+   "quest": "q_hospital_diesel"
+  },
+  {
+   "id": "o6",
+   "order": 6,
+   "text": "Home at dusk",
+   "optional": false,
+   "completeWhen": [
     {
-     "flag": "ch02_diesel_job",
+     "flag": "ch02_glimpse_seen",
      "eq": true
     }
    ]
   }
- ]
+ ],
+ "companion": {
+  "id": "wraith",
+  "spawn": {
+   "x": 3.0,
+   "z": 1.0
+  },
+  "when": [
+   {
+    "flag": "wraith_alive",
+    "eq": true
+   }
+  ],
+  "follow": {
+   "leashM": 6.0,
+   "catchUpM": 14.0,
+   "nav": "grid_bfs_walkable",
+   "avoid": [
+    "door_clearance_cells",
+    "loot_cells"
+   ],
+   "note": "Follows Braith over walkable tiles; idles at heel inside buildings."
+  },
+  "verbs": [
+   "track",
+   "warn",
+   "guard",
+   "hold"
+  ],
+  "injuredWhen": [
+   {
+    "flag": "wraith_injured",
+    "eq": true
+   }
+  ]
+ },
+ "ambientDensity": {
+  "target": "densest crowd level",
+  "placed": 16
+ },
+ "lootSource": "v2"
 }

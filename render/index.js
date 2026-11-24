@@ -1,6 +1,10 @@
-// Public entry for the Ashfall render layer.
-export { createRenderPipeline, TIERS, TIER_ORDER, detectTier, isMobileDevice, CRT_PRESETS, LOOKS, getTierConfig, applyMobileQuality, PALETTES } from './pipeline.js?v=r8';
-export { AdaptiveQuality, isIOS } from './quality.js?v=r8';
-export { createCampfire, createFlashlight, fitSunShadow } from './lighting.js?v=r8';
-export { createParticles } from './particles.js?v=r8';
-export { GRADE_ASHFALL, WINTER_PALETTE_HEX, buildPaletteLUT, buildPaletteLUTGPU, lutStats } from './palette.js?v=r8';
+// Public entry for the Ashfall / Nevada Revision 2 render layer.
+export {
+  createRenderPipeline, TIERS, TIER_ORDER, detectTier, isMobileDevice,
+  CRT_PRESETS, LOOKS, getTierConfig, applyMobileQuality, PALETTES,
+  ENVIRONMENTS, ENVIRONMENT_ORDER, resolveEnvironment, environmentForChapter, getEnvironmentConfig,
+} from './pipeline.js?v=r9';
+export { AdaptiveQuality, isIOS } from './quality.js?v=r9';
+export { createCampfire, createFlashlight, fitSunShadow } from './lighting.js?v=r9';
+export { createParticles } from './particles.js?v=r9';
+export { GRADE_ASHFALL, WINTER_PALETTE_HEX, buildPaletteLUT, buildPaletteLUTGPU, lutStats } from './palette.js?v=r9';

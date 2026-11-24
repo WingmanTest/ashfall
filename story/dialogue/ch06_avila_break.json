@@ -1,0 +1,148 @@
+{
+  "id": "ch06_avila_break",
+  "chapter": "ch06",
+  "location": "loc_rscc_registry",
+  "trigger": "Avila's command post. Federal orders versus the governor.",
+  "speakers": [
+    "narrator",
+    "avila",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Avila's command post. Two radios: one federal, one state. Both are talking. She's not answering either.",
+      "next": "a1"
+    },
+    {
+      "id": "a1",
+      "speaker": "avila",
+      "text": "The governor orders me to resist the Directive. Fort Irwin orders me to assist Ironwood. Both are legal.",
+      "next": "a2"
+    },
+    {
+      "id": "a2",
+      "speaker": "avila",
+      "text": "Tonight Ironwood moves a Bradley through the rail trench to take the Floor's warehouses. I have to pick.",
+      "choices": [
+        {
+          "text": "Break with them. Protect your city.",
+          "next": "gov",
+          "effects": [
+            {
+              "set": "avila_stance",
+              "value": "governor"
+            },
+            {
+              "add": "rep_authority",
+              "value": 1
+            },
+            {
+              "add": "ironwood_hostility",
+              "value": 2
+            },
+            {
+              "trust": "avila",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "text": "Stay with the chain of command.",
+          "next": "dir",
+          "effects": [
+            {
+              "set": "avila_stance",
+              "value": "directive"
+            },
+            {
+              "add": "rep_authority",
+              "value": 2
+            },
+            {
+              "add": "rep_harbor",
+              "value": -2
+            }
+          ]
+        },
+        {
+          "text": "What does your count say?",
+          "next": "count"
+        }
+      ]
+    },
+    {
+      "id": "count",
+      "speaker": "avila",
+      "text": "The real one? Thirty-one days. If the warehouses go west, it's nine.",
+      "next": "count2"
+    },
+    {
+      "id": "count2",
+      "speaker": "avila",
+      "text": "...Fine. Fine. Nine days is murder with paperwork.",
+      "choices": [
+        {
+          "text": "Then break with them.",
+          "next": "gov",
+          "effects": [
+            {
+              "set": "avila_stance",
+              "value": "governor"
+            },
+            {
+              "add": "rep_authority",
+              "value": 1
+            },
+            {
+              "add": "ironwood_hostility",
+              "value": 2
+            },
+            {
+              "trust": "avila",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "text": "Then follow orders. Live with it.",
+          "next": "dir",
+          "effects": [
+            {
+              "set": "avila_stance",
+              "value": "directive"
+            },
+            {
+              "add": "rep_authority",
+              "value": 2
+            },
+            {
+              "add": "rep_harbor",
+              "value": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gov",
+      "speaker": "avila",
+      "text": "God help me. Okay. The Guard holds the bridges. The Army holds everything else. Get to the trench.",
+      "next": "end"
+    },
+    {
+      "id": "dir",
+      "speaker": "avila",
+      "text": "Thank you. It's the only order I know how to give. Stay out of the trench tonight, Pearce.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "Downtown, the Bradley's engine echoes off dead casinos.",
+      "end": true
+    }
+  ]
+}

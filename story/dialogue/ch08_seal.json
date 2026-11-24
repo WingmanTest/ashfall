@@ -1,0 +1,88 @@
+{
+  "id": "ch08_seal",
+  "chapter": "ch08",
+  "location": "loc_sparks_block",
+  "trigger": "Seal the shelter (seal_shelter event; sets shelter_sealed).",
+  "speakers": [
+    "narrator",
+    "braith",
+    "carly",
+    "lolo"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Plastic sheeting from Gil's truck. Duct tape from Dutch's last stock. Every window, every vent.",
+      "next": "s1"
+    },
+    {
+      "id": "s1",
+      "speaker": "lolo",
+      "text": "Heat stays in, ash stays out. And something else, maitia. Something else stays out.",
+      "next": "s2"
+    },
+    {
+      "id": "s2",
+      "speaker": "lolo",
+      "text": "The things on the ridge. They walk past sealed houses. Salt told me. He's not as crazy as he smells.",
+      "choices": [
+        {
+          "text": "[Seal the house]",
+          "next": "seal",
+          "effects": [
+            {
+              "set": "shelter_sealed",
+              "value": true
+            },
+            {
+              "event": "hud_unlock",
+              "hud": "seal"
+            }
+          ]
+        },
+        {
+          "text": "[Seal Lolo's clinic first]",
+          "next": "clinic",
+          "effects": [
+            {
+              "set": "shelter_sealed",
+              "value": true
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            },
+            {
+              "trust": "lolo",
+              "delta": 2
+            },
+            {
+              "event": "hud_unlock",
+              "hud": "seal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "seal",
+      "speaker": "narrator",
+      "text": "The house goes dim and close. SEAL: 100%. Every crack you missed will show up eventually.",
+      "next": "end"
+    },
+    {
+      "id": "clinic",
+      "speaker": "narrator",
+      "text": "Lolo's clinic first, then yours. It costs you an afternoon and half the tape. Both hold.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "That night, something walks the length of the street. It pauses at the Henleys' unsealed house. Then it goes in.",
+      "end": true
+    }
+  ]
+}

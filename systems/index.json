@@ -1,14 +1,14 @@
 [
-  "budget_report.hard_winter.json",
-  "budget_report.json",
-  "budget_report.story.json",
-  "budget_report.whiteout.json",
-  "crafting.json",
-  "difficulty.json",
-  "enemies.json",
-  "items.json",
-  "loot_tables.json",
-  "progression.json",
-  "survival.json",
-  "weapons.json"
+ "budget_report.hard_winter.json",
+ "budget_report.json",
+ "budget_report.story.json",
+ "budget_report.whiteout.json",
+ "crafting.json",
+ "difficulty.json",
+ "enemies.json",
+ "items.json",
+ "loot_tables.json",
+ "progression.json",
+ "survival.json",
+ "weapons.json"
 ]

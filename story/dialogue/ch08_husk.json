@@ -1,48 +1,42 @@
 {
   "id": "ch08_husk",
   "chapter": "ch08",
-  "location": "loc_east_end",
-  "trigger": "Husk encounter: a man in a T-shirt in the snow, trying to get into a car where a family shelters.",
+  "location": "loc_sparks_block",
+  "trigger": "A husk at your truck in the fallout rain (talk-down possible).",
   "speakers": [
+    "narrator",
     "husk",
-    "dell",
-    "theo",
-    "narrator"
+    "braith",
+    "wraith"
   ],
   "start": "start",
   "nodes": [
     {
       "id": "start",
       "speaker": "narrator",
-      "text": "A man in a T-shirt. −15 °C. Hair coming out in clumps. He's pulling at a car door. Kids inside screaming.",
+      "text": "A man at your truck, shirtless in the grey rain. Burned-looking skin. Trying to open the door with his elbow.",
       "next": "h1"
     },
     {
       "id": "h1",
       "speaker": "husk",
-      "text": "warm in there. it's warm in there. i'm so hot. why am i so hot.",
-      "choices": [
-        {
-          "text": "[Holster weapon. Approach slowly.]",
-          "next": "approach"
-        },
-        {
-          "text": "[Shout at him to back off]",
-          "next": "shout"
-        },
-        {
-          "text": "[Shoot]",
-          "next": "shoot"
-        }
-      ]
+      "text": "Warm. It's warm in there. I saw the light. My wife's in the car. She's cold. She's so cold.",
+      "next": "h1w"
     },
     {
-      "id": "approach",
+      "id": "h1w",
+      "speaker": "wraith",
+      "text": "[Ears back. A soft, worried whine. She noses his hand. His breath smokes. Sick, not wrong.]",
+      "next": "h2"
+    },
+    {
+      "id": "h2",
       "speaker": "narrator",
-      "text": "He turns. Gums bleeding. His eyes track your coat, your bag, the heat coming off you.",
-      "branches": [
+      "text": "Radiation sickness. Hypothermia. He's taken off his coat because his brain is lying to him about the cold.",
+      "choices": [
         {
-          "next": "can_talk",
+          "text": "[Talk him down. Blanket, iodide]",
+          "next": "talk",
           "conditions": [
             {
               "item": "iodide_tablets",
@@ -56,68 +50,52 @@
               "flag": "kindness",
               "gte": 4
             }
+          ],
+          "effects": [
+            {
+              "take": "iodide_tablets",
+              "qty": 1
+            },
+            {
+              "take": "wool_blanket",
+              "qty": 1
+            },
+            {
+              "add": "husks_talked_down",
+              "value": 1
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            }
           ]
         },
         {
-          "next": "cant_talk"
+          "text": "[Fight him off]",
+          "next": "fight",
+          "effects": [
+            {
+              "event": "encounter",
+              "id": "enc_ch08_husk"
+            }
+          ]
+        },
+        {
+          "text": "[Back away]",
+          "next": "back"
         }
       ]
     },
     {
-      "id": "can_talk",
-      "speaker": "dell",
-      "text": "Hey. Hey. You're cold, not hot. It lies to you. Here. Put this on. Take these.",
-      "effects": [
-        {
-          "take": "iodide_tablets",
-          "qty": 1
-        },
-        {
-          "take": "wool_blanket",
-          "qty": 1
-        }
-      ],
+      "id": "talk",
+      "speaker": "narrator",
+      "text": "You put the blanket on his shoulders. He weeps. He takes the pills like a child. He follows you inside.",
       "next": "talk2"
     },
     {
       "id": "talk2",
       "speaker": "husk",
-      "text": "...cold. i'm cold. oh god. where's my coat. i had a coat.",
-      "effects": [
-        {
-          "add": "husks_talked_down",
-          "value": 1
-        },
-        {
-          "add": "kindness",
-          "value": 1
-        }
-      ],
-      "next": "talk3"
-    },
-    {
-      "id": "talk3",
-      "speaker": "narrator",
-      "text": "He sits down in the snow and cries. The car door opens an inch. A woman: 'Bring him in. Bring him.'",
-      "branches": [
-        {
-          "next": "pete",
-          "conditions": [
-            {
-              "flag": "lunds_stayed",
-              "eq": false
-            }
-          ]
-        },
-        {
-          "next": "end"
-        }
-      ]
-    },
-    {
-      "id": "pete",
-      "speaker": "narrator",
-      "text": "He has a farm cap. Esko Co-op. It's Pete Lund. He doesn't remember you.",
+      "text": "...Pete. I'm Pete. Pete Lund. I left Galena to find my wife. I couldn't find her.",
       "effects": [
         {
           "set": "pete_lund_recovered",
@@ -127,67 +105,39 @@
       "next": "end"
     },
     {
-      "id": "cant_talk",
+      "id": "fight",
       "speaker": "narrator",
-      "text": "He lunges for your bag. There's nothing in your hands that he understands.",
-      "effects": [
-        {
-          "event": "encounter",
-          "id": "enc_ch08_husk"
-        }
-      ],
-      "next": "fight"
+      "text": "He's not strong. That's the worst part. He's not strong at all.",
+      "next": "fight2"
     },
     {
-      "id": "shout",
-      "speaker": "narrator",
-      "text": "He flinches, then comes at you. Fast. Faster than a sick man should.",
+      "id": "fight2",
+      "speaker": "wraith",
+      "text": "[Wraith growls at the dark beyond him. Not at him. Something's been following him.]",
       "effects": [
         {
-          "event": "encounter",
-          "id": "enc_ch08_husk"
+          "add": "tallman_glimpses",
+          "value": 1
         }
       ],
-      "next": "fight"
-    },
-    {
-      "id": "shoot",
-      "speaker": "narrator",
-      "text": "He drops in the snow. The kids in the car keep screaming.",
       "next": "end"
     },
     {
-      "id": "fight",
+      "id": "back",
       "speaker": "narrator",
-      "text": "When it's over, the family in the car won't open the door for you either.",
+      "text": "He wanders off into the grey. Behind him, from the end of the street, something tall starts to follow.",
+      "effects": [
+        {
+          "add": "tallman_glimpses",
+          "value": 1
+        }
+      ],
       "next": "end"
     },
     {
       "id": "end",
       "speaker": "narrator",
-      "text": "The dosimeter ticks. Get inside.",
-      "next": "tape"
-    },
-    {
-      "id": "tape",
-      "speaker": "theo",
-      "text": "windows first. plastic and tape. i'll do the upstairs.",
-      "effects": [
-        {
-          "set": "shelter_sealed",
-          "value": true
-        },
-        {
-          "event": "hud_unlock",
-          "hud": "seal"
-        }
-      ],
-      "next": "taped"
-    },
-    {
-      "id": "taped",
-      "speaker": "narrator",
-      "text": "Ash ticks on the plastic, not the glass. The click from the street gets quieter.",
+      "text": "Husks draw them. You're sure of it now. Where the sick go, the tall ones follow.",
       "end": true
     }
   ]

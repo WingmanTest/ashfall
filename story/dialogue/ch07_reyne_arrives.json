@@ -1,0 +1,128 @@
+{
+  "id": "ch07_reyne_arrives",
+  "chapter": "ch07",
+  "location": "loc_peavine_shack",
+  "trigger": "A stranger at the shack door before dawn.",
+  "speakers": [
+    "narrator",
+    "reyne",
+    "braith",
+    "wraith",
+    "walt"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "wraith",
+      "text": "[Growling at the door. Not her Tallman shaking. A human growl. Suspicious.]",
+      "next": "r1"
+    },
+    {
+      "id": "r1",
+      "speaker": "narrator",
+      "text": "A woman in a Tyvek suit under a ranch coat. Frostbitten fingers. A plastic badge: DVA — LEVEL 3.",
+      "effects": [
+        {
+          "set": "reyne_met",
+          "value": true
+        }
+      ],
+      "next": "r2"
+    },
+    {
+      "id": "r2",
+      "speaker": "reyne",
+      "text": "I saw your light. I've been walking for nine days. I'm Hollis Reyne. I'm a biologist. Was.",
+      "next": "r3"
+    },
+    {
+      "id": "r3",
+      "speaker": "reyne",
+      "text": "I heard you on the radio before it died. You need hardened control hardware. I know where there's some.",
+      "choices": [
+        {
+          "text": "Where?",
+          "next": "where"
+        },
+        {
+          "text": "Biologist for who?",
+          "next": "who"
+        },
+        {
+          "text": "What's DVA?",
+          "next": "who"
+        }
+      ]
+    },
+    {
+      "id": "who",
+      "speaker": "reyne",
+      "text": "Dixie Valley Annex. A contractor site under the Fallon ranges. We studied torpor. Hibernation biology.",
+      "next": "where"
+    },
+    {
+      "id": "where",
+      "speaker": "reyne",
+      "text": "The Annex was built to survive this. EMP-shielded. Hangar full of spares. Generator room. Controls.",
+      "next": "r4"
+    },
+    {
+      "id": "r4",
+      "speaker": "reyne",
+      "text": "The diesel ran out in September. The holds warmed. Things... woke up. You've seen them. Your dog has.",
+      "effects": [
+        {
+          "set": "annex_known",
+          "value": true
+        }
+      ],
+      "next": "r5"
+    },
+    {
+      "id": "r5",
+      "speaker": "wraith",
+      "text": "[Looks at Reyne. Looks at the door. Lies down between them.]",
+      "next": "r6"
+    },
+    {
+      "id": "r6",
+      "speaker": "walt",
+      "text": "[Quietly] A hundred miles east. Through Fallon. Through the Compact. Through whatever's out there.",
+      "choices": [
+        {
+          "text": "Then we go east.",
+          "next": "go",
+          "effects": [
+            {
+              "quest": "q_control_cards",
+              "state": "start"
+            }
+          ]
+        },
+        {
+          "text": "Why help us?",
+          "next": "why"
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "speaker": "reyne",
+      "text": "Because I'm the reason some of them are out here. And because you have lights. I'm afraid of the dark now.",
+      "effects": [
+        {
+          "quest": "q_control_cards",
+          "state": "start"
+        }
+      ],
+      "next": "go"
+    },
+    {
+      "id": "go",
+      "speaker": "narrator",
+      "text": "You'll need the ground power cart to open a dead facility. And a truck. And luck.",
+      "end": true
+    }
+  ]
+}

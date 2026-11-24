@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "philosophy": "Crafting is tertiary. Scavenging is the core loop. 8 recipes, 1-2 ingredients each, no stations except a lit campfire (a placed object, not a workbench). No trees, no tiers, no unlocks. Clothing, guns, ammo, food, meds and purification tablets come from loot only.",
   "units": {
     "time_real_seconds": "real seconds the craft takes (player can be interrupted; inputs are consumed on completion)"
@@ -42,7 +42,8 @@
         "refuel": {
           "firewood": 2,
           "adds_real_seconds": 120
-        }
+        },
+        "late_summer_note": "Allowed in late summer but raises hydration drain and heat stress nearby; mainly for boiling and light. Heat draws Tallmen/assimilated animals in Act III."
       },
       "legacy": "config RECIPES campfire_kit used wood 3 + scrap 1; cloth is the tinder now so scrap stays a repair material"
     },
@@ -130,29 +131,10 @@
       },
       "requires": "near_campfire",
       "time_real_seconds": 10,
-      "note": "Removes sickness only; in Act IV fallout remains. purification_tablets (loot) clean fully."
+      "note": "Removes sickness only (not hot-spring minerals); in nuclear_winter fallout remains. purification_tablets (loot) clean fully. Sources: Truckee River, Sparks Marina, irrigation ditches, rain barrels, melted snow (winter)."
     }
   ],
-  "story_recipes": [
-    {
-      "id": "lake_cooler",
-      "name": "Lake cooler (Ch1)",
-      "inputs": {
-        "bucket": 1,
-        "wire": 1
-      },
-      "output": {
-        "id": "lake_cooler",
-        "qty": 1
-      },
-      "requires": "none",
-      "time_real_seconds": 6,
-      "chapters": [
-        "ch01"
-      ],
-      "note": "Story-scripted one-off from ch01 'craft lake_cooler'; hidden from the craft menu outside Ch1."
-    }
-  ],
+  "story_recipes": [],
   "removed_from_config_js": [
     {
       "id": "coat",
@@ -165,6 +147,22 @@
     {
       "id": "filter",
       "reason": "mask_filter is loot-only (scarce Act IV resource)."
+    }
+  ],
+  "story_recipes_note": "Revision 2 has no story crafting recipes (gameplay_hooks chapters have no 'crafting' entries). The v1 one-off recipe was removed with the medical mechanic.",
+  "story_interactives": [
+    {
+      "id": "ch01_water_station",
+      "chapter": "ch01",
+      "inputs": {
+        "water_dirty": 1
+      },
+      "output": {
+        "id": "water_clean",
+        "qty": 1
+      },
+      "time_game_minutes": 15,
+      "note": "Level interactive from gameplay_hooks ch01 (repurposed v1 station). Not a menu recipe; doesn't count toward the 8."
     }
   ]
 }

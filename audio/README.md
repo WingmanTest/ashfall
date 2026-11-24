@@ -1,4 +1,4 @@
-# ASHFALL: Lakehead: audio
+# ASHFALL: Truckee Meadows: audio (Revision 2, Nevada)
 
 Owner: **Echoes** (audio). Everything here is original synthesis (see `CREDITS.md`), so there is **zero license risk**.
 `audio/` only: nothing outside this folder is edited.
@@ -15,7 +15,11 @@ audio/
   tools/vo/       VO pipeline: setup.sh, build_script.py, render.py, dsp.py, qa.py, make_cast_md.py, cast.json, barks.json
 ```
 
-Size: 44 sounds, 88 files, **about 3.0 MB on disk for both formats**. A client downloads only one format (Chrome/Firefox/Android get ogg, iOS/Safari get m4a), so that's **about 1.5 MB per player**. Music is about 1 MB of that, and setting `preload: "essential"` defers it.
+Size: **92 sounds, 184 files: 3.76 MB ogg / 3.12 MB m4a** (non-VO). A client downloads only one format (Chrome/Firefox/Android get ogg,
+iOS/Safari get m4a), so that's **about 3.1–3.8 MB per player**. Music is ~1 MB of that (`preload: "essential"` defers it).
+
+> **Revision 2 (Nevada) for Prime:** seasons → **§12**, Tallmen / Hollows / Wraith (incl. the Hollow-vs-husk **Wraith tell**) → **§13**,
+> copy-paste game hooks → **§14**. Every v1 sound name and API method still works unchanged.
 
 ---
 
@@ -77,7 +81,8 @@ A sound that hasn't decoded yet is skipped silently, and it starts loading.
 ```js
 // game.js update(), right after player.move():
 const { moving, sprint } = this.player.move(dt, this.input, this.world, sprintOk);
-A.footsteps(dt, { moving, sprint, speed: sprint ? CFG.sprint : CFG.walk, surface: "snow" }); // or "hard" on concrete/ice
+A.footsteps(dt, { moving, sprint, speed: sprint ? CFG.sprint : CFG.walk });          // Rev 2: surface = season default
+A.footsteps(dt, { moving, sprint, surface: indoor ? "hard" : undefined });            // "snow"|"hard"|"dirt"|"gravel"|"wet" (§12)
 ```
 Steps are triggered by **distance travelled** (1.4 m stride walking, 1.65 m sprinting), so cadence follows speed. Sprint steps are louder and alternate a slight left/right pan.
 
@@ -130,12 +135,12 @@ A.setChapter("ch05");           // uses A.chapterToAct (editable map) -> civil_w
 A.duckMusic(true);  A.duckMusic(false);   // dialogue / radio
 A.stopMusic(3);
 ```
-| act | chapters | loop | feel |
+| act | chapters / season | loop | feel (Revision 2 rewrite, same keys) |
 |---|---|---|---|
-| blackout | ch01–02 | 43.6 s | D minor, sparse e-piano over a warm pad, faint dying mains hum. "Still feels like a snow day." |
-| collapse | ch03–04 | 40 s | A-minor pulse ostinato with a tritone sting, clock tick, distant drum enters halfway |
-| civil_war | ch05–07 | 40 s | low E drone, distant snare cadences, heavy drum, a tired horn call. Not triumphant. |
-| nuclear_winter | ch08–10 | 48 s | glassy near-silence, cold C drone, breath swells, one fragile major motif (earned hope) |
+| blackout | ch01–02 · late summer | 48 s | dry heat stillness: heat-haze shimmer, slow analog "lub-dub" pulse, sparse Karplus-Strong acoustic plucks in D dorian, dusty pad. No snow. |
+| collapse | ch03–04 · dusty autumn | 40 s | hollow resonant gusts tuned to the chords, dark A-minor drone with a ♭2/tritone shadow, walking muted low pluck pulse, loose-sign rim tick |
+| civil_war | ch05–07 · late fall | 37.5 s | exhausted and cold: E-phrygian drone, tired bowed low line, distant heavy drum, far anvil/iron strikes, faint snare roll, rain hiss |
+| nuclear_winter | ch08–10 · fallout winter | 48 s | survival-horror dread: sub-harmonic tritone floor, bowed-metal partials swelling out of nothing, dread cluster, far metal groan, only a faint fragile bell motif |
 
 ## 7. Volume settings (persisted in localStorage `ashfall.audio.v1`)
 
@@ -174,8 +179,19 @@ Pools (call by pool name for a random variant) are in **bold**.
 | geiger_click | ui | use `A.geiger(dt, level0to1)` |
 | molotov_ignite | sfx | glass smash + whoosh |
 | drone_flyby | sfx | Act II surveillance drone set piece (3.5 s pass) |
-| amb_wind, amb_blizzard, amb_fire, amb_war | ambience | loops 16 / 16 / 10 / 24 s |
-| music_blackout, music_collapse, music_civil_war, music_nuclear_winter | music | loops |
+| amb_wind, amb_fire | ambience | v1 loops 16 / 10 s (amb_wind = cold wind layer in late_fall + winter) |
+| amb_blizzard, amb_war | ambience | **Rev 2 regenerated**: 20 s howling ash-blizzard (dread) / 32 s distant war + siren + radio squelch |
+| amb_summer_wind, amb_cicadas, amb_stillness | ambience | Rev 2 · summer loops 20 / 24 / 16 s |
+| amb_autumn_wind, amb_dry_brush | ambience | Rev 2 · autumn loops 18 / 16 s |
+| amb_fall_rain, amb_sleet | ambience | Rev 2 · late fall loops 20 / 16 s |
+| amb_subzero_creaks, amb_ash_hush, amb_floodlight_hum | ambience | Rev 2 · winter loops 24 / 16 / 12 s (floodlight also works as an emitter loop on a lamp pole) |
+| music_blackout, music_collapse, music_civil_war, music_nuclear_winter | music | **Rev 2 regenerated** loops (§6) |
+| **footstep_dirt** / **footstep_gravel** / **footstep_wet** (_1.._4) | sfx | Rev 2 · dry dirt, desert gravel, wet/cold hard ground |
+| power_hum_drop | sfx | Rev 2 · Ch1 opening: mains hum + fridge spin down, relay clack |
+| tallman_stalk (loop) · **tallman_call** · **tallman_click** · tallman_ambush | sfx | Rev 2 · Tallmen (§13) |
+| assim_human_stalk (loop) · **assim_human_call** · assim_human_lunge | sfx | Rev 2 · Hollows, human (§13) |
+| **assim_animal_scrape** · **assim_animal_chitter** · assim_animal_call · assim_animal_lunge | sfx | Rev 2 · Hollows, animal (§13) |
+| **wraith_growl** · **wraith_bark** · **wraith_whine** · wraith_pant (loop) · wraith_hollow_tell · wraith_husk_tell | sfx | Rev 2 · Wraith (§13) |
 
 ## 9. Hook points found in the game (for Echo)
 
@@ -203,8 +219,8 @@ Pools (call by pool name for a random variant) are in **bold**.
 ## 10. Regenerate and verify
 
 ```bash
-cd audio/tools && python3 build_all.py   # numpy + scipy + ffmpeg; about 30 s; rewrites sfx/ amb/ music/ manifest.js
-./verify.sh                               # node --check + every manifest entry exists as .ogg AND .m4a
+cd audio/tools && python3 build_all.py   # numpy + scipy + ffmpeg; about 60 s; rewrites sfx/ amb/ music/ manifest.js; prints loop-seam report
+./verify.sh                               # node --check + every manifest entry exists as .ogg AND .m4a + Rev 2 keys/pools present
 ```
 Open `audio/test.html` (served over http, e.g. `python3 -m http.server` in game2/) to audition everything on a phone.
 
@@ -212,11 +228,12 @@ Open `audio/test.html` (served over http, e.g. `python3 -m http.server` in game2
 
 ## 11. Voice-over: voiced NPCs + combat barks
 
-`vo/` holds **@@NLINES@@ story lines** (every NPC node in `story/dialogue/`, @@NCHARS@@ characters) and **@@NBARKS@@ barks** (12 factions × spot/attack/hurt/death/idle/greet/trade).
-They're generated offline with Kokoro-82M (Apache-2.0) and then given personality and acting by our DSP (see `vo/CAST.md` for every voice's recipe).
-Narrator and Dell (the player) are not voiced on purpose; see CAST.md.
-Size: **@@OGG@@ MB ogg (Opus 14 kbps) / @@M4A@@ MB m4a (AAC 16 kbps)** for @@MIN@@ min of speech. A player only fetches one format, and
-**only one chapter at a time** (about @@PERCH@@ MB). Nothing VO-related is preloaded at boot apart from `vo/manifest.json` (about @@MANKB@@ KB).
+`vo/` holds the **Revision 2 (Nevada) cast: 485 story lines** (every voiced node in `story/dialogue/`, 47 speakers incl. 5 Hollow mimicry lines)
+and **199 barks** (15 factions incl. `deserter`, `boot_strippers` and 18 `hollow` mimic barks in borrowed voices), plus 23 Wraith action cues
+(`M.cues`, played as companion SFX, no TTS). They're generated offline with Kokoro-82M (Apache-2.0) and then given personality and acting by
+our DSP (see `vo/CAST.md` for every voice's recipe). Narrator and Braith (the player) are not voiced on purpose; see CAST.md.
+Size: **5.69 MB ogg (Opus 14 kbps) / 6.40 MB m4a (AAC 12 kbps, 16 kHz)** for 58 min of speech (barks 0.82 / 1.02 MB). A player only fetches one format, and
+**only one chapter at a time** (0.24 to 0.92 MB of Opus; ch07 is the largest). Nothing VO-related is preloaded at boot apart from `vo/manifest.json` (about 160 KB).
 
 ### 11.1 Zero edits: it already talks
 Once the `load.js` fix in §0 is in, `attachAshfallAudio()` watches `#panel`, the dialogue box `game.js _showNode()` renders. When a line appears,
@@ -298,3 +315,121 @@ cd audio/tools/vo
 - `render.py --only ray,hank`, `--ids ch01_ray_garage.r1 --force`, `--takes 5`, `--no-asr` (skip Whisper scoring).
 - Each story line is rendered 3 times (up to 5 if all are poor). The kept take has the lowest Whisper word-error rate,
   plus penalties for a stuck or too-fast tempo and for clipping. Results are in `tools/vo/_state.json` and `tools/vo/QA.md`.
+
+---
+
+## 12. Revision 2: seasons (ambience beds, wind/storm sound, footsteps, music)
+
+`setChapter()` now crossfades **music and seasonal ambience** and sets the **default footstep surface**. game.js already calls
+`this.audio.impl.setChapter(n)` on chapter load, and the adapter also follows `__ASHFALL.flags.chapter`, so with **zero game edits**:
+
+| chapters | season (`gameplay_hooks` id) | music | `wind` layer → | `blizzard` layer (storm) → | beds (default level) | footsteps |
+|---|---|---|---|---|---|---|
+| ch01–02 | `summer` (`late_summer`) | music_blackout | amb_summer_wind | amb_autumn_wind (dust front) | cicadas 0.45, stillness 0.30 | dirt |
+| ch03–04 | `autumn` | music_collapse | amb_autumn_wind | none: storms push wind harder | dry_brush 0.42 | dirt |
+| ch05–07 | `late_fall` | music_civil_war | amb_wind (cold gusts) | none: storms push wind harder | fall_rain 0.32, sleet 0.22, war 0.30 | wet |
+| ch08–10 | `winter` (`nuclear_winter`) | music_nuclear_winter | amb_wind | amb_blizzard | ash_hush 0.40, subzero_creaks 0.38, floodlight 0.10 | snow |
+
+So game.js's blizzard cycle (`audio.setWind(1)`) can't put a blizzard in Ch1 any more: in summer it becomes a dust gust front, in
+autumn/late fall a harder wind. (Visually the blizzard cycle still runs in every chapter; you may want to gate it by season.)
+
+```js
+const A = game.audio.impl.engine;               // or window.GameAudio
+A.setChapter("ch03");                            // music + beds + footsteps (returns "collapse", as in v1)
+A.setChapter(5, { music: false });               // ambience/footsteps only     · { ambience: false } = music only
+A.setSeason("late_fall", { fade: 4 });           // explicit: summer | autumn | late_fall | winter (also late_summer, nuclear_winter)
+A.setSeason("winter", { beds: 0.6, music: true });// beds = 0..1 scale of the bed layers; music:true also plays the act loop
+A.autoSeason = false;                            // stop setChapter() from touching ambience (then drive it yourself)
+A.getSeason();  A.seasonFor("ch07");             // "late_fall"
+A.setWeatherType("sleet");                       // story weather ids: heat_haze dust_wind clear clear_autumn autumn_wind frost overcast
+                                                 // drizzle sleet freezing_rain clear_cold brown_sky snow grey_snow fallout_rain ashfall blizzard
+A.setLayer("floodlight", 0.3);                   // any bed by layer name: summer_wind cicadas stillness autumn_wind dry_brush fall_rain
+                                                 // sleet war subzero_creaks ash_hush floodlight (+ v1 wind blizzard fire war)
+A.setWind(0.6); A.setBlizzard(1);                // unchanged API; sound follows the season (table above)
+A.play("power_hum_drop");                        // Ch1 opening sting: the power dies
+// lamp-line pole: positional hum instead of the bed
+pole.sfx = A.emitter({ x, y: 4, z }, { refDistance: 2, maxDistance: 20 }); pole.sfx.loop("amb_floodlight_hum", { volume: 0.6 });
+```
+Note: a season change sets every bed layer, including `war` (0 outside late_fall). If you drive `war` yourself, set it after `setChapter`.
+
+**Footsteps.** `surface` omitted → season default (`A.surfaceFor()`); before any season is set it stays `"snow"` (v1 behaviour).
+```js
+A.footsteps(dt, { moving, sprint });                         // per frame, seasonal surface (already what maybeFoot() does)
+A.footsteps(dt, { moving, sprint, surface: "hard" });        // indoors / concrete / ice
+A.playFootstep({ surface: "gravel", sprint: true });          // one step now; also { position } or { emitter } for NPC steps
+// surfaces: snow hard dirt gravel wet  · aliases: concrete asphalt ice wood floor indoor -> hard, sand dust earth grass -> dirt,
+// stone rubble -> gravel, mud puddle rain -> wet, ash powder -> snow.  audio.foot() = seasonal, foot(false) = hard.
+```
+
+## 13. Revision 2: Act III creatures and Wraith (3D, HRTF)
+
+All creature/Wraith sounds are **mono, near-dry** (short ash-damped tails) for the PannerNode; distance muffling closes further in a
+blizzard. Story canon (Loremaster, `gameplay_hooks.assimilation`) is baked in: **Hollows have no breath** (their stalk loop is gait,
+drag and joint clicks only), **Hollow voices are borrowed phrases repeated with identical intonation, off-cadence** (not sick/wet:
+that's a husk), and **Hollow animals are near-silent** (paws landing in unnatural unison; the only vocal is one pitched-down yip).
+
+```js
+// enemies.js spawn():   e.sfx = A.emitter({ x, y: 1.6, z });        (Tallmen are tall: y 2.2 sounds right)
+// kind ids accepted: "tallman" | "stalker" (code_kind) | "assimilated_human" | "hollow" | "assimilated_animal"
+A.playCreature(e.kind, "stalk", { emitter: e.sfx });   // seamless loop that follows the body (tallman, assimilated_human)
+A.playCreature(e.kind, "spot",  { emitter: e.sfx });   // on first sight
+A.playCreature(e.kind, "call",  { emitter: e.sfx });   // mimicry from the dark (Tallman far call / Hollow borrowed phrase / animal yip)
+A.playCreature(e.kind, "lunge", { emitter: e.sfx });   // attack wind-up; tallman "ambush" = cold sting + rush when it reveals itself
+A.playCreature(e.kind, "hurt" | "retreat" | "death", { emitter: e.sfx });
+A.stopCreature(e.sfx);                                 // stop the stalk loop (also on kill/despawn, before e.sfx.dispose())
+A.playCreature("tallman", "call", { position: { x, y: 2.2, z } }); // or { x, y, z } / no position = 2D
+```
+| kind | events → sound |
+|---|---|
+| tallman | stalk (loop: hollow shallow breathing, claw scrape, clicks) · idle/spot/click/chitter → tallman_click · call/mimic → tallman_call (stretched, wrong-formant human fragments, long far tail) · ambush/lunge/attack → tallman_ambush · hurt · retreat · death |
+| assimilated_human (Hollow) | stalk (loop: uneven long-short gait, dragged foot, joint pops, NO breathing) · idle/spot/call/mimic → assim_human_call ("Brai-th?" ×3 / "Mor-ning nei-ghbor" ×2, sample-identical repeats, second throat) · lunge/attack/ambush → assim_human_lunge · hurt · death |
+| assimilated_animal (Hollow) | stalk/move/scrape/spot → assim_animal_scrape (3–5 paws within 6 ms) · idle/chitter → assim_animal_chitter (quiet bone rattle) · call/yip → assim_animal_call (single pitched-down yip, cut dead) · lunge/attack/ambush → assim_animal_lunge (rush, scrabble, teeth snap, barely voiced) |
+
+Spoken Hollow lines (generic speaker `hollow`) are rendered in the Rev 2 VO pass: `playMimic(borrow)` / `playBark("hollow", "mimic", { borrow })` / `playLine`; these
+SFX are the non-verbal layer.
+
+### Wraith (Braith's Belgian Malinois)
+```js
+wraith.sfx = A.emitter({ x, y: 0.6, z }, { refDistance: 1.5 });
+A.playWraith("growl", { emitter: wraith.sfx });  // WARN verb: low protective growl (also "warn", "tallman")
+A.playWraith("bark",  { emitter: wraith.sfx });  // sharp Malinois warning bark; Ch10: bark from the threat side
+A.playWraith("whine");                           // anxious whine (no emitter = close beside the player, slight pan)
+const pant = A.playWraith("pant"); pant?.stop(0.5); // calm/alert panting loop
+A.playWraith("hollow_tell", { emitter: wraith.sfx }); // GAMEPLAY TELL, see below
+A.playWraith("husk_tell",   { emitter: wraith.sfx });
+```
+
+### ⚠ The Wraith tell (gameplay-critical): Hollow vs. real husk
+Players must be able to tell **by ear alone** whether the figure in the ash is a Hollow or a living, freezing husk:
+
+| cue | when | sound | how it differs (measured) |
+|---|---|---|---|
+| `wraith_hollow_tell` | Wraith near an **assimilated_human / assimilated_animal** (set `wraith_mimic_warned`) | 2.6 s: **LOW growl** (f0 ≈ 88 Hz) with a **hackle rattle** (14 Hz pulsing + teeth chatter + collar-tag shake), ends in a lip-curl snarl | noisy (spectral flatness 0.25), 31 % of energy below 400 Hz, rhythmic |
+| `wraith_husk_tell` | Wraith near a **real husk** / living stranger | 1.6 s: **two soft sniffs + a gentle HIGH whine** (f0 950–1250 Hz), no growl at all | tonal (flatness 0.04), 0 % below 400 Hz, 94 % in 700–1600 Hz, 6 dB quieter |
+
+Rules for Prime: play exactly one tell per encounter, on Wraith's emitter, **before** the figure is readable on screen (Wraith's WARN
+verb fires before enemies are visible). Never use `wraith_growl` for a husk or `wraith_whine` for a Hollow; the generic growl/whine
+pools are fine for Tallmen and everyday moods, but the two `*_tell` sounds are reserved for this mechanic.
+```js
+// e.g. in the Wraith/companion update, once per newly-noticed figure within ~12 m:
+if (fig.kind === "assimilated_human" || fig.kind === "assimilated_animal") { A.playWraith("hollow_tell", { emitter: wraith.sfx }); flags.wraith_mimic_warned = true; }
+else if (fig.kind === "husk") A.playWraith("husk_tell", { emitter: wraith.sfx });
+```
+The test bench has an A/B button (`test.html` → WRAITH → "A/B GAMEPLAY TELL").
+
+## 14. Copy-paste hooks for Prime (Revision 2)
+
+| where | add |
+|---|---|
+| nothing (already wired) | `game.js` chapter load → `audio.impl.setChapter(n)` now also switches season beds + footsteps; `maybeFoot()` uses the seasonal surface |
+| `game.js` chapter load, after `this._weather = ...` | `this.audio.impl.setWeatherType?.(this._weather);` (story weather ids → layer mix) |
+| `game.js` update, footsteps | optional: `engine.footsteps(dt, { moving, sprint, surface: indoor ? "hard" : undefined })` |
+| `game.js` Ch1 first frame / blackout moment | `engine.play("power_hum_drop")` |
+| `enemies.js` `_voice()` / spawn / update / kill | for kinds `tallman`/`stalker`/`assimilated_human`/`assimilated_animal`: `engine.playCreature(e.kind, "stalk"/"spot"/"call"/"lunge"/"death", { emitter: e.sfx })`; `engine.stopCreature(e.sfx)` on kill. Keep `husk` on `enemy_growl` (husks are people). |
+| companion (Wraith) | `wraith.sfx = engine.emitter(...)`; WARN → `playWraith("growl")`; TRACK → `playWraith("bark")`; Hollow/husk detection → the tell (§13) |
+| lamp line / Galena floodlights | `pole.sfx.loop("amb_floodlight_hum")` (§12) or `engine.setLayer("floodlight", 0.3)` |
+| `manifest.js` | auto-generated; new keys listed in §8. `tools/verify.sh` fails if any Rev 2 key/pool is missing |
+
+`engine` = `game.audio.impl.engine` (or `window.GameAudio`). The adapter (`game.audio.impl`) also exposes `setChapter`, `setSeason`,
+`setWeatherType`, `playFootstep`, `playCreature`, `stopCreature`, `playWraith`.
+

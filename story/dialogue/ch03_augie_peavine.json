@@ -1,0 +1,198 @@
+{
+  "id": "ch03_augie_peavine",
+  "chapter": "ch03",
+  "location": "loc_peavine_shack",
+  "trigger": "Reach Augie's radio shack on Peavine Peak.",
+  "speakers": [
+    "narrator",
+    "augie",
+    "walt",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "A shack under the repeater towers, wrapped in foil insulation. Inside: a woodstove, six radios, two old men.",
+      "effects": [
+        {
+          "set": "augie_met",
+          "value": true
+        }
+      ],
+      "next": "a1"
+    },
+    {
+      "id": "a1",
+      "speaker": "augie",
+      "text": "Sparks! My ears in Sparks! Come in, shut the door. Augie Bell. This is Walt. Walt, be nice.",
+      "next": "a2"
+    },
+    {
+      "id": "a2",
+      "speaker": "augie",
+      "text": "The big rig's down. Final's cooked. Somebody said there's a kid in Sparks who fixes airplanes.",
+      "choices": [
+        {
+          "text": "[Fix the transmitter]",
+          "next": "fix",
+          "effects": [
+            {
+              "trust": "augie",
+              "delta": 3
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "What do I get?",
+          "next": "pay"
+        }
+      ]
+    },
+    {
+      "id": "pay",
+      "speaker": "augie",
+      "text": "Your name on the air, a cup of something hot, and the best gossip in the Great Basin.",
+      "effects": [
+        {
+          "trust": "augie",
+          "delta": 1
+        }
+      ],
+      "next": "fix"
+    },
+    {
+      "id": "fix",
+      "speaker": "narrator",
+      "text": "A blown output tube and a cracked solder joint. Twenty minutes. Augie keys up and almost cries.",
+      "next": "a3"
+    },
+    {
+      "id": "a3",
+      "speaker": "augie",
+      "text": "This is KK7AUG, back on the air with a NEW final, courtesy of a genuine United States Air Force crew chief!",
+      "next": "a4"
+    },
+    {
+      "id": "a4",
+      "speaker": "augie",
+      "text": "...Between us? Half the good news I read is made up. Korea ships? I made that up. People need it.",
+      "choices": [
+        {
+          "text": "That's a lie, Augie.",
+          "next": "lie",
+          "effects": [
+            {
+              "set": "augie_lie_known",
+              "value": true
+            }
+          ]
+        },
+        {
+          "text": "I figured.",
+          "next": "lie",
+          "effects": [
+            {
+              "set": "augie_lie_known",
+              "value": true
+            },
+            {
+              "trust": "augie",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lie",
+      "speaker": "augie",
+      "text": "It's hope with a little extra salt. Walt thinks I'm going to hell. Walt, tell him.",
+      "next": "w1"
+    },
+    {
+      "id": "w1",
+      "speaker": "walt",
+      "text": "He's going to hell. ...You're Pearce. Turbines. Avila's people say you know turbines.",
+      "next": "w2"
+    },
+    {
+      "id": "w2",
+      "speaker": "walt",
+      "text": "Walt Okada. I ran the control room at Galena Station twenty-two years. The geothermal plant. Steamboat.",
+      "effects": [
+        {
+          "set": "walt_recruited",
+          "value": true
+        },
+        {
+          "quest": "q_find_walt",
+          "state": "complete"
+        }
+      ],
+      "next": "w3"
+    },
+    {
+      "id": "w3",
+      "speaker": "walt",
+      "text": "The wells don't care about the grid. Water comes up at three hundred twenty degrees whether America exists or not.",
+      "next": "w4"
+    },
+    {
+      "id": "w4",
+      "speaker": "walt",
+      "text": "But you can't start the plant cold. Pumps, controls, the cooling fans. You need outside power to wake it up.",
+      "next": "w5"
+    },
+    {
+      "id": "w5",
+      "speaker": "braith",
+      "text": "Black start. You need a generator big enough to spin the pumps.",
+      "choices": [
+        {
+          "text": "I know where there's a ground power cart.",
+          "next": "cart"
+        },
+        {
+          "text": "Why haven't you done it already?",
+          "next": "why"
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "speaker": "walt",
+      "text": "[Coughs for a long time.] Lungs. Forty years of hydrogen sulfide. I can tell you. I can't climb.",
+      "effects": [
+        {
+          "set": "walt_secret_known",
+          "value": true
+        }
+      ],
+      "next": "cart"
+    },
+    {
+      "id": "cart",
+      "speaker": "walt",
+      "text": "Air Guard ramp at the airport. Ninety-kilowatt carts for the C-130s. One of those would do it. Barely.",
+      "next": "w6"
+    },
+    {
+      "id": "w6",
+      "speaker": "walt",
+      "text": "Galena's warm. Galena could heat a hospital. Maybe half of Reno. Who do you tell?",
+      "effects": [
+        {
+          "quest": "q_black_start",
+          "state": "start"
+        }
+      ],
+      "end": true
+    }
+  ]
+}

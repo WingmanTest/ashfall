@@ -1,46 +1,56 @@
-# ASHFALL: Story Package (`/workspace/game2/story/`)
+# story/ — ASHFALL: Truckee Meadows (Revision 2, FINAL APPROVED)
 
-The narrative for Echo's first-person, portrait, pixel-art survival game. Everything here is data plus docs. Nothing outside `story/` was touched.
+Narrative data for the game. `js/story.js` loads this folder live.
 
-**Start here:** `story_bible.md` (premise, tone, factions, outline, endings) → `SCHEMA.md` (how to load) → `gameplay_hooks.json` (what to build per chapter).
+**Status (Nov 23, 2026):** Revision 2 is implemented. `python3 story/validate.py` → **0 errors, 0 warnings**. All v1 content has been removed; the id map for other teams is in **`MIGRATION_V1_TO_V2.md`**.
 
-## Layout
+## What's here
+| Path | Contents |
+|---|---|
+| `story_bible.md` | The world, cast, Tallmen rules, the Hollows (§5a), seasons and timeline (§6), chapters, endings |
+| `revision2_proposal.md` | The approved design record (FINAL APPROVED header; decisions at approval in §12) |
+| `chapters/` | 10 chapter docs, `ch01_day_three.md` … `ch10_the_warm_room.md` (Ch7 covers both `ch07_dead_air` and `ch07b_dixie_valley`) |
+| `dialogue/` | 89 scenes. Ch1–Ch2 are fully playable; Ch3–Ch10 cover every key beat, every trader, the Annex, the Ch9 Wraith choice, the Act III Hollows, the Ch10 siege and a branching epilogue for all 5 endings |
+| `npcs.json` | 15 main NPCs, 7 minor, 10 ambient, 6 traders, generic speakers, 7 factions |
+| `flags.json` / `endings.json` | 148 flags with types, defaults, meanings, set/read sites; 5 endings |
+| `items.json` / `quests.json` | 45 story items; 14 quests |
+| `gameplay_hooks.json` | Seasons, timeline, assimilation (Hollows) block; per-chapter levels, season, weather, day/night temperature, survival focus, locations, enemies, encounters, traders, ambient NPCs, set pieces, Tallman glimpses, scenes, start/end effects |
+| `SCHEMA.md` | Data format, events and hard rules |
+| `MIGRATION_V1_TO_V2.md` | Old → new ids, removed ids, action lists for Cartographer / Quartermaster / Prime, retired terms |
+| `validate.py` | Integrity checker |
+| `authoring/` | Python generators; `authoring/build_all.sh` rebuilds every JSON file and chapter doc, then validates |
+
+## Seasons at a glance
+| Ch | `season` | Date | Weather | °C day / night |
+|---|---|---|---|---|
+| 1 | `late_summer` | Day 3, Wed Aug 26, Year 1 | `heat_haze` | 35 / 18 |
+| 2 | `late_summer` | Day 19, Fri Sep 11 | `dust_wind` | 33 / 15 |
+| 3 | `autumn` | Day 50, Mon Oct 12 | `clear_autumn` | 14 / 4 |
+| 4 | `autumn` | Day 66, Wed Oct 28 | `autumn_wind` | 12 / 5 |
+| 5 | `late_fall` | Day 83, Sat Nov 14 | `sleet` | 2 / −3 |
+| 6 | `late_fall` | Day 96, Fri Nov 27 | `overcast` | 1 / −3 |
+| 7 | `late_fall` | Day 104, Sat Dec 5 → mid-Dec | `overcast` → `brown_sky` | −1 / −3 |
+| 8 | `nuclear_winter` | January, Year 2 | `fallout_rain` → `ashfall` | −10 / −18 |
+| 9 | `nuclear_winter` | Early February | `blizzard` | −40 / −45 |
+| 10 | `nuclear_winter` | Late February | `ashfall` | −34 / −45 |
+
+Ch1–2 are a heat-and-hydration game (no frost, snow, coats or cold breath; the validator lints for it). Warmth matters from Ch3.
+
+## Act III: the Hollows
+From Ch8 the Tallmen leave **Hollows**: assimilated people (`assimilated_human`) and animals (`assimilated_animal`) that keep a voice and a shape. Tells: Wraith growls with hackles up (she whines at real husks), no breath plume in the cold, off-cadence borrowed voices. Scenes `ch08_henley_house`, `ch08_door`, `ch09_voices`, `ch10_siege_night2/3`. The count is unknown; `assimilated_killed` only counts kills.
+
+## Editing
+Edit the generator in `authoring/` (`d01.py`…`d10.py` dialogue, `npcs.py`, `hooks.py`, `meta.py` items/quests, `flags.py` flags/endings, `chapters.py` chapter docs), then run:
+```sh
+sh story/authoring/build_all.sh
 ```
-story/
-  story_bible.md          premise, tone (dark but hopeful), setting, protagonist, timeline, factions, 3-act arc, chapter table, endings
-  SCHEMA.md               data formats + engine contract
-  README.md               this file
-  npcs.json               12 NPCs + minor characters + factions
-  flags.json              92 flags (type/default/meaning/where set/read) + 5 endings with exact conditions
-  endings.json            5 endings in the shape Echo's loader expects ({title, body}) + conditions
-  items.json, quests.json story item and quest IDs (items aligned with systems/items.json)
-  gameplay_hooks.json     per-chapter: weather, temp, time, locations, enemies, set pieces, items, scene order, scripts
-  chapters/ch01..ch10_*.md  chapter design docs, each with a "Gameplay hooks" section
-  dialogue/*.json         41 branching scenes (Ch1–2 fully playable; key scenes for Ch3–10 + epilogue)
-  validate.py             integrity check: JSON, node links, flags/items/quests/NPCs/locations/enemies, line lengths, reachability
-  authoring/              Python scripts that generated the JSON (optional; build_all.sh regenerates and overwrites)
-```
+Hand edits to generated JSON are overwritten by the next build.
 
-## Loading (minimal JS sketch)
-```js
-const scene = await (await fetch(`story/dialogue/${id}.json`)).json();
-const nodes = Object.fromEntries(scene.nodes.map(n => [n.id, n]));
-let node = nodes[scene.start];
-function enter(n){ apply(n.effects); render(n); }
-// next → enter(nodes[n.next]); branches → first whose conditions pass;
-// choices → filter by conditions, on pick apply(choice.effects) then enter(nodes[choice.next]);
-// end → apply(scene.on_end)
-```
-`check(conds)` and `apply(effects)` are ~60 lines total; their semantics are in SCHEMA.md.
-
-## Validate after edits
-```
-python3 story/validate.py          # 0 errors, 0 warnings at handoff
-```
-Editing JSON by hand is fine. Just don't run `authoring/build_all.sh` afterwards, because it would overwrite your edits.
-
-## Connections to Echo's mockups
-- The mockup HUD strings are canon: **SECTOR 4** = Dell's block (an Authority zone number); **ROUTE 9** = the Authority's convoy route (Ch5); **TEMP / SEAL / FILTER / RAD / HP** map to stats; **ASHFALL** is the title.
-- The art-style progression follows the acts: Dusty Orange (Act I–II autumn and summer) → the brown-sky transition in Ch7 → Cold Nuclear Winter (Ch8–10). Toxic Green Night (NV) fits the Ch5 and Ch6 night ops.
-- Kenney industrial and road assets fit the Twin Ports: grain elevators, ore docks, water towers, containers, power poles. The wrecked sedan works for Ch8's husk scene.
-- The mockup's mutant/zombie models (Quaternius zombie, Husk Mutant sprite) should be re-dressed as **husks**: sick, under-dressed humans (T-shirts in the snow, hair loss). They aren't monsters, and they appear only from Ch8.
+## Ids at a glance
+- Player speaker `braith`. Companions `carly`, `wraith`. Family `ross`, `wes`.
+- Main: `lolo`, `gil`, `kit`, `avila`, `augie`, `walt`, `ames`, `roz`, `ander`, `ruiz` ("Engineer Two"), `reyne`.
+- Minor: `pruitt`, `deshawn`, `cpl_haas`, `pete_lund`, `rosa`, `kessler`, `sfc_brandt`.
+- Ambient: `amb_brother_amos`, `amb_lonnie`, `amb_salt`, `amb_darlene`, `amb_bike_kids`, `amb_deputy_lusk`, `amb_ruth`, `amb_pvt_marsh`, `amb_night_owl`, `amb_tolliver`.
+- Traders: `trader_dutch`, `trader_mo`, `trader_rourke`, `trader_annie`, `trader_boone`, `trader_floor`.
+- Enemies (v2 Act III): `assimilated_human`, `assimilated_animal`. Seasons: `late_summer`, `autumn`, `late_fall`, `nuclear_winter`.
+- Endings: `end_warm_room`, `end_ledger`, `end_stillwater`, `end_dark_water`, `end_two_coats`.

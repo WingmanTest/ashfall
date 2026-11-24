@@ -1,22 +1,24 @@
 {
  "$schema": "./schema.json",
  "formatVersion": 1,
+ "storyVersion": 2,
  "id": "ch03_the_long_cold",
  "chapter": 3,
+ "storyChapter": "ch03",
  "title": "The Long Cold",
- "act": "I",
+ "act": 1,
  "storyFile": "story/chapters/ch03_the_long_cold.md",
  "next": "ch04_black_start",
- "summary": "Night fire at Ray's -> frozen Proctor rail yard traverse between burn barrels -> Lou's shack; optional Harbor soup line.",
  "difficulty": 2,
+ "summary": "Crisp autumn, Day 50. Wes rides in, Kit's warning at night, Gil's garage burns and the Bridge Boys hit the block, dawn traverse past the river fog, the Peavine switchbacks (Rourke, the tracks, Augie's shack, Walt), Carly's count at the registry, Darlene's reefer at the warehouses, then the Galena secret at home.",
  "units": "meters",
  "grid": {
   "cellSize": 2.0,
-  "cols": 26,
-  "rows": 64,
+  "cols": 48,
+  "rows": 96,
   "origin": {
-   "x": -26.0,
-   "z": -120.0
+   "x": -48.0,
+   "z": -184.0
   },
   "legend": {
    "#": {
@@ -37,20 +39,22 @@
     "preview": "#b8ad98"
    },
    ".": {
-    "name": "snow_ground",
+    "name": "autumn_dirt",
     "walkable": true,
     "solid": false,
     "height": 0,
-    "floorTex": "snow_02",
-    "preview": "#d9e1e8"
+    "floorTex": "dirt",
+    "groundType": "dusty_dirt_leaves",
+    "preview": "#b48c5c"
    },
    "=": {
-    "name": "road",
+    "name": "asphalt_dusty",
     "walkable": true,
     "solid": false,
     "height": 0,
-    "floorTex": "asphalt_snow",
-    "preview": "#8d969e"
+    "floorTex": "road_damaged",
+    "groundType": "asphalt_dusty",
+    "preview": "#9b9488"
    },
    "B": {
     "name": "building_mass",
@@ -78,29 +82,41 @@
     "wallTex": "dirty_concrete",
     "preview": "#3c3f44"
    },
-   "T": {
-    "name": "tree",
-    "walkable": false,
-    "solid": true,
-    "height": 6,
-    "tree": true,
-    "preview": "#2e4a34"
+   "b": {
+    "name": "bridge_deck",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "rusty_metal",
+    "preview": "#7a6a5a"
    },
-   "g": {
-    "name": "dirt_gravel",
+   "l": {
+    "name": "lawn_brown",
     "walkable": true,
     "solid": false,
     "height": 0,
     "floorTex": "dirt",
-    "preview": "#9c8f7a"
+    "groundType": "dead_lawn",
+    "preview": "#9c8a52"
    },
    "r": {
-    "name": "road_damaged",
+    "name": "road_cracked",
     "walkable": true,
     "solid": false,
     "height": 0,
     "floorTex": "road_damaged",
-    "preview": "#7b7f80"
+    "groundType": "asphalt_cracked",
+    "preview": "#857c70"
+   },
+   "y": {
+    "name": "dry_leaves",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirt",
+    "groundType": "dry_leaves",
+    "scatter": "leaves",
+    "preview": "#a8743e"
    },
    "~": {
     "name": "open_water",
@@ -113,277 +129,672 @@
    }
   },
   "tiles": [
-   "HHHHHHHHHHHHHHHHHHHHHHHHHH",
-   "HT.######..............~~H",
-   "H..#,,,,#..T.....BBBBB.~~H",
-   "H..#,,,,#TT..T...BBBBB.~~H",
-   "H..#,,,,#.....T..BBBBB.~~H",
-   "H..#,,,,#..T.TTT.BBBBB.~~H",
-   "H..###D##.TT.TT........~~H",
-   "H....ggggggTT..........~~H",
-   "H...Tgggggg............~~H",
-   "HTTT.....ggT.T.........~~H",
-   "H........ggT...........~~H",
-   "HT...T..Tgg............~~H",
-   "H..TTT..Tgg...T........~~H",
-   "HggggggggggggggggggggggggH",
-   "HggggggggggggggggggggggggH",
-   "HggBBgggBBgggggBBgggBBgggH",
-   "HggBBgggBBgggggBBgggBBgggH",
-   "HggBBgggBBgggggBBgggBBgggH",
-   "HggBBggggggggggBBgggBBgggH",
-   "HggBBggggggggggBBgggBBgggH",
-   "HggBBgggBBggggggggggBBgggH",
-   "HggBBgggBBggggggggggBBgggH",
-   "HgggggggBBgggggBBgggBBgggH",
-   "HgggggggBBgggggBBgggBBgggH",
-   "HggBBgggBBgggggBBgggBBgggH",
-   "HggBBgggBBgggggBBggggggggH",
-   "HggBBgggBBgggggBBggggggggH",
-   "HggBBggggggggggBBgggBBgggH",
-   "HggBBggggggggggBBgggBBgggH",
-   "HggBBgggBBgggggBBgggBBgggH",
-   "HgggggggBBgggggBBgggBBgggH",
-   "HgggggggBBgggggBBgggBBgggH",
-   "HggBBgggBBggggggggggBBgggH",
-   "HggBBgggBBggggggggggBBgggH",
-   "HggBBggggggggggBBgggBBgggH",
-   "HggBBggggggggggBBgggBBgggH",
-   "HggBBgggBBgggggBBgggBBgggH",
-   "HggBBgggBBgggggBBgggBBgggH",
-   "HggggggggggggggggggggggggH",
-   "HggggggggggggggggggggggggH",
-   "H..........====..........H",
-   "H..........====..........H",
-   "H..........====..........H",
-   "H..........====..........H",
-   "H..........====..........H",
-   "H..........====..........H",
-   "H.....r.....==...........H",
-   "H.....r.....==.BBBBB.....H",
-   "H.####r.....==.BBBBB.....H",
-   "H.#,,#r.....==.BBBBB.....H",
-   "H.#,,#r.....==.BBBBB.....H",
-   "H.#,,Dr.....==.BBBBB.....H",
-   "H.#,,#r.....==.BBBBB.....H",
-   "H.#,,#r.....==.BBBBB.....H",
-   "H.####r####.==...........H",
-   "H.....r#,,#.==...........H",
-   "H.####r#,,#.==.BBBBB.....H",
-   "H.#,,#r#,,D.==.BBBBB.....H",
-   "H.#,,Dr#,,#.==.BBBBB.....H",
-   "H.#,,#rD,,#.==.BBBBB.....H",
-   "H.#,,#r#,,#.==.BBBBB.....H",
-   "H.####r####.==.BBBBB.....H",
-   "H.....r.....==...........H",
-   "HHHHHHHHHHHHHHHHHHHHHHHHHH"
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyy###########yyyyyBBBBByyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyy#,,,,,#,,,#yyyyyBBBBByyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyy#,,,,,#,,,#yyyyyBBBBByyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyy#,,,,,D,,,#yyyyyBBBBByyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyy#,,,,,#,,,#yyyyyBBBBByyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyy#,,,,,#,,,#yyyyyyyyyyyyyyyyyyyyyyH",
+   "Hyyyyyyyyyyyyy####D######yyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyrryyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyrryyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyrryyyyyyyyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyrrrrrrrrrrrrrrrrrrrrrrrryyyyyyH",
+   "HyyyyyyyyyyyyyyyyrrrrrrrrrrrrrrrrrrrrrrrryyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyrryyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyrryyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyrryyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyrryyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyrryyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyrryyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyrryyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyrryyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyrryyyyyyH",
+   "HyyyyyrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrryyyyyyH",
+   "HyyyyyrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrryyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyrryyyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyrryyyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyrryyyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyrryyyyyyyyyyyyyyyyyyyyyyyH",
+   "HyyyyyyyyyyyyyyyyyyyyyrryyyyyyyyyyyyyyyyyyyyyyyH",
+   "H~~~~~~~~~~~~~~~~~~~~~bb~~~~~~~~~~~~~~~~~~~~~~~H",
+   "H~~~~~~~~~~~~~~~~~~~~~bb~~~~~~~~~~~~~~~~~~~~~~~H",
+   "H.....................==.......................H",
+   "H.....................==.......................H",
+   "H..#################..==...##################..H",
+   "H..#,,,,,,,,,,,,,,,#..==...#,,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,,,,,,,,#..==...#,,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,,,,,,,,#..==...D,,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,,,,,,,,#..==...#,,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,,,,,,,,#..==...#,,,,,,,,,,,,,,,,#..H",
+   "H..########D########..==...#,,,,,,,,,,,,,,,,#..H",
+   "H..#,,,,,,,,,,,,,,,#..==...########D#########..H",
+   "H..#,,,,,,,,,,,,,,,#..==.......................H",
+   "H..#,,,,,,,,,,,,,,,#..==.......................H",
+   "H..#,,,,,,,,,,,,,,,#..==..............BBBBBBB..H",
+   "H..#,,,,,,,,,,,,,,,#..==..............BBBBBBB..H",
+   "H..########D########..==..............BBBBBBB..H",
+   "H.....................==..............BBBBBBB..H",
+   "H.....................==.......................H",
+   "H==============================================H",
+   "H==============================================H",
+   "H...............llll..==..ll...................H",
+   "H...............llll..==..ll...................H",
+   "H...............llll..==..ll...................H",
+   "H..BBBBBBBBBBBB.llll..==..ll...................H",
+   "H..BBBBBBBBBBBB.llll..==..ll...................H",
+   "H..BBBBBBBBBBBB.llll..==..ll.##########........H",
+   "H..BBBBBBBBBBBB.llll..==..ll.#,,,,,,,,#........H",
+   "H..BBBBBBBBBBBB.llll..==..ll.#,,,,,,,,#........H",
+   "H..BBBBBBBBBBBB.llll..==..ll.#,,,,,,,,#........H",
+   "H...............llll..==..ll.D,,,,,,,,#........H",
+   "H...............llll..==..ll.D,,,,,,,,#........H",
+   "H...............llll..==..ll.#,,,,,,,,#........H",
+   "H...............llll..==..ll.#,,,,,,,,#........H",
+   "H...............llll..==..ll.##########........H",
+   "H...............llll..==..ll...................H",
+   "H...............llll..==..ll...................H",
+   "H...............llll..==..ll...................H",
+   "H...............llll..==..ll...................H",
+   "H...###########.llll..==..ll...................H",
+   "H...#,,,,#,,,,#.llll..==..ll.##########..BBBBB.H",
+   "H...#,,,,#,,,,#.llll..==..ll.#,,,,,,,,#..BBBBB.H",
+   "H...#,,,,#,,,,#.llll..==..ll.#,,,,,,,,#..BBBBB.H",
+   "H...D,,,,D,,,,D.llll..==..ll.#,,,,,,,,#..BBBBB.H",
+   "H...#,,,,#,,,,#.llll..==..ll.D,,,,,,,,#..BBBBB.H",
+   "H...#,,,,#,,,,#.llll..==..ll.#,,,,,,,,#..BBBBB.H",
+   "H...#,,,,#,,,,#.llll..==..ll.#,,,,,,,,#..BBBBB.H",
+   "H...###########.llll..==..ll.#,,,,,,,,#..BBBBB.H",
+   "H...............llll..==..ll.##########..BBBBB.H",
+   "H...............llll..==..ll...................H",
+   "H...............llll..==..ll...................H",
+   "H...............llll..==..ll...................H",
+   "H...............llll..==..ll...................H",
+   "H..BBBBBBBBBBBB.llll..==..ll...................H",
+   "H..BBBBBBBBBBBB.llll..==..ll.BBBBBBBBBBBBBBBB..H",
+   "H..BBBBBBBBBBBB.llll..==..ll.BBBBBBBBBBBBBBBB..H",
+   "H..BBBBBBBBBBBB.llll..==..ll.BBBBBBBBBBBBBBBB..H",
+   "H..BBBBBBBBBBBB.llll..==..ll.BBBBBBBBBBBBBBBB..H",
+   "H..BBBBBBBBBBBB.llll..==..ll.BBBBBBBBBBBBBBBB..H",
+   "H..BBBBBBBBBBBB.llll..==..ll.BBBBBBBBBBBBBBBB..H",
+   "H..BBBBBBBBBBBB.llll..==..ll.BBBBBBBBBBBBBBBB..H",
+   "H..BBBBBBBBBBBB.llll..==..ll.BBBBBBBBBBBBBBBB..H",
+   "H...............llll..==..ll...................H",
+   "H...............llll..==..ll...................H",
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
   ]
  },
  "environment": {
-  "timeStart": 0.0,
-  "timeEnd": 0.27,
+  "seasonArc": "devolving_autumn",
+  "season": "autumn",
+  "actName": "Society Devolving",
+  "groundType": "dusty_dirt_dry_leaves",
+  "precipitation": "none",
+  "particles": "leaves",
+  "snowCover": 0.0,
+  "wetness": 0.0,
+  "fogColor": "#b9926d",
+  "skyColor": "#8e7c82",
+  "sunColor": "#f2d2a0",
+  "ambientColor": "#a99a86",
+  "visibilityM": 70,
+  "fogNear": 6,
+  "fogFar": 70,
+  "windMs": 6,
+  "atmosphere": "Crisp, dusty autumn: cold clear air, gusts carrying grit and dry leaves, muted ochre palette, chimney smoke, no snow.",
+  "environmentPreset": "autumn",
+  "storySeason": "autumn",
+  "storyPalette": "autumn gold, yellow cottonwoods along the Truckee, long shadows",
+  "storyWeather": "clear_autumn",
+  "weather": "clear_autumn",
+  "storyTempC": 14,
+  "tempC": 14,
+  "nightTempC": 4,
+  "survivalFocus": [
+   "first_cold_nights",
+   "fuel",
+   "fire"
+  ],
+  "timeStart": 0.42,
+  "timeEnd": 0.85,
   "timeLocked": false,
-  "weather": "clear_cold",
-  "tempC": -30,
   "blizzard": false,
-  "snowCover": 1.0,
-  "particles": "snow",
-  "fogNear": 8,
-  "fogFar": 40,
-  "palette": "assets/palettes/slso8.json",
-  "ambientTint": "#c9d6e6",
-  "hud": {
-   "temp": true,
-   "hunger": true,
-   "rad": false,
-   "filter": false,
-   "seal": false
+  "warmthDrainMul": 0.35,
+  "transitions": [
+   {
+    "trigger": "t_ch03_nightfall",
+    "time": 0.9,
+    "light": "cold_clear_night"
+   },
+   {
+    "trigger": "t_ch03_dawn",
+    "time": 0.27,
+    "light": "dawn_ground_fog"
+   }
+  ],
+  "groundFog": {
+   "after": "t_ch03_dawn",
+   "band": "river",
+   "heightM": 2.5
   },
-  "warmthDrainMul": 1.6,
-  "maxAliveEnemies": 5
+  "seasonNote": "Day 50 (mid October): cottonwoods gone yellow along the Truckee, dry leaves skittering, first cold night (4 C), no snow.",
+  "hud": {
+   "hp": true,
+   "hydration": true,
+   "hunger": true,
+   "companion": true,
+   "warmth": true,
+   "temp": true
+  }
  },
  "locations": [
   {
-   "id": "loc_east_end",
+   "id": "loc_peavine_shack",
    "x": 0.0,
-   "z": -17.0,
+   "z": -150.0,
    "rect": {
     "type": "rect",
-    "x0": -24.0,
-    "z0": -40.0,
-    "x1": 24.0,
+    "x0": -46.0,
+    "z0": -182.0,
+    "x1": 46.0,
+    "z1": -118.0
+   },
+   "safe": false,
+   "name": "Peavine Peak (Augie's shack)"
+  },
+  {
+   "id": "loc_rscc_registry",
+   "x": -24.0,
+   "z": -101.0,
+   "rect": {
+    "type": "rect",
+    "x0": -46.0,
+    "z0": -118.0,
+    "x1": -2.0,
+    "z1": -84.0
+   },
+   "safe": false,
+   "name": "Convention center registry"
+  },
+  {
+   "id": "loc_tric_warehouses",
+   "x": 22.0,
+   "z": -101.0,
+   "rect": {
+    "type": "rect",
+    "x0": -2.0,
+    "z0": -118.0,
+    "x1": 46.0,
+    "z1": -84.0
+   },
+   "safe": false,
+   "name": "TRIC warehouses"
+  },
+  {
+   "id": "loc_sparks_block",
+   "x": 0.0,
+   "z": -39.0,
+   "rect": {
+    "type": "rect",
+    "x0": -46.0,
+    "z0": -84.0,
+    "x1": 46.0,
     "z1": 6.0
    },
-   "safe": true
-  },
-  {
-   "id": "loc_proctor_yard",
-   "x": 0.0,
-   "z": -67.0,
-   "rect": {
-    "type": "rect",
-    "x0": -24.0,
-    "z0": -94.0,
-    "x1": 24.0,
-    "z1": -40.0
-   },
-   "safe": false
-  },
-  {
-   "id": "loc_lou_shack",
-   "x": -9.0,
-   "z": -106.0,
-   "rect": {
-    "type": "rect",
-    "x0": -24.0,
-    "z0": -118.0,
-    "x1": 6.0,
-    "z1": -94.0
-   },
-   "safe": true
-  },
-  {
-   "id": "loc_ore_docks",
-   "x": 16.0,
-   "z": -106.0,
-   "rect": {
-    "type": "rect",
-    "x0": 8.0,
-    "z0": -118.0,
-    "x1": 24.0,
-    "z1": -94.0
-   },
-   "safe": false
+   "safe": true,
+   "name": "Sector 4 (home block)"
   }
  ],
- "landmarks": [
+ "landmarks": [],
+ "buildings": [
   {
-   "label": "Ray's garage (fire)",
-   "x": -18.0,
-   "z": -17.0
+   "id": "b_ch03_shack",
+   "label": "Augie's radio shack",
+   "kind": "walled",
+   "cells": [
+    14,
+    3,
+    24,
+    9
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -20.0,
+    "z0": -178.0,
+    "x1": 2.0,
+    "z1": -164.0
+   },
+   "doors": [
+    [
+     -11.0,
+     -165.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_peavine_shack",
+   "interior": "bunk room (west), radio room (east)"
   },
   {
-   "label": "Frozen family car",
-   "x": 1.0,
-   "z": -35.0
+   "id": "m_ch03_shed",
+   "label": "Antenna shed",
+   "kind": "mass",
+   "cells": [
+    30,
+    3,
+    34,
+    7
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 12.0,
+    "z0": -178.0,
+    "x1": 22.0,
+    "z1": -168.0
+   },
+   "doors": [],
+   "location": "loc_peavine_shack",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
   },
   {
-   "label": "Proctor water tower",
-   "x": -1.0,
-   "z": -91.0
+   "id": "b_ch03_rscc",
+   "label": "Reno-Sparks Convention Center (registry)",
+   "kind": "walled",
+   "cells": [
+    3,
+    35,
+    19,
+    47
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -42.0,
+    "z0": -114.0,
+    "x1": -8.0,
+    "z1": -88.0
+   },
+   "doors": [
+    [
+     -25.0,
+     -89.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_rscc_registry",
+   "interior": "registry hall (north), stores office (south)"
   },
   {
-   "label": "Lou's shack",
-   "x": -14.0,
-   "z": -112.0
+   "id": "b_ch03_tric",
+   "label": "TRIC warehouse",
+   "kind": "walled",
+   "cells": [
+    27,
+    35,
+    44,
+    42
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 6.0,
+    "z0": -114.0,
+    "x1": 42.0,
+    "z1": -98.0
+   },
+   "doors": [
+    [
+     23.0,
+     -99.0
+    ],
+    [
+     7.0,
+     -107.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_tric_warehouses"
   },
   {
-   "label": "Harbor soup line",
-   "x": 15.0,
-   "z": -103.0
+   "id": "m_ch03_tric_b",
+   "label": "Warehouse B",
+   "kind": "mass",
+   "cells": [
+    38,
+    45,
+    44,
+    48
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 28.0,
+    "z0": -94.0,
+    "x1": 42.0,
+    "z1": -86.0
+   },
+   "doors": [],
+   "location": "loc_tric_warehouses",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  },
+  {
+   "id": "m_ch03_w_houses",
+   "label": "Neighbor houses (west)",
+   "kind": "mass",
+   "cells": [
+    3,
+    55,
+    14,
+    60
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -42.0,
+    "z0": -74.0,
+    "x1": -18.0,
+    "z1": -62.0
+   },
+   "doors": [],
+   "location": "loc_sparks_block",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  },
+  {
+   "id": "b_ch03_home",
+   "label": "Braith and Carly's house",
+   "kind": "walled",
+   "cells": [
+    4,
+    70,
+    14,
+    78
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -40.0,
+    "z0": -44.0,
+    "x1": -18.0,
+    "z1": -26.0
+   },
+   "doors": [
+    [
+     -19.0,
+     -35.0
+    ],
+    [
+     -39.0,
+     -35.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_sparks_block",
+   "interior": "kitchen (west), living room + radio (east)"
+  },
+  {
+   "id": "m_ch03_sw_houses",
+   "label": "Neighbor houses (south-west)",
+   "kind": "mass",
+   "cells": [
+    3,
+    84,
+    14,
+    92
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -42.0,
+    "z0": -16.0,
+    "x1": -18.0,
+    "z1": 2.0
+   },
+   "doors": [],
+   "location": "loc_sparks_block",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  },
+  {
+   "id": "b_ch03_gil",
+   "label": "Gil's garage (burns tonight)",
+   "kind": "walled",
+   "cells": [
+    29,
+    57,
+    38,
+    65
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 10.0,
+    "z0": -70.0,
+    "x1": 30.0,
+    "z1": -52.0
+   },
+   "doors": [
+    [
+     11.0,
+     -61.0
+    ],
+    [
+     11.0,
+     -59.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_sparks_block"
+  },
+  {
+   "id": "b_ch03_lolo",
+   "label": "Lolo's house and clinic",
+   "kind": "walled",
+   "cells": [
+    29,
+    71,
+    38,
+    79
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 10.0,
+    "z0": -42.0,
+    "x1": 30.0,
+    "z1": -24.0
+   },
+   "doors": [
+    [
+     11.0,
+     -33.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_sparks_block"
+  },
+  {
+   "id": "m_ch03_e_houses",
+   "label": "Neighbor houses (east)",
+   "kind": "mass",
+   "cells": [
+    41,
+    71,
+    45,
+    79
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 34.0,
+    "z0": -42.0,
+    "x1": 44.0,
+    "z1": -24.0
+   },
+   "doors": [],
+   "location": "loc_sparks_block",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  },
+  {
+   "id": "m_ch03_se_houses",
+   "label": "Neighbor houses (south-east)",
+   "kind": "mass",
+   "cells": [
+    29,
+    85,
+    44,
+    92
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 10.0,
+    "z0": -14.0,
+    "x1": 42.0,
+    "z1": 2.0
+   },
+   "doors": [],
+   "location": "loc_sparks_block",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
   }
  ],
  "paths": {
   "critical": [
    [
-    -8.0,
-    -5.0
+    -25.0,
+    -37.0
    ],
    [
-    -5.0,
-    -5.0
+    -15.0,
+    -35.0
    ],
    [
-    0.0,
-    -9.0
+    -3.0,
+    -51.0
    ],
    [
-    0.0,
-    -39.0
-   ],
-   [
-    0.0,
-    -47.0
-   ],
-   [
-    -1.0,
+    -3.0,
     -63.0
    ],
    [
-    1.0,
-    -81.0
+    9.0,
+    -61.0
    ],
    [
-    0.0,
-    -93.0
+    -3.0,
+    -63.0
    ],
    [
-    -6.0,
+    -15.0,
+    -35.0
+   ],
+   [
+    -35.0,
+    -31.0
+   ],
+   [
+    -15.0,
+    -35.0
+   ],
+   [
+    -3.0,
+    -79.0
+   ],
+   [
+    -3.0,
+    -117.0
+   ],
+   [
+    -3.0,
+    -121.0
+   ],
+   [
+    -3.0,
+    -133.0
+   ],
+   [
+    -19.0,
+    -135.0
+   ],
+   [
+    -3.0,
+    -133.0
+   ],
+   [
+    31.0,
+    -135.0
+   ],
+   [
+    31.0,
+    -155.0
+   ],
+   [
+    -11.0,
+    -157.0
+   ],
+   [
+    -11.0,
+    -161.0
+   ],
+   [
+    -11.0,
+    -171.0
+   ],
+   [
+    -11.0,
+    -161.0
+   ],
+   [
+    -11.0,
+    -157.0
+   ],
+   [
+    31.0,
+    -155.0
+   ],
+   [
+    31.0,
+    -135.0
+   ],
+   [
+    -3.0,
+    -133.0
+   ],
+   [
+    -3.0,
+    -117.0
+   ],
+   [
+    -23.0,
+    -87.0
+   ],
+   [
+    -25.0,
     -95.0
    ],
    [
-    -6.0,
-    -103.0
+    -23.0,
+    -87.0
    ],
    [
-    -13.0,
-    -104.0
+    -3.0,
+    -83.0
    ],
    [
-    -13.0,
-    -107.0
+    -15.0,
+    -35.0
    ],
    [
-    -14.0,
-    -112.0
+    -25.0,
+    -35.0
    ]
   ],
   "optional": [
    {
-    "id": "b_ray_defend",
-    "label": "Help Ray (alley)",
+    "id": "b_ch03_darlene",
+    "label": "Darlene's reefer",
     "points": [
      [
-      -11.0,
-      -1.0
-     ],
-     [
-      -13.0,
-      -3.0
-     ],
-     [
-      -13.0,
-      -17.0
-     ],
-     [
-      -15.0,
-      -17.0
-     ],
-     [
-      -18.0,
-      -17.0
-     ]
-    ]
-   },
-   {
-    "id": "b_soup",
-    "label": "Harbor soup line",
-    "points": [
-     [
-      3.0,
-      -75.0
-     ],
-     [
-      11.0,
-      -77.0
-     ],
-     [
-      11.0,
+      -3.0,
       -93.0
      ],
      [
-      15.0,
-      -103.0
+      5.0,
+      -93.0
+     ],
+     [
+      17.0,
+      -93.0
      ]
     ]
    }
@@ -393,524 +804,621 @@
   "player": [
    {
     "id": "spawn_default",
-    "x": -8.0,
-    "z": -5.0,
-    "rotY": -1.571
+    "x": -25.0,
+    "z": -37.0,
+    "rotY": 1.571
    }
   ],
   "npcs": [
    {
-    "id": "npc_theo",
-    "npc": "theo",
-    "x": -9.0,
-    "z": -1.0,
-    "rotY": 3.142,
-    "behavior": "idle"
-   },
-   {
-    "id": "npc_marguerite",
-    "npc": "marguerite",
-    "x": -3.0,
-    "z": -1.0,
-    "rotY": 1.571,
-    "behavior": "idle",
+    "id": "npc_wraith",
+    "npc": "wraith",
+    "x": -23.0,
+    "z": -33.0,
+    "rotY": 0.0,
+    "behavior": "companion_follow",
     "when": [
      {
-      "flag": "marguerite_alive",
-      "ne": false
+      "flag": "wraith_alive",
+      "eq": true
+     }
+    ],
+    "label": "Wraith",
+    "companion": true
+   },
+   {
+    "id": "npc_carly",
+    "npc": "carly",
+    "x": -33.0,
+    "z": -37.0,
+    "rotY": 1.571,
+    "behavior": "idle",
+    "dialogue": "ch03_wes_arrives",
+    "when": [
+     {
+      "not": {
+       "flag": "ch03_night",
+       "eq": true
+      }
      }
     ]
    },
    {
-    "id": "npc_wren",
-    "npc": "wren",
-    "x": -13.0,
-    "z": -1.0,
-    "rotY": -1.571,
+    "id": "npc_carly_rscc",
+    "npc": "carly",
+    "x": -21.0,
+    "z": -95.0,
+    "rotY": 0.0,
     "behavior": "idle",
-    "dialogue": "ch03_wren_warning",
+    "dialogue": "ch03_carly_count",
     "when": [
      {
-      "flag": "trust.wren",
+      "flag": "ch03_walt_met",
+      "eq": true
+     }
+    ],
+    "label": "Carly (stores office)"
+   },
+   {
+    "id": "npc_wes",
+    "npc": "wes",
+    "x": -13.0,
+    "z": -37.0,
+    "rotY": -1.571,
+    "behavior": "idle",
+    "dialogue": "ch03_wes_arrives"
+   },
+   {
+    "id": "npc_kit",
+    "npc": "kit",
+    "x": -43.0,
+    "z": -43.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch03_kit_warning",
+    "when": [
+     {
+      "flag": "ch03_night",
+      "eq": true
+     },
+     {
+      "trust": "kit",
       "gte": 3
      }
     ]
    },
    {
-    "id": "npc_ray",
-    "npc": "ray",
-    "x": -18.0,
-    "z": -15.0,
-    "rotY": -1.571,
-    "behavior": "idle",
-    "dialogue": "ch03_ray_fire"
-   },
-   {
-    "id": "npc_hank",
-    "npc": "hank",
-    "x": -16.0,
-    "z": -113.0,
-    "rotY": 0.0,
-    "behavior": "idle",
-    "dialogue": "ch03_hank_proctor"
-   },
-   {
-    "id": "npc_lou",
-    "npc": "lou",
-    "x": -11.0,
-    "z": -114.0,
-    "rotY": 0.0,
-    "behavior": "idle"
-   },
-   {
-    "id": "npc_bea",
-    "npc": "bea",
+    "id": "npc_gil",
+    "npc": "gil",
     "x": 15.0,
-    "z": -105.0,
-    "rotY": 1.571,
-    "behavior": "idle"
-   },
-   {
-    "id": "npc_strand",
-    "npc": "strand",
-    "x": 1.0,
-    "z": -97.0,
+    "z": -75.0,
     "rotY": 0.0,
     "behavior": "idle",
     "when": [
      {
-      "flag": "ch03_strand_inperson",
+      "flag": "ch03_night",
+      "eq": true
+     }
+    ],
+    "label": "Gil (pulled out of the fire)"
+   },
+   {
+    "id": "npc_lolo",
+    "npc": "lolo",
+    "x": 7.0,
+    "z": -35.0,
+    "rotY": 1.571,
+    "behavior": "idle"
+   },
+   {
+    "id": "npc_augie",
+    "npc": "augie",
+    "x": -15.0,
+    "z": -173.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch03_augie_peavine"
+   },
+   {
+    "id": "npc_walt",
+    "npc": "walt",
+    "x": -3.0,
+    "z": -169.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "ch03_augie_met",
       "eq": true
      }
     ]
    },
    {
-    "id": "npc_boot_strippers",
-    "npc": "boot_strippers",
-    "x": 2.0,
-    "z": -69.0,
+    "id": "npc_trader_rourke",
+    "npc": "trader_rourke",
+    "x": -27.0,
+    "z": -139.0,
+    "rotY": 0.0,
+    "behavior": "trade",
+    "label": "Rourke's burro camp (Peavine road)",
+    "trader": {
+     "stall": "Rourke's burro camp (Peavine road)",
+     "repFlag": "trader_rourke_rep",
+     "stockFrom": "story/npcs.json traders[].stock_by_act"
+    }
+   },
+   {
+    "id": "npc_trader_annie",
+    "npc": "trader_annie",
+    "x": -33.0,
+    "z": -107.0,
+    "rotY": 0.0,
+    "behavior": "trade",
+    "label": "Annie's table (registry hall)",
+    "trader": {
+     "stall": "Annie's table (registry hall)",
+     "repFlag": "trader_annie_rep",
+     "stockFrom": "story/npcs.json traders[].stock_by_act"
+    },
+    "relocatedFrom": "loc_sparks_library (library opens Ch8; Ch3 stall stays at the registry)"
+   },
+   {
+    "id": "npc_amb_darlene",
+    "npc": "amb_darlene",
+    "x": 19.0,
+    "z": -91.0,
     "rotY": 0.0,
     "behavior": "idle",
-    "label": "Two men stripping a dead man's boots (ambient)"
+    "dialogue": "ch03_darlene_camp",
+    "label": "Darlene (reefer)"
+   },
+   {
+    "id": "npc_amb_bike_kids",
+    "npc": "amb_bike_kids",
+    "x": 1.0,
+    "z": -31.0,
+    "rotY": 0.0,
+    "behavior": "ride_loop"
+   },
+   {
+    "id": "npc_amb_night_owl",
+    "npc": "amb_night_owl",
+    "x": -21.0,
+    "z": -39.0,
+    "rotY": 0.0,
+    "behavior": "radio_voice",
+    "label": "Night Owl (radio)",
+    "remote": true
+   },
+   {
+    "id": "npc_amb_brother_amos",
+    "npc": "amb_brother_amos",
+    "x": -17.0,
+    "z": -93.0,
+    "rotY": 0.0,
+    "behavior": "preach",
+    "label": "Brother Amos (registry queue)"
+   },
+   {
+    "id": "npc_amb_deputy_lusk",
+    "npc": "amb_deputy_lusk",
+    "x": 1.0,
+    "z": -79.0,
+    "rotY": 0.0,
+    "behavior": "patrol_block"
+   },
+   {
+    "id": "npc_extra_neighbor_01",
+    "npc": "extra_neighbor_01",
+    "x": -15.0,
+    "z": -57.0,
+    "rotY": 0.0,
+    "behavior": "ambient_chores",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_02",
+    "npc": "extra_neighbor_02",
+    "x": -1.0,
+    "z": -55.0,
+    "rotY": 0.0,
+    "behavior": "ambient_chores",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_03",
+    "npc": "extra_neighbor_03",
+    "x": -15.0,
+    "z": -23.0,
+    "rotY": 0.0,
+    "behavior": "ambient_chores",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_04",
+    "npc": "extra_neighbor_04",
+    "x": -1.0,
+    "z": -19.0,
+    "rotY": 0.0,
+    "behavior": "ambient_chores",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_05",
+    "npc": "extra_neighbor_05",
+    "x": -39.0,
+    "z": -91.0,
+    "rotY": 0.0,
+    "behavior": "ambient_chores",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_06",
+    "npc": "extra_neighbor_06",
+    "x": -19.0,
+    "z": -109.0,
+    "rotY": 0.0,
+    "behavior": "ambient_chores",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_07",
+    "npc": "extra_neighbor_07",
+    "x": 9.0,
+    "z": -109.0,
+    "rotY": 0.0,
+    "behavior": "ambient_chores",
+    "label": "neighbor",
+    "crowd": true
    }
   ],
   "enemies": [
    {
     "id": "en_01",
-    "type": "bridge_boy",
-    "x": -13.0,
-    "z": -25.0,
-    "group": "g_bb_w1",
-    "tier": 2,
-    "behavior": "assault",
-    "hostile": "always",
-    "activate": "trigger",
-    "note": "Flee at 50% losses; can be scared off by firing over their heads."
-   },
-   {
-    "id": "en_02",
-    "type": "bridge_boy",
-    "x": -13.0,
-    "z": -19.0,
-    "group": "g_bb_w1",
-    "tier": 2,
-    "behavior": "assault",
-    "hostile": "always",
-    "activate": "trigger",
-    "note": "Flee at 50% losses; can be scared off by firing over their heads."
-   },
-   {
-    "id": "en_03",
-    "type": "bridge_boy",
-    "x": -17.0,
-    "z": -20.0,
-    "group": "g_bb_w1",
-    "tier": 2,
-    "behavior": "assault",
-    "hostile": "always",
-    "activate": "trigger",
-    "note": "Flee at 50% losses; can be scared off by firing over their heads."
-   },
-   {
-    "id": "en_04",
-    "type": "bridge_boy",
-    "x": -11.0,
-    "z": -15.0,
-    "group": "g_bb_w1",
-    "tier": 2,
-    "behavior": "assault",
-    "hostile": "always",
-    "activate": "trigger",
-    "note": "Flee at 50% losses; can be scared off by firing over their heads."
-   },
-   {
-    "id": "en_05",
-    "type": "bridge_boy",
-    "x": -13.0,
-    "z": -11.0,
-    "group": "g_bb_w2",
-    "tier": 2,
-    "behavior": "assault",
-    "hostile": "always",
-    "activate": "trigger",
-    "note": "Flee at 50% losses; can be scared off by firing over their heads."
-   },
-   {
-    "id": "en_06",
-    "type": "bridge_boy",
-    "x": -13.0,
-    "z": -7.0,
-    "group": "g_bb_w2",
-    "tier": 2,
-    "behavior": "assault",
-    "hostile": "always",
-    "activate": "trigger",
-    "note": "Flee at 50% losses; can be scared off by firing over their heads."
-   },
-   {
-    "id": "en_07",
     "type": "watch_militia",
-    "x": -1.0,
-    "z": -75.0,
-    "group": "g_yard_watch",
-    "tier": 2,
-    "behavior": "patrol",
-    "hostile": "conditional",
-    "activate": "load",
-    "patrol": [
-     [
-      -1.0,
-      -87.0
-     ],
-     [
-      -1.0,
-      -47.0
-     ],
-     [
-      9.0,
-      -53.0
-     ],
-     [
-      -1.0,
-      -87.0
-     ]
-    ],
-    "hostileWhen": [
-     {
-      "item": "ration_card",
-      "lt": 1
-     }
-    ]
-   },
-   {
-    "id": "en_08",
-    "type": "watch_militia",
-    "x": 1.0,
-    "z": -59.0,
-    "group": "g_yard_watch",
-    "tier": 2,
-    "behavior": "patrol",
-    "hostile": "conditional",
-    "activate": "load",
-    "patrol": [
-     [
-      1.0,
-      -47.0
-     ],
-     [
-      -13.0,
-      -57.0
-     ],
-     [
-      1.0,
-      -71.0
-     ]
-    ],
-    "hostileWhen": [
-     {
-      "item": "ration_card",
-      "lt": 1
-     }
-    ]
-   },
-   {
-    "id": "en_09",
-    "type": "watch_militia",
-    "x": 11.0,
-    "z": -45.0,
-    "group": "g_yard_watch",
-    "tier": 2,
+    "x": 15.0,
+    "z": -137.0,
+    "group": "g_ch03_watch",
+    "tier": 1,
     "behavior": "guard",
     "hostile": "conditional",
     "activate": "load",
     "hostileWhen": [
      {
-      "item": "ration_card",
-      "lt": 1
+      "flag": "ch03_watch_provoked",
+      "eq": true
      }
-    ]
+    ],
+    "note": "Peavine toll stop; talk or pay past them (ch03_rourke_road), hostile only if provoked."
+   },
+   {
+    "id": "en_02",
+    "type": "watch_militia",
+    "x": 23.0,
+    "z": -131.0,
+    "group": "g_ch03_watch",
+    "tier": 1,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "load",
+    "hostileWhen": [
+     {
+      "flag": "ch03_watch_provoked",
+      "eq": true
+     }
+    ],
+    "note": "Peavine toll stop; talk or pay past them (ch03_rourke_road), hostile only if provoked."
+   },
+   {
+    "id": "en_03",
+    "type": "watch_militia",
+    "x": 29.0,
+    "z": -139.0,
+    "group": "g_ch03_watch",
+    "tier": 1,
+    "behavior": "guard",
+    "hostile": "conditional",
+    "activate": "load",
+    "hostileWhen": [
+     {
+      "flag": "ch03_watch_provoked",
+      "eq": true
+     }
+    ],
+    "note": "Peavine toll stop; talk or pay past them (ch03_rourke_road), hostile only if provoked."
+   },
+   {
+    "id": "en_04",
+    "type": "bridge_boy",
+    "x": 37.0,
+    "z": -75.0,
+    "group": "g_ch03_fire_w1",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch03_fire_defend"
+   },
+   {
+    "id": "en_05",
+    "type": "bridge_boy",
+    "x": 41.0,
+    "z": -67.0,
+    "group": "g_ch03_fire_w1",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch03_fire_defend"
+   },
+   {
+    "id": "en_06",
+    "type": "bridge_boy",
+    "x": 39.0,
+    "z": -49.0,
+    "group": "g_ch03_fire_w1",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch03_fire_defend"
+   },
+   {
+    "id": "en_07",
+    "type": "bridge_boy",
+    "x": 33.0,
+    "z": -47.0,
+    "group": "g_ch03_fire_w1",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch03_fire_defend"
+   },
+   {
+    "id": "en_08",
+    "type": "bridge_boy",
+    "x": 19.0,
+    "z": -77.0,
+    "group": "g_ch03_fire_w2",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch03_fire_defend"
+   },
+   {
+    "id": "en_09",
+    "type": "bridge_boy",
+    "x": 27.0,
+    "z": -47.0,
+    "group": "g_ch03_fire_w2",
+    "tier": 1,
+    "behavior": "assault",
+    "hostile": "always",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch03_fire_defend"
    }
   ],
   "loot": [
    {
     "id": "loot_01",
-    "x": -7.0,
-    "z": -3.0,
-    "r": 1.6,
-    "label": "Dell's woodpile",
-    "container": "kitchen_cabinet",
-    "guaranteed": [
-     {
-      "item": "firewood",
-      "n": 2
-     }
-    ],
-    "location": "loc_east_end"
-   },
-   {
-    "id": "loot_02",
-    "x": -20.0,
-    "z": -21.0,
-    "r": 1.6,
-    "label": "Ray's diesel shelf",
-    "container": "toolbox",
-    "when": [
-     {
-      "flag": "ch02_reported_ray",
-      "ne": true
-     }
-    ],
-    "location": "loc_east_end"
-   },
-   {
-    "id": "loot_03",
-    "x": 0.0,
-    "z": -68.0,
-    "r": 1.6,
-    "label": "Dead man's boots",
-    "container": "supply_cache",
-    "guaranteed": [
-     {
-      "item": "boots_insulated",
-      "n": 1
-     }
-    ],
-    "location": "loc_proctor_yard"
-   },
-   {
-    "id": "loot_04",
-    "x": -14.0,
-    "z": -67.0,
-    "r": 1.6,
-    "label": "Boxcar (bodies)",
-    "container": "toolbox",
-    "location": "loc_proctor_yard"
-   },
-   {
-    "id": "loot_05",
-    "x": -5.0,
-    "z": -50.0,
-    "r": 1.6,
-    "label": "Boxcar",
-    "container": "toolbox",
-    "location": "loc_proctor_yard"
-   },
-   {
-    "id": "loot_06",
-    "x": 9.0,
-    "z": -78.0,
-    "r": 1.6,
-    "label": "Signal hut",
-    "container": "toolbox",
-    "location": "loc_proctor_yard"
-   },
-   {
-    "id": "loot_07",
-    "x": 3.0,
-    "z": -37.0,
-    "r": 1.6,
-    "label": "Frozen family car",
+    "x": 2.0,
+    "z": -63.0,
+    "r": 3.1,
+    "label": "Gil's customer car",
     "container": "car_trunk",
+    "propRef": "prop_01",
+    "render": "prop",
+    "location": "loc_sparks_block",
     "guaranteed": [
      {
       "item": "wool_blanket",
       "n": 1
      }
-    ],
-    "location": "loc_east_end"
+    ]
    },
    {
-    "id": "loot_08",
-    "x": 15.0,
-    "z": -99.0,
-    "r": 1.6,
-    "label": "Soup line crate",
-    "container": "locker",
-    "location": "loc_ore_docks"
-   },
-   {
-    "id": "loot_09",
-    "x": -17.0,
-    "z": -115.0,
-    "r": 1.6,
-    "label": "Lou's spares",
-    "container": "supply_cache",
+    "id": "loot_02",
+    "x": -6.0,
+    "z": -19.0,
+    "r": 3.1,
+    "label": "Neighbor's car",
+    "container": "car_trunk",
+    "propRef": "prop_02",
+    "render": "prop",
+    "location": "loc_sparks_block",
     "guaranteed": [
      {
-      "item": "batteries",
+      "item": "firewood",
       "n": 2
-     },
+     }
+    ]
+   },
+   {
+    "id": "loot_03",
+    "x": -35.0,
+    "z": -39.0,
+    "r": 1.6,
+    "label": "Kitchen cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_sparks_block"
+   },
+   {
+    "id": "loot_04",
+    "x": -23.0,
+    "z": -29.0,
+    "r": 1.6,
+    "label": "Hall wardrobe",
+    "container": "wardrobe",
+    "location": "loc_sparks_block"
+   },
+   {
+    "id": "loot_05",
+    "x": -13.0,
+    "z": -175.0,
+    "r": 1.6,
+    "label": "Augie's cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_peavine_shack",
+    "guaranteed": [
      {
       "item": "hand_radio",
       "n": 1
-     }
-    ],
-    "location": "loc_lou_shack"
-   },
-   {
-    "id": "loot_10",
-    "x": -19.0,
-    "z": -5.0,
-    "r": 1.6,
-    "label": "Closet / wardrobe (filler)",
-    "container": "wardrobe",
-    "location": "loc_east_end",
-    "filler": true
-   },
-   {
-    "id": "loot_11",
-    "x": -19.0,
-    "z": 1.0,
-    "r": 1.6,
-    "label": "Closet / wardrobe (filler)",
-    "container": "wardrobe",
-    "location": "loc_east_end",
-    "filler": true
-   },
-   {
-    "id": "loot_12",
-    "x": -9.0,
-    "z": -9.0,
-    "r": 1.6,
-    "label": "Closet / wardrobe (filler)",
-    "container": "wardrobe",
-    "location": "loc_east_end",
-    "filler": true
-   },
-   {
-    "id": "loot_13",
-    "x": 23.0,
-    "z": -15.0,
-    "r": 1.6,
-    "label": "Woodpile / pallets / broken furniture (filler)",
-    "container": "woodpile",
-    "location": "loc_east_end",
-    "filler": true
-   },
-   {
-    "id": "loot_14",
-    "x": 17.0,
-    "z": 5.0,
-    "r": 1.6,
-    "label": "Woodpile / pallets / broken furniture (filler)",
-    "container": "woodpile",
-    "location": "loc_east_end",
-    "filler": true
-   },
-   {
-    "id": "loot_15",
-    "x": 23.0,
-    "z": -39.0,
-    "r": 1.6,
-    "label": "Dumpster (filler)",
-    "container": "dumpster",
-    "location": "loc_east_end",
-    "filler": true
-   },
-   {
-    "id": "loot_16",
-    "x": -23.0,
-    "z": -39.0,
-    "r": 1.6,
-    "label": "Dumpster (filler)",
-    "container": "dumpster",
-    "location": "loc_east_end",
-    "filler": true
-   },
-   {
-    "id": "loot_17",
-    "x": -17.0,
-    "z": -19.0,
-    "r": 1.6,
-    "label": "Medicine cabinet (filler)",
-    "container": "medicine_cabinet",
-    "location": "loc_east_end",
-    "filler": true
-   },
-   {
-    "id": "loot_18",
-    "x": -23.0,
-    "z": -89.0,
-    "r": 1.6,
-    "label": "Car trunk (filler)",
-    "container": "car_trunk",
-    "location": "loc_proctor_yard",
-    "filler": true,
-    "guaranteed": [
+     },
      {
-      "item": "rifle_ammo",
+      "item": "bandage",
       "n": 1
      }
     ]
    },
    {
-    "id": "loot_19",
-    "x": 23.0,
-    "z": -61.0,
+    "id": "loot_06",
+    "x": -1.0,
+    "z": -175.0,
     "r": 1.6,
-    "label": "Car trunk (filler)",
-    "container": "car_trunk",
-    "location": "loc_proctor_yard",
-    "filler": true
+    "label": "Radio-room toolbox",
+    "container": "toolbox",
+    "location": "loc_peavine_shack",
+    "guaranteed": [
+     {
+      "item": "batteries",
+      "n": 2
+     }
+    ]
    },
    {
-    "id": "loot_20",
-    "x": -7.0,
-    "z": -83.0,
+    "id": "loot_07",
+    "x": -29.0,
+    "z": -95.0,
     "r": 1.6,
-    "label": "Woodpile / pallets / broken furniture (filler)",
-    "container": "woodpile",
-    "location": "loc_proctor_yard",
-    "filler": true
+    "label": "Stores office cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_rscc_registry"
    },
    {
-    "id": "loot_21",
-    "x": 23.0,
-    "z": -85.0,
-    "r": 1.6,
-    "label": "Dumpster (filler)",
-    "container": "dumpster",
-    "location": "loc_proctor_yard",
-    "filler": true
-   },
-   {
-    "id": "loot_22",
-    "x": -23.0,
-    "z": -55.0,
-    "r": 1.6,
-    "label": "Dumpster (filler)",
-    "container": "dumpster",
-    "location": "loc_proctor_yard",
-    "filler": true
-   },
-   {
-    "id": "loot_23",
-    "x": -11.0,
+    "id": "loot_08",
+    "x": 33.0,
     "z": -109.0,
     "r": 1.6,
-    "label": "Kitchen cabinet (filler)",
+    "label": "Warehouse toolbox",
+    "container": "toolbox",
+    "location": "loc_tric_warehouses",
+    "guaranteed": [
+     {
+      "item": "boots_insulated",
+      "n": 1
+     }
+    ]
+   },
+   {
+    "id": "loot_09",
+    "x": 27.0,
+    "z": -55.0,
+    "r": 1.6,
+    "label": "Kitchen cabinet",
     "container": "kitchen_cabinet",
-    "location": "loc_lou_shack",
+    "location": "loc_sparks_block",
+    "filler": true
+   },
+   {
+    "id": "loot_10",
+    "x": 27.0,
+    "z": -27.0,
+    "r": 1.6,
+    "label": "Closet / wardrobe",
+    "container": "wardrobe",
+    "location": "loc_sparks_block",
+    "filler": true
+   },
+   {
+    "id": "loot_11",
+    "x": 13.0,
+    "z": -55.0,
+    "r": 1.6,
+    "label": "Closet / wardrobe",
+    "container": "wardrobe",
+    "location": "loc_sparks_block",
+    "filler": true
+   },
+   {
+    "id": "loot_12",
+    "x": -45.0,
+    "z": 5.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture",
+    "container": "woodpile",
+    "location": "loc_sparks_block",
+    "filler": true
+   },
+   {
+    "id": "loot_13",
+    "x": 45.0,
+    "z": 5.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture",
+    "container": "woodpile",
+    "location": "loc_sparks_block",
+    "filler": true
+   },
+   {
+    "id": "loot_14",
+    "x": 41.0,
+    "z": -81.0,
+    "r": 2.2,
+    "label": "Dumpster",
+    "container": "dumpster",
+    "propRef": "prop_11",
+    "render": "prop",
+    "location": "loc_sparks_block",
+    "filler": true
+   },
+   {
+    "id": "loot_15",
+    "x": 17.0,
+    "z": -83.0,
+    "r": 2.2,
+    "label": "Dumpster",
+    "container": "dumpster",
+    "propRef": "prop_12",
+    "render": "prop",
+    "location": "loc_sparks_block",
+    "filler": true
+   },
+   {
+    "id": "loot_16",
+    "x": 21.0,
+    "z": -39.0,
+    "r": 1.6,
+    "label": "Medicine cabinet",
+    "container": "medicine_cabinet",
+    "location": "loc_sparks_block",
+    "filler": true
+   },
+   {
+    "id": "loot_17",
+    "x": 25.0,
+    "z": -67.0,
+    "r": 1.6,
+    "label": "Gun safe / prepper locker",
+    "container": "gun_safe",
+    "location": "loc_sparks_block",
+    "filler": true
+   },
+   {
+    "id": "loot_18",
+    "x": -17.0,
+    "z": -167.0,
+    "r": 1.6,
+    "label": "Hidden stash / supply cache",
+    "container": "supply_cache",
+    "location": "loc_peavine_shack",
     "filler": true,
     "guaranteed": [
      {
@@ -920,271 +1428,365 @@
     ]
    },
    {
-    "id": "loot_24",
-    "x": -17.0,
-    "z": -109.0,
-    "r": 1.6,
-    "label": "Toolbox / workbench drawer (filler)",
-    "container": "toolbox",
-    "location": "loc_lou_shack",
+    "id": "loot_19",
+    "x": -1.0,
+    "z": -113.0,
+    "r": 3.1,
+    "label": "Car trunk",
+    "container": "car_trunk",
+    "propRef": "prop_13",
+    "render": "prop",
+    "location": "loc_tric_warehouses",
     "filler": true,
     "guaranteed": [
      {
-      "item": "bandage",
+      "item": "rifle_ammo",
       "n": 1
      }
     ]
    },
    {
-    "id": "loot_25",
-    "x": 9.0,
+    "id": "loot_20",
+    "x": -1.0,
+    "z": -93.0,
+    "r": 3.1,
+    "label": "Car trunk",
+    "container": "car_trunk",
+    "propRef": "prop_14",
+    "render": "prop",
+    "location": "loc_tric_warehouses",
+    "filler": true
+   },
+   {
+    "id": "loot_21",
+    "x": 21.0,
+    "z": -105.0,
+    "r": 1.6,
+    "label": "Toolbox / workbench drawer",
+    "container": "toolbox",
+    "location": "loc_tric_warehouses",
+    "filler": true
+   },
+   {
+    "id": "loot_22",
+    "x": 39.0,
+    "z": -101.0,
+    "r": 1.6,
+    "label": "Toolbox / workbench drawer",
+    "container": "toolbox",
+    "location": "loc_tric_warehouses",
+    "filler": true
+   },
+   {
+    "id": "loot_23",
+    "x": 45.0,
     "z": -117.0,
     "r": 1.6,
-    "label": "Closet / wardrobe (filler)",
+    "label": "Woodpile / pallets / broken furniture",
+    "container": "woodpile",
+    "location": "loc_tric_warehouses",
+    "filler": true
+   },
+   {
+    "id": "loot_24",
+    "x": 7.0,
+    "z": -85.0,
+    "r": 2.2,
+    "label": "Dumpster",
+    "container": "dumpster",
+    "propRef": "prop_15",
+    "render": "prop",
+    "location": "loc_tric_warehouses",
+    "filler": true
+   },
+   {
+    "id": "loot_25",
+    "x": 23.0,
+    "z": -89.0,
+    "r": 2.2,
+    "label": "Dumpster",
+    "container": "dumpster",
+    "propRef": "prop_16",
+    "render": "prop",
+    "location": "loc_tric_warehouses",
+    "filler": true
+   },
+   {
+    "id": "loot_26",
+    "x": -11.0,
+    "z": -103.0,
+    "r": 1.6,
+    "label": "Closet / wardrobe",
     "container": "wardrobe",
-    "location": "loc_ore_docks",
-    "filler": true,
-    "guaranteed": [
-     {
-      "item": "dried_fish",
-      "n": 1
-     }
-    ]
+    "location": "loc_rscc_registry",
+    "filler": true
    }
   ]
  },
  "props": [
   {
    "id": "prop_01",
-   "asset": "assets/kenney/industrial/shipping-container-b.glb",
-   "x": -16.0,
-   "z": -83.0,
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": 2.0,
+   "z": -63.0,
    "rotY": 3.142,
-   "h": 2.6,
-   "collide": true
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_02",
-   "asset": "assets/kenney/industrial/shipping-container-a.glb",
-   "x": -16.0,
-   "z": -67.0,
-   "rotY": 3.142,
-   "h": 2.6,
-   "collide": true
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -6.0,
+   "z": -19.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_03",
-   "asset": "assets/kenney/industrial/shipping-container-c.glb",
-   "x": -16.0,
-   "z": -51.0,
-   "rotY": 3.142,
-   "h": 2.6,
-   "collide": true
+   "asset": "assets/kenney/industrial/detail-tank-large.glb",
+   "x": 35.0,
+   "z": -53.0,
+   "rotY": 0.0,
+   "h": 2.4,
+   "collide": true,
+   "footprintR": 2.0,
+   "tag": "propane",
+   "note": "Gil's propane tank (fire hazard)"
   },
   {
    "id": "prop_04",
-   "asset": "assets/kenney/industrial/shipping-container-a.glb",
-   "x": -6.0,
-   "z": -77.0,
-   "rotY": 3.142,
+   "asset": "assets/kenney/industrial/shipping-container-b.glb",
+   "x": 15.0,
+   "z": -90.0,
+   "rotY": 1.571,
    "h": 2.6,
-   "collide": true
+   "collide": true,
+   "footprintR": 3.0,
+   "tag": "reefer",
+   "note": "Darlene's reefer trailer"
   },
   {
    "id": "prop_05",
-   "asset": "assets/kenney/industrial/shipping-container-a.glb",
-   "x": -6.0,
-   "z": -59.0,
-   "rotY": 3.142,
-   "h": 2.6,
-   "collide": true
+   "asset": "assets/kenney/roads/electricity-pole.glb",
+   "x": 7.0,
+   "z": -173.0,
+   "rotY": 0.0,
+   "h": 9,
+   "collide": false,
+   "tag": "antenna",
+   "note": "Augie's antenna mast"
   },
   {
    "id": "prop_06",
-   "asset": "assets/kenney/industrial/shipping-container-c.glb",
-   "x": 8.0,
-   "z": -87.0,
-   "rotY": 3.142,
-   "h": 2.6,
-   "collide": true
-  },
-  {
-   "id": "prop_07",
-   "asset": "assets/kenney/industrial/shipping-container-a.glb",
-   "x": 8.0,
-   "z": -67.0,
-   "rotY": 3.142,
-   "h": 2.6,
-   "collide": true
-  },
-  {
-   "id": "prop_08",
-   "asset": "assets/kenney/industrial/shipping-container-b.glb",
-   "x": 8.0,
-   "z": -47.0,
-   "rotY": 3.142,
-   "h": 2.6,
-   "collide": true
-  },
-  {
-   "id": "prop_09",
-   "asset": "assets/kenney/industrial/shipping-container-a.glb",
-   "x": 18.0,
-   "z": -83.0,
-   "rotY": 3.142,
-   "h": 2.6,
-   "collide": true
-  },
-  {
-   "id": "prop_10",
-   "asset": "assets/kenney/industrial/shipping-container-a.glb",
-   "x": 18.0,
-   "z": -59.0,
-   "rotY": 3.142,
-   "h": 2.6,
-   "collide": true
-  },
-  {
-   "id": "prop_frozen_family_car",
-   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
-   "x": 1.0,
-   "z": -35.0,
-   "rotY": 0.4,
-   "h": 1.45,
-   "collide": true
-  },
-  {
-   "id": "prop_11",
    "asset": "assets/kenney/roads/electricity-pole.glb",
-   "x": -11.0,
-   "z": -113.0,
-   "rotY": 0,
-   "h": 9,
-   "collide": true,
-   "tag": "Lou's antenna mast"
-  },
-  {
-   "id": "prop_12",
-   "asset": "assets/kenney/industrial/water-tower.glb",
-   "x": -1.0,
-   "z": -91.0,
-   "rotY": 0,
-   "h": 15,
-   "collide": true,
-   "tag": "Proctor water tower (landmark from the yard)"
-  },
-  {
-   "id": "prop_13",
-   "asset": "assets/kenney/industrial/chimney-medium.glb",
-   "x": 13.0,
-   "z": -112.0,
-   "rotY": 0,
-   "h": 10,
-   "collide": true
-  },
-  {
-   "id": "prop_14",
-   "asset": "assets/kenney/industrial/building-b.glb",
-   "x": 9.0,
-   "z": -19.0,
-   "rotY": 1.571,
-   "h": 7,
-   "collide": true
-  },
-  {
-   "id": "prop_15",
-   "asset": "assets/kenney/industrial/building-d.glb",
-   "x": 9.0,
-   "z": -2.0,
-   "rotY": 1.571,
-   "h": 6,
-   "collide": true
-  },
-  {
-   "id": "prop_16",
-   "asset": "assets/kenney/industrial/building-r.glb",
-   "x": 13.0,
-   "z": -112.0,
+   "x": -5.0,
+   "z": -73.0,
    "rotY": 0.0,
    "h": 7,
    "collide": false
+  },
+  {
+   "id": "prop_07",
+   "asset": "assets/kenney/roads/electricity-pole.glb",
+   "x": 1.0,
+   "z": -47.0,
+   "rotY": 0.0,
+   "h": 7,
+   "collide": false
+  },
+  {
+   "id": "prop_08",
+   "asset": "assets/kenney/roads/electricity-pole.glb",
+   "x": -5.0,
+   "z": -7.0,
+   "rotY": 0.0,
+   "h": 7,
+   "collide": false
+  },
+  {
+   "id": "prop_09",
+   "asset": "assets/kenney/roads/construction-barrier.glb",
+   "x": 19.0,
+   "z": -129.0,
+   "rotY": 0.0,
+   "h": 1.1,
+   "collide": true,
+   "footprintR": 1.0
+  },
+  {
+   "id": "prop_10",
+   "asset": "assets/kenney/roads/construction-barrier.glb",
+   "x": 25.0,
+   "z": -129.0,
+   "rotY": 0.0,
+   "h": 1.1,
+   "collide": true,
+   "footprintR": 1.0
+  },
+  {
+   "id": "prop_11",
+   "asset": "assets/kenney/roads/dumpster.glb",
+   "x": 41.0,
+   "z": -81.0,
+   "rotY": 0.0,
+   "h": 1.4,
+   "collide": true,
+   "footprintR": 1.3,
+   "tag": "container"
+  },
+  {
+   "id": "prop_12",
+   "asset": "assets/kenney/roads/dumpster.glb",
+   "x": 17.0,
+   "z": -83.0,
+   "rotY": 0.0,
+   "h": 1.4,
+   "collide": true,
+   "footprintR": 1.3,
+   "tag": "container"
+  },
+  {
+   "id": "prop_13",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -1.0,
+   "z": -113.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
+  },
+  {
+   "id": "prop_14",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -1.0,
+   "z": -93.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
+  },
+  {
+   "id": "prop_15",
+   "asset": "assets/kenney/roads/dumpster.glb",
+   "x": 7.0,
+   "z": -85.0,
+   "rotY": 0.0,
+   "h": 1.4,
+   "collide": true,
+   "footprintR": 1.3,
+   "tag": "container"
+  },
+  {
+   "id": "prop_16",
+   "asset": "assets/kenney/roads/dumpster.glb",
+   "x": 23.0,
+   "z": -89.0,
+   "rotY": 0.0,
+   "h": 1.4,
+   "collide": true,
+   "footprintR": 1.3,
+   "tag": "container"
   }
  ],
- "interactives": [],
+ "interactives": [
+  {
+   "id": "ch03_rourke_fire",
+   "type": "talk",
+   "x": -23.0,
+   "z": -141.0,
+   "r": 1.8,
+   "label": "Swap news at Rourke's fire",
+   "setsFlag": "ch03_rumor_heard",
+   "givesItems": {
+    "rumor": 1
+   },
+   "when": [
+    {
+     "flag": "ch03_rourke_met",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "ch03_transmitter",
+   "type": "repair",
+   "x": -3.0,
+   "z": -173.0,
+   "r": 1.8,
+   "label": "Augie's transmitter (mech_tools)",
+   "requiresItems": {
+    "mech_tools": 1
+   },
+   "setsFlag": "ch03_transmitter_fixed"
+  },
+  {
+   "id": "ch03_home_radio",
+   "type": "radio",
+   "x": -21.0,
+   "z": -31.0,
+   "r": 1.8,
+   "label": "Hand radio: late-night band",
+   "requiresItems": {
+    "hand_radio": 1
+   },
+   "setsFlag": "ch03_radio_on"
+  },
+  {
+   "id": "ch03_bed",
+   "type": "sleep",
+   "x": -35.0,
+   "z": -31.0,
+   "r": 1.8,
+   "label": "Bed: wait for night",
+   "setsFlag": "ch03_slept",
+   "when": [
+    {
+     "flag": "ch03_started",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "ch03_woodstove",
+   "type": "boil",
+   "x": -25.0,
+   "z": -41.0,
+   "r": 1.8,
+   "label": "Wood stove (first cold night): warmth + boil water",
+   "requiresItems": {
+    "firewood": 1
+   },
+   "givesItems": {
+    "water_clean": 1
+   }
+  }
+ ],
  "safeZones": [
   {
    "id": "safe_01",
-   "kind": "indoor",
-   "x": -8.0,
-   "z": -5.0,
-   "r": 3,
-   "label": "Home (furniture fire)",
+   "kind": "home",
+   "x": -31.0,
+   "z": -35.0,
+   "r": 4.0,
+   "label": "Home (wood stove)",
    "warmth": true,
    "save": true,
    "sealed": false
   },
   {
    "id": "safe_02",
-   "kind": "burn_barrel",
-   "x": -1.0,
-   "z": -32.0,
-   "r": 2.6,
-   "label": "Burn barrel",
-   "warmth": true,
-   "save": true,
-   "sealed": false
-  },
-  {
-   "id": "safe_03",
-   "kind": "burn_barrel",
-   "x": -11.0,
-   "z": -62.0,
-   "r": 2.6,
-   "label": "Burn barrel (rail workers)",
-   "warmth": true,
-   "save": true,
-   "sealed": false
-  },
-  {
-   "id": "safe_04",
-   "kind": "burn_barrel",
-   "x": 1.0,
-   "z": -81.0,
-   "r": 2.6,
-   "label": "Burn barrel",
-   "warmth": true,
-   "save": true,
-   "sealed": false
-  },
-  {
-   "id": "safe_05",
-   "kind": "burn_barrel",
-   "x": 11.0,
-   "z": -53.0,
-   "r": 2.6,
-   "label": "Burn barrel",
-   "warmth": true,
-   "save": true,
-   "sealed": false
-  },
-  {
-   "id": "safe_06",
-   "kind": "campfire",
-   "x": 15.0,
-   "z": -103.0,
-   "r": 3.4,
-   "label": "Harbor soup kitchen fire",
-   "warmth": true,
-   "save": true,
-   "sealed": false
-  },
-  {
-   "id": "safe_07",
-   "kind": "indoor",
-   "x": -14.0,
-   "z": -112.0,
-   "r": 3,
-   "label": "Lou's shack (car-battery heat)",
+   "kind": "camp",
+   "x": -9.0,
+   "z": -171.0,
+   "r": 3.0,
+   "label": "Augie's shack",
    "warmth": true,
    "save": true,
    "sealed": false
@@ -1192,76 +1794,192 @@
  ],
  "setPieces": [
   {
-   "id": "sp_ch03_ray_fire",
+   "id": "sp_ch03_house_fire",
    "type": "house_fire",
    "area": {
     "type": "rect",
-    "x0": -24.0,
-    "z0": -24.0,
-    "x1": -12.0,
-    "z1": -8.0
+    "x0": 10.0,
+    "z0": -70.0,
+    "x1": 30.0,
+    "z1": -52.0
    },
-   "note": "Ray's garage burns; heat hazard + light source."
+   "when": [
+    {
+     "flag": "ch03_night",
+     "eq": true
+    }
+   ],
+   "note": "Gil's garage burning in the dark; carry Gil out through the double door.",
+   "storyEncounter": "enc_ch03_fire_rescue",
+   "hazard": "heat",
+   "carry": "gil"
+  },
+  {
+   "id": "sp_glimpse_ch03_fog",
+   "type": "tallman_glimpse",
+   "note": "Second-act glimpses get closer but stay distant.",
+   "glimpse": "glimpse_ch03_fog",
+   "kind": "silhouette_quadruped",
+   "x": -132.9,
+   "z": -154.0,
+   "distanceM": 150,
+   "bearingDeg": 300,
+   "durationS": 2.5,
+   "interactable": false,
+   "collider": false,
+   "ai": false,
+   "hudCue": false,
+   "musicSting": false,
+   "despawn": "after duration OR player within 60 m OR LOS lost",
+   "onShow": [
+    {
+     "add": "tallman_glimpses",
+     "value": 1
+    }
+   ],
+   "companionReaction": "wraith_stare",
+   "where": "Edge of dawn ground fog off the Truckee by the Sparks yard, ~150 m, crossing the road on all fours",
+   "offMap": true
+  },
+  {
+   "id": "sp_glimpse_ch03_tracks",
+   "type": "tallman_glimpse",
+   "note": "Decal only; tracks fade in 60 s.",
+   "glimpse": "glimpse_ch03_tracks",
+   "kind": "tracks_decal",
+   "x": 27.0,
+   "z": -147.0,
+   "distanceM": 4,
+   "bearingDeg": 270,
+   "durationS": 60.0,
+   "interactable": false,
+   "collider": false,
+   "ai": false,
+   "hudCue": false,
+   "musicSting": false,
+   "despawn": "after duration OR player within 60 m OR LOS lost",
+   "onShow": [
+    {
+     "add": "tallman_glimpses",
+     "value": 1
+    }
+   ],
+   "companionReaction": "wraith_stare",
+   "where": "Not a figure: a line of too-long tracks crossing the road; Wraith growls at nothing",
+   "offMap": false
   }
  ],
  "encounters": [
   {
-   "id": "enc_fire",
+   "id": "z_ch03_switchback",
    "area": {
     "type": "rect",
-    "x0": -24.0,
-    "z0": -40.0,
-    "x1": 24.0,
-    "z1": 6.0
+    "x0": 4.0,
+    "z0": -146.0,
+    "x1": 42.0,
+    "z1": -124.0
    },
    "groups": [
     {
-     "group": "g_bb_w1",
+     "group": "g_ch03_watch",
+     "wave": 1
+    }
+   ],
+   "note": "Peavine toll stop."
+  },
+  {
+   "id": "z_ch03_fire",
+   "area": {
+    "type": "rect",
+    "x0": 8.0,
+    "z0": -80.0,
+    "x1": 46.0,
+    "z1": -44.0
+   },
+   "groups": [
+    {
+     "group": "g_ch03_fire_w1",
      "wave": 1
     },
     {
-     "group": "g_bb_w2",
+     "group": "g_ch03_fire_w2",
      "wave": 2
     }
    ],
-   "note": "Raid in two waves; flee at 50% losses counts as cleared."
-  },
-  {
-   "id": "enc_yard",
-   "area": {
-    "type": "rect",
-    "x0": -24.0,
-    "z0": -94.0,
-    "x1": 24.0,
-    "z1": -40.0
-   },
-   "groups": [
-    {
-     "group": "g_yard_watch",
-     "wave": 1
-    }
-   ]
+   "storyEncounters": [
+    "enc_ch03_fire_defend"
+   ],
+   "note": "Two waves (4+2); they flee at 50% losses."
   }
  ],
  "triggers": [
+  {
+   "id": "t_glimpse_ch03_fog",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -8.0,
+    "z0": -84.0,
+    "x1": 4.0,
+    "z1": -76.0
+   },
+   "actions": [
+    {
+     "type": "spawn_setpiece",
+     "id": "sp_glimpse_ch03_fog"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch03_dawn",
+     "eq": true
+    }
+   ],
+   "note": "Dawn traverse after the fire"
+  },
+  {
+   "id": "t_glimpse_ch03_tracks",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": 28.0,
+    "z0": -154.0,
+    "x1": 36.0,
+    "z1": -142.0
+   },
+   "actions": [
+    {
+     "type": "spawn_setpiece",
+     "id": "sp_glimpse_ch03_tracks"
+    }
+   ],
+   "note": "Peavine road, approaching the shack"
+  },
   {
    "id": "t_ch03_start",
    "on": "load",
    "once": true,
    "shape": {
     "type": "circle",
-    "x": -8.0,
-    "z": -5.0,
+    "x": -25.0,
+    "z": -37.0,
     "r": 3
    },
    "actions": [
     {
      "type": "set_time",
-     "value": 0.78
+     "value": 0.42
     },
     {
-     "type": "hud_unlock",
-     "stat": "temp"
+     "type": "dialogue",
+     "id": "ch03_wes_arrives"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch03_started",
+     "value": true
     },
     {
      "type": "checkpoint"
@@ -1269,143 +1987,134 @@
    ]
   },
   {
-   "id": "t_ch03_warning",
-   "on": "enter",
+   "id": "t_ch03_nightfall",
+   "on": "flag",
    "once": true,
    "shape": {
-    "type": "rect",
-    "x0": -12.0,
-    "z0": -4.0,
-    "x1": -8.0,
-    "z1": 2.0
+    "type": "circle",
+    "x": -35.0,
+    "z": -31.0,
+    "r": 2.5
    },
    "actions": [
     {
-     "type": "dialogue",
-     "id": "ch03_wren_warning"
+     "type": "set_time",
+     "value": 0.9
+    },
+    {
+     "type": "cutscene",
+     "id": "cs_ch03_cold",
+     "text": "First cold night. Breath shows by the window."
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch03_night",
+     "value": true
+    },
+    {
+     "type": "checkpoint"
     }
    ],
    "when": [
     {
-     "flag": "trust.wren",
+     "flag": "ch03_slept",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch03_kit_warning",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -46.0,
+    "z0": -44.0,
+    "x1": -40.0,
+    "z1": -26.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch03_kit_warning"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch03_kit_warned",
+     "value": true
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch03_night",
+     "eq": true
+    },
+    {
+     "trust": "kit",
      "gte": 3
     }
    ]
   },
   {
-   "id": "t_ch03_fire",
+   "id": "t_ch03_night_owl",
    "on": "flag",
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -24.0,
-    "z0": -32.0,
-    "x1": 24.0,
-    "z1": 6.0
+    "x0": -28.0,
+    "z0": -42.0,
+    "x1": -20.0,
+    "z1": -28.0
    },
    "actions": [
     {
-     "type": "set_time",
-     "value": 0.0
-    },
-    {
      "type": "dialogue",
-     "id": "ch03_ray_fire"
+     "id": "ch03_night_owl"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch03_radio_on",
+     "eq": true
     },
     {
-     "type": "activate_group",
-     "group": "g_bb_w1"
+     "flag": "ch03_night",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch03_fire",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -8.0,
+    "z0": -80.0,
+    "x1": 8.0,
+    "z1": -42.0
+   },
+   "actions": [
+    {
+     "type": "cutscene",
+     "id": "cs_ch03_fire",
+     "text": "Orange light over the rooftops. Gil's garage."
     },
     {
      "type": "spawn_setpiece",
-     "id": "sp_ch03_ray_fire"
-    }
-   ],
-   "when": [
+     "id": "sp_ch03_house_fire"
+    },
     {
-     "flag": "ch03_night_started",
-     "eq": true
-    }
-   ],
-   "note": "Fires once the dusk dialogue (or Wren's warning) completes."
-  },
-  {
-   "id": "t_ch03_wave2",
-   "on": "flag",
-   "once": true,
-   "shape": {
-    "type": "rect",
-    "x0": -24.0,
-    "z0": -32.0,
-    "x1": 24.0,
-    "z1": 6.0
-   },
-   "actions": [
+     "type": "dialogue",
+     "id": "ch03_gil_fire"
+    },
     {
      "type": "activate_group",
-     "group": "g_bb_w2"
+     "group": "g_ch03_fire_w1"
     },
     {
-     "type": "bark",
-     "speaker": "ray",
-     "text": "More of 'em, alley side!"
-    }
-   ],
-   "when": [
-    {
-     "flag": "cleared.g_bb_w1",
-     "eq": true
-    }
-   ]
-  },
-  {
-   "id": "t_ch03_leave_block",
-   "on": "enter",
-   "once": false,
-   "shape": {
-    "type": "rect",
-    "x0": -4.0,
-    "z0": -40.0,
-    "x1": 4.0,
-    "z1": -32.0
-   },
-   "actions": [
-    {
-     "type": "bark",
-     "speaker": "dell",
-     "text": "Not yet. Ray's still out there."
-    },
-    {
-     "type": "push_back"
-    }
-   ],
-   "when": [
-    {
-     "flag": "ch03_fire_resolved",
-     "ne": true
-    }
-   ]
-  },
-  {
-   "id": "t_ch03_yard",
-   "on": "enter",
-   "once": true,
-   "shape": {
-    "type": "rect",
-    "x0": -24.0,
-    "z0": -46.0,
-    "x1": 24.0,
-    "z1": -40.0
-   },
-   "actions": [
-    {
-     "type": "set_time",
-     "value": 0.22
-    },
-    {
-     "type": "cutscene",
-     "id": "cs_ch03_dawn_yard",
-     "text": "Dawn. A boxcar door hangs open. Nobody inside is moving."
+     "type": "activate_group",
+     "group": "g_ch03_fire_w2"
     },
     {
      "type": "checkpoint"
@@ -1413,68 +2122,200 @@
    ],
    "when": [
     {
-     "flag": "ch03_fire_resolved",
+     "flag": "ch03_night",
      "eq": true
     }
    ]
   },
   {
-   "id": "t_ch03_shack",
+   "id": "t_ch03_dawn",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -46.0,
+    "z0": -44.0,
+    "x1": -18.0,
+    "z1": -26.0
+   },
+   "actions": [
+    {
+     "type": "set_time",
+     "value": 0.27
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch03_dawn",
+     "value": true
+    },
+    {
+     "type": "checkpoint"
+    }
+   ],
+   "when": [
+    {
+     "flag": "cleared.g_ch03_fire_w1",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch03_rourke_road",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -36.0,
+    "z0": -144.0,
+    "x1": -18.0,
+    "z1": -132.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch03_rourke_road"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch03_rourke_met",
+     "value": true
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch03_dawn",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch03_augie_peavine",
    "on": "enter",
    "once": true,
    "shape": {
     "type": "rect",
     "x0": -18.0,
-    "z0": -116.0,
-    "x1": -10.0,
-    "z1": -108.0
+    "z0": -176.0,
+    "x1": -8.0,
+    "z1": -166.0
    },
    "actions": [
     {
      "type": "dialogue",
-     "id": "ch03_hank_proctor"
-    }
-   ]
-  },
-  {
-   "id": "t_ch03_secret",
-   "on": "flag",
-   "once": true,
-   "shape": {
-    "type": "rect",
-    "x0": -18.0,
-    "z0": -116.0,
-    "x1": -10.0,
-    "z1": -108.0
-   },
-   "actions": [
+     "id": "ch03_augie_peavine"
+    },
     {
-     "type": "dialogue",
-     "id": "ch03_dam_secret"
+     "type": "set_flag",
+     "flag": "ch03_augie_met",
+     "value": true
     }
    ],
    "when": [
     {
-     "flag": "hank_recruited",
+     "flag": "ch03_dawn",
      "eq": true
     }
    ]
   },
   {
-   "id": "t_ch03_end",
+   "id": "t_ch03_walt",
    "on": "flag",
    "once": true,
    "shape": {
     "type": "rect",
     "x0": -18.0,
-    "z0": -116.0,
-    "x1": -10.0,
-    "z1": -108.0
+    "z0": -176.0,
+    "x1": 0.0,
+    "z1": -166.0
    },
    "actions": [
     {
-     "type": "story_check",
-     "id": "insulin_check"
+     "type": "set_flag",
+     "flag": "ch03_walt_met",
+     "value": true
+    },
+    {
+     "type": "checkpoint"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch03_transmitter_fixed",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch03_carly_count",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -40.0,
+    "z0": -100.0,
+    "x1": -10.0,
+    "z1": -90.0
+   },
+   "actions": [
+    {
+     "type": "set_time",
+     "value": 0.85
+    },
+    {
+     "type": "dialogue",
+     "id": "ch03_carly_count"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch03_count_seen",
+     "value": true
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch03_walt_met",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch03_darlene_camp",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": 8.0,
+    "z0": -96.0,
+    "x1": 26.0,
+    "z1": -84.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch03_darlene_camp"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch03_darlene_met",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch03_plant_secret",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -28.0,
+    "z0": -42.0,
+    "x1": -20.0,
+    "z1": -28.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch03_plant_secret"
     },
     {
      "type": "chapter_end",
@@ -1483,30 +2324,8 @@
    ],
    "when": [
     {
-     "flag": "dam_secret_told",
-     "ne": null
-    }
-   ]
-  },
-  {
-   "id": "t_ch03_hill",
-   "on": "enter",
-   "once": true,
-   "shape": {
-    "type": "rect",
-    "x0": -24.0,
-    "z0": -102.0,
-    "x1": 6.0,
-    "z1": -94.0
-   },
-   "actions": [
-    {
-     "type": "set_flag",
-     "flag": "ch03_reached_hill",
-     "value": true
-    },
-    {
-     "type": "checkpoint"
+     "flag": "ch03_walt_met",
+     "eq": true
     }
    ]
   }
@@ -1515,11 +2334,11 @@
   {
    "id": "o1",
    "order": 1,
-   "text": "Get through the night of the fire",
+   "text": "Wes arrives",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch03_fire_resolved",
+     "flag": "ch03_started",
      "eq": true
     }
    ]
@@ -1527,11 +2346,11 @@
   {
    "id": "o2",
    "order": 2,
-   "text": "Cross the frozen yard to Proctor (stay warm)",
+   "text": "Survive the fire night",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch03_reached_hill",
+     "flag": "cleared.g_ch03_fire_w1",
      "eq": true
     }
    ]
@@ -1539,38 +2358,87 @@
   {
    "id": "o3",
    "order": 3,
-   "text": "Find Hank at Lou's shack",
+   "text": "Reach Peavine; fix Augie's transmitter",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "hank_recruited",
+     "flag": "ch03_transmitter_fixed",
      "eq": true
     }
-   ]
+   ],
+   "quest": "q_find_walt"
   },
   {
    "id": "o4",
    "order": 4,
-   "text": "Decide who learns about the dam",
+   "text": "Meet Walt",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "dam_secret_told",
-     "ne": null
+     "flag": "ch03_walt_met",
+     "eq": true
     }
-   ]
+   ],
+   "quest": "q_find_walt"
   },
   {
    "id": "o5",
    "order": 5,
-   "text": "Optional: Harbor soup line (Bea)",
+   "text": "Decide who learns about Galena",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "dam_secret_told"
+    }
+   ]
+  },
+  {
+   "id": "o6",
+   "order": 6,
+   "text": "Darlene's reefer (optional)",
    "optional": true,
    "completeWhen": [
     {
-     "flag": "ch03_met_bea",
+     "flag": "ch03_darlene_met",
      "eq": true
     }
    ]
   }
- ]
+ ],
+ "companion": {
+  "id": "wraith",
+  "spawn": {
+   "x": -23.0,
+   "z": -33.0
+  },
+  "when": [
+   {
+    "flag": "wraith_alive",
+    "eq": true
+   }
+  ],
+  "follow": {
+   "leashM": 6.0,
+   "catchUpM": 14.0,
+   "nav": "grid_bfs_walkable",
+   "avoid": [
+    "door_clearance_cells",
+    "loot_cells"
+   ],
+   "note": "Follows Braith over walkable tiles; idles at heel inside buildings."
+  },
+  "verbs": [
+   "track",
+   "warn",
+   "guard",
+   "hold"
+  ],
+  "injuredWhen": [
+   {
+    "flag": "wraith_injured",
+    "eq": true
+   }
+  ]
+ },
+ "lootSource": "v2"
 }

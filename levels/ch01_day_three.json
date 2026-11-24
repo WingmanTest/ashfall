@@ -1,22 +1,32 @@
 {
  "$schema": "./schema.json",
  "formatVersion": 1,
+ "storyVersion": 2,
  "id": "ch01_day_three",
  "chapter": 1,
+ "storyChapter": "ch01",
  "title": "Day Three",
- "act": "I",
+ "act": 1,
  "storyFile": "story/chapters/ch01_day_three.md",
  "next": "ch02_the_registry",
- "summary": "Tutorial block in Superior's East End: home -> neighbors -> Belknap Pharmacy at dusk -> home.",
  "difficulty": 1,
+ "summary": "Dry late-summer Sparks, Day 3. Carly home, feed Wraith, haul marina water and boil it at the water station, Lolo's porch, Wraith tracks Mr. Pruitt to the canal, Gil's garage and the gas can, Prater Way pharmacy at dusk (Kit), then the voicemail at night.",
+ "startInventory": {
+  "gas_can": 1,
+  "mech_tools": 1,
+  "canned_food": 3,
+  "candles": 2,
+  "bucket": 1,
+  "flashlight": 1
+ },
  "units": "meters",
  "grid": {
   "cellSize": 2.0,
-  "cols": 22,
-  "rows": 46,
+  "cols": 44,
+  "rows": 72,
   "origin": {
-   "x": -22.0,
-   "z": -84.0
+   "x": -44.0,
+   "z": -136.0
   },
   "legend": {
    "#": {
@@ -37,20 +47,22 @@
     "preview": "#b8ad98"
    },
    ".": {
-    "name": "snow_ground",
+    "name": "dry_dirt",
     "walkable": true,
     "solid": false,
     "height": 0,
-    "floorTex": "snow_02",
-    "preview": "#d9e1e8"
+    "floorTex": "dirt",
+    "groundType": "dry_dirt",
+    "preview": "#c9a87c"
    },
    "=": {
-    "name": "road",
+    "name": "asphalt_dry",
     "walkable": true,
     "solid": false,
     "height": 0,
-    "floorTex": "asphalt_snow",
-    "preview": "#8d969e"
+    "floorTex": "road_damaged",
+    "groundType": "asphalt_dry",
+    "preview": "#a59a8c"
    },
    "B": {
     "name": "building_mass",
@@ -78,22 +90,32 @@
     "wallTex": "dirty_concrete",
     "preview": "#3c3f44"
    },
-   "c": {
-    "name": "cover_low",
-    "walkable": false,
-    "solid": true,
-    "height": 1.0,
-    "wallTex": "dirt",
-    "cover": true,
-    "preview": "#a08850"
-   },
-   "r": {
-    "name": "road_damaged",
+   "b": {
+    "name": "bridge_deck",
     "walkable": true,
     "solid": false,
     "height": 0,
-    "floorTex": "road_damaged",
-    "preview": "#7b7f80"
+    "floorTex": "rusty_metal",
+    "preview": "#7a6a5a"
+   },
+   "l": {
+    "name": "lawn_dry",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirt",
+    "groundType": "dry_lawn",
+    "preview": "#b5a65e"
+   },
+   "y": {
+    "name": "sagebrush_scrub",
+    "walkable": true,
+    "solid": false,
+    "height": 0,
+    "floorTex": "dirt",
+    "groundType": "sagebrush",
+    "scatter": "sagebrush",
+    "preview": "#9a9a68"
    },
    "~": {
     "name": "open_water",
@@ -106,273 +128,613 @@
    }
   },
   "tiles": [
-   "H#########HHHHHHHHHHHH",
-   "H#,,,,,,,#...BBBBBBBBH",
-   "H#,,,,,,,#...BBBBBBBBH",
-   "H#####D###...BBBBBBBBH",
-   "H#,,,,,,,#...BBBBBBBBH",
-   "H#,,,,,,,#...BBBBBBBBH",
-   "H#,,,,,,,#...BBBBBBBBH",
-   "H##D#D####...........H",
-   "H====================H",
-   "H====================H",
-   "H...r.....==....ccc..H",
-   "H...r.BBB.==.BBBBB...H",
-   "H...r.BBB.==.BBBBB...H",
-   "H...r.BBB.==.BBBBB...H",
-   "H...r.BBB.==.BBBBB...H",
-   "H...r.BBB.==.BBBBB...H",
-   "H...r.BBB.==.BBBBB...H",
-   "H...r.....==.BBBBB...H",
-   "H...r.BBB.==.BBBBB...H",
-   "H...r.BBB.==.BBBBB...H",
-   "H...r.BBB.==.BBBBB...H",
-   "H...r.BBB.==.BBBBB...H",
-   "H...r.BBB.==.........H",
-   "H...r.BBB.==.........H",
-   "H...r.....==.#####...H",
-   "H...r.....==.#,,,#...H",
-   "H...r.BBB.==.#,,,#...H",
-   "H...r.BBB.==.D,,,#...H",
-   "H...r.BBB.==.#,,,#...H",
-   "H...r.BBB.==.#,,,#...H",
-   "H###r.BBB.==.#####...H",
-   "H#,#r.BBB.==.........H",
-   "H#,#r.BBB.==.........H",
-   "H#,Dr.BBB.==.#####...H",
-   "H#,#r.....==.#,,,#...H",
-   "H#,#r.####==.#,,,#...H",
-   "H###r.#,,#==.#,,,#...H",
-   "H...r.#,,#==.D,,,#...H",
-   "H###r.#,,D==.#,,,#...H",
-   "H#,#r.#,,#==.#,,,#...H",
-   "H#,Dr.##D#==.#,,,#...H",
-   "H#,#r.#,,#==.#####~~~H",
-   "H#,#r.D,,#==......~~~H",
-   "H###r.#,,#==......~~~H",
-   "H...r.####==......~~~H",
-   "HHHHHHHHHHHHHHHHHHHHHH"
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",
+   "H..........................................H",
+   "H..........................................H",
+   "H....############.........BBBBBBBBBBBBB....H",
+   "H....#,,,,,,,,,,#.........BBBBBBBBBBBBB....H",
+   "H....#,,,,,,,,,,#.........BBBBBBBBBBBBB....H",
+   "H....#,,,,,,,,,,#.........BBBBBBBBBBBBB....H",
+   "H....#####D######.........BBBBBBBBBBBBB....H",
+   "H....#,,,,,,,,,,#.........BBBBBBBBBBBBB....H",
+   "H....#,,,,,,,,,,#.........BBBBBBBBBBBBB....H",
+   "H....#,,,,,,,,,,#.........BBBBBBBBBBBBB....H",
+   "H....#####D######..........................H",
+   "H..........................................H",
+   "H..........................................H",
+   "H..........................................H",
+   "H==========================================H",
+   "H==========================================H",
+   "H==========================================H",
+   "H==========================================H",
+   "H...................====...................H",
+   "Hyyyyyyyyyyyyyyyyyy.====...................H",
+   "Hyyyyyyyyyyyyyyyyyy.====.......~~~~~~~~~~~~H",
+   "Hyyyyyyyyyyyyyyyyyy.====.......~~~~~~~~~~~~H",
+   "Hyyyyyyyyyyyyyyyyyy.====.......~~~~~~~~~~~~H",
+   "Hyyyyyyyyyyyyyyyyyy.====.......~~~~~~~~~~~~H",
+   "Hyyyyyyyyyyyyyyyyyy.====.......~~~~~~~~~~~~H",
+   "Hyyyyyyyyyyyyyyyyyy.====.......bbb~~~~~~~~~H",
+   "Hyyyyyyyyyyyyyyyyyy.====.......bbb~~~~~~~~~H",
+   "Hyyyyyyyyyyyyyyyyyy.====.......~~~~~~~~~~~~H",
+   "Hyyyyyyyyyyyyyyyyyy.====.BBBB..~~~~~~~~~~~~H",
+   "Hyyyyyyyyyyyyyyyyyy.====.BBBB..~~~~~~~~~~~~H",
+   "Hyyyyyyyyyyyyyyyyyy.====.BBBB..~~~~~~~~~~~~H",
+   "Hyyyyyyyyyyyyyyyyyy.====.BBBB..~~~~~~~~~~~~H",
+   "Hyyyyyyyyyyyyyyyyyy.====.......~~~~~~~~~~~~H",
+   "Hyyyyyyyyyyyyyyyyyy.====...................H",
+   "H...................====...................H",
+   "H...................====...................H",
+   "H~~~~~~~~~~~~~......====...................H",
+   "H~~~~~~~~~~~~~......====...................H",
+   "H...................====...................H",
+   "H...................====...................H",
+   "H...#########...llll====ll.................H",
+   "H...#,,,,,,,#...llll====ll.................H",
+   "H...#,,,,,,,#...llll====ll.................H",
+   "H...#,,,,,,,D...llll====ll.................H",
+   "H...#,,,,,,,#...llll====ll.................H",
+   "H...#,,,,,,,#...llll====ll###########.BBBB.H",
+   "H...#########...llll====ll#,,,,,,,,,#.BBBB.H",
+   "H...............llll====ll#,,,,,,,,,#.BBBB.H",
+   "H...............llll====llD,,,,,,,,,#.BBBB.H",
+   "H..BBBBBBBBBB...llll====llD,,,,,,,,,#.BBBB.H",
+   "H..BBBBBBBBBB...llll====ll#,,,,,,,,,#.BBBB.H",
+   "H..BBBBBBBBBB...llll====ll#,,,,,,,,,#.BBBB.H",
+   "H..BBBBBBBBBB...llll====ll###########.BBBB.H",
+   "H...............llll====ll.................H",
+   "H...............llll====ll.................H",
+   "H.....##########llll====ll.................H",
+   "H.....#,,,#,,,,#llll====ll.................H",
+   "H.....#,,,#,,,,#llll====ll###########.BBBB.H",
+   "H.....#,,,#,,,,#llll====ll#,,,,,,,,,#.BBBB.H",
+   "H.....D,,,D,,,,Dllll====ll#,,,,,,,,,#.BBBB.H",
+   "H.....#,,,#,,,,#llll====llD,,,,,,,,,#.BBBB.H",
+   "H.....#,,,#,,,,#llll====ll#,,,,,,,,,#.BBBB.H",
+   "H.....#,,,#,,,,#llll====ll#,,,,,,,,,#.BBBB.H",
+   "H.....##########llll====ll#,,,,,,,,,#.BBBB.H",
+   "H...............llll====ll###########.BBBB.H",
+   "H...............llll====ll.................H",
+   "H..BBBBBBBBBBBB.....====..BBBBBBBBBBBBBBB..H",
+   "H..BBBBBBBBBBBB.....====..BBBBBBBBBBBBBBB..H",
+   "H..BBBBBBBBBBBB.....====..BBBBBBBBBBBBBBB..H",
+   "H...................====...................H",
+   "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
   ]
  },
  "environment": {
-  "timeStart": 0.32,
-  "timeEnd": 0.76,
+  "seasonArc": "blackout_late_summer",
+  "season": "summer",
+  "actName": "Blackout",
+  "groundType": "dry_dirt_asphalt_sagebrush",
+  "precipitation": "none",
+  "particles": "dust",
+  "snowCover": 0.0,
+  "wetness": 0.0,
+  "fogColor": "#cdbfa6",
+  "skyColor": "#6298c8",
+  "sunColor": "#ffd59a",
+  "ambientColor": "#c9a87a",
+  "visibilityM": 95,
+  "fogNear": 10,
+  "fogFar": 95,
+  "windMs": 3,
+  "atmosphere": "Dry late-summer Sparks/Reno and high desert: dust in amber light, heat shimmer over asphalt, sagebrush, no snow anywhere.",
+  "environmentPreset": "summer",
+  "storySeason": "late_summer",
+  "storyPalette": "warm amber dust, white sun glare, heat shimmer",
+  "storyWeather": "heat_haze",
+  "weather": "heat_haze",
+  "storyTempC": 35,
+  "tempC": 35,
+  "nightTempC": 18,
+  "survivalFocus": [
+   "hydration",
+   "heat",
+   "spoiled_food",
+   "dust"
+  ],
+  "timeStart": 0.3,
+  "timeEnd": 0.95,
   "timeLocked": false,
-  "weather": "overcast",
-  "tempC": 6,
   "blizzard": false,
-  "snowCover": 0.15,
-  "particles": "none",
-  "fogNear": 8,
-  "fogFar": 60,
-  "palette": "assets/palettes/endesga-32.json",
-  "ambientTint": "#c9d6e6",
-  "hud": {
-   "temp": false,
-   "hunger": true,
-   "rad": false,
-   "filter": false,
-   "seal": false
-  },
   "warmthDrainMul": 0.0,
-  "maxAliveEnemies": 5
+  "hydrationDrainMul": 1.4,
+  "transitions": [
+   {
+    "trigger": "t_ch01_dusk",
+    "time": 0.74,
+    "light": "amber_dusk"
+   },
+   {
+    "trigger": "t_ch01_night",
+    "time": 0.95,
+    "light": "night_clear"
+   }
+  ],
+  "mechanics": {
+   "boilWater": true,
+   "companionTrack": true,
+   "noSnow": true
+  },
+  "seasonNote": "Day 3 (late August): heat haze over the block, dry lawns, dust, no frost/snow/breath; warm night.",
+  "hud": {
+   "hp": true,
+   "hydration": true,
+   "hunger": true,
+   "companion": true
+  }
  },
  "locations": [
   {
-   "id": "loc_east_end",
+   "id": "loc_prater_pharmacy",
+   "x": 0.0,
+   "z": -115.0,
+   "rect": {
+    "type": "rect",
+    "x0": -42.0,
+    "z0": -134.0,
+    "x1": 42.0,
+    "z1": -96.0
+   },
+   "safe": false,
+   "name": "Prater Way pharmacy"
+  },
+  {
+   "id": "loc_sparks_marina",
+   "x": 0.0,
+   "z": -80.0,
+   "rect": {
+    "type": "rect",
+    "x0": -42.0,
+    "z0": -96.0,
+    "x1": 42.0,
+    "z1": -64.0
+   },
+   "safe": false,
+   "name": "Sparks Marina"
+  },
+  {
+   "id": "loc_sparks_block",
    "x": 0.0,
    "z": -29.0,
    "rect": {
     "type": "rect",
-    "x0": -20.0,
+    "x0": -42.0,
     "z0": -64.0,
-    "x1": 20.0,
+    "x1": 42.0,
     "z1": 6.0
    },
-   "safe": true
-  },
-  {
-   "id": "loc_belknap_pharmacy",
-   "x": -11.0,
-   "z": -74.0,
-   "rect": {
-    "type": "rect",
-    "x0": -20.0,
-    "z0": -84.0,
-    "x1": -2.0,
-    "z1": -64.0
-   },
-   "safe": false
+   "safe": true,
+   "name": "Sector 4 (home block)"
   }
  ],
- "landmarks": [
+ "landmarks": [],
+ "buildings": [
   {
-   "label": "Water tower",
-   "x": 17.0,
-   "z": -76.0
+   "id": "b_ch01_pharmacy",
+   "label": "Prater Way pharmacy",
+   "kind": "walled",
+   "cells": [
+    5,
+    3,
+    16,
+    11
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -34.0,
+    "z0": -130.0,
+    "x1": -10.0,
+    "z1": -112.0
+   },
+   "doors": [
+    [
+     -23.0,
+     -113.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_prater_pharmacy",
+   "interior": "front counter (south), stock room (north)"
   },
   {
-   "label": "Belknap Pharmacy",
-   "x": -11.0,
-   "z": -73.0
+   "id": "m_ch01_prater_shops",
+   "label": "Prater Way storefronts",
+   "kind": "mass",
+   "cells": [
+    26,
+    3,
+    38,
+    10
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 8.0,
+    "z0": -130.0,
+    "x1": 34.0,
+    "z1": -114.0
+   },
+   "doors": [],
+   "location": "loc_prater_pharmacy",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
   },
   {
-   "label": "Home",
-   "x": -6.0,
-   "z": -9.0
+   "id": "m_ch01_marina_restrooms",
+   "label": "Marina restrooms",
+   "kind": "mass",
+   "cells": [
+    25,
+    29,
+    28,
+    32
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 6.0,
+    "z0": -78.0,
+    "x1": 14.0,
+    "z1": -70.0
+   },
+   "doors": [],
+   "location": "loc_sparks_marina",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
   },
   {
-   "label": "Ray's garage",
-   "x": -17.0,
-   "z": -17.0
+   "id": "b_ch01_pruitt",
+   "label": "The Pruitts' house",
+   "kind": "walled",
+   "cells": [
+    4,
+    41,
+    12,
+    47
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -36.0,
+    "z0": -54.0,
+    "x1": -18.0,
+    "z1": -40.0
+   },
+   "doors": [
+    [
+     -19.0,
+     -47.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_sparks_block"
   },
   {
-   "label": "Marguerite's porch",
-   "x": 3.0,
-   "z": -9.0
+   "id": "m_ch01_west_houses",
+   "label": "Neighbor houses (west)",
+   "kind": "mass",
+   "cells": [
+    3,
+    50,
+    12,
+    53
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -38.0,
+    "z0": -36.0,
+    "x1": -18.0,
+    "z1": -28.0
+   },
+   "doors": [],
+   "location": "loc_sparks_block",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  },
+  {
+   "id": "b_ch01_home",
+   "label": "Braith and Carly's house",
+   "kind": "walled",
+   "cells": [
+    6,
+    56,
+    15,
+    64
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -32.0,
+    "z0": -24.0,
+    "x1": -12.0,
+    "z1": -6.0
+   },
+   "doors": [
+    [
+     -13.0,
+     -15.0
+    ],
+    [
+     -31.0,
+     -15.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_sparks_block",
+   "interior": "kitchen + water station (west), living room + phone (east)"
+  },
+  {
+   "id": "m_ch01_sw_houses",
+   "label": "Neighbor houses (south-west)",
+   "kind": "mass",
+   "cells": [
+    3,
+    67,
+    14,
+    69
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": -38.0,
+    "z0": -2.0,
+    "x1": -14.0,
+    "z1": 4.0
+   },
+   "doors": [],
+   "location": "loc_sparks_block",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  },
+  {
+   "id": "b_ch01_gil",
+   "label": "Gil's garage",
+   "kind": "walled",
+   "cells": [
+    26,
+    46,
+    36,
+    53
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 8.0,
+    "z0": -44.0,
+    "x1": 30.0,
+    "z1": -28.0
+   },
+   "doors": [
+    [
+     9.0,
+     -37.0
+    ],
+    [
+     9.0,
+     -35.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_sparks_block",
+   "interior": "two-bay garage"
+  },
+  {
+   "id": "b_ch01_lolo",
+   "label": "Lolo's house and clinic",
+   "kind": "walled",
+   "cells": [
+    26,
+    58,
+    36,
+    65
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 8.0,
+    "z0": -20.0,
+    "x1": 30.0,
+    "z1": -4.0
+   },
+   "doors": [
+    [
+     9.0,
+     -13.0
+    ]
+   ],
+   "wallHeight": 4,
+   "location": "loc_sparks_block"
+  },
+  {
+   "id": "m_ch01_e_houses_a",
+   "label": "Neighbor houses (east)",
+   "kind": "mass",
+   "cells": [
+    38,
+    46,
+    41,
+    53
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 32.0,
+    "z0": -44.0,
+    "x1": 40.0,
+    "z1": -28.0
+   },
+   "doors": [],
+   "location": "loc_sparks_block",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  },
+  {
+   "id": "m_ch01_e_houses_b",
+   "label": "Neighbor houses (east)",
+   "kind": "mass",
+   "cells": [
+    38,
+    58,
+    41,
+    65
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 32.0,
+    "z0": -20.0,
+    "x1": 40.0,
+    "z1": -4.0
+   },
+   "doors": [],
+   "location": "loc_sparks_block",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
+  },
+  {
+   "id": "m_ch01_se_houses",
+   "label": "Neighbor houses (south-east)",
+   "kind": "mass",
+   "cells": [
+    26,
+    67,
+    40,
+    69
+   ],
+   "rect": {
+    "type": "rect",
+    "x0": 8.0,
+    "z0": -2.0,
+    "x1": 38.0,
+    "z1": 4.0
+   },
+   "doors": [],
+   "location": "loc_sparks_block",
+   "note": "Collision mass; engine stamps one Kenney model per greedy rectangle (exactly one here)."
   }
  ],
  "paths": {
   "critical": [
    [
-    -6.0,
-    -8.0
-   ],
-   [
-    -3.0,
-    -7.0
-   ],
-   [
-    1.0,
-    -9.0
-   ],
-   [
-    3.0,
-    -9.0
-   ],
-   [
-    1.0,
-    -11.0
-   ],
-   [
-    1.0,
-    -43.0
-   ],
-   [
-    1.0,
-    -63.0
+    -27.0,
+    -19.0
    ],
    [
     -11.0,
-    -65.0
+    -15.0
    ],
    [
-    -11.0,
-    -69.0
+    1.0,
+    -35.0
    ],
    [
-    -11.0,
+    1.0,
     -75.0
    ],
    [
-    -9.0,
-    -77.0
+    11.0,
+    -83.0
    ],
    [
-    -9.0,
-    -80.0
+    21.0,
+    -83.0
    ],
    [
-    -9.0,
-    -77.0
-   ],
-   [
-    -11.0,
-    -69.0
-   ],
-   [
-    -11.0,
-    -65.0
+    11.0,
+    -83.0
    ],
    [
     1.0,
-    -63.0
+    -55.0
    ],
    [
     1.0,
-    -7.0
+    -15.0
    ],
    [
-    -3.0,
-    -7.0
+    -11.0,
+    -15.0
    ],
    [
-    -6.0,
-    -8.0
+    -27.0,
+    -11.0
+   ],
+   [
+    -11.0,
+    -15.0
+   ],
+   [
+    5.0,
+    -13.0
+   ],
+   [
+    1.0,
+    -45.0
+   ],
+   [
+    1.0,
+    -55.0
+   ],
+   [
+    -11.0,
+    -57.0
+   ],
+   [
+    -27.0,
+    -57.0
+   ],
+   [
+    1.0,
+    -55.0
+   ],
+   [
+    1.0,
+    -35.0
+   ],
+   [
+    7.0,
+    -36.0
+   ],
+   [
+    1.0,
+    -75.0
+   ],
+   [
+    1.0,
+    -99.0
+   ],
+   [
+    -23.0,
+    -109.0
+   ],
+   [
+    -23.0,
+    -117.0
+   ],
+   [
+    -23.0,
+    -109.0
+   ],
+   [
+    1.0,
+    -99.0
+   ],
+   [
+    1.0,
+    -35.0
+   ],
+   [
+    -11.0,
+    -15.0
+   ],
+   [
+    -17.0,
+    -19.0
    ]
   ],
   "optional": [
    {
-    "id": "b_cooler",
-    "label": "Basement cooler + lake water",
+    "id": "b_ch01_gil",
+    "label": "Gil's trade (diesel for tools)",
     "points": [
      [
-      -6.0,
-      -8.0
+      1.0,
+      -35.0
      ],
      [
-      -5.0,
-      -3.0
+      7.0,
+      -36.0
      ],
      [
-      -6.0,
-      2.0
-     ],
-     [
-      -9.0,
-      1.0
-     ],
-     [
-      -11.0,
-      1.0
-     ],
-     [
-      -11.0,
-      5.0
-     ],
-     [
-      13.0,
-      5.0
-     ],
-     [
-      13.0,
-      2.0
-     ]
-    ]
-   },
-   {
-    "id": "b_ray",
-    "label": "Ray's garage trade (via alley)",
-    "points": [
-     [
-      -9.0,
-      1.0
-     ],
-     [
-      -13.0,
-      1.0
-     ],
-     [
-      -13.0,
-      -17.0
-     ],
-     [
-      -15.0,
-      -17.0
-     ],
-     [
-      -17.0,
-      -17.0
+      19.0,
+      -35.0
      ]
     ]
    }
@@ -382,341 +744,593 @@
   "player": [
    {
     "id": "spawn_default",
-    "x": -6.0,
-    "z": -8.0,
+    "x": -27.0,
+    "z": -19.0,
     "rotY": -1.571
    }
   ],
   "npcs": [
    {
-    "id": "npc_theo",
-    "npc": "theo",
-    "x": -5.0,
-    "z": -10.0,
+    "id": "npc_wraith",
+    "npc": "wraith",
+    "x": -39.0,
+    "z": -15.0,
+    "rotY": 0.0,
+    "behavior": "companion_follow",
+    "when": [
+     {
+      "flag": "wraith_alive",
+      "eq": true
+     }
+    ],
+    "label": "Wraith",
+    "companion": true
+   },
+   {
+    "id": "npc_carly",
+    "npc": "carly",
+    "x": -27.0,
+    "z": -13.0,
+    "rotY": 0,
+    "behavior": "idle",
+    "dialogue": "ch01_carly_home"
+   },
+   {
+    "id": "npc_lolo",
+    "npc": "lolo",
+    "x": 5.0,
+    "z": -9.0,
     "rotY": 1.571,
     "behavior": "idle",
-    "dialogue": "ch01_theo_morning"
+    "dialogue": "ch01_lolo_porch",
+    "label": "Lolo (porch)"
    },
    {
-    "id": "npc_marguerite",
-    "npc": "marguerite",
-    "x": 3.0,
-    "z": -10.0,
-    "rotY": 1.571,
-    "behavior": "idle",
-    "dialogue": "ch01_marguerite_porch"
-   },
-   {
-    "id": "npc_ray",
-    "npc": "ray",
-    "x": -17.0,
-    "z": -17.0,
-    "rotY": -1.571,
-    "behavior": "idle",
-    "dialogue": "ch01_ray_garage"
-   },
-   {
-    "id": "npc_wren",
-    "npc": "wren",
-    "x": -11.0,
-    "z": -80.0,
+    "id": "npc_gil",
+    "npc": "gil",
+    "x": 19.0,
+    "z": -35.0,
     "rotY": 0.0,
     "behavior": "idle",
-    "dialogue": "ch01_wren_pharmacy",
+    "dialogue": "ch01_gil_garage"
+   },
+   {
+    "id": "npc_pruitt",
+    "npc": "pruitt",
+    "x": -31.0,
+    "z": -57.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "ch01_tracking",
+      "eq": true
+     }
+    ],
+    "label": "Mr. Pruitt (feeding the ducks)"
+   },
+   {
+    "id": "npc_deshawn",
+    "npc": "deshawn",
+    "x": -21.0,
+    "z": -57.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "when": [
+     {
+      "flag": "ch01_tracking",
+      "eq": true
+     }
+    ]
+   },
+   {
+    "id": "npc_kit",
+    "npc": "kit",
+    "x": -27.0,
+    "z": -125.0,
+    "rotY": 0.0,
+    "behavior": "idle",
+    "dialogue": "ch01_kit_pharmacy",
     "when": [
      {
       "flag": "ch01_dusk",
       "eq": true
      }
-    ],
-    "label": "Wren (looting)",
-    "combatProfile": "looter"
+    ]
    },
    {
-    "id": "npc_theo_night",
-    "npc": "theo",
-    "x": -6.0,
-    "z": -8.0,
+    "id": "npc_amb_deputy_lusk",
+    "npc": "amb_deputy_lusk",
+    "x": 9.0,
+    "z": -91.0,
     "rotY": 0.0,
-    "behavior": "idle",
-    "dialogue": "ch01_theo_night",
-    "when": [
-     {
-      "flag": "ch01_pharmacy_done",
-      "eq": true
-     }
-    ]
+    "behavior": "water_line",
+    "label": "Deputy Cal Lusk (water line)"
+   },
+   {
+    "id": "npc_amb_bike_kids",
+    "npc": "amb_bike_kids",
+    "x": -1.0,
+    "z": -47.0,
+    "rotY": 0.0,
+    "behavior": "ride_loop",
+    "label": "The Bike Kids"
+   },
+   {
+    "id": "npc_extra_neighbor_01",
+    "npc": "extra_neighbor_01",
+    "x": -11.0,
+    "z": -49.0,
+    "rotY": 0.0,
+    "behavior": "ambient_chores",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_02",
+    "npc": "extra_neighbor_02",
+    "x": -11.0,
+    "z": -39.0,
+    "rotY": 0.0,
+    "behavior": "ambient_chores",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_03",
+    "npc": "extra_neighbor_03",
+    "x": 3.0,
+    "z": -47.0,
+    "rotY": 0.0,
+    "behavior": "ambient_chores",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_04",
+    "npc": "extra_neighbor_04",
+    "x": 3.0,
+    "z": -27.0,
+    "rotY": 0.0,
+    "behavior": "ambient_chores",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_05",
+    "npc": "extra_neighbor_05",
+    "x": -11.0,
+    "z": -21.0,
+    "rotY": 0.0,
+    "behavior": "ambient_chores",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_06",
+    "npc": "extra_neighbor_06",
+    "x": 3.0,
+    "z": -3.0,
+    "rotY": 0.0,
+    "behavior": "ambient_chores",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_07",
+    "npc": "extra_neighbor_07",
+    "x": -11.0,
+    "z": -9.0,
+    "rotY": 0.0,
+    "behavior": "ambient_chores",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_08",
+    "npc": "extra_neighbor_08",
+    "x": -19.0,
+    "z": -3.0,
+    "rotY": 0.0,
+    "behavior": "ambient_chores",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_09",
+    "npc": "extra_neighbor_09",
+    "x": 9.0,
+    "z": -89.0,
+    "rotY": 0.0,
+    "behavior": "ambient_chores",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_10",
+    "npc": "extra_neighbor_10",
+    "x": 11.0,
+    "z": -85.0,
+    "rotY": 0.0,
+    "behavior": "ambient_chores",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_11",
+    "npc": "extra_neighbor_11",
+    "x": 7.0,
+    "z": -85.0,
+    "rotY": 0.0,
+    "behavior": "ambient_chores",
+    "label": "neighbor",
+    "crowd": true
+   },
+   {
+    "id": "npc_extra_neighbor_12",
+    "npc": "extra_neighbor_12",
+    "x": -3.0,
+    "z": -63.0,
+    "rotY": 0.0,
+    "behavior": "ambient_chores",
+    "label": "neighbor",
+    "crowd": true
    }
   ],
   "enemies": [
    {
     "id": "en_01",
-    "type": "watch_militia",
-    "x": 15.0,
-    "z": -65.0,
-    "group": "g_watch",
+    "type": "looter",
+    "x": -19.0,
+    "z": -125.0,
+    "group": "g_ch01_kit",
     "tier": 1,
-    "behavior": "patrol",
-    "hostile": "conditional",
+    "behavior": "wander",
+    "hostile": "on_provoke",
     "activate": "trigger",
-    "patrol": [
-     [
-      17.0,
-      -65.0
-     ],
-     [
-      -9.0,
-      -65.0
-     ],
-     [
-      1.0,
-      -55.0
-     ],
-     [
-      17.0,
-      -65.0
-     ]
-    ],
     "hostileWhen": [
      {
-      "flag": "ch01_ran_with_drugs",
+      "flag": "ch01_kit_attacked",
       "eq": true
      }
     ],
-    "note": "Block watch with deer rifle. Hostile only if Dell runs with drugs or draws a weapon."
+    "when": [
+     {
+      "flag": "ch01_kit_attacked",
+      "eq": true
+     }
+    ],
+    "note": "Kit as a looter body (non-hostile unless attacked); the dialogue NPC npc_kit stands in for her until then.",
+    "actsAs": "kit"
+   },
+   {
+    "id": "en_02",
+    "type": "watch_militia",
+    "x": -9.0,
+    "z": -103.0,
+    "group": "g_ch01_watch",
+    "tier": 1,
+    "behavior": "wander",
+    "hostile": "conditional",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch01_watch_standoff",
+    "hostileWhen": [
+     {
+      "any": [
+       {
+        "flag": "ch01_drew_weapon",
+        "eq": true
+       },
+       {
+        "flag": "ch01_pharmacy_choice",
+        "eq": "took_all"
+       }
+      ]
+     }
+    ],
+    "note": "Deputy Lusk's block watch at dusk; Wraith steps in front; holster or run to end it."
+   },
+   {
+    "id": "en_03",
+    "type": "watch_militia",
+    "x": 7.0,
+    "z": -101.0,
+    "group": "g_ch01_watch",
+    "tier": 1,
+    "behavior": "wander",
+    "hostile": "conditional",
+    "activate": "trigger",
+    "storyEncounter": "enc_ch01_watch_standoff",
+    "hostileWhen": [
+     {
+      "any": [
+       {
+        "flag": "ch01_drew_weapon",
+        "eq": true
+       },
+       {
+        "flag": "ch01_pharmacy_choice",
+        "eq": "took_all"
+       }
+      ]
+     }
+    ]
    }
   ],
   "loot": [
    {
     "id": "loot_01",
-    "x": -7.0,
-    "z": -10.0,
-    "r": 1.6,
-    "label": "Kitchen cupboard",
-    "container": "kitchen_cabinet",
-    "guaranteed": [
-     {
-      "item": "candles",
-      "n": 3
-     }
-    ],
-    "location": "loc_east_end"
+    "x": 0.0,
+    "z": -75.0,
+    "r": 3.1,
+    "label": "Abandoned car (marina road)",
+    "container": "car_trunk",
+    "propRef": "prop_01",
+    "render": "prop",
+    "location": "loc_sparks_marina"
    },
    {
     "id": "loot_02",
-    "x": -7.4,
-    "z": -5.0,
-    "r": 1.6,
-    "label": "Hall toolbox",
-    "container": "toolbox",
+    "x": 1.0,
+    "z": -25.0,
+    "r": 3.1,
+    "label": "Neighbor's car",
+    "container": "car_trunk",
+    "propRef": "prop_02",
+    "render": "prop",
+    "location": "loc_sparks_block",
     "guaranteed": [
      {
-      "item": "lineman_tools",
-      "n": 1
+      "item": "candles",
+      "n": 2
      }
-    ],
-    "location": "loc_east_end"
+    ]
    },
    {
     "id": "loot_03",
-    "x": -6.0,
-    "z": 3.0,
-    "r": 1.6,
-    "label": "Basement shelf",
-    "container": "toolbox",
-    "location": "loc_east_end"
-   },
-   {
-    "id": "loot_04",
-    "x": 1.0,
-    "z": -9.8,
-    "r": 1.8,
-    "label": "Dell's car (trunk)",
+    "x": -37.0,
+    "z": -101.0,
+    "r": 3.1,
+    "label": "Sedan trunk (Prater Way)",
     "container": "car_trunk",
-    "guaranteed": [
-     {
-      "item": "gas_can",
-      "n": 1
-     }
-    ],
-    "setsFlag": "ch01_car_checked",
-    "location": "loc_east_end"
-   },
-   {
-    "id": "loot_05",
-    "x": -15.0,
-    "z": -59.0,
-    "r": 1.6,
-    "label": "Dumpster",
-    "container": "dumpster",
-    "location": "loc_east_end"
-   },
-   {
-    "id": "loot_06",
-    "x": -11.0,
-    "z": -33.0,
-    "r": 1.6,
-    "label": "Dumpster",
-    "container": "dumpster",
-    "location": "loc_east_end"
-   },
-   {
-    "id": "loot_07",
-    "x": 10.0,
-    "z": -23.0,
-    "r": 1.6,
-    "label": "Pruitt porch box",
-    "container": "wardrobe",
-    "location": "loc_east_end"
-   },
-   {
-    "id": "loot_08",
-    "x": -15.0,
-    "z": -73.0,
-    "r": 1.6,
-    "label": "Pharmacy shelves (looted)",
-    "container": "medicine_cabinet",
+    "propRef": "prop_03",
+    "render": "prop",
+    "location": "loc_prater_pharmacy",
     "guaranteed": [
      {
       "item": "bandage",
       "n": 1
      }
-    ],
-    "location": "loc_belknap_pharmacy"
+    ]
+   },
+   {
+    "id": "loot_04",
+    "x": -6.0,
+    "z": -110.0,
+    "r": 2.2,
+    "label": "Prater Way dumpster",
+    "container": "dumpster",
+    "propRef": "prop_05",
+    "render": "prop",
+    "location": "loc_prater_pharmacy"
+   },
+   {
+    "id": "loot_05",
+    "x": 25.0,
+    "z": -47.0,
+    "r": 2.2,
+    "label": "Block dumpster",
+    "container": "dumpster",
+    "propRef": "prop_06",
+    "render": "prop",
+    "location": "loc_sparks_block",
+    "guaranteed": [
+     {
+      "item": "empty_bottle",
+      "n": 1
+     }
+    ]
+   },
+   {
+    "id": "loot_06",
+    "x": -29.0,
+    "z": -21.0,
+    "r": 1.6,
+    "label": "Kitchen cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_sparks_block"
+   },
+   {
+    "id": "loot_07",
+    "x": -17.0,
+    "z": -9.0,
+    "r": 1.6,
+    "label": "Hall wardrobe",
+    "container": "wardrobe",
+    "location": "loc_sparks_block"
+   },
+   {
+    "id": "loot_08",
+    "x": -25.0,
+    "z": -45.0,
+    "r": 1.6,
+    "label": "Pruitts' fridge",
+    "container": "fridge",
+    "location": "loc_sparks_block"
    },
    {
     "id": "loot_09",
-    "x": -5.0,
-    "z": -80.0,
+    "x": 25.0,
+    "z": -39.0,
     "r": 1.6,
-    "label": "Back-room locker",
-    "container": "locker",
-    "guaranteed": [
-     {
-      "item": "pharmacy_bag",
-      "n": 1
-     }
-    ],
-    "when": [
-     {
-      "flag": "ch01_dusk",
-      "eq": true
-     }
-    ],
-    "location": "loc_belknap_pharmacy"
+    "label": "Gil's toolbox",
+    "container": "toolbox",
+    "location": "loc_sparks_block"
    },
    {
     "id": "loot_10",
-    "x": -17.0,
-    "z": -66.0,
+    "x": 25.0,
+    "z": -9.0,
     "r": 1.6,
-    "label": "Pharmacy dumpster",
-    "container": "dumpster",
-    "location": "loc_belknap_pharmacy"
+    "label": "Lolo's medicine cabinet",
+    "container": "medicine_cabinet",
+    "location": "loc_sparks_block"
    },
    {
     "id": "loot_11",
-    "x": -6.0,
-    "z": -80.0,
+    "x": -15.0,
+    "z": -117.0,
     "r": 1.6,
-    "label": "Pharmacy fridge",
+    "label": "Pharmacy shelf (picked over)",
     "container": "medicine_cabinet",
-    "guaranteed": [
-     {
-      "item": "insulin_vial",
-      "n": 2
-     },
-     {
-      "item": "cool_pack",
-      "n": 1
-     }
-    ],
-    "when": [
-     {
-      "flag": "ch01_dusk",
-      "eq": true
-     }
-    ],
-    "location": "loc_belknap_pharmacy"
+    "location": "loc_prater_pharmacy"
    },
    {
     "id": "loot_12",
-    "x": -17.0,
-    "z": 1.0,
+    "x": -15.0,
+    "z": -125.0,
     "r": 1.6,
-    "label": "Kitchen cabinet (filler)",
-    "container": "kitchen_cabinet",
-    "location": "loc_east_end",
-    "filler": true
+    "label": "Stock-room cabinet",
+    "container": "medicine_cabinet",
+    "location": "loc_prater_pharmacy"
    },
    {
     "id": "loot_13",
-    "x": 7.0,
-    "z": -33.0,
+    "x": 9.0,
+    "z": -67.0,
     "r": 1.6,
-    "label": "Medicine cabinet (filler)",
-    "container": "medicine_cabinet",
-    "location": "loc_east_end",
-    "filler": true
+    "label": "Marina bait locker",
+    "container": "locker",
+    "location": "loc_sparks_marina"
    },
    {
     "id": "loot_14",
-    "x": 19.0,
-    "z": -61.0,
+    "x": 15.0,
+    "z": -17.0,
     "r": 1.6,
-    "label": "Dumpster (filler)",
-    "container": "dumpster",
-    "location": "loc_east_end",
+    "label": "Kitchen cabinet",
+    "container": "kitchen_cabinet",
+    "location": "loc_sparks_block",
     "filler": true
    },
    {
     "id": "loot_15",
-    "x": 11.0,
-    "z": -13.0,
-    "r": 1.6,
-    "label": "Closet / wardrobe (filler)",
-    "container": "wardrobe",
-    "location": "loc_east_end",
+    "x": -5.0,
+    "z": -51.0,
+    "r": 2.2,
+    "label": "Dumpster",
+    "container": "dumpster",
+    "propRef": "prop_16",
+    "render": "prop",
+    "location": "loc_sparks_block",
     "filler": true
    },
    {
     "id": "loot_16",
-    "x": 7.0,
-    "z": -3.0,
-    "r": 1.6,
-    "label": "Closet / wardrobe (filler)",
-    "container": "wardrobe",
-    "location": "loc_east_end",
+    "x": 37.0,
+    "z": -63.0,
+    "r": 2.2,
+    "label": "Dumpster",
+    "container": "dumpster",
+    "propRef": "prop_17",
+    "render": "prop",
+    "location": "loc_sparks_block",
     "filler": true
    },
    {
     "id": "loot_17",
-    "x": 3.0,
-    "z": -51.0,
+    "x": 11.0,
+    "z": -41.0,
     "r": 1.6,
-    "label": "Car trunk (filler)",
-    "container": "car_trunk",
-    "location": "loc_east_end",
+    "label": "Closet / wardrobe",
+    "container": "wardrobe",
+    "location": "loc_sparks_block",
     "filler": true
    },
    {
     "id": "loot_18",
-    "x": 19.0,
-    "z": -45.0,
+    "x": 15.0,
+    "z": -7.0,
     "r": 1.6,
-    "label": "Woodpile / pallets / broken furniture (filler)",
-    "container": "woodpile",
-    "location": "loc_east_end",
+    "label": "Closet / wardrobe",
+    "container": "wardrobe",
+    "location": "loc_sparks_block",
     "filler": true
    },
    {
     "id": "loot_19",
-    "x": -19.0,
-    "z": -45.0,
+    "x": -1.0,
+    "z": 1.0,
+    "r": 3.1,
+    "label": "Car trunk",
+    "container": "car_trunk",
+    "propRef": "prop_18",
+    "render": "prop",
+    "location": "loc_sparks_block",
+    "filler": true
+   },
+   {
+    "id": "loot_20",
+    "x": 11.0,
+    "z": -31.0,
     "r": 1.6,
-    "label": "Woodpile / pallets / broken furniture (filler)",
+    "label": "Toolbox / workbench drawer",
+    "container": "toolbox",
+    "location": "loc_sparks_block",
+    "filler": true
+   },
+   {
+    "id": "loot_21",
+    "x": 41.0,
+    "z": -25.0,
+    "r": 1.6,
+    "label": "Woodpile / pallets / broken furniture",
     "container": "woodpile",
-    "location": "loc_east_end",
+    "location": "loc_sparks_block",
+    "filler": true
+   },
+   {
+    "id": "loot_22",
+    "x": -37.0,
+    "z": -71.0,
+    "r": 3.1,
+    "label": "Car trunk",
+    "container": "car_trunk",
+    "propRef": "prop_19",
+    "render": "prop",
+    "location": "loc_sparks_marina",
+    "filler": true
+   },
+   {
+    "id": "loot_23",
+    "x": 41.0,
+    "z": -95.0,
+    "r": 1.6,
+    "label": "Cooler chest / vending machine",
+    "container": "cooler_chest",
+    "location": "loc_sparks_marina",
+    "filler": true
+   },
+   {
+    "id": "loot_24",
+    "x": -19.0,
+    "z": -87.0,
+    "r": 2.2,
+    "label": "Dumpster",
+    "container": "dumpster",
+    "propRef": "prop_20",
+    "render": "prop",
+    "location": "loc_sparks_marina",
+    "filler": true
+   },
+   {
+    "id": "loot_25",
+    "x": -31.0,
+    "z": -115.0,
+    "r": 1.6,
+    "label": "Locker",
+    "container": "locker",
+    "location": "loc_prater_pharmacy",
     "filler": true
    }
   ]
@@ -724,236 +1338,406 @@
  "props": [
   {
    "id": "prop_01",
-   "asset": "assets/kenney/industrial/building-k.glb",
-   "x": -7.0,
-   "z": -56.0,
-   "rotY": 1.571,
-   "h": 7,
-   "collide": true
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": 0.0,
+   "z": -75.0,
+   "rotY": 3.142,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_02",
-   "asset": "assets/kenney/industrial/building-d.glb",
-   "x": -7.0,
-   "z": -42.0,
-   "rotY": 1.571,
-   "h": 6,
-   "collide": true
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": 1.0,
+   "z": -25.0,
+   "rotY": 3.142,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_03",
-   "asset": "assets/kenney/industrial/building-a.glb",
-   "x": -7.0,
-   "z": -24.0,
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -37.0,
+   "z": -101.0,
    "rotY": 1.571,
-   "h": 7,
-   "collide": true
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
   },
   {
    "id": "prop_04",
-   "asset": "assets/kenney/industrial/building-f.glb",
-   "x": 9.0,
-   "z": -51.0,
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": 37.0,
+   "z": -103.0,
    "rotY": -1.571,
-   "h": 9,
-   "collide": true
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2
   },
   {
    "id": "prop_05",
-   "asset": "assets/kenney/industrial/building-s.glb",
-   "x": 12.0,
-   "z": -76.0,
+   "asset": "assets/kenney/roads/dumpster.glb",
+   "x": -6.0,
+   "z": -110.0,
    "rotY": 0.0,
-   "h": 7,
-   "collide": true
+   "h": 1.4,
+   "collide": true,
+   "footprintR": 1.3,
+   "tag": "container"
   },
   {
    "id": "prop_06",
-   "asset": "assets/kenney/industrial/water-tower.glb",
-   "x": 17.0,
-   "z": -76.0,
-   "rotY": 0,
-   "h": 16,
+   "asset": "assets/kenney/roads/dumpster.glb",
+   "x": 25.0,
+   "z": -47.0,
+   "rotY": 0.0,
+   "h": 1.4,
    "collide": true,
-   "tag": "landmark"
+   "footprintR": 1.3,
+   "tag": "container"
   },
   {
    "id": "prop_07",
-   "asset": "assets/kenney/industrial/chimney-large.glb",
-   "x": 9.0,
-   "z": -59.0,
-   "rotY": 0,
-   "h": 14,
-   "collide": false,
-   "tag": "backdrop"
-  },
-  {
-   "id": "prop_dell_car",
-   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
-   "x": 1.0,
-   "z": -12.0,
-   "rotY": 0.15,
-   "h": 1.45,
-   "collide": true
+   "asset": "assets/kenney/roads/electricity-pole.glb",
+   "x": -5.0,
+   "z": -93.0,
+   "rotY": 0.0,
+   "h": 7,
+   "collide": false
   },
   {
    "id": "prop_08",
    "asset": "assets/kenney/roads/electricity-pole.glb",
-   "x": 3.0,
+   "x": 5.0,
    "z": -55.0,
-   "rotY": 0,
-   "h": 8,
-   "collide": true
+   "rotY": 0.0,
+   "h": 7,
+   "collide": false
   },
   {
    "id": "prop_09",
    "asset": "assets/kenney/roads/electricity-pole.glb",
-   "x": 3.0,
-   "z": -39.0,
-   "rotY": 0,
-   "h": 8,
-   "collide": true
+   "x": -5.0,
+   "z": -3.0,
+   "rotY": 0.0,
+   "h": 7,
+   "collide": false
   },
   {
    "id": "prop_10",
    "asset": "assets/kenney/roads/electricity-pole.glb",
-   "x": 3.0,
+   "x": 5.0,
    "z": -23.0,
-   "rotY": 0,
-   "h": 8,
-   "collide": true
+   "rotY": 0.0,
+   "h": 7,
+   "collide": false
   },
   {
    "id": "prop_11",
-   "asset": "assets/kenney/roads/electricity-pole.glb",
-   "x": 3.0,
-   "z": 1.0,
-   "rotY": 0,
-   "h": 8,
-   "collide": true
+   "asset": "assets/kenney/roads/light-square.glb",
+   "x": -5.0,
+   "z": -107.0,
+   "rotY": 0.0,
+   "h": 5,
+   "collide": false
   },
   {
    "id": "prop_12",
-   "asset": "assets/kenney/roads/traffic-light.glb",
-   "x": 3.0,
-   "z": -63.0,
-   "rotY": 3.142,
-   "h": 4.5,
-   "collide": true
+   "asset": "assets/kenney/roads/light-square.glb",
+   "x": 7.0,
+   "z": -107.0,
+   "rotY": 0.0,
+   "h": 5,
+   "collide": false
   },
   {
    "id": "prop_13",
    "asset": "assets/kenney/roads/road-sign-stop.glb",
-   "x": -3.0,
-   "z": -63.0,
+   "x": -5.0,
+   "z": -97.0,
    "rotY": 0.0,
    "h": 2.4,
-   "collide": true
+   "collide": false
   },
   {
    "id": "prop_14",
-   "asset": "assets/kenney/roads/light-square.glb",
-   "x": 3.0,
-   "z": -47.0,
+   "asset": "assets/kenney/industrial/detail-tank.glb",
+   "x": -8.0,
+   "z": -45.0,
    "rotY": 0.0,
-   "h": 5.5,
-   "collide": true
+   "h": 1.2,
+   "collide": true,
+   "footprintR": 1.4,
+   "tag": "grill",
+   "note": "Neighbors grilling the freezer contents before it spoils"
   },
   {
    "id": "prop_15",
-   "asset": "assets/kenney/roads/dumpster.glb",
-   "x": -15.0,
-   "z": -61.0,
-   "rotY": 1.571,
-   "h": 1.4,
-   "collide": true
+   "asset": "assets/kenney/industrial/detail-tank.glb",
+   "x": 7.0,
+   "z": -42.0,
+   "rotY": 0.0,
+   "h": 1.2,
+   "collide": false,
+   "tag": "grill"
   },
   {
    "id": "prop_16",
    "asset": "assets/kenney/roads/dumpster.glb",
-   "x": -11.0,
-   "z": -35.0,
-   "rotY": 1.571,
+   "x": -5.0,
+   "z": -51.0,
+   "rotY": 0.0,
    "h": 1.4,
-   "collide": true
+   "collide": true,
+   "footprintR": 1.3,
+   "tag": "container"
   },
   {
    "id": "prop_17",
-   "asset": "assets/kenney/roads/construction-barrier.glb",
-   "x": 13.0,
-   "z": -61.0,
-   "rotY": 0.1,
-   "h": 1.1,
-   "collide": true
+   "asset": "assets/kenney/roads/dumpster.glb",
+   "x": 37.0,
+   "z": -63.0,
+   "rotY": 0.0,
+   "h": 1.4,
+   "collide": true,
+   "footprintR": 1.3,
+   "tag": "container"
+  },
+  {
+   "id": "prop_18",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -1.0,
+   "z": 1.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
+  },
+  {
+   "id": "prop_19",
+   "asset": "assets/tevy/wrecked-sedan-lod1.glb",
+   "x": -37.0,
+   "z": -71.0,
+   "rotY": 0.0,
+   "h": 1.5,
+   "collide": true,
+   "footprintR": 2.2,
+   "tag": "container"
+  },
+  {
+   "id": "prop_20",
+   "asset": "assets/kenney/roads/dumpster.glb",
+   "x": -19.0,
+   "z": -87.0,
+   "rotY": 0.0,
+   "h": 1.4,
+   "collide": true,
+   "footprintR": 1.3,
+   "tag": "container"
   }
  ],
  "interactives": [
   {
-   "id": "ch01_cooler_station",
-   "type": "craft",
-   "x": -5.0,
-   "z": 2.0,
+   "id": "ch01_water_station",
+   "type": "boil",
+   "x": -27.0,
+   "z": -9.0,
    "r": 1.8,
-   "label": "Picnic cooler (craft lake_cooler)",
-   "requiresItems": [
-    "bucket",
-    "wire"
-   ],
-   "setsFlag": "ch01_cooler_built"
+   "label": "Water station: boil water_dirty -> water_clean (15 min)",
+   "requiresItems": {
+    "water_dirty": 1
+   },
+   "setsFlag": "ch01_water_boiled",
+   "givesItems": {
+    "water_clean": 1
+   },
+   "repurposedFrom": "v1 kitchen station (same spot)",
+   "quest": "q_water"
+  },
+  {
+   "id": "ch01_phone",
+   "type": "phone",
+   "x": -17.0,
+   "z": -19.0,
+   "r": 1.8,
+   "label": "Phone: one new voicemail",
+   "setsFlag": "ch01_phone_used",
+   "when": [
+    {
+     "flag": "ch01_night",
+     "eq": true
+    }
+   ]
   },
   {
    "id": "ch01_lake_edge",
    "type": "fill",
-   "x": 15.0,
-   "z": 2.0,
+   "x": 21.0,
+   "z": -83.0,
    "r": 1.8,
-   "label": "Lake edge: haul cold water",
-   "requiresItems": [
-    "bucket"
-   ],
-   "setsFlag": "ch01_bucket_filled"
+   "label": "Marina shore: fill the bucket (water_dirty x4)",
+   "requiresItems": {
+    "bucket": 1
+   },
+   "setsFlag": "ch01_water_hauled",
+   "givesItems": {
+    "water_dirty": 4
+   },
+   "quest": "q_water"
+  },
+  {
+   "id": "ch01_wraith_bowl",
+   "type": "feed",
+   "x": -37.0,
+   "z": -21.0,
+   "r": 1.8,
+   "label": "Wraith's bowl",
+   "setsFlag": "ch01_wraith_fed"
+  },
+  {
+   "id": "ch01_scent_trail",
+   "type": "companion_track",
+   "x": 3.0,
+   "z": -17.0,
+   "r": 1.8,
+   "label": "Give Wraith the scarf: TRACK",
+   "requiresItems": {
+    "pruitt_scarf": 1
+   },
+   "setsFlag": "ch01_tracking",
+   "quest": "q_find_pruitt"
   }
  ],
  "safeZones": [
   {
    "id": "safe_01",
-   "kind": "indoor",
-   "x": -6.0,
-   "z": -8.0,
-   "r": 3.5,
-   "label": "Home kitchen (stove, candles)",
+   "kind": "home",
+   "x": -19.0,
+   "z": -15.0,
+   "r": 4.5,
+   "label": "Home (kitchen stove)",
    "warmth": true,
    "save": true,
    "sealed": false
   },
   {
    "id": "safe_02",
-   "kind": "indoor",
-   "x": -17.0,
-   "z": -17.0,
-   "r": 2.5,
-   "label": "Ray's garage (generator hum)",
+   "kind": "home",
+   "x": 19.0,
+   "z": -11.0,
+   "r": 4.0,
+   "label": "Lolo's clinic",
    "warmth": true,
    "save": false,
    "sealed": false
   }
  ],
- "setPieces": [],
- "encounters": [
+ "setPieces": [
   {
-   "id": "enc_belknap",
+   "id": "sp_ch01_water_line",
+   "type": "water_line",
    "area": {
     "type": "rect",
-    "x0": -20.0,
-    "z0": -68.0,
-    "x1": 20.0,
-    "z1": -50.0
+    "x0": 4.0,
+    "z0": -96.0,
+    "x1": 18.0,
+    "z1": -78.0
+   },
+   "note": "Marina water line run by Deputy Lusk; queue of neighbors with buckets."
+  },
+  {
+   "id": "sp_ch01_scent_trail",
+   "type": "scent_trail",
+   "path": [
+    [
+     3.0,
+     -15.0
+    ],
+    [
+     1.0,
+     -25.0
+    ],
+    [
+     1.0,
+     -45.0
+    ],
+    [
+     1.0,
+     -55.0
+    ],
+    [
+     -11.0,
+     -57.0
+    ],
+    [
+     -27.0,
+     -57.0
+    ]
+   ],
+   "when": [
+    {
+     "flag": "ch01_tracking",
+     "eq": true
+    }
+   ],
+   "note": "Paw-print decals Wraith follows from Lolo's porch to the irrigation canal (TRACK verb).",
+   "item": "pruitt_scarf",
+   "companion": "wraith"
+  },
+  {
+   "id": "sp_ch01_pharmacy_dusk",
+   "type": "ambient_light",
+   "area": {
+    "type": "rect",
+    "x0": -34.0,
+    "z0": -130.0,
+    "x1": -10.0,
+    "z1": -112.0
+   },
+   "note": "Orange dusk light through the broken pharmacy glass."
+  }
+ ],
+ "encounters": [
+  {
+   "id": "z_ch01_pharmacy",
+   "area": {
+    "type": "rect",
+    "x0": -34.0,
+    "z0": -130.0,
+    "x1": -10.0,
+    "z1": -112.0
    },
    "groups": [
     {
-     "group": "g_watch",
+     "group": "g_ch01_kit",
      "wave": 1
     }
+   ],
+   "note": "Only if Braith attacks Kit."
+  },
+  {
+   "id": "z_ch01_prater",
+   "area": {
+    "type": "rect",
+    "x0": -42.0,
+    "z0": -112.0,
+    "x1": 42.0,
+    "z1": -96.0
+   },
+   "groups": [
+    {
+     "group": "g_ch01_watch",
+     "wave": 1
+    }
+   ],
+   "storyEncounters": [
+    "enc_ch01_watch_standoff"
    ]
   }
  ],
@@ -964,14 +1748,23 @@
    "once": true,
    "shape": {
     "type": "circle",
-    "x": -6.0,
-    "z": -8.0,
+    "x": -27.0,
+    "z": -19.0,
     "r": 3
    },
    "actions": [
     {
+     "type": "set_time",
+     "value": 0.3
+    },
+    {
      "type": "dialogue",
-     "id": "ch01_theo_morning"
+     "id": "ch01_carly_home"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch01_carly_talked",
+     "value": true
     },
     {
      "type": "checkpoint"
@@ -979,40 +1772,167 @@
    ]
   },
   {
-   "id": "t_ch01_basement",
-   "on": "enter",
+   "id": "t_ch01_wraith_morning",
+   "on": "interact",
    "once": true,
    "shape": {
-    "type": "rect",
-    "x0": -8.0,
-    "z0": -2.0,
-    "x1": -4.0,
-    "z1": 4.0
+    "type": "circle",
+    "x": -37.0,
+    "z": -17.0,
+    "r": 3.5
    },
    "actions": [
     {
-     "type": "bark",
-     "speaker": "theo",
-     "text": "It's cold down here. Good, right?"
+     "type": "dialogue",
+     "id": "ch01_wraith_morning"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch01_wraith_met",
+     "value": true
     }
    ]
   },
   {
-   "id": "t_ch01_dusk_gate_block",
+   "id": "t_ch01_marina_water",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": 12.0,
+    "z0": -88.0,
+    "x1": 24.0,
+    "z1": -78.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch01_marina_water"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch01_marina_reached",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch01_lolo_porch",
+   "on": "interact",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": 5.0,
+    "z": -11.0,
+    "r": 3.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch01_lolo_porch"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch01_lolo_talked",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch01_pruitt_found",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -36.0,
+    "z0": -58.0,
+    "x1": -18.0,
+    "z1": -54.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch01_pruitt_found"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch01_scarf_found",
+     "value": true
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch01_tracking",
+     "eq": true
+    },
+    {
+     "item": "pruitt_scarf",
+     "gte": 1
+    }
+   ]
+  },
+  {
+   "id": "t_ch01_gil_garage",
+   "on": "interact",
+   "once": true,
+   "shape": {
+    "type": "circle",
+    "x": 19.0,
+    "z": -35.0,
+    "r": 3.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch01_gil_garage"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch01_gil_talked",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch01_block_ambient",
+   "on": "enter",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -4.0,
+    "z0": -52.0,
+    "x1": 4.0,
+    "z1": -26.0
+   },
+   "actions": [
+    {
+     "type": "dialogue",
+     "id": "ch01_block_ambient"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch01_carly_talked",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch01_dusk_gate",
    "on": "enter",
    "once": false,
    "shape": {
     "type": "rect",
-    "x0": -20.0,
-    "z0": -64.0,
-    "x1": 20.0,
-    "z1": -58.0
+    "x0": -4.0,
+    "z0": -98.0,
+    "x1": 4.0,
+    "z1": -94.0
    },
    "actions": [
     {
      "type": "bark",
-     "speaker": "dell",
-     "text": "Marguerite first. And I need fuel."
+     "speaker": "braith",
+     "text": "Lolo first. And the gas can has to go somewhere."
     },
     {
      "type": "push_back"
@@ -1020,19 +1940,20 @@
    ],
    "when": [
     {
-     "any": [
-      {
-       "flag": "ch01_marguerite_talked",
-       "ne": true
-      },
-      {
-       "flag": "ch01_fuel_resolved",
-       "ne": true
-      }
-     ]
+     "not": {
+      "all": [
+       {
+        "flag": "ch01_lolo_talked",
+        "eq": true
+       },
+       {
+        "flag": "ch01_gas_choice"
+       }
+      ]
+     }
     }
    ],
-   "note": "Soft gate: the north end of the street pushes back until the porch + fuel beats are done."
+   "note": "Soft gate: Prater Way waits until the porch and the gas choice are done."
   },
   {
    "id": "t_ch01_dusk",
@@ -1040,10 +1961,10 @@
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -20.0,
-    "z0": -64.0,
-    "x1": 20.0,
-    "z1": -58.0
+    "x0": -4.0,
+    "z0": -98.0,
+    "x1": 4.0,
+    "z1": -90.0
    },
    "actions": [
     {
@@ -1053,7 +1974,7 @@
     {
      "type": "cutscene",
      "id": "cs_ch01_dusk",
-     "text": "The light goes orange. A rifle bolt clacks down Belknap."
+     "text": "The light goes amber. Dust hangs over Prater Way."
     },
     {
      "type": "set_flag",
@@ -1062,7 +1983,7 @@
     },
     {
      "type": "activate_group",
-     "group": "g_watch"
+     "group": "g_ch01_watch"
     },
     {
      "type": "checkpoint"
@@ -1070,30 +1991,34 @@
    ],
    "when": [
     {
-     "flag": "ch01_marguerite_talked",
+     "flag": "ch01_lolo_talked",
      "eq": true
     },
     {
-     "flag": "ch01_fuel_resolved",
-     "eq": true
+     "flag": "ch01_gas_choice"
     }
    ]
   },
   {
-   "id": "t_ch01_pharmacy",
+   "id": "t_ch01_kit_pharmacy",
    "on": "enter",
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -18.0,
-    "z0": -76.0,
-    "x1": -4.0,
-    "z1": -70.0
+    "x0": -32.0,
+    "z0": -120.0,
+    "x1": -12.0,
+    "z1": -114.0
    },
    "actions": [
     {
      "type": "dialogue",
-     "id": "ch01_wren_pharmacy"
+     "id": "ch01_kit_pharmacy"
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch01_pharmacy_done",
+     "value": true
     }
    ],
    "when": [
@@ -1104,24 +2029,76 @@
    ]
   },
   {
-   "id": "t_ch01_home",
+   "id": "t_ch01_kit_attacked",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -32.0,
+    "z0": -128.0,
+    "x1": -12.0,
+    "z1": -114.0
+   },
+   "actions": [
+    {
+     "type": "activate_group",
+     "group": "g_ch01_kit"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch01_kit_attacked",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch01_night",
    "on": "enter",
    "once": true,
    "shape": {
     "type": "rect",
-    "x0": -8.0,
-    "z0": -12.0,
-    "x1": -4.0,
-    "z1": -4.0
+    "x0": -22.0,
+    "z0": -22.0,
+    "x1": -14.0,
+    "z1": -8.0
+   },
+   "actions": [
+    {
+     "type": "set_time",
+     "value": 0.95
+    },
+    {
+     "type": "set_flag",
+     "flag": "ch01_night",
+     "value": true
+    },
+    {
+     "type": "checkpoint"
+    }
+   ],
+   "when": [
+    {
+     "flag": "ch01_pharmacy_done",
+     "eq": true
+    }
+   ]
+  },
+  {
+   "id": "t_ch01_voicemail",
+   "on": "flag",
+   "once": true,
+   "shape": {
+    "type": "rect",
+    "x0": -22.0,
+    "z0": -22.0,
+    "x1": -14.0,
+    "z1": -8.0
    },
    "actions": [
     {
      "type": "dialogue",
-     "id": "ch01_theo_night"
-    },
-    {
-     "type": "story_check",
-     "id": "ch01_end_pruitt"
+     "id": "ch01_voicemail"
     },
     {
      "type": "chapter_end",
@@ -1130,7 +2107,7 @@
    ],
    "when": [
     {
-     "flag": "ch01_pharmacy_done",
+     "flag": "ch01_phone_used",
      "eq": true
     }
    ]
@@ -1140,11 +2117,11 @@
   {
    "id": "o1",
    "order": 1,
-   "text": "Talk to Theo",
+   "text": "Talk to Carly",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch01_theo_talked",
+     "flag": "ch01_carly_talked",
      "eq": true
     }
    ]
@@ -1152,11 +2129,11 @@
   {
    "id": "o2",
    "order": 2,
-   "text": "Build a lake-water cooler for the insulin",
-   "optional": true,
+   "text": "Feed Wraith (companion tutorial)",
+   "optional": false,
    "completeWhen": [
     {
-     "flag": "ch01_cooler_built",
+     "flag": "ch01_wraith_fed",
      "eq": true
     }
    ]
@@ -1164,23 +2141,24 @@
   {
    "id": "o3",
    "order": 3,
-   "text": "Check on Marguerite",
+   "text": "Haul water from the marina and boil it",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch01_marguerite_talked",
+     "flag": "ch01_water_boiled",
      "eq": true
     }
-   ]
+   ],
+   "quest": "q_water"
   },
   {
    "id": "o4",
    "order": 4,
-   "text": "Get fuel: Ray's garage or the gas can in your car",
+   "text": "Check on Lolo",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch01_fuel_resolved",
+     "flag": "ch01_lolo_talked",
      "eq": true
     }
    ]
@@ -1188,26 +2166,92 @@
   {
    "id": "o5",
    "order": 5,
-   "text": "Belknap Pharmacy at dusk: insulin",
+   "text": "Find Mr. Pruitt with Wraith (TRACK)",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch01_scarf_found",
+     "eq": true
+    }
+   ],
+   "quest": "q_find_pruitt"
+  },
+  {
+   "id": "o6",
+   "order": 6,
+   "text": "Fuel: Gil's garage or the gas can",
+   "optional": false,
+   "completeWhen": [
+    {
+     "flag": "ch01_gas_choice"
+    }
+   ]
+  },
+  {
+   "id": "o7",
+   "order": 7,
+   "text": "Pharmacy at dusk: supplies for Lolo",
    "optional": false,
    "completeWhen": [
     {
      "flag": "ch01_pharmacy_done",
      "eq": true
     }
-   ]
+   ],
+   "quest": "q_clinic_supplies"
   },
   {
-   "id": "o6",
-   "order": 6,
-   "text": "Get home before dark",
+   "id": "o8",
+   "order": 8,
+   "text": "Home before dark: the voicemail",
    "optional": false,
    "completeWhen": [
     {
-     "flag": "ch01_home",
+     "flag": "ch01_phone_used",
      "eq": true
     }
    ]
   }
- ]
+ ],
+ "companion": {
+  "id": "wraith",
+  "spawn": {
+   "x": -39.0,
+   "z": -15.0
+  },
+  "when": [
+   {
+    "flag": "wraith_alive",
+    "eq": true
+   }
+  ],
+  "follow": {
+   "leashM": 6.0,
+   "catchUpM": 14.0,
+   "nav": "grid_bfs_walkable",
+   "avoid": [
+    "door_clearance_cells",
+    "loot_cells"
+   ],
+   "note": "Ch1 tutorial: feed her at the yard bowl; she follows Braith from then on (trust.wraith)."
+  },
+  "verbs": [
+   "track",
+   "warn",
+   "guard",
+   "hold"
+  ],
+  "injuredWhen": [
+   {
+    "flag": "wraith_injured",
+    "eq": true
+   }
+  ]
+ },
+ "ambientDensity": {
+  "target": "10-15 neighbors",
+  "placed": 12,
+  "note": "grills, kids on bikes, the block watch, the marina water line"
+ },
+ "lootSource": "v2"
 }

@@ -1,149 +1,178 @@
 {
   "id": "ch10_gate",
   "chapter": "ch10",
-  "location": "loc_thomson_dam",
-  "trigger": "Arrival at the dam gate. Kessler's Remnant is in the snow outside.",
+  "location": "loc_galena_station",
+  "trigger": "Between night 2 and 3: Kessler's Remnant at the gate.",
   "speakers": [
+    "narrator",
     "kessler",
+    "braith",
     "ruiz",
-    "strand",
-    "dell",
-    "narrator"
+    "wes"
   ],
   "start": "start",
   "nodes": [
     {
       "id": "start",
-      "speaker": "kessler",
-      "text": "Ms. Kowalczyk. Dale Kessler. I have forty soldiers, nine hundred liters of diesel, and no orders.",
+      "speaker": "narrator",
+      "text": "Day. Two Humvees and an MRAP on the access road, flying a flag gone grey. Major Dale Kessler, on foot.",
       "next": "k1"
     },
     {
       "id": "k1",
       "speaker": "kessler",
-      "text": "Philadelphia is gone. I checked. I'd like operational control of this facility. I'm asking. Once.",
+      "text": "Pearce. Dale Kessler. I've got forty-one soldiers, no fuel, and orders from nobody. I need your heat.",
       "branches": [
         {
-          "next": "ruiz",
+          "next": "stand",
           "conditions": [
             {
-              "flag": "ruiz_defected",
-              "eq": true
-            }
-          ]
-        },
-        {
-          "next": "strand",
-          "conditions": [
-            {
-              "flag": "strand_stance",
-              "eq": "governor"
+              "any": [
+                {
+                  "flag": "ruiz_defected",
+                  "eq": true
+                },
+                {
+                  "flag": "avila_stance",
+                  "eq": "governor"
+                }
+              ]
             },
             {
-              "flag": "strand_alive",
-              "eq": true
-            }
-          ]
-        },
-        {
-          "next": "fight",
-          "conditions": [
-            {
               "flag": "ironwood_hostility",
-              "gte": 5
+              "lt": 5
             }
           ]
         },
         {
-          "next": "talk"
+          "next": "fight"
         }
       ]
     },
     {
-      "id": "ruiz",
-      "speaker": "ruiz",
-      "text": "Sir. It's Ruiz. Lopez, Okafor, Tran, you know me. There's soup inside. There's no war in there.",
-      "next": "standdown"
-    },
-    {
-      "id": "strand",
-      "speaker": "strand",
-      "text": "Major. Northland Guard. Any of mine in your ranks are released. Come in or go home.",
-      "next": "standdown"
-    },
-    {
-      "id": "standdown",
-      "speaker": "narrator",
-      "text": "One soldier lowers his rifle. Then four. Then most. Kessler watches them go in, then follows, last.",
-      "effects": [
+      "id": "stand",
+      "speaker": "kessler",
+      "text": "Sergeant Ruiz tells me you're the kind who opens doors. So. I'm asking. Not ordering. I'm tired of ordering.",
+      "choices": [
         {
-          "set": "remnant_stood_down",
-          "value": true
+          "text": "Lay down arms. Come in. Work.",
+          "next": "in",
+          "effects": [
+            {
+              "set": "remnant_stood_down",
+              "value": true
+            },
+            {
+              "add": "column_size",
+              "value": 4
+            }
+          ]
+        },
+        {
+          "text": "Your soldiers come in. You don't.",
+          "next": "half",
+          "effects": [
+            {
+              "set": "remnant_stood_down",
+              "value": true
+            },
+            {
+              "add": "column_size",
+              "value": 3
+            },
+            {
+              "add": "kindness",
+              "value": -1
+            }
+          ]
         }
-      ],
-      "next": "end"
+      ]
+    },
+    {
+      "id": "in",
+      "speaker": "kessler",
+      "text": "...Done. God. Done. You'll want my generator mechanics. And my floodlights. I have floodlights.",
+      "next": "prisoners"
+    },
+    {
+      "id": "half",
+      "speaker": "kessler",
+      "text": "Fair. Fair. I'd have done the same. Take care of them.",
+      "next": "prisoners"
     },
     {
       "id": "fight",
       "speaker": "kessler",
-      "text": "Then we do this the old way. I'm sorry. I truly am.",
+      "text": "Then I'm sorry. Nobody wins this one.",
       "effects": [
         {
           "event": "encounter",
           "id": "enc_ch10_gate_battle"
         }
       ],
-      "next": "fight2"
+      "next": "battle"
     },
     {
-      "id": "fight2",
+      "id": "battle",
       "speaker": "narrator",
-      "text": "It lasts eleven minutes. Afterward, the snow is quiet again and there are fewer of everyone.",
+      "text": "A short, stupid fight in the snow. When it's over, the Remnant is gone. So are three of yours.",
       "effects": [
         {
-          "set": "remnant_stood_down",
-          "value": false
+          "add": "column_size",
+          "value": -3
         }
       ],
-      "next": "end"
+      "next": "prisoners"
     },
     {
-      "id": "talk",
-      "speaker": "dell",
-      "text": "Bring your diesel inside. You get a vote. One. Same as everyone.",
-      "choices": [
+      "id": "prisoners",
+      "speaker": "narrator",
+      "text": "In the back of the MRAP: the Remnant's prisoners. Hands bound. Frostbitten.",
+      "branches": [
         {
-          "text": "That's the offer.",
-          "next": "talk2"
-        },
-        {
-          "text": "[Lower your rifle first]",
-          "next": "talk2",
-          "effects": [
+          "next": "wes",
+          "conditions": [
             {
-              "add": "kindness",
-              "value": 1
+              "flag": "wes_prisoner",
+              "eq": true
             }
           ]
+        },
+        {
+          "next": "end"
         }
       ]
     },
     {
-      "id": "talk2",
-      "speaker": "kessler",
-      "text": "...A vote. Christ. All right. I'll take a warm vote over a cold command.",
+      "id": "wes",
+      "speaker": "narrator",
+      "text": "Wes. Thinner. Alive. He looks at you like he's not sure you're real.",
       "effects": [
         {
-          "set": "remnant_stood_down",
+          "set": "wes_prisoner",
+          "value": false
+        },
+        {
+          "set": "wes_spared",
           "value": true
+        },
+        {
+          "trust": "wes",
+          "delta": 3
         }
       ],
+      "next": "wes2"
+    },
+    {
+      "id": "wes2",
+      "speaker": "wes",
+      "text": "...Big brother. You look terrible.",
       "next": "end"
     },
     {
       "id": "end",
       "speaker": "narrator",
-      "text": "Inside: the control room, 18 °C, and every faction that's left.",
+      "text": "Tonight's the third night. Everyone knows it. Nobody says it.",
       "end": true
     }
   ]

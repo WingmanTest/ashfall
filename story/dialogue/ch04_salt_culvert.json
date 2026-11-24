@@ -1,0 +1,139 @@
+{
+  "id": "ch04_salt_culvert",
+  "chapter": "ch04",
+  "location": "loc_steamboat_creek",
+  "trigger": "Pass the culvert by the hot springs on Steamboat Creek.",
+  "speakers": [
+    "narrator",
+    "amb_salt",
+    "braith",
+    "wraith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "A culvert under the road. Steam from the hot springs. A blue tarp, a camp chair, a man with a beard like tumbleweed.",
+      "next": "s1"
+    },
+    {
+      "id": "s1",
+      "speaker": "amb_salt",
+      "text": "Stop. Turn the lights off. You're shining right up the draw.",
+      "effects": [
+        {
+          "set": "salt_met",
+          "value": true
+        }
+      ],
+      "next": "s2"
+    },
+    {
+      "id": "s2",
+      "speaker": "amb_salt",
+      "text": "Name's Salt. Been here since '09. Warm water, nobody bothers me. Till September.",
+      "choices": [
+        {
+          "text": "What happened in September?",
+          "next": "nov"
+        },
+        {
+          "text": "[Give him food]",
+          "next": "food",
+          "conditions": [
+            {
+              "item": "canned_food",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "canned_food",
+              "qty": 1
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            },
+            {
+              "set": "salt_fed",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "food",
+      "speaker": "amb_salt",
+      "text": "Huh. Thanks. Okay. You get the long version.",
+      "next": "nov"
+    },
+    {
+      "id": "nov",
+      "speaker": "amb_salt",
+      "text": "They've been watching me since September. Tall ones. They stand where the steam is and they watch.",
+      "next": "s3"
+    },
+    {
+      "id": "s3",
+      "speaker": "amb_salt",
+      "text": "They don't come close. Not yet. They like the warm. Your plant up there is the warmest thing for miles.",
+      "next": "s4"
+    },
+    {
+      "id": "s4",
+      "speaker": "wraith",
+      "text": "[Pressed against your leg. Shaking. She hasn't stopped looking up the draw.]",
+      "next": "s5"
+    },
+    {
+      "id": "s5",
+      "speaker": "amb_salt",
+      "text": "Your dog knows. Dogs always know. Go on. Light your plant. Keep your lights on.",
+      "choices": [
+        {
+          "text": "[Leave him your flashlight]",
+          "next": "light",
+          "conditions": [
+            {
+              "item": "flashlight",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "flashlight",
+              "qty": 1
+            },
+            {
+              "set": "salt_fed",
+              "value": true
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "Stay safe, Salt.",
+          "next": "bye"
+        }
+      ]
+    },
+    {
+      "id": "light",
+      "speaker": "amb_salt",
+      "text": "...Huh. Nobody's given me anything in fifteen years but tickets. Thank you, airman.",
+      "end": true
+    },
+    {
+      "id": "bye",
+      "speaker": "amb_salt",
+      "text": "Safe. Ha. Sure.",
+      "end": true
+    }
+  ]
+}

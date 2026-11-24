@@ -1,0 +1,215 @@
+{
+  "id": "ch09_voices",
+  "chapter": "ch09",
+  "location": "river_ice",
+  "trigger": "Whiteout on the river: a mimic calls in Walt's voice (enc_ch09_hollow_ambush), then an assimilated coyote pack (enc_ch09_animal_pack).",
+  "speakers": [
+    "narrator",
+    "hollow",
+    "wraith",
+    "column",
+    "carly",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Whiteout. The column moves rope to rope. Somewhere off the ice, to the left, a voice.",
+      "next": "v1"
+    },
+    {
+      "id": "v1",
+      "speaker": "hollow",
+      "text": "Braith? Over here. Over here. I found the trail. I found the trail, Braith.",
+      "next": "v2"
+    },
+    {
+      "id": "v2",
+      "speaker": "narrator",
+      "text": "It's Walt's voice. Walt is on the sled behind you, asleep under three blankets.",
+      "branches": [
+        {
+          "next": "v3w",
+          "conditions": [
+            {
+              "flag": "wraith_alive",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "v3x"
+        }
+      ]
+    },
+    {
+      "id": "v3w",
+      "speaker": "wraith",
+      "text": "[Planted. Hackles up. Growling at the voice. Then she looks at you: don't.]",
+      "effects": [
+        {
+          "set": "wraith_mimic_warned",
+          "value": true
+        }
+      ],
+      "next": "v4"
+    },
+    {
+      "id": "v3x",
+      "speaker": "narrator",
+      "text": "No dog to ask. You stare into the white. Nothing out there is breathing steam.",
+      "next": "v4"
+    },
+    {
+      "id": "v4",
+      "speaker": "column",
+      "text": "[Someone down the line] That's the old man! He's out there! Somebody go get him!",
+      "choices": [
+        {
+          "text": "[Follow the voice]",
+          "next": "follow",
+          "effects": [
+            {
+              "set": "ch09_voice_followed",
+              "value": true
+            },
+            {
+              "event": "encounter",
+              "id": "enc_ch09_hollow_ambush"
+            },
+            {
+              "add": "column_size",
+              "value": -1
+            },
+            {
+              "stat": "health",
+              "delta": -15
+            }
+          ]
+        },
+        {
+          "text": "[Hold the rope. Flares out]",
+          "next": "hold",
+          "effects": [
+            {
+              "event": "encounter",
+              "id": "enc_ch09_hollow_ambush"
+            },
+            {
+              "add": "assimilated_killed",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "[Keep walking. Don't answer]",
+          "next": "walk"
+        }
+      ]
+    },
+    {
+      "id": "follow",
+      "speaker": "narrator",
+      "text": "Thirty steps off the rope the voice stops. Two shapes stand up out of the snow, wrong at the knees.",
+      "next": "follow2"
+    },
+    {
+      "id": "follow2",
+      "speaker": "narrator",
+      "text": "You make it back to the rope. One of the column doesn't. Behind you, the voice starts saying their name.",
+      "next": "pack"
+    },
+    {
+      "id": "hold",
+      "speaker": "narrator",
+      "text": "Red light on the snow. Two figures, close. One wears a parka you saw at the bridge camp. You fire.",
+      "next": "pack"
+    },
+    {
+      "id": "walk",
+      "speaker": "narrator",
+      "text": "You walk. The voice walks with you for a mile, just off the rope: 'I found the trail.' Then it gives up.",
+      "next": "pack"
+    },
+    {
+      "id": "pack",
+      "speaker": "narrator",
+      "text": "Then the coyotes. Five of them in the ash, moving like one animal with too many legs.",
+      "branches": [
+        {
+          "next": "pack_w",
+          "conditions": [
+            {
+              "flag": "wraith_alive",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "pack2"
+        }
+      ]
+    },
+    {
+      "id": "pack_w",
+      "speaker": "wraith",
+      "text": "[Shoves herself between you and them. Silent. She knows these aren't coyotes anymore.]",
+      "next": "pack2"
+    },
+    {
+      "id": "pack2",
+      "speaker": "narrator",
+      "text": "No yips. No breath. They don't circle like dogs. They wait like people.",
+      "choices": [
+        {
+          "text": "[Flares. Fight]",
+          "next": "fight",
+          "effects": [
+            {
+              "event": "encounter",
+              "id": "enc_ch09_animal_pack"
+            },
+            {
+              "add": "assimilated_killed",
+              "value": 2
+            },
+            {
+              "stat": "stamina",
+              "delta": -20
+            }
+          ]
+        },
+        {
+          "text": "[Light the sled lamp. Back away]",
+          "next": "lamp",
+          "effects": [
+            {
+              "stat": "warmth",
+              "delta": -10
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fight",
+      "speaker": "narrator",
+      "text": "They come apart in the flarelight like something badly glued. Two stay down. The rest fade into the white.",
+      "next": "end"
+    },
+    {
+      "id": "lamp",
+      "speaker": "narrator",
+      "text": "The lamp holds them at the edge of the light for an hour. Then the wind shifts and they're gone.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "carly",
+      "text": "New rule, pass it down the line. Nobody answers a voice. Nobody. Not even mine.",
+      "end": true
+    }
+  ]
+}

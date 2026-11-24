@@ -1,0 +1,107 @@
+{
+  "id": "ch01_wraith_morning",
+  "chapter": "ch01",
+  "location": "loc_sparks_block",
+  "trigger": "Interact with Wraith in the yard (companion tutorial).",
+  "speakers": [
+    "narrator",
+    "wraith",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Wraith drops her bowl at your feet. Then her leash. Then sits like a recruit at inspection.",
+      "next": "w1"
+    },
+    {
+      "id": "w1",
+      "speaker": "braith",
+      "text": "Yeah, partner. Everybody wants something today.",
+      "choices": [
+        {
+          "text": "[Feed her a full can]",
+          "next": "full",
+          "conditions": [
+            {
+              "item": "canned_food",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "canned_food",
+              "qty": 1
+            },
+            {
+              "trust": "wraith",
+              "delta": 2
+            }
+          ]
+        },
+        {
+          "text": "[Half rations. Split with her]",
+          "next": "half",
+          "effects": [
+            {
+              "trust": "wraith",
+              "delta": 1
+            },
+            {
+              "stat": "satiety",
+              "delta": -5
+            }
+          ]
+        },
+        {
+          "text": "[Kibble's gone. Make her wait]",
+          "next": "wait",
+          "effects": [
+            {
+              "trust": "wraith",
+              "delta": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "full",
+      "speaker": "narrator",
+      "text": "She eats like it's a mission. Then licks the can until it shines.",
+      "next": "cmds"
+    },
+    {
+      "id": "half",
+      "speaker": "narrator",
+      "text": "You split the last of the kibble with a heel of bread. She takes the bread gently, like a favor.",
+      "next": "cmds"
+    },
+    {
+      "id": "wait",
+      "speaker": "wraith",
+      "text": "[A long, betrayed look. She lies down facing away from you.]",
+      "next": "cmds"
+    },
+    {
+      "id": "cmds",
+      "speaker": "narrator",
+      "text": "COMPANION: tap Wraith to give orders. TRACK a scent. GUARD a spot. HOLD a person. She WARNS on her own.",
+      "next": "cmds2"
+    },
+    {
+      "id": "cmds2",
+      "speaker": "braith",
+      "text": "Track, guard, hold. And if you growl, I listen. That's the deal.",
+      "next": "cmds3"
+    },
+    {
+      "id": "cmds3",
+      "speaker": "wraith",
+      "text": "[Short huff. Paw on your knee.]",
+      "end": true
+    }
+  ]
+}

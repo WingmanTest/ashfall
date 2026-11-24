@@ -1,149 +1,182 @@
 {
   "id": "ch09_ice",
   "chapter": "ch09",
-  "location": "loc_jay_cooke",
-  "trigger": "River crossing. The ice breaks under the column.",
+  "location": "river_ice",
+  "trigger": "Set piece: the ice breaks (ice_break_qte). Save a person or the sled.",
   "speakers": [
-    "cody",
-    "dell",
     "narrator",
-    "ray"
+    "braith",
+    "wes",
+    "kit",
+    "lund_kid"
   ],
   "start": "start",
   "nodes": [
     {
       "id": "start",
       "speaker": "narrator",
-      "text": "A crack like a rifle shot. The ice tilts. The supply sled slides toward black water.",
+      "text": "A crack like a rifle shot. The ice tilts. Black water opens across the column.",
       "branches": [
         {
-          "next": "both",
+          "next": "wes",
           "conditions": [
             {
-              "flag": "cody_alive",
+              "flag": "wes_spared",
+              "eq": true
+            },
+            {
+              "flag": "wes_alive",
               "eq": true
             }
           ]
         },
         {
-          "next": "sled_only"
+          "next": "kit",
+          "conditions": [
+            {
+              "flag": "kit_alive",
+              "eq": true
+            },
+            {
+              "flag": "ch09_sled_brought",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "kid"
         }
       ]
     },
     {
-      "id": "both",
-      "speaker": "narrator",
-      "text": "So does Cody, who was pulling it. You can reach one. Only one.",
+      "id": "wes",
+      "speaker": "wes",
+      "text": "BRAITH— my leg, I can't—",
       "choices": [
         {
-          "text": "[Grab Cody]",
-          "next": "cody"
+          "text": "[Grab Wes]",
+          "next": "save",
+          "effects": [
+            {
+              "set": "ch09_saved",
+              "value": "person"
+            },
+            {
+              "trust": "wes",
+              "delta": 2
+            }
+          ]
         },
         {
           "text": "[Grab the sled]",
-          "next": "sled"
+          "next": "sled",
+          "effects": [
+            {
+              "set": "ch09_saved",
+              "value": "sled"
+            }
+          ]
         }
       ]
     },
     {
-      "id": "cody",
-      "speaker": "narrator",
-      "text": "Your hand on his collar. The sled goes under, a winter of food with it. Cody is choking, alive.",
-      "effects": [
+      "id": "kit",
+      "speaker": "kit",
+      "text": "Wrench! WRENCH!",
+      "choices": [
         {
-          "set": "ch09_saved",
-          "value": "cody"
-        },
-        {
-          "take": "canned_food",
-          "qty": 8
-        },
-        {
-          "take": "firewood",
-          "qty": 6
-        },
-        {
-          "trust": "cody",
-          "delta": 5
-        },
-        {
-          "trust": "ray",
-          "delta": 5
-        },
-        {
-          "add": "rep_compact",
-          "value": 2
-        }
-      ],
-      "next": "cody2"
-    },
-    {
-      "id": "cody2",
-      "speaker": "narrator",
-      "text": "He coughs up river water and laughs, the scared laugh.",
-      "branches": [
-        {
-          "next": "cody_ray",
-          "conditions": [
+          "text": "[Grab Kit]",
+          "next": "save",
+          "effects": [
             {
-              "flag": "ray_alive",
-              "eq": true
+              "set": "ch09_saved",
+              "value": "person"
+            },
+            {
+              "trust": "kit",
+              "delta": 2
             }
           ]
         },
         {
-          "next": "end"
+          "text": "[Grab the sled]",
+          "next": "sled",
+          "effects": [
+            {
+              "set": "ch09_saved",
+              "value": "sled"
+            }
+          ]
         }
       ]
     },
     {
-      "id": "cody_ray",
-      "speaker": "ray",
-      "text": "...Son. Hey. Hey. We're square. We're square, okay?",
+      "id": "kid",
+      "speaker": "lund_kid",
+      "text": "Mister! Mister, help!",
+      "choices": [
+        {
+          "text": "[Grab the kid]",
+          "next": "save",
+          "effects": [
+            {
+              "set": "ch09_saved",
+              "value": "person"
+            },
+            {
+              "add": "kindness",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "text": "[Grab the sled]",
+          "next": "sled",
+          "effects": [
+            {
+              "set": "ch09_saved",
+              "value": "sled"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "save",
+      "speaker": "narrator",
+      "text": "You get a hand. You pull. You both go flat on the ice. The sled slides into the black water and is gone.",
+      "effects": [
+        {
+          "take": "sled",
+          "qty": 1
+        },
+        {
+          "take": "firewood",
+          "qty": 4
+        },
+        {
+          "stat": "warmth",
+          "delta": -20
+        }
+      ],
+      "next": "save2"
+    },
+    {
+      "id": "save2",
+      "speaker": "narrator",
+      "text": "Half your food. All the spare firewood. But everyone you started with is still breathing.",
       "next": "end"
     },
     {
       "id": "sled",
       "speaker": "narrator",
-      "text": "You haul the sled back by the rope. When you look up, the hole is just black water.",
-      "effects": [
-        {
-          "set": "ch09_saved",
-          "value": "sled"
-        },
-        {
-          "set": "cody_alive",
-          "value": false
-        },
-        {
-          "trust": "ray",
-          "delta": -8
-        }
-      ],
-      "next": "sled2"
-    },
-    {
-      "id": "sled2",
-      "speaker": "narrator",
-      "text": "Nobody says anything. Then someone has to keep walking, so everyone does.",
-      "next": "end"
-    },
-    {
-      "id": "sled_only",
-      "speaker": "narrator",
-      "text": "You throw yourself on the rope. The sled stops at the edge. Everyone breathes.",
-      "effects": [
-        {
-          "set": "ch09_saved",
-          "value": "sled"
-        }
-      ],
+      "text": "You get the sled rope. The sled holds. The hand you didn't grab slides away under the ice.",
       "next": "end"
     },
     {
       "id": "end",
       "speaker": "narrator",
-      "text": "Across the swinging bridge: lights. The dam. Someone is standing at the gate.",
+      "text": "Nobody speaks for a mile. Then the snow starts again and there's nothing to do but walk.",
       "end": true
     }
   ]

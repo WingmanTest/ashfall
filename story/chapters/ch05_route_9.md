@@ -1,44 +1,114 @@
 # Chapter 5: Route 9
-**Act II** · March · Port → Hwy 53 → Proctor yard · Dialogue: `dialogue/ch05_*.json`
+
+*Act 2 · season `late_fall` · Day 83 (Sat Nov 14, Year 1) · level id(s): ch05_route_9*
 
 ## Summary
-Washington issues the **Reconstruction Directive**: Midwest grain is requisitioned for starving eastern cities. Minnesota's governor refuses. **Task Force Ironwood**, a federal Army battalion-minus from Fort McCoy, rolls into Duluth to enforce it. Strand's Guard gets two orders from two chains of command. Because the dam is now known, Ironwood presses Dell into service: re-energize the Proctor yard signals so the grain trains can roll on ROUTE 9. The Range Compact has blockaded the Highway 53 overpass.
+
+Day 83: Saturday, November 14. Cold, overcast late fall: sleet, wind down the canyon, a few degrees above freezing. The federal Reconstruction Directive requisitions the valley's warehouses for California; Nevada joins the state bloc, and Task Force Ironwood arrives. Convoy Route 9 runs west out of the industrial center under Ironwood escort, and the Lahontan Compact blocks the I-80 canyon with hay trucks. Ross is on the barricade. Wes is hit under the overpass. In the sleet the soldiers fire tracers at something that isn't people.
 
 ## Goals
-1. Ride the convoy with Ironwood (Sgt. Ruiz is the engineer on the MRAP).
-2. Restore the signal cabinet at the overpass under fire.
-3. Decide the convoy's fate.
-4. Find the wounded Compact fighter under the overpass: Cody.
 
-## Locations
-`loc_ore_docks` → `loc_hwy53_blockade` (ROUTE 9 overpass) → `loc_proctor_yard`
+- Ride the convoy (Sgt. Ruiz, call sign 'Engineer Two').
+- The signal cabinet (cabinet_choice).
+- Decide the convoy (convoy_choice).
+- Find Wes (q_find_wes).
+- Optional: Mo's pump (q_mo_pump), Rourke's burros (q_rourke_escort), Boone's back door.
 
 ## NPCs
-strand, ruiz (first look), jory, cody, ray (if `ray_alive`, before departure), lou (radio), bea (optional)
+
+Ruiz, Ander, Ross, Wes, Kessler (radio), Mo, Rourke, Boone, Darlene.
 
 ## Key beats
-1. **The ask.** Strand, very quietly: "They didn't ask me either." Kessler's voice on the loudspeaker: tonnages, eastern death tolls. He's not lying.
-2. **Convoy at night.** An MRAP searchlight on snow, drone buzz overhead. Ruiz: "You touch the cabinet, I cover you. That's the whole plan."
-3. **Blockade.** Compact militia behind logging trucks. Jory comes out under a white rag to talk to Dell, not to the soldiers. → `ch05_jory_blockade`
-4. **The choice at the cabinet.** *Escort*: energize the signals and the trains roll east. *Sabotage*: short the cabinet and the trains stop. *Divert*: switch the junction so half the cars go to the Harbor siding.
-5. **Under the overpass.** Cody, gut-shot, 27, asks for his dad. Treat him (costs your med kit), leave him, or hand him to Ironwood as a prisoner. → `ch05_cody`
+
+- Ruiz briefs drivers at the warehouses. She's tired and fair.
+- The convoy halts at the canyon. The rail signal cabinet controls the crossing gates and floodlights.
+- Ander walks out to talk. Ross stands behind him and doesn't look at Braith.
+- Escort, sabotage or divert. Whatever you pick, someone shoots.
+- Under the overpass: Wes is hit. Treat him, leave him to Compact medics, or Ironwood takes him.
+- Ironwood radio: 'contact, not human, repeat not—'. A flare shows one figure mid-stride on the hillside.
+- Rourke sells the Annex rumor for an escort (annex_known).
 
 ## Choices & consequences
-| Choice | Flags | Later |
-|---|---|---|
-| Escort | `convoy_choice=escort`, rep_authority+2, rep_compact−2 | Ch6: Ironwood trusts you and the sweep skips your house; the Compact targets the dam in Ch9 |
-| Sabotage | `convoy_choice=sabotage`, rep_compact+3, `ironwood_hostility`+3 | Ch6: you're on Ironwood's list; Strand is at risk if you also raise the bridge |
-| Divert half | `convoy_choice=divert`, rep_harbor+2, `ironwood_hostility`+1 | Ch6: Bea owes you; Ironwood suspects |
-| Save Cody | `cody_spared`, kindness+1 | Ray trust+4; Ch9 the ice choice |
-| Leave / hand over Cody | `cody_alive=false` (leave) or `cody_prisoner` | Ray's fate in Ch6 |
+
+| Choice | Consequence |
+|---|---|
+| Convoy: escort / sabotage / divert half to the Floor | convoy_choice; escort may set fired_on_blockade (breaks pearce_reconciled). |
+| Signal cabinet: fix / jam / flood the canyon with light | cabinet_choice. |
+| Wes: pull him out / leave him | wes_spared (+Ross lets you through Fallon free) or wes_prisoner (Ironwood detainee; freed by Ruiz in Ch6 or at the Ch10 gate). |
 
 ## Flags
-- **Set:** `ironwood_arrived`, `convoy_choice`, `cody_spared`, `cody_alive`, `cody_prisoner`, `jory_met`, `jory_secret_known`, `ruiz_met`, `ironwood_hostility`
-- **Read:** `power_priority`, `rep_*`, `ray_alive`, `ch03_helped_ray`
+
+ironwood_arrived, ruiz_met, ander_met, ross_met, convoy_choice, fired_on_blockade, cabinet_choice, wes_spared, wes_prisoner, mo_met, darlene_with_mo, boone_met, annex_known, tallman_glimpses.
+
+## Level notes (for Cartographer)
+
+Level ch05_route_9: two armed camps (blockade cook fires, the convoy) and Rourke's roadside camp on the canyon shoulder. The armored plow truck reskins as a hay-truck barricade.
 
 ## Gameplay hooks
-- **Player does:** convoy ride (on-rails look and shoot, with the option to hold fire), a **repair-under-fire** at the signal cabinet, a talk scene, a medical mini-interaction.
-- **Enemies:** `compact_militia` (6–8; deer rifles, a homemade armored plow truck). If sabotaging, the enemies flip to `ironwood_patrol` (4) with an `ironwood_drone` spotting (set piece: break line of sight under the overpass). `ironwood_mrap` is the escort set piece (cover for you, or a threat).
-- **Items:** `med_kit`, `rifle_ammo`, `signal_fuse`, `flare`, `grain_sack`.
-- **Weather/time:** freezing rain, −8 °C, night. The ice makes the overpass slippery.
-- **Note:** This is the first chapter where US soldiers are in play. They are allies or enemies depending on `convoy_choice`.
+
+*Generated from `gameplay_hooks.json` and `npcs.json` by `authoring/chapters.py`.*
+
+- **Level file(s):** `ch05_route_9`
+- **Season:** `late_fall` (mid Nov – mid Dec, Year 1). Palette: overcast slate grey, wet asphalt, sodium-orange dead lamps.
+- **Date / weather / temperature:** Day 83 (Sat Nov 14, Year 1); `sleet`; 2 °C, night -3 °C. Time of day: dusk, night.
+- **Survival focus:** warmth, wet_cold, wind. HUD unlocks: ammo_military.
+
+**Locations**
+
+- `loc_tric_warehouses`: Industrial-center warehouses east of Sparks. Ch5 convoy staging; Darlene's reefer trailer.
+- `loc_i80_blockade`: I-80 in the Truckee canyon east of Sparks. Compact blockade, rail signal cabinet, overpass.
+- `loc_mustang_truckstop`: Truck stop at the I-80 Mustang exit. Mo's fuel market.
+- `loc_sparks_yard`: Union Pacific yard, Sparks. Convoys; Boone's back door; Remnant base in Act III.
+
+**Enemies** (max active counts; Tallmen are never a horde, never more than 3 visible)
+
+- `compact_militia` ×8: If escort/divert
+- `ironwood_patrol` ×4: If sabotage
+- `ironwood_drone` ×1: Spotter; break LOS under overpass
+- `ironwood_mrap` ×1: Escort or threat
+
+**Encounters** (`gameplay_hooks.encounters`)
+
+- `enc_ch05_compact_attack`: compact_militia×8. Escort path. Sets fired_on_blockade via dialogue.
+- `enc_ch05_ironwood_turn`: ironwood_patrol×4, ironwood_drone×1. Sabotage path.
+- `enc_ch05_crossfire`: compact_militia×4, ironwood_patrol×4. Divert path.
+
+**Traders**
+
+- `trader_mo` (Maureen 'Mo' Kessinger): loc_mustang_truckstop. Trades diesel_jug, gas_can, tire chains, sled parts; wants mechanic labor, parts, canned_food. Rep flag `trader_mo_rep`. Hook: Fix her transfer pump for standing credit (+3 rep, free diesel). With Darlene (darlene_with_mo) she survives Act III.
+- `trader_rourke` (Wendell Rourke): loc_peavine_shack (Ch3), loc_i80_blockade (Ch5), loc_us50_fallon (Ch7), river_ice camp (Ch9). Trades whiskey, candles, maps, tea, reloading supplies, rumor; wants stories, rumor, salt. Rep flag `trader_rourke_rep`. Hook: Get his burros through the Ch5 canyon; reward: the Annex rumor (annex_known).
+- `trader_boone` (SSgt. Tyrell Boone): loc_sparks_yard. Trades canned_food (MREs), mask_filter, rifle_ammo, dosimeter; wants cigarettes, whiskey, silence, diesel_jug. Rep flag `trader_boone_rep`. Hook: About half his Act III filters are expired (boone_filters_tested reveals it). Expose him to Ruiz (boone_exposed) and Kessler shoots him; his stock drops as loot.
+
+**Ambient NPCs**
+
+- `amb_darlene` (Darlene Okoye-Pratt): Stranded long-haul trucker with a reefer trailer of frozen chicken off USA Parkway.
+
+**Set pieces**
+
+- MRAP searchlight on sleet
+- Hay-truck blockade in the canyon (armored_plow_truck reskin)
+- Tracers into the dark at something that isn't people
+
+**Tallman glimpses** (non-interactable billboards; no collider or AI)
+
+- `glimpse_ch05_flare`: Hillside above the canyon, ~70 m, lit by the flare: one figure, mid-stride, then gone.  Ironwood radio chatter plays: 'contact, not human, repeat not—'.
+
+**Items placed or awarded**
+
+`med_kit`, `rifle_ammo`, `signal_fuse`, `flare`, `grain_sack`, `diesel_jug`, `mask_filter`, `whiskey`, `cigarettes`, `rumor`
+
+**Start inventory:** `med_kit`×1, `signal_fuse`×1
+
+**Player actions:** convoy_onrails_shoot_or_hold, repair_under_fire, dialogue, medical, trade
+
+**Dialogue scenes** (in order)
+
+- `ch05_ruiz_convoy` @ `loc_tric_warehouses`: Convoy staging at the warehouses. Sgt. Ruiz briefs drivers.
+- `ch05_signal_cabinet` @ `loc_i80_blockade`: The convoy halts at the canyon. Rail signal cabinet controls the crossing gates and floodlights.
+- `ch05_ander_blockade` @ `loc_i80_blockade`: Ander Etcheverry walks out to talk.
+- `ch05_wes_wounded` @ `loc_i80_blockade`: Under the overpass: Wes is hit.
+- `ch05_mo_truckstop` @ `loc_mustang_truckstop`: Mo's truck stop at the Mustang exit (trader; q_mo_pump).
+- `ch05_rourke_canyon` @ `loc_i80_blockade`: Rourke's burros stuck at the blockade (q_rourke_escort).
+- `ch05_boone_backdoor` @ `loc_sparks_yard`: SSgt. Boone's back door at the Sparks yard depot (trader).
+
+**Chapter start/end effects:** see `gameplay_hooks.json` → `chapters[].chapter_start_effects` / `chapter_end_effects`.

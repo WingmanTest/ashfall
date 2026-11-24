@@ -1,0 +1,159 @@
+{
+  "id": "ch03_carly_count",
+  "chapter": "ch03",
+  "location": "loc_rscc_registry",
+  "trigger": "Carly finds the falsified stores sheets (night, after shift).",
+  "speakers": [
+    "narrator",
+    "carly",
+    "braith"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Carly comes home after midnight. She sets a folder on the table like it's hot.",
+      "next": "c1"
+    },
+    {
+      "id": "c1",
+      "speaker": "carly",
+      "text": "Stores sheets. Every warehouse in the valley. Avila's been reporting a hundred and forty days. It's forty-one.",
+      "effects": [
+        {
+          "set": "carly_found_count",
+          "value": true
+        }
+      ],
+      "next": "c2"
+    },
+    {
+      "id": "c2",
+      "speaker": "carly",
+      "text": "Forty-one days, Braith. As of Tuesday. Thirty-six now.",
+      "branches": [
+        {
+          "next": "c_knew",
+          "conditions": [
+            {
+              "flag": "ch02_avila_truth",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "c3"
+        }
+      ]
+    },
+    {
+      "id": "c_knew",
+      "speaker": "carly",
+      "text": "...You knew. Since the registry. You knew and you let me type names into that thing for a month.",
+      "choices": [
+        {
+          "text": "She asked me to buy her time.",
+          "next": "time",
+          "effects": [
+            {
+              "trust": "carly",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "text": "I should have told you. I'm sorry.",
+          "next": "sorry",
+          "effects": [
+            {
+              "trust": "carly",
+              "delta": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "time",
+      "speaker": "carly",
+      "text": "She asked YOU. Nobody asked me. Okay. Noted. Very noted.",
+      "next": "c3"
+    },
+    {
+      "id": "sorry",
+      "speaker": "carly",
+      "text": "Yeah. You should've. ...Okay. I'm still mad. I'm also glad it's you.",
+      "next": "c3"
+    },
+    {
+      "id": "c3",
+      "speaker": "carly",
+      "text": "If I take this to the Floor, there's a riot. If I sit on it, I'm Avila. What do I do?",
+      "choices": [
+        {
+          "text": "Take it to Roz. The Floor feeds people.",
+          "next": "roz",
+          "effects": [
+            {
+              "add": "rep_harbor",
+              "value": 1
+            },
+            {
+              "trust": "carly",
+              "delta": 1
+            }
+          ]
+        },
+        {
+          "text": "Sit on it. Buy time for a real plan.",
+          "next": "sit",
+          "effects": [
+            {
+              "add": "rep_authority",
+              "value": 1
+            },
+            {
+              "trust": "carly",
+              "delta": -1
+            }
+          ]
+        },
+        {
+          "text": "Your call. I'll back it.",
+          "next": "yours",
+          "effects": [
+            {
+              "trust": "carly",
+              "delta": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "roz",
+      "speaker": "carly",
+      "text": "Roz. Yeah. She'll yell, then she'll feed people. Okay.",
+      "next": "end"
+    },
+    {
+      "id": "sit",
+      "speaker": "carly",
+      "text": "Buy time. Right. That's what she said too.",
+      "next": "end"
+    },
+    {
+      "id": "yours",
+      "speaker": "carly",
+      "text": "...I'm going to keep a copy. And I'm going to keep counting. My count.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "She falls asleep at the table with her hand on the folder.",
+      "end": true
+    }
+  ]
+}

@@ -1,0 +1,221 @@
+{
+  "id": "ch01_gil_garage",
+  "chapter": "ch01",
+  "location": "loc_sparks_block",
+  "trigger": "Interact with Gil in his garage.",
+  "speakers": [
+    "gil",
+    "braith",
+    "narrator"
+  ],
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "speaker": "narrator",
+      "text": "Gil's garage hums. A diesel generator. Six red jugs. A Union Pacific jacket on a hook, a shotgun under it.",
+      "next": "g1"
+    },
+    {
+      "id": "g1",
+      "speaker": "gil",
+      "text": "Listen here. Shut that door. You're letting my electricity out.",
+      "branches": [
+        {
+          "next": "g_pruitt",
+          "conditions": [
+            {
+              "flag": "ch01_asked_gil_for_pruitt",
+              "eq": true
+            }
+          ]
+        },
+        {
+          "next": "g2"
+        }
+      ]
+    },
+    {
+      "id": "g_pruitt",
+      "speaker": "gil",
+      "text": "If this is about Pruitt, I said it to the nurse. Can't run the whole block off one Kubota.",
+      "next": "g2"
+    },
+    {
+      "id": "g2",
+      "speaker": "gil",
+      "text": "You want diesel, I want something worth diesel. That's the economy now, flyboy.",
+      "choices": [
+        {
+          "text": "What's diesel worth?",
+          "next": "price"
+        },
+        {
+          "text": "[Offer your flight-line tools]",
+          "next": "trade",
+          "conditions": [
+            {
+              "item": "mech_tools",
+              "gte": 1
+            }
+          ]
+        },
+        {
+          "text": "You could just help people, Gil.",
+          "next": "help"
+        },
+        {
+          "text": "Where'd you get six jugs?",
+          "next": "where"
+        }
+      ]
+    },
+    {
+      "id": "price",
+      "speaker": "gil",
+      "text": "Cash is kindling. Guns, tools, meds. That tool roll of yours? Snap-on? That's a jug.",
+      "next": "g2"
+    },
+    {
+      "id": "trade",
+      "speaker": "gil",
+      "text": "Good steel. Five gallons. We're square.",
+      "effects": [
+        {
+          "take": "mech_tools",
+          "qty": 1
+        },
+        {
+          "give": "diesel_jug",
+          "qty": 1
+        },
+        {
+          "set": "ch01_gil_traded",
+          "value": true
+        },
+        {
+          "trust": "gil",
+          "delta": 2
+        }
+      ],
+      "next": "trade2"
+    },
+    {
+      "id": "trade2",
+      "speaker": "braith",
+      "text": "Four years of flight line in that roll. Don't sell it.",
+      "next": "trade3"
+    },
+    {
+      "id": "trade3",
+      "speaker": "gil",
+      "text": "I'll keep it oiled. You'll want it back. Everybody wants their tools back.",
+      "next": "end"
+    },
+    {
+      "id": "help",
+      "speaker": "gil",
+      "text": "I am helping. I'm helping me. Somebody's got to be ready when the help runs out.",
+      "next": "help2"
+    },
+    {
+      "id": "help2",
+      "speaker": "gil",
+      "text": "Thirty-one years on diesel at the Sparks yard. Pension's a joke now. This is my pension.",
+      "choices": [
+        {
+          "text": "Then lend Pruitt one jug.",
+          "next": "pruitt"
+        },
+        {
+          "text": "Fine. Keep it.",
+          "next": "end"
+        }
+      ]
+    },
+    {
+      "id": "pruitt",
+      "speaker": "gil",
+      "text": "...One night. One. And you didn't get it from me.",
+      "branches": [
+        {
+          "next": "pruitt_yes",
+          "conditions": [
+            {
+              "trust": "gil",
+              "gte": 1
+            }
+          ]
+        },
+        {
+          "next": "pruitt_no"
+        }
+      ]
+    },
+    {
+      "id": "pruitt_yes",
+      "speaker": "narrator",
+      "text": "He shoves a jug at you without looking. You'll carry it to Lolo.",
+      "effects": [
+        {
+          "give": "diesel_jug",
+          "qty": 1
+        },
+        {
+          "add": "kindness",
+          "value": 1
+        },
+        {
+          "trust": "gil",
+          "delta": -1
+        }
+      ],
+      "next": "end"
+    },
+    {
+      "id": "pruitt_no",
+      "speaker": "gil",
+      "text": "No. Ask me again in a week when you've done me a favor. Go on.",
+      "next": "end"
+    },
+    {
+      "id": "where",
+      "speaker": "gil",
+      "text": "Bought 'em. Before.",
+      "choices": [
+        {
+          "text": "The pump stickers say Maverik. Monday.",
+          "next": "sticker",
+          "effects": [
+            {
+              "set": "ch01_knows_gil_siphoned",
+              "value": true
+            }
+          ]
+        },
+        {
+          "text": "Okay.",
+          "next": "end"
+        }
+      ]
+    },
+    {
+      "id": "sticker",
+      "speaker": "gil",
+      "text": "...The station manager was gone. Pumps were dead. I had a hand pump. You'd have done the same.",
+      "next": "sticker2"
+    },
+    {
+      "id": "sticker2",
+      "speaker": "gil",
+      "text": "You want to tell somebody, go ahead. Who're you gonna tell?",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "speaker": "narrator",
+      "text": "The generator thuds on behind you.",
+      "end": true
+    }
+  ]
+}
