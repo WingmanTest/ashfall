@@ -58,9 +58,10 @@ export function setShadowMapSize(light, size) {
 }
 
 /** Flashlight: a SpotLight living in the scene root that copies the camera pose each frame. */
-export function createFlashlight({ color = 0xdfe8ff, intensity = 38, range = 26, angleDeg = 22, penumbra = 0.45, offset = [-0.05, 0.02, -0.75] } = {}) {
+export function createFlashlight({ color = 0xdfe8ff, intensity = 110, range = 22, angleDeg = 28, penumbra = 0.58, decay = 1.15, offset = [-0.05, 0.02, -0.75] } = {}) {
   // default offset puts the lamp just ahead of the viewmodel so the gun isn't blown out by it
-  const light = new THREE.SpotLight(color, intensity, range, THREE.MathUtils.degToRad(angleDeg), penumbra, 1.4);
+  // decay 1.15 (not 2) keeps the cone readable on iPhone Safari's physically-correct lights
+  const light = new THREE.SpotLight(color, intensity, range, THREE.MathUtils.degToRad(angleDeg), penumbra, decay);
   light.name = 'ashfall-flashlight';
   light.castShadow = false;
   light.shadow.mapSize.set(256, 256);

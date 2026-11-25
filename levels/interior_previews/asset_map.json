@@ -1,5 +1,5 @@
 {
- "$comment": "THE single remap table for interior dressing. Overlays use provisional arch_ ids; 'remap' maps each to Sculptor's delivered models/arch id (catalog.RENAME). ids[*].status: exists (GLB delivered, dims from manifest bounds) | provisional | planned_by_sculptor.",
+ "$comment": "THE single remap table for interior dressing. Overlays use provisional arch_ ids; 'remap' maps each to Sculptor's delivered models/arch id (catalog.RENAME). ids[*].status: exists (GLB delivered, dims from manifest bounds) | provisional | planned_by_sculptor. Atlas A (arch_floor_decals.png) and Atlas B (arch_decals_b.png) share one decal material/batch so B does not add a draw call.",
  "sets": {
   "arch_set_wall": {
    "desc": "wall-hug furniture (big, most collide)",
@@ -22,9 +22,12 @@
     "arch_bed_messy",
     "arch_fridge_ajar",
     "arch_counter_sink",
-    "arch_med_cabinet"
+    "arch_med_cabinet",
+    "arch_cabinet_file_open",
+    "arch_bed_stripped",
+    "arch_metal_locker"
    ],
-   "trisSum": 2220
+   "trisSum": 2256
   },
   "arch_set_mount": {
    "desc": "flush wall mounts: windows, boards, sheeting, panels, pipes, door frames",
@@ -49,9 +52,12 @@
     "arch_wall_plank_1m",
     "arch_wall_plank_2m",
     "arch_baseboard_2m",
-    "arch_glass_hanging"
+    "arch_glass_hanging",
+    "arch_pipe_run_1m",
+    "arch_window_boarded_diagonal",
+    "arch_boards_overlay_inner"
    ],
-   "trisSum": 1253
+   "trisSum": 1927
   },
   "arch_set_furniture": {
    "desc": "free-standing mid furniture (crates, tables, chairs, drums...)",
@@ -79,9 +85,10 @@
     "arch_cot",
     "arch_tire_stack",
     "arch_crate_small",
-    "arch_crate_broken"
+    "arch_crate_broken",
+    "arch_drum_burn"
    ],
-   "trisSum": 2391
+   "trisSum": 3127
   },
   "arch_set_clutter": {
    "desc": "small clutter + story keepsakes (never collide)",
@@ -129,9 +136,11 @@
     "arch_plank_broken_b",
     "arch_rubble_small",
     "arch_can",
-    "arch_cash_register"
+    "arch_cash_register",
+    "arch_bottle",
+    "arch_glass_shards_a"
    ],
-   "trisSum": 1354
+   "trisSum": 2716
   },
   "arch_decal_atlas": {
    "desc": "floor + wall decals, one atlas, setFrameAt",
@@ -156,6 +165,10 @@
    "note": "steel gondola/utility shelving, 4 shelves; boxes ride on it from the clutter set",
    "final": "arch_shelf_metal_boxes",
    "glb": "models/arch/arch_shelf_metal_boxes.glb",
+   "hints": {},
+   "poses": [
+    "toppled"
+   ],
    "variant": 0,
    "glbExists": true
   },
@@ -170,6 +183,10 @@
    "note": "same frame, bent / stripped shelf (ransacked variant)",
    "final": "arch_shelf_metal",
    "glb": "models/arch/arch_shelf_metal.glb",
+   "hints": {},
+   "poses": [
+    "toppled"
+   ],
    "variant": 1,
    "glbExists": true
   },
@@ -184,36 +201,54 @@
    "note": "laminate counter run (kitchen / store / clinic / bar)",
    "final": "arch_counter",
    "glb": "models/arch/arch_counter.glb",
+   "hints": {},
+   "poses": [],
    "variant": 2,
    "glbExists": true
   },
   "arch_cabinet_file": {
    "set": "arch_set_wall",
    "w": 0.5,
-   "d": 0.65,
+   "d": 0.64,
    "h": 1.3,
-   "tris": 60,
+   "tris": 12,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "4-drawer filing cabinet (one drawer open variant via atlas)",
-   "variant": 3,
-   "final": null,
+   "final": "arch_cabinet_file",
    "glb": "models/arch/arch_cabinet_file.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor_wall"
+   },
+   "poses": [
+    "tipped"
+   ],
+   "variant": 3,
+   "glbExists": true
   },
   "arch_pallet_rack": {
    "set": "arch_set_wall",
-   "w": 2.7,
-   "d": 1.1,
+   "w": 2.69,
+   "d": 1.09,
    "h": 3.0,
-   "tris": 220,
+   "tris": 216,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "warehouse pallet racking bay",
-   "variant": 4,
-   "final": null,
+   "final": "arch_pallet_rack",
    "glb": "models/arch/arch_pallet_rack.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor_wall"
+   },
+   "poses": [],
+   "variant": 4,
+   "glbExists": true
   },
   "arch_workbench": {
    "set": "arch_set_wall",
@@ -226,22 +261,31 @@
    "note": "timber workbench with pegboard back",
    "final": "arch_workbench",
    "glb": "models/arch/arch_workbench.glb",
+   "hints": {},
+   "poses": [],
    "variant": 5,
    "glbExists": true
   },
   "arch_console_panel": {
    "set": "arch_set_wall",
-   "w": 1.8,
-   "d": 0.8,
-   "h": 1.2,
-   "tris": 160,
+   "w": 1.78,
+   "d": 0.76,
+   "h": 1.181,
+   "tris": 36,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "control-room / switchboard desk console",
-   "variant": 6,
-   "final": null,
+   "final": "arch_console_panel",
    "glb": "models/arch/arch_console_panel.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor_wall"
+   },
+   "poses": [],
+   "variant": 6,
+   "glbExists": true
   },
   "arch_bed": {
    "set": "arch_set_wall",
@@ -254,22 +298,33 @@
    "note": "single bed / hospital bed (atlas band variant)",
    "final": "arch_bed",
    "glb": "models/arch/arch_bed.glb",
+   "hints": {},
+   "poses": [
+    "stripped"
+   ],
    "variant": 7,
    "glbExists": true
   },
   "arch_bunk": {
    "set": "arch_set_wall",
-   "w": 0.9,
-   "d": 2.0,
+   "w": 0.935,
+   "d": 1.97,
    "h": 1.6,
-   "tris": 180,
+   "tris": 156,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "steel bunk bed",
-   "variant": 8,
-   "final": null,
+   "final": "arch_bunk",
    "glb": "models/arch/arch_bunk.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor_wall"
+   },
+   "poses": [],
+   "variant": 8,
+   "glbExists": true
   },
   "arch_sofa": {
    "set": "arch_set_wall",
@@ -282,22 +337,33 @@
    "note": "three-seat sofa",
    "final": "arch_couch",
    "glb": "models/arch/arch_couch.glb",
+   "hints": {},
+   "poses": [
+    "overturned"
+   ],
    "variant": 9,
    "glbExists": true
   },
   "arch_stove_wood": {
    "set": "arch_set_wall",
-   "w": 0.7,
-   "d": 0.6,
-   "h": 0.8,
-   "tris": 100,
+   "w": 0.66,
+   "d": 0.606,
+   "h": 1.162,
+   "tris": 112,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "woodstove + flue stub (emissive door)",
-   "variant": 10,
-   "final": null,
+   "final": "arch_stove_wood",
    "glb": "models/arch/arch_stove_wood.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor_wall"
+   },
+   "poses": [],
+   "variant": 10,
+   "glbExists": true
   },
   "arch_fridge": {
    "set": "arch_set_wall",
@@ -310,50 +376,73 @@
    "note": "dead fridge, door ajar variant",
    "final": "arch_fridge",
    "glb": "models/arch/arch_fridge.glb",
+   "hints": {},
+   "poses": [],
    "variant": 11,
    "glbExists": true
   },
   "arch_glass_hold": {
    "set": "arch_set_wall",
-   "w": 1.3,
-   "d": 1.3,
+   "w": 1.28,
+   "d": 1.932,
    "h": 2.4,
-   "tris": 140,
+   "tris": 132,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "Annex torpor hold: phone-booth glass cell, latch torn open",
-   "variant": 12,
-   "final": null,
+   "final": "arch_glass_hold",
    "glb": "models/arch/arch_glass_hold.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [],
+   "variant": 12,
+   "glbExists": true
   },
   "arch_steam_table": {
    "set": "arch_set_wall",
-   "w": 2.0,
-   "d": 0.75,
-   "h": 0.95,
-   "tris": 140,
+   "w": 1.96,
+   "d": 0.72,
+   "h": 1.183,
+   "tris": 120,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "casino steam table / buffet counter",
-   "variant": 13,
-   "final": null,
+   "final": "arch_steam_table",
    "glb": "models/arch/arch_steam_table.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [],
+   "variant": 13,
+   "glbExists": true
   },
   "arch_reception_desk": {
    "set": "arch_set_wall",
-   "w": 2.0,
-   "d": 0.8,
-   "h": 1.05,
-   "tris": 140,
+   "w": 1.98,
+   "d": 1.23,
+   "h": 1.051,
+   "tris": 36,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "L reception / nurses' station / registry desk",
-   "variant": 14,
-   "final": null,
+   "final": "arch_reception_desk",
    "glb": "models/arch/arch_reception_desk.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [],
+   "variant": 14,
+   "glbExists": true
   },
   "arch_window_intact": {
    "set": "arch_set_mount",
@@ -366,6 +455,8 @@
    "note": "models/tools/arch.py build_window('intact')",
    "final": "window_intact",
    "glb": "models/arch/window_intact.glb",
+   "hints": {},
+   "poses": [],
    "variant": 0,
    "glbExists": true
   },
@@ -380,6 +471,8 @@
    "note": "build_window('cracked')",
    "final": "window_cracked",
    "glb": "models/arch/window_cracked.glb",
+   "hints": {},
+   "poses": [],
    "variant": 1,
    "glbExists": true
   },
@@ -394,6 +487,8 @@
    "note": "build_window('broken') alpha hole + sill shards",
    "final": "window_broken",
    "glb": "models/arch/window_broken.glb",
+   "hints": {},
+   "poses": [],
    "variant": 2,
    "glbExists": true
   },
@@ -408,6 +503,8 @@
    "note": "build_window('boarded')",
    "final": "window_boarded",
    "glb": "models/arch/window_boarded.glb",
+   "hints": {},
+   "poses": [],
    "variant": 3,
    "glbExists": true
   },
@@ -422,6 +519,8 @@
    "note": "build_window_storefront()",
    "final": "window_storefront",
    "glb": "models/arch/window_storefront.glb",
+   "hints": {},
+   "poses": [],
    "variant": 4,
    "glbExists": true
   },
@@ -436,6 +535,8 @@
    "note": "build_boards_overlay()",
    "final": "door_boards_overlay",
    "glb": "models/arch/door_boards_overlay.glb",
+   "hints": {},
+   "poses": [],
    "variant": 5,
    "glbExists": true
   },
@@ -443,43 +544,64 @@
    "set": "arch_set_mount",
    "w": 1.0,
    "d": 0.2,
-   "h": 2.1,
-   "tris": 120,
+   "h": 2.101,
+   "tris": 60,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "storefront door FRAME, glazing gone (jagged edge), leaf removed; doorway stays open",
-   "variant": 6,
-   "final": null,
+   "final": "arch_door_storefront_broken",
    "glb": "models/arch/arch_door_storefront_broken.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": true,
+    "surface": "doorframe"
+   },
+   "poses": [],
+   "variant": 6,
+   "glbExists": true
   },
   "arch_door_open_leaf": {
    "set": "arch_set_mount",
    "w": 0.9,
-   "d": 0.05,
+   "d": 0.08,
    "h": 2.03,
-   "tris": 60,
+   "tris": 24,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "residential door leaf hanging open against the wall (Henley house)",
-   "variant": 7,
-   "final": null,
+   "final": "arch_door_open_leaf",
    "glb": "models/arch/arch_door_open_leaf.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": true,
+    "surface": "doorframe"
+   },
+   "poses": [],
+   "variant": 7,
+   "glbExists": true
   },
   "arch_plastic_sheet": {
    "set": "arch_set_mount",
    "w": 1.4,
-   "d": 0.03,
-   "h": 1.8,
-   "tris": 8,
+   "d": 0.04,
+   "h": 1.707,
+   "tris": 100,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "taped plastic sheeting over a window (Act III seal)",
-   "variant": 8,
-   "final": null,
+   "final": "arch_plastic_sheet",
    "glb": "models/arch/arch_plastic_sheet.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": true,
+    "surface": "window_or_wall"
+   },
+   "poses": [],
+   "variant": 8,
+   "glbExists": true
   },
   "arch_wall_corrugated": {
    "set": "arch_set_mount",
@@ -492,50 +614,73 @@
    "note": "corrugated sheet nailed over wall / window (reference image)",
    "final": "arch_wall_corrugated_2m",
    "glb": "models/arch/arch_wall_corrugated_2m.glb",
+   "hints": {},
+   "poses": [],
    "variant": 9,
    "glbExists": true
   },
   "arch_pipe_run": {
    "set": "arch_set_mount",
    "w": 2.0,
-   "d": 0.25,
-   "h": 0.3,
-   "tris": 40,
+   "d": 0.16,
+   "h": 0.24,
+   "tris": 148,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "wall pipe bundle on brackets (y 0.4 or 2.6)",
-   "variant": 10,
-   "final": null,
+   "final": "arch_pipe_run",
    "glb": "models/arch/arch_pipe_run.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": true,
+    "surface": "wall"
+   },
+   "poses": [],
+   "variant": 10,
+   "glbExists": true
   },
   "arch_cage_mesh": {
    "set": "arch_set_mount",
    "w": 2.0,
    "d": 0.06,
    "h": 2.4,
-   "tris": 12,
+   "tris": 156,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "wire-mesh cage panel (alphaTest)",
-   "variant": 11,
-   "final": null,
+   "final": "arch_cage_mesh",
    "glb": "models/arch/arch_cage_mesh.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": true,
+    "surface": "wall"
+   },
+   "poses": [],
+   "variant": 11,
+   "glbExists": true
   },
   "arch_whiteboard": {
    "set": "arch_set_mount",
    "w": 1.6,
-   "d": 0.04,
+   "d": 0.087,
    "h": 1.0,
-   "tris": 12,
+   "tris": 36,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "whiteboard / chalk board (writing comes from wall decals)",
-   "variant": 12,
-   "final": null,
+   "final": "arch_whiteboard",
    "glb": "models/arch/arch_whiteboard.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": true,
+    "surface": "wall"
+   },
+   "poses": [],
+   "variant": 12,
+   "glbExists": true
   },
   "arch_crate_wood": {
    "set": "arch_set_furniture",
@@ -548,6 +693,14 @@
    "note": "plank crate, stacks 1-3 (reference image)",
    "final": "arch_crate_large",
    "glb": "models/arch/arch_crate_large.glb",
+   "hints": {
+    "stackable": true,
+    "leanable": false,
+    "surface": "floor"
+   },
+   "poses": [
+    "tipped"
+   ],
    "variant": 0,
    "glbExists": true
   },
@@ -562,6 +715,11 @@
    "note": "kitchen / office table (can be overturned)",
    "final": "arch_table",
    "glb": "models/arch/arch_table.glb",
+   "hints": {},
+   "poses": [
+    "overturned",
+    "on_side"
+   ],
    "variant": 1,
    "glbExists": true
   },
@@ -569,29 +727,45 @@
    "set": "arch_set_furniture",
    "w": 1.8,
    "d": 0.75,
-   "h": 0.74,
-   "tris": 50,
+   "h": 0.741,
+   "tris": 96,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "folding table (registry / ration hall / swap table)",
-   "variant": 2,
-   "final": null,
+   "final": "arch_table_folding",
    "glb": "models/arch/arch_table_folding.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": true,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [
+    "leaned"
+   ],
+   "variant": 2,
+   "glbExists": true
   },
   "arch_table_blackjack": {
    "set": "arch_set_furniture",
-   "w": 1.9,
-   "d": 1.0,
-   "h": 0.8,
-   "tris": 90,
+   "w": 1.76,
+   "d": 1.76,
+   "h": 0.815,
+   "tris": 80,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "kidney blackjack table (Silver Spur)",
-   "variant": 3,
-   "final": null,
+   "final": "arch_table_blackjack",
    "glb": "models/arch/arch_table_blackjack.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [],
+   "variant": 3,
+   "glbExists": true
   },
   "arch_chair": {
    "set": "arch_set_furniture",
@@ -599,139 +773,217 @@
    "d": 0.42,
    "h": 0.92,
    "tris": 88,
-   "collide": false,
+   "collide": true,
    "status": "exists",
    "note": "chair; upright, tipped (tiltX) or on its back",
    "final": "arch_chair",
    "glb": "models/arch/arch_chair.glb",
+   "hints": {},
+   "poses": [
+    "overturned",
+    "on_side"
+   ],
    "variant": 4,
    "glbExists": true
   },
   "arch_armchair": {
    "set": "arch_set_furniture",
-   "w": 0.9,
-   "d": 0.85,
-   "h": 0.9,
-   "tris": 120,
+   "w": 0.86,
+   "d": 0.8,
+   "h": 0.905,
+   "tris": 96,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "armchair / recliner",
-   "variant": 5,
-   "final": null,
+   "final": "arch_armchair",
    "glb": "models/arch/arch_armchair.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [
+    "tipped"
+   ],
+   "variant": 5,
+   "glbExists": true
   },
   "arch_drum_steel": {
    "set": "arch_set_furniture",
    "w": 0.6,
    "d": 0.6,
-   "h": 0.9,
-   "tris": 64,
+   "h": 0.906,
+   "tris": 176,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "55-gal drum; burn-barrel variant (emissive)",
-   "variant": 6,
-   "final": null,
+   "final": "arch_drum_steel",
    "glb": "models/arch/arch_drum_steel.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": true,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [
+    "tipped"
+   ],
+   "variant": 6,
+   "glbExists": true
   },
   "arch_generator": {
    "set": "arch_set_furniture",
-   "w": 1.2,
-   "d": 0.7,
-   "h": 0.8,
-   "tris": 180,
+   "w": 1.18,
+   "d": 0.68,
+   "h": 0.842,
+   "tris": 68,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "portable diesel generator",
-   "variant": 7,
-   "final": null,
+   "final": "arch_generator",
    "glb": "models/arch/arch_generator.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [],
+   "variant": 7,
+   "glbExists": true
   },
   "arch_sandbag_row": {
    "set": "arch_set_furniture",
-   "w": 1.6,
-   "d": 0.6,
-   "h": 0.9,
-   "tris": 140,
+   "w": 1.49,
+   "d": 0.52,
+   "h": 0.82,
+   "tris": 168,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "sandbag wall section (Mo's counter, checkpoint)",
-   "variant": 8,
-   "final": null,
+   "final": "arch_sandbag_row",
    "glb": "models/arch/arch_sandbag_row.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": true,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [],
+   "variant": 8,
+   "glbExists": true
   },
   "arch_barrier_crowd": {
    "set": "arch_set_furniture",
-   "w": 2.0,
-   "d": 0.5,
-   "h": 1.1,
-   "tris": 60,
+   "w": 1.96,
+   "d": 0.48,
+   "h": 1.082,
+   "tris": 156,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "steel crowd-control barrier",
-   "variant": 9,
-   "final": null,
+   "final": "arch_barrier_crowd",
    "glb": "models/arch/arch_barrier_crowd.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": true,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [
+    "tipped"
+   ],
+   "variant": 9,
+   "glbExists": true
   },
   "arch_barricade": {
    "set": "arch_set_furniture",
-   "w": 1.6,
-   "d": 0.7,
-   "h": 1.4,
-   "tris": 200,
+   "w": 1.775,
+   "d": 0.798,
+   "h": 1.519,
+   "tris": 60,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "furniture barricade (dresser + chair + boards) against a window wall",
-   "variant": 10,
-   "final": null,
+   "final": "arch_barricade",
    "glb": "models/arch/arch_barricade.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor_wall"
+   },
+   "poses": [],
+   "variant": 10,
+   "glbExists": true
   },
   "arch_mattress_floor": {
    "set": "arch_set_furniture",
    "w": 0.9,
-   "d": 2.0,
-   "h": 0.15,
-   "tris": 20,
+   "d": 1.96,
+   "h": 0.222,
+   "tris": 24,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "floor mattress / sleeping bag pad",
-   "variant": 11,
-   "final": null,
+   "final": "arch_mattress_floor",
    "glb": "models/arch/arch_mattress_floor.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": true,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [
+    "leaned"
+   ],
+   "variant": 11,
+   "glbExists": true
   },
   "arch_iv_stand": {
    "set": "arch_set_furniture",
    "w": 0.5,
    "d": 0.5,
-   "h": 1.8,
-   "tris": 40,
+   "h": 1.791,
+   "tris": 172,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "IV stand",
-   "variant": 12,
-   "final": null,
+   "final": "arch_iv_stand",
    "glb": "models/arch/arch_iv_stand.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [
+    "tipped"
+   ],
+   "variant": 12,
+   "glbExists": true
   },
   "arch_gurney": {
    "set": "arch_set_furniture",
-   "w": 0.7,
-   "d": 2.0,
-   "h": 0.9,
-   "tris": 90,
+   "w": 0.681,
+   "d": 1.96,
+   "h": 0.972,
+   "tris": 176,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "hospital gurney (beds in the hallway)",
-   "variant": 13,
-   "final": null,
+   "final": "arch_gurney",
    "glb": "models/arch/arch_gurney.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [],
+   "variant": 13,
+   "glbExists": true
   },
   "arch_shelf_island": {
    "set": "arch_set_furniture",
@@ -744,22 +996,33 @@
    "note": "double-sided store gondola / library stack",
    "final": "arch_gondola_stocked",
    "glb": "models/arch/arch_gondola_stocked.glb",
+   "hints": {},
+   "poses": [
+    "toppled"
+   ],
    "variant": 14,
    "glbExists": true
   },
   "arch_seed_rack": {
    "set": "arch_set_furniture",
-   "w": 1.6,
-   "d": 0.6,
-   "h": 1.2,
-   "tris": 90,
+   "w": 1.55,
+   "d": 0.57,
+   "h": 1.18,
+   "tris": 168,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "tiered seed-tray bench (greenhouse)",
-   "variant": 15,
-   "final": null,
+   "final": "arch_seed_rack",
    "glb": "models/arch/arch_seed_rack.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [],
+   "variant": 15,
+   "glbExists": true
   },
   "arch_box_cardboard": {
    "set": "arch_set_clutter",
@@ -767,11 +1030,19 @@
    "d": 0.52,
    "h": 0.52,
    "tris": 10,
-   "collide": false,
+   "collide": true,
    "status": "exists",
    "note": "cardboard box (open / crushed variants by tint+tilt)",
    "final": "arch_box_large",
    "glb": "models/arch/arch_box_large.glb",
+   "hints": {
+    "stackable": true,
+    "leanable": true,
+    "surface": "floor_or_shelf"
+   },
+   "poses": [
+    "on_side"
+   ],
    "variant": 0,
    "glbExists": true
   },
@@ -786,6 +1057,8 @@
    "note": "planks + pipe + plaster chunks pile (reference image)",
    "final": "arch_debris_pile",
    "glb": "models/arch/arch_debris_pile.glb",
+   "hints": {},
+   "poses": [],
    "variant": 1,
    "glbExists": true
   },
@@ -800,6 +1073,12 @@
    "note": "2-3 loose planks",
    "final": "arch_plank_broken_a",
    "glb": "models/arch/arch_plank_broken_a.glb",
+   "hints": {
+    "stackable": true,
+    "leanable": true,
+    "surface": "floor_or_wall"
+   },
+   "poses": [],
    "variant": 2,
    "glbExists": true
   },
@@ -814,6 +1093,12 @@
    "note": "loose pipe lengths",
    "final": "arch_pipe_straight",
    "glb": "models/arch/arch_pipe_straight.glb",
+   "hints": {
+    "stackable": true,
+    "leanable": true,
+    "surface": "floor_or_wall"
+   },
+   "poses": [],
    "variant": 3,
    "glbExists": true
   },
@@ -828,6 +1113,8 @@
    "note": "concrete / drywall chunks",
    "final": "arch_rubble_medium",
    "glb": "models/arch/arch_rubble_medium.glb",
+   "hints": {},
+   "poses": [],
    "variant": 4,
    "glbExists": true
   },
@@ -842,134 +1129,207 @@
    "note": "raised glass shards that catch the flashlight",
    "final": "arch_glass_shards_b",
    "glb": "models/arch/arch_glass_shards_b.glb",
+   "hints": {},
+   "poses": [],
    "variant": 5,
    "glbExists": true
   },
   "arch_jerrycan": {
    "set": "arch_set_clutter",
-   "w": 0.35,
-   "d": 0.18,
-   "h": 0.45,
-   "tris": 40,
+   "w": 0.33,
+   "d": 0.19,
+   "h": 0.496,
+   "tris": 104,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "jerry can / red gas jug",
-   "variant": 6,
-   "final": null,
+   "final": "arch_jerrycan",
    "glb": "models/arch/arch_jerrycan.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": true,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [
+    "tipped"
+   ],
+   "variant": 6,
+   "glbExists": true
   },
   "arch_radio_set": {
    "set": "arch_set_clutter",
-   "w": 0.5,
-   "d": 0.3,
-   "h": 0.3,
-   "tris": 60,
+   "w": 0.46,
+   "d": 0.293,
+   "h": 0.515,
+   "tris": 104,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "ham / CB / crank radio (sits on benches, tables)",
-   "variant": 7,
-   "final": null,
+   "final": "arch_radio_set",
    "glb": "models/arch/arch_radio_set.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "table_or_bench"
+   },
+   "poses": [],
+   "variant": 7,
+   "glbExists": true
   },
   "arch_laptop": {
    "set": "arch_set_clutter",
-   "w": 0.35,
-   "d": 0.25,
-   "h": 0.25,
-   "tris": 24,
+   "w": 0.445,
+   "d": 0.257,
+   "h": 0.209,
+   "tris": 48,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "laptop + car battery",
-   "variant": 8,
-   "final": null,
+   "final": "arch_laptop",
    "glb": "models/arch/arch_laptop.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "table_or_floor"
+   },
+   "poses": [],
+   "variant": 8,
+   "glbExists": true
   },
   "arch_candle_cluster": {
    "set": "arch_set_clutter",
-   "w": 0.2,
-   "d": 0.2,
-   "h": 0.15,
-   "tris": 24,
+   "w": 0.181,
+   "d": 0.19,
+   "h": 0.146,
+   "tris": 180,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "candles (emissive)",
-   "variant": 9,
-   "final": null,
+   "final": "arch_candle_cluster",
    "glb": "models/arch/arch_candle_cluster.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "table_or_floor"
+   },
+   "poses": [],
+   "variant": 9,
+   "glbExists": true
   },
   "arch_lantern": {
    "set": "arch_set_clutter",
-   "w": 0.2,
-   "d": 0.2,
-   "h": 0.35,
-   "tris": 30,
+   "w": 0.176,
+   "d": 0.176,
+   "h": 0.287,
+   "tris": 120,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "camp lantern (emissive)",
-   "variant": 10,
-   "final": null,
+   "final": "arch_lantern",
    "glb": "models/arch/arch_lantern.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "table_or_floor"
+   },
+   "poses": [
+    "tipped"
+   ],
+   "variant": 10,
+   "glbExists": true
   },
   "arch_seed_tray": {
    "set": "arch_set_clutter",
-   "w": 0.6,
-   "d": 0.4,
-   "h": 0.1,
-   "tris": 20,
+   "w": 0.58,
+   "d": 0.38,
+   "h": 0.108,
+   "tris": 204,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "seedling tray",
-   "variant": 11,
-   "final": null,
+   "final": "arch_seed_tray",
    "glb": "models/arch/arch_seed_tray.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": true,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "bench_or_floor"
+   },
+   "poses": [],
+   "variant": 11,
+   "glbExists": true
   },
   "arch_book_pile": {
    "set": "arch_set_clutter",
-   "w": 0.4,
-   "d": 0.3,
+   "w": 0.322,
+   "d": 0.226,
    "h": 0.25,
-   "tris": 30,
+   "tris": 60,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "books / binders",
-   "variant": 12,
-   "final": null,
+   "final": "arch_book_pile",
    "glb": "models/arch/arch_book_pile.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": true,
+    "leanable": true,
+    "wallMount": false,
+    "surface": "floor_or_table"
+   },
+   "poses": [
+    "tipped"
+   ],
+   "variant": 12,
+   "glbExists": true
   },
   "arch_case_hard": {
    "set": "arch_set_clutter",
-   "w": 0.6,
-   "d": 0.4,
-   "h": 0.25,
-   "tris": 36,
+   "w": 0.59,
+   "d": 0.418,
+   "h": 0.236,
+   "tris": 108,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "Pelican / ammo case",
-   "variant": 13,
-   "final": null,
+   "final": "arch_case_hard",
    "glb": "models/arch/arch_case_hard.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": true,
+    "leanable": true,
+    "wallMount": false,
+    "surface": "floor_or_shelf"
+   },
+   "poses": [
+    "standing"
+   ],
+   "variant": 13,
+   "glbExists": true
   },
   "arch_bottles": {
    "set": "arch_set_clutter",
-   "w": 0.3,
-   "d": 0.2,
-   "h": 0.3,
-   "tris": 30,
+   "w": 0.253,
+   "d": 0.171,
+   "h": 0.241,
+   "tris": 208,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "pill / water bottles",
-   "variant": 14,
-   "final": null,
+   "final": "arch_bottles",
    "glb": "models/arch/arch_bottles.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": true,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "table_or_shelf"
+   },
+   "poses": [],
+   "variant": 14,
+   "glbExists": true
   },
   "arch_cans": {
    "set": "arch_set_clutter",
@@ -982,274 +1342,425 @@
    "note": "empty cans",
    "final": "arch_can_cluster",
    "glb": "models/arch/arch_can_cluster.glb",
+   "hints": {
+    "stackable": true,
+    "leanable": false,
+    "surface": "shelf_or_table"
+   },
+   "poses": [],
    "variant": 15,
    "glbExists": true
   },
   "arch_bucket": {
    "set": "arch_set_clutter",
-   "w": 0.3,
-   "d": 0.3,
-   "h": 0.35,
-   "tris": 30,
+   "w": 0.328,
+   "d": 0.32,
+   "h": 0.373,
+   "tris": 108,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "bucket",
-   "variant": 16,
-   "final": null,
+   "final": "arch_bucket",
    "glb": "models/arch/arch_bucket.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": true,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [
+    "tipped"
+   ],
+   "variant": 16,
+   "glbExists": true
   },
   "arch_blanket_pile": {
    "set": "arch_set_clutter",
-   "w": 0.9,
-   "d": 0.7,
-   "h": 0.25,
-   "tris": 40,
+   "w": 0.917,
+   "d": 0.62,
+   "h": 0.237,
+   "tris": 68,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "folded / heaped blankets",
-   "variant": 17,
-   "final": null,
+   "final": "arch_blanket_pile",
    "glb": "models/arch/arch_blanket_pile.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": true,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor_or_bed"
+   },
+   "poses": [],
+   "variant": 17,
+   "glbExists": true
   },
   "arch_duffel": {
    "set": "arch_set_clutter",
-   "w": 0.7,
-   "d": 0.35,
-   "h": 0.3,
-   "tris": 36,
+   "w": 0.66,
+   "d": 0.285,
+   "h": 0.316,
+   "tris": 64,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "duffel / deployment bag",
-   "variant": 18,
-   "final": null,
+   "final": "arch_duffel",
    "glb": "models/arch/arch_duffel.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": true,
+    "leanable": true,
+    "wallMount": false,
+    "surface": "floor_or_bed"
+   },
+   "poses": [],
+   "variant": 18,
+   "glbExists": true
   },
   "arch_photo_frame": {
    "set": "arch_set_clutter",
-   "w": 0.2,
-   "d": 0.05,
-   "h": 0.25,
-   "tris": 12,
+   "w": 0.19,
+   "d": 0.125,
+   "h": 0.242,
+   "tris": 24,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "STORY: family photo (standing or face-down)",
-   "variant": 19,
-   "final": null,
+   "final": "arch_photo_frame",
    "glb": "models/arch/arch_photo_frame.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "table_or_shelf"
+   },
+   "poses": [
+    "face_down"
+   ],
+   "variant": 19,
+   "glbExists": true
   },
   "arch_toy_kid": {
    "set": "arch_set_clutter",
-   "w": 0.3,
-   "d": 0.3,
-   "h": 0.3,
-   "tris": 40,
+   "w": 0.26,
+   "d": 0.205,
+   "h": 0.196,
+   "tris": 104,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "STORY: kid's toy (truck / plush; tint variants)",
-   "variant": 20,
-   "final": null,
+   "final": "arch_toy_kid",
    "glb": "models/arch/arch_toy_kid.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor_or_shelf"
+   },
+   "poses": [],
+   "variant": 20,
+   "glbExists": true
   },
   "arch_suitcase_packed": {
    "set": "arch_set_clutter",
-   "w": 0.7,
-   "d": 0.25,
-   "h": 0.5,
-   "tris": 36,
+   "w": 0.68,
+   "d": 0.252,
+   "h": 0.518,
+   "tris": 48,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "STORY: packed suitcase by the door",
-   "variant": 21,
-   "final": null,
+   "final": "arch_suitcase_packed",
    "glb": "models/arch/arch_suitcase_packed.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": true,
+    "leanable": true,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [
+    "flat"
+   ],
+   "variant": 21,
+   "glbExists": true
   },
   "arch_pet_bowl": {
    "set": "arch_set_clutter",
-   "w": 0.25,
+   "w": 0.238,
    "d": 0.25,
-   "h": 0.08,
-   "tris": 16,
+   "h": 0.075,
+   "tris": 36,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "STORY: pet bowl",
-   "variant": 22,
-   "final": null,
+   "final": "arch_pet_bowl",
    "glb": "models/arch/arch_pet_bowl.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [],
+   "variant": 22,
+   "glbExists": true
   },
   "arch_shoes_pair": {
    "set": "arch_set_clutter",
-   "w": 0.3,
-   "d": 0.3,
-   "h": 0.12,
-   "tris": 24,
+   "w": 0.262,
+   "d": 0.258,
+   "h": 0.111,
+   "tris": 48,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "STORY: shoes / boots left behind",
-   "variant": 23,
-   "final": null,
+   "final": "arch_shoes_pair",
    "glb": "models/arch/arch_shoes_pair.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [],
+   "variant": 23,
+   "glbExists": true
   },
   "arch_mug": {
    "set": "arch_set_clutter",
-   "w": 0.1,
-   "d": 0.1,
-   "h": 0.1,
-   "tris": 12,
+   "w": 0.104,
+   "d": 0.084,
+   "h": 0.095,
+   "tris": 64,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "STORY: mug",
-   "variant": 24,
-   "final": null,
+   "final": "arch_mug",
    "glb": "models/arch/arch_mug.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "table_or_counter"
+   },
+   "poses": [
+    "tipped"
+   ],
+   "variant": 24,
+   "glbExists": true
   },
   "arch_note_card": {
    "set": "arch_set_clutter",
-   "w": 0.2,
-   "d": 0.3,
-   "h": 0.01,
-   "tris": 2,
+   "w": 0.18,
+   "d": 0.26,
+   "h": 0.011,
+   "tris": 24,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "STORY: handwritten note (taped or on table)",
-   "variant": 25,
-   "final": null,
+   "final": "arch_note_card",
    "glb": "models/arch/arch_note_card.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": true,
+    "surface": "table_or_wall"
+   },
+   "poses": [
+    "wall"
+   ],
+   "variant": 25,
+   "glbExists": true
   },
   "arch_oxygen_tank": {
    "set": "arch_set_clutter",
-   "w": 0.25,
-   "d": 0.25,
-   "h": 0.9,
-   "tris": 30,
+   "w": 0.219,
+   "d": 0.23,
+   "h": 0.902,
+   "tris": 84,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "STORY: oxygen bottle (Mr. Pruitt)",
-   "variant": 26,
-   "final": null,
+   "final": "arch_oxygen_tank",
    "glb": "models/arch/arch_oxygen_tank.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": true,
+    "wallMount": false,
+    "surface": "floor_or_wall"
+   },
+   "poses": [
+    "tipped"
+   ],
+   "variant": 26,
+   "glbExists": true
   },
   "arch_dog_leash": {
    "set": "arch_set_clutter",
-   "w": 0.4,
-   "d": 0.3,
-   "h": 0.02,
-   "tris": 12,
+   "w": 0.26,
+   "d": 0.17,
+   "h": 0.034,
+   "tris": 36,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "STORY: leash / collar",
-   "variant": 27,
-   "final": null,
+   "final": "arch_dog_leash",
    "glb": "models/arch/arch_dog_leash.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor_or_table"
+   },
+   "poses": [],
+   "variant": 27,
+   "glbExists": true
   },
   "arch_door_mailslot": {
    "set": "arch_set_mount",
    "w": 0.95,
-   "d": 0.06,
+   "d": 0.086,
    "h": 2.05,
-   "tris": 70,
+   "tris": 48,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "front door leaf with brass mail slot (Act III mimic beat); mounted closed in the frame, slot at 0.9 m",
-   "variant": 13,
-   "final": null,
+   "final": "arch_door_mailslot",
    "glb": "models/arch/arch_door_mailslot.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": true,
+    "surface": "doorframe"
+   },
+   "poses": [],
+   "variant": 13,
+   "glbExists": true
   },
   "arch_breaker_panel": {
    "set": "arch_set_mount",
-   "w": 0.9,
-   "d": 0.25,
-   "h": 1.6,
-   "tris": 60,
+   "w": 0.94,
+   "d": 0.236,
+   "h": 1.56,
+   "tris": 48,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "wall breaker / bus panel with big throw handle",
-   "variant": 14,
-   "final": null,
+   "final": "arch_breaker_panel",
    "glb": "models/arch/arch_breaker_panel.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": true,
+    "surface": "wall"
+   },
+   "poses": [],
+   "variant": 14,
+   "glbExists": true
   },
   "arch_woodpile": {
    "set": "arch_set_furniture",
-   "w": 1.6,
-   "d": 0.7,
-   "h": 0.9,
-   "tris": 120,
+   "w": 1.373,
+   "d": 0.62,
+   "h": 0.741,
+   "tris": 320,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "split-wood stack",
-   "variant": 16,
-   "final": null,
+   "final": "arch_woodpile",
    "glb": "models/arch/arch_woodpile.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": true,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [],
+   "variant": 16,
+   "glbExists": true
   },
   "arch_sack_pile": {
    "set": "arch_set_furniture",
-   "w": 1.4,
-   "d": 1.0,
-   "h": 0.8,
-   "tris": 110,
+   "w": 1.334,
+   "d": 0.94,
+   "h": 0.718,
+   "tris": 72,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "grain / feed sacks",
-   "variant": 17,
-   "final": null,
+   "final": "arch_sack_pile",
    "glb": "models/arch/arch_sack_pile.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": true,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [],
+   "variant": 17,
+   "glbExists": true
   },
   "arch_crash_cart": {
    "set": "arch_set_furniture",
-   "w": 0.7,
-   "d": 0.5,
-   "h": 1.0,
-   "tris": 90,
+   "w": 0.75,
+   "d": 0.502,
+   "h": 0.961,
+   "tris": 164,
    "collide": true,
-   "status": "provisional",
+   "status": "exists",
    "note": "red crash cart (drawers)",
-   "variant": 18,
-   "final": null,
+   "final": "arch_crash_cart",
    "glb": "models/arch/arch_crash_cart.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [],
+   "variant": 18,
+   "glbExists": true
   },
   "arch_phone_landline": {
    "set": "arch_set_clutter",
-   "w": 0.2,
-   "d": 0.2,
-   "h": 0.1,
-   "tris": 20,
+   "w": 0.18,
+   "d": 0.21,
+   "h": 0.101,
+   "tris": 36,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "corded landline phone (voicemail)",
-   "variant": 28,
-   "final": null,
+   "final": "arch_phone_landline",
    "glb": "models/arch/arch_phone_landline.glb",
-   "glbExists": false
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "table_or_desk"
+   },
+   "poses": [],
+   "variant": 28,
+   "glbExists": true
   },
   "arch_ceiling_pipes": {
    "set": "arch_set_mount",
    "w": 2.0,
-   "d": 0.25,
-   "h": 0.25,
-   "tris": 24,
+   "d": 0.16,
+   "h": 0.24,
+   "tris": 148,
    "collide": false,
-   "status": "provisional",
+   "status": "exists",
    "note": "overhead ceiling conduit / pipe bundle mounted high (y 3.5 m)",
+   "final": "arch_pipe_run",
+   "glb": "models/arch/arch_pipe_run.glb",
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": true,
+    "surface": "wall"
+   },
+   "poses": [],
    "variant": 15,
-   "final": null,
-   "glb": "models/arch/arch_ceiling_pipes.glb",
-   "glbExists": false
+   "glbExists": true
   },
   "arch_hanging_wires": {
    "set": "arch_set_clutter",
@@ -1260,6 +1771,8 @@
    "collide": false,
    "status": "provisional",
    "note": "dangling ceiling wires / severed drop cable hanging from y 4.0 to ~2.6 m",
+   "hints": {},
+   "poses": [],
    "variant": 29,
    "final": null,
    "glb": "models/arch/arch_hanging_wires.glb",
@@ -1274,6 +1787,8 @@
    "collide": false,
    "status": "provisional",
    "note": "crooked / dangling broken fluorescent light fixture hung from ceiling (y 3.1 m)",
+   "hints": {},
+   "poses": [],
    "variant": 30,
    "final": null,
    "glb": "models/arch/arch_ceiling_fixture_broken.glb",
@@ -1290,6 +1805,8 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_bed_messy",
    "glb": "models/arch/arch_bed_messy.glb",
+   "hints": {},
+   "poses": [],
    "variant": 15,
    "glbExists": true
   },
@@ -1304,6 +1821,8 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_fridge_ajar",
    "glb": "models/arch/arch_fridge_ajar.glb",
+   "hints": {},
+   "poses": [],
    "variant": 16,
    "glbExists": true
   },
@@ -1318,6 +1837,8 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_counter_sink",
    "glb": "models/arch/arch_counter_sink.glb",
+   "hints": {},
+   "poses": [],
    "variant": 17,
    "glbExists": true
   },
@@ -1332,6 +1853,10 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_med_cabinet",
    "glb": "models/arch/arch_med_cabinet.glb",
+   "hints": {},
+   "poses": [
+    "toppled"
+   ],
    "variant": 18,
    "glbExists": true
   },
@@ -1346,6 +1871,10 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_gondola_looted",
    "glb": "models/arch/arch_gondola_looted.glb",
+   "hints": {},
+   "poses": [
+    "toppled"
+   ],
    "variant": 19,
    "glbExists": true
   },
@@ -1360,6 +1889,8 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_cot",
    "glb": "models/arch/arch_cot.glb",
+   "hints": {},
+   "poses": [],
    "variant": 20,
    "glbExists": true
   },
@@ -1374,6 +1905,8 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_tire_stack",
    "glb": "models/arch/arch_tire_stack.glb",
+   "hints": {},
+   "poses": [],
    "variant": 21,
    "glbExists": true
   },
@@ -1388,6 +1921,14 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_crate_small",
    "glb": "models/arch/arch_crate_small.glb",
+   "hints": {
+    "stackable": true,
+    "leanable": false,
+    "surface": "floor_or_crate"
+   },
+   "poses": [
+    "tipped"
+   ],
    "variant": 22,
    "glbExists": true
   },
@@ -1402,6 +1943,8 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_crate_broken",
    "glb": "models/arch/arch_crate_broken.glb",
+   "hints": {},
+   "poses": [],
    "variant": 23,
    "glbExists": true
   },
@@ -1411,11 +1954,13 @@
    "d": 0.701,
    "h": 0.15,
    "tris": 60,
-   "collide": false,
+   "collide": true,
    "status": "exists",
    "note": "Sculptor id adopted directly",
    "final": "arch_plank_stack",
    "glb": "models/arch/arch_plank_stack.glb",
+   "hints": {},
+   "poses": [],
    "variant": 31,
    "glbExists": true
   },
@@ -1430,6 +1975,12 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_tire",
    "glb": "models/arch/arch_tire.glb",
+   "hints": {
+    "stackable": true,
+    "leanable": true,
+    "surface": "floor_or_wall"
+   },
+   "poses": [],
    "variant": 32,
    "glbExists": true
   },
@@ -1444,6 +1995,12 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_box_collapsed",
    "glb": "models/arch/arch_box_collapsed.glb",
+   "hints": {
+    "stackable": true,
+    "leanable": true,
+    "surface": "floor"
+   },
+   "poses": [],
    "variant": 33,
    "glbExists": true
   },
@@ -1458,6 +2015,12 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_paper_pile",
    "glb": "models/arch/arch_paper_pile.glb",
+   "hints": {
+    "stackable": true,
+    "leanable": false,
+    "surface": "floor_or_table"
+   },
+   "poses": [],
    "variant": 34,
    "glbExists": true
   },
@@ -1472,6 +2035,8 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_glass_pane_fallen",
    "glb": "models/arch/arch_glass_pane_fallen.glb",
+   "hints": {},
+   "poses": [],
    "variant": 35,
    "glbExists": true
   },
@@ -1481,11 +2046,13 @@
    "d": 0.593,
    "h": 0.199,
    "tris": 42,
-   "collide": false,
+   "collide": true,
    "status": "exists",
    "note": "Sculptor id adopted directly",
    "final": "arch_rubble_large",
    "glb": "models/arch/arch_rubble_large.glb",
+   "hints": {},
+   "poses": [],
    "variant": 36,
    "glbExists": true
   },
@@ -1500,6 +2067,12 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_box_small",
    "glb": "models/arch/arch_box_small.glb",
+   "hints": {
+    "stackable": true,
+    "leanable": false,
+    "surface": "floor_or_shelf"
+   },
+   "poses": [],
    "variant": 37,
    "glbExists": true
   },
@@ -1514,6 +2087,8 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_wall_corrugated_1m",
    "glb": "models/arch/arch_wall_corrugated_1m.glb",
+   "hints": {},
+   "poses": [],
    "variant": 16,
    "glbExists": true
   },
@@ -1528,6 +2103,8 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_wall_plank_1m",
    "glb": "models/arch/arch_wall_plank_1m.glb",
+   "hints": {},
+   "poses": [],
    "variant": 17,
    "glbExists": true
   },
@@ -1542,6 +2119,8 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_wall_plank_2m",
    "glb": "models/arch/arch_wall_plank_2m.glb",
+   "hints": {},
+   "poses": [],
    "variant": 18,
    "glbExists": true
   },
@@ -1556,6 +2135,8 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_baseboard_2m",
    "glb": "models/arch/arch_baseboard_2m.glb",
+   "hints": {},
+   "poses": [],
    "variant": 19,
    "glbExists": true
   },
@@ -1570,6 +2151,8 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_glass_hanging",
    "glb": "models/arch/arch_glass_hanging.glb",
+   "hints": {},
+   "poses": [],
    "variant": 20,
    "glbExists": true
   },
@@ -1584,6 +2167,8 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_pipe_elbow",
    "glb": "models/arch/arch_pipe_elbow.glb",
+   "hints": {},
+   "poses": [],
    "variant": 38,
    "glbExists": true
   },
@@ -1598,6 +2183,12 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_plank_loose",
    "glb": "models/arch/arch_plank_loose.glb",
+   "hints": {
+    "stackable": true,
+    "leanable": true,
+    "surface": "floor_or_wall"
+   },
+   "poses": [],
    "variant": 39,
    "glbExists": true
   },
@@ -1612,6 +2203,12 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_plank_broken_b",
    "glb": "models/arch/arch_plank_broken_b.glb",
+   "hints": {
+    "stackable": true,
+    "leanable": true,
+    "surface": "floor_or_wall"
+   },
+   "poses": [],
    "variant": 40,
    "glbExists": true
   },
@@ -1626,6 +2223,8 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_rubble_small",
    "glb": "models/arch/arch_rubble_small.glb",
+   "hints": {},
+   "poses": [],
    "variant": 41,
    "glbExists": true
   },
@@ -1640,6 +2239,12 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_can",
    "glb": "models/arch/arch_can.glb",
+   "hints": {
+    "stackable": true,
+    "leanable": false,
+    "surface": "shelf_or_table"
+   },
+   "poses": [],
    "variant": 42,
    "glbExists": true
   },
@@ -1654,14 +2259,190 @@
    "note": "Sculptor id adopted directly",
    "final": "arch_cash_register",
    "glb": "models/arch/arch_cash_register.glb",
+   "hints": {},
+   "poses": [],
    "variant": 43,
+   "glbExists": true
+  },
+  "arch_pipe_run_1m": {
+   "set": "arch_set_mount",
+   "w": 1.0,
+   "d": 0.16,
+   "h": 0.24,
+   "tris": 124,
+   "collide": false,
+   "status": "exists",
+   "note": "Sculptor id adopted directly",
+   "final": "arch_pipe_run_1m",
+   "glb": "models/arch/arch_pipe_run_1m.glb",
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": true,
+    "surface": "wall"
+   },
+   "poses": [],
+   "variant": 21,
+   "glbExists": true
+  },
+  "arch_cabinet_file_open": {
+   "set": "arch_set_wall",
+   "w": 0.5,
+   "d": 0.89,
+   "h": 1.3,
+   "tris": 36,
+   "collide": true,
+   "status": "exists",
+   "note": "Sculptor id adopted directly",
+   "final": "arch_cabinet_file_open",
+   "glb": "models/arch/arch_cabinet_file_open.glb",
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor_wall"
+   },
+   "poses": [],
+   "variant": 19,
+   "glbExists": true
+  },
+  "arch_drum_burn": {
+   "set": "arch_set_furniture",
+   "w": 0.6,
+   "d": 0.6,
+   "h": 1.027,
+   "tris": 204,
+   "collide": true,
+   "status": "exists",
+   "note": "Sculptor id adopted directly",
+   "final": "arch_drum_burn",
+   "glb": "models/arch/arch_drum_burn.glb",
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [],
+   "variant": 24,
+   "glbExists": true
+  },
+  "arch_bed_stripped": {
+   "set": "arch_set_wall",
+   "w": 1.44,
+   "d": 2.0,
+   "h": 1.05,
+   "tris": 48,
+   "collide": true,
+   "status": "exists",
+   "note": "Sculptor id adopted directly",
+   "final": "arch_bed_stripped",
+   "glb": "models/arch/arch_bed_stripped.glb",
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "floor"
+   },
+   "poses": [],
+   "variant": 20,
+   "glbExists": true
+  },
+  "arch_bottle": {
+   "set": "arch_set_clutter",
+   "w": 0.088,
+   "d": 0.088,
+   "h": 0.265,
+   "tris": 80,
+   "collide": false,
+   "status": "exists",
+   "note": "Sculptor id adopted directly",
+   "final": "arch_bottle",
+   "glb": "models/arch/arch_bottle.glb",
+   "hints": {
+    "stackable": true,
+    "leanable": false,
+    "wallMount": false,
+    "surface": "table_or_shelf"
+   },
+   "poses": [],
+   "variant": 44,
+   "glbExists": true
+  },
+  "arch_glass_shards_a": {
+   "set": "arch_set_clutter",
+   "w": 0.334,
+   "d": 0.317,
+   "h": 0.01,
+   "tris": 6,
+   "collide": false,
+   "status": "exists",
+   "note": "Sculptor id adopted directly",
+   "final": "arch_glass_shards_a",
+   "glb": "models/arch/arch_glass_shards_a.glb",
+   "hints": {},
+   "poses": [],
+   "variant": 45,
+   "glbExists": true
+  },
+  "arch_window_boarded_diagonal": {
+   "set": "arch_set_mount",
+   "w": 1.141,
+   "d": 0.25,
+   "h": 1.38,
+   "tris": 140,
+   "collide": false,
+   "status": "exists",
+   "note": "Sculptor id adopted directly",
+   "final": "window_boarded_diagonal",
+   "glb": "models/arch/window_boarded_diagonal.glb",
+   "hints": {},
+   "poses": [],
+   "variant": 22,
+   "glbExists": true
+  },
+  "arch_metal_locker": {
+   "set": "arch_set_wall",
+   "w": 0.48,
+   "d": 0.563,
+   "h": 1.95,
+   "tris": 272,
+   "collide": true,
+   "status": "exists",
+   "note": "Sculptor id adopted directly",
+   "final": "metal_locker",
+   "glb": "models/props/metal_locker.glb",
+   "hints": {},
+   "poses": [],
+   "variant": 21,
+   "glbExists": true
+  },
+  "arch_boards_overlay_inner": {
+   "set": "arch_set_mount",
+   "w": 1.238,
+   "d": 0.065,
+   "h": 1.075,
+   "tris": 48,
+   "collide": false,
+   "status": "exists",
+   "note": "Sculptor id adopted directly",
+   "final": "arch_boards_overlay",
+   "glb": "models/arch/arch_boards_overlay.glb",
+   "hints": {
+    "stackable": false,
+    "leanable": false,
+    "wallMount": true,
+    "surface": "wall"
+   },
+   "poses": [],
+   "variant": 23,
    "glbExists": true
   }
  },
  "decalAtlas": {
   "id": "arch_decal_atlas",
   "sculptorAtlas": "models/arch/textures/arch_floor_decals.png",
-  "status": "partial: frames with 'final' use Sculptor's arch_floor_decals.png; the rest are provisional",
+  "status": "delivered: 46/46 frames across atlas A+B, batched as one InstancedMesh",
   "frames": {
    "glass_shards": {
     "size": [
@@ -1671,6 +2452,7 @@
     "wall": false,
     "frameIndex": 0,
     "final": "glass_shards",
+    "atlas": "a",
     "uvRect": [
      0.501953,
      0.501953,
@@ -1686,6 +2468,7 @@
     "wall": false,
     "frameIndex": 1,
     "final": "glass_shards",
+    "atlas": "a",
     "uvRect": [
      0.501953,
      0.501953,
@@ -1701,6 +2484,7 @@
     "wall": false,
     "frameIndex": 2,
     "final": "papers",
+    "atlas": "a",
     "uvRect": [
      0.251953,
      0.501953,
@@ -1716,6 +2500,7 @@
     "wall": false,
     "frameIndex": 3,
     "final": "papers",
+    "atlas": "a",
     "uvRect": [
      0.251953,
      0.501953,
@@ -1731,6 +2516,7 @@
     "wall": false,
     "frameIndex": 4,
     "final": "debris",
+    "atlas": "a",
     "uvRect": [
      0.001953,
      0.501953,
@@ -1746,6 +2532,7 @@
     "wall": false,
     "frameIndex": 5,
     "final": "plaster",
+    "atlas": "a",
     "uvRect": [
      0.001953,
      0.751953,
@@ -1761,6 +2548,7 @@
     "wall": false,
     "frameIndex": 6,
     "final": "sawdust",
+    "atlas": "a",
     "uvRect": [
      0.751953,
      0.751953,
@@ -1776,6 +2564,7 @@
     "wall": false,
     "frameIndex": 7,
     "final": "stain_dark",
+    "atlas": "a",
     "uvRect": [
      0.501953,
      0.251953,
@@ -1791,6 +2580,7 @@
     "wall": false,
     "frameIndex": 8,
     "final": "stain_dark",
+    "atlas": "a",
     "uvRect": [
      0.501953,
      0.251953,
@@ -1806,6 +2596,7 @@
     "wall": false,
     "frameIndex": 9,
     "final": "stain_water",
+    "atlas": "a",
     "uvRect": [
      0.001953,
      0.251953,
@@ -1820,8 +2611,14 @@
     ],
     "wall": false,
     "frameIndex": 10,
-    "final": null,
-    "uvRect": null
+    "final": "frost_rime",
+    "atlas": "b",
+    "uvRect": [
+     0.125977,
+     0.001953,
+     0.249023,
+     0.248047
+    ]
    },
    "ash_drift": {
     "size": [
@@ -1831,6 +2628,7 @@
     "wall": false,
     "frameIndex": 11,
     "final": "ash_drift",
+    "atlas": "a",
     "uvRect": [
      0.751953,
      0.501953,
@@ -1846,6 +2644,7 @@
     "wall": false,
     "frameIndex": 12,
     "final": "ash_drift",
+    "atlas": "a",
     "uvRect": [
      0.751953,
      0.501953,
@@ -1861,6 +2660,7 @@
     "wall": false,
     "frameIndex": 13,
     "final": "footprints",
+    "atlas": "a",
     "uvRect": [
      0.751953,
      0.126953,
@@ -1876,6 +2676,7 @@
     "wall": false,
     "frameIndex": 14,
     "final": "scorch",
+    "atlas": "a",
     "uvRect": [
      0.501953,
      0.751953,
@@ -1891,6 +2692,7 @@
     "wall": false,
     "frameIndex": 15,
     "final": "stain_oil",
+    "atlas": "a",
     "uvRect": [
      0.251953,
      0.251953,
@@ -1905,8 +2707,14 @@
     ],
     "wall": false,
     "frameIndex": 16,
-    "final": null,
-    "uvRect": null
+    "final": "pill_scatter",
+    "atlas": "b",
+    "uvRect": [
+     0.250977,
+     0.001953,
+     0.374023,
+     0.248047
+    ]
    },
    "wrappers_cans": {
     "size": [
@@ -1915,8 +2723,14 @@
     ],
     "wall": false,
     "frameIndex": 17,
-    "final": null,
-    "uvRect": null
+    "final": "wrappers_cans",
+    "atlas": "b",
+    "uvRect": [
+     0.000977,
+     0.001953,
+     0.124023,
+     0.248047
+    ]
    },
    "sleeping_bag": {
     "size": [
@@ -1925,8 +2739,14 @@
     ],
     "wall": false,
     "frameIndex": 18,
-    "final": null,
-    "uvRect": null
+    "final": "sleeping_bag",
+    "atlas": "b",
+    "uvRect": [
+     0.750977,
+     0.001953,
+     0.874023,
+     0.248047
+    ]
    },
    "rug_worn": {
     "size": [
@@ -1936,6 +2756,7 @@
     "wall": false,
     "frameIndex": 19,
     "final": "rug_rect",
+    "atlas": "a",
     "uvRect": [
      0.001953,
      0.001953,
@@ -1951,6 +2772,7 @@
     "wall": false,
     "frameIndex": 20,
     "final": "leaves",
+    "atlas": "a",
     "uvRect": [
      0.251953,
      0.751953,
@@ -1966,6 +2788,7 @@
     "wall": false,
     "frameIndex": 21,
     "final": "footprints",
+    "atlas": "a",
     "uvRect": [
      0.751953,
      0.126953,
@@ -1980,8 +2803,14 @@
     ],
     "wall": false,
     "frameIndex": 22,
-    "final": null,
-    "uvRect": null
+    "final": "floor_hatch",
+    "atlas": "b",
+    "uvRect": [
+     0.000977,
+     0.501953,
+     0.124023,
+     0.748047
+    ]
    },
    "yoga_mat_row": {
     "size": [
@@ -1990,8 +2819,14 @@
     ],
     "wall": false,
     "frameIndex": 23,
-    "final": null,
-    "uvRect": null
+    "final": "yoga_mat_row",
+    "atlas": "b",
+    "uvRect": [
+     0.250977,
+     0.251953,
+     0.374023,
+     0.498047
+    ]
    },
    "chalk_outline_tape": {
     "size": [
@@ -2000,8 +2835,14 @@
     ],
     "wall": false,
     "frameIndex": 24,
-    "final": null,
-    "uvRect": null
+    "final": "chalk_outline_tape",
+    "atlas": "b",
+    "uvRect": [
+     0.000977,
+     0.751953,
+     0.124023,
+     0.998047
+    ]
    },
    "grease_film": {
     "size": [
@@ -2011,6 +2852,7 @@
     "wall": false,
     "frameIndex": 25,
     "final": "stain_oil",
+    "atlas": "a",
     "uvRect": [
      0.251953,
      0.251953,
@@ -2025,8 +2867,14 @@
     ],
     "wall": true,
     "frameIndex": 26,
-    "final": null,
-    "uvRect": null
+    "final": "wall_water_stain",
+    "atlas": "b",
+    "uvRect": [
+     0.875977,
+     0.001953,
+     0.999023,
+     0.248047
+    ]
    },
    "wall_scorch": {
     "size": [
@@ -2035,8 +2883,14 @@
     ],
     "wall": true,
     "frameIndex": 27,
-    "final": null,
-    "uvRect": null
+    "final": "wall_scorch",
+    "atlas": "b",
+    "uvRect": [
+     0.500977,
+     0.251953,
+     0.624023,
+     0.498047
+    ]
    },
    "wall_notice": {
     "size": [
@@ -2045,8 +2899,14 @@
     ],
     "wall": true,
     "frameIndex": 28,
-    "final": null,
-    "uvRect": null
+    "final": "wall_notice",
+    "atlas": "b",
+    "uvRect": [
+     0.625977,
+     0.001953,
+     0.749023,
+     0.248047
+    ]
    },
    "wall_spray_requisitioned": {
     "size": [
@@ -2055,8 +2915,14 @@
     ],
     "wall": true,
     "frameIndex": 29,
-    "final": null,
-    "uvRect": null
+    "final": "wall_spray_requisitioned",
+    "atlas": "b",
+    "uvRect": [
+     0.125977,
+     0.501953,
+     0.249023,
+     0.748047
+    ]
    },
    "wall_census_chalk": {
     "size": [
@@ -2065,8 +2931,14 @@
     ],
     "wall": true,
     "frameIndex": 30,
-    "final": null,
-    "uvRect": null
+    "final": "wall_census_chalk",
+    "atlas": "b",
+    "uvRect": [
+     0.250977,
+     0.501953,
+     0.374023,
+     0.748047
+    ]
    },
    "wall_fractions_board": {
     "size": [
@@ -2075,8 +2947,14 @@
     ],
     "wall": true,
     "frameIndex": 31,
-    "final": null,
-    "uvRect": null
+    "final": "wall_fractions_board",
+    "atlas": "b",
+    "uvRect": [
+     0.375977,
+     0.501953,
+     0.499023,
+     0.748047
+    ]
    },
    "wall_handsign_chips": {
     "size": [
@@ -2085,8 +2963,14 @@
     ],
     "wall": true,
     "frameIndex": 32,
-    "final": null,
-    "uvRect": null
+    "final": "wall_handsign_chips",
+    "atlas": "b",
+    "uvRect": [
+     0.500977,
+     0.501953,
+     0.624023,
+     0.748047
+    ]
    },
    "wall_frost": {
     "size": [
@@ -2095,8 +2979,14 @@
     ],
     "wall": true,
     "frameIndex": 33,
-    "final": null,
-    "uvRect": null
+    "final": "wall_frost",
+    "atlas": "b",
+    "uvRect": [
+     0.375977,
+     0.001953,
+     0.499023,
+     0.248047
+    ]
    },
    "wall_ash_film": {
     "size": [
@@ -2105,8 +2995,14 @@
     ],
     "wall": true,
     "frameIndex": 34,
-    "final": null,
-    "uvRect": null
+    "final": "wall_ash_film",
+    "atlas": "b",
+    "uvRect": [
+     0.500977,
+     0.001953,
+     0.624023,
+     0.248047
+    ]
    },
    "wall_jacket_hook": {
     "size": [
@@ -2115,8 +3011,14 @@
     ],
     "wall": true,
     "frameIndex": 35,
-    "final": null,
-    "uvRect": null
+    "final": "wall_jacket_hook",
+    "atlas": "b",
+    "uvRect": [
+     0.625977,
+     0.501953,
+     0.749023,
+     0.748047
+    ]
    },
    "wall_calendar": {
     "size": [
@@ -2125,8 +3027,14 @@
     ],
     "wall": true,
     "frameIndex": 36,
-    "final": null,
-    "uvRect": null
+    "final": "wall_calendar",
+    "atlas": "b",
+    "uvRect": [
+     0.125977,
+     0.251953,
+     0.249023,
+     0.498047
+    ]
    },
    "wall_kid_drawing": {
     "size": [
@@ -2135,8 +3043,14 @@
     ],
     "wall": true,
     "frameIndex": 37,
-    "final": null,
-    "uvRect": null
+    "final": "wall_kid_drawing",
+    "atlas": "b",
+    "uvRect": [
+     0.625977,
+     0.251953,
+     0.749023,
+     0.498047
+    ]
    },
    "wall_map_marked": {
     "size": [
@@ -2145,8 +3059,14 @@
     ],
     "wall": true,
     "frameIndex": 38,
-    "final": null,
-    "uvRect": null
+    "final": "wall_map_marked",
+    "atlas": "b",
+    "uvRect": [
+     0.375977,
+     0.251953,
+     0.499023,
+     0.498047
+    ]
    },
    "wall_seed_library_sign": {
     "size": [
@@ -2155,8 +3075,14 @@
     ],
     "wall": true,
     "frameIndex": 39,
-    "final": null,
-    "uvRect": null
+    "final": "wall_seed_library_sign",
+    "atlas": "b",
+    "uvRect": [
+     0.750977,
+     0.501953,
+     0.874023,
+     0.748047
+    ]
    },
    "wall_neon_dead": {
     "size": [
@@ -2165,8 +3091,14 @@
     ],
     "wall": true,
     "frameIndex": 40,
-    "final": null,
-    "uvRect": null
+    "final": "wall_neon_dead",
+    "atlas": "b",
+    "uvRect": [
+     0.875977,
+     0.501953,
+     0.999023,
+     0.748047
+    ]
    },
    "wall_names_list": {
     "size": [
@@ -2175,8 +3107,14 @@
     ],
     "wall": true,
     "frameIndex": 41,
-    "final": null,
-    "uvRect": null
+    "final": "wall_names_list",
+    "atlas": "b",
+    "uvRect": [
+     0.000977,
+     0.251953,
+     0.124023,
+     0.498047
+    ]
    },
    "wall_bullet_holes": {
     "size": [
@@ -2185,8 +3123,14 @@
     ],
     "wall": true,
     "frameIndex": 42,
-    "final": null,
-    "uvRect": null
+    "final": "wall_bullet_holes",
+    "atlas": "b",
+    "uvRect": [
+     0.125977,
+     0.751953,
+     0.249023,
+     0.998047
+    ]
    },
    "wall_redacted_manifest": {
     "size": [
@@ -2195,8 +3139,14 @@
     ],
     "wall": true,
     "frameIndex": 43,
-    "final": null,
-    "uvRect": null
+    "final": "wall_redacted_manifest",
+    "atlas": "b",
+    "uvRect": [
+     0.750977,
+     0.251953,
+     0.874023,
+     0.498047
+    ]
    },
    "wall_foil_insulation": {
     "size": [
@@ -2205,8 +3155,14 @@
     ],
     "wall": true,
     "frameIndex": 44,
-    "final": null,
-    "uvRect": null
+    "final": "wall_foil_insulation",
+    "atlas": "b",
+    "uvRect": [
+     0.875977,
+     0.251953,
+     0.999023,
+     0.498047
+    ]
    },
    "wall_photo_board": {
     "size": [
@@ -2215,8 +3171,453 @@
     ],
     "wall": true,
     "frameIndex": 45,
-    "final": null,
-    "uvRect": null
+    "final": "wall_photo_board",
+    "atlas": "b",
+    "uvRect": [
+     0.250977,
+     0.751953,
+     0.374023,
+     0.998047
+    ]
+   }
+  }
+ },
+ "decalAtlasB": {
+  "id": "arch_decal_atlas_b",
+  "sculptorAtlas": "models/arch/textures/arch_decals_b.png",
+  "status": "delivered (27 frames). Combined with atlas A in one material/batch (0 extra calls).",
+  "frames": {
+   "frost_rime": {
+    "size": [
+     1.6,
+     1.4
+    ],
+    "wall": false,
+    "frameIndex": 10,
+    "final": "frost_rime",
+    "atlas": "b",
+    "uvRect": [
+     0.125977,
+     0.001953,
+     0.249023,
+     0.248047
+    ]
+   },
+   "pill_scatter": {
+    "size": [
+     0.6,
+     0.5
+    ],
+    "wall": false,
+    "frameIndex": 16,
+    "final": "pill_scatter",
+    "atlas": "b",
+    "uvRect": [
+     0.250977,
+     0.001953,
+     0.374023,
+     0.248047
+    ]
+   },
+   "wrappers_cans": {
+    "size": [
+     0.9,
+     0.7
+    ],
+    "wall": false,
+    "frameIndex": 17,
+    "final": "wrappers_cans",
+    "atlas": "b",
+    "uvRect": [
+     0.000977,
+     0.001953,
+     0.124023,
+     0.248047
+    ]
+   },
+   "sleeping_bag": {
+    "size": [
+     0.9,
+     2.0
+    ],
+    "wall": false,
+    "frameIndex": 18,
+    "final": "sleeping_bag",
+    "atlas": "b",
+    "uvRect": [
+     0.750977,
+     0.001953,
+     0.874023,
+     0.248047
+    ]
+   },
+   "floor_hatch": {
+    "size": [
+     0.9,
+     0.9
+    ],
+    "wall": false,
+    "frameIndex": 22,
+    "final": "floor_hatch",
+    "atlas": "b",
+    "uvRect": [
+     0.000977,
+     0.501953,
+     0.124023,
+     0.748047
+    ]
+   },
+   "yoga_mat_row": {
+    "size": [
+     2.2,
+     0.7
+    ],
+    "wall": false,
+    "frameIndex": 23,
+    "final": "yoga_mat_row",
+    "atlas": "b",
+    "uvRect": [
+     0.250977,
+     0.251953,
+     0.374023,
+     0.498047
+    ]
+   },
+   "chalk_outline_tape": {
+    "size": [
+     1.4,
+     1.4
+    ],
+    "wall": false,
+    "frameIndex": 24,
+    "final": "chalk_outline_tape",
+    "atlas": "b",
+    "uvRect": [
+     0.000977,
+     0.751953,
+     0.124023,
+     0.998047
+    ]
+   },
+   "wall_water_stain": {
+    "size": [
+     1.4,
+     1.6
+    ],
+    "wall": true,
+    "frameIndex": 26,
+    "final": "wall_water_stain",
+    "atlas": "b",
+    "uvRect": [
+     0.875977,
+     0.001953,
+     0.999023,
+     0.248047
+    ]
+   },
+   "wall_scorch": {
+    "size": [
+     1.6,
+     2.0
+    ],
+    "wall": true,
+    "frameIndex": 27,
+    "final": "wall_scorch",
+    "atlas": "b",
+    "uvRect": [
+     0.500977,
+     0.251953,
+     0.624023,
+     0.498047
+    ]
+   },
+   "wall_notice": {
+    "size": [
+     0.4,
+     0.6
+    ],
+    "wall": true,
+    "frameIndex": 28,
+    "final": "wall_notice",
+    "atlas": "b",
+    "uvRect": [
+     0.625977,
+     0.001953,
+     0.749023,
+     0.248047
+    ]
+   },
+   "wall_spray_requisitioned": {
+    "size": [
+     1.4,
+     0.6
+    ],
+    "wall": true,
+    "frameIndex": 29,
+    "final": "wall_spray_requisitioned",
+    "atlas": "b",
+    "uvRect": [
+     0.125977,
+     0.501953,
+     0.249023,
+     0.748047
+    ]
+   },
+   "wall_census_chalk": {
+    "size": [
+     3.0,
+     1.6
+    ],
+    "wall": true,
+    "frameIndex": 30,
+    "final": "wall_census_chalk",
+    "atlas": "b",
+    "uvRect": [
+     0.250977,
+     0.501953,
+     0.374023,
+     0.748047
+    ]
+   },
+   "wall_fractions_board": {
+    "size": [
+     1.4,
+     0.9
+    ],
+    "wall": true,
+    "frameIndex": 31,
+    "final": "wall_fractions_board",
+    "atlas": "b",
+    "uvRect": [
+     0.375977,
+     0.501953,
+     0.499023,
+     0.748047
+    ]
+   },
+   "wall_handsign_chips": {
+    "size": [
+     0.8,
+     0.5
+    ],
+    "wall": true,
+    "frameIndex": 32,
+    "final": "wall_handsign_chips",
+    "atlas": "b",
+    "uvRect": [
+     0.500977,
+     0.501953,
+     0.624023,
+     0.748047
+    ]
+   },
+   "wall_frost": {
+    "size": [
+     1.6,
+     1.6
+    ],
+    "wall": true,
+    "frameIndex": 33,
+    "final": "wall_frost",
+    "atlas": "b",
+    "uvRect": [
+     0.375977,
+     0.001953,
+     0.499023,
+     0.248047
+    ]
+   },
+   "wall_ash_film": {
+    "size": [
+     1.6,
+     1.0
+    ],
+    "wall": true,
+    "frameIndex": 34,
+    "final": "wall_ash_film",
+    "atlas": "b",
+    "uvRect": [
+     0.500977,
+     0.001953,
+     0.624023,
+     0.248047
+    ]
+   },
+   "wall_jacket_hook": {
+    "size": [
+     0.5,
+     1.0
+    ],
+    "wall": true,
+    "frameIndex": 35,
+    "final": "wall_jacket_hook",
+    "atlas": "b",
+    "uvRect": [
+     0.625977,
+     0.501953,
+     0.749023,
+     0.748047
+    ]
+   },
+   "wall_calendar": {
+    "size": [
+     0.35,
+     0.5
+    ],
+    "wall": true,
+    "frameIndex": 36,
+    "final": "wall_calendar",
+    "atlas": "b",
+    "uvRect": [
+     0.125977,
+     0.251953,
+     0.249023,
+     0.498047
+    ]
+   },
+   "wall_kid_drawing": {
+    "size": [
+     0.35,
+     0.3
+    ],
+    "wall": true,
+    "frameIndex": 37,
+    "final": "wall_kid_drawing",
+    "atlas": "b",
+    "uvRect": [
+     0.625977,
+     0.251953,
+     0.749023,
+     0.498047
+    ]
+   },
+   "wall_map_marked": {
+    "size": [
+     1.0,
+     0.7
+    ],
+    "wall": true,
+    "frameIndex": 38,
+    "final": "wall_map_marked",
+    "atlas": "b",
+    "uvRect": [
+     0.375977,
+     0.251953,
+     0.499023,
+     0.498047
+    ]
+   },
+   "wall_seed_library_sign": {
+    "size": [
+     1.0,
+     0.4
+    ],
+    "wall": true,
+    "frameIndex": 39,
+    "final": "wall_seed_library_sign",
+    "atlas": "b",
+    "uvRect": [
+     0.750977,
+     0.501953,
+     0.874023,
+     0.748047
+    ]
+   },
+   "wall_neon_dead": {
+    "size": [
+     1.6,
+     0.5
+    ],
+    "wall": true,
+    "frameIndex": 40,
+    "final": "wall_neon_dead",
+    "atlas": "b",
+    "uvRect": [
+     0.875977,
+     0.501953,
+     0.999023,
+     0.748047
+    ]
+   },
+   "wall_names_list": {
+    "size": [
+     0.5,
+     0.7
+    ],
+    "wall": true,
+    "frameIndex": 41,
+    "final": "wall_names_list",
+    "atlas": "b",
+    "uvRect": [
+     0.000977,
+     0.251953,
+     0.124023,
+     0.498047
+    ]
+   },
+   "wall_bullet_holes": {
+    "size": [
+     0.8,
+     0.8
+    ],
+    "wall": true,
+    "frameIndex": 42,
+    "final": "wall_bullet_holes",
+    "atlas": "b",
+    "uvRect": [
+     0.125977,
+     0.751953,
+     0.249023,
+     0.998047
+    ]
+   },
+   "wall_redacted_manifest": {
+    "size": [
+     0.4,
+     0.5
+    ],
+    "wall": true,
+    "frameIndex": 43,
+    "final": "wall_redacted_manifest",
+    "atlas": "b",
+    "uvRect": [
+     0.750977,
+     0.251953,
+     0.874023,
+     0.498047
+    ]
+   },
+   "wall_foil_insulation": {
+    "size": [
+     2.0,
+     2.2
+    ],
+    "wall": true,
+    "frameIndex": 44,
+    "final": "wall_foil_insulation",
+    "atlas": "b",
+    "uvRect": [
+     0.875977,
+     0.251953,
+     0.999023,
+     0.498047
+    ]
+   },
+   "wall_photo_board": {
+    "size": [
+     0.8,
+     0.6
+    ],
+    "wall": true,
+    "frameIndex": 45,
+    "final": "wall_photo_board",
+    "atlas": "b",
+    "uvRect": [
+     0.250977,
+     0.751953,
+     0.374023,
+     0.998047
+    ]
    }
   }
  },
@@ -2243,7 +3644,7 @@
    "arch_tex_corrugated": "wall_corrugated",
    "arch_tex_drywall": "wall_drywall",
    "arch_tex_panel_wood": "wall_wood_panel",
-   "arch_tex_cinder": null
+   "arch_tex_cinder": "wall_cinder"
   },
   "wearSuffix": {
    "intact": "",
@@ -2257,17 +3658,7 @@
   "winterSuffix": "_ash",
   "path": "models/arch/textures/<final><suffix>.png"
  },
- "existing": {
-  "metal_locker": {
-   "path": "models/props/metal_locker.glb",
-   "tris": 272,
-   "w": 0.48,
-   "d": 0.56,
-   "h": 1.95,
-   "collide": true,
-   "note": "exists (Sculptor wave 1) but 5 materials: own InstancedMesh (+1 call) until re-atlased into arch_set_wall"
-  }
- },
+ "existing": {},
  "remap": {
   "arch_shelf_metal": "arch_shelf_metal_boxes",
   "arch_shelf_empty": "arch_shelf_metal",
@@ -2280,6 +3671,7 @@
   "arch_window_cracked": "window_cracked",
   "arch_window_broken": "window_broken",
   "arch_window_boarded": "window_boarded",
+  "arch_window_boarded_diagonal": "window_boarded_diagonal",
   "arch_window_storefront": "window_storefront",
   "arch_boards_overlay": "door_boards_overlay",
   "arch_wall_corrugated": "arch_wall_corrugated_2m",
@@ -2294,6 +3686,9 @@
   "arch_rubble_chunks": "arch_rubble_medium",
   "arch_glass_shards_3d": "arch_glass_shards_b",
   "arch_cans": "arch_can_cluster",
+  "arch_ceiling_pipes": "arch_pipe_run",
+  "arch_metal_locker": "metal_locker",
+  "arch_boards_overlay_inner": "arch_boards_overlay",
   "arch_bed_messy": "arch_bed_messy",
   "arch_fridge_ajar": "arch_fridge_ajar",
   "arch_counter_sink": "arch_counter_sink",
@@ -2320,6 +3715,65 @@
   "arch_plank_broken_b": "arch_plank_broken_b",
   "arch_rubble_small": "arch_rubble_small",
   "arch_can": "arch_can",
-  "arch_cash_register": "arch_cash_register"
+  "arch_cash_register": "arch_cash_register",
+  "arch_pipe_run_1m": "arch_pipe_run_1m",
+  "arch_cabinet_file_open": "arch_cabinet_file_open",
+  "arch_drum_burn": "arch_drum_burn",
+  "arch_bed_stripped": "arch_bed_stripped",
+  "arch_bottle": "arch_bottle",
+  "arch_glass_shards_a": "arch_glass_shards_a",
+  "arch_cabinet_file": "arch_cabinet_file",
+  "arch_pallet_rack": "arch_pallet_rack",
+  "arch_console_panel": "arch_console_panel",
+  "arch_bunk": "arch_bunk",
+  "arch_stove_wood": "arch_stove_wood",
+  "arch_glass_hold": "arch_glass_hold",
+  "arch_steam_table": "arch_steam_table",
+  "arch_reception_desk": "arch_reception_desk",
+  "arch_door_storefront_broken": "arch_door_storefront_broken",
+  "arch_door_open_leaf": "arch_door_open_leaf",
+  "arch_plastic_sheet": "arch_plastic_sheet",
+  "arch_pipe_run": "arch_pipe_run",
+  "arch_cage_mesh": "arch_cage_mesh",
+  "arch_whiteboard": "arch_whiteboard",
+  "arch_table_folding": "arch_table_folding",
+  "arch_table_blackjack": "arch_table_blackjack",
+  "arch_armchair": "arch_armchair",
+  "arch_drum_steel": "arch_drum_steel",
+  "arch_generator": "arch_generator",
+  "arch_sandbag_row": "arch_sandbag_row",
+  "arch_barrier_crowd": "arch_barrier_crowd",
+  "arch_barricade": "arch_barricade",
+  "arch_mattress_floor": "arch_mattress_floor",
+  "arch_iv_stand": "arch_iv_stand",
+  "arch_gurney": "arch_gurney",
+  "arch_seed_rack": "arch_seed_rack",
+  "arch_jerrycan": "arch_jerrycan",
+  "arch_radio_set": "arch_radio_set",
+  "arch_laptop": "arch_laptop",
+  "arch_candle_cluster": "arch_candle_cluster",
+  "arch_lantern": "arch_lantern",
+  "arch_seed_tray": "arch_seed_tray",
+  "arch_book_pile": "arch_book_pile",
+  "arch_case_hard": "arch_case_hard",
+  "arch_bottles": "arch_bottles",
+  "arch_bucket": "arch_bucket",
+  "arch_blanket_pile": "arch_blanket_pile",
+  "arch_duffel": "arch_duffel",
+  "arch_photo_frame": "arch_photo_frame",
+  "arch_toy_kid": "arch_toy_kid",
+  "arch_suitcase_packed": "arch_suitcase_packed",
+  "arch_pet_bowl": "arch_pet_bowl",
+  "arch_shoes_pair": "arch_shoes_pair",
+  "arch_mug": "arch_mug",
+  "arch_note_card": "arch_note_card",
+  "arch_oxygen_tank": "arch_oxygen_tank",
+  "arch_dog_leash": "arch_dog_leash",
+  "arch_door_mailslot": "arch_door_mailslot",
+  "arch_breaker_panel": "arch_breaker_panel",
+  "arch_woodpile": "arch_woodpile",
+  "arch_sack_pile": "arch_sack_pile",
+  "arch_crash_cart": "arch_crash_cart",
+  "arch_phone_landline": "arch_phone_landline"
  }
 }

@@ -7,9 +7,9 @@ import {
   ARCH_CATALOG, ARCH_DECAL_FRAMES, ARCH_TEXTURES,
   loadArchModel, makeArchInstanced, setDoorOpen, setArchSeason,
   loadFloorTexture, makeArchFloorDecals, makeArchDust, archPoseMatrix,
-} from "../models/registry.js?v=r16.1";
-import { gltfLoader } from "./models3d.js?v=r16.1";
-import { ARCH_OPENINGS, addPunchedWall, applyWorldUV } from "./buildings.js?v=r16.1";
+} from "../models/registry.js?v=r16.2";
+import { gltfLoader } from "./models3d.js?v=r16.2";
+import { ARCH_OPENINGS, addPunchedWall, applyWorldUV } from "./buildings.js?v=r16.2";
 
 const KNOWN = new Set([
   "ch01_day_three", "ch02_the_registry", "ch03_the_long_cold", "ch04_black_start",
@@ -73,6 +73,10 @@ const REMAP = {
   arch_door_wood: "door_residential_wood",
   arch_door_garage: "door_garage_rollup",
   arch_door_boarded: "door_boarded",
+  // Gap-fill (r16.2): Cartographer ceiling dressing had no dedicated GLBs in r16.1.
+  arch_ceiling_pipes: "arch_pipe_run",
+  arch_hanging_wires: "arch_pipe_run_1m",
+  arch_ceiling_fixture_broken: "arch_lantern",
 };
 
 const FLOOR_TEX = {
@@ -658,6 +662,11 @@ export async function applyInteriorDressing(runtime, overlay, scene, world, L, o
   }
 
   try { setArchSeason(season, root); } catch {}
+  try {
+    await reinforceInteriors(runtime, overlay, L, world, root, ops, season);
+  } catch (err) {
+    console.warn("[interior] reinforce", err);
+  }
   tickInteriorDressing(runtime, world?._player || { x: 0, z: 0 }, 0);
   return runtime._interior;
 }
@@ -780,4 +789,414 @@ export function auditQuestAccess(world, L, openings, rad = 0.38) {
     results.push({ id: b.id, label: b.label, ok, entry });
   }
   return { ok: results.every((r) => r.ok), buildings: results };
+}
+
+/** True only inside a real enclosed room (interior_floor or a building doorway).
+ *  covered_floor / U, loc.safe streets, and outdoor fires must not count. */
+export function isEnclosedInterior(runtime, x, z) {
+  if (!runtime) return false;
+  const t = typeof runtime.tileAt === "function" ? runtime.tileAt(x, z) : null;
+  if (!t) return false;
+  const ch = t.ch;
+  const name = t.def?.name || "";
+  if (name === "covered_floor") return false;
+  const isRoom = name === "interior_floor" || ch === "," || name === "door" || ch === "D" || !!t.def?.door;
+  if (!isRoom) return false;
+  const L = runtime.L;
+  const buildings = L?.buildings || [];
+  for (const b of buildings) {
+    if (b.kind !== "walled" || !b.rect) continue;
+    const r = b.rect;
+    const minX = Math.min(r.x0, r.x1), maxX = Math.max(r.x0, r.x1);
+    const minZ = Math.min(r.z0, r.z1), maxZ = Math.max(r.z0, r.z1);
+    if (x >= minX && x <= maxX && z >= minZ && z <= maxZ) return true;
+  }
+  if (name === "interior_floor" || ch === ",") return true;
+  if (name === "door" || ch === "D" || t.def?.door) {
+    const g = L?.grid;
+    if (!g?.tiles) return false;
+    const tiles = g.tiles, legend = g.legend || {};
+    const c = t.c, r = t.r;
+    for (const [dc, dr] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      const rr = r + dr, cc = c + dc;
+      if (rr < 0 || cc < 0 || rr >= tiles.length || cc >= (tiles[rr] || "").length) continue;
+      const nch = tiles[rr][cc];
+      const nd = legend[nch] || {};
+      if (nd.name === "interior_floor" || nch === ",") return true;
+    }
+  }
+  return false;
+}
+
+const CEIL_Y = 3.05;
+const SHELL_H = 3.08;
+
+function shellCeilMat() {
+  return new THREE.MeshStandardMaterial({
+    color: 0x8a847c, roughness: 0.96, metalness: 0,
+    side: THREE.DoubleSide, name: "interior_ceiling",
+  });
+}
+function shellWallMat() {
+  return new THREE.MeshStandardMaterial({
+    color: 0x9a8b7a, roughness: 0.92, metalness: 0, name: "interior_partition",
+  });
+}
+
+function addCeilingPlane(parent, box, y, mat) {
+  const pad = 0.02;
+  const w = Math.max(0.4, box.maxX - box.minX - pad * 2);
+  const d = Math.max(0.4, box.maxZ - box.minZ - pad * 2);
+  const geo = new THREE.PlaneGeometry(w, d);
+  geo.rotateX(Math.PI / 2); // normal down
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set((box.minX + box.maxX) / 2, y, (box.minZ + box.maxZ) / 2);
+  mesh.userData.kind = "interior_ceiling";
+  mesh.receiveShadow = true;
+  mesh.castShadow = false;
+  parent.add(mesh);
+  return mesh;
+}
+
+function addShellWall(parent, world, minX, maxX, minZ, maxZ, h, mat, src = "interior_wall") {
+  const w = Math.max(0.08, maxX - minX), d = Math.max(0.08, maxZ - minZ);
+  const geo = new THREE.BoxGeometry(w, h, d);
+  applyWorldUV(geo, 2);
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set((minX + maxX) / 2, h / 2, (minZ + maxZ) / 2);
+  mesh.userData.kind = src;
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  parent.add(mesh);
+  if (world?.colliders) {
+    world.colliders.push({ minX, maxX, minZ, maxZ, src, ch: "#" });
+  }
+  return mesh;
+}
+
+function roomBoxesOf(L, overlay) {
+  const boxes = [];
+  const seen = new Set();
+  const add = (box, meta = {}) => {
+    if (!box || box.maxX - box.minX < 1.2 || box.maxZ - box.minZ < 1.2) return;
+    const k = [box.minX, box.minZ, box.maxX, box.maxZ].map((n) => n.toFixed(2)).join(",");
+    if (seen.has(k)) return;
+    seen.add(k);
+    boxes.push({ ...box, ...meta });
+  };
+  for (const b of L?.buildings || []) {
+    if (b.kind !== "walled" || !b.rect) continue;
+    const r = b.rect;
+    add({
+      minX: Math.min(r.x0, r.x1), maxX: Math.max(r.x0, r.x1),
+      minZ: Math.min(r.z0, r.z1), maxZ: Math.max(r.z0, r.z1),
+    }, { id: b.id, label: b.label, kind: b.kind, source: "building" });
+  }
+  for (const room of overlay?.rooms || []) {
+    const bb = room.bbox;
+    if (!bb || bb.length < 4) continue;
+    add({ minX: bb[0], minZ: bb[1], maxX: bb[2], maxZ: bb[3] }, {
+      id: room.id || room.building, label: room.id, kind: room.kind, source: "room", room,
+    });
+  }
+  return boxes;
+}
+
+function fillPerimeterGaps(parent, world, L, mat) {
+  const g = L?.grid;
+  if (!g?.tiles) return 0;
+  const cs = g.cellSize || 2, o = g.origin || { x: 0, z: 0 };
+  const tiles = g.tiles, legend = g.legend || {};
+  const thick = 0.18;
+  let n = 0;
+  const isRoom = (ch) => {
+    const t = legend[ch] || {};
+    return t.name === "interior_floor" || ch === ",";
+  };
+  const isDoor = (ch) => {
+    const t = legend[ch] || {};
+    return !!(t.door || t.name === "door" || ch === "D");
+  };
+  const isSolid = (ch) => !!(legend[ch] || {}).solid;
+  const neigh = (r, c) => {
+    if (r < 0 || c < 0 || r >= tiles.length || c >= (tiles[r] || "").length) return "";
+    return tiles[r][c];
+  };
+  // For each interior cell, close any edge that opens onto outdoor / empty space.
+  for (let r = 0; r < tiles.length; r++) {
+    const row = tiles[r] || "";
+    for (let c = 0; c < row.length; c++) {
+      if (!isRoom(row[c])) continue;
+      const x0 = o.x + c * cs, z0 = o.z + r * cs;
+      const x1 = x0 + cs, z1 = z0 + cs;
+      const edges = [
+        { ch: neigh(r, c - 1), minX: x0 - thick, maxX: x0, minZ: z0, maxZ: z1 },
+        { ch: neigh(r, c + 1), minX: x1, maxX: x1 + thick, minZ: z0, maxZ: z1 },
+        { ch: neigh(r - 1, c), minX: x0, maxX: x1, minZ: z0 - thick, maxZ: z0 },
+        { ch: neigh(r + 1, c), minX: x0, maxX: x1, minZ: z1, maxZ: z1 + thick },
+      ];
+      for (const e of edges) {
+        if (isRoom(e.ch) || isDoor(e.ch) || isSolid(e.ch)) continue;
+        addShellWall(parent, world, e.minX, e.maxX, e.minZ, e.maxZ, SHELL_H, mat, "interior_wall");
+        n++;
+      }
+    }
+  }
+  return n;
+}
+
+function roomHasInternalWall(L, box, cs = 2) {
+  const g = L?.grid;
+  if (!g?.tiles) return false;
+  const o = g.origin || { x: 0, z: 0 };
+  const tiles = g.tiles, legend = g.legend || {};
+  const c0 = Math.floor((box.minX - o.x) / cs) + 1;
+  const c1 = Math.floor((box.maxX - o.x) / cs) - 1;
+  const r0 = Math.floor((box.minZ - o.z) / cs) + 1;
+  const r1 = Math.floor((box.maxZ - o.z) / cs) - 1;
+  let n = 0;
+  for (let r = r0; r <= r1; r++) {
+    const row = tiles[r];
+    if (!row) continue;
+    for (let c = c0; c <= c1; c++) {
+      const t = legend[row[c]] || {};
+      if (t.solid && t.name === "wall") n++;
+    }
+  }
+  return n >= 3;
+}
+
+function addPartitionFor(parent, world, L, box, mat) {
+  const w = box.maxX - box.minX, d = box.maxZ - box.minZ;
+  if (Math.min(w, d) < 7.5 || w * d < 80) return false;
+  if (roomHasInternalWall(L, box)) return false;
+  const seed = seedNum((box.id || "") + ":" + box.minX + "," + box.minZ);
+  const alongX = w >= d; // wall runs along the long axis (constant on the short axis)
+  const gapW = 2.0;
+  const thick = 0.18;
+  const t = 0.35 + 0.3 * seed; // gap centre as fraction of the long axis
+  if (alongX) {
+    const z = box.minZ + d * (0.4 + 0.2 * hash01(seed * 17 + 3));
+    const gapC = box.minX + w * t;
+    const gap0 = Math.max(box.minX + 1.2, gapC - gapW / 2);
+    const gap1 = Math.min(box.maxX - 1.2, gapC + gapW / 2);
+    if (gap0 - box.minX > 0.8) addShellWall(parent, world, box.minX, gap0, z - thick / 2, z + thick / 2, SHELL_H, mat, "interior_partition");
+    if (box.maxX - gap1 > 0.8) addShellWall(parent, world, gap1, box.maxX, z - thick / 2, z + thick / 2, SHELL_H, mat, "interior_partition");
+  } else {
+    const x = box.minX + w * (0.4 + 0.2 * hash01(seed * 17 + 3));
+    const gapC = box.minZ + d * t;
+    const gap0 = Math.max(box.minZ + 1.2, gapC - gapW / 2);
+    const gap1 = Math.min(box.maxZ - 1.2, gapC + gapW / 2);
+    if (gap0 - box.minZ > 0.8) addShellWall(parent, world, x - thick / 2, x + thick / 2, box.minZ, gap0, SHELL_H, mat, "interior_partition");
+    if (box.maxZ - gap1 > 0.8) addShellWall(parent, world, x - thick / 2, x + thick / 2, gap1, box.maxZ, SHELL_H, mat, "interior_partition");
+  }
+  return true;
+}
+
+const DENSE_KITS = {
+  house: ["arch_shelf_metal_boxes", "arch_shelf_metal", "arch_chair", "arch_table", "arch_couch", "arch_box_large", "arch_crate_small", "arch_paper_pile"],
+  store: ["arch_gondola_stocked", "arch_shelf_metal_boxes", "arch_counter", "arch_crate_large", "arch_box_large", "arch_can_cluster"],
+  garage: ["arch_workbench", "arch_shelf_metal", "arch_crate_large", "arch_crate_small", "arch_tire_stack", "arch_plank_stack"],
+  clinic: ["arch_cot", "arch_med_cabinet", "arch_chair", "arch_counter", "arch_shelf_metal", "arch_box_small"],
+  default: ["arch_shelf_metal", "arch_crate_large", "arch_chair", "arch_box_large", "arch_paper_pile"],
+};
+
+function kitListFor(kind) {
+  const k = String(kind || "default").toLowerCase();
+  if (/store|shop|pharmacy|pawn|retail/.test(k)) return DENSE_KITS.store;
+  if (/garage|warehouse|workshop/.test(k)) return DENSE_KITS.garage;
+  if (/clinic|hospital|med/.test(k)) return DENSE_KITS.clinic;
+  if (/house|home|motel|apt|residential/.test(k)) return DENSE_KITS.house;
+  return DENSE_KITS.default;
+}
+
+function densifyBox(room, existing, L, seed) {
+  const box = room.bbox
+    ? { minX: room.bbox[0], minZ: room.bbox[1], maxX: room.bbox[2], maxZ: room.bbox[3] }
+    : room;
+  if (!box) return [];
+  const w = box.maxX - box.minX, d = box.maxZ - box.minZ;
+  const kit = kitListFor(room.kind);
+  const usable = kit.filter((id) => remapArchId(id));
+  if (!usable.length) return [];
+  const doors = [];
+  const g = L?.grid;
+  if (g?.tiles) {
+    const cs = g.cellSize || 2, o = g.origin || { x: 0, z: 0 };
+    const tiles = g.tiles, legend = g.legend || {};
+    for (let r = 0; r < tiles.length; r++) {
+      const row = tiles[r] || "";
+      for (let c = 0; c < row.length; c++) {
+        const t = legend[row[c]] || {};
+        if (!(t.door || t.name === "door" || row[c] === "D")) continue;
+        const x = o.x + (c + 0.5) * cs, z = o.z + (r + 0.5) * cs;
+        if (x >= box.minX - 1 && x <= box.maxX + 1 && z >= box.minZ - 1 && z <= box.maxZ + 1) doors.push({ x, z });
+      }
+    }
+  }
+  const nearDoor = (x, z) => doors.some((d) => Math.hypot(d.x - x, d.z - z) < 1.35);
+  const nearExist = (x, z) => (existing || []).some((p) => Math.hypot((p.x || 0) - x, (p.z || 0) - z) < 1.15);
+  const inset = 0.55;
+  const step = 3.2;
+  const out = [];
+  let i = 0;
+  const sides = [
+    { x0: box.minX + inset, z0: box.minZ + inset, x1: box.maxX - inset, z1: box.minZ + inset, rot: 0 },
+    { x0: box.maxX - inset, z0: box.minZ + inset, x1: box.maxX - inset, z1: box.maxZ - inset, rot: -Math.PI / 2 },
+    { x0: box.maxX - inset, z0: box.maxZ - inset, x1: box.minX + inset, z1: box.maxZ - inset, rot: Math.PI },
+    { x0: box.minX + inset, z0: box.maxZ - inset, x1: box.minX + inset, z1: box.minZ + inset, rot: Math.PI / 2 },
+  ];
+  for (const s of sides) {
+    const len = Math.hypot(s.x1 - s.x0, s.z1 - s.z0);
+    const n = Math.max(1, Math.floor(len / step));
+    for (let k = 0; k < n; k++) {
+      const u = (k + 0.5) / n;
+      const x = s.x0 + (s.x1 - s.x0) * u;
+      const z = s.z0 + (s.z1 - s.z0) * u;
+      if (nearDoor(x, z) || nearExist(x, z)) continue;
+      const id = usable[Math.floor(hash01(seed + i * 19) * usable.length) % usable.length];
+      out.push({ id, x, y: 0, z, rotY: s.rot, scale: 1 });
+      i++;
+      // occasional clutter just off the wall
+      if (hash01(seed + i * 31) > 0.55) {
+        const clutter = ["arch_box_small", "arch_paper_pile", "arch_can_cluster", "arch_crate_small", "arch_box_collapsed"];
+        const cid = clutter[Math.floor(hash01(seed + i * 47) * clutter.length) % clutter.length];
+        if (remapArchId(cid)) {
+          const nx = x + Math.sin(s.rot) * 0.7;
+          const nz = z + Math.cos(s.rot) * 0.7;
+          if (!nearDoor(nx, nz) && !nearExist(nx, nz)) out.push({ id: cid, x: nx, y: 0, z: nz, rotY: s.rot + 0.2, scale: 1 });
+        }
+      }
+    }
+  }
+  return out;
+}
+
+async function reinforceInteriors(runtime, overlay, L, world, root, ops, season) {
+  const shells = new THREE.Group();
+  shells.name = "interior_shells";
+  shells.visible = true;
+  root.add(shells);
+  const cMat = shellCeilMat();
+  const wMat = shellWallMat();
+  const boxes = roomBoxesOf(L, overlay);
+  let ceilings = 0, parts = 0;
+  const covered = [];
+  const overlaps = (a, b) => {
+    const x0 = Math.max(a.minX, b.minX), x1 = Math.min(a.maxX, b.maxX);
+    const z0 = Math.max(a.minZ, b.minZ), z1 = Math.min(a.maxZ, b.maxZ);
+    if (x1 <= x0 || z1 <= z0) return 0;
+    const area = (x1 - x0) * (z1 - z0);
+    const aa = Math.max(0.01, (a.maxX - a.minX) * (a.maxZ - a.minZ));
+    return area / aa;
+  };
+  // Prefer tighter room boxes first so a house split into rooms gets one ceiling per room,
+  // then fill any leftover building footprint.
+  const ordered = boxes.slice().sort((a, b) => (a.maxX - a.minX) * (a.maxZ - a.minZ) - (b.maxX - b.minX) * (b.maxZ - b.minZ));
+  const roomsFirst = ordered.filter((b) => b.source === "room").concat(ordered.filter((b) => b.source !== "room"));
+  for (const box of roomsFirst) {
+    const coverFrac = covered.reduce((s, c) => s + overlaps(box, c), 0);
+    if (coverFrac >= 0.5) continue;
+    addCeilingPlane(shells, box, CEIL_Y, cMat);
+    covered.push(box);
+    ceilings++;
+  }
+  // A slightly higher building cap covers internal door cells the room boxes miss.
+  for (const box of boxes) {
+    if (box.source !== "building") continue;
+    addCeilingPlane(shells, box, CEIL_Y + 0.06, cMat);
+    ceilings++;
+  }
+  const gaps = fillPerimeterGaps(shells, world, L, wMat);
+  // Partitions only for large building boxes (not every overlay room, to avoid double walls).
+  for (const box of boxes) {
+    if (box.source !== "building") continue;
+    if (addPartitionFor(shells, world, L, box, wMat)) parts++;
+  }
+
+  // Densify rooms with wall-hugging furniture from the r16.1 catalog only.
+  const extra = [];
+  for (const room of overlay?.rooms || []) {
+    const existing = room.props || [];
+    const seed = seedNum((room.id || room.building || "") + ":dense");
+    extra.push(...densifyBox(room, existing.concat(extra), L, seed));
+  }
+  // Buildings with no overlay rooms still get a pass from the building rect + kind.
+  for (const b of L?.buildings || []) {
+    if (b.kind !== "walled" || !b.rect) continue;
+    const has = (overlay?.rooms || []).some((r) => r.building === b.id || (r.id || "").startsWith(b.id));
+    if (has) continue;
+    const r = b.rect;
+    const box = { minX: Math.min(r.x0, r.x1), maxX: Math.max(r.x0, r.x1), minZ: Math.min(r.z0, r.z1), maxZ: Math.max(r.z0, r.z1), kind: b.label || b.kind };
+    extra.push(...densifyBox(box, extra, L, seedNum(b.id + ":dense")));
+  }
+  if (extra.length) {
+    const dg = new THREE.Group();
+    dg.name = "interior_dense";
+    dg.userData.kind = "arch_prop";
+    shells.add(dg);
+    try { await placeProps(dg, extra, { buildingSeed: 7 }); } catch (err) {
+      console.warn("[interior] densify", err);
+    }
+  }
+  runtime._interior.shells = shells;
+  runtime._interior.shellStats = { ceilings, gaps, parts, extra: extra.length };
+  window.__ASHFALL_SHELLS = runtime._interior.shellStats;
+}
+
+/** Raycast straight up from inside each enterable room. A ceiling must hide the sky. */
+export function auditInteriorCeilings(runtime) {
+  const scene = runtime?.group || runtime?.world?.scene;
+  const L = runtime?.L;
+  const out = [];
+  if (!scene || !L) return { ok: false, error: "no scene", samples: out };
+  const ray = new THREE.Raycaster();
+  const origin = new THREE.Vector3();
+  const dir = new THREE.Vector3(0, 1, 0);
+  const points = [];
+  for (const b of L.buildings || []) {
+    if (b.kind !== "walled" || !b.rect) continue;
+    const r = b.rect;
+    const minX = Math.min(r.x0, r.x1) + 1.2, maxX = Math.max(r.x0, r.x1) - 1.2;
+    const minZ = Math.min(r.z0, r.z1) + 1.2, maxZ = Math.max(r.z0, r.z1) - 1.2;
+    if (maxX <= minX || maxZ <= minZ) continue;
+    const cx = (minX + maxX) / 2, cz = (minZ + maxZ) / 2;
+    points.push({ id: b.id, label: b.label, x: cx, z: cz });
+    points.push({ id: b.id, label: b.label, x: (minX + cx) / 2, z: (minZ + cz) / 2 });
+    points.push({ id: b.id, label: b.label, x: (maxX + cx) / 2, z: (maxZ + cz) / 2 });
+  }
+  // Interiors that aren't tagged walled: sample tile centers.
+  const g = L.grid;
+  if (g?.tiles && !(L.buildings || []).some((b) => b.kind === "walled")) {
+    const cs = g.cellSize || 2, o = g.origin || { x: 0, z: 0 };
+    for (let r = 0; r < g.tiles.length; r += 2) {
+      const row = g.tiles[r] || "";
+      for (let c = 0; c < row.length; c += 2) {
+        const def = (g.legend || {})[row[c]] || {};
+        if (def.name !== "interior_floor" && row[c] !== ",") continue;
+        points.push({ id: L.id, label: "interior", x: o.x + (c + 0.5) * cs, z: o.z + (r + 0.5) * cs });
+      }
+    }
+  }
+  for (const p of points) {
+    // Only test points that are actually inside a room (skip if the 1.2 inset landed in a wall).
+    if (!isEnclosedInterior(runtime, p.x, p.z)) continue;
+    origin.set(p.x, 1.55, p.z);
+    ray.set(origin, dir);
+    ray.far = 8;
+    const hits = ray.intersectObject(scene, true) || [];
+    let ok = false, y = null, kind = null;
+    for (const h of hits) {
+      const obj = h.object;
+      const k = (obj.userData && obj.userData.kind) || obj.name || "";
+      const mat = obj.material;
+      const isSky = /sky/i.test(k) || (mat && mat.depthWrite === false && !obj.receiveShadow && /sky/i.test(mat.name || ""));
+      if (isSky) continue;
+      if (h.point.y > 1.8 && h.point.y < 7.5) {
+        ok = true; y = h.point.y; kind = k; break;
+      }
+    }
+    out.push({ ...p, ok, y, kind });
+  }
+  return { ok: out.length > 0 && out.every((s) => s.ok), n: out.length, failed: out.filter((s) => !s.ok), samples: out };
 }

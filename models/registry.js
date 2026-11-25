@@ -3,7 +3,7 @@
 //   "three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/addons/"
 //
 //   import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-//   import { loadModel, fitToGround } from './models/registry.js?v=r16.1';
+//   import { loadModel, fitToGround } from './models/registry.js?v=r16.2';
 //   const loader = new GLTFLoader();
 //   const militia = await loadModel('watch_militia', loader);   // cached, cloned per call
 //   scene.add(militia);
@@ -345,7 +345,7 @@ export function playClip(mixer, root, name, { fade = 0.25, timeScale = 1, loop =
 // ready for THREE.InstancedMesh.  Trees, bushes and tufts all share ONE 256 px atlas (env/textures/env_atlas.png)
 // with 4 season bands; setEnvSeason() swaps every env mesh at once (no reload, no new materials).
 //
-//   import { makeEnvInstanced, envJitterMatrix, loadGroundTexture, setEnvSeason } from './models/registry.js?v=r16.1';
+//   import { makeEnvInstanced, envJitterMatrix, loadGroundTexture, setEnvSeason } from './models/registry.js?v=r16.2';
 //   setEnvSeason('autumn');                                       // once per level (summer|autumn|late_fall|fallout_winter)
 //   const trees = await makeEnvInstanced('env_tree_cottonwood_dead', 12);  // shared geometry + material
 //   const m = new THREE.Matrix4();
@@ -805,18 +805,18 @@ export const ARCH_CATALOG = Object.freeze({
   arch_glass_shards_b: {"path":"arch/arch_glass_shards_b.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":14,"cutout":false,"tags":["glass","shards","broken"],"rooms":["any"],"collider":null},
   arch_glass_pane_fallen: {"path":"arch/arch_glass_pane_fallen.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":35,"cutout":false,"tags":["glass","shattered","window","broken"],"rooms":["any"],"collider":null},
   arch_glass_hanging: {"path":"arch/arch_glass_hanging.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":10,"cutout":false,"tags":["glass","shattered","window","broken"],"rooms":["any"],"collider":null},
-  arch_paper_pile: {"path":"arch/arch_paper_pile.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":50,"cutout":false,"tags":["papers","debris","office"],"rooms":["any","clinic","store"],"collider":null},
+  arch_paper_pile: {"path":"arch/arch_paper_pile.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":50,"cutout":false,"tags":["papers","debris","office"],"rooms":["any","clinic","store"],"collider":null,"placementHints":{"stackable":true,"leanable":false,"surface":"floor_or_table"}},
   arch_debris_pile: {"path":"arch/arch_debris_pile.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":86,"cutout":false,"tags":["debris","rubble","papers"],"rooms":["any"],"collider":null},
   arch_rubble_small: {"path":"arch/arch_rubble_small.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":12,"cutout":false,"tags":["rubble","rocks","debris"],"rooms":["any","warehouse"],"collider":null},
   arch_rubble_medium: {"path":"arch/arch_rubble_medium.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":27,"cutout":false,"tags":["rubble","rocks","debris"],"rooms":["any","warehouse"],"collider":null},
   arch_rubble_large: {"path":"arch/arch_rubble_large.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":42,"cutout":false,"tags":["rubble","rocks","debris"],"rooms":["any","warehouse"],"collider":{"type":"box","min":[-0.363,0.0,-0.266],"max":[0.455,0.199,0.327]}},
-  arch_can: {"path":"arch/arch_can.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":19,"cutout":false,"tags":["can","trash","food"],"rooms":["any"],"collider":null},
-  arch_can_cluster: {"path":"arch/arch_can_cluster.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":81,"cutout":false,"tags":["can","trash","food"],"rooms":["any","kitchen","store"],"collider":null},
-  arch_pipe_straight: {"path":"arch/arch_pipe_straight.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":40,"cutout":false,"tags":["pipe","metal","debris"],"rooms":["warehouse","garage","any"],"collider":null},
+  arch_can: {"path":"arch/arch_can.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":19,"cutout":false,"tags":["can","trash","food"],"rooms":["any"],"collider":null,"placementHints":{"stackable":true,"leanable":false,"surface":"shelf_or_table"}},
+  arch_can_cluster: {"path":"arch/arch_can_cluster.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":81,"cutout":false,"tags":["can","trash","food"],"rooms":["any","kitchen","store"],"collider":null,"placementHints":{"stackable":true,"leanable":false,"surface":"shelf_or_table"}},
+  arch_pipe_straight: {"path":"arch/arch_pipe_straight.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":40,"cutout":false,"tags":["pipe","metal","debris"],"rooms":["warehouse","garage","any"],"collider":null,"placementHints":{"stackable":true,"leanable":true,"surface":"floor_or_wall"}},
   arch_pipe_elbow: {"path":"arch/arch_pipe_elbow.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":44,"cutout":false,"tags":["pipe","metal","debris"],"rooms":["warehouse","garage","any"],"collider":null},
-  arch_plank_loose: {"path":"arch/arch_plank_loose.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":10,"cutout":false,"tags":["planks","wood","broken_boards"],"rooms":["any","warehouse"],"collider":null},
-  arch_plank_broken_a: {"path":"arch/arch_plank_broken_a.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":12,"cutout":false,"tags":["planks","broken_boards","wood"],"rooms":["any","warehouse"],"collider":null},
-  arch_plank_broken_b: {"path":"arch/arch_plank_broken_b.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":24,"cutout":false,"tags":["planks","broken_boards","wood"],"rooms":["any","warehouse"],"collider":null},
+  arch_plank_loose: {"path":"arch/arch_plank_loose.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":10,"cutout":false,"tags":["planks","wood","broken_boards"],"rooms":["any","warehouse"],"collider":null,"placementHints":{"stackable":true,"leanable":true,"surface":"floor_or_wall"}},
+  arch_plank_broken_a: {"path":"arch/arch_plank_broken_a.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":12,"cutout":false,"tags":["planks","broken_boards","wood"],"rooms":["any","warehouse"],"collider":null,"placementHints":{"stackable":true,"leanable":true,"surface":"floor_or_wall"}},
+  arch_plank_broken_b: {"path":"arch/arch_plank_broken_b.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":24,"cutout":false,"tags":["planks","broken_boards","wood"],"rooms":["any","warehouse"],"collider":null,"placementHints":{"stackable":true,"leanable":true,"surface":"floor_or_wall"}},
   arch_plank_stack: {"path":"arch/arch_plank_stack.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":60,"cutout":false,"tags":["planks","wood","lumber"],"rooms":["warehouse","garage"],"collider":{"type":"box","min":[-0.953,0.0,-0.409],"max":[0.953,0.15,0.292]}},
   arch_chair: {"path":"arch/arch_chair.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":88,"cutout":false,"tags":["chair","wood","overturned"],"rooms":["kitchen","living","clinic","any"],"collider":{"type":"box","min":[-0.22,0.0,-0.21],"max":[0.22,0.92,0.21]},"poses":{"overturned":{"rotationDeg":[-90,0,0],"position":[0.0,0.21,0.0]},"on_side":{"rotationDeg":[0,0,90],"position":[0.0,0.22,0.0]}}},
   arch_table: {"path":"arch/arch_table.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":56,"cutout":false,"tags":["table","wood"],"rooms":["kitchen","living","any"],"collider":{"type":"box","min":[-0.6,0.0,-0.38],"max":[0.6,0.76,0.38]},"poses":{"overturned":{"rotationDeg":[-90,0,0],"position":[0.0,0.38,0.0]},"on_side":{"rotationDeg":[0,0,90],"position":[0.0,0.6,0.0]}}},
@@ -824,25 +824,84 @@ export const ARCH_CATALOG = Object.freeze({
   arch_counter_sink: {"path":"arch/arch_counter_sink.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":162,"cutout":false,"tags":["counter","sink","kitchen"],"rooms":["kitchen","clinic"],"collider":{"type":"box","min":[-0.92,0.0,-0.31],"max":[0.92,1.15,0.33]}},
   arch_shelf_metal: {"path":"arch/arch_shelf_metal.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":80,"cutout":false,"tags":["shelves","metal","storage"],"rooms":["warehouse","garage","store","any"],"collider":{"type":"box","min":[-0.614,0.0,-0.23],"max":[0.614,2.1,0.23]},"poses":{"toppled":{"rotationDeg":[90,0,0],"position":[0.0,0.23,0.0]}}},
   arch_shelf_metal_boxes: {"path":"arch/arch_shelf_metal_boxes.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":190,"cutout":false,"tags":["shelves","boxes","storage","concept"],"rooms":["warehouse","garage","store"],"collider":{"type":"box","min":[-0.614,0.0,-0.23],"max":[0.614,2.1,0.235]},"poses":{"toppled":{"rotationDeg":[90,0,0],"position":[0.0,0.2348,0.0]}}},
-  arch_box_small: {"path":"arch/arch_box_small.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":10,"cutout":false,"tags":["boxes","cardboard"],"rooms":["any"],"collider":null},
-  arch_box_large: {"path":"arch/arch_box_large.glb","kind":"dressing","subtype":"box","parts":["main"],"tris":10,"cutout":false,"tags":["boxes","cardboard"],"rooms":["any","warehouse","store"],"collider":{"type":"box","min":[-0.35,0.0,-0.26],"max":[0.35,0.52,0.26]}},
-  arch_box_collapsed: {"path":"arch/arch_box_collapsed.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":14,"cutout":false,"tags":["boxes","cardboard","debris"],"rooms":["any"],"collider":null},
-  arch_crate_large: {"path":"arch/arch_crate_large.glb","kind":"furniture","subtype":"crate","parts":["main"],"tris":70,"cutout":false,"tags":["crate","wood","concept"],"rooms":["warehouse","garage","any"],"collider":{"type":"box","min":[-0.57,0.0,-0.445],"max":[0.57,0.855,0.445]}},
-  arch_crate_small: {"path":"arch/arch_crate_small.glb","kind":"furniture","subtype":"crate","parts":["main"],"tris":74,"cutout":false,"tags":["crate","wood"],"rooms":["warehouse","garage","store","any"],"collider":{"type":"box","min":[-0.32,0.0,-0.27],"max":[0.32,0.485,0.27]}},
+  arch_box_small: {"path":"arch/arch_box_small.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":10,"cutout":false,"tags":["boxes","cardboard"],"rooms":["any"],"collider":null,"placementHints":{"stackable":true,"leanable":false,"surface":"floor_or_shelf"}},
+  arch_box_large: {"path":"arch/arch_box_large.glb","kind":"dressing","subtype":"box","parts":["main"],"tris":10,"cutout":false,"tags":["boxes","cardboard"],"rooms":["any","warehouse","store"],"collider":{"type":"box","min":[-0.35,0.0,-0.26],"max":[0.35,0.52,0.26]},"poses":{"on_side":{"rotationDeg":[0,0,90],"position":[0.0,0.35,0.0]}},"placementHints":{"stackable":true,"leanable":true,"surface":"floor_or_shelf"}},
+  arch_box_collapsed: {"path":"arch/arch_box_collapsed.glb","kind":"dressing","subtype":"small","parts":["main"],"tris":14,"cutout":false,"tags":["boxes","cardboard","debris"],"rooms":["any"],"collider":null,"placementHints":{"stackable":true,"leanable":true,"surface":"floor"}},
+  arch_crate_large: {"path":"arch/arch_crate_large.glb","kind":"furniture","subtype":"crate","parts":["main"],"tris":70,"cutout":false,"tags":["crate","wood","concept"],"rooms":["warehouse","garage","any"],"collider":{"type":"box","min":[-0.57,0.0,-0.445],"max":[0.57,0.855,0.445]},"poses":{"tipped":{"rotationDeg":[0,0,90],"position":[0.0,0.57,0.0]}},"placementHints":{"stackable":true,"leanable":false,"surface":"floor"}},
+  arch_crate_small: {"path":"arch/arch_crate_small.glb","kind":"furniture","subtype":"crate","parts":["main"],"tris":74,"cutout":false,"tags":["crate","wood"],"rooms":["warehouse","garage","store","any"],"collider":{"type":"box","min":[-0.32,0.0,-0.27],"max":[0.32,0.485,0.27]},"poses":{"tipped":{"rotationDeg":[0,0,90],"position":[0.0,0.32,0.0]}},"placementHints":{"stackable":true,"leanable":false,"surface":"floor_or_crate"}},
   arch_crate_broken: {"path":"arch/arch_crate_broken.glb","kind":"furniture","subtype":"crate","parts":["main"],"tris":92,"cutout":false,"tags":["crate","broken","broken_boards","looted"],"rooms":["warehouse","garage","any"],"collider":{"type":"box","min":[-0.495,0.0,-0.395],"max":[0.537,0.755,0.998]}},
   arch_fridge: {"path":"arch/arch_fridge.glb","kind":"furniture","subtype":"kitchen","parts":["main"],"tris":36,"cutout":false,"tags":["fridge","appliance"],"rooms":["kitchen"],"collider":{"type":"box","min":[-0.38,0.0,-0.35],"max":[0.38,1.7,0.35]}},
   arch_fridge_ajar: {"path":"arch/arch_fridge_ajar.glb","kind":"furniture","subtype":"kitchen","parts":["main"],"tris":46,"cutout":false,"tags":["fridge","appliance","looted","ajar"],"rooms":["kitchen"],"collider":{"type":"box","min":[-0.411,0.0,-0.35],"max":[0.38,1.7,0.807]}},
-  arch_bed: {"path":"arch/arch_bed.glb","kind":"furniture","subtype":"bedroom","parts":["main"],"tris":72,"cutout":false,"tags":["bed","mattress"],"rooms":["bedroom"],"collider":{"type":"box","min":[-0.72,0.0,-1.05],"max":[0.72,1.05,1.0]}},
+  arch_bed: {"path":"arch/arch_bed.glb","kind":"furniture","subtype":"bedroom","parts":["main"],"tris":72,"cutout":false,"tags":["bed","mattress"],"rooms":["bedroom"],"collider":{"type":"box","min":[-0.72,0.0,-1.05],"max":[0.72,1.05,1.0]},"poses":{"stripped":{"rotationDeg":[0,0,0],"position":[0.0,-0.0,0.0]}}},
   arch_bed_messy: {"path":"arch/arch_bed_messy.glb","kind":"furniture","subtype":"bedroom","parts":["main"],"tris":92,"cutout":false,"tags":["bed","mattress","messy","abandoned"],"rooms":["bedroom"],"collider":{"type":"box","min":[-0.72,0.0,-1.05],"max":[0.75,1.05,1.06]}},
-  arch_couch: {"path":"arch/arch_couch.glb","kind":"furniture","subtype":"living","parts":["main"],"tris":82,"cutout":false,"tags":["couch","sofa"],"rooms":["living"],"collider":{"type":"box","min":[-0.95,0.0,-0.44],"max":[0.95,0.92,0.45]}},
+  arch_couch: {"path":"arch/arch_couch.glb","kind":"furniture","subtype":"living","parts":["main"],"tris":82,"cutout":false,"tags":["couch","sofa"],"rooms":["living"],"collider":{"type":"box","min":[-0.95,0.0,-0.44],"max":[0.95,0.92,0.45]},"poses":{"overturned":{"rotationDeg":[-90,0,0],"position":[0.0,0.44,0.0]}}},
   arch_gondola_stocked: {"path":"arch/arch_gondola_stocked.glb","kind":"furniture","subtype":"store","parts":["main"],"tris":74,"cutout":false,"tags":["shelves","store","stocked"],"rooms":["store"],"collider":{"type":"box","min":[-0.64,0.0,-0.25],"max":[0.64,1.6,0.25]},"poses":{"toppled":{"rotationDeg":[90,0,0],"position":[0.0,0.25,0.0]}}},
   arch_gondola_looted: {"path":"arch/arch_gondola_looted.glb","kind":"furniture","subtype":"store","parts":["main"],"tris":114,"cutout":false,"tags":["shelves","store","looted","empty"],"rooms":["store"],"collider":{"type":"box","min":[-0.64,0.0,-0.25],"max":[0.64,1.6,0.493]},"poses":{"toppled":{"rotationDeg":[90,0,0],"position":[0.0,0.4934,0.0]}}},
   arch_cash_register: {"path":"arch/arch_cash_register.glb","kind":"dressing","subtype":"store","parts":["main"],"tris":36,"cutout":false,"tags":["register","store","counter"],"rooms":["store"],"collider":null},
   arch_workbench: {"path":"arch/arch_workbench.glb","kind":"furniture","subtype":"garage","parts":["main"],"tris":138,"cutout":false,"tags":["workbench","tools","garage"],"rooms":["garage","warehouse"],"collider":{"type":"box","min":[-0.9,0.0,-0.37],"max":[0.9,1.75,0.35]}},
-  arch_tire: {"path":"arch/arch_tire.glb","kind":"dressing","subtype":"garage","parts":["main"],"tris":80,"cutout":false,"tags":["tire","garage"],"rooms":["garage","warehouse"],"collider":null},
+  arch_tire: {"path":"arch/arch_tire.glb","kind":"dressing","subtype":"garage","parts":["main"],"tris":80,"cutout":false,"tags":["tire","garage"],"rooms":["garage","warehouse"],"collider":null,"placementHints":{"stackable":true,"leanable":true,"surface":"floor_or_wall"}},
   arch_tire_stack: {"path":"arch/arch_tire_stack.glb","kind":"furniture","subtype":"garage","parts":["main"],"tris":240,"cutout":false,"tags":["tire","garage"],"rooms":["garage","warehouse"],"collider":{"type":"box","min":[-0.36,0.0,-0.344],"max":[0.37,0.61,0.334]}},
   arch_cot: {"path":"arch/arch_cot.glb","kind":"furniture","subtype":"clinic","parts":["main"],"tris":119,"cutout":false,"tags":["cot","bed","clinic","shelter"],"rooms":["clinic","warehouse","any"],"collider":{"type":"box","min":[-0.37,0.0,-0.95],"max":[0.366,0.544,0.95]}},
   arch_med_cabinet: {"path":"arch/arch_med_cabinet.glb","kind":"furniture","subtype":"clinic","parts":["main"],"tris":70,"cutout":false,"tags":["cabinet","medical","clinic"],"rooms":["clinic"],"collider":{"type":"box","min":[-0.41,0.0,-0.21],"max":[0.41,1.83,0.22]},"poses":{"toppled":{"rotationDeg":[90,0,0],"position":[0.0,0.22,0.0]}}},
+  arch_bottle: {"path":"arch/arch_bottle.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":80,"cutout":false,"tags":["clutter","bottle"],"rooms":["shelter","kitchen","clinic","motel"],"collider":null,"placementHints":{"stackable":true,"leanable":false,"wallMount":false,"surface":"table_or_shelf"}},
+  arch_bottles: {"path":"arch/arch_bottles.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":208,"cutout":false,"tags":["clutter","bottles"],"rooms":["shelter","kitchen","clinic","motel","store"],"collider":null,"placementHints":{"stackable":true,"leanable":false,"wallMount":false,"surface":"table_or_shelf"}},
+  arch_book_pile: {"path":"arch/arch_book_pile.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":60,"cutout":false,"tags":["clutter","book_pile"],"rooms":["shelter","office","school","motel"],"collider":null,"poses":{"tipped":{"rotationDeg":[90,0,0],"position":[0.0,0.1154,0.0]}},"placementHints":{"stackable":true,"leanable":true,"wallMount":false,"surface":"floor_or_table"}},
+  arch_blanket_pile: {"path":"arch/arch_blanket_pile.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":68,"cutout":false,"tags":["clutter","blanket_pile"],"rooms":["shelter","motel","residential"],"collider":null,"placementHints":{"stackable":true,"leanable":false,"wallMount":false,"surface":"floor_or_bed"}},
+  arch_mug: {"path":"arch/arch_mug.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":64,"cutout":false,"tags":["clutter","mug"],"rooms":["shelter","kitchen","office","story"],"collider":null,"poses":{"tipped":{"rotationDeg":[90,0,0],"position":[0.0,0.042,0.0]}},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"table_or_counter"}},
+  arch_bucket: {"path":"arch/arch_bucket.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":108,"cutout":false,"tags":["clutter","bucket"],"rooms":["shelter","garage","greenhouse","clinic"],"collider":null,"poses":{"tipped":{"rotationDeg":[90,0,0],"position":[0.0,0.16,0.0]}},"placementHints":{"stackable":true,"leanable":false,"wallMount":false,"surface":"floor"}},
+  arch_radio_set: {"path":"arch/arch_radio_set.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":104,"cutout":false,"tags":["clutter","radio_set"],"rooms":["shelter","watchtower","office","utility"],"collider":null,"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"table_or_bench"}},
+  arch_case_hard: {"path":"arch/arch_case_hard.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":108,"cutout":false,"tags":["clutter","case_hard"],"rooms":["checkpoint","clinic","utility","shelter"],"collider":null,"poses":{"standing":{"rotationDeg":[90,0,0],"position":[0.0,0.223,0.0]}},"placementHints":{"stackable":true,"leanable":true,"wallMount":false,"surface":"floor_or_shelf"}},
+  arch_jerrycan: {"path":"arch/arch_jerrycan.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":104,"cutout":false,"tags":["clutter","jerrycan"],"rooms":["garage","utility","checkpoint","warehouse"],"collider":null,"poses":{"tipped":{"rotationDeg":[0,0,90],"position":[0.0,0.165,0.0]}},"placementHints":{"stackable":false,"leanable":true,"wallMount":false,"surface":"floor"}},
+  arch_pipe_run: {"path":"arch/arch_pipe_run.glb","kind":"mount","subtype":"mount","parts":["main"],"tris":148,"cutout":false,"tags":["mount","pipe_run"],"rooms":["utility","plant","lab","warehouse"],"collider":null,"placementHints":{"stackable":false,"leanable":false,"wallMount":true,"surface":"wall"}},
+  arch_pipe_run_1m: {"path":"arch/arch_pipe_run_1m.glb","kind":"mount","subtype":"mount","parts":["main"],"tris":124,"cutout":false,"tags":["mount","pipe_run_1m"],"rooms":["utility","plant","lab","warehouse"],"collider":null,"placementHints":{"stackable":false,"leanable":false,"wallMount":true,"surface":"wall"}},
+  arch_table_folding: {"path":"arch/arch_table_folding.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":96,"cutout":false,"tags":["furniture","table_folding"],"rooms":["shelter","clinic","hall"],"collider":{"type":"box","min":[-0.9,0.0,-0.375],"max":[0.9,0.741,0.375]},"poses":{"leaned":{"rotationDeg":[75,0,0],"position":[0.0,0.2859,0.0]}},"placementHints":{"stackable":false,"leanable":true,"wallMount":false,"surface":"floor"}},
+  arch_candle_cluster: {"path":"arch/arch_candle_cluster.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":180,"cutout":false,"tags":["clutter","candle_cluster"],"rooms":["shelter","motel","residential"],"collider":null,"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"table_or_floor"}},
+  arch_note_card: {"path":"arch/arch_note_card.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":24,"cutout":false,"tags":["clutter","note_card"],"rooms":["story","shelter","office","residential"],"collider":null,"poses":{"wall":{"rotationDeg":[90,0,0],"position":[0.0,0.13,0.0]}},"placementHints":{"stackable":false,"leanable":false,"wallMount":true,"surface":"table_or_wall"}},
+  arch_plastic_sheet: {"path":"arch/arch_plastic_sheet.glb","kind":"mount","subtype":"mount","parts":["main"],"tris":100,"cutout":true,"tags":["mount","plastic_sheet"],"rooms":["shelter","residential","clinic"],"collider":null,"placementHints":{"stackable":false,"leanable":false,"wallMount":true,"surface":"window_or_wall"}},
+  arch_laptop: {"path":"arch/arch_laptop.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":48,"cutout":false,"tags":["clutter","laptop"],"rooms":["lab","office","shelter"],"collider":null,"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"table_or_floor"}},
+  arch_mattress_floor: {"path":"arch/arch_mattress_floor.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":24,"cutout":false,"tags":["furniture","mattress_floor"],"rooms":["shelter","motel","clinic"],"collider":null,"poses":{"leaned":{"rotationDeg":[78,0,0],"position":[0.0,0.9586,0.0]}},"placementHints":{"stackable":false,"leanable":true,"wallMount":false,"surface":"floor"}},
+  arch_seed_tray: {"path":"arch/arch_seed_tray.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":204,"cutout":false,"tags":["clutter","seed_tray"],"rooms":["greenhouse","shelter"],"collider":null,"placementHints":{"stackable":true,"leanable":false,"wallMount":false,"surface":"bench_or_floor"}},
+  arch_cabinet_file: {"path":"arch/arch_cabinet_file.glb","kind":"wall","subtype":"wall","parts":["main"],"tris":12,"cutout":false,"tags":["wall","cabinet_file"],"rooms":["office","clinic","lab"],"collider":{"type":"box","min":[-0.25,0.0,-0.32],"max":[0.25,1.3,0.32]},"poses":{"tipped":{"rotationDeg":[90,0,0],"position":[0.0,0.32,0.0]}},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor_wall"}},
+  arch_cabinet_file_open: {"path":"arch/arch_cabinet_file_open.glb","kind":"wall","subtype":"wall","parts":["main"],"tris":36,"cutout":false,"tags":["wall","cabinet_file_open"],"rooms":["office","clinic","lab"],"collider":{"type":"box","min":[-0.25,0.0,-0.32],"max":[0.25,1.3,0.57]},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor_wall"}},
+  arch_glass_hold: {"path":"arch/arch_glass_hold.glb","kind":"wall","subtype":"wall","parts":["main"],"tris":132,"cutout":false,"tags":["wall","glass_hold"],"rooms":["lab","clinic"],"collider":{"type":"box","min":[-0.64,0.0,-0.64],"max":[0.64,2.4,1.292]},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor"}},
+  arch_lantern: {"path":"arch/arch_lantern.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":120,"cutout":false,"tags":["clutter","lantern"],"rooms":["shelter","utility","garage"],"collider":null,"poses":{"tipped":{"rotationDeg":[90,0,0],"position":[0.0,0.088,0.0]}},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"table_or_floor"}},
+  arch_pallet_rack: {"path":"arch/arch_pallet_rack.glb","kind":"wall","subtype":"wall","parts":["main"],"tris":216,"cutout":false,"tags":["wall","pallet_rack"],"rooms":["warehouse","store","plant"],"collider":{"type":"box","min":[-1.345,0.0,-0.545],"max":[1.345,3.0,0.545]},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor_wall"}},
+  arch_duffel: {"path":"arch/arch_duffel.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":64,"cutout":false,"tags":["clutter","duffel"],"rooms":["shelter","checkpoint","motel"],"collider":null,"placementHints":{"stackable":true,"leanable":true,"wallMount":false,"surface":"floor_or_bed"}},
+  arch_iv_stand: {"path":"arch/arch_iv_stand.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":172,"cutout":false,"tags":["furniture","iv_stand"],"rooms":["clinic","lab"],"collider":null,"poses":{"tipped":{"rotationDeg":[90,0,0],"position":[0.0,0.25,0.0]}},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor"}},
+  arch_gurney: {"path":"arch/arch_gurney.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":176,"cutout":false,"tags":["furniture","gurney"],"rooms":["clinic","lab"],"collider":{"type":"box","min":[-0.34,0.0,-0.98],"max":[0.34,0.972,0.98]},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor"}},
+  arch_photo_frame: {"path":"arch/arch_photo_frame.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":24,"cutout":false,"tags":["clutter","photo_frame"],"rooms":["story","residential","motel"],"collider":null,"poses":{"face_down":{"rotationDeg":[-90,0,0],"position":[0.0,0.1155,0.0]}},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"table_or_shelf"}},
+  arch_console_panel: {"path":"arch/arch_console_panel.glb","kind":"wall","subtype":"wall","parts":["main"],"tris":36,"cutout":false,"tags":["wall","console_panel"],"rooms":["plant","lab","utility"],"collider":{"type":"box","min":[-0.89,0.0,-0.38],"max":[0.89,1.181,0.38]},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor_wall"}},
+  arch_stove_wood: {"path":"arch/arch_stove_wood.glb","kind":"wall","subtype":"wall","parts":["main"],"tris":112,"cutout":false,"tags":["wall","stove_wood"],"rooms":["shelter","residential","motel"],"collider":{"type":"box","min":[-0.33,0.0,-0.28],"max":[0.33,1.162,0.326]},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor_wall"}},
+  arch_seed_rack: {"path":"arch/arch_seed_rack.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":168,"cutout":false,"tags":["furniture","seed_rack"],"rooms":["greenhouse"],"collider":{"type":"box","min":[-0.775,0.0,-0.285],"max":[0.775,1.18,0.285]},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor"}},
+  arch_barrier_crowd: {"path":"arch/arch_barrier_crowd.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":156,"cutout":false,"tags":["furniture","barrier_crowd"],"rooms":["checkpoint","hall","clinic"],"collider":{"type":"box","min":[-0.98,0.0,-0.24],"max":[0.98,1.082,0.24]},"poses":{"tipped":{"rotationDeg":[85,0,0],"position":[0.0,0.2391,0.0]}},"placementHints":{"stackable":false,"leanable":true,"wallMount":false,"surface":"floor"}},
+  arch_bunk: {"path":"arch/arch_bunk.glb","kind":"wall","subtype":"wall","parts":["main"],"tris":156,"cutout":false,"tags":["wall","bunk"],"rooms":["shelter","checkpoint","clinic"],"collider":{"type":"box","min":[-0.455,0.0,-0.985],"max":[0.48,1.6,0.985]},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor_wall"}},
+  arch_boards_overlay: {"path":"arch/arch_boards_overlay.glb","kind":"mount","subtype":"mount","parts":["main"],"tris":48,"cutout":false,"tags":["mount","boards_overlay"],"rooms":["shelter","store","residential"],"collider":null,"placementHints":{"stackable":false,"leanable":false,"wallMount":true,"surface":"wall"}},
+  arch_cage_mesh: {"path":"arch/arch_cage_mesh.glb","kind":"mount","subtype":"mount","parts":["main"],"tris":156,"cutout":false,"tags":["mount","cage_mesh"],"rooms":["warehouse","checkpoint","plant"],"collider":null,"placementHints":{"stackable":false,"leanable":false,"wallMount":true,"surface":"wall"}},
+  arch_sandbag_row: {"path":"arch/arch_sandbag_row.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":168,"cutout":false,"tags":["furniture","sandbag_row"],"rooms":["checkpoint","shelter"],"collider":{"type":"box","min":[-0.745,0.0,-0.26],"max":[0.745,0.82,0.26]},"placementHints":{"stackable":true,"leanable":false,"wallMount":false,"surface":"floor"}},
+  arch_shoes_pair: {"path":"arch/arch_shoes_pair.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":48,"cutout":false,"tags":["clutter","shoes_pair"],"rooms":["story","shelter","residential","motel"],"collider":null,"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor"}},
+  arch_whiteboard: {"path":"arch/arch_whiteboard.glb","kind":"mount","subtype":"mount","parts":["main"],"tris":36,"cutout":false,"tags":["mount","whiteboard"],"rooms":["office","clinic","shelter","school"],"collider":null,"placementHints":{"stackable":false,"leanable":false,"wallMount":true,"surface":"wall"}},
+  arch_generator: {"path":"arch/arch_generator.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":68,"cutout":false,"tags":["furniture","generator"],"rooms":["utility","garage","checkpoint","plant"],"collider":{"type":"box","min":[-0.59,0.0,-0.34],"max":[0.59,0.842,0.34]},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor"}},
+  arch_toy_kid: {"path":"arch/arch_toy_kid.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":104,"cutout":false,"tags":["clutter","toy_kid"],"rooms":["story","residential","shelter"],"collider":null,"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor_or_shelf"}},
+  arch_drum_steel: {"path":"arch/arch_drum_steel.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":176,"cutout":false,"tags":["furniture","drum_steel"],"rooms":["warehouse","garage","plant"],"collider":{"type":"box","min":[-0.3,0.0,-0.3],"max":[0.3,0.906,0.3]},"poses":{"tipped":{"rotationDeg":[90,0,0],"position":[0.0,0.3,0.0]}},"placementHints":{"stackable":true,"leanable":false,"wallMount":false,"surface":"floor"}},
+  arch_drum_burn: {"path":"arch/arch_drum_burn.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":204,"cutout":false,"tags":["furniture","drum_burn"],"rooms":["shelter","checkpoint"],"collider":{"type":"box","min":[-0.3,0.0,-0.3],"max":[0.3,1.027,0.3]},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor"}},
+  arch_breaker_panel: {"path":"arch/arch_breaker_panel.glb","kind":"mount","subtype":"mount","parts":["main"],"tris":48,"cutout":false,"tags":["mount","breaker_panel"],"rooms":["utility","plant","warehouse"],"collider":null,"placementHints":{"stackable":false,"leanable":false,"wallMount":true,"surface":"wall"}},
+  arch_reception_desk: {"path":"arch/arch_reception_desk.glb","kind":"wall","subtype":"wall","parts":["main"],"tris":36,"cutout":false,"tags":["wall","reception_desk"],"rooms":["clinic","motel","office"],"collider":{"type":"box","min":[-0.99,0.0,-0.86],"max":[0.99,1.051,0.37]},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor"}},
+  arch_table_blackjack: {"path":"arch/arch_table_blackjack.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":80,"cutout":false,"tags":["furniture","table_blackjack"],"rooms":["casino","hall"],"collider":{"type":"box","min":[-0.88,0.0,-0.84],"max":[0.88,0.815,0.92]},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor"}},
+  arch_armchair: {"path":"arch/arch_armchair.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":96,"cutout":false,"tags":["furniture","armchair"],"rooms":["residential","motel","shelter"],"collider":{"type":"box","min":[-0.43,0.0,-0.4],"max":[0.43,0.905,0.4]},"poses":{"tipped":{"rotationDeg":[-85,0,0],"position":[0.0,0.3896,0.0]}},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor"}},
+  arch_suitcase_packed: {"path":"arch/arch_suitcase_packed.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":48,"cutout":false,"tags":["clutter","suitcase_packed"],"rooms":["story","motel","residential"],"collider":null,"poses":{"flat":{"rotationDeg":[90,0,0],"position":[0.0,0.126,0.0]}},"placementHints":{"stackable":true,"leanable":true,"wallMount":false,"surface":"floor"}},
+  arch_pet_bowl: {"path":"arch/arch_pet_bowl.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":36,"cutout":false,"tags":["clutter","pet_bowl"],"rooms":["story","residential"],"collider":null,"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor"}},
+  arch_oxygen_tank: {"path":"arch/arch_oxygen_tank.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":84,"cutout":false,"tags":["clutter","oxygen_tank"],"rooms":["story","clinic","residential"],"collider":null,"poses":{"tipped":{"rotationDeg":[90,0,0],"position":[0.0,0.115,0.0]}},"placementHints":{"stackable":false,"leanable":true,"wallMount":false,"surface":"floor_or_wall"}},
+  arch_dog_leash: {"path":"arch/arch_dog_leash.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":36,"cutout":false,"tags":["clutter","dog_leash"],"rooms":["story","residential"],"collider":null,"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor_or_table"}},
+  arch_sack_pile: {"path":"arch/arch_sack_pile.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":72,"cutout":false,"tags":["furniture","sack_pile"],"rooms":["warehouse","greenhouse","shelter"],"collider":{"type":"box","min":[-0.673,0.0,-0.555],"max":[0.661,0.718,0.384]},"placementHints":{"stackable":true,"leanable":false,"wallMount":false,"surface":"floor"}},
+  arch_phone_landline: {"path":"arch/arch_phone_landline.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":36,"cutout":false,"tags":["clutter","phone_landline"],"rooms":["office","motel","residential"],"collider":null,"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"table_or_desk"}},
+  arch_steam_table: {"path":"arch/arch_steam_table.glb","kind":"wall","subtype":"wall","parts":["main"],"tris":120,"cutout":false,"tags":["wall","steam_table"],"rooms":["casino","kitchen"],"collider":{"type":"box","min":[-0.98,0.0,-0.36],"max":[0.98,1.183,0.36]},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor"}},
+  arch_door_storefront_broken: {"path":"arch/arch_door_storefront_broken.glb","kind":"mount","subtype":"mount","parts":["main"],"tris":60,"cutout":false,"tags":["mount","door_storefront_broken"],"rooms":["store","commercial"],"collider":null,"placementHints":{"stackable":false,"leanable":false,"wallMount":true,"surface":"doorframe"}},
+  arch_door_open_leaf: {"path":"arch/arch_door_open_leaf.glb","kind":"mount","subtype":"mount","parts":["main"],"tris":24,"cutout":false,"tags":["mount","door_open_leaf"],"rooms":["residential","motel"],"collider":null,"placementHints":{"stackable":false,"leanable":false,"wallMount":true,"surface":"doorframe"}},
+  arch_door_mailslot: {"path":"arch/arch_door_mailslot.glb","kind":"mount","subtype":"mount","parts":["main"],"tris":48,"cutout":false,"tags":["mount","door_mailslot"],"rooms":["residential"],"collider":null,"placementHints":{"stackable":false,"leanable":false,"wallMount":true,"surface":"doorframe"}},
+  arch_woodpile: {"path":"arch/arch_woodpile.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":320,"cutout":false,"tags":["furniture","woodpile"],"rooms":["shelter","residential"],"collider":{"type":"box","min":[-0.67,0.0,-0.31],"max":[0.703,0.741,0.31]},"placementHints":{"stackable":true,"leanable":false,"wallMount":false,"surface":"floor"}},
+  arch_crash_cart: {"path":"arch/arch_crash_cart.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":164,"cutout":false,"tags":["furniture","crash_cart"],"rooms":["clinic"],"collider":{"type":"box","min":[-0.41,0.0,-0.24],"max":[0.34,0.961,0.262]},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor"}},
+  arch_bed_stripped: {"path":"arch/arch_bed_stripped.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":48,"cutout":false,"tags":["furniture","bed_stripped"],"rooms":["shelter","bedroom","motel"],"collider":{"type":"box","min":[-0.72,0.0,-1.0],"max":[0.72,1.05,1.0]},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor"}},
+  arch_barricade: {"path":"arch/arch_barricade.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":60,"cutout":false,"tags":["furniture","barricade"],"rooms":["shelter","residential","store"],"collider":{"type":"box","min":[-0.794,0.0,-0.25],"max":[0.982,1.519,0.548]},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor_wall"}},
 });
 export const ARCH_TEXTURES = Object.freeze({
   floor_hardwood: { path: 'arch/textures/floor_hardwood.png', kind: 'floor', metersPerTile: [2.0, 2.0], wrap: 'repeat', px: 128 },
@@ -876,27 +935,58 @@ export const ARCH_TEXTURES = Object.freeze({
   wall_brick: { path: 'arch/textures/wall_brick.png', kind: 'wall', metersPerTile: [1.0, 1.0], wrap: 'repeat', px: 64 },
   wall_brick_dirty: { path: 'arch/textures/wall_brick_dirty.png', kind: 'wall', metersPerTile: [1.0, 1.0], wrap: 'repeat', px: 64 },
   wall_brick_ash: { path: 'arch/textures/wall_brick_ash.png', kind: 'wall', metersPerTile: [1.0, 1.0], wrap: 'repeat', px: 64 },
+  wall_cinder: { path: 'arch/textures/wall_cinder.png', kind: 'wall', metersPerTile: [1.0, 1.0], wrap: 'repeat', px: 64 },
+  wall_cinder_dirty: { path: 'arch/textures/wall_cinder_dirty.png', kind: 'wall', metersPerTile: [1.0, 1.0], wrap: 'repeat', px: 64 },
+  wall_cinder_ash: { path: 'arch/textures/wall_cinder_ash.png', kind: 'wall', metersPerTile: [1.0, 1.0], wrap: 'repeat', px: 64 },
   arch_floor_decals: { path: 'arch/textures/arch_floor_decals.png', kind: 'decal_atlas', metersPerTile: null, wrap: 'clamp', px: 256 },
+  arch_decals_b: { path: 'arch/textures/arch_decals_b.png', kind: 'decal_atlas', metersPerTile: null, wrap: 'clamp', px: 512 },
   arch_dust_mote: { path: 'arch/textures/arch_dust_mote.png', kind: 'sprite', metersPerTile: null, wrap: 'clamp', px: 16 },
 });
 export const ARCH_ATLAS = Object.freeze({ path: 'arch/textures/arch_atlas.png', mr: 'arch/textures/arch_atlas_mr.png', size: [512, 512], bandOffsetV: 0.5, bands: { weathered: 0, ashfall: 1 }, seasonBand: {"summer": 0, "autumn": 0, "late_fall": 0, "fallout_winter": 1} });
 export const ARCH_DECAL_FRAMES = Object.freeze({
-  rug_rect: { uvRect: [0.001953, 0.001953, 0.498047, 0.248047], size: [2.0, 1.25] },
-  rug_round: { uvRect: [0.501953, 0.001953, 0.748047, 0.248047], size: [1.3, 1.3] },
-  doormat: { uvRect: [0.751953, 0.001953, 0.998047, 0.123047], size: [0.9, 0.5] },
-  footprints: { uvRect: [0.751953, 0.126953, 0.998047, 0.248047], size: [0.9, 0.45] },
-  stain_water: { uvRect: [0.001953, 0.251953, 0.248047, 0.498047], size: [1.2, 1.2] },
-  stain_oil: { uvRect: [0.251953, 0.251953, 0.498047, 0.498047], size: [1.4, 1.4] },
-  stain_dark: { uvRect: [0.501953, 0.251953, 0.748047, 0.498047], size: [1.0, 1.0] },
-  puddle: { uvRect: [0.751953, 0.251953, 0.998047, 0.498047], size: [1.2, 1.0] },
-  debris: { uvRect: [0.001953, 0.501953, 0.248047, 0.748047], size: [1.0, 1.0] },
-  papers: { uvRect: [0.251953, 0.501953, 0.498047, 0.748047], size: [1.0, 1.0] },
-  glass_shards: { uvRect: [0.501953, 0.501953, 0.748047, 0.748047], size: [1.0, 1.0] },
-  ash_drift: { uvRect: [0.751953, 0.501953, 0.998047, 0.748047], size: [1.2, 1.0] },
-  plaster: { uvRect: [0.001953, 0.751953, 0.248047, 0.998047], size: [1.0, 1.0] },
-  leaves: { uvRect: [0.251953, 0.751953, 0.498047, 0.998047], size: [1.0, 1.0] },
-  scorch: { uvRect: [0.501953, 0.751953, 0.748047, 0.998047], size: [1.2, 1.2] },
-  sawdust: { uvRect: [0.751953, 0.751953, 0.998047, 0.998047], size: [1.0, 1.0] },
+  rug_rect: { uvRect: [0.001953, 0.001953, 0.498047, 0.248047], size: [2.0, 1.25], wall: false, atlas: 'a' },
+  rug_round: { uvRect: [0.501953, 0.001953, 0.748047, 0.248047], size: [1.3, 1.3], wall: false, atlas: 'a' },
+  doormat: { uvRect: [0.751953, 0.001953, 0.998047, 0.123047], size: [0.9, 0.5], wall: false, atlas: 'a' },
+  footprints: { uvRect: [0.751953, 0.126953, 0.998047, 0.248047], size: [0.9, 0.45], wall: false, atlas: 'a' },
+  stain_water: { uvRect: [0.001953, 0.251953, 0.248047, 0.498047], size: [1.2, 1.2], wall: false, atlas: 'a' },
+  stain_oil: { uvRect: [0.251953, 0.251953, 0.498047, 0.498047], size: [1.4, 1.4], wall: false, atlas: 'a' },
+  stain_dark: { uvRect: [0.501953, 0.251953, 0.748047, 0.498047], size: [1.0, 1.0], wall: false, atlas: 'a' },
+  puddle: { uvRect: [0.751953, 0.251953, 0.998047, 0.498047], size: [1.2, 1.0], wall: false, atlas: 'a' },
+  debris: { uvRect: [0.001953, 0.501953, 0.248047, 0.748047], size: [1.0, 1.0], wall: false, atlas: 'a' },
+  papers: { uvRect: [0.251953, 0.501953, 0.498047, 0.748047], size: [1.0, 1.0], wall: false, atlas: 'a' },
+  glass_shards: { uvRect: [0.501953, 0.501953, 0.748047, 0.748047], size: [1.0, 1.0], wall: false, atlas: 'a' },
+  ash_drift: { uvRect: [0.751953, 0.501953, 0.998047, 0.748047], size: [1.2, 1.0], wall: false, atlas: 'a' },
+  plaster: { uvRect: [0.001953, 0.751953, 0.248047, 0.998047], size: [1.0, 1.0], wall: false, atlas: 'a' },
+  leaves: { uvRect: [0.251953, 0.751953, 0.498047, 0.998047], size: [1.0, 1.0], wall: false, atlas: 'a' },
+  scorch: { uvRect: [0.501953, 0.751953, 0.748047, 0.998047], size: [1.2, 1.2], wall: false, atlas: 'a' },
+  sawdust: { uvRect: [0.751953, 0.751953, 0.998047, 0.998047], size: [1.0, 1.0], wall: false, atlas: 'a' },
+  wrappers_cans: { uvRect: [0.000977, 0.001953, 0.124023, 0.248047], size: [0.9, 0.7], wall: false, atlas: 'b' },
+  frost_rime: { uvRect: [0.125977, 0.001953, 0.249023, 0.248047], size: [1.6, 1.4], wall: false, atlas: 'b' },
+  pill_scatter: { uvRect: [0.250977, 0.001953, 0.374023, 0.248047], size: [0.6, 0.5], wall: false, atlas: 'b' },
+  wall_frost: { uvRect: [0.375977, 0.001953, 0.499023, 0.248047], size: [1.6, 1.6], wall: true, atlas: 'b' },
+  wall_ash_film: { uvRect: [0.500977, 0.001953, 0.624023, 0.248047], size: [1.6, 1.0], wall: true, atlas: 'b' },
+  wall_notice: { uvRect: [0.625977, 0.001953, 0.749023, 0.248047], size: [0.4, 0.6], wall: true, atlas: 'b' },
+  sleeping_bag: { uvRect: [0.750977, 0.001953, 0.874023, 0.248047], size: [0.9, 2.0], wall: false, atlas: 'b' },
+  wall_water_stain: { uvRect: [0.875977, 0.001953, 0.999023, 0.248047], size: [1.4, 1.6], wall: true, atlas: 'b' },
+  wall_names_list: { uvRect: [0.000977, 0.251953, 0.124023, 0.498047], size: [0.5, 0.7], wall: true, atlas: 'b' },
+  wall_calendar: { uvRect: [0.125977, 0.251953, 0.249023, 0.498047], size: [0.35, 0.5], wall: true, atlas: 'b' },
+  yoga_mat_row: { uvRect: [0.250977, 0.251953, 0.374023, 0.498047], size: [2.2, 0.7], wall: false, atlas: 'b' },
+  wall_map_marked: { uvRect: [0.375977, 0.251953, 0.499023, 0.498047], size: [1.0, 0.7], wall: true, atlas: 'b' },
+  wall_scorch: { uvRect: [0.500977, 0.251953, 0.624023, 0.498047], size: [1.6, 2.0], wall: true, atlas: 'b' },
+  wall_kid_drawing: { uvRect: [0.625977, 0.251953, 0.749023, 0.498047], size: [0.35, 0.3], wall: true, atlas: 'b' },
+  wall_redacted_manifest: { uvRect: [0.750977, 0.251953, 0.874023, 0.498047], size: [0.4, 0.5], wall: true, atlas: 'b' },
+  wall_foil_insulation: { uvRect: [0.875977, 0.251953, 0.999023, 0.498047], size: [2.0, 2.2], wall: true, atlas: 'b' },
+  floor_hatch: { uvRect: [0.000977, 0.501953, 0.124023, 0.748047], size: [0.9, 0.9], wall: false, atlas: 'b' },
+  wall_spray_requisitioned: { uvRect: [0.125977, 0.501953, 0.249023, 0.748047], size: [1.4, 0.6], wall: true, atlas: 'b' },
+  wall_census_chalk: { uvRect: [0.250977, 0.501953, 0.374023, 0.748047], size: [3.0, 1.6], wall: true, atlas: 'b' },
+  wall_fractions_board: { uvRect: [0.375977, 0.501953, 0.499023, 0.748047], size: [1.4, 0.9], wall: true, atlas: 'b' },
+  wall_handsign_chips: { uvRect: [0.500977, 0.501953, 0.624023, 0.748047], size: [0.8, 0.5], wall: true, atlas: 'b' },
+  wall_jacket_hook: { uvRect: [0.625977, 0.501953, 0.749023, 0.748047], size: [0.5, 1.0], wall: true, atlas: 'b' },
+  wall_seed_library_sign: { uvRect: [0.750977, 0.501953, 0.874023, 0.748047], size: [1.0, 0.4], wall: true, atlas: 'b' },
+  wall_neon_dead: { uvRect: [0.875977, 0.501953, 0.999023, 0.748047], size: [1.6, 0.5], wall: true, atlas: 'b' },
+  chalk_outline_tape: { uvRect: [0.000977, 0.751953, 0.124023, 0.998047], size: [1.4, 1.4], wall: false, atlas: 'b' },
+  wall_bullet_holes: { uvRect: [0.125977, 0.751953, 0.249023, 0.998047], size: [0.8, 0.8], wall: true, atlas: 'b' },
+  wall_photo_board: { uvRect: [0.250977, 0.751953, 0.374023, 0.998047], size: [0.8, 0.6], wall: true, atlas: 'b' },
 });
 // </arch-catalog>
 
@@ -1143,13 +1233,14 @@ export function loadFloorTexture(id, { size, repeat } = {}) {
  * Floor decals (rugs, stains, papers, glass, ash drifts...) in ONE InstancedMesh: setDecalAt(i, frame, x, z, yaw, scale, y).
  * alphaTest 0.5 + polygonOffset, lifted 1 cm.  Frames: ARCH_DECAL_FRAMES.
  */
-export function makeArchFloorDecals(count) {
+export function makeArchFloorDecals(count, { page = 'a' } = {}) {
   const g = new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2).translate(0, 0.01, 0);
   const rect = new THREE.InstancedBufferAttribute(new Float32Array(count * 4), 4);
   g.setAttribute('uvRect', rect);
-  const m = new THREE.MeshStandardMaterial({ map: _archTexture('arch/textures/arch_floor_decals.png', 'clamp'),
+  const texPath = page === 'b' ? 'arch/textures/arch_decals_b.png' : 'arch/textures/arch_floor_decals.png';
+  const m = new THREE.MeshStandardMaterial({ map: _archTexture(texPath, 'clamp'),
     roughness: 0.95, metalness: 0, alphaTest: 0.5, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
-  m.name = 'arch_floor_decals';
+  m.name = `arch_floor_decals_${page}`;
   _patchUv(m, 'arch_decal_rect', 'attribute vec4 uvRect;',
     'vMapUv = uvRect.xy + vec2(uv.x, 1.0 - uv.y) * (uvRect.zw - uvRect.xy);');
   const im = new THREE.InstancedMesh(g, m, count);
@@ -1161,6 +1252,35 @@ export function makeArchFloorDecals(count) {
     rect.setXYZW(i, ...fr.uvRect); rect.needsUpdate = true;
     q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), yaw);
     im.setMatrixAt(i, mm.compose(p.set(x, y, z), q, s.set(fr.size[0] * scale, 1, fr.size[1] * scale)));
+    im.instanceMatrix.needsUpdate = true;
+  };
+  return im;
+}
+
+
+/**
+ * Vertical wall decals (wall_frost, wall_ash_film, wall_notice, wall_map_marked...) in ONE InstancedMesh:
+ * setDecalAt(i, frame, x, y, z, yaw, scale). Uses arch_decals_b.png (page 'b') by default.
+ */
+export function makeArchWallDecals(count, { page = 'b' } = {}) {
+  const g = new THREE.PlaneGeometry(1, 1);
+  const rect = new THREE.InstancedBufferAttribute(new Float32Array(count * 4), 4);
+  g.setAttribute('uvRect', rect);
+  const texPath = page === 'a' ? 'arch/textures/arch_floor_decals.png' : 'arch/textures/arch_decals_b.png';
+  const m = new THREE.MeshStandardMaterial({ map: _archTexture(texPath, 'clamp'),
+    roughness: 0.95, metalness: 0, alphaTest: 0.5, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+  m.name = `arch_wall_decals_${page}`;
+  _patchUv(m, 'arch_decal_rect', 'attribute vec4 uvRect;',
+    'vMapUv = uvRect.xy + vec2(uv.x, 1.0 - uv.y) * (uvRect.zw - uvRect.xy);');
+  const im = new THREE.InstancedMesh(g, m, count);
+  im.name = `arch_wall_decals_${page}_x${count}`; im.receiveShadow = true;
+  const mm = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(), p = new THREE.Vector3();
+  im.setDecalAt = (i, frame, x, y, z, yaw = 0, scale = 1) => {
+    const fr = ARCH_DECAL_FRAMES[frame];
+    if (!fr) throw new Error(`[models] unknown arch decal "${frame}"`);
+    rect.setXYZW(i, ...fr.uvRect); rect.needsUpdate = true;
+    q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), yaw);
+    im.setMatrixAt(i, mm.compose(p.set(x, y, z), q, s.set(fr.size[0] * scale, fr.size[1] * scale, 1)));
     im.instanceMatrix.needsUpdate = true;
   };
   return im;

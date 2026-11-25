@@ -2,7 +2,7 @@
 // ONE draw call: a single full-screen triangle at the far plane, view rays rebuilt per fragment.
 // No textures, no render targets, no loops. three.js r170, plain ES module.
 //
-//   import { createSky, hudHour } from '../sky/sky.js?v=r16.1';
+//   import { createSky, hudHour } from '../sky/sky.js?v=r16.2';
 //   const sky = createSky({ scene, camera, renderer, environment: 'fallout_winter' });
 //   sky.update(dt, { timeOfDay: hudHour(game.timeOfDay), weather: 'ashfall' });
 //   sky.applyTo({ sun, hemi, amb, fog: scene.fog, scene, pipeline });
@@ -332,7 +332,7 @@ export const NIGHT_LOOK = {
   brightness: 0.96,
   bloom: 0.16,
   tint: [1.00, 1.01, 1.05], // subtle cold, cancels summer's warm grade tint
-  flash: { color: 0xd0e3ff, intensity: 26, angle: 24, penumbra: 0.68, range: 18, scatter: 0.052, pitch: 0.05 },
+  flash: { color: 0xd0e3ff, intensity: 72, angle: 26, penumbra: 0.64, range: 20, decay: 1.2, scatter: 0.07, pitch: 0.08 },
   motes: {
     fall: 0.035, wind: [0.045, 0, 0.025], ashRatio: 1.0,
     colorA: [0.88, 0.92, 1.0], colorB: [0.55, 0.62, 0.75],
@@ -349,10 +349,13 @@ export const INTERIOR_LOOK = {
   windowDirect: 0.70,   // fraction of outdoor direct light admitted by a fully open window
   windowFill: 0.22,     // fraction of outdoor amb/hemi admitted
   windowMoon: 0.40,     // night-time moon shaft through a fully open window (cinematic, still room-dark)
+  // Flashlight is the key indoor light (refs/interior_target_lumen.png). Stronger than
+  // the outdoor-night beam so the cone clearly lights the room ahead, including daytime.
+  flash: { color: 0xd0e3ff, intensity: 88, angle: 28, penumbra: 0.6, range: 20, decay: 1.2, scatter: 0.08, pitch: 0.10 },
 };
 export const ADAPT_LOOK = {
   tauDown: 2.4,         // seconds to ease fill lights down (day → night / entering a building)
-  tauUp: 0.7,           // faster coming back into the light
+  tauUp: 0.45,          // recover outdoor fill within about 1s of leaving a building
   floor: 0.008,         // never let applied amb drop below this (playable, not a crushed void)
 };
 
@@ -788,22 +791,26 @@ export function createSky(opts = {}) {
       });
     },
     _applyFlashlight(P, explicit) {
-      const F = NIGHT_LOOK.flash, w = state.darkMix;
+      const F = NIGHT_LOOK.flash, IF = INTERIOR_LOOK.flash || F, w = state.darkMix;
+      const indoor = state.interior > 0.35;
       const L = P.flashlight;
       if (!this._hostFlash) {
-        this._hostFlash = { color: (L && L.color && L.color.getHex()) || 0xdfe8ff, intensity: 38, angle: 22, penumbra: 0.45, range: 26, scatter: 0.05, pitch: 0.12 };
+        this._hostFlash = { color: (L && L.color && L.color.getHex()) || 0xdfe8ff, intensity: 38, angle: 22, penumbra: 0.45, range: 26, decay: 1.4, scatter: 0.05, pitch: 0.12 };
       }
       if (!P.setFlashlight) return;
       const lerp = (a, b) => a + (b - a) * w;
       const H = this._hostFlash || F;
+      const Tgt = indoor ? IF : F;
       const args = {
-        color: w > 0.5 ? F.color : H.color,
-        intensity: lerp(H.intensity, F.intensity),
-        angle: lerp(H.angle, F.angle),
-        penumbra: lerp(H.penumbra, F.penumbra),
-        range: lerp(H.range, F.range),
-        scatter: lerp(H.scatter ?? 0.05, F.scatter),
-        pitch: lerp(H.pitch ?? 0.12, F.pitch),
+        color: (indoor || w > 0.5) ? Tgt.color : H.color,
+        // Never lerp down below the authored beam; interiors use the stronger preset.
+        intensity: indoor ? Tgt.intensity : Math.max(H.intensity, lerp(H.intensity, Tgt.intensity)),
+        angle: indoor ? Tgt.angle : lerp(H.angle, Tgt.angle),
+        penumbra: indoor ? Tgt.penumbra : lerp(H.penumbra, Tgt.penumbra),
+        range: indoor ? Tgt.range : lerp(H.range, Tgt.range),
+        decay: Tgt.decay ?? H.decay ?? 1.15,
+        scatter: indoor ? (Tgt.scatter ?? 0.1) : lerp(H.scatter ?? 0.05, Tgt.scatter ?? 0.08),
+        pitch: indoor ? (Tgt.pitch ?? 0.1) : lerp(H.pitch ?? 0.12, Tgt.pitch ?? 0.08),
       };
       if (explicit && typeof explicit === 'object' && !explicit.isLight) Object.assign(args, explicit);
       P.setFlashlight(args);

@@ -1,23 +1,24 @@
 // Cartographer chapter loader. Builds geometry from levels/*.json (do not edit those files).
 import * as THREE from "three";
-import { CFG } from "./config.js?v=r16.1";
-import { fitHeight, makePerson, makeDog } from "./world.js?v=r16.1";
-import { evalCondition, applyEffects, setFlag } from "./story.js?v=r16.1";
-import { rollContainer, aliasItem } from "./systems.js?v=r16.1";
-import { addItem, takeItem, hasItems } from "./inventory.js?v=r16.1";
-import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings, instanceSmallBoxes, addPunchedWall, walledBuildingBoxes, isWalledBuildingWall } from "./buildings.js?v=r16.1";
-import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r16.1";
-import { coverBuildingRoofs, extractShingleMaterial, fallbackShingleMat } from "./roofs.js?v=r16.1";
-import { startTracking } from "./companionCmd.js?v=r16.1";
-import { bindNpc, disposeMixer } from "./npcWander.js?v=r16.1";
+import { CFG } from "./config.js?v=r16.2";
+import { fitHeight, makePerson, makeDog } from "./world.js?v=r16.2";
+import { evalCondition, applyEffects, setFlag } from "./story.js?v=r16.2";
+import { rollContainer, aliasItem } from "./systems.js?v=r16.2";
+import { addItem, takeItem, hasItems } from "./inventory.js?v=r16.2";
+import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings, instanceSmallBoxes, addPunchedWall, walledBuildingBoxes, isWalledBuildingWall } from "./buildings.js?v=r16.2";
+import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r16.2";
+import { coverBuildingRoofs, extractShingleMaterial, fallbackShingleMat } from "./roofs.js?v=r16.2";
+import { startTracking } from "./companionCmd.js?v=r16.2";
+import { bindNpc, disposeMixer } from "./npcWander.js?v=r16.2";
 import {
   loadGroundOverlay, floorSkipSet, decorateFloorMaterial,
   applyGroundDressing, tickGroundDressing, replacesSagebrush,
-} from "./groundDressing.js?v=r16.1";
+} from "./groundDressing.js?v=r16.2";
 import {
   loadInteriorOverlay, collectOpenings, applyInteriorDressing,
   tickInteriorDressing, toggleArchDoor, auditQuestAccess,
-} from "./interiorDressing.js?v=r16.1";
+  isEnclosedInterior, auditInteriorCeilings,
+} from "./interiorDressing.js?v=r16.2";
 
 const SNOW_HEX = 0xeef2f6;
 function stripSnow(obj) {
@@ -630,7 +631,10 @@ export class LevelRuntime {
     try {
       await applyInteriorDressing(this, this._interiorOverlay, scene, world, L, this._archOpenings);
       this._accessAudit = auditQuestAccess(world, L, this._archOpenings);
+      this.isEnclosedInterior = (x, z) => isEnclosedInterior(this, x, z);
       window.__ASHFALL_AUDIT_DOORS = () => auditQuestAccess(this.world, this.L, this._archOpenings);
+      window.__ASHFALL_ENCLOSED = (x, z) => isEnclosedInterior(this, x, z);
+      window.__ASHFALL_AUDIT_CEILINGS = () => auditInteriorCeilings(this);
     } catch (err) {
       console.warn("[interior] apply failed", err);
     }

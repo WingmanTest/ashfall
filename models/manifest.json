@@ -12,8 +12,8 @@
     "previews": 1,
     "env_models": 21,
     "env_textures": 17,
-    "arch_models": 58,
-    "arch_textures": 33
+    "arch_models": 117,
+    "arch_textures": 37
   },
   "conventions": {
     "up": "+Y",
@@ -525,7 +525,7 @@
       "category": "prop",
       "tris": 272,
       "vertices": 816,
-      "bytes": 29412,
+      "bytes": 27548,
       "bounds": [
         0.48,
         1.95,
@@ -549,8 +549,8 @@
         160,
         300
       ],
-      "materials": 5,
-      "textures": 1,
+      "materials": 1,
+      "textures": 2,
       "nodes": 1,
       "chapters": [
         1,
@@ -563,7 +563,12 @@
         "primitive box stack (searchable)"
       ],
       "notes": "Weathered olive-grey steel locker: recessed frame, ajar door, louvered vents, handle pocket, hasp + padlock. 64 px chipped-paint NEAREST texture. Searchable.",
-      "wave": 1
+      "wave": 1,
+      "materials_merged_from": 5,
+      "drawCalls": 1,
+      "texture": "arch/textures/arch_atlas.png",
+      "mrTexture": "arch/textures/arch_atlas_mr.png",
+      "backup": "/workspace/ashfall_rig_backup/pre_arch2/metal_locker.glb"
     },
     {
       "id": "carly",
@@ -5477,12 +5482,12 @@
         512,
         512
       ],
-      "bytes": 153885,
+      "bytes": 173219,
       "mrSize": [
         128,
         128
       ],
-      "mrBytes": 617,
+      "mrBytes": 817,
       "bands": {
         "weathered": {
           "band": 0,
@@ -5504,7 +5509,7 @@
       "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping (needed for the band offset); MR map linear, offset 0 (same in both bands)",
       "layout": {
         "bandHeightPx": 256,
-        "swatches": "96 solid 8 px cells (x 0-63 y 0-63, then x 448-511 y 192-255); *_top twins are used on up-facing facets (ash in band 1)",
+        "swatches": "128 solid 8 px cells (x 0-63 y 0-63, then x 448-511 y 192-255); *_top twins are used on up-facing facets (ash in band 1)",
         "regions": {
           "swatches": [
             0,
@@ -5596,12 +5601,6 @@
             48,
             32
           ],
-          "free": [
-            224,
-            224,
-            32,
-            32
-          ],
           "corrugated": [
             256,
             0,
@@ -5686,17 +5685,59 @@
             64,
             32
           ],
-          "free2": [
+          "metal_locker": [
+            224,
+            224,
+            32,
+            32
+          ],
+          "radio_front": [
             448,
             128,
-            64,
-            64
+            32,
+            32
           ],
-          "free3": [
+          "book_spines": [
+            480,
+            128,
+            32,
+            32
+          ],
+          "console": [
+            448,
+            160,
+            32,
+            32
+          ],
+          "note_photo": [
+            480,
+            160,
+            32,
+            32
+          ],
+          "bottle_label": [
             384,
             192,
-            64,
-            64
+            32,
+            32
+          ],
+          "laptop_screen": [
+            416,
+            192,
+            32,
+            32
+          ],
+          "file_cab": [
+            384,
+            224,
+            32,
+            32
+          ],
+          "plastic_tarp": [
+            416,
+            224,
+            32,
+            32
           ],
           "swatches2": [
             448,
@@ -5997,15 +6038,15 @@
         "crate": {
           "index": 41,
           "colors": {
-            "weathered": "#7a6142",
-            "ashfall": "#6e6150"
+            "weathered": "#5e4b36",
+            "ashfall": "#584d40"
           }
         },
         "crate_dk": {
           "index": 42,
           "colors": {
-            "weathered": "#4d3c2a",
-            "ashfall": "#4a4036"
+            "weathered": "#3a2d20",
+            "ashfall": "#383129"
           }
         },
         "mattress": {
@@ -6333,14 +6374,14 @@
         "crate_top": {
           "index": 89,
           "colors": {
-            "weathered": "#7a6142",
+            "weathered": "#5e4b36",
             "ashfall": "#b8b4ad"
           }
         },
         "crate_dk_top": {
           "index": 90,
           "colors": {
-            "weathered": "#4d3c2a",
+            "weathered": "#3a2d20",
             "ashfall": "#b8b4ad"
           }
         },
@@ -6376,6 +6417,230 @@
           "index": 95,
           "colors": {
             "weathered": "#5b6470",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "locker_dk": {
+          "index": 96,
+          "colors": {
+            "weathered": "#3f4238",
+            "ashfall": "#42453e"
+          }
+        },
+        "locker_vent": {
+          "index": 97,
+          "colors": {
+            "weathered": "#1c1d1a",
+            "ashfall": "#20211e"
+          }
+        },
+        "locker_steel": {
+          "index": 98,
+          "colors": {
+            "weathered": "#8c9094",
+            "ashfall": "#898d90"
+          }
+        },
+        "locker_lock": {
+          "index": 99,
+          "colors": {
+            "weathered": "#a58a42",
+            "ashfall": "#958458"
+          }
+        },
+        "glass_tint": {
+          "index": 100,
+          "colors": {
+            "weathered": "#587a6e",
+            "ashfall": "#6f8780"
+          }
+        },
+        "glass_amber": {
+          "index": 101,
+          "colors": {
+            "weathered": "#6d4826",
+            "ashfall": "#72563c"
+          }
+        },
+        "glass_blue": {
+          "index": 102,
+          "colors": {
+            "weathered": "#557486",
+            "ashfall": "#6d8492"
+          }
+        },
+        "wax": {
+          "index": 103,
+          "colors": {
+            "weathered": "#c8bfa4",
+            "ashfall": "#bfb9ac"
+          }
+        },
+        "ember": {
+          "index": 104,
+          "colors": {
+            "weathered": "#d47c2a",
+            "ashfall": "#c97c34"
+          }
+        },
+        "bucket_galv": {
+          "index": 105,
+          "colors": {
+            "weathered": "#7c8180",
+            "ashfall": "#7e8281"
+          }
+        },
+        "case_olive": {
+          "index": 106,
+          "colors": {
+            "weathered": "#49523d",
+            "ashfall": "#4f5546"
+          }
+        },
+        "jerry_red": {
+          "index": 107,
+          "colors": {
+            "weathered": "#892e26",
+            "ashfall": "#7d3d35"
+          }
+        },
+        "orange_rack": {
+          "index": 108,
+          "colors": {
+            "weathered": "#9a4c22",
+            "ashfall": "#8c5434"
+          }
+        },
+        "olive_bag": {
+          "index": 109,
+          "colors": {
+            "weathered": "#515541",
+            "ashfall": "#56594b"
+          }
+        },
+        "plastic": {
+          "index": 110,
+          "colors": {
+            "weathered": "#a4a9a8",
+            "ashfall": "#9ea2a1"
+          }
+        },
+        "navy": {
+          "index": 111,
+          "colors": {
+            "weathered": "#35404e",
+            "ashfall": "#404852"
+          }
+        },
+        "locker_dk_top": {
+          "index": 112,
+          "colors": {
+            "weathered": "#3f4238",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "locker_vent_top": {
+          "index": 113,
+          "colors": {
+            "weathered": "#1c1d1a",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "locker_steel_top": {
+          "index": 114,
+          "colors": {
+            "weathered": "#8c9094",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "locker_lock_top": {
+          "index": 115,
+          "colors": {
+            "weathered": "#a58a42",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "glass_tint_top": {
+          "index": 116,
+          "colors": {
+            "weathered": "#587a6e",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "glass_amber_top": {
+          "index": 117,
+          "colors": {
+            "weathered": "#6d4826",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "glass_blue_top": {
+          "index": 118,
+          "colors": {
+            "weathered": "#557486",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "wax_top": {
+          "index": 119,
+          "colors": {
+            "weathered": "#c8bfa4",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "ember_top": {
+          "index": 120,
+          "colors": {
+            "weathered": "#d47c2a",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "bucket_galv_top": {
+          "index": 121,
+          "colors": {
+            "weathered": "#7c8180",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "case_olive_top": {
+          "index": 122,
+          "colors": {
+            "weathered": "#49523d",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "jerry_red_top": {
+          "index": 123,
+          "colors": {
+            "weathered": "#892e26",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "orange_rack_top": {
+          "index": 124,
+          "colors": {
+            "weathered": "#9a4c22",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "olive_bag_top": {
+          "index": 125,
+          "colors": {
+            "weathered": "#515541",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "plastic_top": {
+          "index": 126,
+          "colors": {
+            "weathered": "#a4a9a8",
+            "ashfall": "#b8b4ad"
+          }
+        },
+        "navy_top": {
+          "index": 127,
+          "colors": {
+            "weathered": "#35404e",
             "ashfall": "#b8b4ad"
           }
         }
@@ -6767,6 +7032,556 @@
       },
       "uvRect": "[u0, v0, u1, v1] glTF uv (v from the top), half-texel inset"
     },
+    "decalAtlasB": {
+      "path": "arch/textures/arch_decals_b.png",
+      "size": [
+        512,
+        256
+      ],
+      "frames": {
+        "wrappers_cans": {
+          "px": [
+            0,
+            0,
+            64,
+            64
+          ],
+          "size": [
+            0.9,
+            0.7
+          ],
+          "wall": false,
+          "atlas": "b",
+          "uvRect": [
+            0.000977,
+            0.001953,
+            0.124023,
+            0.248047
+          ]
+        },
+        "frost_rime": {
+          "px": [
+            64,
+            0,
+            64,
+            64
+          ],
+          "size": [
+            1.6,
+            1.4
+          ],
+          "wall": false,
+          "atlas": "b",
+          "uvRect": [
+            0.125977,
+            0.001953,
+            0.249023,
+            0.248047
+          ]
+        },
+        "pill_scatter": {
+          "px": [
+            128,
+            0,
+            64,
+            64
+          ],
+          "size": [
+            0.6,
+            0.5
+          ],
+          "wall": false,
+          "atlas": "b",
+          "uvRect": [
+            0.250977,
+            0.001953,
+            0.374023,
+            0.248047
+          ]
+        },
+        "wall_frost": {
+          "px": [
+            192,
+            0,
+            64,
+            64
+          ],
+          "size": [
+            1.6,
+            1.6
+          ],
+          "wall": true,
+          "atlas": "b",
+          "uvRect": [
+            0.375977,
+            0.001953,
+            0.499023,
+            0.248047
+          ]
+        },
+        "wall_ash_film": {
+          "px": [
+            256,
+            0,
+            64,
+            64
+          ],
+          "size": [
+            1.6,
+            1.0
+          ],
+          "wall": true,
+          "atlas": "b",
+          "uvRect": [
+            0.500977,
+            0.001953,
+            0.624023,
+            0.248047
+          ]
+        },
+        "wall_notice": {
+          "px": [
+            320,
+            0,
+            64,
+            64
+          ],
+          "size": [
+            0.4,
+            0.6
+          ],
+          "wall": true,
+          "atlas": "b",
+          "uvRect": [
+            0.625977,
+            0.001953,
+            0.749023,
+            0.248047
+          ]
+        },
+        "sleeping_bag": {
+          "px": [
+            384,
+            0,
+            64,
+            64
+          ],
+          "size": [
+            0.9,
+            2.0
+          ],
+          "wall": false,
+          "atlas": "b",
+          "uvRect": [
+            0.750977,
+            0.001953,
+            0.874023,
+            0.248047
+          ]
+        },
+        "wall_water_stain": {
+          "px": [
+            448,
+            0,
+            64,
+            64
+          ],
+          "size": [
+            1.4,
+            1.6
+          ],
+          "wall": true,
+          "atlas": "b",
+          "uvRect": [
+            0.875977,
+            0.001953,
+            0.999023,
+            0.248047
+          ]
+        },
+        "wall_names_list": {
+          "px": [
+            0,
+            64,
+            64,
+            64
+          ],
+          "size": [
+            0.5,
+            0.7
+          ],
+          "wall": true,
+          "atlas": "b",
+          "uvRect": [
+            0.000977,
+            0.251953,
+            0.124023,
+            0.498047
+          ]
+        },
+        "wall_calendar": {
+          "px": [
+            64,
+            64,
+            64,
+            64
+          ],
+          "size": [
+            0.35,
+            0.5
+          ],
+          "wall": true,
+          "atlas": "b",
+          "uvRect": [
+            0.125977,
+            0.251953,
+            0.249023,
+            0.498047
+          ]
+        },
+        "yoga_mat_row": {
+          "px": [
+            128,
+            64,
+            64,
+            64
+          ],
+          "size": [
+            2.2,
+            0.7
+          ],
+          "wall": false,
+          "atlas": "b",
+          "uvRect": [
+            0.250977,
+            0.251953,
+            0.374023,
+            0.498047
+          ]
+        },
+        "wall_map_marked": {
+          "px": [
+            192,
+            64,
+            64,
+            64
+          ],
+          "size": [
+            1.0,
+            0.7
+          ],
+          "wall": true,
+          "atlas": "b",
+          "uvRect": [
+            0.375977,
+            0.251953,
+            0.499023,
+            0.498047
+          ]
+        },
+        "wall_scorch": {
+          "px": [
+            256,
+            64,
+            64,
+            64
+          ],
+          "size": [
+            1.6,
+            2.0
+          ],
+          "wall": true,
+          "atlas": "b",
+          "uvRect": [
+            0.500977,
+            0.251953,
+            0.624023,
+            0.498047
+          ]
+        },
+        "wall_kid_drawing": {
+          "px": [
+            320,
+            64,
+            64,
+            64
+          ],
+          "size": [
+            0.35,
+            0.3
+          ],
+          "wall": true,
+          "atlas": "b",
+          "uvRect": [
+            0.625977,
+            0.251953,
+            0.749023,
+            0.498047
+          ]
+        },
+        "wall_redacted_manifest": {
+          "px": [
+            384,
+            64,
+            64,
+            64
+          ],
+          "size": [
+            0.4,
+            0.5
+          ],
+          "wall": true,
+          "atlas": "b",
+          "uvRect": [
+            0.750977,
+            0.251953,
+            0.874023,
+            0.498047
+          ]
+        },
+        "wall_foil_insulation": {
+          "px": [
+            448,
+            64,
+            64,
+            64
+          ],
+          "size": [
+            2.0,
+            2.2
+          ],
+          "wall": true,
+          "atlas": "b",
+          "uvRect": [
+            0.875977,
+            0.251953,
+            0.999023,
+            0.498047
+          ]
+        },
+        "floor_hatch": {
+          "px": [
+            0,
+            128,
+            64,
+            64
+          ],
+          "size": [
+            0.9,
+            0.9
+          ],
+          "wall": false,
+          "atlas": "b",
+          "uvRect": [
+            0.000977,
+            0.501953,
+            0.124023,
+            0.748047
+          ]
+        },
+        "wall_spray_requisitioned": {
+          "px": [
+            64,
+            128,
+            64,
+            64
+          ],
+          "size": [
+            1.4,
+            0.6
+          ],
+          "wall": true,
+          "atlas": "b",
+          "uvRect": [
+            0.125977,
+            0.501953,
+            0.249023,
+            0.748047
+          ]
+        },
+        "wall_census_chalk": {
+          "px": [
+            128,
+            128,
+            64,
+            64
+          ],
+          "size": [
+            3.0,
+            1.6
+          ],
+          "wall": true,
+          "atlas": "b",
+          "uvRect": [
+            0.250977,
+            0.501953,
+            0.374023,
+            0.748047
+          ]
+        },
+        "wall_fractions_board": {
+          "px": [
+            192,
+            128,
+            64,
+            64
+          ],
+          "size": [
+            1.4,
+            0.9
+          ],
+          "wall": true,
+          "atlas": "b",
+          "uvRect": [
+            0.375977,
+            0.501953,
+            0.499023,
+            0.748047
+          ]
+        },
+        "wall_handsign_chips": {
+          "px": [
+            256,
+            128,
+            64,
+            64
+          ],
+          "size": [
+            0.8,
+            0.5
+          ],
+          "wall": true,
+          "atlas": "b",
+          "uvRect": [
+            0.500977,
+            0.501953,
+            0.624023,
+            0.748047
+          ]
+        },
+        "wall_jacket_hook": {
+          "px": [
+            320,
+            128,
+            64,
+            64
+          ],
+          "size": [
+            0.5,
+            1.0
+          ],
+          "wall": true,
+          "atlas": "b",
+          "uvRect": [
+            0.625977,
+            0.501953,
+            0.749023,
+            0.748047
+          ]
+        },
+        "wall_seed_library_sign": {
+          "px": [
+            384,
+            128,
+            64,
+            64
+          ],
+          "size": [
+            1.0,
+            0.4
+          ],
+          "wall": true,
+          "atlas": "b",
+          "uvRect": [
+            0.750977,
+            0.501953,
+            0.874023,
+            0.748047
+          ]
+        },
+        "wall_neon_dead": {
+          "px": [
+            448,
+            128,
+            64,
+            64
+          ],
+          "size": [
+            1.6,
+            0.5
+          ],
+          "wall": true,
+          "atlas": "b",
+          "uvRect": [
+            0.875977,
+            0.501953,
+            0.999023,
+            0.748047
+          ]
+        },
+        "chalk_outline_tape": {
+          "px": [
+            0,
+            192,
+            64,
+            64
+          ],
+          "size": [
+            1.4,
+            1.4
+          ],
+          "wall": false,
+          "atlas": "b",
+          "uvRect": [
+            0.000977,
+            0.751953,
+            0.124023,
+            0.998047
+          ]
+        },
+        "wall_bullet_holes": {
+          "px": [
+            64,
+            192,
+            64,
+            64
+          ],
+          "size": [
+            0.8,
+            0.8
+          ],
+          "wall": true,
+          "atlas": "b",
+          "uvRect": [
+            0.125977,
+            0.751953,
+            0.249023,
+            0.998047
+          ]
+        },
+        "wall_photo_board": {
+          "px": [
+            128,
+            192,
+            64,
+            64
+          ],
+          "size": [
+            0.8,
+            0.6
+          ],
+          "wall": true,
+          "atlas": "b",
+          "uvRect": [
+            0.250977,
+            0.751953,
+            0.374023,
+            0.998047
+          ]
+        }
+      },
+      "uvRect": "[u0, v0, u1, v1] glTF uv (v from the top), half-texel inset"
+    },
     "counts": {
       "door": 4,
       "overlay": 1,
@@ -6774,7 +7589,10 @@
       "trim": 1,
       "wall_panel": 4,
       "dressing": 22,
-      "furniture": 20
+      "furniture": 37,
+      "clutter": 23,
+      "mount": 10,
+      "wall": 9
     },
     "roomKits": {
       "any": {
@@ -6823,14 +7641,16 @@
           "wall_drywall",
           "wall_drywall_stained",
           "wall_wood_panel",
-          "wall_brick"
+          "wall_brick",
+          "wall_cinder"
         ]
       },
       "bedroom": {
         "models": [
           "door_residential_wood",
           "arch_bed",
-          "arch_bed_messy"
+          "arch_bed_messy",
+          "arch_bed_stripped"
         ],
         "textures": [
           "floor_hardwood",
@@ -6840,6 +7660,27 @@
           "wall_wood_panel"
         ]
       },
+      "casino": {
+        "models": [
+          "arch_table_blackjack",
+          "arch_steam_table"
+        ],
+        "textures": []
+      },
+      "checkpoint": {
+        "models": [
+          "arch_case_hard",
+          "arch_jerrycan",
+          "arch_duffel",
+          "arch_barrier_crowd",
+          "arch_bunk",
+          "arch_cage_mesh",
+          "arch_sandbag_row",
+          "arch_generator",
+          "arch_drum_burn"
+        ],
+        "textures": []
+      },
       "clinic": {
         "models": [
           "door_storefront",
@@ -6848,14 +7689,39 @@
           "arch_chair",
           "arch_counter_sink",
           "arch_cot",
-          "arch_med_cabinet"
+          "arch_med_cabinet",
+          "arch_bottle",
+          "arch_bottles",
+          "arch_bucket",
+          "arch_case_hard",
+          "arch_table_folding",
+          "arch_plastic_sheet",
+          "arch_mattress_floor",
+          "arch_cabinet_file",
+          "arch_cabinet_file_open",
+          "arch_glass_hold",
+          "arch_iv_stand",
+          "arch_gurney",
+          "arch_barrier_crowd",
+          "arch_bunk",
+          "arch_whiteboard",
+          "arch_reception_desk",
+          "arch_oxygen_tank",
+          "arch_crash_cart"
         ],
         "textures": [
           "floor_linoleum",
           "floor_carpet",
           "wall_drywall",
-          "wall_drywall_stained"
+          "wall_drywall_stained",
+          "wall_cinder"
         ]
+      },
+      "commercial": {
+        "models": [
+          "arch_door_storefront_broken"
+        ],
+        "textures": []
       },
       "garage": {
         "models": [
@@ -6874,7 +7740,12 @@
           "arch_crate_broken",
           "arch_workbench",
           "arch_tire",
-          "arch_tire_stack"
+          "arch_tire_stack",
+          "arch_bucket",
+          "arch_jerrycan",
+          "arch_lantern",
+          "arch_generator",
+          "arch_drum_steel"
         ],
         "textures": [
           "floor_concrete_stained",
@@ -6882,6 +7753,23 @@
           "wall_corrugated",
           "wall_brick"
         ]
+      },
+      "greenhouse": {
+        "models": [
+          "arch_bucket",
+          "arch_seed_tray",
+          "arch_seed_rack",
+          "arch_sack_pile"
+        ],
+        "textures": []
+      },
+      "hall": {
+        "models": [
+          "arch_table_folding",
+          "arch_barrier_crowd",
+          "arch_table_blackjack"
+        ],
+        "textures": []
       },
       "kitchen": {
         "models": [
@@ -6892,13 +7780,33 @@
           "arch_counter",
           "arch_counter_sink",
           "arch_fridge",
-          "arch_fridge_ajar"
+          "arch_fridge_ajar",
+          "arch_bottle",
+          "arch_bottles",
+          "arch_mug",
+          "arch_steam_table"
         ],
         "textures": [
           "floor_linoleum",
           "floor_ceramic_tile",
           "wall_drywall",
           "wall_drywall_stained"
+        ]
+      },
+      "lab": {
+        "models": [
+          "arch_pipe_run",
+          "arch_pipe_run_1m",
+          "arch_laptop",
+          "arch_cabinet_file",
+          "arch_cabinet_file_open",
+          "arch_glass_hold",
+          "arch_iv_stand",
+          "arch_gurney",
+          "arch_console_panel"
+        ],
+        "textures": [
+          "wall_cinder"
         ]
       },
       "living": {
@@ -6916,6 +7824,125 @@
           "wall_wood_panel"
         ]
       },
+      "motel": {
+        "models": [
+          "arch_bottle",
+          "arch_bottles",
+          "arch_book_pile",
+          "arch_blanket_pile",
+          "arch_candle_cluster",
+          "arch_mattress_floor",
+          "arch_duffel",
+          "arch_photo_frame",
+          "arch_stove_wood",
+          "arch_shoes_pair",
+          "arch_reception_desk",
+          "arch_armchair",
+          "arch_suitcase_packed",
+          "arch_phone_landline",
+          "arch_door_open_leaf",
+          "arch_bed_stripped"
+        ],
+        "textures": [
+          "wall_cinder"
+        ]
+      },
+      "office": {
+        "models": [
+          "arch_book_pile",
+          "arch_mug",
+          "arch_radio_set",
+          "arch_note_card",
+          "arch_laptop",
+          "arch_cabinet_file",
+          "arch_cabinet_file_open",
+          "arch_whiteboard",
+          "arch_reception_desk",
+          "arch_phone_landline"
+        ],
+        "textures": []
+      },
+      "plant": {
+        "models": [
+          "arch_pipe_run",
+          "arch_pipe_run_1m",
+          "arch_pallet_rack",
+          "arch_console_panel",
+          "arch_cage_mesh",
+          "arch_generator",
+          "arch_drum_steel",
+          "arch_breaker_panel"
+        ],
+        "textures": [
+          "wall_cinder"
+        ]
+      },
+      "residential": {
+        "models": [
+          "arch_blanket_pile",
+          "arch_candle_cluster",
+          "arch_note_card",
+          "arch_plastic_sheet",
+          "arch_photo_frame",
+          "arch_stove_wood",
+          "arch_boards_overlay",
+          "arch_shoes_pair",
+          "arch_toy_kid",
+          "arch_armchair",
+          "arch_suitcase_packed",
+          "arch_pet_bowl",
+          "arch_oxygen_tank",
+          "arch_dog_leash",
+          "arch_phone_landline",
+          "arch_door_open_leaf",
+          "arch_door_mailslot",
+          "arch_woodpile",
+          "arch_barricade"
+        ],
+        "textures": []
+      },
+      "school": {
+        "models": [
+          "arch_book_pile",
+          "arch_whiteboard"
+        ],
+        "textures": []
+      },
+      "shelter": {
+        "models": [
+          "arch_bottle",
+          "arch_bottles",
+          "arch_book_pile",
+          "arch_blanket_pile",
+          "arch_mug",
+          "arch_bucket",
+          "arch_radio_set",
+          "arch_case_hard",
+          "arch_table_folding",
+          "arch_candle_cluster",
+          "arch_note_card",
+          "arch_plastic_sheet",
+          "arch_laptop",
+          "arch_mattress_floor",
+          "arch_seed_tray",
+          "arch_lantern",
+          "arch_duffel",
+          "arch_stove_wood",
+          "arch_bunk",
+          "arch_boards_overlay",
+          "arch_sandbag_row",
+          "arch_shoes_pair",
+          "arch_whiteboard",
+          "arch_toy_kid",
+          "arch_drum_burn",
+          "arch_armchair",
+          "arch_sack_pile",
+          "arch_woodpile",
+          "arch_bed_stripped",
+          "arch_barricade"
+        ],
+        "textures": []
+      },
       "store": {
         "models": [
           "door_storefront",
@@ -6930,15 +7957,49 @@
           "arch_crate_small",
           "arch_gondola_stocked",
           "arch_gondola_looted",
-          "arch_cash_register"
+          "arch_cash_register",
+          "arch_bottles",
+          "arch_pallet_rack",
+          "arch_boards_overlay",
+          "arch_door_storefront_broken",
+          "arch_barricade"
         ],
         "textures": [
           "floor_linoleum",
           "floor_ceramic_tile",
           "floor_concrete_stained",
           "wall_drywall",
-          "wall_brick"
+          "wall_brick",
+          "wall_cinder"
         ]
+      },
+      "story": {
+        "models": [
+          "arch_mug",
+          "arch_note_card",
+          "arch_photo_frame",
+          "arch_shoes_pair",
+          "arch_toy_kid",
+          "arch_suitcase_packed",
+          "arch_pet_bowl",
+          "arch_oxygen_tank",
+          "arch_dog_leash"
+        ],
+        "textures": []
+      },
+      "utility": {
+        "models": [
+          "arch_radio_set",
+          "arch_case_hard",
+          "arch_jerrycan",
+          "arch_pipe_run",
+          "arch_pipe_run_1m",
+          "arch_lantern",
+          "arch_console_panel",
+          "arch_generator",
+          "arch_breaker_panel"
+        ],
+        "textures": []
       },
       "warehouse": {
         "models": [
@@ -6966,14 +8027,29 @@
           "arch_workbench",
           "arch_tire",
           "arch_tire_stack",
-          "arch_cot"
+          "arch_cot",
+          "arch_jerrycan",
+          "arch_pipe_run",
+          "arch_pipe_run_1m",
+          "arch_pallet_rack",
+          "arch_cage_mesh",
+          "arch_drum_steel",
+          "arch_breaker_panel",
+          "arch_sack_pile"
         ],
         "textures": [
           "floor_concrete_stained",
           "floor_wood_plank",
           "wall_corrugated",
-          "wall_brick"
+          "wall_brick",
+          "wall_cinder"
         ]
+      },
+      "watchtower": {
+        "models": [
+          "arch_radio_set"
+        ],
+        "textures": []
       }
     },
     "models": [
@@ -9237,7 +10313,12 @@
           }
         },
         "pivot": "ground-centre (min y = 0)",
-        "collider": null
+        "collider": null,
+        "placementHints": {
+          "stackable": true,
+          "leanable": false,
+          "surface": "floor_or_table"
+        }
       },
       {
         "id": "arch_debris_pile",
@@ -9627,7 +10708,12 @@
           }
         },
         "pivot": "ground-centre (min y = 0)",
-        "collider": null
+        "collider": null,
+        "placementHints": {
+          "stackable": true,
+          "leanable": false,
+          "surface": "shelf_or_table"
+        }
       },
       {
         "id": "arch_can_cluster",
@@ -9704,7 +10790,12 @@
           }
         },
         "pivot": "ground-centre (min y = 0)",
-        "collider": null
+        "collider": null,
+        "placementHints": {
+          "stackable": true,
+          "leanable": false,
+          "surface": "shelf_or_table"
+        }
       },
       {
         "id": "arch_pipe_straight",
@@ -9781,7 +10872,12 @@
           }
         },
         "pivot": "ground-centre (min y = 0)",
-        "collider": null
+        "collider": null,
+        "placementHints": {
+          "stackable": true,
+          "leanable": true,
+          "surface": "floor_or_wall"
+        }
       },
       {
         "id": "arch_pipe_elbow",
@@ -9934,7 +11030,12 @@
           }
         },
         "pivot": "ground-centre (min y = 0)",
-        "collider": null
+        "collider": null,
+        "placementHints": {
+          "stackable": true,
+          "leanable": true,
+          "surface": "floor_or_wall"
+        }
       },
       {
         "id": "arch_plank_broken_a",
@@ -10010,7 +11111,12 @@
           }
         },
         "pivot": "ground-centre (min y = 0)",
-        "collider": null
+        "collider": null,
+        "placementHints": {
+          "stackable": true,
+          "leanable": true,
+          "surface": "floor_or_wall"
+        }
       },
       {
         "id": "arch_plank_broken_b",
@@ -10086,7 +11192,12 @@
           }
         },
         "pivot": "ground-centre (min y = 0)",
-        "collider": null
+        "collider": null,
+        "placementHints": {
+          "stackable": true,
+          "leanable": true,
+          "surface": "floor_or_wall"
+        }
       },
       {
         "id": "arch_plank_stack",
@@ -10940,7 +12051,12 @@
           }
         },
         "pivot": "ground-centre (min y = 0)",
-        "collider": null
+        "collider": null,
+        "placementHints": {
+          "stackable": true,
+          "leanable": false,
+          "surface": "floor_or_shelf"
+        }
       },
       {
         "id": "arch_box_large",
@@ -11028,6 +12144,38 @@
             0.52,
             0.26
           ]
+        },
+        "poses": {
+          "on_side": {
+            "rotationDeg": [
+              0,
+              0,
+              90
+            ],
+            "position": [
+              0.0,
+              0.35,
+              0.0
+            ],
+            "note": "lying on its side",
+            "collider": {
+              "min": [
+                -0.52,
+                0.0,
+                -0.26
+              ],
+              "max": [
+                0.0,
+                0.7,
+                0.26
+              ]
+            }
+          }
+        },
+        "placementHints": {
+          "stackable": true,
+          "leanable": true,
+          "surface": "floor_or_shelf"
         }
       },
       {
@@ -11103,7 +12251,12 @@
           }
         },
         "pivot": "ground-centre (min y = 0)",
-        "collider": null
+        "collider": null,
+        "placementHints": {
+          "stackable": true,
+          "leanable": true,
+          "surface": "floor"
+        }
       },
       {
         "id": "arch_crate_large",
@@ -11192,6 +12345,38 @@
             0.855,
             0.445
           ]
+        },
+        "poses": {
+          "tipped": {
+            "rotationDeg": [
+              0,
+              0,
+              90
+            ],
+            "position": [
+              0.0,
+              0.57,
+              0.0
+            ],
+            "note": "tipped onto its side (ransacked room)",
+            "collider": {
+              "min": [
+                -0.855,
+                0.0,
+                -0.445
+              ],
+              "max": [
+                0.0,
+                1.14,
+                0.445
+              ]
+            }
+          }
+        },
+        "placementHints": {
+          "stackable": true,
+          "leanable": false,
+          "surface": "floor"
         }
       },
       {
@@ -11281,6 +12466,38 @@
             0.485,
             0.27
           ]
+        },
+        "poses": {
+          "tipped": {
+            "rotationDeg": [
+              0,
+              0,
+              90
+            ],
+            "position": [
+              0.0,
+              0.32,
+              0.0
+            ],
+            "note": "tipped onto its side (ransacked room)",
+            "collider": {
+              "min": [
+                -0.485,
+                0.0,
+                -0.27
+              ],
+              "max": [
+                0.0,
+                0.64,
+                0.27
+              ]
+            }
+          }
+        },
+        "placementHints": {
+          "stackable": true,
+          "leanable": false,
+          "surface": "floor_or_crate"
         }
       },
       {
@@ -11631,6 +12848,33 @@
             1.05,
             1.0
           ]
+        },
+        "poses": {
+          "stripped": {
+            "rotationDeg": [
+              0,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              -0.0,
+              0.0
+            ],
+            "note": "bare stripped-mattress state (shelter / frozen house)",
+            "collider": {
+              "min": [
+                -0.72,
+                0.0,
+                -1.05
+              ],
+              "max": [
+                0.72,
+                1.05,
+                1.0
+              ]
+            }
+          }
         }
       },
       {
@@ -11805,6 +13049,33 @@
             0.92,
             0.45
           ]
+        },
+        "poses": {
+          "overturned": {
+            "rotationDeg": [
+              -90,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.44,
+              0.0
+            ],
+            "note": "tipped onto its back",
+            "collider": {
+              "min": [
+                -0.95,
+                0.0,
+                -0.92
+              ],
+              "max": [
+                0.95,
+                0.89,
+                0.0
+              ]
+            }
+          }
         }
       },
       {
@@ -12273,7 +13544,12 @@
           }
         },
         "pivot": "ground-centre (min y = 0)",
-        "collider": null
+        "collider": null,
+        "placementHints": {
+          "stackable": true,
+          "leanable": true,
+          "surface": "floor_or_wall"
+        }
       },
       {
         "id": "arch_tire_stack",
@@ -12564,6 +13840,5587 @@
               ]
             }
           }
+        }
+      },
+      {
+        "id": "arch_bottle",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_bottle.glb",
+        "tris": 80,
+        "partTris": {
+          "main": 80
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 9100,
+        "bounds": [
+          0.088,
+          0.265,
+          0.088
+        ],
+        "min": [
+          -0.044,
+          0.0,
+          -0.044
+        ],
+        "max": [
+          0.044,
+          0.265,
+          0.044
+        ],
+        "budget": [
+          10,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "bottle"
+        ],
+        "rooms": [
+          "shelter",
+          "kitchen",
+          "clinic",
+          "motel"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": true,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "table_or_shelf"
+        }
+      },
+      {
+        "id": "arch_bottles",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_bottles.glb",
+        "tris": 208,
+        "partTris": {
+          "main": 208
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 21388,
+        "bounds": [
+          0.253,
+          0.241,
+          0.171
+        ],
+        "min": [
+          -0.128,
+          0.0,
+          -0.079
+        ],
+        "max": [
+          0.125,
+          0.241,
+          0.093
+        ],
+        "budget": [
+          20,
+          260
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "bottles"
+        ],
+        "rooms": [
+          "shelter",
+          "kitchen",
+          "clinic",
+          "motel",
+          "store"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": true,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "table_or_shelf"
+        }
+      },
+      {
+        "id": "arch_book_pile",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_book_pile.glb",
+        "tris": 60,
+        "partTris": {
+          "main": 60
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 7188,
+        "bounds": [
+          0.322,
+          0.25,
+          0.226
+        ],
+        "min": [
+          -0.128,
+          0.0,
+          -0.11
+        ],
+        "max": [
+          0.193,
+          0.25,
+          0.115
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "book_pile"
+        ],
+        "rooms": [
+          "shelter",
+          "office",
+          "school",
+          "motel"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "poses": {
+          "tipped": {
+            "rotationDeg": [
+              90,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.1154,
+              0.0
+            ],
+            "note": "tipped variant",
+            "collider": {
+              "min": [
+                -0.128,
+                0.0,
+                -0.0
+              ],
+              "max": [
+                0.193,
+                0.226,
+                0.25
+              ]
+            }
+          }
+        },
+        "placementHints": {
+          "stackable": true,
+          "leanable": true,
+          "wallMount": false,
+          "surface": "floor_or_table"
+        }
+      },
+      {
+        "id": "arch_blanket_pile",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_blanket_pile.glb",
+        "tris": 68,
+        "partTris": {
+          "main": 68
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 7960,
+        "bounds": [
+          0.917,
+          0.237,
+          0.62
+        ],
+        "min": [
+          -0.41,
+          0.0,
+          -0.31
+        ],
+        "max": [
+          0.507,
+          0.237,
+          0.31
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "blanket_pile"
+        ],
+        "rooms": [
+          "shelter",
+          "motel",
+          "residential"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": true,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor_or_bed"
+        }
+      },
+      {
+        "id": "arch_mug",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_mug.glb",
+        "tris": 64,
+        "partTris": {
+          "main": 64
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 7556,
+        "bounds": [
+          0.104,
+          0.095,
+          0.084
+        ],
+        "min": [
+          -0.042,
+          0.0,
+          -0.042
+        ],
+        "max": [
+          0.062,
+          0.095,
+          0.042
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "mug"
+        ],
+        "rooms": [
+          "shelter",
+          "kitchen",
+          "office",
+          "story"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "poses": {
+          "tipped": {
+            "rotationDeg": [
+              90,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.042,
+              0.0
+            ],
+            "note": "tipped variant",
+            "collider": {
+              "min": [
+                -0.042,
+                0.0,
+                -0.0
+              ],
+              "max": [
+                0.062,
+                0.084,
+                0.095
+              ]
+            }
+          }
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "table_or_counter"
+        }
+      },
+      {
+        "id": "arch_bucket",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_bucket.glb",
+        "tris": 108,
+        "partTris": {
+          "main": 108
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 11784,
+        "bounds": [
+          0.328,
+          0.373,
+          0.32
+        ],
+        "min": [
+          -0.164,
+          0.0,
+          -0.16
+        ],
+        "max": [
+          0.164,
+          0.373,
+          0.16
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "bucket"
+        ],
+        "rooms": [
+          "shelter",
+          "garage",
+          "greenhouse",
+          "clinic"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "poses": {
+          "tipped": {
+            "rotationDeg": [
+              90,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.16,
+              0.0
+            ],
+            "note": "tipped variant",
+            "collider": {
+              "min": [
+                -0.164,
+                0.0,
+                -0.0
+              ],
+              "max": [
+                0.164,
+                0.32,
+                0.373
+              ]
+            }
+          }
+        },
+        "placementHints": {
+          "stackable": true,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_radio_set",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_radio_set.glb",
+        "tris": 104,
+        "partTris": {
+          "main": 104
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 11412,
+        "bounds": [
+          0.46,
+          0.515,
+          0.293
+        ],
+        "min": [
+          -0.23,
+          0.0,
+          -0.13
+        ],
+        "max": [
+          0.23,
+          0.515,
+          0.163
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "radio_set"
+        ],
+        "rooms": [
+          "shelter",
+          "watchtower",
+          "office",
+          "utility"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "table_or_bench"
+        }
+      },
+      {
+        "id": "arch_case_hard",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_case_hard.glb",
+        "tris": 108,
+        "partTris": {
+          "main": 108
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 11796,
+        "bounds": [
+          0.59,
+          0.236,
+          0.418
+        ],
+        "min": [
+          -0.295,
+          0.0,
+          -0.195
+        ],
+        "max": [
+          0.295,
+          0.236,
+          0.223
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "case_hard"
+        ],
+        "rooms": [
+          "checkpoint",
+          "clinic",
+          "utility",
+          "shelter"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "poses": {
+          "standing": {
+            "rotationDeg": [
+              90,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.223,
+              0.0
+            ],
+            "note": "standing variant",
+            "collider": {
+              "min": [
+                -0.295,
+                0.0,
+                -0.0
+              ],
+              "max": [
+                0.295,
+                0.418,
+                0.236
+              ]
+            }
+          }
+        },
+        "placementHints": {
+          "stackable": true,
+          "leanable": true,
+          "wallMount": false,
+          "surface": "floor_or_shelf"
+        }
+      },
+      {
+        "id": "arch_jerrycan",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_jerrycan.glb",
+        "tris": 104,
+        "partTris": {
+          "main": 104
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 11408,
+        "bounds": [
+          0.33,
+          0.496,
+          0.19
+        ],
+        "min": [
+          -0.165,
+          0.0,
+          -0.095
+        ],
+        "max": [
+          0.165,
+          0.496,
+          0.095
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "jerrycan"
+        ],
+        "rooms": [
+          "garage",
+          "utility",
+          "checkpoint",
+          "warehouse"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "poses": {
+          "tipped": {
+            "rotationDeg": [
+              0,
+              0,
+              90
+            ],
+            "position": [
+              0.0,
+              0.165,
+              0.0
+            ],
+            "note": "tipped variant",
+            "collider": {
+              "min": [
+                -0.496,
+                0.0,
+                -0.095
+              ],
+              "max": [
+                0.0,
+                0.33,
+                0.095
+              ]
+            }
+          }
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": true,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_pipe_run",
+        "category": "arch",
+        "kind": "mount",
+        "subtype": "mount",
+        "path": "arch/arch_pipe_run.glb",
+        "tris": 148,
+        "partTris": {
+          "main": 148
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 15600,
+        "bounds": [
+          2.0,
+          0.24,
+          0.16
+        ],
+        "min": [
+          -1.0,
+          0.03,
+          0.0
+        ],
+        "max": [
+          1.0,
+          0.27,
+          0.16
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "mount",
+          "pipe_run"
+        ],
+        "rooms": [
+          "utility",
+          "plant",
+          "lab",
+          "warehouse"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": true,
+          "surface": "wall"
+        }
+      },
+      {
+        "id": "arch_pipe_run_1m",
+        "category": "arch",
+        "kind": "mount",
+        "subtype": "mount",
+        "path": "arch/arch_pipe_run_1m.glb",
+        "tris": 124,
+        "partTris": {
+          "main": 124
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 13304,
+        "bounds": [
+          1.0,
+          0.24,
+          0.16
+        ],
+        "min": [
+          -0.5,
+          0.03,
+          0.0
+        ],
+        "max": [
+          0.5,
+          0.27,
+          0.16
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "mount",
+          "pipe_run_1m"
+        ],
+        "rooms": [
+          "utility",
+          "plant",
+          "lab",
+          "warehouse"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": true,
+          "surface": "wall"
+        }
+      },
+      {
+        "id": "arch_table_folding",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_table_folding.glb",
+        "tris": 96,
+        "partTris": {
+          "main": 96
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 10628,
+        "bounds": [
+          1.8,
+          0.741,
+          0.75
+        ],
+        "min": [
+          -0.9,
+          0.0,
+          -0.375
+        ],
+        "max": [
+          0.9,
+          0.741,
+          0.375
+        ],
+        "budget": [
+          60,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "furniture",
+          "table_folding"
+        ],
+        "rooms": [
+          "shelter",
+          "clinic",
+          "hall"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.9,
+            0.0,
+            -0.375
+          ],
+          "max": [
+            0.9,
+            0.741,
+            0.375
+          ]
+        },
+        "poses": {
+          "leaned": {
+            "rotationDeg": [
+              75,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.2859,
+              0.0
+            ],
+            "note": "leaned variant",
+            "collider": {
+              "min": [
+                -0.9,
+                0.0,
+                -0.077
+              ],
+              "max": [
+                0.9,
+                0.84,
+                0.813
+              ]
+            }
+          }
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": true,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_candle_cluster",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_candle_cluster.glb",
+        "tris": 180,
+        "partTris": {
+          "main": 180
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 18724,
+        "bounds": [
+          0.181,
+          0.146,
+          0.19
+        ],
+        "min": [
+          -0.09,
+          0.0,
+          -0.095
+        ],
+        "max": [
+          0.09,
+          0.146,
+          0.095
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "candle_cluster"
+        ],
+        "rooms": [
+          "shelter",
+          "motel",
+          "residential"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "table_or_floor"
+        }
+      },
+      {
+        "id": "arch_note_card",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_note_card.glb",
+        "tris": 24,
+        "partTris": {
+          "main": 24
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 3728,
+        "bounds": [
+          0.18,
+          0.011,
+          0.26
+        ],
+        "min": [
+          -0.09,
+          0.0,
+          -0.13
+        ],
+        "max": [
+          0.09,
+          0.011,
+          0.13
+        ],
+        "budget": [
+          6,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "note_card"
+        ],
+        "rooms": [
+          "story",
+          "shelter",
+          "office",
+          "residential"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "poses": {
+          "wall": {
+            "rotationDeg": [
+              90,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.13,
+              0.0
+            ],
+            "note": "wall variant",
+            "collider": {
+              "min": [
+                -0.09,
+                0.0,
+                -0.0
+              ],
+              "max": [
+                0.09,
+                0.26,
+                0.011
+              ]
+            }
+          }
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": true,
+          "surface": "table_or_wall"
+        }
+      },
+      {
+        "id": "arch_plastic_sheet",
+        "category": "arch",
+        "kind": "mount",
+        "subtype": "mount",
+        "path": "arch/arch_plastic_sheet.glb",
+        "tris": 100,
+        "partTris": {
+          "main": 100
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 11088,
+        "bounds": [
+          1.4,
+          1.707,
+          0.04
+        ],
+        "min": [
+          -0.7,
+          0.063,
+          -0.004
+        ],
+        "max": [
+          0.7,
+          1.77,
+          0.036
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_cutout (same atlas, alphaTest 0.5)",
+        "drawCalls": 1,
+        "tags": [
+          "mount",
+          "plastic_sheet"
+        ],
+        "rooms": [
+          "shelter",
+          "residential",
+          "clinic"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": true,
+          "surface": "window_or_wall"
+        }
+      },
+      {
+        "id": "arch_laptop",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_laptop.glb",
+        "tris": 48,
+        "partTris": {
+          "main": 48
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 6012,
+        "bounds": [
+          0.445,
+          0.209,
+          0.257
+        ],
+        "min": [
+          -0.215,
+          0.0,
+          -0.132
+        ],
+        "max": [
+          0.23,
+          0.209,
+          0.125
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "laptop"
+        ],
+        "rooms": [
+          "lab",
+          "office",
+          "shelter"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "table_or_floor"
+        }
+      },
+      {
+        "id": "arch_mattress_floor",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_mattress_floor.glb",
+        "tris": 24,
+        "partTris": {
+          "main": 24
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 3740,
+        "bounds": [
+          0.9,
+          0.222,
+          1.96
+        ],
+        "min": [
+          -0.45,
+          0.0,
+          -0.98
+        ],
+        "max": [
+          0.45,
+          0.222,
+          0.98
+        ],
+        "budget": [
+          12,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "furniture",
+          "mattress_floor"
+        ],
+        "rooms": [
+          "shelter",
+          "motel",
+          "clinic"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "poses": {
+          "leaned": {
+            "rotationDeg": [
+              78,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.9586,
+              0.0
+            ],
+            "note": "leaned variant",
+            "collider": {
+              "min": [
+                -0.45,
+                0.0,
+                -0.204
+              ],
+              "max": [
+                0.45,
+                1.946,
+                0.341
+              ]
+            }
+          }
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": true,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_seed_tray",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_seed_tray.glb",
+        "tris": 204,
+        "partTris": {
+          "main": 204
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 21012,
+        "bounds": [
+          0.58,
+          0.108,
+          0.38
+        ],
+        "min": [
+          -0.29,
+          0.0,
+          -0.19
+        ],
+        "max": [
+          0.29,
+          0.108,
+          0.19
+        ],
+        "budget": [
+          20,
+          220
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "seed_tray"
+        ],
+        "rooms": [
+          "greenhouse",
+          "shelter"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": true,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "bench_or_floor"
+        }
+      },
+      {
+        "id": "arch_cabinet_file",
+        "category": "arch",
+        "kind": "wall",
+        "subtype": "wall",
+        "path": "arch/arch_cabinet_file.glb",
+        "tris": 12,
+        "partTris": {
+          "main": 12
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 2544,
+        "bounds": [
+          0.5,
+          1.3,
+          0.64
+        ],
+        "min": [
+          -0.25,
+          0.0,
+          -0.32
+        ],
+        "max": [
+          0.25,
+          1.3,
+          0.32
+        ],
+        "budget": [
+          10,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "wall",
+          "cabinet_file"
+        ],
+        "rooms": [
+          "office",
+          "clinic",
+          "lab"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.25,
+            0.0,
+            -0.32
+          ],
+          "max": [
+            0.25,
+            1.3,
+            0.32
+          ]
+        },
+        "poses": {
+          "tipped": {
+            "rotationDeg": [
+              90,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.32,
+              0.0
+            ],
+            "note": "tipped variant",
+            "collider": {
+              "min": [
+                -0.25,
+                0.0,
+                -0.0
+              ],
+              "max": [
+                0.25,
+                0.64,
+                1.3
+              ]
+            }
+          }
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor_wall"
+        }
+      },
+      {
+        "id": "arch_cabinet_file_open",
+        "category": "arch",
+        "kind": "wall",
+        "subtype": "wall",
+        "path": "arch/arch_cabinet_file_open.glb",
+        "tris": 36,
+        "partTris": {
+          "main": 36
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 4872,
+        "bounds": [
+          0.5,
+          1.3,
+          0.89
+        ],
+        "min": [
+          -0.25,
+          0.0,
+          -0.32
+        ],
+        "max": [
+          0.25,
+          1.3,
+          0.57
+        ],
+        "budget": [
+          10,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "wall",
+          "cabinet_file_open"
+        ],
+        "rooms": [
+          "office",
+          "clinic",
+          "lab"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.25,
+            0.0,
+            -0.32
+          ],
+          "max": [
+            0.25,
+            1.3,
+            0.57
+          ]
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor_wall"
+        }
+      },
+      {
+        "id": "arch_glass_hold",
+        "category": "arch",
+        "kind": "wall",
+        "subtype": "wall",
+        "path": "arch/arch_glass_hold.glb",
+        "tris": 132,
+        "partTris": {
+          "main": 132
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 14096,
+        "bounds": [
+          1.28,
+          2.4,
+          1.932
+        ],
+        "min": [
+          -0.64,
+          0.0,
+          -0.64
+        ],
+        "max": [
+          0.64,
+          2.4,
+          1.292
+        ],
+        "budget": [
+          80,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "wall",
+          "glass_hold"
+        ],
+        "rooms": [
+          "lab",
+          "clinic"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.64,
+            0.0,
+            -0.64
+          ],
+          "max": [
+            0.64,
+            2.4,
+            1.292
+          ]
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_lantern",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_lantern.glb",
+        "tris": 120,
+        "partTris": {
+          "main": 120
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 12944,
+        "bounds": [
+          0.176,
+          0.287,
+          0.176
+        ],
+        "min": [
+          -0.088,
+          0.0,
+          -0.088
+        ],
+        "max": [
+          0.088,
+          0.287,
+          0.088
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "lantern"
+        ],
+        "rooms": [
+          "shelter",
+          "utility",
+          "garage"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "poses": {
+          "tipped": {
+            "rotationDeg": [
+              90,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.088,
+              0.0
+            ],
+            "note": "tipped variant",
+            "collider": {
+              "min": [
+                -0.088,
+                0.0,
+                -0.0
+              ],
+              "max": [
+                0.088,
+                0.176,
+                0.287
+              ]
+            }
+          }
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "table_or_floor"
+        }
+      },
+      {
+        "id": "arch_pallet_rack",
+        "category": "arch",
+        "kind": "wall",
+        "subtype": "wall",
+        "path": "arch/arch_pallet_rack.glb",
+        "tris": 216,
+        "partTris": {
+          "main": 216
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 22148,
+        "bounds": [
+          2.69,
+          3.0,
+          1.09
+        ],
+        "min": [
+          -1.345,
+          0.0,
+          -0.545
+        ],
+        "max": [
+          1.345,
+          3.0,
+          0.545
+        ],
+        "budget": [
+          100,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "wall",
+          "pallet_rack"
+        ],
+        "rooms": [
+          "warehouse",
+          "store",
+          "plant"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -1.345,
+            0.0,
+            -0.545
+          ],
+          "max": [
+            1.345,
+            3.0,
+            0.545
+          ]
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor_wall"
+        }
+      },
+      {
+        "id": "arch_duffel",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_duffel.glb",
+        "tris": 64,
+        "partTris": {
+          "main": 64
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 7564,
+        "bounds": [
+          0.66,
+          0.316,
+          0.285
+        ],
+        "min": [
+          -0.33,
+          0.0,
+          -0.142
+        ],
+        "max": [
+          0.33,
+          0.316,
+          0.142
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "duffel"
+        ],
+        "rooms": [
+          "shelter",
+          "checkpoint",
+          "motel"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": true,
+          "leanable": true,
+          "wallMount": false,
+          "surface": "floor_or_bed"
+        }
+      },
+      {
+        "id": "arch_iv_stand",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_iv_stand.glb",
+        "tris": 172,
+        "partTris": {
+          "main": 172
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 17924,
+        "bounds": [
+          0.5,
+          1.791,
+          0.5
+        ],
+        "min": [
+          -0.25,
+          0.0,
+          -0.25
+        ],
+        "max": [
+          0.25,
+          1.791,
+          0.25
+        ],
+        "budget": [
+          60,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "furniture",
+          "iv_stand"
+        ],
+        "rooms": [
+          "clinic",
+          "lab"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "poses": {
+          "tipped": {
+            "rotationDeg": [
+              90,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.25,
+              0.0
+            ],
+            "note": "tipped variant",
+            "collider": {
+              "min": [
+                -0.25,
+                0.0,
+                -0.0
+              ],
+              "max": [
+                0.25,
+                0.5,
+                1.791
+              ]
+            }
+          }
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_gurney",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_gurney.glb",
+        "tris": 176,
+        "partTris": {
+          "main": 176
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 18312,
+        "bounds": [
+          0.681,
+          0.972,
+          1.96
+        ],
+        "min": [
+          -0.34,
+          0.0,
+          -0.98
+        ],
+        "max": [
+          0.34,
+          0.972,
+          0.98
+        ],
+        "budget": [
+          60,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "furniture",
+          "gurney"
+        ],
+        "rooms": [
+          "clinic",
+          "lab"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.34,
+            0.0,
+            -0.98
+          ],
+          "max": [
+            0.34,
+            0.972,
+            0.98
+          ]
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_photo_frame",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_photo_frame.glb",
+        "tris": 24,
+        "partTris": {
+          "main": 24
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 3732,
+        "bounds": [
+          0.19,
+          0.242,
+          0.125
+        ],
+        "min": [
+          -0.095,
+          0.0,
+          -0.115
+        ],
+        "max": [
+          0.095,
+          0.242,
+          0.01
+        ],
+        "budget": [
+          12,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "photo_frame"
+        ],
+        "rooms": [
+          "story",
+          "residential",
+          "motel"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "poses": {
+          "face_down": {
+            "rotationDeg": [
+              -90,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.1155,
+              0.0
+            ],
+            "note": "face_down variant",
+            "collider": {
+              "min": [
+                -0.095,
+                0.0,
+                -0.242
+              ],
+              "max": [
+                0.095,
+                0.125,
+                -0.0
+              ]
+            }
+          }
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "table_or_shelf"
+        }
+      },
+      {
+        "id": "arch_console_panel",
+        "category": "arch",
+        "kind": "wall",
+        "subtype": "wall",
+        "path": "arch/arch_console_panel.glb",
+        "tris": 36,
+        "partTris": {
+          "main": 36
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 4888,
+        "bounds": [
+          1.78,
+          1.181,
+          0.76
+        ],
+        "min": [
+          -0.89,
+          0.0,
+          -0.38
+        ],
+        "max": [
+          0.89,
+          1.181,
+          0.38
+        ],
+        "budget": [
+          20,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "wall",
+          "console_panel"
+        ],
+        "rooms": [
+          "plant",
+          "lab",
+          "utility"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.89,
+            0.0,
+            -0.38
+          ],
+          "max": [
+            0.89,
+            1.181,
+            0.38
+          ]
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor_wall"
+        }
+      },
+      {
+        "id": "arch_stove_wood",
+        "category": "arch",
+        "kind": "wall",
+        "subtype": "wall",
+        "path": "arch/arch_stove_wood.glb",
+        "tris": 112,
+        "partTris": {
+          "main": 112
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 12180,
+        "bounds": [
+          0.66,
+          1.162,
+          0.606
+        ],
+        "min": [
+          -0.33,
+          0.0,
+          -0.28
+        ],
+        "max": [
+          0.33,
+          1.162,
+          0.326
+        ],
+        "budget": [
+          60,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "wall",
+          "stove_wood"
+        ],
+        "rooms": [
+          "shelter",
+          "residential",
+          "motel"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.33,
+            0.0,
+            -0.28
+          ],
+          "max": [
+            0.33,
+            1.162,
+            0.326
+          ]
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor_wall"
+        }
+      },
+      {
+        "id": "arch_seed_rack",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_seed_rack.glb",
+        "tris": 168,
+        "partTris": {
+          "main": 168
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 17556,
+        "bounds": [
+          1.55,
+          1.18,
+          0.57
+        ],
+        "min": [
+          -0.775,
+          0.0,
+          -0.285
+        ],
+        "max": [
+          0.775,
+          1.18,
+          0.285
+        ],
+        "budget": [
+          80,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "furniture",
+          "seed_rack"
+        ],
+        "rooms": [
+          "greenhouse"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.775,
+            0.0,
+            -0.285
+          ],
+          "max": [
+            0.775,
+            1.18,
+            0.285
+          ]
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_barrier_crowd",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_barrier_crowd.glb",
+        "tris": 156,
+        "partTris": {
+          "main": 156
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 16416,
+        "bounds": [
+          1.96,
+          1.082,
+          0.48
+        ],
+        "min": [
+          -0.98,
+          0.0,
+          -0.24
+        ],
+        "max": [
+          0.98,
+          1.082,
+          0.24
+        ],
+        "budget": [
+          80,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "furniture",
+          "barrier_crowd"
+        ],
+        "rooms": [
+          "checkpoint",
+          "hall",
+          "clinic"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.98,
+            0.0,
+            -0.24
+          ],
+          "max": [
+            0.98,
+            1.082,
+            0.24
+          ]
+        },
+        "poses": {
+          "tipped": {
+            "rotationDeg": [
+              85,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.2391,
+              0.0
+            ],
+            "note": "tipped variant",
+            "collider": {
+              "min": [
+                -0.98,
+                0.0,
+                -0.021
+              ],
+              "max": [
+                0.98,
+                0.482,
+                1.08
+              ]
+            }
+          }
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": true,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_bunk",
+        "category": "arch",
+        "kind": "wall",
+        "subtype": "wall",
+        "path": "arch/arch_bunk.glb",
+        "tris": 156,
+        "partTris": {
+          "main": 156
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 16384,
+        "bounds": [
+          0.935,
+          1.6,
+          1.97
+        ],
+        "min": [
+          -0.455,
+          0.0,
+          -0.985
+        ],
+        "max": [
+          0.48,
+          1.6,
+          0.985
+        ],
+        "budget": [
+          80,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "wall",
+          "bunk"
+        ],
+        "rooms": [
+          "shelter",
+          "checkpoint",
+          "clinic"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.455,
+            0.0,
+            -0.985
+          ],
+          "max": [
+            0.48,
+            1.6,
+            0.985
+          ]
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor_wall"
+        }
+      },
+      {
+        "id": "arch_boards_overlay",
+        "category": "arch",
+        "kind": "mount",
+        "subtype": "mount",
+        "path": "arch/arch_boards_overlay.glb",
+        "tris": 48,
+        "partTris": {
+          "main": 48
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 6060,
+        "bounds": [
+          1.238,
+          1.075,
+          0.065
+        ],
+        "min": [
+          -0.618,
+          0.143,
+          -0.015
+        ],
+        "max": [
+          0.62,
+          1.218,
+          0.05
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "mount",
+          "boards_overlay"
+        ],
+        "rooms": [
+          "shelter",
+          "store",
+          "residential"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": true,
+          "surface": "wall"
+        }
+      },
+      {
+        "id": "arch_cage_mesh",
+        "category": "arch",
+        "kind": "mount",
+        "subtype": "mount",
+        "path": "arch/arch_cage_mesh.glb",
+        "tris": 156,
+        "partTris": {
+          "main": 156
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 16372,
+        "bounds": [
+          2.0,
+          2.4,
+          0.06
+        ],
+        "min": [
+          -1.0,
+          0.0,
+          -0.03
+        ],
+        "max": [
+          1.0,
+          2.4,
+          0.03
+        ],
+        "budget": [
+          80,
+          260
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "mount",
+          "cage_mesh"
+        ],
+        "rooms": [
+          "warehouse",
+          "checkpoint",
+          "plant"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": true,
+          "surface": "wall"
+        }
+      },
+      {
+        "id": "arch_sandbag_row",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_sandbag_row.glb",
+        "tris": 168,
+        "partTris": {
+          "main": 168
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 17564,
+        "bounds": [
+          1.49,
+          0.82,
+          0.52
+        ],
+        "min": [
+          -0.745,
+          0.0,
+          -0.26
+        ],
+        "max": [
+          0.745,
+          0.82,
+          0.26
+        ],
+        "budget": [
+          80,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "furniture",
+          "sandbag_row"
+        ],
+        "rooms": [
+          "checkpoint",
+          "shelter"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.745,
+            0.0,
+            -0.26
+          ],
+          "max": [
+            0.745,
+            0.82,
+            0.26
+          ]
+        },
+        "placementHints": {
+          "stackable": true,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_shoes_pair",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_shoes_pair.glb",
+        "tris": 48,
+        "partTris": {
+          "main": 48
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 6040,
+        "bounds": [
+          0.262,
+          0.111,
+          0.258
+        ],
+        "min": [
+          -0.13,
+          0.0,
+          -0.129
+        ],
+        "max": [
+          0.132,
+          0.111,
+          0.129
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "shoes_pair"
+        ],
+        "rooms": [
+          "story",
+          "shelter",
+          "residential",
+          "motel"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_whiteboard",
+        "category": "arch",
+        "kind": "mount",
+        "subtype": "mount",
+        "path": "arch/arch_whiteboard.glb",
+        "tris": 36,
+        "partTris": {
+          "main": 36
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 4848,
+        "bounds": [
+          1.6,
+          1.0,
+          0.087
+        ],
+        "min": [
+          -0.8,
+          0.0,
+          0.0
+        ],
+        "max": [
+          0.8,
+          1.0,
+          0.087
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "mount",
+          "whiteboard"
+        ],
+        "rooms": [
+          "office",
+          "clinic",
+          "shelter",
+          "school"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": true,
+          "surface": "wall"
+        }
+      },
+      {
+        "id": "arch_generator",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_generator.glb",
+        "tris": 68,
+        "partTris": {
+          "main": 68
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 7952,
+        "bounds": [
+          1.18,
+          0.842,
+          0.68
+        ],
+        "min": [
+          -0.59,
+          0.0,
+          -0.34
+        ],
+        "max": [
+          0.59,
+          0.842,
+          0.34
+        ],
+        "budget": [
+          60,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "furniture",
+          "generator"
+        ],
+        "rooms": [
+          "utility",
+          "garage",
+          "checkpoint",
+          "plant"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.59,
+            0.0,
+            -0.34
+          ],
+          "max": [
+            0.59,
+            0.842,
+            0.34
+          ]
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_toy_kid",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_toy_kid.glb",
+        "tris": 104,
+        "partTris": {
+          "main": 104
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 11408,
+        "bounds": [
+          0.26,
+          0.196,
+          0.205
+        ],
+        "min": [
+          -0.13,
+          0.0,
+          -0.102
+        ],
+        "max": [
+          0.13,
+          0.196,
+          0.103
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "toy_kid"
+        ],
+        "rooms": [
+          "story",
+          "residential",
+          "shelter"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor_or_shelf"
+        }
+      },
+      {
+        "id": "arch_drum_steel",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_drum_steel.glb",
+        "tris": 176,
+        "partTris": {
+          "main": 176
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 18328,
+        "bounds": [
+          0.6,
+          0.906,
+          0.6
+        ],
+        "min": [
+          -0.3,
+          0.0,
+          -0.3
+        ],
+        "max": [
+          0.3,
+          0.906,
+          0.3
+        ],
+        "budget": [
+          60,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "furniture",
+          "drum_steel"
+        ],
+        "rooms": [
+          "warehouse",
+          "garage",
+          "plant"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.3,
+            0.0,
+            -0.3
+          ],
+          "max": [
+            0.3,
+            0.906,
+            0.3
+          ]
+        },
+        "poses": {
+          "tipped": {
+            "rotationDeg": [
+              90,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.3,
+              0.0
+            ],
+            "note": "tipped variant",
+            "collider": {
+              "min": [
+                -0.3,
+                0.0,
+                -0.0
+              ],
+              "max": [
+                0.3,
+                0.6,
+                0.906
+              ]
+            }
+          }
+        },
+        "placementHints": {
+          "stackable": true,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_drum_burn",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_drum_burn.glb",
+        "tris": 204,
+        "partTris": {
+          "main": 204
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 21016,
+        "bounds": [
+          0.6,
+          1.027,
+          0.6
+        ],
+        "min": [
+          -0.3,
+          0.0,
+          -0.3
+        ],
+        "max": [
+          0.3,
+          1.027,
+          0.3
+        ],
+        "budget": [
+          60,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "furniture",
+          "drum_burn"
+        ],
+        "rooms": [
+          "shelter",
+          "checkpoint"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.3,
+            0.0,
+            -0.3
+          ],
+          "max": [
+            0.3,
+            1.027,
+            0.3
+          ]
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_breaker_panel",
+        "category": "arch",
+        "kind": "mount",
+        "subtype": "mount",
+        "path": "arch/arch_breaker_panel.glb",
+        "tris": 48,
+        "partTris": {
+          "main": 48
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 6012,
+        "bounds": [
+          0.94,
+          1.56,
+          0.236
+        ],
+        "min": [
+          -0.44,
+          0.0,
+          0.0
+        ],
+        "max": [
+          0.5,
+          1.56,
+          0.236
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "mount",
+          "breaker_panel"
+        ],
+        "rooms": [
+          "utility",
+          "plant",
+          "warehouse"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": true,
+          "surface": "wall"
+        }
+      },
+      {
+        "id": "arch_reception_desk",
+        "category": "arch",
+        "kind": "wall",
+        "subtype": "wall",
+        "path": "arch/arch_reception_desk.glb",
+        "tris": 36,
+        "partTris": {
+          "main": 36
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 4892,
+        "bounds": [
+          1.98,
+          1.051,
+          1.23
+        ],
+        "min": [
+          -0.99,
+          0.0,
+          -0.86
+        ],
+        "max": [
+          0.99,
+          1.051,
+          0.37
+        ],
+        "budget": [
+          20,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "wall",
+          "reception_desk"
+        ],
+        "rooms": [
+          "clinic",
+          "motel",
+          "office"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.99,
+            0.0,
+            -0.86
+          ],
+          "max": [
+            0.99,
+            1.051,
+            0.37
+          ]
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_table_blackjack",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_table_blackjack.glb",
+        "tris": 80,
+        "partTris": {
+          "main": 80
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 9124,
+        "bounds": [
+          1.76,
+          0.815,
+          1.76
+        ],
+        "min": [
+          -0.88,
+          0.0,
+          -0.84
+        ],
+        "max": [
+          0.88,
+          0.815,
+          0.92
+        ],
+        "budget": [
+          60,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "furniture",
+          "table_blackjack"
+        ],
+        "rooms": [
+          "casino",
+          "hall"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.88,
+            0.0,
+            -0.84
+          ],
+          "max": [
+            0.88,
+            0.815,
+            0.92
+          ]
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_armchair",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_armchair.glb",
+        "tris": 96,
+        "partTris": {
+          "main": 96
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 10640,
+        "bounds": [
+          0.86,
+          0.905,
+          0.8
+        ],
+        "min": [
+          -0.43,
+          0.0,
+          -0.4
+        ],
+        "max": [
+          0.43,
+          0.905,
+          0.4
+        ],
+        "budget": [
+          60,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "furniture",
+          "armchair"
+        ],
+        "rooms": [
+          "residential",
+          "motel",
+          "shelter"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.43,
+            0.0,
+            -0.4
+          ],
+          "max": [
+            0.43,
+            0.905,
+            0.4
+          ]
+        },
+        "poses": {
+          "tipped": {
+            "rotationDeg": [
+              -85,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.3896,
+              0.0
+            ],
+            "note": "tipped variant",
+            "collider": {
+              "min": [
+                -0.43,
+                0.0,
+                -0.936
+              ],
+              "max": [
+                0.43,
+                0.844,
+                0.031
+              ]
+            }
+          }
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_suitcase_packed",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_suitcase_packed.glb",
+        "tris": 48,
+        "partTris": {
+          "main": 48
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 6052,
+        "bounds": [
+          0.68,
+          0.518,
+          0.252
+        ],
+        "min": [
+          -0.34,
+          0.0,
+          -0.126
+        ],
+        "max": [
+          0.34,
+          0.518,
+          0.126
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "suitcase_packed"
+        ],
+        "rooms": [
+          "story",
+          "motel",
+          "residential"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "poses": {
+          "flat": {
+            "rotationDeg": [
+              90,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.126,
+              0.0
+            ],
+            "note": "flat variant",
+            "collider": {
+              "min": [
+                -0.34,
+                0.0,
+                -0.0
+              ],
+              "max": [
+                0.34,
+                0.252,
+                0.518
+              ]
+            }
+          }
+        },
+        "placementHints": {
+          "stackable": true,
+          "leanable": true,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_pet_bowl",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_pet_bowl.glb",
+        "tris": 36,
+        "partTris": {
+          "main": 36
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 4852,
+        "bounds": [
+          0.238,
+          0.075,
+          0.25
+        ],
+        "min": [
+          -0.119,
+          0.0,
+          -0.125
+        ],
+        "max": [
+          0.119,
+          0.075,
+          0.125
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "pet_bowl"
+        ],
+        "rooms": [
+          "story",
+          "residential"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_oxygen_tank",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_oxygen_tank.glb",
+        "tris": 84,
+        "partTris": {
+          "main": 84
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 9496,
+        "bounds": [
+          0.219,
+          0.902,
+          0.23
+        ],
+        "min": [
+          -0.109,
+          0.0,
+          -0.115
+        ],
+        "max": [
+          0.109,
+          0.902,
+          0.115
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "oxygen_tank"
+        ],
+        "rooms": [
+          "story",
+          "clinic",
+          "residential"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "poses": {
+          "tipped": {
+            "rotationDeg": [
+              90,
+              0,
+              0
+            ],
+            "position": [
+              0.0,
+              0.115,
+              0.0
+            ],
+            "note": "tipped variant",
+            "collider": {
+              "min": [
+                -0.109,
+                0.0,
+                -0.0
+              ],
+              "max": [
+                0.109,
+                0.23,
+                0.902
+              ]
+            }
+          }
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": true,
+          "wallMount": false,
+          "surface": "floor_or_wall"
+        }
+      },
+      {
+        "id": "arch_dog_leash",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_dog_leash.glb",
+        "tris": 36,
+        "partTris": {
+          "main": 36
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 4884,
+        "bounds": [
+          0.26,
+          0.034,
+          0.17
+        ],
+        "min": [
+          -0.11,
+          0.0,
+          -0.08
+        ],
+        "max": [
+          0.15,
+          0.034,
+          0.09
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "dog_leash"
+        ],
+        "rooms": [
+          "story",
+          "residential"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor_or_table"
+        }
+      },
+      {
+        "id": "arch_sack_pile",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_sack_pile.glb",
+        "tris": 72,
+        "partTris": {
+          "main": 72
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 8336,
+        "bounds": [
+          1.334,
+          0.718,
+          0.94
+        ],
+        "min": [
+          -0.673,
+          0.0,
+          -0.555
+        ],
+        "max": [
+          0.661,
+          0.718,
+          0.384
+        ],
+        "budget": [
+          60,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "furniture",
+          "sack_pile"
+        ],
+        "rooms": [
+          "warehouse",
+          "greenhouse",
+          "shelter"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.673,
+            0.0,
+            -0.555
+          ],
+          "max": [
+            0.661,
+            0.718,
+            0.384
+          ]
+        },
+        "placementHints": {
+          "stackable": true,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_phone_landline",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_phone_landline.glb",
+        "tris": 36,
+        "partTris": {
+          "main": 36
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 4900,
+        "bounds": [
+          0.18,
+          0.101,
+          0.21
+        ],
+        "min": [
+          -0.09,
+          0.0,
+          -0.105
+        ],
+        "max": [
+          0.09,
+          0.101,
+          0.105
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "phone_landline"
+        ],
+        "rooms": [
+          "office",
+          "motel",
+          "residential"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "table_or_desk"
+        }
+      },
+      {
+        "id": "arch_steam_table",
+        "category": "arch",
+        "kind": "wall",
+        "subtype": "wall",
+        "path": "arch/arch_steam_table.glb",
+        "tris": 120,
+        "partTris": {
+          "main": 120
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 12948,
+        "bounds": [
+          1.96,
+          1.183,
+          0.72
+        ],
+        "min": [
+          -0.98,
+          0.0,
+          -0.36
+        ],
+        "max": [
+          0.98,
+          1.183,
+          0.36
+        ],
+        "budget": [
+          60,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "wall",
+          "steam_table"
+        ],
+        "rooms": [
+          "casino",
+          "kitchen"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.98,
+            0.0,
+            -0.36
+          ],
+          "max": [
+            0.98,
+            1.183,
+            0.36
+          ]
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_door_storefront_broken",
+        "category": "arch",
+        "kind": "mount",
+        "subtype": "mount",
+        "path": "arch/arch_door_storefront_broken.glb",
+        "tris": 60,
+        "partTris": {
+          "main": 60
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 7176,
+        "bounds": [
+          1.0,
+          2.101,
+          0.2
+        ],
+        "min": [
+          -0.5,
+          0.0,
+          0.0
+        ],
+        "max": [
+          0.5,
+          2.101,
+          0.2
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "mount",
+          "door_storefront_broken"
+        ],
+        "rooms": [
+          "store",
+          "commercial"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": true,
+          "surface": "doorframe"
+        }
+      },
+      {
+        "id": "arch_door_open_leaf",
+        "category": "arch",
+        "kind": "mount",
+        "subtype": "mount",
+        "path": "arch/arch_door_open_leaf.glb",
+        "tris": 24,
+        "partTris": {
+          "main": 24
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 3720,
+        "bounds": [
+          0.9,
+          2.03,
+          0.08
+        ],
+        "min": [
+          -0.45,
+          0.0,
+          0.0
+        ],
+        "max": [
+          0.45,
+          2.03,
+          0.08
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "mount",
+          "door_open_leaf"
+        ],
+        "rooms": [
+          "residential",
+          "motel"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": true,
+          "surface": "doorframe"
+        }
+      },
+      {
+        "id": "arch_door_mailslot",
+        "category": "arch",
+        "kind": "mount",
+        "subtype": "mount",
+        "path": "arch/arch_door_mailslot.glb",
+        "tris": 48,
+        "partTris": {
+          "main": 48
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 6024,
+        "bounds": [
+          0.95,
+          2.05,
+          0.086
+        ],
+        "min": [
+          -0.475,
+          0.0,
+          0.0
+        ],
+        "max": [
+          0.475,
+          2.05,
+          0.086
+        ],
+        "budget": [
+          20,
+          200
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "mount",
+          "door_mailslot"
+        ],
+        "rooms": [
+          "residential"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": null,
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": true,
+          "surface": "doorframe"
+        }
+      },
+      {
+        "id": "arch_woodpile",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_woodpile.glb",
+        "tris": 320,
+        "partTris": {
+          "main": 320
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 32148,
+        "bounds": [
+          1.373,
+          0.741,
+          0.62
+        ],
+        "min": [
+          -0.67,
+          0.0,
+          -0.31
+        ],
+        "max": [
+          0.703,
+          0.741,
+          0.31
+        ],
+        "budget": [
+          80,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "furniture",
+          "woodpile"
+        ],
+        "rooms": [
+          "shelter",
+          "residential"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.67,
+            0.0,
+            -0.31
+          ],
+          "max": [
+            0.703,
+            0.741,
+            0.31
+          ]
+        },
+        "placementHints": {
+          "stackable": true,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_crash_cart",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_crash_cart.glb",
+        "tris": 164,
+        "partTris": {
+          "main": 164
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 17176,
+        "bounds": [
+          0.75,
+          0.961,
+          0.502
+        ],
+        "min": [
+          -0.41,
+          0.0,
+          -0.24
+        ],
+        "max": [
+          0.34,
+          0.961,
+          0.262
+        ],
+        "budget": [
+          80,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "furniture",
+          "crash_cart"
+        ],
+        "rooms": [
+          "clinic"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.41,
+            0.0,
+            -0.24
+          ],
+          "max": [
+            0.34,
+            0.961,
+            0.262
+          ]
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_bed_stripped",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_bed_stripped.glb",
+        "tris": 48,
+        "partTris": {
+          "main": 48
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 6012,
+        "bounds": [
+          1.44,
+          1.05,
+          2.0
+        ],
+        "min": [
+          -0.72,
+          0.0,
+          -1.0
+        ],
+        "max": [
+          0.72,
+          1.05,
+          1.0
+        ],
+        "budget": [
+          30,
+          350
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "furniture",
+          "bed_stripped"
+        ],
+        "rooms": [
+          "shelter",
+          "bedroom",
+          "motel"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.72,
+            0.0,
+            -1.0
+          ],
+          "max": [
+            0.72,
+            1.05,
+            1.0
+          ]
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor"
+        }
+      },
+      {
+        "id": "arch_barricade",
+        "category": "arch",
+        "kind": "furniture",
+        "subtype": "furniture",
+        "path": "arch/arch_barricade.glb",
+        "tris": 60,
+        "partTris": {
+          "main": 60
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 7188,
+        "bounds": [
+          1.775,
+          1.519,
+          0.798
+        ],
+        "min": [
+          -0.794,
+          0.0,
+          -0.25
+        ],
+        "max": [
+          0.982,
+          1.519,
+          0.548
+        ],
+        "budget": [
+          60,
+          400
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "furniture",
+          "barricade"
+        ],
+        "rooms": [
+          "shelter",
+          "residential",
+          "store"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0)",
+        "collider": {
+          "type": "box",
+          "min": [
+            -0.794,
+            0.0,
+            -0.25
+          ],
+          "max": [
+            0.982,
+            1.519,
+            0.548
+          ]
+        },
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "floor_wall"
         }
       }
     ],
@@ -13355,6 +20212,93 @@
         "notes": "Ash variant (Act III / fallout_winter): the dirty texture with dithered ash in the low pixels."
       },
       {
+        "id": "wall_cinder",
+        "category": "arch",
+        "kind": "wall",
+        "path": "arch/textures/wall_cinder.png",
+        "size": [
+          64,
+          64
+        ],
+        "bytes": 4125,
+        "metersPerTile": [
+          1.0,
+          1.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": null,
+        "rooms": [
+          "store",
+          "motel",
+          "clinic",
+          "plant",
+          "lab",
+          "warehouse",
+          "any"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Painted/weathered cinder-block wall (arch_tex_cinder), 8 x 16 px courses."
+      },
+      {
+        "id": "wall_cinder_dirty",
+        "category": "arch",
+        "kind": "wall",
+        "path": "arch/textures/wall_cinder_dirty.png",
+        "size": [
+          64,
+          64
+        ],
+        "bytes": 4549,
+        "metersPerTile": [
+          1.0,
+          1.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "wall_cinder",
+        "rooms": [
+          "store",
+          "motel",
+          "clinic",
+          "plant",
+          "lab",
+          "warehouse",
+          "any"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Dirty variant: grime blotches, scuffs, stains. Same layout."
+      },
+      {
+        "id": "wall_cinder_ash",
+        "category": "arch",
+        "kind": "wall",
+        "path": "arch/textures/wall_cinder_ash.png",
+        "size": [
+          64,
+          64
+        ],
+        "bytes": 5135,
+        "metersPerTile": [
+          1.0,
+          1.0
+        ],
+        "wrap": "repeat",
+        "alpha": null,
+        "variantOf": "wall_cinder",
+        "rooms": [
+          "store",
+          "motel",
+          "clinic",
+          "plant",
+          "lab",
+          "warehouse",
+          "any"
+        ],
+        "filter": "NEAREST, no mipmaps, SRGB, RepeatWrapping",
+        "notes": "Ash variant (Act III / fallout_winter): the dirty texture with dithered ash in the low pixels."
+      },
+      {
         "id": "arch_floor_decals",
         "category": "arch",
         "kind": "decal_atlas",
@@ -13369,6 +20313,22 @@
         "alpha": "alphaTest 0.5",
         "filter": "NEAREST, no mipmaps, SRGB",
         "notes": "4 x 4 cells of 64 px; per-instance uvRect (makeArchFloorDecals)."
+      },
+      {
+        "id": "arch_decals_b",
+        "category": "arch",
+        "kind": "decal_atlas",
+        "path": "arch/textures/arch_decals_b.png",
+        "size": [
+          512,
+          256
+        ],
+        "bytes": 12551,
+        "metersPerTile": null,
+        "wrap": "clamp",
+        "alpha": "alphaTest 0.5",
+        "filter": "NEAREST, no mipmaps, SRGB",
+        "notes": "8 x 4 cells of 64 px (27 floor + vertical wall decals; makeArchFloorDecals/makeArchWallDecals)."
       },
       {
         "id": "arch_dust_mote",

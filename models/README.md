@@ -616,3 +616,13 @@ WebKit through `registry.js`).
   Instance repeated pieces with `makeArchInstanced`: baseboards, panels, rubble, cans, tires.
 - **Previews**: `previews/arch_sheet.png`, `previews/arch_in_context.png` (raw renders plus the seasonal-palette
   quantise of each), `previews/arch_room_kits.png`.
+
+### r16 gap-fill additions (`tools/arch_gapfill.py`, additive only)
+- **Atlas preservation**: all 58 original `arch/*.glb` models, `arch_floor_decals.png` (`uvRect`s + bytes), swatch slots `0..95`, and existing region coordinates in `arch_atlas.png` remain unchanged. The 3 formerly `free`/`free2`/`free3` regions now hold `metal_locker`, `radio_front`, `book_spines`, `console`, `note_photo`, `bottle_label`, `laptop_screen`, `file_cab`, and `plastic_tarp`, with 16 new base swatches + `_top` twins appended at slots `96..127`.
+- **Atlas polish**: `crate` (`paint_crate_weathered`) darkened/weathered to match `refs/interior_target_lumen.png`, and `goods` / `goods_looted` (`paint_goods_groceries`) reworked into cans, boxes, and capped bottles so `arch_gondola_stocked` reads as groceries.
+- **`props/metal_locker.glb` re-atlas**: merged from 5 materials to 1 material on `arch/textures/arch_atlas.png` + `arch_atlas_mr.png` (272 tris, 1 draw call, grounded `min y = 0`; backup in `/workspace/ashfall_rig_backup/pre_arch2/metal_locker.glb`).
+- **59 new arch GLBs** covering all 54 items in `SCULPTOR_REQUEST.md` plus modular variants (`arch_bottle`, `arch_pipe_run_1m`, `arch_cabinet_file_open`, `arch_drum_burn`, `arch_bed_stripped`), with `placementHints` (`stackable`, `leanable`, `wallMount`, `surface`) in `manifest.json` and `ARCH_CATALOG`.
+- **New poses on existing meshes** (metadata only, GLBs byte-identical): `arch_crate_large` / `arch_crate_small` (`tipped`), `arch_couch` (`overturned`), `arch_bed` (`stripped`), `arch_box_large` (`on_side`).
+- **Cinder-block wall**: `wall_cinder`, `wall_cinder_dirty`, `wall_cinder_ash` (64 px, 1.0 m/tile, seam-checked).
+- **Decal Atlas B (`arch_decals_b.png`, 512 × 256, 8 × 4 cells of 64 px)**: 27 floor + vertical wall decals registered in `manifest.arch.decalAtlasB` and `ARCH_DECAL_FRAMES` (`atlas: 'b'`, `wall: true|false`). Use `makeArchFloorDecals(n, { page: 'b' })` for floor decals and `makeArchWallDecals(n)` for vertical wall decals.
+- **Previews**: `previews/arch_gapfill_sheet.png`, `previews/arch_cluttered_vignette.png` (36 draw calls, 2697 tris, 0 WebKit errors).

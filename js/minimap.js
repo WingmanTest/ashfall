@@ -1,5 +1,5 @@
 /** B_round minimap: fixed-north circular map, per Cartographer NOTES.md. */
-import { currentMainObjective } from "./questTrack.js?v=r16.1";
+import { currentMainObjective } from "./questTrack.js?v=r16.2";
 
 const PLOT = 78;
 const BEZEL = 6;
@@ -708,11 +708,15 @@ export function drawWorldMap(game) {
     ctx.restore();
   }
 
-  // Building name labels ABOVE each building (toward north / top of the map)
-  ctx.font = `${Math.max(10, Math.round(11 * dpr))}px ui-monospace, Cascadia Code, DejaVu Sans Mono, monospace`;
+  // Building name labels sit above each building, then fall back inside the
+  // footprint. They are always clamped fully on-screen (and clear of the minimap chip).
+  const margin = Math.round(8 * dpr);
+  const chipR = Math.round(62 * dpr); // #minimap in the top-right of the portrait HUD
+  const fontPx = Math.max(10, Math.round(11 * dpr));
+  ctx.font = `${fontPx}px ui-monospace, Cascadia Code, DejaVu Sans Mono, monospace`;
   ctx.textAlign = "center";
   ctx.textBaseline = "bottom";
-  ctx.letterSpacing = "0.08em";
+  ctx.letterSpacing = "0.04em";
   const placed = [];
   const labels = [];
   for (const b of L.buildings || []) {
@@ -720,26 +724,86 @@ export function drawWorldMap(game) {
     if (!name) continue;
     const R = b.rect;
     if (!R) continue;
-    const cx = (R.x0 + R.x1) / 2;
-    const minZ = Math.min(R.z0, R.z1);
-    labels.push({ name, cx, minZ, w: Math.abs(R.x1 - R.x0) });
+    const minX = Math.min(R.x0, R.x1), maxX = Math.max(R.x0, R.x1);
+    const minZ = Math.min(R.z0, R.z1), maxZ = Math.max(R.z0, R.z1);
+    labels.push({ name, minX, maxX, minZ, maxZ, cx: (minX + maxX) / 2 });
   }
   labels.sort((a, b) => a.minZ - b.minZ);
-  for (const lab of labels) {
-    let [sx, sy] = toS(lab.cx, lab.minZ);
-    sy -= 4 * dpr;
-    const tw = ctx.measureText(lab.name).width;
-    let ly = sy;
-    for (let k = 0; k < 8; k++) {
-      const hit = placed.some((q) => Math.abs(q.x - sx) < (q.w + tw) / 2 + 4 && Math.abs(q.y - ly) < 14 * dpr);
-      if (!hit) break;
-      ly -= 12 * dpr;
+
+  const maxTextW = Math.max(40, W - margin * 2 - 4 * dpr);
+  function wrapName(name, maxW) {
+    if (ctx.measureText(name).width <= maxW) return [name];
+    const words = name.split(/(\s+)/).filter((s) => s.trim().length);
+    const lines = [];
+    let cur = "";
+    for (const w of words) {
+      const trial = cur ? cur + " " + w : w;
+      if (ctx.measureText(trial).width <= maxW) cur = trial;
+      else { if (cur) lines.push(cur); cur = w; }
     }
-    placed.push({ x: sx, y: ly, w: tw });
-    ctx.fillStyle = "rgba(10,13,18,0.72)";
-    ctx.fillRect(sx - tw / 2 - 3 * dpr, ly - 12 * dpr, tw + 6 * dpr, 14 * dpr);
+    if (cur) lines.push(cur);
+    return lines.length ? lines : [name];
+  }
+  function inChip(left, top, right, bot) {
+    // canvas top-right corner is under the circular minimap chip
+    return right > W - chipR && top < chipR;
+  }
+  function blocked(left, top, right, bot, skip) {
+    if (left < margin || right > W - margin || top < margin || bot > H - margin) return true;
+    if (inChip(left, top, right, bot)) return true;
+    const cx = (left + right) / 2, cy = (top + bot) / 2, tw = right - left, th = bot - top;
+    return placed.some((q, i) => {
+      if (i === skip) return false;
+      return Math.abs(q.x - cx) < (q.w + tw) / 2 + 3 * dpr && Math.abs(q.y - cy) < (q.h + th) / 2 + 2 * dpr;
+    });
+  }
+  function clampBox(x, y, tw, th) {
+    let left = x - tw / 2, right = x + tw / 2, top = y - th, bot = y;
+    if (inChip(left, top, right, bot)) {
+      x = W - chipR - tw / 2 - margin;
+      left = x - tw / 2; right = x + tw / 2;
+    }
+    if (left < margin) { x = margin + tw / 2; left = x - tw / 2; right = x + tw / 2; }
+    if (right > W - margin) { x = W - margin - tw / 2; left = x - tw / 2; right = x + tw / 2; }
+    if (top < margin) { y = margin + th; top = y - th; bot = y; }
+    if (bot > H - margin) { y = H - margin; top = y - th; bot = y; }
+    return { x, y, left, right, top, bot };
+  }
+
+  for (const lab of labels) {
+    const [bx0, by0] = toS(lab.minX, lab.minZ);
+    const [bx1, by1] = toS(lab.maxX, lab.maxZ);
+    const bLeft = Math.min(bx0, bx1), bRight = Math.max(bx0, bx1);
+    const bTop = Math.min(by0, by1), bBot = Math.max(by0, by1);
+    const cx = (bLeft + bRight) / 2;
+    const lines = wrapName(lab.name, Math.min(maxTextW, Math.max(80 * dpr, bRight - bLeft + 36 * dpr)));
+    const lineH = fontPx + 2 * dpr;
+    const tw = Math.max(...lines.map((s) => ctx.measureText(s).width));
+    const th = lines.length * lineH + 4 * dpr;
+    const padX = 3 * dpr;
+    const candidates = [
+      { x: cx, y: bTop - 4 * dpr },            // above (north)
+      { x: cx, y: bTop + th + 6 * dpr },       // just inside the top
+      { x: cx, y: (bTop + bBot) / 2 + th / 2 },
+      { x: cx, y: bBot - 4 * dpr },
+      { x: bLeft + tw / 2 + 6 * dpr, y: bTop + th + 6 * dpr },
+      { x: bRight - tw / 2 - 6 * dpr, y: bTop + th + 6 * dpr },
+    ];
+    let pick = null;
+    for (const c of candidates) {
+      const b = clampBox(c.x, c.y, tw + padX * 2, th);
+      if (!blocked(b.left, b.top, b.right, b.bot)) { pick = b; break; }
+    }
+    if (!pick) pick = clampBox(cx, Math.max(bTop + th + 4 * dpr, margin + th), tw + padX * 2, th);
+    placed.push({ x: pick.x, y: (pick.top + pick.bot) / 2, w: tw + padX * 2, h: th });
+    ctx.fillStyle = "rgba(10,13,18,0.78)";
+    ctx.fillRect(pick.left, pick.top, pick.right - pick.left, pick.bot - pick.top);
     ctx.fillStyle = "#e8eef4";
-    ctx.fillText(lab.name, sx, ly);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "alphabetic";
+    lines.forEach((line, i) => {
+      ctx.fillText(line, pick.x, pick.top + (i + 1) * lineH);
+    });
   }
 
   // Gold N at the top of the plot

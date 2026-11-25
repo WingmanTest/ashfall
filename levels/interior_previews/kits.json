@@ -140,6 +140,14 @@
     [
      "arch_box_small",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.34,
@@ -302,6 +310,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.408,
@@ -363,6 +379,12 @@
      2,
      0.288,
      6
+    ],
+    [
+     "arch_bed_stripped",
+     3,
+     0.24,
+     4
     ]
    ],
    "wall_pick": 3,
@@ -447,6 +469,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.34,
@@ -625,6 +655,14 @@
     [
      "arch_box_small",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.34,
@@ -751,6 +789,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.28,
@@ -821,6 +867,12 @@
      "arch_counter",
      3,
      0.288,
+     4
+    ],
+    [
+     "arch_bed_stripped",
+     2,
+     0.192,
      4
     ]
    ],
@@ -918,6 +970,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.34,
@@ -1060,6 +1120,14 @@
     [
      "arch_box_small",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.476,
@@ -1191,6 +1259,14 @@
     [
      "arch_box_small",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.544,
@@ -1245,6 +1321,12 @@
      3,
      0.336,
      10
+    ],
+    [
+     "arch_metal_locker",
+     3,
+     0.24,
+     4
     ]
    ],
    "wall_pick": 3,
@@ -1339,6 +1421,14 @@
     [
      "arch_box_small",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.34,
@@ -1488,6 +1578,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.34,
@@ -1629,6 +1727,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.28,
@@ -1775,6 +1881,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.28,
@@ -1829,6 +1943,24 @@
      2,
      0.096,
      4
+    ],
+    [
+     "arch_metal_locker",
+     4,
+     0.288,
+     6
+    ],
+    [
+     "arch_cabinet_file_open",
+     4,
+     0.288,
+     6
+    ],
+    [
+     "arch_wall_plank_2m",
+     2,
+     0.192,
+     8
     ]
    ],
    "wall_pick": 4,
@@ -1917,6 +2049,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.34,
@@ -1965,6 +2105,18 @@
      1,
      0.024,
      4
+    ],
+    [
+     "arch_metal_locker",
+     3,
+     0.192,
+     8
+    ],
+    [
+     "arch_cabinet_file",
+     3,
+     0.192,
+     6
     ]
    ],
    "wall_pick": 3,
@@ -2061,6 +2213,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.28,
@@ -2109,6 +2269,12 @@
      2,
      0.096,
      8
+    ],
+    [
+     "arch_metal_locker",
+     2,
+     0.144,
+     6
     ]
    ],
    "wall_pick": 3,
@@ -2197,6 +2363,14 @@
     [
      "arch_box_small",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.28,
@@ -2338,6 +2512,14 @@
     [
      "arch_box_small",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.28,
@@ -2474,6 +2656,14 @@
     [
      "arch_box_small",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.28,
@@ -2628,6 +2818,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.408,
@@ -2762,6 +2960,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.476,
@@ -2897,6 +3103,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.28,
@@ -3033,6 +3247,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.28,
@@ -3163,6 +3385,14 @@
     [
      "arch_box_small",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.28,
@@ -3270,6 +3500,14 @@
     [
      "arch_box_small",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.28,
@@ -3322,6 +3560,18 @@
      2,
      0.12,
      4
+    ],
+    [
+     "arch_bed_stripped",
+     3,
+     0.192,
+     8
+    ],
+    [
+     "arch_metal_locker",
+     3,
+     0.192,
+     8
     ]
    ],
    "wall_pick": 4,
@@ -3426,6 +3676,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.408,
@@ -3483,6 +3741,30 @@
      2,
      0.096,
      4
+    ],
+    [
+     "arch_metal_locker",
+     5,
+     0.384,
+     8
+    ],
+    [
+     "arch_cabinet_file_open",
+     3,
+     0.24,
+     4
+    ],
+    [
+     "arch_wall_plank_2m",
+     3,
+     0.336,
+     12
+    ],
+    [
+     "arch_shelf_empty",
+     3,
+     0.288,
+     6
     ]
    ],
    "wall_pick": 3,
@@ -3579,6 +3861,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.34,
@@ -3646,6 +3936,12 @@
      2,
      0.192,
      6
+    ],
+    [
+     "arch_metal_locker",
+     2,
+     0.192,
+     4
     ]
    ],
    "wall_pick": 3,
@@ -3732,6 +4028,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.28,
@@ -3787,6 +4091,12 @@
      "arch_med_cabinet",
      2,
      0.192,
+     6
+    ],
+    [
+     "arch_metal_locker",
+     2,
+     0.144,
      6
     ]
    ],
@@ -3864,6 +4174,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.28,
@@ -3984,6 +4302,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.28,
@@ -4105,6 +4431,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.28,
@@ -4239,6 +4573,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.28,
@@ -4371,6 +4713,14 @@
     [
      "arch_debris_pile",
      2
+    ],
+    [
+     "arch_bottle",
+     2
+    ],
+    [
+     "arch_can",
+     1
     ]
    ],
    "clutter_m2": 0.28,
@@ -4431,8 +4781,9 @@
    "tip": 0.45,
    "win": {
     "arch_window_broken": 4,
+    "arch_window_boarded_diagonal": 3,
     "arch_window_cracked": 2,
-    "arch_window_boarded": 1
+    "arch_window_boarded": 2
    },
    "decals": {
     "papers_scatter": 5,
@@ -4447,7 +4798,8 @@
    "dens": 0.8,
    "tip": 0.35,
    "win": {
-    "arch_window_broken": 5,
+    "arch_window_broken": 4,
+    "arch_window_boarded_diagonal": 3,
     "arch_boards_overlay": 2
    },
    "decals": {
@@ -4478,6 +4830,7 @@
    "win": {
     "arch_window_cracked": 3,
     "arch_plastic_sheet": 3,
+    "arch_window_boarded_diagonal": 2,
     "arch_window_boarded": 2
    },
    "decals": {
@@ -4491,8 +4844,9 @@
    "dens": 1.0,
    "tip": 0.1,
    "win": {
-    "arch_window_boarded": 6,
-    "arch_wall_corrugated": 3,
+    "arch_window_boarded_diagonal": 6,
+    "arch_window_boarded": 4,
+    "arch_wall_corrugated": 2,
     "arch_boards_overlay": 2
    },
    "decals": {
