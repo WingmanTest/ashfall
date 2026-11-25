@@ -7,9 +7,9 @@ import {
   ARCH_CATALOG, ARCH_DECAL_FRAMES, ARCH_TEXTURES,
   loadArchModel, makeArchInstanced, setDoorOpen, setArchSeason,
   loadFloorTexture, makeArchFloorDecals, makeArchDust, archPoseMatrix,
-} from "../models/registry.js?v=r16.2";
-import { gltfLoader } from "./models3d.js?v=r16.2";
-import { ARCH_OPENINGS, addPunchedWall, applyWorldUV } from "./buildings.js?v=r16.2";
+} from "../models/registry.js?v=r16.3";
+import { gltfLoader } from "./models3d.js?v=r16.3";
+import { ARCH_OPENINGS, addPunchedWall, applyWorldUV } from "./buildings.js?v=r16.3";
 
 const KNOWN = new Set([
   "ch01_day_three", "ch02_the_registry", "ch03_the_long_cold", "ch04_black_start",

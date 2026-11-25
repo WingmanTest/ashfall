@@ -1,8 +1,8 @@
 import * as THREE from "three";
-import { CFG, ITEMS, WEAPONS_ORDER } from "./config.js?v=r16.2";
-import { combinedInsulation } from "./equipment.js?v=r16.2";
-import { fitHeight } from "./world.js?v=r16.2";
-import { createWeaponModel, setWeaponLibrary, mountViewmodel, applyHold, installViewmodelLights, weaponKind } from "./weapons/viewmodels.js?v=r16.2";
+import { CFG, ITEMS, WEAPONS_ORDER } from "./config.js?v=r16.3";
+import { combinedInsulation } from "./equipment.js?v=r16.3";
+import { fitHeight } from "./world.js?v=r16.3";
+import { createWeaponModel, setWeaponLibrary, mountViewmodel, applyHold, installViewmodelLights, weaponKind } from "./weapons/viewmodels.js?v=r16.3";
 
 export function defaultStats() {
   return {
@@ -45,6 +45,7 @@ export class Player {
     this.swingT = 0;
     this._t = 0;
     this._noDamageT = 10;
+    this.statuses = { sick: 0 };
     this._buildViewmodel(scene, gunModels);
   }
 
@@ -248,7 +249,6 @@ export class Player {
     if (this.stats.warmth < 40) hMul *= 1.25;
     if (this.stats.rad > 25) hMul *= 1.3;
     if (sprinting) hMul *= 1.2;
-    this.stats.hunger = Math.max(0, this.stats.hunger - prs(statsDef.satiety, 0.055) * hMul * dt);
 
     // Hydration
     let dMul = 1 * (mul.hydration_drain_mult ?? 1);
@@ -256,6 +256,15 @@ export class Player {
     if (typeof thirst === "number" && thirst > 0) dMul *= thirst;
     if (sprinting) dMul *= 1.3;
     if (inFire) dMul *= 1.2;
+
+    // Quartermaster 'sick' status: 1.5x hunger + thirst drain for 600s (dirty water).
+    if (this.statuses && this.statuses.sick > 0) {
+      this.statuses.sick = Math.max(0, this.statuses.sick - dt);
+      hMul *= 1.5;
+      dMul *= 1.5;
+    }
+
+    this.stats.hunger = Math.max(0, this.stats.hunger - prs(statsDef.satiety, 0.055) * hMul * dt);
     this.stats.hydration = Math.max(0, this.stats.hydration - prs(statsDef.hydration, 0.075) * dMul * dt);
 
     // Stamina regen already handled in move(); apply warmth/hunger/thirst floors
@@ -310,7 +319,7 @@ export class Player {
     if (this.stats.health <= 0) this.alive = false;
   }
 
-  useItem(id, inv) {
+  useItem(id, inv, catalog, ctx = {}) {
     if (id === "filter" || id === "mask_filter" || id === "gas_mask") {
       const have = (inv[id] || 0) || (inv.filter || 0) || (inv.mask_filter || 0);
       if (have <= 0 && id !== "gas_mask") return false;
@@ -323,21 +332,56 @@ export class Player {
       this.filterOn = true;
       this.filterCharge = Math.min(100, (this.filterCharge || 0) + (id === "gas_mask" ? 0 : 100));
       if (id === "gas_mask") this.filterCharge = Math.max(this.filterCharge, 1);
-      return true;
+      return { ok: true, verb: "Used", name: "filter" };
     }
-    const def = ITEMS[id];
+    const def = (catalog && catalog[id]) || ITEMS[id];
     if (!def || (inv[id] || 0) <= 0) return false;
-    if (def.kind === "use") {
+    const fx = { ...def, ...(def.effects || {}) };
+    const convert = fx.convert;
+    if (convert && convert.from && convert.to) {
+      if ((inv[convert.from] || 0) <= 0) return false;
       inv[id]--;
       if (inv[id] <= 0) delete inv[id];
-      if (def.heal) this.stats.health = Math.min(100, this.stats.health + def.heal);
-      // hunger field is negative when the item fills the stomach
-      if (def.hunger) this.stats.hunger = Math.min(100, Math.max(0, this.stats.hunger - def.hunger));
-      if (def.warmth) this.stats.warmth = Math.min(100, this.stats.warmth + def.warmth);
-      return true;
+      inv[convert.from]--;
+      if (inv[convert.from] <= 0) delete inv[convert.from];
+      inv[convert.to] = (inv[convert.to] || 0) + 1;
+      return { ok: true, verb: "Used", name: def.name || id, converted: convert };
     }
-    if (id === "coat") { this.coatOn = true; return true; }
-    return false;
+    const usable = def.kind === "use" || def.category === "water" || fx.hydration != null || fx.heal || fx.satiety || fx.cures;
+    if (!usable) {
+      if (id === "coat") { this.coatOn = true; return { ok: true, verb: "Used", name: def.name || id }; }
+      return false;
+    }
+    inv[id]--;
+    if (inv[id] <= 0) delete inv[id];
+    if (fx.heal) this.stats.health = Math.min(100, this.stats.health + fx.heal);
+    if (fx.health && !fx.heal) this.stats.health = Math.min(100, this.stats.health + fx.health);
+    // config hunger is negative when the item fills the stomach; systems uses satiety.
+    if (fx.hunger) this.stats.hunger = Math.min(100, Math.max(0, this.stats.hunger - fx.hunger));
+    else if (fx.satiety) this.stats.hunger = Math.min(100, Math.max(0, this.stats.hunger + fx.satiety));
+    if (fx.warmth) this.stats.warmth = Math.min(100, this.stats.warmth + fx.warmth);
+    const hyd = fx.hydration ?? fx.water;
+    if (hyd) this.stats.hydration = Math.min(100, Math.max(0, this.stats.hydration + hyd));
+    if (fx.stamina && this.stats.stamina != null) {
+      this.stats.stamina = Math.min(100, Math.max(0, this.stats.stamina + fx.stamina));
+    }
+    this.statuses = this.statuses || { sick: 0 };
+    let sick = false;
+    const sickChance = fx.sickChance ?? fx.chance_status?.sick ?? 0;
+    if (sickChance > 0 && Math.random() < sickChance) {
+      this.statuses.sick = Math.max(this.statuses.sick || 0, 600);
+      sick = true;
+    }
+    const cures = fx.cures || [];
+    if (cures.includes("sick")) this.statuses.sick = 0;
+    const ch = String(ctx.chapter || ctx.flags?.chapter || "");
+    const winter = !!(ctx.flags?.nuclear_winter) || /ch0([89]|10)|ch1[0-9]/.test(ch);
+    const radAct = fx.radiation_by_act;
+    if (winter && radAct && radAct.nuclear_winter) {
+      this.stats.rad = Math.min(100, (this.stats.rad || 0) + radAct.nuclear_winter);
+    }
+    const drinkable = def.category === "water" || /^water_/.test(id) || (typeof hyd === "number" && hyd > 0 && def.category !== "food" && def.kind === "use");
+    return { ok: true, verb: drinkable ? "Drank" : "Used", name: def.name || id, sick, hydration: hyd || 0 };
   }
 
   serialize() {
@@ -345,6 +389,7 @@ export class Player {
       x: this.x, z: this.z, yaw: this.yaw, pitch: this.pitch,
       stats: { ...this.stats }, equipped: this.equipped, mags: { ...this.mags },
       coatOn: this.coatOn, filterOn: this.filterOn, filterCharge: this.filterCharge, alive: this.alive,
+      statuses: { ...(this.statuses || {}) },
       wDur: { ...this.wDur }, jammed: { ...this.jammed }, fireMode: { ...this.fireMode },
     };
   }
@@ -356,6 +401,7 @@ export class Player {
     this.equipped = d.equipped || this.equipped;
     this.mags = { ...this.mags, ...(d.mags || {}) };
     this.coatOn = !!d.coatOn; this.filterOn = !!d.filterOn;
+    this.statuses = { sick: 0, ...(d.statuses || {}) };
     if (d.filterCharge != null) this.filterCharge = d.filterCharge;
     this.alive = d.alive !== false;
     if (d.wDur) this.wDur = { ...d.wDur };

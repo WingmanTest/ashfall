@@ -61,6 +61,14 @@
             {
               "quest": "q_hospital_diesel",
               "state": "start"
+            },
+            {
+              "give": "diesel_jug",
+              "qty": 1
+            },
+            {
+              "set": "ch02_diesel_accepted",
+              "value": true
             }
           ]
         },
@@ -86,6 +94,14 @@
             {
               "quest": "q_hospital_diesel",
               "state": "start"
+            },
+            {
+              "give": "diesel_jug",
+              "qty": 1
+            },
+            {
+              "set": "ch02_diesel_accepted",
+              "value": true
             }
           ]
         },
@@ -98,13 +114,13 @@
     {
       "id": "yes",
       "speaker": "ames",
-      "text": "Thank you. Bring it to the loading dock. Pump's dead; you'll need to gravity-feed it.",
+      "text": "Thank you. Take this empty jug. The tanker is in the hospital parking garage, level 3 \u2014 there's a spare in the ramp locker if you need one. Pump's dead; you'll need to gravity-feed it.",
       "next": "yes2"
     },
     {
       "id": "yes2",
       "speaker": "ames",
-      "text": "I'll make it worth your while. And your nurse friend's while.",
+      "text": "Bring the diesel to the loading dock. I'll make it worth your while. And your nurse friend's while.",
       "end": true
     },
     {

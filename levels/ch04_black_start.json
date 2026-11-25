@@ -1012,7 +1012,11 @@
     "r": 1.6,
     "label": "Hangar tool locker",
     "container": "locker",
-    "location": "loc_airguard_ramp"
+    "location": "loc_airguard_ramp",
+    "guaranteed": {
+     "blaster": 1,
+     "ammo_shell": 8
+    }
    },
    {
     "id": "loot_02",

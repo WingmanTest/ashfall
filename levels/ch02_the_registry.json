@@ -367,7 +367,7 @@
   },
   {
    "id": "b_ch02_ramp",
-   "label": "Parking ramp, level 3",
+   "label": "Hospital Garage L3",
    "kind": "walled",
    "cells": [
     29,
@@ -1181,9 +1181,14 @@
     "x": 37.0,
     "z": -147.0,
     "r": 1.6,
-    "label": "Ramp locker",
+    "label": "Ramp locker (Hospital Garage L3)",
     "container": "locker",
-    "location": "loc_meadows_general"
+    "location": "loc_meadows_general",
+    "guaranteed": {
+     "diesel_jug": 1,
+     "pistol": 1,
+     "ammo_9mm": 12
+    }
    },
    {
     "id": "loot_08",
@@ -1583,7 +1588,7 @@
    "x": 31.0,
    "z": -135.0,
    "r": 1.8,
-   "label": "Tanker valve (level 3)",
+   "label": "Tanker valve (Hospital Garage L3)",
    "requiresItems": {
     "diesel_jug": 1
    },
@@ -1591,7 +1596,11 @@
    "givesItems": {
     "hospital_diesel": 1
    },
-   "quest": "q_hospital_diesel"
+   "quest": "q_hospital_diesel",
+   "requiresHint": "Need an empty fuel jug: check the ramp locker",
+   "takesItems": {
+    "diesel_jug": 1
+   }
   }
  ],
  "safeZones": [],
@@ -2114,15 +2123,24 @@
   {
    "id": "o5",
    "order": 5,
-   "text": "Optional: drain the level-3 tanker for Ames",
+   "text": "Diesel for Dr. Ames",
    "optional": true,
    "completeWhen": [
     {
      "flag": "ch02_diesel_drained",
      "eq": true
+    },
+    {
+     "flag": "ch02_diesel_delivered",
+     "eq": true
     }
    ],
-   "quest": "q_hospital_diesel"
+   "quest": "q_hospital_diesel",
+   "hint": "Hospital parking garage, level 3: drain the tanker",
+   "startWhen": {
+    "flag": "ch02_diesel_accepted",
+    "eq": true
+   }
   },
   {
    "id": "o6",

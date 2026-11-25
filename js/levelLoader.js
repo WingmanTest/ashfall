@@ -1,24 +1,24 @@
 // Cartographer chapter loader. Builds geometry from levels/*.json (do not edit those files).
 import * as THREE from "three";
-import { CFG } from "./config.js?v=r16.2";
-import { fitHeight, makePerson, makeDog } from "./world.js?v=r16.2";
-import { evalCondition, applyEffects, setFlag } from "./story.js?v=r16.2";
-import { rollContainer, aliasItem } from "./systems.js?v=r16.2";
-import { addItem, takeItem, hasItems } from "./inventory.js?v=r16.2";
-import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings, instanceSmallBoxes, addPunchedWall, walledBuildingBoxes, isWalledBuildingWall } from "./buildings.js?v=r16.2";
-import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r16.2";
-import { coverBuildingRoofs, extractShingleMaterial, fallbackShingleMat } from "./roofs.js?v=r16.2";
-import { startTracking } from "./companionCmd.js?v=r16.2";
-import { bindNpc, disposeMixer } from "./npcWander.js?v=r16.2";
+import { CFG } from "./config.js?v=r16.3";
+import { fitHeight, makePerson, makeDog } from "./world.js?v=r16.3";
+import { evalCondition, applyEffects, setFlag } from "./story.js?v=r16.3";
+import { rollContainer, aliasItem } from "./systems.js?v=r16.3";
+import { addItem, takeItem, hasItems, missingItemsMessage } from "./inventory.js?v=r16.3";
+import { pbrMat, boxMesh, snowCap, addFacadeDetails, greedyRects, rectWorld, stampBuildings, instanceSmallBoxes, addPunchedWall, walledBuildingBoxes, isWalledBuildingWall } from "./buildings.js?v=r16.3";
+import { getModel, fitToGround, getNpcModel, resolveNpcModelId, MODEL_CATALOG } from "./models3d.js?v=r16.3";
+import { coverBuildingRoofs, extractShingleMaterial, fallbackShingleMat } from "./roofs.js?v=r16.3";
+import { startTracking } from "./companionCmd.js?v=r16.3";
+import { bindNpc, disposeMixer } from "./npcWander.js?v=r16.3";
 import {
   loadGroundOverlay, floorSkipSet, decorateFloorMaterial,
   applyGroundDressing, tickGroundDressing, replacesSagebrush,
-} from "./groundDressing.js?v=r16.2";
+} from "./groundDressing.js?v=r16.3";
 import {
   loadInteriorOverlay, collectOpenings, applyInteriorDressing,
   tickInteriorDressing, toggleArchDoor, auditQuestAccess,
   isEnclosedInterior, auditInteriorCeilings,
-} from "./interiorDressing.js?v=r16.2";
+} from "./interiorDressing.js?v=r16.3";
 
 const SNOW_HEX = 0xeef2f6;
 function stripSnow(obj) {
@@ -1407,7 +1407,18 @@ export class LevelRuntime {
       const need = Array.isArray(it.requiresItems)
         ? Object.fromEntries(it.requiresItems.map((id) => [aliasItem(id), 1]))
         : it.requiresItems;
-      if (!hasItems(game.inv, need)) { game.hud.say("You don't have that."); return false; }
+      if (!hasItems(game.inv, need)) {
+        const hint = it.requiresHint || it.missingHint;
+        const catalog = game.systems?.items;
+        game.hud.say(missingItemsMessage(game.inv, need, catalog, hint) || "Need the required item.");
+        return false;
+      }
+    }
+    if (it.takesItems) {
+      const take = Array.isArray(it.takesItems)
+        ? Object.fromEntries(it.takesItems.map((id) => [aliasItem(id), 1]))
+        : it.takesItems;
+      for (const [id, n] of Object.entries(take || {})) takeItem(game.inv, aliasItem(id), typeof n === "number" ? n : 1);
     }
     if (it.setsFlag) setFlag(game.flags, it.setsFlag, true);
     if (it.givesItems) {

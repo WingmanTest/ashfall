@@ -1159,7 +1159,11 @@
     "r": 1.6,
     "label": "Depot locker",
     "container": "locker",
-    "location": "loc_sparks_yard"
+    "location": "loc_sparks_yard",
+    "guaranteed": {
+     "pump_shotgun": 1,
+     "ammo_shell": 8
+    }
    },
    {
     "id": "loot_07",

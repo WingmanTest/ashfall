@@ -26,6 +26,10 @@
         {
           "add": "kindness",
           "value": 1
+        },
+        {
+          "set": "ch02_diesel_delivered",
+          "value": true
         }
       ],
       "next": "a1"

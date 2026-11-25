@@ -50,9 +50,9 @@
       ]
     },
     "q_hospital_diesel": {
-      "title": "Level Three",
+      "title": "Diesel for Dr. Ames",
       "chapter": "ch02",
-      "desc": "Drain the tanker on level three of the hospital ramp for Dr. Ames.",
+      "desc": "Hospital parking garage, level 3: drain the tanker, then bring the diesel back to Dr. Ames.",
       "stages": [
         "start",
         "complete"

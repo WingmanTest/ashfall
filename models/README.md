@@ -626,3 +626,14 @@ WebKit through `registry.js`).
 - **Cinder-block wall**: `wall_cinder`, `wall_cinder_dirty`, `wall_cinder_ash` (64 px, 1.0 m/tile, seam-checked).
 - **Decal Atlas B (`arch_decals_b.png`, 512 × 256, 8 × 4 cells of 64 px)**: 27 floor + vertical wall decals registered in `manifest.arch.decalAtlasB` and `ARCH_DECAL_FRAMES` (`atlas: 'b'`, `wall: true|false`). Use `makeArchFloorDecals(n, { page: 'b' })` for floor decals and `makeArchWallDecals(n)` for vertical wall decals.
 - **Previews**: `previews/arch_gapfill_sheet.png`, `previews/arch_cluttered_vignette.png` (36 draw calls, 2697 tris, 0 WebKit errors).
+
+### r16.2 ceiling props (`arch_hanging_wires`, `arch_ceiling_fixture_broken`)
+
+Two leftover provisional ceiling ids, now on `arch_atlas` (existing swatches only; no new atlas pixels, no uvRect moves).
+
+| id | tris | bounds (m) | pivot | place (current interiors) |
+|---|---|---|---|---|
+| `arch_hanging_wires` | 78 | 0.345 × 0.311 × 1.351 | min y = 0 at the lowest strand tip; top is the ceiling attach | y = 2.65 under a ~3.8–4.0 m ceiling |
+| `arch_ceiling_fixture_broken` | 142 | 1.146 × 0.280 × 0.700 | min y = 0 at the hanging shade tip; canopy at the top is the attach | y = 3.15 (interiors also apply tiltZ ±0.22) |
+
+No colliders, 1 material, InstancedMesh-ready. Variants: the hanging-wires mesh is already a 4-drop bundle of mixed lengths (~0.6–1.2 m) so a second id was not added. Previews: `previews/arch_ceiling_props.png`, `previews/arch_ceiling_in_context.png`.

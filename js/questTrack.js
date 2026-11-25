@@ -1,13 +1,13 @@
-import { evalCondition } from "./story.js?v=r16.2";
-import { chapterNum } from "./save.js?v=r16.2";
+import { evalCondition } from "./story.js?v=r16.3";
+import { chapterNum } from "./save.js?v=r16.3";
 
 /** Companion tutorial and any objective marked side/tutorial stay off the main HUD. */
 export function isSideObjective(o) {
   if (!o) return false;
-  if (o.side === true || o.track === "side" || o.kind === "side") return true;
+  if (o.side === true || o.optional === true || o.track === "side" || o.track === "optional" || o.kind === "side") return true;
   if (o.quest && /^q_companion|tutorial/i.test(o.quest)) return true;
   const t = String(o.text || o.id || "");
-  if (/companion tutorial|feed wraith/i.test(t)) return true;
+  if (/^optional\b|companion tutorial|feed wraith/i.test(t)) return true;
   return false;
 }
 
@@ -113,7 +113,12 @@ export function currentMainObjective(game) {
 }
 
 export function currentSideObjective(game) {
-  return partitionObjectives(game).side[0] || null;
+  const sides = partitionObjectives(game).side;
+  // Prefer a side job that is gated on an accept/start flag (e.g. diesel)
+  // over always-on optionals (e.g. "see Carly") so the offered job is the
+  // one the tracker line follows.
+  const gated = sides.filter((o) => o.startWhen);
+  return (gated[0] || sides[0]) || null;
 }
 
 export function stepsFor(game, o, ctx) {

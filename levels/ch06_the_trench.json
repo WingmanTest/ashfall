@@ -360,7 +360,7 @@
     "z1": 6.0
    },
    "safe": true,
-   "name": "Sparks · Home Block"
+   "name": "Sparks \u00b7 Home Block"
   }
  ],
  "landmarks": [],
@@ -1690,7 +1690,11 @@
     "r": 1.6,
     "label": "Command-post crate",
     "container": "military_crate",
-    "location": "loc_rscc_registry"
+    "location": "loc_rscc_registry",
+    "guaranteed": {
+     "service_rifle": 1,
+     "ammo_556": 12
+    }
    },
    {
     "id": "loot_11",

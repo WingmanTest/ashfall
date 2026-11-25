@@ -605,10 +605,10 @@
     },
     {
       "id": "q_hospital_diesel",
-      "title": "Level Three",
+      "title": "Diesel for Dr. Ames",
       "loc": "loc_meadows_general",
       "chapter": "ch02",
-      "hint": "Tanker on parking ramp level three."
+      "hint": "Hospital parking garage, level 3: drain the tanker"
     },
     {
       "id": "q_find_walt",
@@ -696,7 +696,7 @@
         "ch01",
         "ch02"
       ],
-      "months": "late Aug – mid Sep, Year 1",
+      "months": "late Aug \u2013 mid Sep, Year 1",
       "temp_c": [
         32,
         36
@@ -741,7 +741,7 @@
         "ch06",
         "ch07"
       ],
-      "months": "mid Nov – mid Dec, Year 1",
+      "months": "mid Nov \u2013 mid Dec, Year 1",
       "temp_c": [
         -1,
         2
@@ -767,7 +767,7 @@
         "ch09",
         "ch10"
       ],
-      "months": "January – late February, Year 2",
+      "months": "January \u2013 late February, Year 2",
       "temp_c": [
         -40,
         -10
@@ -784,7 +784,7 @@
       ],
       "survival": "warmth, radiation, filters, SEAL; survival horror (Hollows).",
       "palette": "ashfall blue-grey, near-monochrome; floodlight cones and flare red are the only warm colors",
-      "notes": "Fallout rain → thick ashfall → whiteout blizzards; frozen Truckee (river_ice). Tone shifts to grounded survival horror; endings stay dark-but-hopeful."
+      "notes": "Fallout rain \u2192 thick ashfall \u2192 whiteout blizzards; frozen Truckee (river_ice). Tone shifts to grounded survival horror; endings stay dark-but-hopeful."
     }
   },
   "assimilation": {
@@ -1697,7 +1697,7 @@
             }
           ],
           "companion_reaction": "wraith_stare",
-          "note": "Ironwood radio chatter plays: 'contact, not human, repeat not—'."
+          "note": "Ironwood radio chatter plays: 'contact, not human, repeat not\u2014'."
         }
       ],
       "traders": [
@@ -1943,7 +1943,7 @@
       "title": "Dead Air",
       "act": 2,
       "season": "late_fall",
-      "date": "Day 104 (Sat Dec 5) → mid-December, Year 1",
+      "date": "Day 104 (Sat Dec 5) \u2192 mid-December, Year 1",
       "weather": "overcast",
       "weather_after_bursts": "brown_sky",
       "temp_c": -1,
@@ -2773,7 +2773,7 @@
       "setpieces": [
         "lamp_line_siege",
         "Voices past the lamp line; Hollow prowlers testing poles (enc_ch10_hollow_prowlers)",
-        "Control room at 18 °C",
+        "Control room at 18 \u00b0C",
         "Dawn through the ash"
       ],
       "tallman_glimpses": [],

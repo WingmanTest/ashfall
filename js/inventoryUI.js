@@ -1,12 +1,20 @@
-import { CFG } from "./config.js?v=r16.2";
+import { CFG } from "./config.js?v=r16.3";
 import {
   GEAR_SLOTS, WEAPON_SLOTS, ALL_SLOTS, SLOT_LABELS, SLOT_COLORS,
   itemSlot, combinedInsulation, combinedWetResist, carryState,
   resolveDollLayers, wearItem, removeGear, emptyGear, canAddWeight,
-} from "./equipment.js?v=r16.2";
-import { mountDoll3D, stopDoll3D, doll3DWasDrag } from "./doll3d.js?v=r16.2";
-import { renderQuestLogHtml } from "./questTrack.js?v=r16.2";
-import { chapterHeading } from "./save.js?v=r16.2";
+} from "./equipment.js?v=r16.3";
+import { mountDoll3D, stopDoll3D, doll3DWasDrag } from "./doll3d.js?v=r16.3";
+import { renderQuestLogHtml } from "./questTrack.js?v=r16.3";
+import { chapterHeading } from "./save.js?v=r16.3";
+
+export function isDrinkable(id, def) {
+  if (!def && !id) return false;
+  def = def || {};
+  if (def.category === "water" || /^water_/.test(String(id || ""))) return true;
+  const hyd = def.hydration ?? def.effects?.hydration;
+  return def.kind === "use" && typeof hyd === "number" && hyd > 0 && def.category !== "food";
+}
 
 const cache = new Map();
 function loadImg(src) {
@@ -247,7 +255,7 @@ export function openCharacterSheet(game, panel, tab = "bag") {
       <div class="satchel-label">SATCHEL</div>
       <div class="satchel" id="satchel">${cells || '<div class="empty">The bag is empty.</div>'}</div>
       <div class="inv-actions">
-        <button data-a="use">USE</button>
+        <button data-a="use" id="inv-use">USE</button>
         <button data-a="equip">EQUIP</button>
         <button data-a="close">CLOSE</button>
       </div>
@@ -280,6 +288,8 @@ export function openCharacterSheet(game, panel, tab = "bag") {
   const selectCell = (id) => {
     selected = id;
     panel.querySelectorAll(".cell").forEach((c) => c.classList.toggle("on", c.dataset.id === id));
+    const useBtn = panel.querySelector("#inv-use, [data-a='use']");
+    if (useBtn) useBtn.textContent = isDrinkable(id, items[id] || {}) ? "DRINK" : "USE";
   };
 
   panel.querySelectorAll(".cell").forEach((cell) => {
@@ -293,7 +303,7 @@ export function openCharacterSheet(game, panel, tab = "bag") {
     });
     cell.addEventListener("pointerdown", (e) => {
       if (e.pointerType === "touch") {
-        selected = cell.dataset.id;
+        selectCell(cell.dataset.id);
         game._invDrag = cell.dataset.id;
         const g = panel.querySelector("#inv-ghost");
         g.hidden = false; g.textContent = (items[cell.dataset.id]?.name || cell.dataset.id);
@@ -391,8 +401,13 @@ export function openCharacterSheet(game, panel, tab = "bag") {
       if (a === "use") {
         if (def.kind === "wear" || itemSlot(def, selected)) return tryEquipTo(itemSlot(def, selected), selected);
         game.player._allowFilter = !!flags.has_gas_mask;
-        if (game.player.useItem(selected, game.inv)) game.hud.say("Used " + (def.name || selected));
-        else game.hud.say("Can't use that.");
+        const result = game.player.useItem(selected, game.inv, items, { flags, chapter: flags.chapter });
+        if (result) {
+          const verb = result.verb || (isDrinkable(selected, def) ? "Drank" : "Used");
+          const name = result.name || def.name || selected;
+          game.hud.say(verb + " " + name);
+          if (result.sick) game.hud.say("The water made you sick.", 3.6);
+        } else game.hud.say(isDrinkable(selected, def) ? "Can't drink that." : "Can't use that.");
         openCharacterSheet(game, panel);
       }
     };

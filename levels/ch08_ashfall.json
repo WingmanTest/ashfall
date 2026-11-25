@@ -361,7 +361,7 @@
     "z1": 6.0
    },
    "safe": true,
-   "name": "Sparks · Home Block"
+   "name": "Sparks \u00b7 Home Block"
   }
  ],
  "landmarks": [],
@@ -1511,12 +1511,11 @@
     "label": "Gatehouse locker",
     "container": "locker",
     "location": "loc_galena_station",
-    "guaranteed": [
-     {
-      "item": "bandage",
-      "n": 2
-     }
-    ]
+    "guaranteed": {
+     "bandage": 2,
+     "ar15": 1,
+     "ammo_556": 12
+    }
    },
    {
     "id": "loot_12",

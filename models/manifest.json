@@ -12,7 +12,7 @@
     "previews": 1,
     "env_models": 21,
     "env_textures": 17,
-    "arch_models": 117,
+    "arch_models": 119,
     "arch_textures": 37
   },
   "conventions": {
@@ -7590,7 +7590,7 @@
       "wall_panel": 4,
       "dressing": 22,
       "furniture": 37,
-      "clutter": 23,
+      "clutter": 25,
       "mount": 10,
       "wall": 9
     },
@@ -7633,7 +7633,9 @@
           "arch_crate_large",
           "arch_crate_small",
           "arch_crate_broken",
-          "arch_cot"
+          "arch_cot",
+          "arch_hanging_wires",
+          "arch_ceiling_fixture_broken"
         ],
         "textures": [
           "floor_hardwood",
@@ -7650,7 +7652,9 @@
           "door_residential_wood",
           "arch_bed",
           "arch_bed_messy",
-          "arch_bed_stripped"
+          "arch_bed_stripped",
+          "arch_hanging_wires",
+          "arch_ceiling_fixture_broken"
         ],
         "textures": [
           "floor_hardwood",
@@ -7677,7 +7681,9 @@
           "arch_cage_mesh",
           "arch_sandbag_row",
           "arch_generator",
-          "arch_drum_burn"
+          "arch_drum_burn",
+          "arch_hanging_wires",
+          "arch_ceiling_fixture_broken"
         ],
         "textures": []
       },
@@ -7707,7 +7713,9 @@
           "arch_whiteboard",
           "arch_reception_desk",
           "arch_oxygen_tank",
-          "arch_crash_cart"
+          "arch_crash_cart",
+          "arch_hanging_wires",
+          "arch_ceiling_fixture_broken"
         ],
         "textures": [
           "floor_linoleum",
@@ -7719,7 +7727,9 @@
       },
       "commercial": {
         "models": [
-          "arch_door_storefront_broken"
+          "arch_door_storefront_broken",
+          "arch_hanging_wires",
+          "arch_ceiling_fixture_broken"
         ],
         "textures": []
       },
@@ -7745,7 +7755,9 @@
           "arch_jerrycan",
           "arch_lantern",
           "arch_generator",
-          "arch_drum_steel"
+          "arch_drum_steel",
+          "arch_hanging_wires",
+          "arch_ceiling_fixture_broken"
         ],
         "textures": [
           "floor_concrete_stained",
@@ -7767,7 +7779,9 @@
         "models": [
           "arch_table_folding",
           "arch_barrier_crowd",
-          "arch_table_blackjack"
+          "arch_table_blackjack",
+          "arch_hanging_wires",
+          "arch_ceiling_fixture_broken"
         ],
         "textures": []
       },
@@ -7784,7 +7798,9 @@
           "arch_bottle",
           "arch_bottles",
           "arch_mug",
-          "arch_steam_table"
+          "arch_steam_table",
+          "arch_hanging_wires",
+          "arch_ceiling_fixture_broken"
         ],
         "textures": [
           "floor_linoleum",
@@ -7803,7 +7819,9 @@
           "arch_glass_hold",
           "arch_iv_stand",
           "arch_gurney",
-          "arch_console_panel"
+          "arch_console_panel",
+          "arch_hanging_wires",
+          "arch_ceiling_fixture_broken"
         ],
         "textures": [
           "wall_cinder"
@@ -7814,7 +7832,9 @@
           "door_residential_wood",
           "arch_chair",
           "arch_table",
-          "arch_couch"
+          "arch_couch",
+          "arch_hanging_wires",
+          "arch_ceiling_fixture_broken"
         ],
         "textures": [
           "floor_hardwood",
@@ -7841,7 +7861,9 @@
           "arch_suitcase_packed",
           "arch_phone_landline",
           "arch_door_open_leaf",
-          "arch_bed_stripped"
+          "arch_bed_stripped",
+          "arch_hanging_wires",
+          "arch_ceiling_fixture_broken"
         ],
         "textures": [
           "wall_cinder"
@@ -7858,7 +7880,9 @@
           "arch_cabinet_file_open",
           "arch_whiteboard",
           "arch_reception_desk",
-          "arch_phone_landline"
+          "arch_phone_landline",
+          "arch_hanging_wires",
+          "arch_ceiling_fixture_broken"
         ],
         "textures": []
       },
@@ -7871,7 +7895,9 @@
           "arch_cage_mesh",
           "arch_generator",
           "arch_drum_steel",
-          "arch_breaker_panel"
+          "arch_breaker_panel",
+          "arch_hanging_wires",
+          "arch_ceiling_fixture_broken"
         ],
         "textures": [
           "wall_cinder"
@@ -7897,14 +7923,18 @@
           "arch_door_open_leaf",
           "arch_door_mailslot",
           "arch_woodpile",
-          "arch_barricade"
+          "arch_barricade",
+          "arch_hanging_wires",
+          "arch_ceiling_fixture_broken"
         ],
         "textures": []
       },
       "school": {
         "models": [
           "arch_book_pile",
-          "arch_whiteboard"
+          "arch_whiteboard",
+          "arch_hanging_wires",
+          "arch_ceiling_fixture_broken"
         ],
         "textures": []
       },
@@ -7939,7 +7969,9 @@
           "arch_sack_pile",
           "arch_woodpile",
           "arch_bed_stripped",
-          "arch_barricade"
+          "arch_barricade",
+          "arch_hanging_wires",
+          "arch_ceiling_fixture_broken"
         ],
         "textures": []
       },
@@ -7962,7 +7994,9 @@
           "arch_pallet_rack",
           "arch_boards_overlay",
           "arch_door_storefront_broken",
-          "arch_barricade"
+          "arch_barricade",
+          "arch_hanging_wires",
+          "arch_ceiling_fixture_broken"
         ],
         "textures": [
           "floor_linoleum",
@@ -7997,7 +8031,9 @@
           "arch_lantern",
           "arch_console_panel",
           "arch_generator",
-          "arch_breaker_panel"
+          "arch_breaker_panel",
+          "arch_hanging_wires",
+          "arch_ceiling_fixture_broken"
         ],
         "textures": []
       },
@@ -8035,7 +8071,9 @@
           "arch_cage_mesh",
           "arch_drum_steel",
           "arch_breaker_panel",
-          "arch_sack_pile"
+          "arch_sack_pile",
+          "arch_hanging_wires",
+          "arch_ceiling_fixture_broken"
         ],
         "textures": [
           "floor_concrete_stained",
@@ -19421,6 +19459,206 @@
           "leanable": false,
           "wallMount": false,
           "surface": "floor_wall"
+        }
+      },
+      {
+        "id": "arch_hanging_wires",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_hanging_wires.glb",
+        "tris": 78,
+        "partTris": {
+          "main": 78
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 8924,
+        "bounds": [
+          0.345,
+          1.351,
+          0.311
+        ],
+        "min": [
+          -0.169,
+          0.0,
+          -0.155
+        ],
+        "max": [
+          0.177,
+          1.351,
+          0.157
+        ],
+        "budget": [
+          20,
+          80
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "hanging_wires"
+        ],
+        "rooms": [
+          "any",
+          "shelter",
+          "residential",
+          "motel",
+          "office",
+          "clinic",
+          "store",
+          "kitchen",
+          "bedroom",
+          "living",
+          "garage",
+          "warehouse",
+          "hall",
+          "school",
+          "checkpoint",
+          "commercial",
+          "lab",
+          "plant",
+          "utility"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0); top of the mesh is the ceiling attach",
+        "collider": null,
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "ceiling",
+          "ceilingMount": true,
+          "pivot": "min y = 0 at the lowest strand tip; the top of the mesh (~1.35 m) is the ceiling attach. Place the origin so the top meets the ceiling (current interiors: y=2.65 under a ~3.8\u20134.0 m ceiling)."
+        }
+      },
+      {
+        "id": "arch_ceiling_fixture_broken",
+        "category": "arch",
+        "kind": "clutter",
+        "subtype": "clutter",
+        "path": "arch/arch_ceiling_fixture_broken.glb",
+        "tris": 142,
+        "partTris": {
+          "main": 142
+        },
+        "parts": [
+          "main"
+        ],
+        "bytes": 15096,
+        "bounds": [
+          1.146,
+          0.7,
+          0.28
+        ],
+        "min": [
+          -0.573,
+          0.0,
+          -0.075
+        ],
+        "max": [
+          0.573,
+          0.7,
+          0.205
+        ],
+        "budget": [
+          40,
+          150
+        ],
+        "materials": 1,
+        "material": "arch_atlas (opaque)",
+        "drawCalls": 1,
+        "tags": [
+          "clutter",
+          "ceiling_fixture_broken"
+        ],
+        "rooms": [
+          "any",
+          "shelter",
+          "residential",
+          "motel",
+          "office",
+          "clinic",
+          "store",
+          "kitchen",
+          "bedroom",
+          "living",
+          "garage",
+          "warehouse",
+          "hall",
+          "school",
+          "checkpoint",
+          "commercial",
+          "lab",
+          "plant",
+          "utility"
+        ],
+        "chapters": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "facing": "+Z (exterior / front)",
+        "units": "meters",
+        "checks": {
+          "zFightPairs": 0,
+          "degenerate": 0
+        },
+        "wear": {
+          "weathered": {
+            "band": 0,
+            "offsetV": 0
+          },
+          "ashfall": {
+            "band": 1,
+            "offsetV": 0.5
+          }
+        },
+        "pivot": "ground-centre (min y = 0); top of the mesh is the ceiling attach",
+        "collider": null,
+        "placementHints": {
+          "stackable": false,
+          "leanable": false,
+          "wallMount": false,
+          "surface": "ceiling",
+          "ceilingMount": true,
+          "pivot": "min y = 0 at the lowest hanging shade tip; the canopy (~0.70 m) is the ceiling attach. Place the origin so the canopy meets the ceiling (current interiors: y=3.15 under a ~3.8 m ceiling). Interiors already apply tiltZ \u00b10.22."
         }
       }
     ],

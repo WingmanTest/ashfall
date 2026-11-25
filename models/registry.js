@@ -3,7 +3,7 @@
 //   "three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/addons/"
 //
 //   import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-//   import { loadModel, fitToGround } from './models/registry.js?v=r16.2';
+//   import { loadModel, fitToGround } from './models/registry.js?v=r16.3';
 //   const loader = new GLTFLoader();
 //   const militia = await loadModel('watch_militia', loader);   // cached, cloned per call
 //   scene.add(militia);
@@ -345,7 +345,7 @@ export function playClip(mixer, root, name, { fade = 0.25, timeScale = 1, loop =
 // ready for THREE.InstancedMesh.  Trees, bushes and tufts all share ONE 256 px atlas (env/textures/env_atlas.png)
 // with 4 season bands; setEnvSeason() swaps every env mesh at once (no reload, no new materials).
 //
-//   import { makeEnvInstanced, envJitterMatrix, loadGroundTexture, setEnvSeason } from './models/registry.js?v=r16.2';
+//   import { makeEnvInstanced, envJitterMatrix, loadGroundTexture, setEnvSeason } from './models/registry.js?v=r16.3';
 //   setEnvSeason('autumn');                                       // once per level (summer|autumn|late_fall|fallout_winter)
 //   const trees = await makeEnvInstanced('env_tree_cottonwood_dead', 12);  // shared geometry + material
 //   const m = new THREE.Matrix4();
@@ -902,6 +902,8 @@ export const ARCH_CATALOG = Object.freeze({
   arch_crash_cart: {"path":"arch/arch_crash_cart.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":164,"cutout":false,"tags":["furniture","crash_cart"],"rooms":["clinic"],"collider":{"type":"box","min":[-0.41,0.0,-0.24],"max":[0.34,0.961,0.262]},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor"}},
   arch_bed_stripped: {"path":"arch/arch_bed_stripped.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":48,"cutout":false,"tags":["furniture","bed_stripped"],"rooms":["shelter","bedroom","motel"],"collider":{"type":"box","min":[-0.72,0.0,-1.0],"max":[0.72,1.05,1.0]},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor"}},
   arch_barricade: {"path":"arch/arch_barricade.glb","kind":"furniture","subtype":"furniture","parts":["main"],"tris":60,"cutout":false,"tags":["furniture","barricade"],"rooms":["shelter","residential","store"],"collider":{"type":"box","min":[-0.794,0.0,-0.25],"max":[0.982,1.519,0.548]},"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"floor_wall"}},
+  arch_hanging_wires: {"path":"arch/arch_hanging_wires.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":78,"cutout":false,"tags":["clutter","hanging_wires"],"rooms":["any","shelter","residential","motel","office","clinic","store","kitchen","bedroom","living","garage","warehouse","hall","school","checkpoint","commercial","lab","plant","utility"],"collider":null,"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"ceiling","ceilingMount":true,"pivot":"min y = 0 at the lowest strand tip; the top of the mesh (~1.35 m) is the ceiling attach. Place the origin so the top meets the ceiling (current interiors: y=2.65 under a ~3.8\u20134.0 m ceiling)."}},
+  arch_ceiling_fixture_broken: {"path":"arch/arch_ceiling_fixture_broken.glb","kind":"clutter","subtype":"clutter","parts":["main"],"tris":142,"cutout":false,"tags":["clutter","ceiling_fixture_broken"],"rooms":["any","shelter","residential","motel","office","clinic","store","kitchen","bedroom","living","garage","warehouse","hall","school","checkpoint","commercial","lab","plant","utility"],"collider":null,"placementHints":{"stackable":false,"leanable":false,"wallMount":false,"surface":"ceiling","ceilingMount":true,"pivot":"min y = 0 at the lowest hanging shade tip; the canopy (~0.70 m) is the ceiling attach. Place the origin so the canopy meets the ceiling (current interiors: y=3.15 under a ~3.8 m ceiling). Interiors already apply tiltZ \u00b10.22."}},
 });
 export const ARCH_TEXTURES = Object.freeze({
   floor_hardwood: { path: 'arch/textures/floor_hardwood.png', kind: 'floor', metersPerTile: [2.0, 2.0], wrap: 'repeat', px: 128 },

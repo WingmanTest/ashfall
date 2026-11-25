@@ -1,5 +1,6 @@
 /** B_round minimap: fixed-north circular map, per Cartographer NOTES.md. */
-import { currentMainObjective } from "./questTrack.js?v=r16.2";
+import { boundObjectivePosition, currentSideObjectiveTarget, loadObjectiveBinds, chapterKey } from "./objectiveNav.js?v=r16.3";
+export { boundObjectivePosition, loadObjectiveBinds, currentSideObjectiveTarget };
 
 const PLOT = 78;
 const BEZEL = 6;
@@ -40,19 +41,6 @@ const TERRAIN = {
   sagebrush: [90, 110, 70],
 };
 
-let bindsCache = null;
-let bindsTried = false;
-
-export async function loadObjectiveBinds() {
-  if (bindsTried) return bindsCache;
-  bindsTried = true;
-  try {
-    const res = await fetch("./levels/objective_binds.json");
-    if (res.ok) bindsCache = await res.json();
-  } catch (_) { /* hook file is optional */ }
-  return bindsCache;
-}
-
 function hexrgb(h) {
   const s = String(h || "").replace("#", "");
   if (s.length !== 6) return null;
@@ -69,10 +57,6 @@ function tileColor(def) {
   if (def.solid || def.name === "wall") return TERRAIN.wall;
   if (def.water) return TERRAIN.open_water;
   return [90, 90, 90];
-}
-
-function chapterKey(id) {
-  return String(id || "ch01").replace(/_.*$/, "") || "ch01";
 }
 
 function ensureFog(game, L) {
@@ -178,75 +162,6 @@ function exploreAround(game, L) {
   stampWalkedPath(game, L, rec);
 }
 
-function resolvePoint(game, hint) {
-  if (!hint) return null;
-  if (typeof hint.x === "number" && typeof hint.z === "number") return { x: hint.x, z: hint.z };
-  const L = game.levelRuntime?.L;
-  const world = game.world;
-  const tryNpc = (id) => {
-    const n = (world?.npcs || []).find((x) => x.id === id || x.data?.id === id);
-    return n ? { x: n.x, z: n.z } : null;
-  };
-  const tryIt = (id) => {
-    const it = (world?.interactives || L?.interactives || []).find((x) => x.id === id);
-    return it && it.x != null ? { x: it.x, z: it.z } : null;
-  };
-  const trySafe = (id) => {
-    const s = (L?.safeZones || []).find((x) => x.id === id);
-    return s ? { x: s.x, z: s.z } : null;
-  };
-  const tryLoc = (id) => {
-    const loc = (L?.locations || []).find((x) => x.id === id);
-    if (!loc) return null;
-    if (loc.x != null) return { x: loc.x, z: loc.z };
-    const r = loc.rect;
-    if (r) return { x: (r.x0 + r.x1) / 2, z: (r.z0 + r.z1) / 2 };
-    return null;
-  };
-  const tryLm = (id) => {
-    const lm = (L?.landmarks || []).find((x) => x.id === id || x.name === id);
-    return lm && lm.x != null ? { x: lm.x, z: lm.z } : null;
-  };
-  return tryNpc(hint.npc)
-    || tryIt(hint.interactive)
-    || tryIt(hint.interactiveAlt)
-    || trySafe(hint.safeZone)
-    || tryLoc(hint.location)
-    || tryLm(hint.landmark)
-    || (hint.x != null ? { x: hint.x, z: hint.z } : null);
-}
-
-export function boundObjectivePosition(game) {
-  const o = currentMainObjective(game);
-  if (!o) return null;
-  const L = game.levelRuntime?.L;
-  const ch = chapterKey(L?.id || L?.chapter || game.flags?.chapter);
-  const hook = bindsCache && (bindsCache[ch] || bindsCache[L?.id || ""]);
-  const hint = hook && (hook[o.id] || hook[o.quest]);
-  let pt = resolvePoint(game, hint);
-  if (pt) return { ...pt, id: o.id, text: o.text };
-  const text = String(o.text || "").toLowerCase();
-  const world = game.world;
-  for (const n of world?.npcs || []) {
-    const name = String(n.name || n.id || "").toLowerCase();
-    const id = String(n.id || "").toLowerCase();
-    if (id && text.includes(id)) return { x: n.x, z: n.z, id: o.id, text: o.text };
-    if (name && name.length > 2 && text.includes(name.split(" ")[0])) return { x: n.x, z: n.z, id: o.id, text: o.text };
-  }
-  for (const it of world?.interactives || L?.interactives || []) {
-    const lab = String(it.label || it.id || "").toLowerCase();
-    if (lab && text.includes(lab.split(":")[0].trim())) return { x: it.x, z: it.z, id: o.id, text: o.text };
-  }
-  const path = L?.paths?.critical;
-  if (path && path.length) {
-    const last = path[path.length - 1];
-    const x = Array.isArray(last) ? last[0] : last.x;
-    const z = Array.isArray(last) ? last[1] : last.z;
-    return { x, z, id: o.id, text: o.text };
-  }
-  return null;
-}
-
 function pathPoints(L) {
   return (L?.paths?.critical || []).map((p) => Array.isArray(p) ? { x: p[0], z: p[1] } : p);
 }
@@ -336,27 +251,65 @@ export function createMinimap(canvas) {
     clipDisk(bctx);
     bctx.drawImage(lo, 0, 0, lo.width, lo.height, BEZEL, BEZEL, PLOT, PLOT);
 
-    // Gold dashed remainder of the critical path, clipped ~7px inside the disc.
-    const path = pathPoints(L);
-    const cut = walkedPrefix(p, path);
-    const remain = path.slice(Math.max(0, cut - 1));
-    if (remain.length > 1) {
-      bctx.save();
-      bctx.beginPath();
-      bctx.arc(BEZEL + PLOT / 2, BEZEL + PLOT / 2, PLOT / 2 - 7, 0, Math.PI * 2);
-      bctx.clip();
-      bctx.strokeStyle = "rgb(212,168,58)";
-      bctx.lineWidth = 1;
-      bctx.setLineDash([3, 2]);
-      bctx.beginPath();
-      for (let i = 0; i < remain.length; i++) {
-        const [sx, sy] = toPlot(px, pz, remain[i].x, remain[i].z);
-        if (i === 0) bctx.moveTo(sx, sy);
-        else bctx.lineTo(sx, sy);
+    // Solid gold guide to the CURRENT objective only. (The old gold dashed
+    // stroke was L.paths.critical — a static whole-chapter tour, not a
+    // live quest pointer — and was removed in r16.3.)
+    {
+      const obj = boundObjectivePosition(game);
+      if (obj) {
+        const cx = BEZEL + PLOT / 2, cy = BEZEL + PLOT / 2;
+        let [ex, ey] = toPlot(px, pz, obj.x, obj.z);
+        const dx = ex - cx, dy = ey - cy;
+        const dist = Math.hypot(dx, dy) || 1;
+        const rim = PLOT / 2 - 6;
+        if (dist > rim) {
+          ex = cx + dx / dist * rim;
+          ey = cy + dy / dist * rim;
+        }
+        bctx.save();
+        bctx.beginPath();
+        bctx.arc(cx, cy, PLOT / 2 - 3, 0, Math.PI * 2);
+        bctx.clip();
+        bctx.strokeStyle = "rgb(236, 196, 52)";
+        bctx.lineWidth = 2;
+        bctx.setLineDash([]);
+        bctx.lineCap = "round";
+        bctx.beginPath();
+        bctx.moveTo(cx, cy);
+        bctx.lineTo(ex, ey);
+        bctx.stroke();
+        bctx.restore();
       }
-      bctx.stroke();
-      bctx.setLineDash([]);
-      bctx.restore();
+    }
+
+    // Dashed copper guide to the current SIDE job (visually distinct from the solid gold main line).
+    {
+      const sideObj = currentSideObjectiveTarget(game);
+      if (sideObj) {
+        const cx = BEZEL + PLOT / 2, cy = BEZEL + PLOT / 2;
+        let [ex, ey] = toPlot(px, pz, sideObj.x, sideObj.z);
+        const dx = ex - cx, dy = ey - cy;
+        const dist = Math.hypot(dx, dy) || 1;
+        const rim = PLOT / 2 - 6;
+        if (dist > rim) {
+          ex = cx + dx / dist * rim;
+          ey = cy + dy / dist * rim;
+        }
+        bctx.save();
+        bctx.beginPath();
+        bctx.arc(cx, cy, PLOT / 2 - 3, 0, Math.PI * 2);
+        bctx.clip();
+        bctx.strokeStyle = "rgb(200, 132, 64)";
+        bctx.lineWidth = 1.5;
+        bctx.setLineDash([3, 3]);
+        bctx.lineCap = "round";
+        bctx.beginPath();
+        bctx.moveTo(cx, cy);
+        bctx.lineTo(ex, ey);
+        bctx.stroke();
+        bctx.setLineDash([]);
+        bctx.restore();
+      }
     }
 
     const inSight = (x, z) => Math.hypot(x - px, z - pz) <= SIGHT;
@@ -670,8 +623,43 @@ export function drawWorldMap(game) {
     ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
   }
 
-  // Objective
+  // Solid gold guide to the current objective, then the cyan diamond.
   const obj = boundObjectivePosition(game);
+  if (obj) {
+    const [ox2, oy2] = toS(obj.x, obj.z);
+    const [px2, py2] = toS(p.x, p.z);
+    ctx.strokeStyle = "rgb(236, 196, 52)";
+    ctx.lineWidth = Math.max(2, 2 * dpr);
+    ctx.setLineDash([]);
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(px2, py2);
+    ctx.lineTo(ox2, oy2);
+    ctx.stroke();
+  }
+  const sideObj = currentSideObjectiveTarget(game);
+  if (sideObj) {
+    const [oxs, oys] = toS(sideObj.x, sideObj.z);
+    const [pxs, pys] = toS(p.x, p.z);
+    ctx.strokeStyle = "rgb(200, 132, 64)";
+    ctx.lineWidth = Math.max(1.5, 1.5 * dpr);
+    ctx.setLineDash([5 * dpr, 4 * dpr]);
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(pxs, pys);
+    ctx.lineTo(oxs, oys);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    const s = Math.max(4, 5 * dpr);
+    ctx.fillStyle = "rgb(200, 132, 64)";
+    ctx.beginPath();
+    ctx.moveTo(oxs, oys - s);
+    ctx.lineTo(oxs + s, oys);
+    ctx.lineTo(oxs, oys + s);
+    ctx.lineTo(oxs - s, oys);
+    ctx.closePath();
+    ctx.fill();
+  }
   if (obj) {
     const [sx, sy] = toS(obj.x, obj.z);
     const s = Math.max(5, 6 * dpr);

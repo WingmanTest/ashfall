@@ -1,5 +1,5 @@
-import { ITEMS, RECIPES } from "./config.js?v=r16.2";
-import { aliasItem } from "./systems.js?v=r16.2";
+import { ITEMS, RECIPES } from "./config.js?v=r16.3";
+import { aliasItem } from "./systems.js?v=r16.3";
 
 export function emptyInv() {
   return { knife: 1, cloth: 2, wood: 2, ration: 1 };
@@ -21,8 +21,31 @@ export function takeItem(inv, id, n = 1) {
 }
 
 export function hasItems(inv, need) {
-  for (const [id, n] of Object.entries(need)) if ((inv[aliasItem(id)] || 0) < n) return false;
+  for (const [id, n] of Object.entries(need || {})) if ((inv[aliasItem(id)] || 0) < n) return false;
   return true;
+}
+
+export function itemDisplayName(id, catalog) {
+  const key = aliasItem(id);
+  const def = (catalog && (catalog[key] || catalog[id])) || ITEMS[key] || ITEMS[id];
+  if (def && def.name) return def.name;
+  return String(id || "").replace(/_/g, " ");
+}
+
+/** Name every missing requirement, e.g. "Need an empty fuel jug." */
+export function missingItemsMessage(inv, need, catalog, hint) {
+  if (hint) return String(hint);
+  const req = Array.isArray(need)
+    ? Object.fromEntries(need.map((id) => [aliasItem(id), 1]))
+    : Object.fromEntries(Object.entries(need || {}).map(([id, n]) => [aliasItem(id), n]));
+  const names = [];
+  for (const [id, n] of Object.entries(req)) {
+    if ((inv[id] || 0) < (n || 1)) names.push(itemDisplayName(id, catalog));
+  }
+  if (!names.length) return null;
+  if (names.length === 1) return "Need " + names[0] + ".";
+  if (names.length === 2) return "Need " + names[0] + " and " + names[1] + ".";
+  return "Need " + names.slice(0, -1).join(", ") + ", and " + names[names.length - 1] + ".";
 }
 
 export function craft(inv, recipe, world, player) {

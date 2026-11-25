@@ -13,7 +13,7 @@
     {
       "id": "start",
       "speaker": "narrator",
-      "text": "SILVER STATE PAWN — WE BUY GOLD. The neon is dead. The door is open. A man is eating peaches from the can.",
+      "text": "SILVER STATE PAWN \u2014 WE BUY GOLD. The neon is dead. The door is open. A man is eating peaches from the can.",
       "next": "d1"
     },
     {
@@ -64,13 +64,41 @@
               "value": 1
             }
           ]
+        },
+        {
+          "text": "[Trade batteries for a 9mm and a box of ammo]",
+          "next": "trade",
+          "conditions": [
+            {
+              "item": "batteries",
+              "gte": 1
+            }
+          ],
+          "effects": [
+            {
+              "take": "batteries",
+              "qty": 1
+            },
+            {
+              "give": "pistol",
+              "qty": 1
+            },
+            {
+              "give": "ammo_9mm",
+              "qty": 12
+            },
+            {
+              "add": "trader_dutch_rep",
+              "value": 1
+            }
+          ]
         }
       ]
     },
     {
       "id": "stock",
       "speaker": "trader_dutch",
-      "text": "Tools, a few guns, cigarettes, a very nice bass boat. Meds, if you don't ask where from.",
+      "text": "Tools, a service 9mm if you've got batteries to trade, cigarettes, a very nice bass boat. Meds, if you don't ask where from.",
       "next": "d2"
     },
     {

@@ -1,43 +1,44 @@
 import * as THREE from "three";
-import { CFG, WEAPONS_ORDER } from "./config.js?v=r16.2";
-import { weaponKind } from "./weapons/viewmodels.js?v=r16.2";
-import { Input } from "./input.js?v=r16.2";
-import { HUD } from "./hud.js?v=r16.2";
-import { World } from "./world.js?v=r16.2";
-import { Player } from "./player.js?v=r16.2";
-import { EnemySystem } from "./enemies.js?v=r16.2";
-import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot } from "./inventory.js?v=r16.2";
-import { openCharacterSheet } from "./inventoryUI.js?v=r16.2";
+import { CFG, WEAPONS_ORDER } from "./config.js?v=r16.3";
+import { weaponKind } from "./weapons/viewmodels.js?v=r16.3";
+import { Input } from "./input.js?v=r16.3";
+import { HUD } from "./hud.js?v=r16.3";
+import { World } from "./world.js?v=r16.3";
+import { Player } from "./player.js?v=r16.3";
+import { EnemySystem } from "./enemies.js?v=r16.3";
+import { addItem, takeItem, hasItems, craft, emptyInv, mergeLoot, missingItemsMessage, itemDisplayName } from "./inventory.js?v=r16.3";
+import { openCharacterSheet } from "./inventoryUI.js?v=r16.3";
 import {
   emptyDialogueMem, markNode, markChoice, markComplete, filterChoices, resumeNodeId,
   makeRevisitDialogue, authoredRevisit, hydrateDialogueMem, looksLikeFeedChoice,
   looksLikeFeedNode, choiceFlagName, memHasFeed,
-} from "./dialogueMem.js?v=r16.2";
-import { currentMainObjective, currentSideObjective, isSideObjective, noteSideQuestUpdate, renderQuestLogHtml } from "./questTrack.js?v=r16.2";
-import { createMinimap, loadObjectiveBinds, packExploredFog, restoreExploredFog } from "./minimap.js?v=r16.2";
-import { stopDoll3D } from "./doll3d.js?v=r16.2";
-import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r16.2";
-import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r16.2";
-import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r16.2";
-import { tickCompanion, disposeCompanion } from "./companion.js?v=r16.2";
-import { collectCompanionCommands, collectPendingActions, mergeActionChoices, startTracking, restoreTracking, findTrackTarget, setCompanionMode } from "./companionCmd.js?v=r16.2";
-import { pinNpc, unpinNpc, haltForTalk, findNpc } from "./npcWander.js?v=r16.2";
-import { BreathSystem } from "./breath.js?v=r16.2";
-import { openTradeModal } from "./trade.js?v=r16.2";
-import { preloadModels } from "./models3d.js?v=r16.2";
-import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r16.2";
-import { isMobileClient, canvasDpr } from "./device.js?v=r16.2";
-import { LevelRuntime } from "./levelLoader.js?v=r16.2";
-import { attachAudio } from "./audioHook.js?v=r16.2";
-import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r16.2";
-import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r16.2";
-import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r16.2";
-import { loadSave, hasSave, writeSave, clearSave, migrateSave, applyCh1CompleteFlags, completePriorChapterProgress, chapterHeading, normalizeChapter, CH02_SPAWN } from "./save.js?v=r16.2";
-import { createSky, hudHour } from "../sky/sky.js?v=r16.2";
+} from "./dialogueMem.js?v=r16.3";
+import { currentMainObjective, currentSideObjective, isSideObjective, noteSideQuestUpdate, renderQuestLogHtml } from "./questTrack.js?v=r16.3";
+import { createMinimap, packExploredFog, restoreExploredFog } from "./minimap.js?v=r16.3";
+import { loadObjectiveBinds, orientPlayerToObjective, shouldOrientOnLoad, auditObjectives, auditSpawnFacing, currentObjectiveTarget, currentSideObjectiveTarget } from "./objectiveNav.js?v=r16.3";
+import { stopDoll3D } from "./doll3d.js?v=r16.3";
+import { emptyGear, wearItem, carryState, canAddWeight, combinedInsulation } from "./equipment.js?v=r16.3";
+import { StorySystem, applyEffects, evalCondition, resolveBranches, setFlag, dialogueCompleteFlags, dialogueIsComplete, registerItemFlagResolver } from "./story.js?v=r16.3";
+import { loadSystems, aliasItem, rollContainer, rollDrops, getWeapon, stripRetiredInv } from "./systems.js?v=r16.3";
+import { tickCompanion, disposeCompanion } from "./companion.js?v=r16.3";
+import { collectCompanionCommands, collectPendingActions, mergeActionChoices, startTracking, restoreTracking, findTrackTarget, setCompanionMode } from "./companionCmd.js?v=r16.3";
+import { pinNpc, unpinNpc, haltForTalk, findNpc } from "./npcWander.js?v=r16.3";
+import { BreathSystem } from "./breath.js?v=r16.3";
+import { openTradeModal } from "./trade.js?v=r16.3";
+import { preloadModels } from "./models3d.js?v=r16.3";
+import { loadLevels, advanceChapter, ensureChapterLevel } from "./levels.js?v=r16.3";
+import { isMobileClient, canvasDpr } from "./device.js?v=r16.3";
+import { LevelRuntime } from "./levelLoader.js?v=r16.3";
+import { attachAudio } from "./audioHook.js?v=r16.3";
+import { discoverRenderModule, attachRenderModule } from "./renderHook.js?v=r16.3";
+import { createRenderPipeline, TIERS, environmentForChapter } from "../render/index.js?v=r16.3";
+import { loadLumenPixelOverrides, applyPixelTiers, winterPalette } from "./pixel.js?v=r16.3";
+import { loadSave, hasSave, writeSave, clearSave, migrateSave, applyCh1CompleteFlags, completePriorChapterProgress, chapterHeading, normalizeChapter, CH02_SPAWN } from "./save.js?v=r16.3";
+import { createSky, hudHour } from "../sky/sky.js?v=r16.3";
 
 window.__ASHFALL_MODULE = true;
-window.__ASHFALL_BUILD = "r16.2";
-if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r16.2") {
+window.__ASHFALL_BUILD = "r16.3";
+if (window.__ASHFALL_EXPECTED_BUILD && window.__ASHFALL_EXPECTED_BUILD !== "r16.3") {
   if (typeof window.__ashfallBustStaleBuild === "function") window.__ashfallBustStaleBuild(window.__ASHFALL_BUILD);
 }
 
@@ -222,6 +223,12 @@ class Game {
       startGame: (opts) => self.newGame(opts),
       loadGame: () => self.continueGame(),
       setTime: (t) => { self.timeOfDay = t; },
+      currentObjective: () => currentObjectiveTarget(self),
+      currentSideObjective: () => currentSideObjectiveTarget(self),
+      auditObjectives: () => auditObjectives(self),
+      auditSpawnFacing: () => auditSpawnFacing(self),
+      orientToObjective: (yaw) => orientPlayerToObjective(self, { authoredYaw: yaw }),
+
       setBlizzard: (v) => { self.blizzard = !!v; self._lockWeather = true; },
       giveItem: (id, n = 1) => addItem(self.inv, aliasItem(id), n),
       equipGear: (id) => {
@@ -622,7 +629,11 @@ class Game {
         this.player.restore(s.player);
         if (mig.rescuedToCh02) {
           completePriorChapterProgress(this.flags, this.quests, this.levels, ch);
+          try { orientPlayerToObjective(this, { authoredYaw: 0 }); } catch (err) { console.warn("[spawn] rescue face", err); }
           try { this.save(); } catch {}
+        } else if (shouldOrientOnLoad(this)) {
+          try { orientPlayerToObjective(this, { authoredYaw: this.levelRuntime?.spawn?.rotY }); }
+          catch (err) { console.warn("[spawn] checkpoint face", err); }
         }
         hideLoad();
         this.enterPlay();
@@ -903,6 +914,11 @@ class Game {
           this.player.yaw = 0;
           this.player.pitch = 0;
           this.player.syncCamera?.();
+        }
+        if (ok && teleport) {
+          const authored = id === "ch01" ? 0 : this.levelRuntime?.spawn?.rotY;
+          try { orientPlayerToObjective(this, { authoredYaw: authored }); }
+          catch (err) { console.warn("[spawn] face objective", err); }
         }
         showLoad(80, "Lighting");
         this._loadStage = "lighting";
@@ -1373,7 +1389,8 @@ class Game {
   _pickChoice(c) {
     if (!c) return;
     if (c.require_item && !((this.inv[aliasItem(c.require_item)] || 0) > 0)) {
-      this.hud.say("You don't have that.");
+      const id = aliasItem(c.require_item);
+      this.hud.say(c.requiresHint || missingItemsMessage(this.inv, { [id]: 1 }, this.systems?.items) || ("Need " + itemDisplayName(id, this.systems?.items) + "."));
       return;
     }
     const nodeId = this.dlgId;
@@ -2688,7 +2705,7 @@ async function boot() {
     await story.load();
     const systems = await loadSystems();
     const levels = await loadLevels();
-    const { rollTable } = await import("./systems.js?v=r16.2");
+    const { rollTable } = await import("./systems.js?v=r16.3");
 
     const renderer = new THREE.WebGLRenderer({
       canvas: view, antialias: false, alpha: false, powerPreference: "high-performance",
@@ -2823,7 +2840,7 @@ async function boot() {
     game.loop();
     window.__READY = true;
     window.__ASHFALL_BOOTED = true;
-    window.__ASHFALL_BUILD = "r16.2";
+    window.__ASHFALL_BUILD = "r16.3";
     const banner = $("boot-banner");
     if (banner) banner.classList.remove("show");
     window.__INTEGRATION = {

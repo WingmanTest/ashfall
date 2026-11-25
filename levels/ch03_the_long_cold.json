@@ -345,7 +345,7 @@
     "z1": 6.0
    },
    "safe": true,
-   "name": "Sparks · Home Block"
+   "name": "Sparks \u00b7 Home Block"
   }
  ],
  "landmarks": [],
@@ -1409,7 +1409,11 @@
     "label": "Gun safe / prepper locker",
     "container": "gun_safe",
     "location": "loc_sparks_block",
-    "filler": true
+    "filler": true,
+    "guaranteed": {
+     "deer_rifle": 1,
+     "rifle_ammo": 8
+    }
    },
    {
     "id": "loot_18",

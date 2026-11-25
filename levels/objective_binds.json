@@ -1,57 +1,333 @@
 {
-  "comment": "Hook file: bind level objectives[] (which have no x,z) to world positions for the minimap. Each id may list npc, interactive, landmark, location, safeZone, or x/z. The first resolvable entry wins. Engine also falls back to name/flag matching.",
+  "comment": "Hook file: bind level objectives[] (which have no x,z) to world positions for the minimap and the solid objective guide. Each id may list npc, interactive, interactiveAlt, building, trigger, landmark, location, safeZone, or x/z. Optional steps[] (flag + same fields) pick the first incomplete step. The first resolvable entry wins. Indoor targets are routed to the building's street door until the player is at or inside it, then to the item. Engine also falls back to name/flag matching \u2014 never to the chapter tour path.",
   "ch01": {
-    "o1": { "npc": "carly" },
-    "o2": { "interactive": "ch01_wraith_bowl", "npc": "wraith" },
-    "o3": { "interactive": "ch01_lake_edge", "interactiveAlt": "ch01_water_station" },
-    "o4": { "npc": "lolo" },
-    "o5": { "npc": "pruitt", "interactive": "ch01_scent_trail" },
-    "o6": { "npc": "gil" },
-    "o7": { "npc": "kit" },
-    "o8": { "interactive": "ch01_phone", "safeZone": "safe_01" }
+    "o1": {
+      "npc": "carly"
+    },
+    "o2": {
+      "interactive": "ch01_wraith_bowl",
+      "npc": "wraith"
+    },
+    "o3": {
+      "steps": [
+        {
+          "flag": "ch01_water_hauled",
+          "interactive": "ch01_lake_edge",
+          "location": "loc_sparks_marina"
+        },
+        {
+          "flag": "ch01_water_boiled",
+          "interactive": "ch01_water_station",
+          "building": "b_ch01_home",
+          "safeZone": "safe_01"
+        }
+      ],
+      "interactive": "ch01_lake_edge",
+      "location": "loc_sparks_marina"
+    },
+    "o4": {
+      "npc": "lolo",
+      "building": "b_ch01_lolo"
+    },
+    "o5": {
+      "npc": "pruitt",
+      "interactive": "ch01_scent_trail"
+    },
+    "o6": {
+      "npc": "gil",
+      "building": "b_ch01_gil"
+    },
+    "o7": {
+      "building": "b_ch01_pharmacy",
+      "location": "loc_prater_pharmacy",
+      "npc": "kit"
+    },
+    "o8": {
+      "interactive": "ch01_phone",
+      "building": "b_ch01_home",
+      "safeZone": "safe_01"
+    }
   },
   "ch02": {
-    "o1": { "npc": "avila" },
-    "o2": { "npc": "kit" },
-    "o3": { "npc": "ames" },
-    "o4": { "npc": "carly" }
+    "o1": {
+      "npc": "cpl_haas",
+      "location": "loc_virginia_bridge"
+    },
+    "o2": {
+      "npc": "avila",
+      "building": "b_ch02_rscc",
+      "location": "loc_rscc_registry"
+    },
+    "o3": {
+      "npc": "carly"
+    },
+    "o4": {
+      "npc": "ames",
+      "building": "b_ch02_hospital",
+      "location": "loc_meadows_general"
+    },
+    "o5": {
+      "steps": [
+        {
+          "flag": "ch02_diesel_drained",
+          "interactive": "ch02_tanker_valve",
+          "building": "b_ch02_ramp"
+        },
+        {
+          "npc": "ames",
+          "building": "b_ch02_hospital",
+          "location": "loc_meadows_general"
+        }
+      ],
+      "interactive": "ch02_tanker_valve",
+      "building": "b_ch02_ramp"
+    },
+    "o6": {
+      "trigger": "t_glimpse_ch02_ridge",
+      "triggerAlt": "t_ch02_dusk"
+    }
   },
   "ch03": {
-    "o1": { "npc": "carly" },
-    "o2": { "npc": "wes" },
-    "o3": { "npc": "lolo" },
-    "o4": { "npc": "walt" }
+    "o1": {
+      "npc": "wes"
+    },
+    "o2": {
+      "npc": "gil",
+      "building": "b_ch03_gil"
+    },
+    "o3": {
+      "interactive": "ch03_transmitter",
+      "npc": "augie",
+      "location": "loc_peavine_shack",
+      "building": "b_ch03_shack"
+    },
+    "o4": {
+      "npc": "walt"
+    },
+    "o5": {
+      "trigger": "t_ch03_plant_secret",
+      "interactive": "ch03_home_radio",
+      "safeZone": "safe_01"
+    },
+    "o6": {
+      "npc": "amb_darlene",
+      "trigger": "t_ch03_darlene_camp",
+      "building": "b_ch03_darlene"
+    }
   },
   "ch04": {
-    "o1": { "npc": "walt" },
-    "o2": { "npc": "avila" },
-    "o3": { "npc": "amb_salt" }
+    "o1": {
+      "interactive": "ch04_gpu_cart",
+      "building": "b_ch04_hangar",
+      "location": "loc_airguard_ramp"
+    },
+    "o2": {
+      "location": "loc_airguard_ramp"
+    },
+    "o3": {
+      "interactive": "ch04_cart_dock",
+      "location": "loc_galena_station",
+      "building": "b_ch04_plant"
+    },
+    "o4": {
+      "npc": "pete_lund"
+    },
+    "o5": {
+      "interactive": "ch04_breaker",
+      "building": "b_ch04_plant"
+    }
   },
   "ch05": {
-    "o1": { "npc": "ruiz" },
-    "o2": { "npc": "wes" },
-    "o3": { "npc": "ross" },
-    "o4": { "npc": "ander" }
+    "o1": {
+      "npc": "ruiz",
+      "interactive": "ch05_convoy_crate",
+      "location": "loc_tric_warehouses",
+      "building": "b_ch05_tric"
+    },
+    "o2": {
+      "interactive": "ch05_mo_pump",
+      "npc": "trader_mo",
+      "building": "b_ch05_truckstop"
+    },
+    "o3": {
+      "interactive": "ch05_signal_cabinet",
+      "location": "loc_i80_blockade"
+    },
+    "o4": {
+      "npc": "ander"
+    },
+    "o5": {
+      "npc": "trader_rourke"
+    },
+    "o6": {
+      "npc": "npc_wes_overpass"
+    },
+    "o7": {
+      "location": "loc_tric_warehouses",
+      "building": "b_ch05_tric"
+    }
   },
   "ch06": {
-    "o1": { "location": "loc_fourth_street" },
-    "o2": { "interactive": "ch06_informant_list" },
-    "o3": { "npc": "carly", "safeZone": "safe_02", "location": "loc_silver_spur" },
-    "o4": { "npc": "avila" },
-    "o5": { "npc": "ruiz", "interactive": "ch06_mrap_door", "location": "loc_rail_trench" },
-    "o6": { "interactive": "ch06_freight_brake" }
+    "o1": {
+      "location": "loc_sparks_block"
+    },
+    "o2": {
+      "interactive": "ch06_informant_list"
+    },
+    "o3": {
+      "npc": "carly",
+      "safeZone": "safe_02",
+      "location": "loc_silver_spur",
+      "building": "b_ch06_spur"
+    },
+    "o4": {
+      "npc": "avila",
+      "building": "b_ch06_rscc"
+    },
+    "o5": {
+      "npc": "ruiz",
+      "interactive": "ch06_mrap_door",
+      "location": "loc_rail_trench"
+    },
+    "o6": {
+      "interactive": "ch06_freight_brake"
+    }
   },
   "ch07": {
-    "o1": { "npc": "reyne" }
+    "o1": {
+      "interactive": "ch07_dead_radio",
+      "npc": "augie",
+      "building": "b_ch07_shack"
+    },
+    "o2": {
+      "npc": "reyne"
+    },
+    "o3": {
+      "trigger": "t_ch07_fallon_checkpoint",
+      "building": "b_ch07_checkpoint",
+      "location": "loc_us50_fallon"
+    },
+    "o4": {
+      "trigger": "t_ch07_to_annex"
+    },
+    "o5": {
+      "trigger": "t_ch07_fallon_return",
+      "npc": "ross",
+      "location": "loc_us50_fallon"
+    },
+    "o6": {
+      "trigger": "t_ch07_where",
+      "npc": "augie",
+      "location": "loc_peavine_shack",
+      "building": "b_ch07_shack"
+    }
+  },
+  "ch07b": {
+    "o1": {
+      "location": "loc_dixie_annex",
+      "building": "b_ch07b_annex"
+    },
+    "o2": {
+      "interactive": "ch07b_maglocks"
+    },
+    "o3": {
+      "interactive": "ch07b_cards",
+      "location": "loc_annex_holds"
+    },
+    "o4": {
+      "npc": "sfc_brandt",
+      "building": "b_ch07b_hangar"
+    },
+    "o5": {
+      "location": "loc_dixie_hotsprings"
+    },
+    "o6": {
+      "x": -45.0,
+      "z": -47.0
+    }
   },
   "ch08": {
-    "o1": { "npc": "carly", "safeZone": "safe_01" }
+    "o1": {
+      "interactive": "ch08_mask_bag"
+    },
+    "o2": {
+      "interactive": "ch08_seal_kit",
+      "safeZone": "safe_01",
+      "building": "b_ch08_shelter"
+    },
+    "o3": {
+      "trigger": "t_ch08_husk"
+    },
+    "o4": {
+      "npc": "ames",
+      "building": "b_ch08_hospital",
+      "location": "loc_meadows_general"
+    },
+    "o5": {
+      "npc": "trader_boone",
+      "building": "b_ch08_depot",
+      "location": "loc_sparks_yard"
+    },
+    "o6": {
+      "npc": "trader_annie",
+      "building": "b_ch08_library",
+      "location": "loc_sparks_library"
+    },
+    "o7": {
+      "interactive": "ch08_mail_slot",
+      "npc": "stranger_mother"
+    },
+    "o8": {
+      "building": "b_ch08_henley"
+    }
   },
   "ch09": {
-    "o1": { "npc": "ross" },
-    "o2": { "npc": "wraith" }
+    "o1": {
+      "npc": "carly",
+      "safeZone": "safe_01",
+      "building": "b_ch09_shelter"
+    },
+    "o2": {
+      "trigger": "t_ch09_picket",
+      "npc": "ruiz",
+      "building": "b_ch09_picket_hut"
+    },
+    "o3": {
+      "trigger": "t_ch09_ice",
+      "location": "river_ice"
+    },
+    "o4": {
+      "trigger": "t_ch09_voices"
+    },
+    "o5": {
+      "trigger": "t_ch09_walt",
+      "location": "loc_steamboat_creek",
+      "npc": "pete_lund",
+      "safeZone": "safe_02"
+    },
+    "o6": {
+      "interactive": "ch09_gate_cards",
+      "location": "loc_galena_station",
+      "building": "b_ch09_gatehouse"
+    }
   },
   "ch10": {
-    "o1": { "npc": "reyne" }
+    "o1": {
+      "interactive": "ch10_lamp_cable"
+    },
+    "o2": {
+      "interactive": "ch10_cooling_clamp"
+    },
+    "o3": {
+      "npc": "kessler",
+      "trigger": "t_ch10_gate"
+    },
+    "o4": {
+      "trigger": "t_ch10_siege_night3",
+      "safeZone": "safe_01"
+    },
+    "o5": {
+      "interactive": "ch10_vote"
+    }
   }
 }
